@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './core/shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SecretInterceptor } from './core/interceptor/secret.interceptor';
 
 @NgModule({
     declarations: [AppComponent],
@@ -15,7 +17,7 @@ import { RouterModule } from '@angular/router';
       BrowserModule,
       AppRoutingModule,
       BrowserAnimationsModule],
-    providers: [],
+    providers: [{ provide: HTTP_INTERCEPTORS, useClass: SecretInterceptor, multi: true },],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
