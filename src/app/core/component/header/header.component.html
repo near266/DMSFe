@@ -1,5 +1,64 @@
-<div class="w-full bg-zinc-100 h-16">
-    <div>
-        
+<div class="w-full bg-zinc-100 h-16 flex items-center justify-between">
+    <img src="./../../../../assets/images/logo main.svg" class="h-5/6 ml-3" alt="" />
+    <ul class="flex">
+        <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Công việc</li>
+        <li
+            class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer flex items-center"
+            [matMenuTriggerFor]="menu1">
+            <span class="mr-1">Bán hàng</span>
+            <i class="fa-solid fa-caret-down"></i>
+        </li>
+        <mat-menu #menu1="matMenu" class="mt-1">
+            <button mat-menu-item class="flex items-center">
+                <i class="fa-solid fa-users text-base mr-2"></i>
+                <span>Khách hàng</span>
+            </button>
+            <button mat-menu-item>
+                <i class="fa-solid fa-cart-shopping text-base mr-2"></i>
+                <span>Sản phẩm</span>
+            </button>
+            <button mat-menu-item>
+                <i class="fa-solid fa-shop text-base mr-2"></i>
+                <span>Kho hàng</span>
+            </button>
+            <button mat-menu-item>
+                <i class="fa-solid fa-file-invoice text-base mr-2"></i>
+                <span>Phiếu đặt hàng</span>
+            </button>
+            <button mat-menu-item>
+                <i class="fa-solid fa-clock-rotate-left text-base mr-2"></i>
+                <span>Phiếu trả hàng</span>
+            </button>
+        </mat-menu>
+        <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Danh mục</li>
+        <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Báo cáo</li>
+        <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Trợ giúp</li>
+    </ul>
+    <div class="flex items-center mr-3">
+        <div class="mr-5 cursor-pointer hover:opacity-70">
+            <i class="fa-solid fa-bell text-2xl"></i>
+        </div>
+        <div class="mr-5 cursor-pointer hover:opacity-70">
+            <i class="fa-solid fa-download text-2xl"></i>
+        </div>
+        <div
+            [matMenuTriggerFor]="menu"
+            class="cursor-pointer overflow-hidden relative w-12 h-12 bg-gray-100 rounded-full dark:bg-gray-600">
+            <img [src]="annonimousAvatar" alt="" />
+        </div>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item class="flex items-center">
+                <i class="fa-solid fa-user text-lg mr-2"></i>
+                <span>Tài khoản cá nhân</span>
+            </button>
+            <button mat-menu-item>
+                <i class="fa-solid fa-bell text-lg mr-2"></i>
+                <span>Nhận Email thông báo</span>
+            </button>
+            <button mat-menu-item>
+                <i class="fa-solid fa-right-from-bracket text-lg mr-2"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </mat-menu>
     </div>
 </div>
