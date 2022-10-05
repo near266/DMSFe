@@ -12,6 +12,7 @@ const routes: Routes = [
     loadChildren: () => import('./core/layouts/auth/auth.module')
       .then(m => m.AuthModule),
   },
+  { path: 'dispatchs', loadChildren: () => import('./features/dispatchs/dispatchs.module').then(m => m.DispatchsModule) },
 ];
 
 @NgModule({

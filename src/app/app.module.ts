@@ -8,7 +8,6 @@ import { SharedModule } from './core/shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecretInterceptor } from './core/interceptor/secret.interceptor';
-import { LoginComponent } from './features/auth/login/login.component';
 
 @NgModule({
     declarations: [AppComponent],
