@@ -1,0 +1,42 @@
+:host ::ng-deep .mat-form-field-infix {
+  margin-left: 20px;
+}
+
+:host ::ng-deep .mat-input-element {
+  font: inherit;
+  background: transparent;
+  color: black;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  vertical-align: bottom;
+  text-align: inherit;
+  box-sizing: content-box;
+  // font-weight: 600;
+}
+
+// :host ::ng-deep .mat-form-field-infix {
+//   font-weight: 600;
+//   color: #0EAF8F;
+// }
+:host ::ng-deep .mat-flat-button {
+  padding: 4px 24px;
+}
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus input:-webkit-autofill,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    border: 1px solid white;
+    -webkit-text-fill-color: black;
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
