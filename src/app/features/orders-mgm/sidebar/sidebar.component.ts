@@ -7,7 +7,9 @@ import { Config } from 'src/app/core/model/Config';
     styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
+    
     isShowSidebar = true;
+    isSearchByBill = false;
     statusMenu: Config = {
         icon: '<i class="fa-solid fa-flag-usa"></i>',
         title: 'Trạng thái',
