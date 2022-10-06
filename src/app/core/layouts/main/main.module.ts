@@ -9,6 +9,13 @@ const routes: Routes = [
   {
     path: '',
     component: MainComponent,
+    children: [
+      {
+        path: 'dispatchs',
+        loadChildren: () => import('../../../features/dispatchs/dispatchs.module')
+        .then(m => m.DispatchsModule),
+      }
+    ]
   }
 ];
 
