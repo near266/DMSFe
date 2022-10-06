@@ -1,4 +1,4 @@
-<div *ngIf="isShowSidebar" class="min-h-screen p-3 w-60 border-r">
+<div *ngIf="isShowSidebar" class="min-h-screen bg-white p-3 w-60 border-r">
     <div class="w-full flex items-center justify-between">
         <div class="py-1 px-1.5 bg-zinc-300 rounded">
             <i
@@ -60,7 +60,7 @@
     </div>
 </div>
 <!-- sidebar when collapse -->
-<div *ngIf="!isShowSidebar" class="fixed top-16 left-0 bottom-0 min-h-screen p-2 border-r">
+<div *ngIf="!isShowSidebar" class="fixed top-16 left-0 bottom-0 bg-white min-h-screen p-2 border-r">
     <div class="py-1 px-1.5 bg-zinc-300 rounded">
         <i (click)="toggleShowSidebar()" class="w-1/12 fa-solid fa-bars text-sm cursor-pointer hover:opacity-70"></i>
     </div>
