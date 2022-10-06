@@ -2,10 +2,12 @@
     <img src="./../../../../assets/images/logo main.svg" class="h-5/6 ml-3" alt="" />
     <ul class="flex">
         <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Công việc</li>
+        <!-- Menu Bán hàng -->
         <li
             class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer flex items-center"
             [matMenuTriggerFor]="menu1">
             <span class="mr-1">Bán hàng</span>
+            <i class="fa-solid fa-caret-down"></i>
         </li>
         <mat-menu #menu1="matMenu" class="mt-1">
             <button mat-menu-item class="flex items-center">
@@ -29,8 +31,34 @@
                 <span>Phiếu trả hàng</span>
             </button>
         </mat-menu>
-        <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Danh mục</li>
+        <!-- Menu Danh mục -->
+        <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="menu2">
+            <span class="mr-1">Danh mục</span>
+            <i class="fa-solid fa-caret-down"></i>
+        </li>
+        <mat-menu #menu2="matMenu">
+            <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren1">
+                <i class="fa-solid fa-user-tag text-base mr-2"></i>
+                <span>Phân quyền, chỉ tiêu</span>
+            </button>
+            <mat-menu #matMenuChildren1="matMenu">
+                <button mat-menu-item class="flex items-center">
+                    <i class="fa-solid fa-shuffle text-base mr-2"></i>
+                    <span>Quản lý tuyến</span>
+                </button>
+                <button mat-menu-item class="flex items-center">
+                    <i class="fa-solid fa-lock-open text-base mr-2"></i>
+                    <span>Quyền bán sản phẩm</span>
+                </button>
+                <button mat-menu-item class="flex items-center">
+                    <i class="fa-regular fa-thumbs-up text-base mr-2"></i>
+                    <span>Chỉ tiêu KPI</span>
+                </button>
+            </mat-menu>
+        </mat-menu>
+        <!-- Menu Báo cáo -->
         <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Báo cáo</li>
+        <!-- Menu trợ giúp -->
         <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Trợ giúp</li>
     </ul>
     <div class="flex items-center mr-3">
