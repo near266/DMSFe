@@ -20,6 +20,11 @@ const routes: Routes = [
                 loadChildren: () =>
                     import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
             },
+            {
+                path: 'categories',
+                loadChildren: () =>
+                    import('../../../features/user-manage/categories.module').then((m) => m.UserManageModule),
+            },
         ],
     },
 ];
