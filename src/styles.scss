@@ -8,6 +8,9 @@ body {
     margin: 0;
     font-family: Roboto, 'Lato', sans-serif !important;
 }
+* {
+    color: #333;
+}
 
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import 'tailwindcss/base';

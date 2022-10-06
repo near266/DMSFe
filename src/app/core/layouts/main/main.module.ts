@@ -6,29 +6,26 @@ import { MainComponent } from './main.component';
 import { ComponentModule } from '../../component/component.module';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: MainComponent,
-    children: [
-      {
-        path: 'dispatchs',
-        loadChildren: () => import('../../../features/dispatchs/dispatchs.module')
-        .then(m => m.DispatchsModule),
-      }
-    ]
-  }
+    {
+        path: '',
+        component: MainComponent,
+        children: [
+            {
+                path: 'dispatchs',
+                loadChildren: () =>
+                    import('../../../features/dispatchs/dispatchs.module').then((m) => m.DispatchsModule),
+            },
+            {
+                path: 'orders-mgm',
+                loadChildren: () =>
+                    import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
+            },
+        ],
+    },
 ];
 
 @NgModule({
-  declarations: [
-    MainComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule,
-    ComponentModule,
-    RouterModule.forChild(routes)
-  ]
+    declarations: [MainComponent],
+    imports: [CommonModule, SharedModule, RouterModule, ComponentModule, RouterModule.forChild(routes)],
 })
-export class MainModule { }
+export class MainModule {}

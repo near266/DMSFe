@@ -11,13 +11,8 @@ import { SecretInterceptor } from './core/interceptor/secret.interceptor';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [
-      SharedModule,
-      RouterModule,
-      BrowserModule,
-      AppRoutingModule,
-      BrowserAnimationsModule],
-    providers: [{ provide: HTTP_INTERCEPTORS, useClass: SecretInterceptor, multi: true },],
+    imports: [SharedModule, RouterModule, BrowserModule, AppRoutingModule, BrowserAnimationsModule],
+    providers: [{ provide: HTTP_INTERCEPTORS, useClass: SecretInterceptor, multi: true }],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

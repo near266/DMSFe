@@ -1,5 +1,5 @@
-<div class="w-full bg-zinc-100 h-16 flex items-center justify-between">
-    <img src="./../../../../assets/images/logo main.svg" class="h-5/6 ml-3" alt="" />
+<div class="w-full z-10 header-shadow bg-zinc-100 h-16 flex items-center justify-between px-3 fixed top-0 right-0 left-0">
+    <img src="./../../../../assets/images/logo main.svg" class="h-5/6" alt="" />
     <ul class="flex">
         <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Công việc</li>
         <!-- Menu Bán hàng -->
@@ -22,9 +22,14 @@
                 <i class="fa-solid fa-shop text-base mr-2"></i>
                 <span>Kho hàng</span>
             </button>
+            <mat-divider></mat-divider>
             <button mat-menu-item>
                 <i class="fa-solid fa-file-invoice text-base mr-2"></i>
                 <span>Phiếu đặt hàng</span>
+            </button>
+            <button mat-menu-item>
+                <i class="fa-solid fa-calculator text-base mr-2"></i>
+                <span>Phiếu bán hàng</span>
             </button>
             <button mat-menu-item>
                 <i class="fa-solid fa-clock-rotate-left text-base mr-2"></i>
@@ -61,7 +66,7 @@
         <!-- Menu trợ giúp -->
         <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Trợ giúp</li>
     </ul>
-    <div class="flex items-center mr-3">
+    <div class="flex items-center">
         <div class="mr-5 cursor-pointer hover:opacity-70">
             <i class="fa-solid fa-bell text-2xl"></i>
         </div>
