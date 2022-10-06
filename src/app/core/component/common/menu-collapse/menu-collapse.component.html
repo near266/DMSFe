@@ -1,0 +1,19 @@
+<div
+    (click)="isShowmenu = !isShowmenu"
+    class="w-full justify-between items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+    <div>
+        <span id="icon-{{Config.title}}" class="text-base mr-3"></span>
+        <span class="text-sm">{{ Config.title }}</span>
+    </div>
+    <i *ngIf="!isShowmenu" class="fa-solid fa-caret-down"></i>
+    <i *ngIf="isShowmenu" class="fa-solid fa-caret-up"></i>
+</div>
+<!-- Trạng thái menu -->
+<div *ngIf="isShowmenu">
+    <div
+        (click)="select(menuChildren)"
+        *ngFor="let menuChildren of Config.menuChildrens"
+        class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+        <span class="text-sm">{{ menuChildren }}</span>
+    </div>
+</div>

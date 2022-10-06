@@ -6,7 +6,7 @@
                 class="w-1/12 fa-solid fa-bars text-lg cursor-pointer hover:opacity-70"></i>
         </div>
         <mat-form-field class="w-10/12 text-[12px]" appearance="outline">
-            <mat-label>Tìm công việc</mat-label>
+            <mat-label>Tìm kiếm phiếu đặt hàng</mat-label>
             <input matInput class="bg-white" />
             <i matPrefix class="text-[#0EAF8F] mr-1 fa-solid -translate-y-1 text-base icon fa-magnifying-glass"> </i>
         </mat-form-field>
@@ -15,54 +15,34 @@
         <i class="fa-solid fa-user mr-3 text-base"></i>
         <span class="text-sm">Nhân viên đặt</span>
     </div>
-    <div
-        (click)="statusMenu = !statusMenu"
-        class="w-full justify-between items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-        <div>
-            <i class="fa-solid fa-flag-usa mr-3 text-base"></i>
-            <span class="text-sm">Trạng thái</span>
-        </div>
-        <i *ngIf="!statusMenu" class="fa-solid fa-caret-down"></i>
-        <i *ngIf="statusMenu" class="fa-solid fa-caret-up"></i>
-    </div>
     <!-- Trạng thái menu -->
-    <div *ngIf="statusMenu">
-        <div
-            class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-            <span class="text-sm">Tất cả</span>
-        </div>
-        <div
-            class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-            <span class="text-sm">Chờ duyệt</span>
-        </div>
-        <div
-            class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-            <span class="text-sm">Từ chối</span>
-        </div>
-        <div
-            class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-            <span class="text-sm">Đã duyệt</span>
-        </div>
-        <div
-            class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-            <span class="text-sm">Đã giám sát</span>
-        </div>
-        <div
-            class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-            <span class="text-sm">Đã bán hàng</span>
-        </div>
-        <div
-            class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-            <span class="text-sm">Đã xuất hàng</span>
-        </div>
-        <div
-            class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-            <span class="text-sm">Đã giao hàng</span>
-        </div>
-        <div
-            class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-            <span class="text-sm">Hủy</span>
-        </div>
+    <app-menu-collapse (Selection)="selection1($event)" [Config]="statusMenu"></app-menu-collapse>
+    <!-- Trạng thái in menu -->
+    <app-menu-collapse (Selection)="selection2($event)" [Config]="statusPrintMenu"></app-menu-collapse>
+    <!-- Viếng thăm menu -->
+    <app-menu-collapse (Selection)="selection3($event)" [Config]="visitionMenu"></app-menu-collapse>
+    <!-- Tuyến menu -->
+    <app-menu-collapse (Selection)="selection4($event)" [Config]="lineMenu"></app-menu-collapse>
+    <!-- Loại khách hàng menu -->
+    <app-menu-collapse (Selection)="selection5($event)" [Config]="typeCustomerMenu"></app-menu-collapse>
+    <!-- Nhóm khách hàng menu -->
+    <app-menu-collapse (Selection)="selection6($event)" [Config]="groupCustomerMenu"></app-menu-collapse>
+    <!-- Khu vực menu -->
+    <div class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+        <i class="fa-solid fa-earth-americas mr-3 text-base"></i>
+        <span class="text-sm">Khu vực</span>
+    </div>
+    <!-- Lưu trữ menu -->
+    <app-menu-collapse (Selection)="selection8($event)" [Config]="storageMenu"></app-menu-collapse>
+    <!-- Ngày giao hàng menu -->
+    <div class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+        <i class="fa-solid fa-truck-fast mr-3 text-base"></i>
+        <span class="text-sm">Ngày giao hàng</span>
+    </div>
+    <!-- Người duyệt menu -->
+    <div class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+        <i class="fa-solid fa-check mr-3 text-base"></i>
+        <span class="text-sm">Người duyệt</span>
     </div>
 </div>
 <!-- sidebar when collapse -->

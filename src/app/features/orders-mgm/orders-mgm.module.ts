@@ -6,9 +6,10 @@ import { DispatchsRoutingModule } from '../dispatchs/dispatchs-routing.module';
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { OrdersMgmRoutingModule } from './orders-mgm-routing.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { MenuCollapseComponent } from 'src/app/core/component/common/menu-collapse/menu-collapse.component';
 
 @NgModule({
-    declarations: [SidebarComponent, OrdersMgmComponent],
+    declarations: [SidebarComponent, OrdersMgmComponent, MenuCollapseComponent],
     imports: [CommonModule, SharedModule, OrdersMgmRoutingModule, RouterModule],
 })
 export class OrdersMgmModule {}
