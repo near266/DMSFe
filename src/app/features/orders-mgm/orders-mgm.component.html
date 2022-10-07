@@ -2,12 +2,261 @@
     <div class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
         <app-sidebar (isShowSidebarOutput)="isShowSidebar($event)"></app-sidebar>
     </div>
+
     <div
         [ngClass]="{ 'ml-60': isShowSidebarToMargin, 'ml-10': !isShowSidebarToMargin }"
         class="fixed bottom-10 top-16 z-0 px-5">
+        <!-- header -->
+        <div class="mt-2 flex justify-between items-center">
+            <span *ngIf="type === 'order'" class="text-xl font-medium">Danh sách phiếu đặt hàng</span>
+            <span *ngIf="type === 'sales'" class="text-xl font-medium">Danh sách phiếu bán hàng</span>
+            <span *ngIf="type === 'return'" class="text-xl font-medium">Danh sách trả hàng</span>
+            <div style="font-size: 12px">
+                <mat-form-field appearance="outline">
+                    <mat-label>Khoảng thời gian</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate placeholder="Start date" />
+                        <input matEndDate placeholder="End date" />
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+        </div>
+        <!-- options select to edit -->
+        <div class="flex mt-2">
+            <button class="p-2 button-option mr-2" [matMenuTriggerFor]="addMenu">
+                <i class="fa-solid fa-plus text-green-700 text-sm font-bold mr-1"></i>
+                <span>Thêm mới</span>
+                <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+            </button>
+            <!-- menu thêm mới của Phiếu đặt hàng | Phiếu bán hàng | Phiếu trả hàng -->
+            <mat-menu #addMenu="matMenu">
+                <!-- phiếu đặt hàng -->
+                <div *ngIf="type === 'order'">
+                    <button mat-menu-item class="flex text-sm">
+                        <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
+                        <span class="text-sm">Thêm mới đơn hàng</span>
+                    </button>
+                    <!-- <button mat-menu-item class="flex text-sm">
+                        <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
+                        <span class="text-sm">Thêm mới đơn hàng combo</span>
+                    </button> -->
+                </div>
+                <!-- phiếu bán hàng -->
+                <div *ngIf="type === 'sales'">
+                    <button mat-menu-item class="flex text-sm">
+                        <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
+                        <span class="text-sm">Thêm mới phiếu bán hàng</span>
+                    </button>
+                    <button mat-menu-item class="flex text-sm">
+                        <i class="fa-solid fa-files"></i>
+                        <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
+                        <span class="text-sm">Thêm mới phiếu bán hàng combo</span>
+                    </button>
+                </div>
+                <!-- phiếu trả hàng -->
+                <div *ngIf="type === 'return'">
+                    <button mat-menu-item class="flex text-sm" [matMenuTriggerFor]="addMenuChildren">
+                        <i class="fa-solid fa-plus mr-2 text-green-700"></i>
+                        <span class="text-sm">Thêm mới</span>
+                    </button>
+                    <mat-menu #addMenuChildren="matMenu">
+                        <button mat-menu-item>Thêm mới phiếu trả hàng</button>
+                        <button mat-menu-item>Thêm mới phiếu trả hàng theo combo</button>
+                    </mat-menu>
+                    <button mat-menu-item class="flex text-sm">
+                        <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
+                        <span class="text-sm">Thêm mới từ phiếu bán hàng</span>
+                    </button>
+                </div>
+            </mat-menu>
+            <button class="p-2 button-option mr-2">
+                <i class="fa-solid fa-arrows-rotate text-green-700 text-sm font-bold mr-1"></i>
+                <span>Tải lại</span>
+            </button>
+            <button class="p-2 button-option mr-2" [matMenuTriggerFor]="importData">
+                <i class="fa-solid fa-file-import text-green-700 text-sm font-bold mr-1"></i>
+                <span>Nhập dữ liệu</span>
+                <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+            </button>
+            <mat-menu #importData="matMenu">
+                <button mat-menu-item>Nhập theo mẫu excel</button>
+            </mat-menu>
+            <button class="p-2 button-option mr-2" [matMenuTriggerFor]="exportData">
+                <i class="fa-solid fa-file-export text-green-700 text-sm font-bold mr-1"></i>
+                <span>Xuất dữ liệu</span>
+                <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+            </button>
+            <mat-menu #exportData="matMenu">
+                <button mat-menu-item>Xuất excel danh sách lưới (được chọn)</button>
+            </mat-menu>
+            <button class="p-2 button-option mr-2" [matMenuTriggerFor]="printMenu">
+                <i class="fa-solid fa-print text-green-700 text-sm font-bold mr-1"></i>
+                <span>In</span>
+                <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+            </button>
+            <mat-menu #exportData="matMenu" #printMenu="matMenu">
+                <button mat-menu-item>In theo mẫu A4 (được chọn)</button>
+                <button mat-menu-item>In theo mẫu A5 (được chọn)</button>
+            </mat-menu>
+            <button class="p-2 button-option mr-2" [matMenuTriggerFor]="filterByTime">
+                <i class="fa-solid fa-calendar text-green-700 text-sm font-bold mr-1"></i>
+                <span>Lọc thời gian</span>
+                <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+            </button>
+            <mat-menu #filterByTime="matMenu" #printMenu="matMenu">
+                <button mat-menu-item>Ngày tạo</button>
+                <button mat-menu-item>Ngày đặt hàng</button>
+                <button mat-menu-item>Ngày giao hàng</button>
+                <button mat-menu-item>Ngày sửa</button>
+            </mat-menu>
+            <button class="p-2 button-option mr-2" [matMenuTriggerFor]="sortMenu">
+                <i class="fa-solid fa-sort text-green-700 text-sm font-bold mr-1"></i>
+                <span>Sắp xếp</span>
+                <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+            </button>
+            <mat-menu #sortMenu="matMenu" #printMenu="matMenu">
+                <button mat-menu-item>Ngày đặt hàng</button>
+                <button mat-menu-item>Ngày đặt hàng</button>
+            </mat-menu>
+            <button class="p-2 button-option mr-2" [matMenuTriggerFor]="manageMenu">
+                <i class="fa-solid fa-lock text-green-700 text-sm font-bold mr-1"></i>
+                <span>Quản trị</span>
+                <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+            </button>
+            <mat-menu #sortMenu="matMenu" #manageMenu="matMenu">
+                <button mat-menu-item class="flex items-center justify-between">
+                    <i class="fa-solid fa-trash mr-2"></i>
+                    <span>Xóa nhiều</span>
+                </button>
+            </mat-menu>
+            <!-- <button class="p-2 button-option mr-2" *ngIf="type != 'return'">
+                <i class="fa-solid fa-calculator text-green-700 text-sm font-bold mr-1"></i>
+                <span>Thao tác nhiều</span>
+                <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+            </button> -->
+        </div>
         <!-- table -->
         <router-outlet></router-outlet>
-        <div id="table" class="table-wrapper">
+        <!-- Bảng đặt hàng -->
+        <div *ngIf="type === 'order'" id="table" class="table-wrapper">
+            <table class="block custom-table text-gray-500 dark:text-gray-400">
+                <thead class="custom-thead">
+                    <th class="custom-th">TT</th>
+                    <th class="custom-th">
+                        <mat-checkbox></mat-checkbox>
+                    </th>
+                    <th class="custom-th">Người đặt</th>
+                    <th class="custom-th">Trạng thái</th>
+                    <th class="custom-th">Mã phiếu</th>
+                    <th class="custom-th">Mã KH</th>
+                    <th class="custom-th">Tên KH</th>
+                    <th class="custom-th">Địa chỉ</th>
+                    <th class="custom-th">Ngày đặt</th>
+                    <th class="custom-th">Tổng tiền</th>
+                    <th class="custom-th">Người duyệt</th>
+                    <th class="custom-th">Ngày duyệt</th>
+                    <th class="custom-th">Nguồn</th>
+                    <th class="custom-th">Ngày tạo</th>
+                    <th class="custom-th">Ngày sửa</th>
+                    <th class="custom-th">Người sửa</th>
+                    <th class="custom-th">Diễn giải</th>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let element of [1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]"
+                        class="custom-row">
+                        <td>Value 1</td>
+                        <td>Value 2</td>
+                        <td>Value 3</td>
+                        <td>Value 4</td>
+                        <td>Value 5</td>
+                        <td>Value 6</td>
+                        <td>Value 7</td>
+                        <td>Value 8</td>
+                        <td>Value 9</td>
+                        <td>Value 10</td>
+                        <td>Value 11</td>
+                        <td>Value 12</td>
+                        <td>Value 13</td>
+                        <td>Value 14</td>
+                        <td>Value 15</td>
+                        <td>Value 16</td>
+                        <td>Value 17</td>
+                        <td>Value 18</td>
+                        <td>Value 19</td>
+                        <td>Value 20</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination -->
+        <div class="justify-end px-2 text-sm mt-2 flex items-center">
+            <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward-fast text-sm mr-2"></i>
+            <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward text-sm mr-2"></i>
+            <div
+                *ngFor="let index of [1, 2, 3]"
+                class="mr-2 bg-green-600 px-2 text-white rounded-sm cursor-pointer hover:bg-green-700">
+                {{ index }}
+            </div>
+            <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward text-sm mr-2"></i>
+            <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward-fast text-sm"></i>
+        </div>
+        <!-- Bảng đơn hàng -->
+        <div *ngIf="type === 'sales'" id="table" class="table-wrapper">
+            <table class="block custom-table text-gray-500 dark:text-gray-400">
+                <thead class="custom-thead">
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                    <th class="custom-th">Col1 this is the longest title</th>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let element of [1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]"
+                        class="custom-row">
+                        <td>Value 1</td>
+                        <td>Value 2</td>
+                        <td>Value 3</td>
+                        <td>Value 4</td>
+                        <td>Value 5</td>
+                        <td>Value 6</td>
+                        <td>Value 7</td>
+                        <td>Value 8</td>
+                        <td>Value 9</td>
+                        <td>Value 10</td>
+                        <td>Value 11</td>
+                        <td>Value 12</td>
+                        <td>Value 13</td>
+                        <td>Value 14</td>
+                        <td>Value 15</td>
+                        <td>Value 16</td>
+                        <td>Value 17</td>
+                        <td>Value 18</td>
+                        <td>Value 19</td>
+                        <td>Value 20</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Bảng đơn hàng trả lại -->
+        <div *ngIf="type === 'return'" id="table" class="table-wrapper">
             <table class="block custom-table text-gray-500 dark:text-gray-400">
                 <thead class="custom-thead">
                     <th class="custom-th">Col1 this is the longest title</th>

@@ -16,9 +16,22 @@ const routes: Routes = [
                     import('../../../features/dispatchs/dispatchs.module').then((m) => m.DispatchsModule),
             },
             {
-                path: 'orders-mgm',
+                path: 'orders',
                 loadChildren: () =>
                     import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
+                data: { type: 'order' },
+            },
+            {
+                path: 'ordersale',
+                loadChildren: () =>
+                    import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
+                data: { type: 'sales' },
+            },
+            {
+                path: 'orderReturn',
+                loadChildren: () =>
+                    import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
+                data: { type: 'return' },
             },
         ],
     },

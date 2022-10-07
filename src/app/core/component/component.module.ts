@@ -4,10 +4,11 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SharedModule } from '../shared/shared.module';
 import { MenuCollapseComponent } from './common/menu-collapse/menu-collapse.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
     declarations: [HeaderComponent, SidebarComponent],
-    imports: [CommonModule, SharedModule],
+    imports: [CommonModule, SharedModule, RouterModule],
     exports: [HeaderComponent, SidebarComponent],
 })
 export class ComponentModule {}
