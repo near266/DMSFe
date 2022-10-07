@@ -1,0 +1,8 @@
+:host ::ng-deep .mat-divider {
+    border-top-color: rgb(74 222 128);
+    border-top-width: 2px;
+}
+
+:host ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 8px !important;
+}

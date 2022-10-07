@@ -34,14 +34,10 @@
             <mat-menu #addMenu="matMenu">
                 <!-- phiếu đặt hàng -->
                 <div *ngIf="type === 'order'">
-                    <button mat-menu-item class="flex text-sm">
+                    <button mat-menu-item class="flex text-sm" [routerLink]="['/orders/createPerchaseOrder']">
                         <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
                         <span class="text-sm">Thêm mới đơn hàng</span>
                     </button>
-                    <!-- <button mat-menu-item class="flex text-sm">
-                        <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
-                        <span class="text-sm">Thêm mới đơn hàng combo</span>
-                    </button> -->
                 </div>
                 <!-- phiếu bán hàng -->
                 <div *ngIf="type === 'sales'">
@@ -165,10 +161,12 @@
                 </thead>
                 <tbody>
                     <tr
-                        *ngFor="let element of [1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]"
+                        *ngFor="let element of [1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]; index as i"
                         class="custom-row">
-                        <td>Value 1</td>
-                        <td>Value 2</td>
+                        <td>{{ i + 1 }}</td>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
                         <td>Value 3</td>
                         <td>Value 4</td>
                         <td>Value 5</td>
@@ -184,9 +182,6 @@
                         <td>Value 15</td>
                         <td>Value 16</td>
                         <td>Value 17</td>
-                        <td>Value 18</td>
-                        <td>Value 19</td>
-                        <td>Value 20</td>
                     </tr>
                 </tbody>
             </table>

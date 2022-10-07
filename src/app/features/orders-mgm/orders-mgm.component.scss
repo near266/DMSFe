@@ -43,9 +43,10 @@ table th {
     position: sticky;
     top: 0px;
     text-align: center;
-    font-weight: normal;
+    font-weight: 600;
     font-size: 14px;
-    @apply text-gray-700 bg-gray-100;
+    z-index: 1;
+    @apply text-gray-700 bg-zinc-200;
 }
 
 table th,
@@ -87,6 +88,18 @@ tbody {
 :host ::ng-deep .mat-menu-item {
     padding: 0px 4px !important;
     height: 30px !important;
+}
+
+:host ::ng-deep {
+    .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+        opacity: 0.03 !important;
+        background-color: rgb(22 163 74) !important;
+    }
+
+    .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+    .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+        background-color: rgb(22 163 74);
+    }
 }
 
 .button-option {
