@@ -10,11 +10,11 @@ export class MenuCollapseComponent implements OnInit, AfterViewInit {
     @Input() Config = new Config();
     @Output() Selection = new EventEmitter<string>();
     isShowmenu = false;
+    isSelect = false;
+    selectedChildren!: string;
     constructor() {}
 
-    ngOnInit(): void {
-        console.log(this.Config.icon);
-    }
+    ngOnInit(): void {}
 
     ngAfterViewInit(): void {
         let iconNode = document.getElementById(`icon-${this.Config.title}`);
@@ -23,6 +23,17 @@ export class MenuCollapseComponent implements OnInit, AfterViewInit {
         }
     }
     select(menuChildren: string) {
+        this.isSelect = true;
+        this.isShowmenu = false;
+        this.selectedChildren = menuChildren;
         this.Selection.emit(menuChildren);
+    }
+
+    cancelSelect() {
+        this.isSelect = false;
+    }
+
+    stopPropagation(e: any) {
+        e.stopPropagation();
     }
 }

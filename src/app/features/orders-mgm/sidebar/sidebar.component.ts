@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Config } from 'src/app/core/model/Config';
-
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
+    @Output() isShowSidebarOutput = new EventEmitter<boolean>();
     isShowSidebar = true;
+    isSearchByBill = false;
     statusMenu: Config = {
         icon: '<i class="fa-solid fa-flag-usa"></i>',
         title: 'Trạng thái',
@@ -55,10 +56,13 @@ export class SidebarComponent implements OnInit {
     };
     constructor() {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.isShowSidebarOutput.emit(this.isShowSidebar);
+    }
 
     toggleShowSidebar() {
         this.isShowSidebar = !this.isShowSidebar;
+        this.isShowSidebarOutput.emit(this.isShowSidebar);
     }
 
     selection1(e: any) {

@@ -1,0 +1,99 @@
+<div class="p-3 flex justify-between items-center">
+    <span style="font-size: 20px !important" class="font-medium">Thêm mới phiếu đặt hàng</span>
+    <div class="flex items-center">
+        <button class="button-primary-small flex items-center justify-between mr-2">
+            <i class="fa-solid fa-check text-white mr-2"></i>
+            <span class="text-white">Lưu</span>
+        </button>
+        <button class="button-success-small flex items-center justify-between mr-2">
+            <i class="fa-solid fa-circle-check text-white mr-2"></i>
+            <span class="text-white">Lưu & Đóng</span>
+        </button>
+        <button class="button-danger" [routerLink]="['/orders']">
+            <i class="fa-solid fa-ban text-white mr-2"></i>
+            <span class="text-white">Đóng</span>
+        </button>
+    </div>
+</div>
+<mat-divider></mat-divider>
+<div class="p-3">
+    <div style="font-size: 12px">
+        <div class="flex gap-x-6 justify-between">
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Mã phiếu</mat-label>
+                <input matInput [readonly]="true" />
+            </mat-form-field>
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Trạng thái</mat-label>
+                <mat-select>
+                    <mat-option *ngFor="let status of statusList" [value]="status">
+                        {{ status }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Ngày đặt</mat-label>
+                <input matInput [matDatepicker]="picker" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Ngày giao</mat-label>
+                <input matInput [matDatepicker]="picker2" />
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="flex gap-x-6 justify-between">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Nhóm</mat-label>
+                <mat-select>
+                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <mat-option *ngFor="let city of groupCites" [value]="city"> {{ city }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Nhân viên đặt</mat-label>
+                <mat-select>
+                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <mat-option *ngFor="let city of groupCites" [value]="city"> {{ city }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Tuyến</mat-label>
+                <mat-select>
+                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <mat-option *ngFor="let city of groupCites" [value]="city"> {{ city }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="flex gap-x-6 justify-between">
+            <mat-form-field class="w-1/3" appearance="outline">
+                <mat-label>Mã Khách hàng</mat-label>
+                <input matInput />
+            </mat-form-field>
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Khách hàng</mat-label>
+                <input matInput />
+            </mat-form-field>
+        </div>
+        <div class="flex gap-x-6 justify-between">
+            <mat-form-field class="w-1/3" appearance="outline">
+                <mat-label>SĐT</mat-label>
+                <input matInput />
+            </mat-form-field>
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Địa chỉ</mat-label>
+                <input matInput />
+            </mat-form-field>
+        </div>
+        <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Diễn giải</mat-label>
+            <textarea matInput></textarea>
+        </mat-form-field>
+    </div>
+    <mat-tab-group>
+        <mat-tab label="Sản phẩm đặt hàng"></mat-tab>
+        <mat-tab label="Sản phẩm khuyến mại"> </mat-tab>
+    </mat-tab-group>
+</div>
