@@ -13,6 +13,28 @@ export class UserManageComponent implements OnInit {
     private title: Title,
   ) { }
 
+  closeSideBar() {
+    this.class = {
+      left: 'w-5',
+      right: 'w-full',
+      statusbar: false
+    }
+  }
+
+  openSideBar() {
+    this.class = {
+      left: 'w-3/12',
+      right: 'w-9/12',
+      statusbar: true
+    }
+  }
+
+  class = {
+    left: 'w-3/12',
+    right: 'w-9/12',
+    statusbar: true
+  }
+
   item = {
     level: 1,
     name: 'level1',
