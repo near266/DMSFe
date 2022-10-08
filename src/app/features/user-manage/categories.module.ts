@@ -5,6 +5,7 @@ import { Router, RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { MenuCollapseComponent } from 'src/app/core/component/common/menu-collapse/menu-collapse.component';
 import { ComponentModule } from 'src/app/core/component/component.module';
+import { MenuBarComponent } from './user-tree/menu-bar/menu-bar.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     UserManageComponent,
+    MenuBarComponent,
   ],
   imports: [
     CommonModule,

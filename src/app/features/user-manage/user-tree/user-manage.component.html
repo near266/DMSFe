@@ -24,25 +24,14 @@
                 <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
                 Thêm mới
             </button>
-            <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" [matMenuTriggerFor]="menu"
-                #menuTrigger="matMenuTrigger" (mouseenter)="mouseEnter(menuTrigger)"
-                (mouseleave)="mouseLeave(menuTrigger)">
-                <i class="fa-solid fa-filter text-emerald-500 font-bold mr-2"></i>
-                Chức danh
-                <i class="fa-solid fa-caret-down text-emerald-500 font-bold ml-2"></i>
+            <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
+            </app-menu-bar>
+            <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+                <i class="fa-sharp fa-solid fa-download text-emerald-500 font-bold mr-2"></i>
+                Xuất dữ liệu
             </button>
-            <ng-content select="[trigger]"></ng-content>
-            <mat-menu #menu="matMenu" [hasBackdrop]="false">
-                <div (mouseenter)="mouseEnter(menuTrigger)" (mouseleave)="mouseLeave(menuTrigger)" class="px-1">
-                    <ng-content select="[content]"></ng-content>
-                    <button (click)="Select(menuItem.value)"
-                        class="p-2 font-medium text-xs hover:bg-gray-200 w-full flex flex-row justify-start items-center"
-                        *ngFor="let menuItem of listMenuPosition">
-                        <i class="fa-solid font-bold mr-2 text-base" [ngClass]="menuItem.leftIcon"></i>
-                        {{menuItem.title}}
-                    </button>
-                </div>
-            </mat-menu>
+            <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj2">
+            </app-menu-bar>
         </div>
         <div class="overflow-scroll h-full">
             <div class="w-60 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
