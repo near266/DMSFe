@@ -26,6 +26,9 @@
         </div>
         <div class="bg-white h-full overflow-y-scroll w-full">
             <app-infor *ngIf="title == 'Thông tin chung'"></app-infor>
+            <app-config *ngIf="title == 'Cấu hình nhân viên'"></app-config>
+            <app-app *ngIf="title == 'App nhân viên'"></app-app>
+            <app-menu *ngIf="title == 'Menu hiển thị'"></app-menu>
         </div>
     </div>
 </div>

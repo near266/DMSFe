@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { AddUserComponent } from './add-user/add-user.component';
+import { DetailUserComponent } from './detail-user/detail-user.component';
 
 @Component({
   selector: 'app-user-manage',
@@ -17,9 +18,20 @@ export class UserManageComponent implements OnInit {
   ) { }
 
   AddUser() {
-    this.dialog.open(AddUserComponent,{
+    this.dialog.open(AddUserComponent, {
       height: '100vh',
       minWidth: '900px',
+    })
+  }
+
+  DetailUser(id: any) {
+    this.dialog.open(DetailUserComponent, {
+      height: '100vh',
+      minWidth: '900px',
+      data: {
+        id: id,
+        title: 'view'
+      }
     })
   }
 
@@ -171,6 +183,7 @@ export class UserManageComponent implements OnInit {
   ]
 
   users = [{
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -184,6 +197,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 2,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -197,6 +211,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 3,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -210,6 +225,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 4,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -223,6 +239,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 5,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -236,6 +253,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 5,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -249,6 +267,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -262,6 +281,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -275,6 +295,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -288,6 +309,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -301,6 +323,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -314,6 +337,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -327,6 +351,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -340,6 +365,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -353,6 +379,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -366,6 +393,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -379,6 +407,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -392,6 +421,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -405,6 +435,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -418,6 +449,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -431,6 +463,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -444,6 +477,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -457,6 +491,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -470,6 +505,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -483,6 +519,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -496,6 +533,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -509,6 +547,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -522,6 +561,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -535,6 +575,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -548,6 +589,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -561,6 +603,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -574,6 +617,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -587,6 +631,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -600,6 +645,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -613,6 +659,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -626,6 +673,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -639,6 +687,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -652,6 +701,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -665,6 +715,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -678,6 +729,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -691,6 +743,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -704,6 +757,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -717,6 +771,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -730,6 +785,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -743,6 +799,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -756,6 +813,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -769,6 +827,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -782,6 +841,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -795,6 +855,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -808,6 +869,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
@@ -821,6 +883,7 @@ export class UserManageComponent implements OnInit {
     lastModifed: '2022-01-01T12:01:01.234Z',
     lastAsync: '2022-01-01T12:01:01.234Z',
   }, {
+    id: 1,
     img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
     status: 'Hoạt động',
     email: 'zxcvbnm@gmail.com',
