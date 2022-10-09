@@ -6,6 +6,8 @@ import { SharedModule } from 'src/app/core/shared/shared.module';
 import { MenuCollapseComponent } from 'src/app/core/component/common/menu-collapse/menu-collapse.component';
 import { ComponentModule } from 'src/app/core/component/component.module';
 import { MenuBarComponent } from './user-tree/menu-bar/menu-bar.component';
+import { AddUserComponent } from './user-tree/add-user/add-user.component';
+import { DetailUserComponent } from './user-tree/detail-user/detail-user.component';
 
 const routes: Routes = [
   {
@@ -18,6 +20,8 @@ const routes: Routes = [
   declarations: [
     UserManageComponent,
     MenuBarComponent,
+    AddUserComponent,
+    DetailUserComponent,
   ],
   imports: [
     CommonModule,

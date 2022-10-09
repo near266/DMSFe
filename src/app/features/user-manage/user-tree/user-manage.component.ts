@@ -1,6 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
+import { AddUserComponent } from './add-user/add-user.component';
 
 @Component({
   selector: 'app-user-manage',
@@ -11,7 +13,15 @@ export class UserManageComponent implements OnInit {
 
   constructor(
     private title: Title,
+    private dialog: MatDialog
   ) { }
+
+  AddUser() {
+    this.dialog.open(AddUserComponent,{
+      height: '100vh',
+      minWidth: '900px',
+    })
+  }
 
   closeSideBar() {
     this.class = {
