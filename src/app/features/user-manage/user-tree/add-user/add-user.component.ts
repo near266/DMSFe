@@ -19,7 +19,7 @@ export class AddUserComponent implements OnInit {
     { title: 'Cấu hình nhân viên', leftIcon: 'fa-solid fa-gear' },
     { title: 'App nhân viên', leftIcon: 'fa-solid fa-gear' },
     { title: 'Menu hiển thị', leftIcon: 'fa-solid fa-list' },
-    { title: 'Chấm thi phòng nhóm', leftIcon: 'fa-solid fa-location-dot' },
+    // { title: 'Chấm thi phòng nhóm', leftIcon: 'fa-solid fa-location-dot' },
   ]
 
 }
