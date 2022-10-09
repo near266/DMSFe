@@ -30,7 +30,7 @@ export class UserManageComponent implements OnInit {
       minWidth: '900px',
       data: {
         id: id,
-        title: 'view'
+        status: 'view'
       }
     })
   }

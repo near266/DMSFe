@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-detail-user',
@@ -7,11 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DetailUserComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public dataDialog:any
+  ) { }
 
   title = 'Thông tin chung'
 
   ngOnInit(): void {
+    console.log(this.dataDialog.status);
+    
   }
 
   tabList = [
