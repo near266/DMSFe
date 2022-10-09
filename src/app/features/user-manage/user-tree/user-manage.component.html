@@ -1,11 +1,13 @@
 <div class="h-full flex flex-row w-full overflow-hidden">
     <div class="h-full max-w-md bg-gray-100 my-1 mr-1 flex flex-col relative overflow-hidden" [ngClass]="class.left">
-        <div class="w-72 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm" *ngIf="class.statusbar">
+        <div class="w-72 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm"
+            *ngIf="class.statusbar">
             <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
             <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm nhân viên">
         </div>
         <div class="overflow-scroll h-full">
-            <div class="w-72 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm" *ngIf="class.statusbar">
+            <div class="w-72 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm"
+                *ngIf="class.statusbar">
                 <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
                 <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm trên cây">
             </div>
@@ -13,10 +15,12 @@
 
             </div>
         </div>
-        <button class="absolute w-5 h-8 top-0 right-0 bg-gray-50 border border-solid border-gray-300" (click)="closeSideBar()" *ngIf="class.statusbar">
+        <button class="absolute w-5 h-8 top-0 right-0 bg-gray-50 border border-solid border-gray-300"
+            (click)="closeSideBar()" *ngIf="class.statusbar">
             <i class="fa-solid fa-caret-left"></i>
         </button>
-        <button class="absolute w-5 h-8 top-0 right-0 bg-gray-50 border border-solid border-gray-300" (click)="openSideBar()" *ngIf="!class.statusbar">
+        <button class="absolute w-5 h-8 top-0 right-0 bg-gray-50 border border-solid border-gray-300"
+            (click)="openSideBar()" *ngIf="!class.statusbar">
             <i class="fa-solid fa-caret-right"></i>
         </button>
     </div>
