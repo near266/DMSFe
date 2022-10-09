@@ -3,12 +3,32 @@
         style="display: flex!important; margin: 0!important;">
         <div class="text-2xl text-gray-500 italic font-semibold tracking-wider flex">Thông tin thành viên</div>
         <div class="flex flex-row text-xs">
-            <div
+            <div *ngIf="dataDialog.status == 'edit'"
                 class="flex flex-row bg-blue-900 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
                 <i class="fa-solid fa-circle-check mx-2"></i>
                 <span class="mr-2">Lưu</span>
             </div>
-            <div class="flex flex-row bg-gray-300 text-black justify-center items-center px-2 py-3 rounded-r-sm cursor-pointer"
+            <div *ngIf="dataDialog.status == 'view'" (click)="dataDialog.status = 'edit'"
+                class="flex flex-row bg-gray-800 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
+                <i class="fa-solid fa-file mx-2"></i>
+                <span class="mr-2">Sửa</span>
+            </div>
+            <div *ngIf="dataDialog.status == 'view'" class="flex flex-row bg-gray-200 text-black justify-center items-center border-x border-gray-300 px-2 py-3 cursor-pointer"
+                mat-dialog-close>
+                <i class="fa-solid fa-right-from-bracket mx-2"></i>
+                <span class="mr-2">Thoát tài khoản</span>
+            </div>
+            <div *ngIf="dataDialog.status == 'view'" class="flex flex-row bg-gray-200 text-black justify-center items-center border-x border-gray-300 px-2 py-3 cursor-pointer"
+                mat-dialog-close>
+                <i class="fa-solid fa-refresh mx-2"></i>
+                <span class="mr-2">Đặt mật khẩu</span>
+            </div>
+            <div class="flex flex-row bg-gray-200 text-black justify-center items-center border-x border-gray-300 px-2 py-3 cursor-pointer"
+                mat-dialog-close>
+                <i class="fa-solid fa-trash mx-2"></i>
+                <span class="mr-2">Xóa</span>
+            </div>
+            <div class="flex flex-row bg-gray-200 text-black justify-center items-center border-x border-gray-300 px-2 py-3 rounded-r-sm cursor-pointer"
                 mat-dialog-close>
                 <i class="fa-solid fa-right-from-bracket mx-2"></i>
                 <span class="mr-2">Đóng</span>
