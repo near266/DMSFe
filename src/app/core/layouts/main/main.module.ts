@@ -20,6 +20,10 @@ const routes: Routes = [
                 loadChildren: () =>
                     import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
             },
+            {
+                path: 'warehouses',
+                loadChildren: () =>
+                    import('../../../features/warehouse/warehouse.module').then(m => m.WarehouseModule) }
         ],
     },
 ];
