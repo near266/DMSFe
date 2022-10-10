@@ -21,6 +21,11 @@ const routes: Routes = [
                     import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
             },
             {
+                path: 'ordersale',
+                loadChildren: () =>
+                    import('../../../features/order-sale-mgm/order-sale-mgm.module').then((m) => m.OrderSaleMgmModule),
+            },
+            {
                 path: 'warehouses',
                 loadChildren: () =>
                     import('../../../features/warehouse/warehouse.module').then(m => m.WarehouseModule)
