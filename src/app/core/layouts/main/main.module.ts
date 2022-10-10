@@ -23,14 +23,7 @@ const routes: Routes = [
             {
                 path: 'warehouses',
                 loadChildren: () =>
-                    import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
-                data: { type: 'sales' },
-            },
-            {
-                path: 'orderReturn',
-                loadChildren: () =>
-                    import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
-                data: { type: 'return' },
+                    import('../../../features/warehouse/warehouse.module').then(m => m.WarehouseModule)
             },
             {
                 path: 'categories',
@@ -45,4 +38,4 @@ const routes: Routes = [
     declarations: [MainComponent],
     imports: [CommonModule, SharedModule, RouterModule, ComponentModule, RouterModule.forChild(routes)],
 })
-export class MainModule {}
+export class MainModule { }
