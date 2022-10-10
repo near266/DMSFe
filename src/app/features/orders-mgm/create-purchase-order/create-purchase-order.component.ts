@@ -7,8 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreatePurchaseOrderComponent implements OnInit {
     statusList = ['Chờ duyệt', 'Đã duyệt', 'Đã giao hàng'];
-    groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng']
+    groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng'];
     constructor() {}
 
     ngOnInit(): void {}
+    stopPropagation(e: any) {
+        e.stopPropagation();
+    }
 }

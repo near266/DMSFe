@@ -12,11 +12,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy {
     type!: string;
     constructor(private activatedroute: ActivatedRoute) {}
 
-    ngOnInit(): void {
-        this.activatedroute.data.subscribe((data) => {
-            this.type = data['type'];
-        });
-    }
+    ngOnInit(): void {}
 
     ngDoCheck(): void {
         let table = document.getElementById('table');
