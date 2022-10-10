@@ -12,9 +12,10 @@
                 <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm trên cây">
             </div>
             <div class="w-fit p-2 text-xs">
-
             </div>
+            <app-user-tree-view></app-user-tree-view>
         </div>
+
         <button class="absolute w-5 h-8 top-0 right-0 bg-gray-50 border border-solid border-gray-300"
             (click)="closeSideBar()" *ngIf="class.statusbar">
             <i class="fa-solid fa-caret-left"></i>
@@ -90,7 +91,8 @@
                         <tr class="h-14 w-fit text-xs" *ngFor="let user of users; let o=odd; let e=even;"
                             [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
                             <td class="border-x w-fit border-solid align-middle px-2">{{user.code}}</td>
-                            <td class="border-x w-fit border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer" (click)="DetailUser(user.id)">
+                            <td class="border-x w-fit border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer"
+                                (click)="DetailUser(user.id)">
                                 {{user.fullname}} </td>
                             <td class="border-x w-fit border-solid align-middle px-2">{{user.gender}} </td>
                             <td class="border-x w-fit border-solid align-middle px-2">{{user.pos}}</td>

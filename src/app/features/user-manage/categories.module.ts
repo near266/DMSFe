@@ -12,6 +12,8 @@ import { InforComponent } from './user-tree/add-user/infor/infor.component';
 import { ConfigComponent } from './user-tree/add-user/config/config.component';
 import { AppComponent } from './user-tree/add-user/app/app.component';
 import { MenuComponent } from './user-tree/add-user/menu/menu.component';
+import { TreeModule } from '@circlon/angular-tree-component';
+import { UserTreeViewComponent } from './user-tree/user-tree-view/user-tree-view.component';
 
 const routes: Routes = [
   {
@@ -30,9 +32,10 @@ const routes: Routes = [
     ConfigComponent,
     AppComponent,
     MenuComponent,
+    UserTreeViewComponent,
   ],
   imports: [
-    CommonModule,
+    CommonModule, TreeModule,
     RouterModule.forChild(routes),
     SharedModule
   ]

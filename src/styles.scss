@@ -1,9 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 html,
 body {
     height: 100%;
 }
+
 body {
     margin: 0;
     font-family: Roboto, 'Lato', sans-serif !important;
@@ -11,70 +15,59 @@ body {
     // overflow-x: hidden;
 }
 
-.button-primary {
-    @apply text-white bg-blue-700 hover:bg-blue-800
-    focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg
-    text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700
-    dark:focus:ring-blue-800;
+@import '~@circlon/angular-tree-component/css/angular-tree-component.css';
+
+.node-content-wrapper,
+.tree-children {
+    position: relative;
 }
 
-.button-primary-small {
-    @apply text-white bg-blue-700 hover:bg-blue-800
-    focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg
-    text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700
-    dark:focus:ring-blue-800;
+.node-content-wrapper::before,
+.tree-children::after {
+    content: "";
+    position: absolute;
 }
 
-.button-warning {
-    @apply text-white bg-yellow-500 hover:bg-yellow-600
-    focus:ring-4 focus:outline-none focus:ring-yellow-200 font-medium rounded-lg
-    text-sm px-5 py-2.5 text-center dark:bg-yellow-400 dark:hover:bg-yellow-500
-    dark:focus:ring-yellow-600;
+.node-content-wrapper::before {
+    border-bottom: 1px solid lightgrey;
+    border-left: 1px solid lightgrey;
+    height: 28px;
+    top: -17px;
+    width: 20px;
+    left: -28px;
 }
 
-.button-success {
-    @apply text-white bg-green-500 hover:bg-green-600
-    focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg
-    text-sm px-5 py-2.5 text-center dark:bg-green-400 dark:hover:bg-green-500
-    dark:focus:ring-green-600;
+.tree-node-level-1>tree-node-wrapper>.node-wrapper>.node-content-wrapper::before {
+    display: none;
 }
 
-.button-success-small {
-    @apply text-white bg-green-500 hover:bg-green-600
-    focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg
-    text-sm px-3 py-2 text-center dark:bg-green-400 dark:hover:bg-green-500
-    dark:focus:ring-green-600;
+tree-node-expander {
+    order: 0;
 }
 
-.button-danger {
-    @apply text-white bg-red-600 hover:bg-red-700
-    focus:ring-4 focus:outline-none focus:ring-red-200 font-medium rounded-lg
-    text-sm px-5 py-2.5 text-center dark:bg-red-400 dark:hover:bg-red-500
-    dark:focus:ring-red-600;
+tree-node-checkbox {
+    order: 1;
 }
 
-.button-danger-small {
-    @apply text-white bg-red-600 hover:bg-red-700
-    focus:ring-4 focus:outline-none focus:ring-red-200 font-medium rounded-lg
-    text-sm px-3 py-2 text-center dark:bg-red-400 dark:hover:bg-red-500
-    dark:focus:ring-red-600;
+.node-content-wrapper {
+    order: 2;
 }
 
-.button-cancel {
-    @apply text-white bg-gray-500 hover:bg-gray-600
-    focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-lg
-    text-sm px-5 py-2.5 text-center dark:bg-gray-400 dark:hover:bg-gray-500
-    dark:focus:ring-gray-600;
+.tree-node-leaf>.node-wrapper>.node-content-wrapper::before {
+    width: 25px;
 }
 
-.button-cancel-small {
-    @apply text-white bg-gray-500 hover:bg-gray-600
-    focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-lg
-    text-sm px-3 py-2 text-center dark:bg-gray-400 dark:hover:bg-gray-500
-    dark:focus:ring-gray-600;
+.tree-children::after {
+    border-left: 1px solid lightgrey;
+    height: 100%;
+    top: -15px;
+    left: -15px;
 }
 
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+tree-node:last-child>.tree-node>.tree-children::after {
+    border-left: none;
+}
+
+.toggle-children {
+    z-index: 1;
+}

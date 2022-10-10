@@ -900,7 +900,6 @@ export class UserManageComponent implements OnInit {
 
   Select(e: any) {
     console.log(e);
-
   }
 
 }
