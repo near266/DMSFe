@@ -19,7 +19,7 @@
                 <i class="fa-solid fa-cart-shopping text-base mr-2"></i>
                 <span>Sản phẩm</span>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item [routerLink]="['warehouses']">
                 <i class="fa-solid fa-shop text-base mr-2"></i>
                 <span>Kho hàng</span>
             </button>
@@ -43,6 +43,10 @@
             <i class="fa-solid fa-caret-down"></i>
         </li>
         <mat-menu #menu2="matMenu">
+            <button mat-menu-item class="flex items-center" (click)="openTree()">
+                <i class="fa-solid fa-list-tree text-base mr-2"></i>
+                <span>Cây đơn vị</span>
+            </button>
             <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren1">
                 <i class="fa-solid fa-user-tag text-base mr-2"></i>
                 <span>Phân quyền, chỉ tiêu</span>
