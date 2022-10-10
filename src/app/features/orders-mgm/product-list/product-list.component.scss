@@ -1,0 +1,18 @@
+:host ::ng-deep .mat-divider {
+    border-top-color: rgb(74 222 128);
+    border-top-width: 2px;
+}
+.custom {
+    &-table {
+        @apply table-auto w-full text-left text-gray-500 dark:text-gray-400;
+    }
+    &-thead {
+        @apply text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400;
+    }
+    &-th {
+        @apply py-3 text-center;
+    }
+    &-tr {
+        @apply cursor-default bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
+    }
+}

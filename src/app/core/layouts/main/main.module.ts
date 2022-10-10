@@ -19,10 +19,9 @@ const routes: Routes = [
                 path: 'orders',
                 loadChildren: () =>
                     import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
-                data: { type: 'order' },
             },
             {
-                path: 'ordersale',
+                path: 'warehouses',
                 loadChildren: () =>
                     import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
                 data: { type: 'sales' },
