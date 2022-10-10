@@ -1,5 +1,9 @@
 import { Component, DoCheck, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { PurchaseOrderList } from 'src/app/core/data/PurchaseOrderList';
+import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
+// import * as moment from 'moment';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-orders-mgm',
@@ -10,7 +14,8 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy {
     isShowSidebarToMargin = true;
     sideBarWidth!: string;
     type!: string;
-    constructor(private activatedroute: ActivatedRoute) {}
+    listOrder: PurchaseOrder[] = PurchaseOrderList;
+    constructor(private activatedroute: ActivatedRoute, public datepipe: DatePipe) {}
 
     ngOnInit(): void {}
 

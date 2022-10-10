@@ -1,0 +1,61 @@
+<div class="fixed z-10 bg-white w-full">
+    <div class="p-3 w-full flex justify-between items-center">
+        <button *ngIf="type === 'View'" class="button-success-small flex items-center justify-between mr-2">
+            <i class="fa-solid fa-truck text-white mr-2"></i>
+            <span class="text-white">Chuyển kho</span>
+        </button>
+        <div *ngIf="type === 'Edit'"></div>
+        <div class="flex items-center">
+            <button
+                *ngIf="type === 'View'"
+                (click)="type = 'Edit'"
+                class="button-primary-small flex items-center justify-between mr-2">
+                <i class="fa-solid fa-pen-to-square text-white mr-2"></i>
+                <span class="text-white">Sửa</span>
+            </button>
+            <button
+                *ngIf="type === 'View'"
+                class="button-danger-small flex items-center justify-between mr-2"
+                [routerLink]="['/orders']">
+                <i class="fa-solid fa-trash text-white mr-2"></i>
+                <span class="text-white">Xóa</span>
+            </button>
+            <button *ngIf="type === 'Edit'" class="button-primary-small flex items-center justify-between mr-2">
+                <i class="fa-solid fa-check text-white mr-2"></i>
+                <span class="text-white">Lưu</span>
+            </button>
+            <button *ngIf="type === 'Edit'" class="button-success-small flex items-center justify-between mr-2">
+                <i class="fa-solid fa-circle-check text-white mr-2"></i>
+                <span class="text-white">Lưu & Đóng</span>
+            </button>
+            <button [routerLink]="['/orders']" class="button-cancel-small flex items-center justify-between mr-2">
+                <i class="fa-solid fa-ban text-white mr-2"></i>
+                <span class="text-white">Đóng</span>
+            </button>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+<div class="flex overflow-x-hidden">
+    <!-- sidebar -->
+    <div class="w-48 fixed mt-16 border-r h-screen mr-1 flex flex-col items-stretch overflow-y-auto">
+        <div
+            [routerLink]="['/orders/detailOrder/viewEdit']"
+            routerLinkActive="active"
+            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
+            <i class="fa-solid fa-pen-to-square mr-2"></i>
+            <span>Đặt hàng</span>
+        </div>
+        <div
+            [routerLink]="['/orders/detailOrder/customer']"
+            routerLinkActive="active"
+            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
+            <i class="fa-solid fa-user-secret mr-2"></i>
+            <span>Khách hàng</span>
+        </div>
+    </div>
+    <!-- main -->
+    <div class="overflow-x-auto w-full ml-48 mt-16">
+        <router-outlet></router-outlet>
+    </div>
+</div>

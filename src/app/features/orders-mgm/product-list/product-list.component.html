@@ -16,8 +16,47 @@
     </div>
     <mat-divider></mat-divider>
 </div>
-<div class="flex items-center mt-20">
-    <div class="w-60 h-full border-r"></div>
+<div class="flex mt-20">
+    <div class="w-60 h-full border-r min-h-screen mr-1 flex flex-col items-stretch px-5">
+        <button class="button-success">Tìm kiếm sản phẩm</button>
+        <input type="text" placeholder="Mã hoặc tên sản phẩm" class="border rounded-md mt-3 p-2" />
+        <div style="font-size: 12px" class="mt-2">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>[-- Chọn nhãn hiệu --]</mat-label>
+                <mat-select>
+                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <mat-option [value]="1"> 1</mat-option>
+                    <mat-option [value]="1"> 1</mat-option>
+                    <mat-option [value]="1"> 1</mat-option>
+                    <mat-option [value]="1"> 1</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div style="font-size: 12px" class="mt-2">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>[-- Chọn nhà cung cấp --]</mat-label>
+                <mat-select>
+                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <mat-option [value]="1"> 1</mat-option>
+                    <mat-option [value]="1"> 1</mat-option>
+                    <mat-option [value]="1"> 1</mat-option>
+                    <mat-option [value]="1"> 1</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div style="font-size: 12px" class="mt-2">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>[-- Chọn ngành hàng --]</mat-label>
+                <mat-select>
+                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <mat-option [value]="1"> 1</mat-option>
+                    <mat-option [value]="1"> 1</mat-option>
+                    <mat-option [value]="1"> 1</mat-option>
+                    <mat-option [value]="1"> 1</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
     <mat-tab-group class="w-full">
         <mat-tab label="Danh sách sản phẩm">
             <div class="flex justify-end mt-2">

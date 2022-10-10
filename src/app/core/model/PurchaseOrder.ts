@@ -1,15 +1,20 @@
 export class PurchaseOrder {
-    id?: string;
-    orderCode?: string;
-    group?: string;
-    customerCode?: string;
-    phoneNo?: string;
-    status?: string;
-    orderEmployee?: string;
-    customer?: string;
-    route?: string;
+    purchaseOrderId?: string;
+    purchaseOrderCode?: string;
+    status?: number;
+    type?: number;
     orderDate?: string;
-    deliveryDate?: string;
+    orderEmployeeName?: string;
+    customerCode?: string;
+    customerName?: string;
+    phone?: string;
+    address?: string;
     description?: string;
-    product?: string;
+    warehouseName?: string;
+    approveDate?: string;
+    approveBy?: string;
+    createdDate?: string;
+    lastModifiedDate?: string;
+    lastModifiedBy?: string;
+    source?: string;
 }

@@ -9,9 +9,11 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { MenuCollapseComponent } from 'src/app/core/component/common/menu-collapse/menu-collapse.component';
 import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
 import { ProductListComponent } from './product-list/product-list.component';
+import { ViewEditDetailOrderComponent } from './view-edit-detail-order/view-edit-detail-order.component';
+import { CustomerComponent } from './view-edit-detail-order/customer/customer.component';
 
 @NgModule({
-    declarations: [SidebarComponent, OrdersMgmComponent, MenuCollapseComponent, CreatePurchaseOrderComponent, ProductListComponent],
+    declarations: [SidebarComponent, OrdersMgmComponent, MenuCollapseComponent, CreatePurchaseOrderComponent, ProductListComponent, ViewEditDetailOrderComponent, CustomerComponent],
     imports: [CommonModule, SharedModule, OrdersMgmRoutingModule, RouterModule],
 })
 export class OrdersMgmModule {}

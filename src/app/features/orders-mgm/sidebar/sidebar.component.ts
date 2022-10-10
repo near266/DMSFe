@@ -47,7 +47,7 @@ export class SidebarComponent implements OnInit {
     groupCustomerMenu: Config = {
         icon: '<i class="fa-solid fa-users"></i>',
         title: 'Nhóm khách hàng',
-        menuChildrens: ['Tất cả', 'Hợp đò'],
+        menuChildrens: ['Tất cả', 'Hợp đồng', 'KH lẻ'],
     };
     storageMenu: Config = {
         icon: '<i class="fa-solid fa-warehouse"></i>',
