@@ -35,6 +35,11 @@ const routes: Routes = [
                 loadChildren: () =>
                     import('../../../features/user-manage/categories.module').then((m) => m.UserManageModule),
             },
+            {
+                path: 'customers',
+                loadChildren: () =>
+                import('../../../features/customers/customers.module').then(m => m.CustomersModule)
+            }
         ],
     },
 ];

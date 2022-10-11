@@ -1,0 +1,29 @@
+export class Customers {
+  id?: string;
+  Status?: string;
+  CustomerCode?: string;
+  CustomerName?: string;
+  CustomerGroupId?: string;
+  CustomerTypeId?: string;
+  IsLocationVerified?: string;
+  IsUpdatedAddress?: string;
+  LastModifiedDate?: string;
+  ChannelId?: string;
+  Address?: string;
+  AreaId?: string;
+  Province?: string;
+  District?: string;
+  Ward?: string;
+  DeliveryAddress?: string;
+  DOB?: string;
+  ContactName?: string;
+  Position?: string;
+  Phone?: string;
+  Email?: string;
+  DebtLimit?: string;
+  CashAcc?: string;
+  CreatedBy?: string;
+  CreatedDate?: string;
+  LastModifiedBy?: string;
+  Avatar?: string;
+}
