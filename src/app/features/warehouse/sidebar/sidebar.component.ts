@@ -11,7 +11,7 @@ export class SidebarComponent implements OnInit {
     isSearchByBill = false;
     statusMenu: Config = {
         icon: '<i class="fa-solid fa-flag"></i>',
-        title: 'Chưa chốt',
+        title: 'Trạng thái',
         menuChildrens: [
             'Tất cả',
             'Chưa chốt',
@@ -31,7 +31,20 @@ export class SidebarComponent implements OnInit {
     lineMenu: Config = {
         icon: '<i class="fa-solid fa-grip"></i>',
         title: 'Loại nhập/xuất',
-        menuChildrens: ['Tất cả', 'Đúng tuyến', 'Không đúng tuyến'],
+        menuChildrens: [
+          'Tất cả',
+          'Nhập mua NCC',
+          'Xuất trả NCC',
+          'Xuất bán KH',
+          'Nhập trả KH',
+          'Xuất sang kho NV',
+          'Nhập từ kho NV',
+          'Xuất điều chỉnh',
+          'Nhập điều chỉnh',
+          'Chuyển kho',
+          'Chuyển kho từ phiếu đặt',
+          'Chuyển kho chưa duyệt'
+        ],
     };
     typeCustomerMenu: Config = {
         icon: '<i class="fa-solid fa-briefcase"></i>',

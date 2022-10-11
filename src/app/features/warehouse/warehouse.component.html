@@ -2,5 +2,21 @@
   <div class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
       <app-sidebar (isShowSidebarOutput)="isShowSidebar($event)"></app-sidebar>
   </div>
-  
+  <div [ngClass]="{ 'ml-60': isShowSidebarToMargin, 'ml-10': !isShowSidebarToMargin }"
+  class="fixed bottom-10 top-16 z-0 px-5">
+    <div class="mt-2 flex justify-between items-center">
+      <span class="text-xl font-medium">Kho hàng</span>
+      <div style="font-size: 12px">
+          <mat-form-field appearance="outline">
+              <mat-label>Khoảng thời gian</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate placeholder="Start date" />
+                  <input matEndDate placeholder="End date" />
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+      </div>
+    </div>
+  </div>
 </div>
