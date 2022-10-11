@@ -1,7 +1,9 @@
+<mat-sidenav-container [hasBackdrop]="true">
+	<mat-sidenav class="fixed" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" #drawer [mode]="'over'"
+	[position]="'start'" class="bg-[#fafafa] overflow-hidden relative z-50">Start</mat-sidenav>
+  <mat-sidenav-content>
 <div class="flex w-full">
-	<div class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
-	</div>
-	<div [ngClass]="{ 'ml-60': isShowSidebarToMargin, 'ml-10': !isShowSidebarToMargin }"
+	<div
 		class="fixed bottom-10 top-16 z-0 px-5">
 		<!-- header -->
 		<div class="mt-2 flex justify-between items-center">
@@ -191,3 +193,5 @@
 		</div>
 	</div>
 </div>
+</mat-sidenav-content>
+</mat-sidenav-container>
