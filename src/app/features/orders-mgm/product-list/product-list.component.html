@@ -2,13 +2,12 @@
     <div class="p-3 w-full flex justify-between items-center">
         <span style="font-size: 20px !important" class="font-medium">Danh sách sản phẩm</span>
         <div class="flex items-center">
-            <button
-                [routerLink]="['/orders/createPerchaseOrder']"
-                class="button-primary-small flex items-center justify-between mr-2">
+            <button (click)="navigateToClose()" class="button-primary-small
+             flex items-center justify-between mr-2">
                 <i class="fa-solid fa-check text-white mr-2"></i>
                 <span class="text-white">Đã xong</span>
             </button>
-            <button class="button-danger" [routerLink]="['/orders/createPerchaseOrder']">
+            <button class="button-danger" (click)="navigateToClose()">
                 <i class="fa-solid fa-ban text-white mr-2"></i>
                 <span class="text-white">Đóng</span>
             </button>
@@ -60,16 +59,12 @@
     <mat-tab-group class="w-full">
         <mat-tab label="Danh sách sản phẩm">
             <div class="flex justify-end mt-2">
-                <button
-                    *ngIf="!isSelectAll"
-                    (click)="isSelectAll = true"
+                <button *ngIf="!isSelectAll" (click)="isSelectAll = true"
                     class="button-primary-small flex items-center justify-between mr-2">
                     <i class="fa-solid fa-circle-check text-white mr-2"></i>
                     <span class="text-white">Chọn tất cả sản phẩm</span>
                 </button>
-                <button
-                    *ngIf="isSelectAll"
-                    (click)="isSelectAll = false"
+                <button *ngIf="isSelectAll" (click)="isSelectAll = false"
                     class="button-danger-small flex items-center justify-between mr-2">
                     <i class="fa-solid fa-xmark text-white mr-2"></i>
                     <span class="text-white">Bỏ chọn tất cả</span>
@@ -103,13 +98,11 @@
                             <td class="custom-th">Value 1</td>
                             <td class="custom-th">Value 1</td>
                             <td class="custom-th" (click)="stopPropagation($event)">
-                                <button
-                                    *ngIf="!isSelectAll"
+                                <button *ngIf="!isSelectAll"
                                     class="text-green-600 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">
                                     <span>Chọn</span>
                                 </button>
-                                <button
-                                    *ngIf="isSelectAll"
+                                <button *ngIf="isSelectAll"
                                     class="text-white p-2 bg-green-400 rounded-lg hover:bg-green-500 font-medium">
                                     <i class="fa-solid fa-check mr-2"></i>
                                     <span>Đã chọn</span>
@@ -123,8 +116,7 @@
             <div class="justify-end px-2 text-sm mt-2 flex items-center">
                 <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward-fast text-sm mr-2"></i>
                 <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward text-sm mr-2"></i>
-                <div
-                    *ngFor="let index of [1, 2, 3]"
+                <div *ngFor="let index of [1, 2, 3]"
                     class="mr-2 bg-green-600 px-2 text-white rounded-sm cursor-pointer hover:bg-green-700">
                     {{ index }}
                 </div>

@@ -1,53 +1,27 @@
-<div>
-    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
-        <!-- This is the tree node template for leaf nodes -->
-        <!-- There is inline padding applied to this node using styles.
-      This padding value depends on the mat-icon-button width. -->
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-            {{ node.name }}
-        </mat-tree-node>
-        <!-- This is the tree node template for expandable nodes -->
-        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-            <div class="mat-tree-node">
-                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
-                    <mat-icon class="mat-icon-rtl-mirror">
-                        {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
-                    </mat-icon>
-                </button>
-                {{ node.name }}
-            </div>
-            <!-- There is inline padding applied to this div using styles.
-            This padding value depends on the mat-icon-button width.  -->
-            <div [class.example-tree-invisible]="!treeControl.isExpanded(node)" role="group">
-                <ng-container matTreeNodeOutlet></ng-container>
-            </div>
-        </mat-nested-tree-node>
-    </mat-tree>
-</div>
-<div class="p-3 w-full">
+<form [formGroup]="detailOrderForm" class="p-3 w-full">
     <div style="font-size: 12px">
         <div class="flex gap-x-6 justify-between">
             <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Mã phiếu</mat-label>
-                <input matInput [readonly]="true" />
+                <input matInput [readonly]="true" formControlName="purchaseOrderCode" />
             </mat-form-field>
             <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Trạng thái</mat-label>
-                <mat-select>
-                    <mat-option *ngFor="let status of statusList" [value]="status">
-                        {{ status }}
+                <mat-select formControlName="status" [disabled]="type === 'View'">
+                    <mat-option *ngFor="let status of statusList" [value]="status.value">
+                        {{ status.name }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Ngày đặt</mat-label>
-                <input matInput [matDatepicker]="picker" />
+                <input matInput [matDatepicker]="picker" formControlName="orderDate" [disabled]="type === 'View'" />
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Ngày giao</mat-label>
-                <input matInput [matDatepicker]="picker2" />
+                <input matInput [matDatepicker]="picker2" formControlName="deliveryDate" [disabled]="type === 'View'" />
                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
@@ -55,49 +29,52 @@
         <div class="flex gap-x-6 justify-between">
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Nhóm</mat-label>
-                <mat-select>
+                <mat-select formControlName="group" [disabled]="type === 'View'">
                     <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                    <mat-option *ngFor="let city of groupCites" [value]="city"> {{ city }}</mat-option>
+                    <mat-option *ngFor="let group of listGroup" [value]="group.groupId"> {{ group.groupName }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Nhân viên đặt</mat-label>
-                <mat-select>
+                <mat-select [disabled]="type === 'View'" formControlName="orderEmployee">
                     <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                    <mat-option *ngFor="let city of groupCites" [value]="city"> {{ city }}</mat-option>
+                    <mat-option *ngFor="let employee of listEmployee" [value]="employee.employeeId"> {{
+                        employee.employeeName }}</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Tuyến</mat-label>
-                <mat-select>
+                <mat-select [disabled]="type === 'View'" formControlName="route">
                     <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                    <mat-option *ngFor="let city of groupCites" [value]="city"> {{ city }}</mat-option>
+                    <mat-option *ngFor="let route of listRoute" [value]="route.routeId"> {{ route.routeName }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
         <div class="flex gap-x-6 justify-between">
             <mat-form-field class="w-1/3" appearance="outline">
                 <mat-label>Mã Khách hàng</mat-label>
-                <input matInput />
+                <input [readonly]="type === 'View'" matInput formControlName="customerCode" />
             </mat-form-field>
             <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Khách hàng</mat-label>
-                <input matInput />
+                <input [readonly]="type === 'View'" matInput formControlName="customerName" />
             </mat-form-field>
         </div>
         <div class="flex gap-x-6 justify-between">
             <mat-form-field class="w-1/3" appearance="outline">
                 <mat-label>SĐT</mat-label>
-                <input matInput />
+                <input [readonly]="type === 'View'" matInput formControlName="phone" />
             </mat-form-field>
             <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Địa chỉ</mat-label>
-                <input matInput />
+                <input [readonly]="type === 'View'" matInput formControlName="address" />
             </mat-form-field>
         </div>
         <mat-form-field class="w-full" appearance="outline">
             <mat-label>Diễn giải</mat-label>
-            <textarea matInput></textarea>
+            <textarea [readonly]="type === 'View'" matInput formControlName="description"></textarea>
         </mat-form-field>
     </div>
     <mat-tab-group>
@@ -109,14 +86,9 @@
                         <label for="simple-search" class="sr-only">Search</label>
                         <div class="relative w-full">
                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <svg
-                                    aria-hidden="true"
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        fill-rule="evenodd"
+                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
                                         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                                         clip-rule="evenodd"></path>
                                 </svg>
@@ -124,8 +96,7 @@
                             <input type="text" id="simple-search" class="search-input" placeholder="Search" required />
                         </div>
                     </div>
-                    <button
-                        [routerLink]="['/orders/products']"
+                    <button [routerLink]="['/orders/products']" (click)="passingDataFrom();"
                         class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
                         <i class="fa-solid fa-filter mr-2 px-2"></i>
                         <span class="px-2"> Tìm kiếm nâng cao </span>
@@ -171,18 +142,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]; index as i" class="custom-tr">
+                        <tr *ngFor="let product of listProduct; index as i" class="custom-tr">
                             <td class="custom-th">{{ i + 1 }}</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
+                            <td class="custom-th">{{product.productCode}}</td>
+                            <td class="custom-th">{{product.productName}}</td>
+                            <td class="custom-th">{{product.unitName}}</td>
+                            <td class="custom-th">{{product.warehouseName}}</td>
+                            <td class="custom-th">{{product.quantity}}</td>
+                            <td class="custom-th">{{product.unitPrice | currency:"VND":true}}</td>
+                            <td class="custom-th">{{product.totalPrice | currency:"VND":true}}</td>
+                            <td class="custom-th">{{product.discount | currency:"VND":true}}</td>
+                            <td class="custom-th">{{product.discountRate | percent}}</td>
+                            <td class="custom-th">{{product.note}}</td>
                             <td class="custom-th" (click)="stopPropagation($event)">
                                 <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
                             </td>
@@ -199,14 +170,9 @@
                         <label for="simple-search" class="sr-only">Search</label>
                         <div class="relative w-full">
                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <svg
-                                    aria-hidden="true"
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        fill-rule="evenodd"
+                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
                                         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                                         clip-rule="evenodd"></path>
                                 </svg>
@@ -214,8 +180,7 @@
                             <input type="text" id="simple-search" class="search-input" placeholder="Search" required />
                         </div>
                     </div>
-                    <button
-                        [routerLink]="['/orders/products']"
+                    <button [routerLink]="['/orders/products']"
                         class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
                         <i class="fa-solid fa-filter mr-2 px-2"></i>
                         <span class="px-2"> Tìm kiếm nâng cao </span>
@@ -232,27 +197,19 @@
                             <th scope="col" class="custom-th">ĐVT</th>
                             <th scope="col" class="custom-th">Kho xuất</th>
                             <th scope="col" class="custom-th">Số lượng <span class="text-red-500">(Tổng: 0)</span></th>
-                            <th scope="col" class="custom-th">Đơn giá</th>
-                            <th scope="col" class="custom-th">Thành tiền</th>
-                            <th scope="col" class="custom-th">Chiết khấu</th>
-                            <th scope="col" class="custom-th">Tỷ lệ CK</th>
                             <th scope="col" class="custom-th">Ghi chú</th>
                             <th scope="col" class="custom-th">Xóa</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]; index as i" class="custom-tr">
+                        <tr *ngFor="let promotionProduct of listPromotionProduct; index as i" class="custom-tr">
                             <td class="custom-th">{{ i + 1 }}</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
+                            <td class="custom-th">{{promotionProduct.productCode}}</td>
+                            <td class="custom-th">{{promotionProduct.productName}}</td>
+                            <td class="custom-th">{{promotionProduct.unitName}}</td>
+                            <td class="custom-th">{{promotionProduct.warehouseName}}</td>
+                            <td class="custom-th">{{promotionProduct.quantity}}</td>
+                            <td class="custom-th">{{promotionProduct.note}}</td>
                             <td class="custom-th" (click)="stopPropagation($event)">
                                 <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
                             </td>
@@ -264,24 +221,48 @@
     </mat-tab-group>
     <div>
         <div class="flex justify-between">
-            <span class="font-medium w-1/3 py-2">Bằng chữ: </span>
-            <span class="font-medium w-1/3 py-2">Tổng tiền hàng: </span>
+            <span class="font-medium w-1/3 py-2">Bằng chữ:
+                Chưa biết tính ra nhưu nào
+            </span>
+            <span class="font-medium w-1/3 py-2">Tổng tiền hàng:
+                <span class="font-normal ml-4">{{detailOrderFakeData.totalAmount | currency:"VND":true}}</span>
+            </span>
         </div>
         <div class="flex justify-between">
-            <span class="font-medium w-1/3 py-2 text-green-700">Hạn mức công nợ: </span>
-            <span class="font-medium w-1/3 py-2">Tổng tiền VAT: </span>
+            <span class="font-medium w-1/3 py-2 text-green-700">Hạn mức công nợ:
+                <span class="font-normal ml-4">{{detailOrderFakeData.debtLimit | currency:"VND":true}}</span>
+            </span>
+            <span class="font-medium w-1/3 py-2">Tổng tiền VAT:
+                <span class="font-normal ml-4">{{detailOrderFakeData.totalOfVAT | currency:"VND":true}}</span>
+            </span>
         </div>
         <div class="flex justify-between">
-            <span class="font-medium w-1/3 py-2 text-green-700">Dư nợ hiện tại: </span>
-            <span class="font-medium w-1/3 py-2">Chiết khấu sản phẩm: </span>
+            <span class="font-medium w-1/3 py-2 text-green-700">Dư nợ hiện tại:
+                <span class="font-normal ml-4">{{detailOrderFakeData.debtCurrent | currency:"VND":true}}</span>
+            </span>
+            <span class="font-medium w-1/3 py-2">Chiết khấu sản phẩm:
+                <span class="font-normal ml-4">{{detailOrderFakeData.totalDiscountProduct | currency:"VND":true}}</span>
+            </span>
         </div>
         <div class="flex justify-between">
-            <span class="font-medium w-1/3 py-2 text-green-700">Hình thức thanh toán: </span>
-            <span class="font-medium w-1/3 py-2">Chiết khấu đơn hàng: </span>
+            <span class="font-medium w-1/3 py-2 text-green-700">Hình thức thanh toán:
+                <span class="font-normal ml-4">{{detailOrderFakeData.paymentMethod}}</span>
+            </span>
+            <span class="font-medium w-1/3 py-2">Chiết khấu đơn hàng:
+                <span class="font-normal ml-4">{{detailOrderFakeData.tradeDiscount | currency:"VND":true}}</span>
+            </span>
         </div>
         <div class="flex justify-between">
             <span class="font-medium w-1/3 py-2"></span>
-            <span class="font-medium w-1/3 py-2">Thanh toán trước: </span>
+            <span class="font-medium w-1/3 py-2">Phải thanh toán:
+                <span class="font-normal ml-4">{{detailOrderFakeData.totalPayment | currency:"VND":true}}</span>
+            </span>
+        </div>
+        <div class="flex justify-between">
+            <span class="font-medium w-1/3 py-2"></span>
+            <span class="font-medium w-1/3 py-2">Thanh toán trước:
+                <span class="font-normal ml-4">{{detailOrderFakeData.prePayment | currency:"VND":true}}</span>
+            </span>
         </div>
     </div>
-</div>
+</form>

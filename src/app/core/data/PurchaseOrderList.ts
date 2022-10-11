@@ -22,7 +22,7 @@ export const PurchaseOrderList = [
     {
         purchaseOrderId: '1',
         purchaseOrderCode: 'ĐFH2022_06493',
-        status: 0,
+        status: 1,
         type: 2,
         orderDate: '2022-10-10T09:34:53.268Z',
         orderEmployeeName: 'Trần Minh Quang',
@@ -42,7 +42,7 @@ export const PurchaseOrderList = [
     {
         purchaseOrderId: '1',
         purchaseOrderCode: 'ĐFH2022_06493',
-        status: 0,
+        status: 2,
         type: 2,
         orderDate: '2022-10-10T09:34:53.268Z',
         orderEmployeeName: 'Trần Minh Quang',
@@ -62,7 +62,7 @@ export const PurchaseOrderList = [
     {
         purchaseOrderId: '1',
         purchaseOrderCode: 'ĐFH2022_06493',
-        status: 0,
+        status: 3,
         type: 2,
         orderDate: '2022-10-10T09:34:53.268Z',
         orderEmployeeName: 'Trần Minh Quang',
@@ -82,7 +82,7 @@ export const PurchaseOrderList = [
     {
         purchaseOrderId: '1',
         purchaseOrderCode: 'ĐFH2022_06493',
-        status: 0,
+        status: 4,
         type: 2,
         orderDate: '2022-10-10T09:34:53.268Z',
         orderEmployeeName: 'Trần Minh Quang',
@@ -120,3 +120,105 @@ export const PurchaseOrderList = [
         source: 'mobile',
     },
 ];
+
+export const DetailPurchaseOrder = [
+    {
+        purchaseOrderId: '1',
+        purchaseOrderCode: 'ĐFH2022_06496',
+        status: 0,
+        type: 0,
+        orderDate: '2022-10-10T09:34:53.268Z',
+        deliveryDate: '2022-10-10T09:34:53.268Z',
+        group: {
+            groupId: '1',
+            groupName: 'FT2 - Đông Bắc - QL Tùng (Khu vực Đông Bắc)'
+        },
+        orderEmployee: {
+            employeeId: '1',
+            employeeName: 'Nguyễn Văn Tuấn'
+        },
+        route: {
+            routeId: '1',
+            routeName: 'Nguyễn Văn Tuấn'
+        },
+        customerCode: 'ND046',
+        customerName: 'Quầy Thuốc Lê Thị Thảo - Đội 16, Xã Nghĩa Bình, Huyện Nghĩa Hưng, Tỉnh Nam Định',
+        phone: '0946524469',
+        address: 'Đội 16, Xã Nghĩa Bình, Huyện Nghĩa Hưng, Tỉnh Nam Định',
+        description: 'Giao hàng thu tiền',
+        warehouseName: 'Chưa biết mục đích để làm gì',
+        listProduct: [
+            {
+                productCode: 'MPCN002',
+                productName: 'Fitolabs Kembi',
+                unitName: 'Hộp',
+                warehouseName: 'Kho chính',
+                quantity: 9,
+                unitPrice: '60000',
+                totalPrice: 540000,
+                discount: 54000,
+                discountRate: 0.1,
+                note: 'abc'
+            },
+            {
+                productCode: 'MPCN002',
+                productName: 'Fitolabs Kembi',
+                unitName: 'Hộp',
+                warehouseName: 'Kho chính',
+                quantity: 9,
+                unitPrice: '60000',
+                totalPrice: 540000,
+                discount: 54000,
+                discountRate: 0.1,
+                note: 'abc'
+            },
+            {
+                productCode: 'MPCN002',
+                productName: 'Fitolabs Kembi',
+                unitName: 'Hộp',
+                warehouseName: 'Kho chính',
+                quantity: 9,
+                unitPrice: '60000',
+                totalPrice: 540000,
+                discount: 54000,
+                discountRate: 0.1,
+                note: 'abc'
+            }
+        ],
+        listPromotionProduct: [
+            {
+                productCode: 'MPCN002',
+                productName: 'Fitolabs Kembi',
+                unitName: 'Hộp',
+                warehouseName: 'Kho khuyến mại',
+                quantity: 3,
+                note: 'abcd'
+            },
+            {
+                productCode: 'MPCN002',
+                productName: 'Fitolabs Kembi',
+                unitName: 'Hộp',
+                warehouseName: 'Kho khuyến mại',
+                quantity: 3,
+                note: 'abcd'
+            },
+            {
+                productCode: 'MPCN002',
+                productName: 'Fitolabs Kembi',
+                unitName: 'Hộp',
+                warehouseName: 'Kho khuyến mại',
+                quantity: 3,
+                note: 'abcd'
+            }
+        ],
+        debtLimit: 100000,
+        debtCurrent: 10000,
+        paymentMethod: 'Thanh toán ngay',
+        totalAmount: 540000,
+        totalOfVAT: 10000,
+        totalDiscountProduct: 1000,
+        tradeDiscount: 54000,
+        totalPayment: 486000,
+        prePayment: 486000
+    }
+]

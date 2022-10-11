@@ -3,8 +3,7 @@
         <app-sidebar (isShowSidebarOutput)="isShowSidebar($event)"></app-sidebar>
     </div>
 
-    <div
-        [ngClass]="{ 'ml-60': isShowSidebarToMargin, 'ml-10': !isShowSidebarToMargin }"
+    <div [ngClass]="{ 'ml-60': isShowSidebarToMargin, 'ml-10': !isShowSidebarToMargin }"
         class="fixed bottom-10 top-16 z-0 px-5">
         <!-- header -->
         <div class="mt-2 flex justify-between items-center">
@@ -133,50 +132,70 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let order of listOrder; index as i" class="custom-row">
-                        <td class="custom-td">{{ i + 1 }}</td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">{{ i + 1 }}</td>
+                        <td class="custom-td border-b">
                             <mat-checkbox></mat-checkbox>
                         </td>
-                        <td class="custom-td">{{ order.orderEmployeeName }}</td>
-                        <td class="custom-td">{{ order.status }} &nbsp;(chưa define xong)</td>
-                        <td
-                            class="cursor-pointer hover:text-blue-500 custom-td"
+                        <td class="custom-td border-b">{{ order.orderEmployeeName }}</td>
+                        <td class="custom-td border-b">
+                            <button class="button-orange-xs font-normal cursor-default min-w-[90px]"
+                                *ngIf="order.status === 0">
+                                <span style="font-size: 12px;">Chờ duyệt</span>
+                            </button>
+                            <button class="button-primary-xs font-normal cursor-default min-w-[90px]"
+                                *ngIf="order.status === 1">
+                                <span style="font-size: 12px;">Đã duyệt</span>
+                            </button>
+                            <button class="button-success-xs font-normal cursor-default min-w-[90px]"
+                                *ngIf="order.status === 2">
+                                <span style="font-size: 12px;">Đã bán hàng</span>
+                            </button>
+                            <button class="button-success-700-xs font-normal cursor-default min-w-[90px]"
+                                *ngIf="order.status === 3">
+                                <span style="font-size: 12px;">Đã xuất hàng</span>
+                            </button>
+                            <button class="button-danger-xs font-normal cursor-default min-w-[90px]"
+                                *ngIf="order.status === 4">
+                                <span style="font-size: 12px;">Từ chối</span>
+                            </button>
+                        </td>
+                        <td class="cursor-pointer hover:text-blue-500 custom-td border-b"
                             [routerLink]="['/orders/detailOrder/viewEdit']">
                             {{ order.purchaseOrderCode }}
                         </td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">
                             {{ order.customerCode }}
                         </td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">
                             {{ order.customerName }}
                         </td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">
                             {{ order.address }}
                         </td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">
                             {{ datepipe.transform(order.orderDate, 'dd/MM/yyyy') || 'No-data' }}
                         </td>
-                        <td class="custom-td">Chưa trả</td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">Chưa trả</td>
+                        <td class="custom-td border-b">
                             {{ order.approveBy }}
                         </td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">
                             {{ datepipe.transform(order.approveDate, 'dd/MM/yyyy') || 'No-data' }}
                         </td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">
                             {{ order.source }}
                         </td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">
                             {{ datepipe.transform(order.createdDate, 'dd/MM/yyyy') || 'No-data' }}
                         </td>
-                        <td class="custom-td">Chưa trả</td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">Chưa trả</td>
+                        <td class="custom-td border-b">
                             {{ datepipe.transform(order.lastModifiedDate, 'dd/MM/yyyy') || 'No-data' }}
                         </td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">
                             {{ order.lastModifiedBy }}
                         </td>
-                        <td class="custom-td">
+                        <td class="custom-td border-b">
                             {{ order.description }}
                         </td>
                     </tr>
@@ -184,16 +203,23 @@
             </table>
         </div>
         <!-- Pagination -->
-        <div class="justify-end px-2 text-sm mt-2 flex items-center">
+        <!-- <div class="justify-end px-2 text-sm mt-2 flex items-center">
             <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward-fast text-sm mr-2"></i>
             <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward text-sm mr-2"></i>
-            <div
-                *ngFor="let index of [1, 2, 3]"
+            <div *ngFor="let index of [1, 2, 3]"
                 class="mr-2 bg-green-600 px-2 text-white rounded-sm cursor-pointer hover:bg-green-700">
                 {{ index }}
             </div>
             <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward text-sm mr-2"></i>
             <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward-fast text-sm"></i>
+        </div> -->
+
+        <div class="w-full px-2 bg-gray-100 py-1 mb-1 flex flex-row justify-end items-center text-xs">
+            <select class="bg-white px-3 py-1 border border-solid border-gray-500 rounded-sm">
+                <option>30 bản ghi/trang</option>
+            </select>
+            <div class="flex w-6 h-6 mx-3 justify-center items-center text-white bg-green-600">1</div>
+            <span>Hiển thị 1 - 9 trên tổng số 9 bản ghi</span>
         </div>
     </div>
 </div>

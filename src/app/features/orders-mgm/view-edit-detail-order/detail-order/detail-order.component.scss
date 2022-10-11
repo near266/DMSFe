@@ -3,6 +3,22 @@
     border-top-width: 2px;
 }
 
+:host ::ng-deep .mat-select-disabled .mat-select-value {
+    color: black;
+}
+
+:host ::ng-deep .mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-outline {
+    color: #e0e0e0;
+}
+
+:host ::ng-deep .mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+    color: black;
+}
+
+:host::ng-deep .mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-label {
+    color: rgba(0, 0, 0, 0.6);
+}
+
 :host ::ng-deep .mat-form-field-wrapper {
     padding-bottom: 8px !important;
 }
