@@ -1,0 +1,193 @@
+<div class="flex w-full">
+	<div class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
+	</div>
+	<div [ngClass]="{ 'ml-60': isShowSidebarToMargin, 'ml-10': !isShowSidebarToMargin }"
+		class="fixed bottom-10 top-16 z-0 px-5">
+		<!-- header -->
+		<div class="mt-2 flex justify-between items-center">
+			<span class="text-xl font-medium">Danh sách phiếu đặt hàng</span>
+			<div style="font-size: 12px">
+				<mat-form-field appearance="outline">
+					<mat-label>Khoảng thời gian</mat-label>
+					<mat-date-range-input [rangePicker]="picker">
+						<input matStartDate placeholder="Start date" />
+						<input matEndDate placeholder="End date" />
+					</mat-date-range-input>
+					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+					<mat-date-range-picker #picker></mat-date-range-picker>
+				</mat-form-field>
+			</div>
+		</div>
+		<!-- options select to edit -->
+		<div class="flex mt-2">
+			<button class="p-2 button-option mr-2" [matMenuTriggerFor]="addMenu">
+				<i class="fa-solid fa-plus text-green-700 text-sm font-bold mr-1"></i>
+				<span>Thêm mới</span>
+				<i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+			</button>
+			<!-- menu thêm mới của Phiếu đặt hàng | Phiếu bán hàng | Phiếu trả hàng -->
+			<mat-menu #addMenu="matMenu">
+				<!-- phiếu đặt hàng -->
+				<div>
+					<button mat-menu-item class="flex text-sm" [routerLink]="['/orders/createPerchaseOrder']">
+						<i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
+						<span class="text-sm">Thêm mới đơn hàng</span>
+					</button>
+				</div>
+			</mat-menu>
+			<button class="p-2 button-option mr-2">
+				<i class="fa-solid fa-arrows-rotate text-green-700 text-sm font-bold mr-1"></i>
+				<span>Tải lại</span>
+			</button>
+			<button class="p-2 button-option mr-2" [matMenuTriggerFor]="importData">
+				<i class="fa-solid fa-file-import text-green-700 text-sm font-bold mr-1"></i>
+				<span>Nhập dữ liệu</span>
+				<i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+			</button>
+			<mat-menu #importData="matMenu">
+				<button mat-menu-item>Nhập theo mẫu excel</button>
+			</mat-menu>
+			<button class="p-2 button-option mr-2" [matMenuTriggerFor]="exportData">
+				<i class="fa-solid fa-file-export text-green-700 text-sm font-bold mr-1"></i>
+				<span>Xuất dữ liệu</span>
+				<i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+			</button>
+			<mat-menu #exportData="matMenu">
+				<button mat-menu-item>Xuất excel danh sách lưới (được chọn)</button>
+			</mat-menu>
+			<button class="p-2 button-option mr-2" [matMenuTriggerFor]="printMenu">
+				<i class="fa-solid fa-print text-green-700 text-sm font-bold mr-1"></i>
+				<span>In</span>
+				<i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+			</button>
+			<mat-menu #exportData="matMenu" #printMenu="matMenu">
+				<button mat-menu-item>In theo mẫu A4 (được chọn)</button>
+				<button mat-menu-item>In theo mẫu A5 (được chọn)</button>
+			</mat-menu>
+			<button class="p-2 button-option mr-2" [matMenuTriggerFor]="filterByTime">
+				<i class="fa-solid fa-calendar text-green-700 text-sm font-bold mr-1"></i>
+				<span>Lọc thời gian</span>
+				<i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+			</button>
+			<mat-menu #filterByTime="matMenu" #printMenu="matMenu">
+				<button mat-menu-item>Ngày tạo</button>
+				<button mat-menu-item>Ngày đặt hàng</button>
+				<button mat-menu-item>Ngày giao hàng</button>
+				<button mat-menu-item>Ngày sửa</button>
+			</mat-menu>
+			<button class="p-2 button-option mr-2" [matMenuTriggerFor]="sortMenu">
+				<i class="fa-solid fa-sort text-green-700 text-sm font-bold mr-1"></i>
+				<span>Sắp xếp</span>
+				<i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+			</button>
+			<mat-menu #sortMenu="matMenu" #printMenu="matMenu">
+				<button mat-menu-item>Ngày đặt hàng</button>
+				<button mat-menu-item>Ngày đặt hàng</button>
+			</mat-menu>
+			<button class="p-2 button-option mr-2" [matMenuTriggerFor]="manageMenu">
+				<i class="fa-solid fa-lock text-green-700 text-sm font-bold mr-1"></i>
+				<span>Quản trị</span>
+				<i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+			</button>
+			<mat-menu #sortMenu="matMenu" #manageMenu="matMenu">
+				<button mat-menu-item class="flex items-center justify-between">
+					<i class="fa-solid fa-trash mr-2"></i>
+					<span>Xóa nhiều</span>
+				</button>
+			</mat-menu>
+			<!-- <button class="p-2 button-option mr-2" *ngIf="type != 'return'">
+							<i class="fa-solid fa-calculator text-green-700 text-sm font-bold mr-1"></i>
+							<span>Thao tác nhiều</span>
+							<i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+					</button> -->
+		</div>
+		<!-- table -->
+		<router-outlet></router-outlet>
+		<!-- Bảng đặt hàng -->
+		<div id="table" class="table-wrapper">
+			<table class="block custom-table text-gray-500 dark:text-gray-400">
+				<thead class="custom-thead">
+					<th class="custom-th">TT</th>
+					<th class="custom-th">
+						<mat-checkbox></mat-checkbox>
+					</th>
+					<th class="custom-th">Người đặt</th>
+					<th class="custom-th">Trạng thái</th>
+					<th class="custom-th">Mã phiếu</th>
+					<th class="custom-th">Mã KH</th>
+					<th class="custom-th">Tên KH</th>
+					<th class="custom-th">Địa chỉ</th>
+					<th class="custom-th">Ngày đặt</th>
+					<th class="custom-th">Tổng tiền</th>
+					<th class="custom-th">Người duyệt</th>
+					<th class="custom-th">Ngày duyệt</th>
+					<th class="custom-th">Nguồn</th>
+					<th class="custom-th">Ngày tạo</th>
+					<th class="custom-th">Người tạo</th>
+					<th class="custom-th">Ngày sửa</th>
+					<th class="custom-th">Người sửa</th>
+					<th class="custom-th">Diễn giải</th>
+				</thead>
+				<tbody>
+					<tr *ngFor="let order of listOrder; index as i" class="custom-row">
+						<td class="custom-td">{{ i + 1 }}</td>
+						<td class="custom-td">
+							<mat-checkbox></mat-checkbox>
+						</td>
+						<td class="custom-td">{{ order.orderEmployeeName }}</td>
+						<td class="custom-td">{{ order.status }} &nbsp;(chưa define xong)</td>
+						<td class="cursor-pointer hover:text-blue-500 custom-td" [routerLink]="['/orders/detailOrder/viewEdit']">
+							{{ order.purchaseOrderCode }}
+						</td>
+						<td class="custom-td">
+							{{ order.customerCode }}
+						</td>
+						<td class="custom-td">
+							{{ order.customerName }}
+						</td>
+						<td class="custom-td">
+							{{ order.address }}
+						</td>
+						<td class="custom-td">
+							{{ datepipe.transform(order.orderDate, 'dd/MM/yyyy') || 'No-data' }}
+						</td>
+						<td class="custom-td">Chưa trả</td>
+						<td class="custom-td">
+							{{ order.approveBy }}
+						</td>
+						<td class="custom-td">
+							{{ datepipe.transform(order.approveDate, 'dd/MM/yyyy') || 'No-data' }}
+						</td>
+						<td class="custom-td">
+							{{ order.source }}
+						</td>
+						<td class="custom-td">
+							{{ datepipe.transform(order.createdDate, 'dd/MM/yyyy') || 'No-data' }}
+						</td>
+						<td class="custom-td">Chưa trả</td>
+						<td class="custom-td">
+							{{ datepipe.transform(order.lastModifiedDate, 'dd/MM/yyyy') || 'No-data' }}
+						</td>
+						<td class="custom-td">
+							{{ order.lastModifiedBy }}
+						</td>
+						<td class="custom-td">
+							{{ order.description }}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- Pagination -->
+		<div class="justify-end px-2 text-sm mt-2 flex items-center">
+			<i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward-fast text-sm mr-2"></i>
+			<i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward text-sm mr-2"></i>
+			<div *ngFor="let index of [1, 2, 3]"
+				class="mr-2 bg-green-600 px-2 text-white rounded-sm cursor-pointer hover:bg-green-700">
+				{{ index }}
+			</div>
+			<i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward text-sm mr-2"></i>
+			<i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward-fast text-sm"></i>
+		</div>
+	</div>
+</div>

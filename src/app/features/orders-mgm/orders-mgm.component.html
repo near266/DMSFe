@@ -2,9 +2,7 @@
     <div class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
         <app-sidebar (isShowSidebarOutput)="isShowSidebar($event)"></app-sidebar>
     </div>
-
-    <div
-        [ngClass]="{ 'ml-60': isShowSidebarToMargin, 'ml-10': !isShowSidebarToMargin }"
+    <div [ngClass]="{ 'ml-60': isShowSidebarToMargin, 'ml-10': !isShowSidebarToMargin }"
         class="fixed bottom-10 top-16 z-0 px-5">
         <!-- header -->
         <div class="mt-2 flex justify-between items-center">
@@ -139,8 +137,7 @@
                         </td>
                         <td class="custom-td">{{ order.orderEmployeeName }}</td>
                         <td class="custom-td">{{ order.status }} &nbsp;(chưa define xong)</td>
-                        <td
-                            class="cursor-pointer hover:text-blue-500 custom-td"
+                        <td class="cursor-pointer hover:text-blue-500 custom-td"
                             [routerLink]="['/orders/detailOrder/viewEdit']">
                             {{ order.purchaseOrderCode }}
                         </td>
@@ -187,8 +184,7 @@
         <div class="justify-end px-2 text-sm mt-2 flex items-center">
             <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward-fast text-sm mr-2"></i>
             <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward text-sm mr-2"></i>
-            <div
-                *ngFor="let index of [1, 2, 3]"
+            <div *ngFor="let index of [1, 2, 3]"
                 class="mr-2 bg-green-600 px-2 text-white rounded-sm cursor-pointer hover:bg-green-700">
                 {{ index }}
             </div>
