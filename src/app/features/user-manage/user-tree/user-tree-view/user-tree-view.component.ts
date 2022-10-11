@@ -8,18 +8,51 @@ import { ITreeOptions } from '@circlon/angular-tree-component';
 export class UserTreeViewComponent implements OnInit {
   @Input() nodes: any[] = [
     {
-      id: 1,
-      name: 'root1',
+      id: 'all',
+      name: 'Tất cả',
       children: [
         {
           id: 2, name: 'child1',
           children: [
             { id: 4, name: 'child1' },
-            { id: 5, name: 'child2', 
-            children: [
-              { id: 8, name: 'child1' },
-              { id: 9, name: 'child2' }
-            ]}
+            {
+              id: 5, name: 'child2',
+              children: [
+                {
+                  id: 8, name: 'child1',
+                  children: [
+                    { id: 10, name: 'child1' },
+                    { id: 11, name: 'child2' }
+                  ]
+                },
+                {
+                  id: 9, name: 'child2',
+                  children: [
+                    { id: 12, name: 'child1' },
+                    { id: 13, name: 'child2' }
+                  ]
+                }
+              ]
+            },
+            {
+              id: 14, name: 'child2',
+              children: [
+                {
+                  id: 15, name: 'child1',
+                  children: [
+                    { id: 16, name: 'child1' },
+                    { id: 17, name: 'child2' }
+                  ]
+                },
+                {
+                  id: 19, name: 'child2',
+                  children: [
+                    { id: 18, name: 'child1' },
+                    { id: 20, name: 'child2' }
+                  ]
+                }
+              ]
+            }
           ]
         },
         {
@@ -40,5 +73,8 @@ export class UserTreeViewComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  Config(e: any) { 
+    console.log(e);
+    
+  }
 }

@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DeleteUserComponent } from './delete-user/delete-user.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @Component({
@@ -29,9 +30,16 @@ export class DetailUserComponent implements OnInit {
     // { title: 'Chấm thi phòng nhóm', leftIcon: 'fa-solid fa-location-dot' },
   ]
 
-  ResetPw() { 
-    this.dialog.open(ResetPasswordComponent,{
-      data:{}
+  ResetPw() {
+    this.dialog.open(ResetPasswordComponent, {
+      data: {},
+    })
+  }
+
+  DeleteUser() {
+    this.dialog.open(DeleteUserComponent, {
+      data: {},
+      maxWidth: '520px'
     })
   }
 
