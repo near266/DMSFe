@@ -44,9 +44,11 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TreeModule } from '@circlon/angular-tree-component';
+import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.component';
+import { MenuCollapseSearchComponent } from './components/menu-collapse-search/menu-collapse-search.component';
 
 @NgModule({
-    declarations: [],
+    declarations: [MenuCollapseComponent, MenuCollapseSearchComponent],
     imports: [
         CommonModule,
         MatAutocompleteModule,
@@ -108,6 +110,8 @@ import { TreeModule } from '@circlon/angular-tree-component';
         MatGridListModule,
         MatListModule,
         MatStepperModule,
+        MenuCollapseSearchComponent,
+        MenuCollapseComponent,
         MatTabsModule,
         MatTreeModule,
         MatButtonModule,

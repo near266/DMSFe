@@ -21,6 +21,11 @@ const routes: Routes = [
                     import('../../../features/orders-mgm/orders-mgm.module').then((m) => m.OrdersMgmModule),
             },
             {
+                path: 'ordersale',
+                loadChildren: () =>
+                    import('../../../features/order-sale-mgm/order-sale-mgm.module').then((m) => m.OrderSaleMgmModule),
+            },
+            {
                 path: 'warehouses',
                 loadChildren: () =>
                     import('../../../features/warehouse/warehouse.module').then(m => m.WarehouseModule)
@@ -30,6 +35,11 @@ const routes: Routes = [
                 loadChildren: () =>
                     import('../../../features/user-manage/categories.module').then((m) => m.UserManageModule),
             },
+            {
+                path: 'customers',
+                loadChildren: () =>
+                import('../../../features/customers/customers.module').then(m => m.CustomersModule)
+            }
         ],
     },
 ];

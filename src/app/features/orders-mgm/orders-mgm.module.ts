@@ -8,10 +8,18 @@ import { OrdersMgmRoutingModule } from './orders-mgm-routing.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
 import { ProductListComponent } from './product-list/product-list.component';
-import { CommonsModule } from 'src/app/core/component/common/commons.module';
+import { ViewEditDetailOrderComponent } from './view-edit-detail-order/view-edit-detail-order.component';
+import { CustomerComponent } from './view-edit-detail-order/customer/customer.component';
 
 @NgModule({
-    declarations: [SidebarComponent, OrdersMgmComponent, CreatePurchaseOrderComponent, ProductListComponent],
-    imports: [CommonModule, SharedModule, OrdersMgmRoutingModule, RouterModule, CommonsModule],
+    declarations: [
+        SidebarComponent,
+        OrdersMgmComponent,
+        CreatePurchaseOrderComponent,
+        ProductListComponent,
+        ViewEditDetailOrderComponent,
+        CustomerComponent
+    ],
+    imports: [CommonModule, SharedModule, OrdersMgmRoutingModule, RouterModule],
 })
-export class OrdersMgmModule {}
+export class OrdersMgmModule { }

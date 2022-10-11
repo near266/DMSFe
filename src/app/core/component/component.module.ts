@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SharedModule } from '../shared/shared.module';
-import { MenuCollapseComponent } from './common/menu-collapse/menu-collapse.component';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
@@ -11,4 +10,4 @@ import { RouterModule } from '@angular/router';
     imports: [CommonModule, SharedModule, RouterModule],
     exports: [HeaderComponent, SidebarComponent],
 })
-export class ComponentModule {}
+export class ComponentModule { }

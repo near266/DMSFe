@@ -7,6 +7,8 @@ import { SharedModule } from 'src/app/core/shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { CommonsModule } from 'src/app/core/component/common/commons.module';
+import { MainComponent } from 'src/app/core/layouts/main/main.component';
+import { MainModule } from 'src/app/core/layouts/main/main.module';
 
 
 @NgModule({

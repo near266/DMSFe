@@ -1,0 +1,18 @@
+<button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" [matMenuTriggerFor]="menu"
+    #menuTrigger="matMenuTrigger" (mouseenter)="mouseEnter(menuTrigger)" (mouseleave)="mouseLeave(menuTrigger)">
+    <i class="fa-solid text-emerald-500 font-bold mr-2" [ngClass]="menuObj.leftTitleIcon"></i>
+    {{menuObj.title}}
+    <i class="fa-solid fa-caret-down text-emerald-500 font-bold ml-2"></i>
+</button>
+<ng-content select="[trigger]"></ng-content>
+<mat-menu #menu="matMenu" [hasBackdrop]="false">
+    <div (mouseenter)="mouseEnter(menuTrigger)" (mouseleave)="mouseLeave(menuTrigger)" class="px-1">
+        <ng-content select="[content]"></ng-content>
+        <button (click)="Select(menuItem.value)"
+            class="p-2 font-medium text-xs hover:bg-gray-200 w-full flex flex-row justify-start items-center"
+            *ngFor="let menuItem of menuObj.listMenuPosition">
+            <i class="fa-solid font-bold mr-2 text-base" [ngClass]="menuItem.leftIcon"></i>
+            {{menuItem.title}}
+        </button>
+    </div>
+</mat-menu>

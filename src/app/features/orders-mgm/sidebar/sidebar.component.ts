@@ -10,18 +10,15 @@ export class SidebarComponent implements OnInit {
     isShowSidebar = true;
     isSearchByBill = false;
     statusMenu: Config = {
-        icon: '<i class="fa-solid fa-flag-usa"></i>',
+        icon: '<i class="fa-solid fa-flag"></i>',
         title: 'Trạng thái',
         menuChildrens: [
             'Tất cả',
             'Chờ duyệt',
-            'Từ chối',
             'Đã duyệt',
-            'Đã giám sát',
             'Đã bán hàng',
             'Đã xuất hàng',
-            'Đã giao hàng',
-            'Hủy',
+            'Từ chối'
         ],
     };
     statusPrintMenu: Config = {
@@ -47,7 +44,7 @@ export class SidebarComponent implements OnInit {
     groupCustomerMenu: Config = {
         icon: '<i class="fa-solid fa-users"></i>',
         title: 'Nhóm khách hàng',
-        menuChildrens: ['Tất cả', 'Hợp đò'],
+        menuChildrens: ['Tất cả', 'Hợp đồng', 'KH lẻ'],
     };
     storageMenu: Config = {
         icon: '<i class="fa-solid fa-warehouse"></i>',

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
 import { OrdersMgmComponent } from './orders-mgm.component';
 import { ProductListComponent } from './product-list/product-list.component';
+import { ViewEditDetailOrderComponent } from './view-edit-detail-order/view-edit-detail-order.component';
 
 const routes: Routes = [
     {
@@ -16,6 +17,11 @@ const routes: Routes = [
     {
         path: 'products',
         component: ProductListComponent,
+    },
+    {
+        path: 'detailOrder',
+        loadChildren: () =>
+            import('./view-edit-detail-order/view-edit-detail-order.module').then((m) => m.ViewEditDetailOrderModule),
     },
 ];
 

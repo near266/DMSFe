@@ -4,14 +4,13 @@
     <ul class="flex">
         <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Công việc</li>
         <!-- Menu Bán hàng -->
-        <li
-            class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer flex items-center"
+        <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer flex items-center"
             [matMenuTriggerFor]="menu1">
             <span class="mr-1">Bán hàng</span>
             <i class="fa-solid fa-caret-down"></i>
         </li>
         <mat-menu #menu1="matMenu" class="mt-1">
-            <button mat-menu-item class="flex items-center">
+            <button mat-menu-item class="flex items-center" [routerLink]="['customers']">
                 <i class="fa-solid fa-users text-base mr-2"></i>
                 <span>Khách hàng</span>
             </button>
@@ -28,7 +27,7 @@
                 <i class="fa-solid fa-file-invoice text-base mr-2"></i>
                 <span>Phiếu đặt hàng</span>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item [routerLink]="['ordersale']">
                 <i class="fa-solid fa-calculator text-base mr-2"></i>
                 <span>Phiếu bán hàng</span>
             </button>
@@ -78,8 +77,7 @@
         <div class="mr-5 cursor-pointer hover:opacity-70">
             <i class="fa-solid fa-download text-2xl"></i>
         </div>
-        <div
-            [matMenuTriggerFor]="menu"
+        <div [matMenuTriggerFor]="menu"
             class="cursor-pointer overflow-hidden relative w-12 h-12 bg-gray-100 rounded-full dark:bg-gray-600">
             <img [src]="annonimousAvatar" alt="" />
         </div>

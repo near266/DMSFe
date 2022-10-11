@@ -1,0 +1,29 @@
+<div
+    (click)="isShowmenu = !isShowmenu"
+    class="w-full justify-between items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+    <div>
+        <span id="icon-{{ Config.title }}" class="text-base mr-3"></span>
+        <span *ngIf="!isSelect" class="text-sm">{{ Config.title }}</span>
+        <span *ngIf="isSelect" class="text-sm">{{ selectedChildren }}</span>
+    </div>
+    <div *ngIf="!isSelect">
+        <i *ngIf="!isShowmenu" class="fa-solid fa-caret-down"></i>
+        <i *ngIf="isShowmenu" class="fa-solid fa-caret-up"></i>
+    </div>
+    <div *ngIf="isSelect" class="font-semibold text-base" (click)="cancelSelect(); stopPropagation($event)">
+        <i class="fa-solid fa-xmark"></i>
+    </div>
+</div>
+<!-- Trạng thái menu -->
+<div *ngIf="isShowmenu">
+  <div class=" bg-white mx-6 my-1 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
+      <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
+      <input class="bg-white text-xs h-full w-full" [(ngModel)]="keyword" placeholder="Tìm kiếm {{Config.title.toLowerCase()}}" (keyup)="search(keyword)">
+  </div>
+  <div
+      (click)="select(menuChildren)"
+      *ngFor="let menuChildren of buffer_menu_item"
+      class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+      <span class="text-sm">{{ menuChildren }}</span>
+  </div>
+</div>

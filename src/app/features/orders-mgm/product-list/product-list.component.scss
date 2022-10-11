@@ -16,3 +16,7 @@
         @apply cursor-default bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
     }
 }
+
+:host ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+}
