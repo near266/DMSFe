@@ -11,20 +11,22 @@ export class UserTreeViewComponent implements OnInit {
       id: 1,
       name: 'root1',
       children: [
-        { id: 2, name: 'child1' },
-        { id: 3, name: 'child2' }
-      ]
-    },
-    {
-      id: 4,
-      name: 'root2',
-      children: [
-        { id: 5, name: 'child2.1' },
         {
-          id: 6,
-          name: 'child2.2',
+          id: 2, name: 'child1',
           children: [
-            { id: 7, name: 'subsub' }
+            { id: 4, name: 'child1' },
+            { id: 5, name: 'child2', 
+            children: [
+              { id: 8, name: 'child1' },
+              { id: 9, name: 'child2' }
+            ]}
+          ]
+        },
+        {
+          id: 3, name: 'child2',
+          children: [
+            { id: 6, name: 'child1' },
+            { id: 7, name: 'child2' }
           ]
         }
       ]

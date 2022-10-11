@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @Component({
   selector: 'app-detail-user',
@@ -9,14 +10,15 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class DetailUserComponent implements OnInit {
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public dataDialog:any
+    @Inject(MAT_DIALOG_DATA) public dataDialog: any,
+    private dialog: MatDialog
   ) { }
 
   title = 'Thông tin chung'
 
   ngOnInit(): void {
     console.log(this.dataDialog.status);
-    
+
   }
 
   tabList = [
@@ -26,5 +28,11 @@ export class DetailUserComponent implements OnInit {
     { title: 'Menu hiển thị', leftIcon: 'fa-solid fa-list' },
     // { title: 'Chấm thi phòng nhóm', leftIcon: 'fa-solid fa-location-dot' },
   ]
+
+  ResetPw() { 
+    this.dialog.open(ResetPasswordComponent,{
+      data:{}
+    })
+  }
 
 }

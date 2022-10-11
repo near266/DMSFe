@@ -12,28 +12,31 @@ import { InforComponent } from './user-tree/add-user/infor/infor.component';
 import { ConfigComponent } from './user-tree/add-user/config/config.component';
 import { AppComponent } from './user-tree/add-user/app/app.component';
 import { MenuComponent } from './user-tree/add-user/menu/menu.component';
-import { TreeModule } from '@circlon/angular-tree-component';
 import { UserTreeViewComponent } from './user-tree/user-tree-view/user-tree-view.component';
+import { ResetPasswordComponent } from './user-tree/detail-user/reset-password/reset-password.component';
+import { DeleteUserComponent } from './user-tree/detail-user/delete-user/delete-user.component';
 
 const routes: Routes = [
-    {
-        path: 'tree',
-        component: UserManageComponent,
-    },
+  {
+    path: 'tree',
+    component: UserManageComponent,
+  },
 ];
 
 @NgModule({
-    declarations: [
-        UserManageComponent,
-        MenuBarComponent,
-        AddUserComponent,
-        DetailUserComponent,
-        InforComponent,
-        ConfigComponent,
-        AppComponent,
-        MenuComponent,
-        UserTreeViewComponent,
-    ],
-    imports: [CommonModule, TreeModule, RouterModule.forChild(routes), SharedModule],
+  declarations: [
+    UserManageComponent,
+    MenuBarComponent,
+    AddUserComponent,
+    DetailUserComponent,
+    InforComponent,
+    ConfigComponent,
+    AppComponent,
+    MenuComponent,
+    UserTreeViewComponent,
+    ResetPasswordComponent,
+    DeleteUserComponent,
+  ],
+  imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
 })
-export class UserManageModule {}
+export class UserManageModule { }
