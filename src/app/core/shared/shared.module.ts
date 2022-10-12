@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
 // Material Form Controls
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -46,9 +45,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TreeModule } from '@circlon/angular-tree-component';
 import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.component';
 import { MenuCollapseSearchComponent } from './components/menu-collapse-search/menu-collapse-search.component';
+import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 
 @NgModule({
-    declarations: [MenuCollapseComponent, MenuCollapseSearchComponent],
+    declarations: [MenuCollapseComponent, MenuBarComponent, MenuCollapseSearchComponent],
     imports: [
         CommonModule,
         MatAutocompleteModule,
@@ -89,7 +89,7 @@ import { MenuCollapseSearchComponent } from './components/menu-collapse-search/m
         MatNativeDateModule,
         FormsModule,
         ReactiveFormsModule,
-        TreeModule
+        TreeModule,
     ],
     exports: [
         MatAutocompleteModule,
@@ -98,6 +98,7 @@ import { MenuCollapseSearchComponent } from './components/menu-collapse-search/m
         MatFormFieldModule,
         MatInputModule,
         MatRadioModule,
+        MenuBarComponent,
         MatSelectModule,
         MatSliderModule,
         MatSlideToggleModule,
@@ -110,7 +111,6 @@ import { MenuCollapseSearchComponent } from './components/menu-collapse-search/m
         MatGridListModule,
         MatListModule,
         MatStepperModule,
-        MenuCollapseSearchComponent,
         MenuCollapseComponent,
         MatTabsModule,
         MatTreeModule,
@@ -119,6 +119,7 @@ import { MenuCollapseSearchComponent } from './components/menu-collapse-search/m
         MatBadgeModule,
         MatChipsModule,
         MatIconModule,
+        MenuCollapseSearchComponent,
         MatProgressSpinnerModule,
         MatProgressBarModule,
         MatRippleModule,
@@ -132,7 +133,7 @@ import { MenuCollapseSearchComponent } from './components/menu-collapse-search/m
         MatNativeDateModule,
         FormsModule,
         ReactiveFormsModule,
-        TreeModule
+        TreeModule,
     ],
 })
 export class SharedModule {}
