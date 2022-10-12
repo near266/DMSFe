@@ -1,0 +1,62 @@
+<mat-sidenav-container [hasBackdrop]="false">
+  <mat-sidenav [mode]="'side'" class="fixed" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" #sidenav
+    [position]="'start'" class=" overflow-hidden relative z-50 navbar-container">
+    <div class="w-60 bg-[#f2f2f2] "></div>
+  </mat-sidenav>
+  <mat-sidenav-content class="">
+    <div class=" bg-[#f2f2f2] fixed bottom-0 top-16 z-10 border-r border-gray-300 border-solid">
+      <button (click)="sidenav.toggle()"
+        class=" h-5 flex items-center justify-center border-solid border-2 border-slate-400 py-4 px-2">
+        <i *ngIf="sidenav?.opened" class="fa-solid fa-caret-right"></i>
+        <i *ngIf="!sidenav?.opened" class="fa-solid fa-caret-left"></i>
+      </button>
+    </div>
+    <div class="flex h-full w-full pl-[26px] pb-9">
+      <div class="flex w-full h-full relative flex-col">
+        <div class="z-0 ">
+          <!-- header -->
+          <div class="mt-2 px-2 flex justify-between items-center">
+            <span class="text-xl font-medium">Danh sách sản phẩm ({{totalProducts}} sản phẩm) </span>
+          </div>
+          <!-- options select to edit -->
+          <div class="flex mt-2 p-2 bg-[#f2f2f2] border-y border-solid border-slate-400">
+            <button class="button-option " [matMenuTriggerFor]="addMenu">
+              <i class="fa-solid fa-plus text-green-700 text-sm font-bold mr-1"></i>
+              <span>Thêm mới</span>
+              <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+            </button>
+            <!-- menu thêm mới của Phiếu đặt hàng | Phiếu bán hàng | Phiếu trả hàng -->
+            <mat-menu #addMenu="matMenu">
+              <!-- phiếu đặt hàng -->
+              <div>
+                <button mat-menu-item class="flex text-sm" [routerLink]="['/orders/createPerchaseOrder']">
+                  <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
+                  <span class="text-sm">Thêm mới </span>
+                </button>
+              </div>
+            </mat-menu>
+            <app-menu-bar [menuObj]="menuObj" (message)="select($event)" *ngFor="let menuObj of listMenu">
+            </app-menu-bar>
+            <!-- <button class="p-2 button-option mr-2" *ngIf="type != 'return'">
+										<i class="fa-solid fa-calculator text-green-700 text-sm font-bold mr-1"></i>
+										<span>Thao tác nhiều</span>
+										<i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+								</button> -->
+          </div>
+          <!-- table -->
+          <!-- Bảng đặt hàng -->
+
+          <!-- Pagination -->
+        </div>
+        <div class="w-full table-container overflow-scroll">
+          <app-product-table>
+          </app-product-table>
+        </div>
+      </div>
+    </div>
+    <div
+      class="fixed bottom-0 right-0 ml-[26px] left-0 h-9 px-2 flex items-center justify-end bg-[#f2f2f2] border-t border-solid border-slate-400">
+      <app-product-pagination></app-product-pagination>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

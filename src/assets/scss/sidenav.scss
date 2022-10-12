@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+
+@layer base {
+    mat-sidenav {
+        height: calc(100vh - 64px);
+        margin-top: 64px;
+    }
+}
+@layer componenst {
+    .mat-drawer:not(.mat-drawer-side) {
+        @apply shadow-none #{!important};
+    }
+} ;
