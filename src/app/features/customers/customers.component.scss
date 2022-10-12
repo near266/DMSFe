@@ -6,3 +6,7 @@ input {
 input:focus {
   outline: none !important;
 }
+
+:host ::ng-deep .mat-dialog-container {
+  overflow: hidden;
+}

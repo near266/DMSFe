@@ -85,53 +85,65 @@
                       <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã khách hàng</th>
                   </thead>
                   <tbody>
-                      <tr class="h-14 w-fit text-sm" *ngFor="let user of users; let o=odd; let e=even;"
+                      <tr class="h-14 w-fit text-xs" *ngFor="let user of customer; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
                           <td class="w-10 border-x border-solid align-middle px-2"><input type="checkbox">
                           </td>
                           <!-- <td class="border-x border-solid align-middle px-2">
                               <img class="w-20" [src]="user.img">
                           </td> -->
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.status}}
+                          <td class="border-x w-fit border-solid align-middle px-2"><button class="text-xs bg-[#1891C9] text-white font-medium px-7 py-1 rounded-md">{{user.Status}}</button>
                           </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.email}}
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.CustomerCode}}
                           </td>
                       </tr>
                   </tbody>
               </table>
               <table class="w-max">
                   <thead class="h-10 w-full text-sm sticky top-0">
-                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã nhân viên
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Khách hàng
                       </th>
-                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tên nhân viên
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Nhóm khách hàng
                       </th>
-                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Giới tính</th>
-                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Chức danh</th>
-                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Chức vụ</th>
-                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Bộ phận</th>
-                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Điện thoại</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Loại khách hàng</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Ngày cập nhật</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Kênh</th>
                       <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Địa chỉ</th>
-                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Version</th>
-                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">TG online cuối
-                      </th>
-                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">TG đồng bộ cuối
-                      </th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Điạ chỉ giao hàng</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tỉnh/Thành phố</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Quận/Huyện</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Sinh nhật</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Người liên hệ</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Chức vụ</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">SĐT</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Email</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Hạn mức công nợ</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">TK tiền/Chi phí/Nợ</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Người tạo</th>
+                      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Người sửa</th>
                   </thead>
                   <tbody>
-                      <tr class="h-14 w-fit text-sm" *ngFor="let user of users; let o=odd; let e=even;"
+                      <tr class="h-14 w-fit text-xs" *ngFor="let user of customer; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.code}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer" (click)="DetailUser(user.id)">
-                              {{user.fullname}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.gender}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.pos}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2"></td>
-                          <td class="border-x w-fit border-solid align-middle px-2"></td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.phone}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.add}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.ver}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2"> {{user.lastModifed}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.lastAsync}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 cursor-pointer" (click)="DetailCustomer(user.id)">{{user.CustomerName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer">
+                              {{user.CustomerGroupId}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.CustomerTypeId}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.LastModifiedDate}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.ChannelId}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.Address}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.AreaId}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.Province}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.District}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2"> {{user.DOB}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.ContactName}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.Position}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.Phone}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.Email}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.DebtLimit}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.CashAcc}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.CreatedBy}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.LastModifiedBy}} </td>
                       </tr>
                   </tbody>
               </table>
