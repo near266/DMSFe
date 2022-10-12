@@ -17,11 +17,11 @@
                 <i class="fa-solid fa-right-from-bracket mx-2"></i>
                 <span class="mr-2">Thoát tài khoản</span>
             </div>
-            <div *ngIf="dataDialog.status == 'view'" class="flex flex-row bg-gray-200 text-black justify-center items-center border-x border-gray-300 px-2 py-3 cursor-pointer">
+            <div *ngIf="dataDialog.status == 'view'" class="flex flex-row bg-gray-200 text-black justify-center items-center border-x border-gray-300 px-2 py-3 cursor-pointer" (click)="ResetPw()">
                 <i class="fa-solid fa-refresh mx-2"></i>
                 <span class="mr-2">Đặt mật khẩu</span>
             </div>
-            <div class="flex flex-row bg-gray-200 text-black justify-center items-center border-x border-gray-300 px-2 py-3 cursor-pointer">
+            <div class="flex flex-row bg-gray-200 text-black justify-center items-center border-x border-gray-300 px-2 py-3 cursor-pointer" (click)="DeleteUser()">
                 <i class="fa-solid fa-trash mx-2"></i>
                 <span class="mr-2">Xóa</span>
             </div>

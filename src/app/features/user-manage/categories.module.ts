@@ -11,13 +11,16 @@ import { InforComponent } from './user-tree/add-user/infor/infor.component';
 import { ConfigComponent } from './user-tree/add-user/config/config.component';
 import { AppComponent } from './user-tree/add-user/app/app.component';
 import { MenuComponent } from './user-tree/add-user/menu/menu.component';
+import { UserTreeViewComponent } from './user-tree/user-tree-view/user-tree-view.component';
+import { ResetPasswordComponent } from './user-tree/detail-user/reset-password/reset-password.component';
+import { DeleteUserComponent } from './user-tree/detail-user/delete-user/delete-user.component';
 
 const routes: Routes = [
   {
     path: 'tree',
-    component: UserManageComponent
-  }
-]
+    component: UserManageComponent,
+  },
+];
 
 @NgModule({
   declarations: [
@@ -29,11 +32,10 @@ const routes: Routes = [
     ConfigComponent,
     AppComponent,
     MenuComponent,
+    UserTreeViewComponent,
+    ResetPasswordComponent,
+    DeleteUserComponent,
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    SharedModule
-  ]
+  imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
 })
 export class UserManageModule { }

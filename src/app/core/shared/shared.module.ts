@@ -43,6 +43,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TreeModule } from '@circlon/angular-tree-component';
 import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.component';
 import { MenuCollapseSearchComponent } from './components/menu-collapse-search/menu-collapse-search.component';
 
@@ -88,6 +89,7 @@ import { MenuCollapseSearchComponent } from './components/menu-collapse-search/m
         MatNativeDateModule,
         FormsModule,
         ReactiveFormsModule,
+        TreeModule
     ],
     exports: [
         MatAutocompleteModule,
@@ -130,6 +132,7 @@ import { MenuCollapseSearchComponent } from './components/menu-collapse-search/m
         MatNativeDateModule,
         FormsModule,
         ReactiveFormsModule,
+        TreeModule
     ],
 })
 export class SharedModule {}
