@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
+import { customers } from 'src/app/core/data/Customers';
 import { Config } from 'src/app/core/model/Config';
+import { DetailCustomerComponent } from './detail-customer/detail-customer.component';
 
 @Component({
   selector: 'app-customers',
@@ -11,6 +13,7 @@ import { Config } from 'src/app/core/model/Config';
 export class CustomersComponent implements OnInit {
 
   isProvince = false;
+  customer = customers;
 
   statusMenu: Config = {
     icon: '<i class="fa-solid fa-flag"></i>',
@@ -103,15 +106,15 @@ export class CustomersComponent implements OnInit {
     // })
   }
 
-  DetailUser(id: any) {
-    // this.dialog.open(DetailUserComponent, {
-    //   height: '100vh',
-    //   minWidth: '900px',
-    //   data: {
-    //     id: id,
-    //     status: 'view'
-    //   }
-    // })
+  DetailCustomer(id: any) {
+    this.dialog.open(DetailCustomerComponent, {
+      height: '100vh',
+      minWidth: '1100px',
+      data: {
+        id: id,
+        status: 'view'
+      }
+    })
   }
 
   closeSideBar() {
@@ -154,11 +157,11 @@ export class CustomersComponent implements OnInit {
       title: 'Sắp xếp',
       leftTitleIcon: 'fa-sort-alpha-asc',
       listMenuPosition: [
-        // { title: 'Tên khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
-        // { title: 'Tên khách hàng', leftIcon: 'fa-arrow-up', value: 'all' },
+        { title: 'Tên khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
+        { title: 'Tên khách hàng', leftIcon: 'fa-arrow-up', value: 'emp' },
 
-        // { title: 'Mã khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
-        // { title: 'Mã khách hàng', leftIcon: 'fa-arrow-up', value: 'all' },
+        { title: 'Mã khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
+        { title: 'Mã khách hàng', leftIcon: 'fa-arrow-up', value: 'emp' },
 
         // { title: 'Ngày tạo', leftIcon: 'fa-arrow-down', value: 'all' },
         // { title: 'Ngày tạo', leftIcon: 'fa-arrow-up', value: 'all' },

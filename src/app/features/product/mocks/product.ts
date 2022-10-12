@@ -3,7 +3,7 @@ import { Product } from '../models/product';
 
 const products: Product[] = [];
 
-for (let i = 0; i < 13123; i++) {
+for (let i = 0; i < 100; i++) {
     products.push({
         locked: faker.datatype.boolean(),
         unitId: faker.helpers.arrayElement(['Hộp', 'Tuýt', 'Lọ', 'Chai', undefined]),
