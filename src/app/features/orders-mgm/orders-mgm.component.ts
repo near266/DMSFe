@@ -37,16 +37,16 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     }
 
     ngAfterViewInit(): void {
-        // this.purchaseOrderService.searchFilterPurchaseOrder().subscribe((data) => {
-        //     this.listOrder = data;
-        //     this.total = this.listOrder.length;
-        //     this.purchaseOrderService.setTotal(this.total);
-        // });
-        this.purchaseOrderService.searchFilterPurchaseOrderMockAPI().subscribe((data) => {
+        this.purchaseOrderService.searchFilterPurchaseOrder().subscribe((data) => {
             this.listOrder = data;
             this.total = this.listOrder.length;
             this.purchaseOrderService.setTotal(this.total);
         });
+        // this.purchaseOrderService.searchFilterPurchaseOrderMockAPI().subscribe((data) => {
+        //     this.listOrder = data;
+        //     this.total = this.listOrder.length;
+        //     this.purchaseOrderService.setTotal(this.total);
+        // });
     }
 
     ngDoCheck(): void {

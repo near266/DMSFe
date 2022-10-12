@@ -19,16 +19,16 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         private route: ActivatedRoute,
         public router: Router,
         private dataService: DataService,
-        private purchaseOrder: PurchaseOrderService
+        private purchaseOrder: PurchaseOrderService,
     ) {}
 
     ngOnInit(): void {
         this.type = 'View';
         this.changeType('View');
         this.statusNow = parseInt(localStorage.getItem('status')!);
-        this.purchaseOrder
-            .getPurchaseDetail(parseInt(localStorage.getItem('purchaseOrderId')!))
-            .subscribe((data) => console.log(data));
+        // this.purchaseOrder
+        //     .getPurchaseDetail(parseInt(localStorage.getItem('purchaseOrderId')!))
+        //     .subscribe((data) => console.log(data));
     }
 
     ngDoCheck(): void {}
