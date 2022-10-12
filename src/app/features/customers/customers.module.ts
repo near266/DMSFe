@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { CustomersRoutingModule } from './customers-routing.module';
 import { CustomersComponent } from './customers.component';
-import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { DetailCustomerComponent } from './detail-customer/detail-customer.component';
 
@@ -11,7 +10,6 @@ import { DetailCustomerComponent } from './detail-customer/detail-customer.compo
 @NgModule({
   declarations: [
     CustomersComponent,
-    MenuBarComponent,
     DetailCustomerComponent
   ],
   imports: [
