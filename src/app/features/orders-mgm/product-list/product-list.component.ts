@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/core/services/data.service';
@@ -13,7 +14,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     subscription!: Subscription;
     from = '';
 
-    constructor(private dataService: DataService, private router: Router) { }
+    constructor(private dataService: DataService, private router: Router,
+        public dialogRef: MatDialogRef<ProductListComponent>) { }
 
     ngOnInit(): void {
         this.subscription = this.dataService.openProductFrom.subscribe((data: any) => {
@@ -32,5 +34,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
         } else if (this.from === 'update') {
             this.router.navigate(['/orders/detailOrder/viewEdit']);
         }
+    }
+    closeDialog() {
+        this.dialogRef.close();
     }
 }

@@ -1,10 +1,22 @@
 <div class="fixed z-10 bg-white w-full">
     <div class="p-3 w-full flex justify-between items-center">
-        <button *ngIf="type === 'View'" class="button-success-small flex items-center justify-between mr-2">
-            <i class="fa-solid fa-truck text-white mr-2"></i>
-            <span class="text-white">Chuyển kho</span>
-        </button>
-        <div *ngIf="type === 'Edit'"></div>
+        <div class="flex" *ngIf="statusNow">
+            <button *ngIf="type === 'View' && (statusNow === 1 || statusNow === 5)"
+                class="button-primary-small flex items-center justify-between mr-2">
+                <i class="fa-solid fa-thumbs-up text-white mr-2"></i>
+                <span class="text-white">Duyệt</span>
+            </button>
+            <button *ngIf="type === 'View' && statusNow === 1"
+                class="button-primary-small flex items-center justify-between mr-2">
+                <i class="fa-solid fa-thumbs-down text-white mr-2"></i>
+                <span class="text-white">Từ chối</span>
+            </button>
+            <button *ngIf="type === 'View' && (statusNow === 2 || statusNow === 3)"
+                class="button-primary-small flex items-center justify-between mr-2">
+                <i class="fa-solid fa-calculator text-white mr-2"></i>
+                <span class="text-white">Bán hàng</span>
+            </button>
+        </div>
         <div class="flex items-center">
             <button *ngIf="type === 'View'" (click)="changeType('Edit')"
                 class="button-primary-small flex items-center justify-between mr-2">
@@ -37,7 +49,7 @@
 <div class="flex overflow-x-hidden">
     <!-- sidebar -->
     <div class="w-48 fixed mt-16 border-r h-screen mr-1 flex flex-col items-stretch overflow-y-auto">
-        <div [routerLink]="['/orders/detailOrder/viewEdit']" routerLinkActive="active"
+        <div [routerLink]="['/orders/detailOrder/viewEdit']" routerLinkActive=" active"
             class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
             <i class="fa-solid fa-pen-to-square mr-2"></i>
             <span>Đặt hàng</span>

@@ -139,28 +139,28 @@
                         <td class="custom-td border-b">{{ order.orderEmployeeName }}</td>
                         <td class="custom-td border-b">
                             <button class="button-orange-xs font-normal cursor-default min-w-[90px]"
-                                *ngIf="order.status === 0">
+                                *ngIf="order.status === 1">
                                 <span style="font-size: 12px;">Chờ duyệt</span>
                             </button>
                             <button class="button-primary-xs font-normal cursor-default min-w-[90px]"
-                                *ngIf="order.status === 1">
+                                *ngIf="order.status === 2">
                                 <span style="font-size: 12px;">Đã duyệt</span>
                             </button>
                             <button class="button-success-xs font-normal cursor-default min-w-[90px]"
-                                *ngIf="order.status === 2">
+                                *ngIf="order.status === 3">
                                 <span style="font-size: 12px;">Đã bán hàng</span>
                             </button>
                             <button class="button-success-700-xs font-normal cursor-default min-w-[90px]"
-                                *ngIf="order.status === 3">
+                                *ngIf="order.status === 4">
                                 <span style="font-size: 12px;">Đã xuất hàng</span>
                             </button>
                             <button class="button-danger-xs font-normal cursor-default min-w-[90px]"
-                                *ngIf="order.status === 4">
+                                *ngIf="order.status === 5">
                                 <span style="font-size: 12px;">Từ chối</span>
                             </button>
                         </td>
                         <td class="cursor-pointer hover:text-blue-500 custom-td border-b"
-                            [routerLink]="['/orders/detailOrder/viewEdit']">
+                            (click)="navigateToDetail(order)">
                             {{ order.purchaseOrderCode }}
                         </td>
                         <td class="custom-td border-b">

@@ -1,164 +1,177 @@
-<div class="fixed z-10 bg-white w-full">
-    <div class="p-3 w-full flex justify-between items-center">
-        <span style="font-size: 20px !important" class="font-medium">Danh sách sản phẩm</span>
-        <div class="flex items-center">
-            <button (click)="navigateToClose()" class="button-primary-small
-             flex items-center justify-between mr-2">
-                <i class="fa-solid fa-check text-white mr-2"></i>
-                <span class="text-white">Đã xong</span>
-            </button>
-            <button class="button-danger" (click)="navigateToClose()">
-                <i class="fa-solid fa-ban text-white mr-2"></i>
-                <span class="text-white">Đóng</span>
-            </button>
-        </div>
-    </div>
-    <mat-divider></mat-divider>
-</div>
-<div class="flex mt-20">
-    <div class="w-60 h-full border-r min-h-screen mr-1 flex flex-col items-stretch px-5">
-        <button class="button-success">Tìm kiếm sản phẩm</button>
-        <input type="text" placeholder="Mã hoặc tên sản phẩm" class="border rounded-md mt-3 p-2" />
-        <div style="font-size: 12px" class="mt-2">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>[-- Chọn nhãn hiệu --]</mat-label>
-                <mat-select>
-                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                    <mat-option [value]="1"> 1</mat-option>
-                    <mat-option [value]="1"> 1</mat-option>
-                    <mat-option [value]="1"> 1</mat-option>
-                    <mat-option [value]="1"> 1</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div style="font-size: 12px" class="mt-2">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>[-- Chọn nhà cung cấp --]</mat-label>
-                <mat-select>
-                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                    <mat-option [value]="1"> 1</mat-option>
-                    <mat-option [value]="1"> 1</mat-option>
-                    <mat-option [value]="1"> 1</mat-option>
-                    <mat-option [value]="1"> 1</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div style="font-size: 12px" class="mt-2">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>[-- Chọn ngành hàng --]</mat-label>
-                <mat-select>
-                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                    <mat-option [value]="1"> 1</mat-option>
-                    <mat-option [value]="1"> 1</mat-option>
-                    <mat-option [value]="1"> 1</mat-option>
-                    <mat-option [value]="1"> 1</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-    </div>
-    <mat-tab-group class="w-full">
-        <mat-tab label="Danh sách sản phẩm">
-            <div class="flex justify-end mt-2">
-                <button *ngIf="!isSelectAll" (click)="isSelectAll = true"
-                    class="button-primary-small flex items-center justify-between mr-2">
-                    <i class="fa-solid fa-circle-check text-white mr-2"></i>
-                    <span class="text-white">Chọn tất cả sản phẩm</span>
+<div class="m-[-24px] min-h-screen">
+    <div class=" bg-white w-full sticky top-[-24px] z-10">
+        <div class=" p-3 w-full flex justify-between items-center">
+            <span style="font-size: 20px !important" class="font-medium">Danh sách sản phẩm</span>
+            <div class="flex items-center">
+                <button (click)="navigateToClose()" class="button-primary-small
+                 flex items-center justify-between mr-2">
+                    <i class="fa-solid fa-check text-white mr-2"></i>
+                    <span class="text-white">Đã xong</span>
                 </button>
-                <button *ngIf="isSelectAll" (click)="isSelectAll = false"
-                    class="button-danger-small flex items-center justify-between mr-2">
-                    <i class="fa-solid fa-xmark text-white mr-2"></i>
-                    <span class="text-white">Bỏ chọn tất cả</span>
-                </button>
-                <button class="button-primary-small flex items-center justify-between mr-2">
-                    <i class="fa-sharp fa-solid fa-list-check text-white mr-2"></i>
-                    <span class="text-white">Sản phẩm trên trang</span>
+                <button class="button-danger" (click)="navigateToClose(); closeDialog()">
+                    <i class="fa-solid fa-ban text-white mr-2"></i>
+                    <span class="text-white">Đóng</span>
                 </button>
             </div>
-            <div class="relative sm:rounded-lg mt-2" style="font-size: 12px">
-                <table class="custom-table">
-                    <thead class="custom-thead">
-                        <tr class="row-customize">
-                            <th scope="col" class="custom-th">Mã SP</th>
-                            <th scope="col" class="custom-th">Tên sản phẩm</th>
-                            <th scope="col" class="custom-th">ĐVT Chẵn</th>
-                            <th scope="col" class="custom-th">ĐVT Lẻ</th>
-                            <th scope="col" class="custom-th">Giá chẵn</th>
-                            <th scope="col" class="custom-th">Giá lẻ</th>
-                            <th scope="col" class="custom-th">VAT</th>
-                            <th scope="col" class="custom-th">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]; index as i" class="custom-tr">
-                            <td class="custom-th">{{ i + 1 }}</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th" (click)="stopPropagation($event)">
-                                <button *ngIf="!isSelectAll"
-                                    class="text-green-600 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">
-                                    <span>Chọn</span>
-                                </button>
-                                <button *ngIf="isSelectAll"
-                                    class="text-white p-2 bg-green-400 rounded-lg hover:bg-green-500 font-medium">
-                                    <i class="fa-solid fa-check mr-2"></i>
-                                    <span>Đã chọn</span>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        </div>
+        <mat-divider></mat-divider>
+    </div>
+    <div class="flex mt-2">
+        <div class="w-60 h-full border-r min-h-screen mr-1 flex flex-col items-stretch px-5">
+            <button class="button-success">Tìm kiếm sản phẩm</button>
+            <input type="text" placeholder="Mã hoặc tên sản phẩm" class="border rounded-md mt-3 p-2" />
+            <div style="font-size: 12px" class="mt-2">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>[-- Chọn nhãn hiệu --]</mat-label>
+                    <mat-select>
+                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1"> 1</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-            <!-- Pagination -->
-            <div class="justify-end px-2 text-sm mt-2 flex items-center">
-                <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward-fast text-sm mr-2"></i>
-                <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward text-sm mr-2"></i>
-                <div *ngFor="let index of [1, 2, 3]"
-                    class="mr-2 bg-green-600 px-2 text-white rounded-sm cursor-pointer hover:bg-green-700">
-                    {{ index }}
+            <div style="font-size: 12px" class="mt-2">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>[-- Chọn nhà cung cấp --]</mat-label>
+                    <mat-select>
+                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1"> 1</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div style="font-size: 12px" class="mt-2">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>[-- Chọn ngành hàng --]</mat-label>
+                    <mat-select>
+                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1"> 1</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-tab-group class="w-full">
+            <mat-tab label="Danh sách sản phẩm">
+                <div class="flex justify-end mt-2">
+                    <button *ngIf="!isSelectAll" (click)="isSelectAll = true"
+                        class="button-primary-small flex items-center justify-between mr-2">
+                        <i class="fa-solid fa-circle-check text-white mr-2"></i>
+                        <span class="text-white">Chọn tất cả sản phẩm</span>
+                    </button>
+                    <button *ngIf="isSelectAll" (click)="isSelectAll = false"
+                        class="button-danger-small flex items-center justify-between mr-2">
+                        <i class="fa-solid fa-xmark text-white mr-2"></i>
+                        <span class="text-white">Bỏ chọn tất cả</span>
+                    </button>
+                    <button class="button-primary-small flex items-center justify-between mr-2">
+                        <i class="fa-sharp fa-solid fa-list-check text-white mr-2"></i>
+                        <span class="text-white">Sản phẩm trên trang</span>
+                    </button>
                 </div>
-                <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward text-sm mr-2"></i>
-                <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward-fast text-sm"></i>
-            </div>
-        </mat-tab>
-        <mat-tab label="Sản phẩm đã chọn">
-            <div class="relative sm:rounded-lg mt-2" style="font-size: 12px">
-                <table class="custom-table">
-                    <thead class="custom-thead">
-                        <tr class="row-customize">
-                            <th scope="col" class="custom-th">Mã SP</th>
-                            <th scope="col" class="custom-th">Tên sản phẩm</th>
-                            <th scope="col" class="custom-th">ĐVT Chẵn</th>
-                            <th scope="col" class="custom-th">ĐVT Lẻ</th>
-                            <th scope="col" class="custom-th">Giá chẵn</th>
-                            <th scope="col" class="custom-th">Giá lẻ</th>
-                            <th scope="col" class="custom-th">VAT</th>
-                            <th scope="col" class="custom-th">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]; index as i" class="custom-tr">
-                            <td class="custom-th">{{ i + 1 }}</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th">Value 1</td>
-                            <td class="custom-th text-center" (click)="stopPropagation($event)">
-                                <button
-                                    class="text-red-500 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">
-                                    <i class="fa-solid mr-1 fa-xmark text-sm cursor-pointer hover:opacity-70"></i>
-                                    <span>Xóa</span>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </mat-tab>
-    </mat-tab-group>
+                <div class="relative sm:rounded-lg mt-2" style="font-size: 12px">
+                    <table class="custom-table">
+                        <thead class="custom-thead">
+                            <tr class="row-customize">
+                                <th scope="col" class="custom-th">Mã SP</th>
+                                <th scope="col" class="custom-th">Tên sản phẩm</th>
+                                <th scope="col" class="custom-th">ĐVT Chẵn</th>
+                                <th scope="col" class="custom-th">ĐVT Lẻ</th>
+                                <th scope="col" class="custom-th">Giá chẵn</th>
+                                <th scope="col" class="custom-th">Giá lẻ</th>
+                                <th scope="col" class="custom-th">VAT</th>
+                                <th scope="col" class="custom-th">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]; index as i" class="custom-tr">
+                                <td class="custom-th">{{ i + 1 }}</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th" (click)="stopPropagation($event)">
+                                    <button *ngIf="!isSelectAll"
+                                        class="text-green-600 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">
+                                        <span>Chọn</span>
+                                    </button>
+                                    <button *ngIf="isSelectAll"
+                                        class="text-white p-2 bg-green-400 rounded-lg hover:bg-green-500 font-medium">
+                                        <i class="fa-solid fa-check mr-2"></i>
+                                        <span>Đã chọn</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div class="justify-end px-2 text-sm mt-2 flex items-center">
+                    <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward-fast text-sm mr-2"></i>
+                    <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward text-sm mr-2"></i>
+                    <div *ngFor="let index of [1, 2, 3]"
+                        class="mr-2 bg-green-600 px-2 text-white rounded-sm cursor-pointer hover:bg-green-700">
+                        {{ index }}
+                    </div>
+                    <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward text-sm mr-2"></i>
+                    <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward-fast text-sm"></i>
+                </div>
+            </mat-tab>
+            <mat-tab label="Sản phẩm đã chọn">
+                <div class="relative sm:rounded-lg mt-2" style="font-size: 12px">
+                    <table class="custom-table">
+                        <thead class="custom-thead">
+                            <tr class="row-customize">
+                                <th scope="col" class="custom-th">Mã SP</th>
+                                <th scope="col" class="custom-th">Tên sản phẩm</th>
+                                <th scope="col" class="custom-th">ĐVT Chẵn</th>
+                                <th scope="col" class="custom-th">ĐVT Lẻ</th>
+                                <th scope="col" class="custom-th">Giá chẵn</th>
+                                <th scope="col" class="custom-th">Giá lẻ</th>
+                                <th scope="col" class="custom-th">VAT</th>
+                                <th scope="col" class="custom-th">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]; index as i" class="custom-tr">
+                                <td class="custom-th">{{ i + 1 }}</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th">Value 1</td>
+                                <td class="custom-th text-center" (click)="stopPropagation($event)">
+                                    <button
+                                        class="text-red-500 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">
+                                        <i class="fa-solid mr-1 fa-xmark text-sm cursor-pointer hover:opacity-70"></i>
+                                        <span>Xóa</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+    <!-- <div mat-dialog-close class="flex items-center justify-end pt-2">
+        <button (click)="navigateToClose()" class="button-primary-small
+         flex items-center justify-between mr-2">
+            <i class="fa-solid fa-check text-white mr-2"></i>
+            <span class="text-white">Đã xong</span>
+        </button>
+        <button class="button-danger" (click)="navigateToClose()">
+            <i class="fa-solid fa-ban text-white mr-2"></i>
+            <span class="text-white">Đóng</span>
+        </button>
+    </div> -->
 </div>
