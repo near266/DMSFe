@@ -1,0 +1,15 @@
+export const tableHeader = [
+    'Số thứ tự',
+    'Nhãn hiệu',
+    'Mã sản phẩm',
+    'Tên sản phẩm',
+    'ĐVT lẻ',
+    'Giá bán lẻ',
+    'VAT',
+    'TK chiết khấu',
+    'Kho',
+    'TK_kho',
+    'TK_giá vốn',
+    'Tồn kho',
+    'Barcode',
+];

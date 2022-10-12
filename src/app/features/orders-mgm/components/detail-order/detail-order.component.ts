@@ -1,12 +1,18 @@
 import { Component, OnInit, AfterViewInit, Input, DoCheck, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ListProduct, ListPromotionProduct, PurchaseOrder, PurchaseOrderDetail } from 'src/app/core/model/PurchaseOrder';
+import {
+    ListProduct,
+    ListPromotionProduct,
+    PurchaseOrder,
+    PurchaseOrderDetail,
+} from 'src/app/core/model/PurchaseOrder';
 import { DetailPurchaseOrder, statusList } from 'src/app/core/data/PurchaseOrderList';
 import { DataService } from 'src/app/core/services/data.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { ProductListComponent } from '../../product-list/product-list.component';
+import { ProductListComponent } from '../product-list/product-list.component';
+import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 @Component({
     selector: 'app-detail-order',
     templateUrl: './detail-order.component.html',
@@ -24,53 +30,61 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     listGroup = [
         {
             groupId: '1',
-            groupName: 'FT2 - Đông Bắc - QL Tùng (Khu vực Đông Bắc)'
+            groupName: 'FT2 - Đông Bắc - QL Tùng (Khu vực Đông Bắc)',
         },
         {
             groupId: '2',
-            groupName: 'FT5 - Bắc Miền Trung - QL Trọng (Khu vực Bắc Miền Trung)'
+            groupName: 'FT5 - Bắc Miền Trung - QL Trọng (Khu vực Bắc Miền Trung)',
         },
         {
             groupId: '3',
-            groupName: 'FT7 - Miền Tây NB - QL Duy'
-        }
-    ]
+            groupName: 'FT7 - Miền Tây NB - QL Duy',
+        },
+    ];
     listEmployee = [
         {
             employeeId: '1',
-            employeeName: 'Nguyễn Văn Tuấn'
+            employeeName: 'Nguyễn Văn Tuấn',
         },
         {
             employeeId: '2',
-            employeeName: 'Đặng Xuân Khu'
+            employeeName: 'Đặng Xuân Khu',
         },
         {
             employeeId: '3',
-            employeeName: 'Hồ Tuấn Anh'
-        }
-    ]
+            employeeName: 'Hồ Tuấn Anh',
+        },
+    ];
     listRoute = [
         {
             routeId: '1',
-            routeName: 'Nguyễn Văn Tuấn'
+            routeName: 'Nguyễn Văn Tuấn',
         },
         {
             routeId: '2',
-            routeName: 'Đặng Xuân Khu'
+            routeName: 'Đặng Xuân Khu',
         },
         {
             routeId: '3',
-            routeName: 'Hồ Tuấn Anh'
-        }
-    ]
-    constructor(private activatedRoute: ActivatedRoute, private fb: FormBuilder, private dataservice: DataService, private dialog: MatDialog, private router: Router, private dataService: DataService) { }
+            routeName: 'Hồ Tuấn Anh',
+        },
+    ];
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        private fb: FormBuilder,
+        private dataservice: DataService,
+        private dialog: MatDialog,
+        private router: Router,
+        private dataService: DataService,
+        private purchaseOrder: PurchaseOrderService
+    ) {}
 
     ngOnInit(): void {
         // this.dataService.status.subscribe(
         //     data => this.statusNow = data
         // )
-        this.statusNow = parseInt(localStorage.getItem('status')!)
-        this.detailOrderFakeData = DetailPurchaseOrder[this.statusNow-1];
+        this.statusNow = parseInt(localStorage.getItem('status')!);
+        this.detailOrderFakeData = DetailPurchaseOrder[this.statusNow - 1];
         this.detailOrderForm = this.fb.group({
             purchaseOrderCode: [''],
             status: [''],
@@ -94,7 +108,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 totalPrice: [''],
                 discount: [''],
                 discountRate: [''],
-                note: ['']
+                note: [''],
             }),
             listPromotionProduct: this.fb.group({
                 productCode: [''],
@@ -102,7 +116,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 unitName: [''],
                 warehouseName: [''],
                 quantity: [''],
-                note: ['']
+                note: [''],
             }),
             debtLimit: [''],
             debtCurrent: [''],
@@ -112,8 +126,8 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             totalDiscountProduct: [''],
             tradeDiscount: [''],
             totalPayment: [''],
-            prePayment: ['']
-        })
+            prePayment: [''],
+        });
         this.subscription = this.dataservice.type.subscribe((data: any) => {
             this.type = data;
         });
@@ -137,24 +151,21 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 customerName: this.detailOrderFakeData.customerName,
                 phone: this.detailOrderFakeData.phone,
                 address: this.detailOrderFakeData.address,
-                description: this.detailOrderFakeData.description
-            })
+                description: this.detailOrderFakeData.description,
+            });
             this.listProduct = this.detailOrderFakeData.listProduct;
             this.listPromotionProduct = this.detailOrderFakeData.listPromotionProduct;
-        }, 0)
-
+        }, 0);
     }
 
-    ngDoCheck(): void {
-
-    }
+    ngDoCheck(): void {}
 
     stopPropagation(e: any) {
         e.stopPropagation();
     }
 
     passingDataFrom() {
-        this.dataservice.openProductList('update', this.detailOrderFakeData)
+        this.dataservice.openProductList('update', this.detailOrderFakeData);
     }
 
     openDialogProduct() {
@@ -163,7 +174,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             maxHeight: '100vh',
             height: '100%',
             width: '100%',
-            panelClass: 'full-screen-modal'
-        })
+            panelClass: 'full-screen-modal',
+        });
     }
 }

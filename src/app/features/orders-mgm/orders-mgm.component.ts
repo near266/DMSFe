@@ -1,24 +1,53 @@
-import { Component, DoCheck, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, DoCheck, OnInit, OnDestroy, Inject, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { PurchaseOrderList } from 'src/app/core/data/PurchaseOrderList';
 import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
 // import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { DataService } from 'src/app/core/services/data.service';
+import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 
 @Component({
     selector: 'app-orders-mgm',
     templateUrl: './orders-mgm.component.html',
     styleUrls: ['./orders-mgm.component.scss'],
 })
-export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy {
+export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterViewInit {
     isShowSidebarToMargin = true;
     sideBarWidth!: string;
     type!: string;
-    listOrder: PurchaseOrder[] = PurchaseOrderList;
-    constructor(private activatedroute: ActivatedRoute, public datepipe: DatePipe, public router: Router, private dataService: DataService) { }
+    listOrder: PurchaseOrder[] = [];
+    totalCount: number;
 
-    ngOnInit(): void { }
+    page: number = 1;
+    pageSize: number = 30;
+    total: number = 0;
+    constructor(
+        private activatedroute: ActivatedRoute,
+        public datepipe: DatePipe,
+        public router: Router,
+        private dataService: DataService,
+        private purchaseOrderService: PurchaseOrderService,
+    ) {}
+
+    ngOnInit(): void {
+        this.purchaseOrderService.page.subscribe((data) => {
+            this.page = data;
+        });
+    }
+
+    ngAfterViewInit(): void {
+        // this.purchaseOrderService.searchFilterPurchaseOrder().subscribe((data) => {
+        //     this.listOrder = data;
+        //     this.total = this.listOrder.length;
+        //     this.purchaseOrderService.setTotal(this.total);
+        // });
+        this.purchaseOrderService.searchFilterPurchaseOrderMockAPI().subscribe((data) => {
+            this.listOrder = data;
+            this.total = this.listOrder.length;
+            this.purchaseOrderService.setTotal(this.total);
+        });
+    }
 
     ngDoCheck(): void {
         let table = document.getElementById('table');
@@ -32,9 +61,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy {
         }
     }
 
-    ngOnDestroy(): void {
-        // console.log('Đã hủy')
-    }
+    ngOnDestroy(): void {}
 
     isShowSidebar(e: any) {
         this.isShowSidebarToMargin = e;
@@ -49,8 +76,8 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     navigateToDetail(order: any) {
-        // this.dataService.passStatus(order.status);
         localStorage.setItem('status', order.status);
-        this.router.navigate(['/orders/detailOrder/viewEdit'])
+        localStorage.setItem('purchaseOrderId', order.purchaseOrderId);
+        this.router.navigate(['/orders/detailOrder/viewEdit']);
     }
 }

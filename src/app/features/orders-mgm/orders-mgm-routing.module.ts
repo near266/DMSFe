@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
+import { CreatePurchaseOrderComponent } from './components/create-purchase-order/create-purchase-order.component';
 import { OrdersMgmComponent } from './orders-mgm.component';
-import { ProductListComponent } from './product-list/product-list.component';
-import { ViewEditDetailOrderComponent } from './view-edit-detail-order/view-edit-detail-order.component';
+import { ProductListComponent } from './components/product-list/product-list.component';
 
 const routes: Routes = [
     {
@@ -15,13 +14,11 @@ const routes: Routes = [
         component: CreatePurchaseOrderComponent,
     },
     {
-        path: 'products',
-        component: ProductListComponent,
-    },
-    {
         path: 'detailOrder',
         loadChildren: () =>
-            import('./view-edit-detail-order/view-edit-detail-order.module').then((m) => m.ViewEditDetailOrderModule),
+            import('./components/view-edit-detail-order/view-edit-detail-order.module').then(
+                (m) => m.ViewEditDetailOrderModule,
+            ),
     },
 ];
 
@@ -29,4 +26,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class OrdersMgmRoutingModule { }
+export class OrdersMgmRoutingModule {}
