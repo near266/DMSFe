@@ -4,6 +4,7 @@ import { PurchaseOrderList } from 'src/app/core/data/PurchaseOrderList';
 import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
 // import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
+import { DataService } from 'src/app/core/services/data.service';
 
 @Component({
     selector: 'app-orders-mgm',
@@ -15,7 +16,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy {
     sideBarWidth!: string;
     type!: string;
     listOrder: PurchaseOrder[] = PurchaseOrderList;
-    constructor(private activatedroute: ActivatedRoute, public datepipe: DatePipe, public router: Router) { }
+    constructor(private activatedroute: ActivatedRoute, public datepipe: DatePipe, public router: Router, private dataService: DataService) { }
 
     ngOnInit(): void { }
 
@@ -47,12 +48,9 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy {
         }
     }
 
-    // navigateToDetail(order: any) {
-    //     let orderJson: NavigationExtras = {
-    //         queryParams: {
-    //             "order": JSON.stringify(order)
-    //         }
-    //     }
-    //     this.router.navigate(['/orders/detailOrder/viewEdit'], orderJson)
-    // }
+    navigateToDetail(order: any) {
+        // this.dataService.passStatus(order.status);
+        localStorage.setItem('status', order.status);
+        this.router.navigate(['/orders/detailOrder/viewEdit'])
+    }
 }

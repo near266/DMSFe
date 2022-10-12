@@ -1,10 +1,8 @@
 import { Component, OnInit, AfterViewInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { NestedTreeControl } from '@angular/cdk/tree';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ListProduct, ListPromotionProduct, PurchaseOrder, PurchaseOrderDetail } from 'src/app/core/model/PurchaseOrder';
-import { DetailPurchaseOrder } from 'src/app/core/data/PurchaseOrderList';
+import { DetailPurchaseOrder, statusList } from 'src/app/core/data/PurchaseOrderList';
 import { DataService } from 'src/app/core/services/data.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,28 +13,11 @@ import { ProductListComponent } from '../../product-list/product-list.component'
     styleUrls: ['./detail-order.component.scss'],
 })
 export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
-    statusList = [
-        {
-            value: 0,
-            name: 'Chờ duyệt'
-        },
-        {
-            value: 1,
-            name: 'Đã duyệt'
-        },
-        {
-            value: 2,
-            name: 'Đã xuất hàng'
-        },
-        {
-            value: 3,
-            name: 'Đã bán hàng'
-        },
-
-    ];
+    statusList = statusList;
+    statusNow!: number;
     type: string = 'View';
     detailOrderForm!: FormGroup;
-    detailOrderFakeData: PurchaseOrderDetail = DetailPurchaseOrder[0];
+    detailOrderFakeData!: PurchaseOrderDetail;
     listProduct?: ListProduct[] = [];
     listPromotionProduct?: ListPromotionProduct[] = [];
     subscription!: Subscription;
@@ -82,9 +63,14 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             routeName: 'Hồ Tuấn Anh'
         }
     ]
-    constructor(private route: ActivatedRoute, private fb: FormBuilder, private dataservice: DataService, private dialog: MatDialog) { }
+    constructor(private activatedRoute: ActivatedRoute, private fb: FormBuilder, private dataservice: DataService, private dialog: MatDialog, private router: Router, private dataService: DataService) { }
 
     ngOnInit(): void {
+        // this.dataService.status.subscribe(
+        //     data => this.statusNow = data
+        // )
+        this.statusNow = parseInt(localStorage.getItem('status')!)
+        this.detailOrderFakeData = DetailPurchaseOrder[this.statusNow-1];
         this.detailOrderForm = this.fb.group({
             purchaseOrderCode: [''],
             status: [''],
@@ -173,8 +159,11 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     openDialogProduct() {
         const dialogRef = this.dialog.open(ProductListComponent, {
-            width: '100vw',
-            height: '100vh'
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            height: '100%',
+            width: '100%',
+            panelClass: 'full-screen-modal'
         })
     }
 }

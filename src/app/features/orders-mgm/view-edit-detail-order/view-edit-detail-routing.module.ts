@@ -10,6 +10,11 @@ const routes: Routes = [
         component: ViewEditDetailOrderComponent,
         children: [
             {
+                path: '',
+                redirectTo: 'viewEdit',
+                pathMatch: 'full',
+            },
+            {
                 path: 'viewEdit',
                 component: DetailOrderComponent,
             },
@@ -25,4 +30,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class ViewEditDetailRoutingModule {}
+export class ViewEditDetailRoutingModule { }
