@@ -3,7 +3,7 @@
         <div class=" p-3 w-full flex justify-between items-center">
             <span style="font-size: 20px !important" class="font-medium">Danh sách sản phẩm</span>
             <div class="flex items-center">
-                <button (click)="navigateToClose()" class="button-primary-small
+                <button (click)="navigateToClose()" class="button-primary-sm
                  flex items-center justify-between mr-2">
                     <i class="fa-solid fa-check text-white mr-2"></i>
                     <span class="text-white">Đã xong</span>
@@ -61,16 +61,16 @@
             <mat-tab label="Danh sách sản phẩm">
                 <div class="flex justify-end mt-2">
                     <button *ngIf="!isSelectAll" (click)="isSelectAll = true"
-                        class="button-primary-small flex items-center justify-between mr-2">
+                        class="button-primary-sm flex items-center justify-between mr-2">
                         <i class="fa-solid fa-circle-check text-white mr-2"></i>
                         <span class="text-white">Chọn tất cả sản phẩm</span>
                     </button>
                     <button *ngIf="isSelectAll" (click)="isSelectAll = false"
-                        class="button-danger-small flex items-center justify-between mr-2">
+                        class="button-danger-sm flex items-center justify-between mr-2">
                         <i class="fa-solid fa-xmark text-white mr-2"></i>
                         <span class="text-white">Bỏ chọn tất cả</span>
                     </button>
-                    <button class="button-primary-small flex items-center justify-between mr-2">
+                    <button class="button-primary-sm flex items-center justify-between mr-2">
                         <i class="fa-sharp fa-solid fa-list-check text-white mr-2"></i>
                         <span class="text-white">Sản phẩm trên trang</span>
                     </button>
@@ -164,7 +164,7 @@
         </mat-tab-group>
     </div>
     <!-- <div mat-dialog-close class="flex items-center justify-end pt-2">
-        <button (click)="navigateToClose()" class="button-primary-small
+        <button (click)="navigateToClose()" class="button-primary-sm
          flex items-center justify-between mr-2">
             <i class="fa-solid fa-check text-white mr-2"></i>
             <span class="text-white">Đã xong</span>

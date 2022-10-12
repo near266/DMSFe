@@ -18,9 +18,6 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     ngOnInit(): void {
         this.type = 'View';
         this.changeType('View');
-        // this.dataService.status.subscribe(
-        //     data => this.statusNow = data
-        // )
         this.statusNow = parseInt(localStorage.getItem('status')!)
     }
 
