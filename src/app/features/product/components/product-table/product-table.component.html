@@ -1,0 +1,39 @@
+<table id="product" class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
+  <thead class="h-10  border-gray-300 ">
+    <tr>
+      <th scope="col"
+        class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">
+        <input type="checkbox">
+      </th>
+      <th scope="col" *ngFor="let header of headers"
+        class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+        {{header}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="h-14 w-fit text-xs"
+      *ngFor="let product of products | paginate: { itemsPerPage: 30, currentPage };let i =index; let o=odd; let e=even;"
+      [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
+      <td class="space-x-2 w-14 border-x border-solid align-midde h-full pl-2 "><input class="inline" type="checkbox"><i
+          *ngIf="product.locked" class="fa-solid fa-lock text-base text-[#2e799c]"></i><i *ngIf="!product?.locked"
+          class="fa-solid fa-lock-open text-base text-[#2e799c]"></i>
+      </td>
+      <td class="border-x  border-solid align-middle px-2">{{i}}
+      </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.brandId}}
+      </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.SKU}}</td>
+      <td class="border-x  border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer">
+        {{product.productName}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.unitId}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.retailPrice}}</td>
+      <td class="border-x  border-solid align-middle px-2">{{product.VAT}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.discountAcc}}</td>
+      <td class="border-x  border-solid align-middle px-2">{{product.warehouseID}}</td>
+      <td class="border-x  border-solid align-middle px-2"> {{product.warehouseAcc}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.priceAcc}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.inventoryWarning}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.barcode}} </td>
+    </tr>
+  </tbody>
+</table>

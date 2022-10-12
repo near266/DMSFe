@@ -44,9 +44,10 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.component';
+import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 
 @NgModule({
-    declarations: [MenuCollapseComponent],
+    declarations: [MenuCollapseComponent, MenuBarComponent],
     imports: [
         CommonModule,
         MatAutocompleteModule,
@@ -74,7 +75,7 @@ import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.
         MatBadgeModule,
         MatChipsModule,
         MatIconModule,
-        
+
         MatProgressSpinnerModule,
         MatProgressBarModule,
         MatRippleModule,
@@ -96,6 +97,7 @@ import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.
         MatFormFieldModule,
         MatInputModule,
         MatRadioModule,
+        MenuBarComponent,
         MatSelectModule,
         MatSliderModule,
         MatSlideToggleModule,
