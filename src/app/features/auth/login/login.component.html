@@ -28,7 +28,7 @@
           <input type="checkbox" class="checked:before:bg-[#0EAF8F] accent-[#0EAF8F]" formControlName="rememberMe"/>
           <span>Ghi nhớ đăng nhập</span>
         </div>
-        <div class="flex flex-col h-full justify-center align-middle text-red-500 font-medium"><span>Quên mật khẩu?</span></div>
+        <div class="flex flex-col h-full justify-center align-middle text-red-500 font-medium cursor-pointer" [routerLink]="'../forgotpassword'"><span>Quên mật khẩu?</span></div>
       </div>
       <div class="flex justify-center">
         <button mat-flat-button class="bg-[#0EAF8F] text-white text-lg font-medium">Đăng nhập</button>
