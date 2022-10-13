@@ -50,7 +50,7 @@ export class InforComponent implements OnInit {
   })
 
   ngOnInit(): void {
-    if(this.status == 'view' || this.status == 'edit'){
+    if (this.status == 'view' || this.status == 'edit') {
       this.employee.patchValue({
         employeeId: 'f11d1-d1fd1v1v3-v1-v1-vv1',
         status: true,
@@ -58,17 +58,24 @@ export class InforComponent implements OnInit {
         employeeCode: 'vantu...2',
         employeeName: 'vantu...3',
         password: 'vantu...4',
-        employeeTitle: 'vantu...5',
+        employeeTitle: 'ceo',
         phone: '345678',
         position: 'ceo',
         department: 'test1',
-        langKey: 'test2',
+        langKey: 'vn',
         address: 'test3',
-        entranceDate: '0001-01-01T00:00:00.000Z',
-        exitDate: '0001-01-01T00:00:00.000Z',
+        entranceDate: new Date('2001-12-21T00:00:00.000Z'),
+        exitDate: new Date('2010-10-29T00:00:00.000Z'),
         gender: 1,
         avatar: this.avt,
       })
+      this.entranceDate.date = this.employee.value.entranceDate.getDate()
+      this.entranceDate.month = this.employee.value.entranceDate.getMonth() + 1
+      this.entranceDate.year = this.employee.value.entranceDate.getFullYear()
+
+      this.exitDate.date = this.employee.value.exitDate.getDate()
+      this.exitDate.month = this.employee.value.exitDate.getMonth() + 1
+      this.exitDate.year = this.employee.value.exitDate.getFullYear()
     }
     this.dataService.employee.subscribe(data => {
       if (data == 'add') {
