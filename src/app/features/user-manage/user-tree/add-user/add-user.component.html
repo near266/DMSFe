@@ -3,7 +3,7 @@
         style="display: flex!important; margin: 0!important;">
         <div class="text-2xl text-gray-500 italic font-semibold tracking-wider flex">Thêm mới thành viên</div>
         <div class="flex flex-row text-xs">
-            <div
+            <div (click)="add($event)"
                 class="flex flex-row bg-blue-900 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
                 <i class="fa-solid fa-circle-check mx-2"></i>
                 <span class="mr-2">Lưu</span>
@@ -25,10 +25,10 @@
             </div>
         </div>
         <div class="bg-white h-full overflow-y-scroll w-full">
-            <app-infor *ngIf="title == 'Thông tin chung'"></app-infor>
-            <app-config *ngIf="title == 'Cấu hình nhân viên'"></app-config>
-            <app-app *ngIf="title == 'App nhân viên'"></app-app>
-            <app-menu *ngIf="title == 'Menu hiển thị'"></app-menu>
+            <app-infor [ngClass]="{'hidden':title != 'Thông tin chung'}"></app-infor>
+            <app-config [ngClass]="{'hidden':title != 'Cấu hình nhân viên'}"></app-config>
+            <app-app [ngClass]="{'hidden':title != 'App nhân viên'}"></app-app>
+            <app-menu [ngClass]="{'hidden':title != 'Menu hiển thị'}"></app-menu>
         </div>
     </div>
 </div>
