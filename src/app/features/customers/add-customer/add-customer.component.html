@@ -1,0 +1,122 @@
+<form>
+  <div class="w-full flex justify-between">
+    <div class="flex flex-col justify-center">
+      <span class="text-lg text-[#888] font-medium italic">Bản ghi mới</span>
+    </div>
+    <div class="flex justify-between w-[160px]">
+      <button mat-flat-button (click)="isChoseUpdated = !isChoseUpdated" class="bg-[#565869] text-white font-medium mx-1"><i class="fa-solid fa-pen mr-1"></i>Sửa</button>
+      <button type="button" mat-stroked-button (click)="close()" class="text-[#565869] bg-white font-medium"><i class="fa-solid fa-trash mr-1"></i>Đóng</button>
+    </div>
+  </div>
+  <hr class="my-2">
+  <div class="w-full flex">
+    <div class="w-2/12 justify-between menu-collapse ">
+      <div class="w-full font-medium text-base">
+        <i class="fa-regular fa-file-lines mr-2"></i><span>Thông tin chung</span>
+      </div>
+    </div>
+    <div class="w-10/12">
+      <div class="w-8/12 px-2 py-4 text-base">
+        <div class="w-full flex mb-6">
+            <div class="w-4/12 font-semibold">Kiểm tra trùng mã</div>
+            <div class="w-8/12">
+              <mat-checkbox [color]="'primary'"></mat-checkbox>
+            </div>
+        </div>
+
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold flex flex-col justify-center">
+            Mã khách hàng
+          </div>
+          <div class="w-8/12">
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+          </div>
+        </div>
+
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold flex flex-col justify-center">Khách hàng</div>
+          <div class="w-8/12"><input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></div>
+        </div>
+
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold flex flex-col justify-center">Nhóm khách hàng</div>
+          <div class="w-8/12"><select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></select></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold flex flex-col justify-center">Loại khách hàng</div>
+          <div class="w-8/12"><select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></select></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold flex flex-col justify-center">Trạng thái</div>
+          <div class="w-8/12"><select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></select></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold flex flex-col justify-center">Kênh</div>
+          <div class="w-8/12"><select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></select></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold flex flex-col justify-center">Địa chỉ</div>
+          <div class="w-8/12"><input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold flex flex-col justify-center">Địa chỉ giao hàng</div>
+          <div class="w-8/12"><input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold flex flex-col justify-center">Khu vực</div>
+          <div class="w-8/12"><select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></select></div>
+        </div>
+      </div>
+      <hr class="mx-2">
+      <div class="w-8/12 px-2 py-4 text-base">
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold flex flex-col justify-center">Tỉnh/Thành phố</div>
+          <div class="w-8/12"><select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></select></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold">Quận/Huyện</div>
+          <div class="w-8/12"><select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></select></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold">Xã/Phường</div>
+          <div class="w-8/12"><select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></select></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold">Sinh nhật</div>
+          <div class="w-8/12"><input type="date" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold">Người liên hệ</div>
+          <div class="w-8/12"><input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold">Chức vụ</div>
+          <div class="w-8/12"><input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold">SĐT</div>
+          <div class="w-8/12"><input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold">Email</div>
+          <div class="w-8/12"><input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></div>
+        </div>
+      </div>
+      <hr class="mx-2">
+      <div class="w-8/12 px-2 py-4 text-base">
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold">Hình ảnh</div>
+          <div class="w-8/12"></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold">Hạn mức công nợ</div>
+          <div class="w-8/12"><input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></div>
+        </div>
+        <div class="w-full flex mb-6">
+          <div class="w-4/12 font-semibold">TK Tiền/Chi phí/Nợ</div>
+          <div class="w-8/12"><input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"></div>
+        </div>
+      </div>
+    </div>
+    </div>
+</form>

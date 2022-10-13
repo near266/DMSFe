@@ -1,0 +1,33 @@
+<div class="h-full w-full px-4 py-2 overflow-hidden">
+  <div class="w-full bg-white h-9 flex items-center text-lg font-medium">
+    Danh sách khách hàng (0)
+  </div>
+  <div
+      class="w-full px-2 py-1 bg-gray-100 border-gray-300 border-y border-solid h-10 flex flex-wrap items-center text-xs font-medium">
+      <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+        <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
+        Thêm mới
+      </button>
+      <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+        <i class="fa-sharp fa-solid fa-refresh text-emerald-500 font-bold mr-2"></i>
+        Tải lại
+      </button>
+      <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+        <i class="fa-sharp fa-solid fa-upload text-emerald-500 font-bold mr-2"></i>
+        Nhập dữ liệu
+      </button>
+      <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+        <i class="fa-sharp fa-regular fa-file text-emerald-500 font-bold mr-2"></i>
+        Xuất dữ liệu
+      </button>
+      <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
+      </app-menu-bar>
+      <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+        <i class="fa-sharp fa-solid fa-trash text-emerald-500 font-bold mr-2"></i>
+        Xóa nhiều
+      </button>
+  </div>
+  <div class="w-full">
+    
+  </div>
+</div>

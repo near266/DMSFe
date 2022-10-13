@@ -67,9 +67,13 @@
       </div>
       <div
           class="w-full px-2 py-1 bg-gray-100 border-gray-300 border-y border-solid h-10 flex flex-wrap items-center text-xs font-medium">
+          <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="add()">
+            <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
+            Thêm mới
+        </button>
           <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
           </app-menu-bar>
-          <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="AddUser()">
+          <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
             <i class="fa-sharp fa-solid fa-refresh text-emerald-500 font-bold mr-2"></i>
             Tải lại
         </button>
@@ -92,9 +96,9 @@
                           <!-- <td class="border-x border-solid align-middle px-2">
                               <img class="w-20" [src]="user.img">
                           </td> -->
-                          <td class="border-x w-fit border-solid align-middle px-2"><button class="text-xs bg-[#1891C9] text-white font-medium px-7 py-1 rounded-md">{{user.Status}}</button>
+                          <td class="border-x w-fit border-solid align-middle px-2"><button class="text-xs bg-[#1891C9] text-white font-medium px-7 py-1 rounded-md">{{user.status}}</button>
                           </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.CustomerCode}}
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.customerCode}}
                           </td>
                       </tr>
                   </tbody>
@@ -125,25 +129,25 @@
                   <tbody>
                       <tr class="h-14 w-fit text-xs" *ngFor="let user of customer; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                          <td class="border-x w-fit border-solid align-middle px-2 cursor-pointer" (click)="DetailCustomer(user.id)">{{user.CustomerName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 cursor-pointer" (click)="DetailCustomer(user.customerId)">{{user.customerName}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer">
-                              {{user.CustomerGroupId}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.CustomerTypeId}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.LastModifiedDate}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.ChannelId}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.Address}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.AreaId}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.Province}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.District}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2"> {{user.DOB}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.ContactName}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.Position}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.Phone}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.Email}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.DebtLimit}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.CashAcc}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.CreatedBy}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.LastModifiedBy}} </td>
+                              {{user.customerGroupName}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.customerTypeName}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.lastModifiedDate}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.channelName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.address}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.areaId}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.province}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.district}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2"> {{user.dOB}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.contactName}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.position}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.phone}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.email}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.debtLimit}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.cashAcc}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.createdBy}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.lastModifiedBy}} </td>
                       </tr>
                   </tbody>
               </table>
