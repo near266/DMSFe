@@ -21,32 +21,29 @@ export class PurchaseOrder {
 }
 
 export class PurchaseOrderDetail {
-    purchaseOrderId?: string;
-    purchaseOrderCode?: string;
-    status?: number;
-    type?: number;
-    orderDate?: string;
-    deliveryDate?: string;
-    group?: Group;
-    orderEmployee?: OrderEmployee;
-    route?: Route;
-    customerCode?: string;
-    customerName?: string;
-    phone?: string;
-    address?: string;
-    description?: string;
-    warehouseName?: string;
-    listProduct?: ListProduct[];
-    listPromotionProduct?: ListPromotionProduct[];
-    debtLimit?: number;
-    debtCurrent?: number;
-    paymentMethod?: string;
-    totalAmount?: number;
-    totalOfVAT?: number;
-    totalDiscountProduct?: number;
-    tradeDiscount?: number;
-    totalPayment?: number;
-    prePayment?: number;
+    purchaseOrderId: string;
+    purchaseOrderCode: string;
+    status: string;
+    orderDate: string;
+    deliveryDate: string;
+    groupId: string;
+    orderEmployeeId: string;
+    routeId: string;
+    customerCode: string;
+    customerName: string;
+    phone: string;
+    address: string;
+    description: string;
+    warehouseId: string;
+    file: string;
+    listProduct: ListProduct[];
+    listPromotionProduct: ListPromotionProduct[];
+    totalAmount: string;
+    totalOfVAT: string;
+    totalDiscountProduct: string;
+    tradeDiscount: string;
+    totalPayment: string;
+    prePayment: string;
 }
 
 export class Group {
@@ -65,23 +62,23 @@ export class Route {
 }
 
 export class ListProduct {
-    productCode?: string;
-    productName?: string;
-    unitName?: string;
-    warehouseName?: string;
-    quantity?: number;
-    unitPrice?: string;
-    totalPrice?: number;
-    discount?: number;
-    discountRate?: number;
-    note?: string;
+    productCode: string;
+    productName: string;
+    unitName: string;
+    warehouseName: string;
+    quantity: string;
+    unitPrice: string;
+    totalPrice: string;
+    discount: string;
+    discountRate: string;
+    note: string;
 }
 
 export class ListPromotionProduct {
-    productCode?: string;
-    productName?: string;
-    unitName?: string;
-    warehouseName?: string;
-    quantity?: number;
-    note?: string;
+    productCode: string;
+    productName: string;
+    unitName: string;
+    warehouseName: string;
+    quantity: string;
+    note: string;
 }

@@ -194,7 +194,7 @@
                         <td class="custom-td border-b">
                             {{ datepipe.transform(order.orderDate, 'dd/MM/yyyy') || 'No-data' }}
                         </td>
-                        <td class="custom-td border-b">{{ order.totalPayment | currency:"VND":"symbol" }}</td>
+                        <td class="custom-td border-b">{{ order.totalPayment | currency: 'VND':'symbol' }}</td>
                         <td class="custom-td border-b">
                             {{ order.approveBy }}
                         </td>
@@ -207,7 +207,7 @@
                         <td class="custom-td border-b">
                             {{ datepipe.transform(order.createdDate, 'dd/MM/yyyy') || 'No-data' }}
                         </td>
-                        <td class="custom-td border-b">Chưa trả</td>
+                        <td class="custom-td border-b">{{ order.createdBy }}</td>
                         <td class="custom-td border-b">
                             {{ datepipe.transform(order.lastModifiedDate, 'dd/MM/yyyy') || 'No-data' }}
                         </td>
