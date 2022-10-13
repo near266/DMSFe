@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -15,13 +16,13 @@ import { DataService } from './core/services/data.service';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [SharedModule, RouterModule, BrowserModule, AppRoutingModule, BrowserAnimationsModule],
+    imports: [SharedModule, RouterModule, BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule],
     providers: [
         DatePipe,
         { provide: HTTP_INTERCEPTORS, useClass: SecretInterceptor, multi: true },
         { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
-        DataService
+        DataService,
     ],
     bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

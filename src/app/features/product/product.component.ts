@@ -22,7 +22,7 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit {
     sideBarWidth!: string;
     totalProducts: number;
     type!: string;
-    listOrder: PurchaseOrder[] = PurchaseOrderList;
+    // listOrder: PurchaseOrder[] = PurchaseOrderList;
 
     constructor(
         private activatedroute: ActivatedRoute,

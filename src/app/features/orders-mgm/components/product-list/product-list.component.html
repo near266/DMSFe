@@ -114,15 +114,12 @@
                     </table>
                 </div>
                 <!-- Pagination -->
-                <div class="justify-end px-2 text-sm mt-2 flex items-center">
-                    <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward-fast text-sm mr-2"></i>
-                    <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-backward text-sm mr-2"></i>
-                    <div *ngFor="let index of [1, 2, 3]"
-                        class="mr-2 bg-green-600 px-2 text-white rounded-sm cursor-pointer hover:bg-green-700">
-                        {{ index }}
-                    </div>
-                    <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward text-sm mr-2"></i>
-                    <i class="fa-sharp cursor-pointer hover:opacity-70 fa-solid fa-forward-fast text-sm"></i>
+                <div class="w-full px-2 py-1 mt-2 mb-1 flex flex-row justify-end items-center text-xs">
+                    <select class="bg-white px-3 py-1 border border-solid border-gray-500 rounded-sm">
+                        <option>30 bản ghi/trang</option>
+                    </select>
+                    <div class="flex w-6 h-6 mx-3 justify-center items-center text-white bg-green-600">1</div>
+                    <span>Hiển thị 1 - 9 trên tổng số 9 bản ghi</span>
                 </div>
             </mat-tab>
             <mat-tab label="Sản phẩm đã chọn">
@@ -163,15 +160,4 @@
             </mat-tab>
         </mat-tab-group>
     </div>
-    <!-- <div mat-dialog-close class="flex items-center justify-end pt-2">
-        <button (click)="navigateToClose()" class="button-primary-sm
-         flex items-center justify-between mr-2">
-            <i class="fa-solid fa-check text-white mr-2"></i>
-            <span class="text-white">Đã xong</span>
-        </button>
-        <button class="button-danger" (click)="navigateToClose()">
-            <i class="fa-solid fa-ban text-white mr-2"></i>
-            <span class="text-white">Đóng</span>
-        </button>
-    </div> -->
 </div>

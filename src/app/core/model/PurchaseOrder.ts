@@ -2,19 +2,20 @@ export class PurchaseOrder {
     purchaseOrderId?: string;
     purchaseOrderCode?: string;
     status?: number;
-    type?: number;
-    orderDate?: string;
-    orderEmployeeName?: string;
+    orderDate?: Date;
+    deliveryDate: Date;
+    orderEmployee?: OrderEmployee;
     customerCode?: string;
     customerName?: string;
     phone?: string;
     address?: string;
     description?: string;
-    warehouseName?: string;
-    approveDate?: string;
+    totalPayment?: number;
+    approveDate?: Date;
     approveBy?: string;
-    createdDate?: string;
-    lastModifiedDate?: string;
+    createdDate?: Date;
+    createdBy?: string;
+    lastModifiedDate?: Date;
     lastModifiedBy?: string;
     source?: string;
 }
@@ -26,7 +27,7 @@ export class PurchaseOrderDetail {
     type?: number;
     orderDate?: string;
     deliveryDate?: string;
-    group?: Group
+    group?: Group;
     orderEmployee?: OrderEmployee;
     route?: Route;
     customerCode?: string;
@@ -45,22 +46,22 @@ export class PurchaseOrderDetail {
     totalDiscountProduct?: number;
     tradeDiscount?: number;
     totalPayment?: number;
-    prePayment?: number
+    prePayment?: number;
 }
 
 export class Group {
     groupId?: string;
-    groupName?: string
+    groupName?: string;
 }
 
 export class OrderEmployee {
     employeeId?: string;
-    employeeName?: string
+    employeeName?: string;
 }
 
 export class Route {
     routeId?: string;
-    routeName?: string
+    routeName?: string;
 }
 
 export class ListProduct {
@@ -73,7 +74,7 @@ export class ListProduct {
     totalPrice?: number;
     discount?: number;
     discountRate?: number;
-    note?: string
+    note?: string;
 }
 
 export class ListPromotionProduct {
@@ -82,5 +83,5 @@ export class ListPromotionProduct {
     unitName?: string;
     warehouseName?: string;
     quantity?: number;
-    note?: string
+    note?: string;
 }

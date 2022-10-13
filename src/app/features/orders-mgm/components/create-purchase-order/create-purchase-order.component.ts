@@ -11,14 +11,14 @@ import { ProductListComponent } from '../product-list/product-list.component';
 export class CreatePurchaseOrderComponent implements OnInit {
     statusList = ['Chờ duyệt', 'Đã duyệt', 'Đã giao hàng'];
     groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng'];
-    constructor(private dataService: DataService, private dialog: MatDialog) { }
+    constructor(private dataService: DataService, private dialog: MatDialog) {}
 
-    ngOnInit(): void { }
+    ngOnInit(): void {}
     stopPropagation(e: any) {
         e.stopPropagation();
     }
     passingDataFrom() {
-        this.dataService.openProductList('create', 'Đây là tạo sản phẩm')
+        this.dataService.openProductList('create', 'Đây là tạo sản phẩm');
     }
     openDialogProduct() {
         const dialogRef = this.dialog.open(ProductListComponent, {
@@ -26,7 +26,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
             maxHeight: '100vh',
             height: '100%',
             width: '100%',
-            panelClass: 'full-screen-modal'
-        })
+            panelClass: 'full-screen-modal',
+        });
     }
 }
