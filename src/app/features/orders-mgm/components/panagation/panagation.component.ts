@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
-import { ProductService } from 'src/app/features/product/services/product.service';
 
 @Component({
     selector: 'app-panagation',
@@ -13,7 +12,7 @@ export class PanagationComponent implements OnInit {
     page: number = 1;
     pageSize: number = 30;
     total: number = 0;
-    constructor(private productService: ProductService, private purchaseOrderService: PurchaseOrderService) {}
+    constructor(private purchaseOrderService: PurchaseOrderService) {}
     ngOnInit(): void {
         this.purchaseOrderService.total.subscribe((data) => {
             this.total = data;
@@ -25,7 +24,7 @@ export class PanagationComponent implements OnInit {
         this.endIndex = Math.min(this.startIndex + this.pageSize, this.total);
     }
     setIndexToSecondPageToDiffrentFirstPage(event: any) {
-        this.startIndex = (event-1)*this.pageSize + event;
+        this.startIndex = (event - 1) * this.pageSize + event;
         this.endIndex = Math.min(this.startIndex + this.pageSize, this.total);
     }
 

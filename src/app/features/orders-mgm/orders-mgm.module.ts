@@ -12,6 +12,9 @@ import { CustomerComponent } from './components/customer/customer.component';
 import { PanagationComponent } from './components/panagation/panagation.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ViewEditDetailOrderComponent } from './components/view-edit-detail-order/view-edit-detail-order.component';
+import { ConfirmRejectComponent } from './components/confirm-reject/confirm-reject.component';
+import { GenOrderSaleComponent } from './components/gen-order-sale/gen-order-sale.component';
+import { ProductPaginationComponent } from './components/product-pagination/product-pagination.component';
 
 @NgModule({
     declarations: [
@@ -22,6 +25,9 @@ import { ViewEditDetailOrderComponent } from './components/view-edit-detail-orde
         ViewEditDetailOrderComponent,
         CustomerComponent,
         PanagationComponent,
+        ConfirmRejectComponent,
+        GenOrderSaleComponent,
+        ProductPaginationComponent,
     ],
     imports: [CommonModule, SharedModule, OrdersMgmRoutingModule, RouterModule, NgxPaginationModule],
 })

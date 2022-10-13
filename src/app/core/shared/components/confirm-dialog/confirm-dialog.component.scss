@@ -1,0 +1,12 @@
+:host ::ng-deep .mat-dialog-container {
+    padding: 12px !important;
+}
+
+.button-danger-sm {
+    @apply bg-red-600;
+
+}
+
+.button-cancel-sm {
+    @apply bg-gray-500;
+}

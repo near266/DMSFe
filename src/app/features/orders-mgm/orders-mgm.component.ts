@@ -37,16 +37,17 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     }
 
     ngAfterViewInit(): void {
-        this.purchaseOrderService.searchFilterPurchaseOrder().subscribe((data) => {
-            this.listOrder = data;
-            this.total = this.listOrder.length;
-            this.purchaseOrderService.setTotal(this.total);
-        });
-        // this.purchaseOrderService.searchFilterPurchaseOrderMockAPI().subscribe((data) => {
+        // this.purchaseOrderService.searchFilterPurchaseOrder().subscribe((data) => {
         //     this.listOrder = data;
         //     this.total = this.listOrder.length;
         //     this.purchaseOrderService.setTotal(this.total);
         // });
+        this.purchaseOrderService.searchFilterPurchaseOrder().subscribe((data) => {
+            console.log(data);
+            this.listOrder = data.data;
+            this.total = data.total;
+            this.purchaseOrderService.setTotal(this.total);
+        });
     }
 
     ngDoCheck(): void {
@@ -77,7 +78,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
 
     navigateToDetail(order: any) {
         localStorage.setItem('status', order.status);
-        localStorage.setItem('purchaseOrderId', order.purchaseOrderId);
-        this.router.navigate(['/orders/detailOrder/viewEdit']);
+        // this.purchaseOrderService.passId(order.purchaseOrderId)
+        this.router.navigate(['/orders/detailOrder/viewEdit', order.purchaseOrderId]);
     }
 }

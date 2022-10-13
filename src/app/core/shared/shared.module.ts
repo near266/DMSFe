@@ -46,9 +46,10 @@ import { TreeModule } from '@circlon/angular-tree-component';
 import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.component';
 import { MenuCollapseSearchComponent } from './components/menu-collapse-search/menu-collapse-search.component';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
-    declarations: [MenuCollapseComponent, MenuBarComponent, MenuCollapseSearchComponent],
+    declarations: [MenuCollapseComponent, MenuBarComponent, MenuCollapseSearchComponent, ConfirmDialogComponent],
     imports: [
         CommonModule,
         MatAutocompleteModule,
@@ -92,6 +93,7 @@ import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
         TreeModule,
     ],
     exports: [
+        ConfirmDialogComponent,
         MatAutocompleteModule,
         MatCheckboxModule,
         MatDatepickerModule,

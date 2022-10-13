@@ -23,10 +23,11 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     statusNow!: number;
     type: string = 'View';
     detailOrderForm!: FormGroup;
-    detailOrderFakeData!: PurchaseOrderDetail;
+    detailOrderFakeData: any = [];
     listProduct?: ListProduct[] = [];
     listPromotionProduct?: ListPromotionProduct[] = [];
-    subscription!: Subscription;
+    subscription: Subscription[] = [];
+    id: string;
     listGroup = [
         {
             groupId: '1',
@@ -76,15 +77,18 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         private dialog: MatDialog,
         private router: Router,
         private dataService: DataService,
-        private purchaseOrder: PurchaseOrderService
+        private purchaseOrder: PurchaseOrderService,
     ) {}
 
     ngOnInit(): void {
-        // this.dataService.status.subscribe(
-        //     data => this.statusNow = data
-        // )
-        this.statusNow = parseInt(localStorage.getItem('status')!);
-        this.detailOrderFakeData = DetailPurchaseOrder[this.statusNow - 1];
+        // pass id to service
+        this.subscription.push(
+            this.activatedRoute.params.subscribe((params) => {
+                this.id = params['id'];
+                this.purchaseOrder.passId(params['id']);
+            }),
+        );
+        // create Form
         this.detailOrderForm = this.fb.group({
             purchaseOrderCode: [''],
             status: [''],
@@ -128,34 +132,61 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             totalPayment: [''],
             prePayment: [''],
         });
-        this.subscription = this.dataservice.type.subscribe((data: any) => {
-            this.type = data;
+        // get type (Edit or View) from parent Component
+        this.subscription.push(
+            this.dataservice.type.subscribe((data: any) => {
+                this.type = data;
+            }),
+        );
+        // get isChangeStatus
+        this.purchaseOrder.msg.subscribe((data) => {
+            if (data === 'Done') {
+                this.getDetail();
+            }
         });
     }
 
+    getDetail() {
+        this.purchaseOrder.getPurchaseDetail(this.id).subscribe((data) => {
+            this.detailOrderFakeData = data;
+            this.patchValue();
+        });
+    }
+
+    patchValue() {
+        this.detailOrderForm.patchValue({
+            purchaseOrderCode: this.detailOrderFakeData.purchaseOrderCode,
+            status: this.detailOrderFakeData.status,
+            orderDate: this.detailOrderFakeData.orderDate,
+            deliveryDate: this.detailOrderFakeData.deliveryDate,
+            group: this.detailOrderFakeData.group?.groupId,
+            orderEmployee: this.detailOrderFakeData.orderEmployee?.employeeId,
+            route: this.detailOrderFakeData.route?.routeId,
+            customerCode: this.detailOrderFakeData.customerCode,
+            customerName: this.detailOrderFakeData.customerName,
+            phone: this.detailOrderFakeData.phone,
+            address: this.detailOrderFakeData.address,
+            description: this.detailOrderFakeData.description,
+        });
+        this.listProduct = this.detailOrderFakeData.listProduct;
+        this.listPromotionProduct = this.detailOrderFakeData.listPromotionProduct;
+    }
+
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        this.subscription.forEach((service) => {
+            service.unsubscribe();
+        });
     }
 
     ngAfterViewInit(): void {
-        setTimeout(() => {
-            this.detailOrderForm.patchValue({
-                purchaseOrderCode: this.detailOrderFakeData.purchaseOrderCode,
-                status: this.detailOrderFakeData.status,
-                orderDate: this.detailOrderFakeData.orderDate,
-                deliveryDate: this.detailOrderFakeData.deliveryDate,
-                group: this.detailOrderFakeData.group?.groupId,
-                orderEmployee: this.detailOrderFakeData.orderEmployee?.employeeId,
-                route: this.detailOrderFakeData.route?.routeId,
-                customerCode: this.detailOrderFakeData.customerCode,
-                customerName: this.detailOrderFakeData.customerName,
-                phone: this.detailOrderFakeData.phone,
-                address: this.detailOrderFakeData.address,
-                description: this.detailOrderFakeData.description,
-            });
-            this.listProduct = this.detailOrderFakeData.listProduct;
-            this.listPromotionProduct = this.detailOrderFakeData.listPromotionProduct;
-        }, 0);
+        this.subscription.push(
+            this.purchaseOrder.id.subscribe((data) => {
+                this.id = data;
+                if (this.id) {
+                    this.getDetail();
+                }
+            }),
+        );
     }
 
     ngDoCheck(): void {}
