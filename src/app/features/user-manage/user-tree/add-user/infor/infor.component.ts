@@ -78,7 +78,7 @@ export class InforComponent implements OnInit {
       this.exitDate.year = this.employee.value.exitDate.getFullYear()
     }
     this.dataService.employee.subscribe(data => {
-      if (data == 'add') {
+      if (data == 'add' || data == 'update') {
         this.employee.value.entranceDate = new Date()
         this.employee.value.entranceDate.setFullYear(this.entranceDate.year!, this.entranceDate.month! - 1, this.entranceDate.date!)
         this.employee.value.entranceDate.setHours(7, 0, 0, 0)

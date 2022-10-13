@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DataService } from 'src/app/core/services/data.service';
 import { DeleteUserComponent } from './delete-user/delete-user.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
@@ -12,7 +13,8 @@ export class DetailUserComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public dataDialog: any,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dataService: DataService
   ) { }
 
   title = 'Thông tin chung'
@@ -40,5 +42,7 @@ export class DetailUserComponent implements OnInit {
       maxWidth: '520px'
     })
   }
-
+  Update(){
+    this.dataService.changeEmployee('update')
+  }
 }
