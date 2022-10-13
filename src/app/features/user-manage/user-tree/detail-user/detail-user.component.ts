@@ -18,8 +18,6 @@ export class DetailUserComponent implements OnInit {
   title = 'Thông tin chung'
 
   ngOnInit(): void {
-    console.log(this.dataDialog.status);
-
   }
 
   tabList = [

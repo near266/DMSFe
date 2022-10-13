@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DataService } from 'src/app/core/services/data.service';
@@ -10,7 +11,8 @@ import { DataService } from 'src/app/core/services/data.service';
 export class InforComponent implements OnInit {
 
   constructor(
-    private dataService: DataService
+    private dataService: DataService,
+    public datePipe: DatePipe
   ) { }
 
   img: any
@@ -48,6 +50,26 @@ export class InforComponent implements OnInit {
   })
 
   ngOnInit(): void {
+    if(this.status == 'view' || this.status == 'edit'){
+      this.employee.patchValue({
+        employeeId: 'f11d1-d1fd1v1v3-v1-v1-vv1',
+        status: true,
+        email: 'vantu...1',
+        employeeCode: 'vantu...2',
+        employeeName: 'vantu...3',
+        password: 'vantu...4',
+        employeeTitle: 'vantu...5',
+        phone: '345678',
+        position: 'ceo',
+        department: 'test1',
+        langKey: 'test2',
+        address: 'test3',
+        entranceDate: '0001-01-01T00:00:00.000Z',
+        exitDate: '0001-01-01T00:00:00.000Z',
+        gender: 1,
+        avatar: this.avt,
+      })
+    }
     this.dataService.employee.subscribe(data => {
       if (data == 'add') {
         this.employee.value.entranceDate = new Date()
