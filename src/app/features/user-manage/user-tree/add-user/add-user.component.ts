@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from 'src/app/core/services/data.service';
 
 @Component({
   selector: 'app-add-user',
@@ -7,11 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddUserComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private dataService: DataService
+  ) { }
 
   title = 'Thông tin chung'
 
   ngOnInit(): void {
+  }
+
+  add(e: any) {
+    this.dataService.changeEmployee('add')
   }
 
   tabList = [

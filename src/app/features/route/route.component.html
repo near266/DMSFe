@@ -1,12 +1,12 @@
 <div class="h-full flex flex-row w-full overflow-hidden">
     <div class="h-full max-w-md bg-gray-100 my-1 mr-1 flex flex-col relative overflow-hidden" [ngClass]="class.left">
-        <div class="w-72 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm"
+        <div class="w-60 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm"
             *ngIf="class.statusbar">
             <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
             <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm tuyến bán hàng">
         </div>
         <div class="overflow-scroll h-full">
-            <div class="w-72 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm"
+            <div class="w-60 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm"
                 *ngIf="class.statusbar">
                 <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
                 <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm trên cây">
@@ -48,69 +48,41 @@
             <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj2">
             </app-menu-bar>
         </div>
-        <div class="overflow-scroll relative w-full">
-            <div class="flex flex-row w-max">
-                <table class="w-max sticky left-0 bg-gray-100 z-10">
-                    <thead class="h-10 w-full text-xs sticky top-0">
-                        <th class="w-10 border-x border-solid border-gray-300 px-2 bg-gray-100"><input type="checkbox">
-                        </th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Ảnh</th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Trạng thái</th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Email</th>
-                    </thead>
-                    <tbody>
-                        <tr class="h-14 w-fit text-xs" *ngFor="let route of routes; let o=odd; let e=even;"
-                            [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                            <td class="w-10 border-x border-solid align-middle px-2"><input type="checkbox">
-                            </td>
-                            <td class="border-x border-solid align-middle px-2">
-                                <img class="w-20" [src]="">
-                            </td>
-                            <td class="border-x w-fit border-solid align-middle px-2">route.status}}
-                            </td>
-                            <td class="border-x w-fit border-solid align-middle px-2">route.email}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table class="w-max">
-                    <thead class="h-10 w-full text-xs sticky top-0">
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã nhân viên
-                        </th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tên nhân viên
-                        </th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Giới tính</th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Chức danh</th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Chức vụ</th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Bộ phận</th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Điện thoại</th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Địa chỉ</th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Version</th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">TG online cuối
-                        </th>
-                        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">TG đồng bộ cuối
-                        </th>
-                    </thead>
-                    <tbody>
-                        <tr class="h-14 w-fit text-xs" *ngFor="let route of routes; let o=odd; let e=even;"
-                            [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                            <td class="border-x w-fit border-solid align-middle px-2">route.code}}</td>
-                            <td class="border-x w-fit border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer"
-                                (click)="Detailroute(route.id)">
-                                route.fullname}} </td>
-                            <td class="border-x w-fit border-solid align-middle px-2">route.gender}} </td>
-                            <td class="border-x w-fit border-solid align-middle px-2">route.pos}}</td>
-                            <td class="border-x w-fit border-solid align-middle px-2"></td>
-                            <td class="border-x w-fit border-solid align-middle px-2"></td>
-                            <td class="border-x w-fit border-solid align-middle px-2">route.phone}} </td>
-                            <td class="border-x w-fit border-solid align-middle px-2">route.add}}</td>
-                            <td class="border-x w-fit border-solid align-middle px-2">route.ver}}</td>
-                            <td class="border-x w-fit border-solid align-middle px-2"> route.lastModifed}} </td>
-                            <td class="border-x w-fit border-solid align-middle px-2">route.lastAsync}} </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="overflow-scroll relative w-full h-full">
+            <table class="w-full">
+                <thead class="h-10 w-full text-xs sticky top-0">
+                    <th class="border-x border-solid border-gray-300 px-2 bg-gray-100"><input type="checkbox">
+                    </th>
+                    <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Trạng thái</th>
+                    <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã tuyến</th>
+                    <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tên tuyến</th>
+                    <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Nhân viên</th>
+                    <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Nhóm</th>
+                    <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tổng</th>
+                    <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Ngày tạo</th>
+                    <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Ngày cập nhật
+                    </th>
+                    <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Người cập nhật
+                    </th>
+                </thead>
+                <tbody>
+                    <tr class="h-auto text-xs" *ngFor="let route of routes; let o=odd; let e=even;"
+                        [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
+                        <td class="border-x border-solid align-middle px-2 py-3"><input type="checkbox"></td>
+                        <td class="border-x border-solid align-middle px-2 py-3">route.gender}} </td>
+                        <td class="border-x border-solid align-middle px-2 py-3 text-emerald-500 font-medium cursor-pointer"
+                            (click)="Detailroute(route.id)">
+                            route.fullname}} </td>
+                        <td class="border-x border-solid align-middle px-2 py-3">route.pos}}</td>
+                        <td class="border-x border-solid align-middle px-2 py-3"></td>
+                        <td class="border-x border-solid align-middle px-2 py-3"></td>
+                        <td class="border-x border-solid align-middle px-2 py-3">route.phone}} </td>
+                        <td class="border-x border-solid align-middle px-2 py-3">route.add}}</td>
+                        <td class="border-x border-solid align-middle px-2 py-3">route.ver}}</td>
+                        <td class="border-x border-solid align-middle px-2 py-3"> route.lastModifed}} </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="w-full px-2 bg-gray-100 py-1 mb-1 flex flex-row justify-end items-center text-xs">
             <select class="bg-white px-3 py-1 border border-solid border-gray-500 rounded-sm">

@@ -24,15 +24,15 @@ export class RouteComponent implements OnInit {
 
   openSideBar() {
     this.class = {
-      left: 'w-3/12',
-      right: 'w-9/12',
+      left: 'w-1/5',
+      right: 'w-4/5',
       statusbar: true,
     };
   }
 
   class = {
-    left: 'w-3/12',
-    right: 'w-9/12',
+    left: 'w-1/5',
+    right: 'w-4/5',
     statusbar: true,
   };
 

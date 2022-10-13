@@ -10,6 +10,8 @@ export class DataService {
   orderData = this.orderDataStorage.asObservable();
   private statusSource = new BehaviorSubject<any>('');
   status = this.statusSource.asObservable();
+  private employeeSource = new BehaviorSubject<any>('');
+  employee = this.employeeSource.asObservable();
 
   constructor() { }
   changeType(type: string) {
@@ -21,6 +23,9 @@ export class DataService {
   }
   passStatus(status: string) {
     this.statusSource.next(status);
+  }
+  changeEmployee(data: any) {
+    this.employeeSource.next(data)
   }
 
 }
