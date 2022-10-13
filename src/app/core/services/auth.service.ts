@@ -1,9 +1,31 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { map, Observable, pipe } from 'rxjs';
+import { api_url } from '../const/url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+  ) { }
+
+  Authenticate(body: any): Observable<any> {
+    return this.http.post(api_url + '/authenticate', body)
+      .pipe(
+        map((response: any) => response)
+      )
+  }
+
+  setToken(token: string) {
+    localStorage.setItem("access_token", token)
+
+  }
+
+  isLoggednIn() {
+    return localStorage.getItem('access_token') != null
+  }
+  
 }
