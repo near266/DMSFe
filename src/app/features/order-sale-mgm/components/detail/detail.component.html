@@ -3,7 +3,7 @@
         <div class="flex gap-x-6 justify-between">
             <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Mã phiếu</mat-label>
-                <input matInput [readonly]="true" formControlName="purchaseOrderCode" />
+                <input matInput [readonly]="true" formControlName="saleReceiptCode" />
             </mat-form-field>
             <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Trạng thái</mat-label>
@@ -18,6 +18,12 @@
                 <input matInput [matDatepicker]="picker" formControlName="orderDate" [disabled]="type === 'View'" />
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Ngày bán</mat-label>
+                <input matInput [matDatepicker]="picker1" formControlName="saleDate" [disabled]="type === 'View'" />
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
             <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Ngày giao</mat-label>
@@ -51,6 +57,15 @@
                     <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
                     <mat-option *ngFor="let route of listRoute" [value]="route.routeId">
                         {{ route.routeName }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Nhân viên bán</mat-label>
+                <mat-select [disabled]="type === 'View'" formControlName="saleEmployee">
+                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <mat-option *ngFor="let employee of listEmployee" [value]="employee.employeeId">
+                        {{ employee.employeeName }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>

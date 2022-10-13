@@ -1,6 +1,5 @@
 import { Component, DoCheck, OnInit, OnDestroy, Inject, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { PurchaseOrderList } from 'src/app/core/data/PurchaseOrderList';
 import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
 // import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
@@ -77,7 +76,6 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     }
 
     navigateToDetail(order: any) {
-        localStorage.setItem('status', order.status);
         // this.purchaseOrderService.passId(order.purchaseOrderId)
         this.router.navigate(['/orders/detailOrder/viewEdit', order.purchaseOrderId]);
     }

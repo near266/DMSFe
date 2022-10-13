@@ -169,13 +169,4 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
             }
         });
     }
-
-    navigate(router: any) {
-        let status: NavigationExtras = {
-            queryParams: {
-                status: this.statusNow,
-            },
-        };
-        this.router.navigate(router, status);
-    }
 }

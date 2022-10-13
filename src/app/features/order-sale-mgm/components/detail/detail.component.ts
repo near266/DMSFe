@@ -1,24 +1,21 @@
-import { Component, OnInit, AfterViewInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import {
-    ListProduct,
-    ListPromotionProduct,
-    PurchaseOrder,
-    PurchaseOrderDetail,
-} from 'src/app/core/model/PurchaseOrder';
-import { DetailPurchaseOrder, statusList } from 'src/app/core/data/PurchaseOrderList';
-import { DataService } from 'src/app/core/services/data.service';
-import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { ProductListComponent } from '../product-list/product-list.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ListProduct, ListPromotionProduct } from 'src/app/core/model/PurchaseOrder';
+import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
+import { Subscription } from 'rxjs';
+import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
+import { statusList } from 'src/app/core/data/PurchaseOrderList';
+
 @Component({
-    selector: 'app-detail-order',
-    templateUrl: './detail-order.component.html',
-    styleUrls: ['./detail-order.component.scss'],
+    selector: 'app-detail',
+    templateUrl: './detail.component.html',
+    styleUrls: ['./detail.component.scss'],
 })
-export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
+export class DetailComponent implements OnInit {
     statusList = statusList;
     statusNow!: number;
     type: string = 'View';
@@ -75,9 +72,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         private fb: FormBuilder,
         private dataservice: DataService,
         private dialog: MatDialog,
-        private router: Router,
-        private dataService: DataService,
-        private purchaseOrder: PurchaseOrderService,
+        private saleReceipt: SaleReceiptService,
     ) {}
 
     ngOnInit(): void {
@@ -85,14 +80,15 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         this.subscription.push(
             this.activatedRoute.params.subscribe((params) => {
                 this.id = params['id'];
-                this.purchaseOrder.passId(params['id']);
+                this.saleReceipt.passId(params['id']);
             }),
         );
         // create Form
         this.detailOrderForm = this.fb.group({
-            purchaseOrderCode: [''],
-            status: [''],
+            saleReceiptCode: [''],
             orderDate: [''],
+            saleDate: [''],
+            saleEmployee: [''],
             deliveryDate: [''],
             group: [''],
             orderEmployee: [''],
@@ -102,26 +98,6 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             phone: [''],
             address: [''],
             description: [''],
-            listProduct: this.fb.group({
-                productCode: [''],
-                productName: [''],
-                unitName: [''],
-                warehouseName: [''],
-                quantity: [''],
-                unitPrice: [''],
-                totalPrice: [''],
-                discount: [''],
-                discountRate: [''],
-                note: [''],
-            }),
-            listPromotionProduct: this.fb.group({
-                productCode: [''],
-                productName: [''],
-                unitName: [''],
-                warehouseName: [''],
-                quantity: [''],
-                note: [''],
-            }),
             debtLimit: [''],
             debtCurrent: [''],
             paymentMethod: [''],
@@ -131,6 +107,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             tradeDiscount: [''],
             totalPayment: [''],
             prePayment: [''],
+            status: [''],
         });
         // get type (Edit or View) from parent Component
         this.subscription.push(
@@ -139,7 +116,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             }),
         );
         // get isChangeStatus
-        this.purchaseOrder.msg.subscribe((data) => {
+        this.saleReceipt.msg.subscribe((data) => {
             if (data === 'Done') {
                 this.getDetail();
             }
@@ -147,17 +124,22 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     }
 
     getDetail() {
-        this.purchaseOrder.getPurchaseDetail(this.id).subscribe((data) => {
+        this.saleReceipt.searchById(this.id).subscribe((data) => {
             this.detailOrderFakeData = data;
+            console.log(data);
             this.patchValue();
         });
     }
 
     patchValue() {
+        // push if have relatedPurchaseOrder
+        if (this.detailOrderFakeData.relatedOrder.purchaseOrderCode) {
+            this.detailOrderFakeData.description += `  - Bán hàng theo phiếu đặt hàng số [${this.detailOrderFakeData.relatedOrder.purchaseOrderCode}]`;
+        }
         this.detailOrderForm.patchValue({
-            purchaseOrderCode: this.detailOrderFakeData.purchaseOrderCode,
-            status: this.detailOrderFakeData.status,
+            saleReceiptCode: this.detailOrderFakeData.saleReceiptCode,
             orderDate: this.detailOrderFakeData.orderDate,
+            saleDate: this.detailOrderFakeData.saleDate,
             deliveryDate: this.detailOrderFakeData.deliveryDate,
             group: this.detailOrderFakeData.group?.groupId,
             orderEmployee: this.detailOrderFakeData.orderEmployee?.employeeId,
@@ -167,6 +149,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             phone: this.detailOrderFakeData.phone,
             address: this.detailOrderFakeData.address,
             description: this.detailOrderFakeData.description,
+            status: this.detailOrderFakeData.status,
         });
         this.listProduct = this.detailOrderFakeData.listProduct;
         this.listPromotionProduct = this.detailOrderFakeData.listPromotionProduct;
@@ -180,7 +163,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     ngAfterViewInit(): void {
         this.subscription.push(
-            this.purchaseOrder.id.subscribe((data) => {
+            this.saleReceipt.id.subscribe((data) => {
                 this.id = data;
                 if (this.id) {
                     this.getDetail();
