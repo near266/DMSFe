@@ -6,21 +6,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { RouteTreeViewComponent } from './route-tree-view/route-tree-view.component';
 
 const routes: Routes = [
-  {
-      path: '',
-      component: RouteComponent,
-  },
+    {
+        path: '',
+        component: RouteComponent,
+    },
 ];
 
 @NgModule({
-  declarations: [
-    RouteComponent,
-    RouteTreeViewComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule.forChild(routes)
-  ]
+    declarations: [RouteComponent, RouteTreeViewComponent],
+    imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
 })
-export class RouteModule { }
+export class RouteModule {}

@@ -6,16 +6,16 @@ const routes: Routes = [
     {
         path: '',
         loadChildren: () => import('./core/layouts/main/main.module').then((m) => m.MainModule),
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
     },
     {
         path: 'auth',
         loadChildren: () => import('./core/layouts/auth/auth.module').then((m) => m.AuthModule),
-    }
+    },
 ];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
