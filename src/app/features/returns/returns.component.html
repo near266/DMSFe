@@ -20,10 +20,16 @@
           </div>
           <!-- options select to edit -->
           <div class="flex mt-2 p-2 bg-[#f2f2f2] border-y border-solid border-slate-400">
-            <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
-              <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
-              Thêm mới
-            </button>
+            <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" [matMenuTriggerFor]="addMenu"><i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>Thêm mới</button>
+            <mat-menu #addMenu="matMenu">
+              <!-- phiếu đặt hàng -->
+              <div>
+                  <button mat-menu-item class="flex text-sm" [routerLink]="['/returns/create_return_order']">
+                      <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
+                      <span class="text-sm">Thêm mới đơn hàng</span>
+                  </button>
+              </div>
+          </mat-menu>
             <app-menu-bar [menuObj]="menuObj" (message)="select($event)" *ngFor="let menuObj of listMenu">
             </app-menu-bar>
           </div>

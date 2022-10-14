@@ -12,6 +12,7 @@ import { CustomerGroupService } from 'src/app/core/services/customer-group.servi
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 export interface IBody {
   // id: this.form.controls['customerGroupId'].value,
@@ -63,6 +64,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
     private customerTypeService: CustomerTypeService,
     private channelService: ChannelService,
     private areaService: AreaService,
+    private snackbar: SnackbarService,
     private provincesService: ProvincesService,
     @Inject(MAT_DIALOG_DATA) public data: string,
     ) { }
@@ -141,7 +143,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
   add() {
     let body = {
       // id: this.form.controls['customerGroupId'].value,
-      customerCode: this.form.controls['customerCode'].value,
+      // customerCode: this.form.controls['customerCode'].value,
       customerName: this.form.controls['customerName'].value !== '' ? this.form.controls['customerName'].value: null,
       customerGroupId: this.form.controls['customerGroupId'].value !== '' ? this.form.controls['customerGroupId'].value: null,
       customerTypeId: this.form.controls['customerTypeId'].value !== '' ? this.form.controls['customerTypeId'].value: null,
@@ -171,8 +173,10 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
     }
 
     this.customerService.add(body).subscribe(data => {
-      console.log(data);
+      this.snackbar.openSnackbar('Thêm khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
       this.dialogRef.close({event: true});
+    }, (error) => {
+      this.snackbar.openSnackbar('Thêm khách hàng không thành công, vui lòng kiểm tra thông tin đã nhập', 2000, 'Đóng', 'center', 'bottom', true);
     });
 
   }
