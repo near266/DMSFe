@@ -49,9 +49,10 @@ import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { MenuCollapseTreeComponent } from './components/menu-collapse-tree/menu-collapse-tree.component';
 import { EzPaginationComponent } from './components/ez-pagination/ez-pagination.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
-    declarations: [MenuCollapseComponent, MenuBarComponent, MenuCollapseSearchComponent, MenuCollapseTreeComponent, EzPaginationComponent],
+    declarations: [MenuCollapseComponent, MenuBarComponent, MenuCollapseSearchComponent, MenuCollapseTreeComponent, EzPaginationComponent, ConfirmDialogComponent],
     imports: [
         CommonModule,
         MatAutocompleteModule,
@@ -96,6 +97,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
         NgxPaginationModule
     ],
     exports: [
+        ConfirmDialogComponent,
         MatAutocompleteModule,
         MatCheckboxModule,
         MatDatepickerModule,

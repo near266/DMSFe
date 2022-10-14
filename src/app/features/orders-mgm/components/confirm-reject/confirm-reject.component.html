@@ -1,0 +1,28 @@
+<div class="m-[-24px] min-h-screen">
+    <div class="bg-white w-full sticky top-[-24px] z-10">
+        <div class="p-3 w-full flex justify-between items-center">
+            <span style="font-size: 20px !important" class="font-medium">Từ chối phiếu đặt hàng</span>
+            <div class="flex items-center">
+                <button mat-dialog-close="Lưu" class="button-primary-sm flex items-center justify-between mr-2">
+                    <i class="fa-solid fa-check text-white mr-2"></i>
+                    <span class="text-white">Lưu</span>
+                </button>
+                <button class="button-danger-sm" mat-dialog-close="Đóng">
+                    <i class="fa-solid fa-ban text-white mr-2"></i>
+                    <span class="text-white">Đóng</span>
+                </button>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+    </div>
+    <div>
+        <mat-form-field
+            style="height: calc(100vh - 300px)"
+            class="mt-10 w-full px-5"
+            appearance="outline"
+            floatLabel="always">
+            <mat-label>Lý do từ chối</mat-label>
+            <textarea matInput></textarea>
+        </mat-form-field>
+    </div>
+</div>
