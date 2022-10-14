@@ -60,7 +60,9 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         });
     }
 
-    ngDoCheck(): void {}
+    ngDoCheck(): void {
+        this.update();
+    }
 
     changeType(type: any) {
         this.type = type;
@@ -144,6 +146,36 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
                 console.log('Tạo mới đơn bán hàng khi trạng thái hiện tại là đã bán hàng');
             }
         }
+    }
+
+    update() {
+        const body = {
+            purchaseOrderId: this.id,
+            orderDate: '2022-10-14T07:22:15.195Z',
+            groupId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            orderEmployeeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            customerId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            routeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            type: 0,
+            status: 0,
+            paymentMethod: 0,
+            description: 'string',
+            phone: 'string',
+            address: 'string',
+            customerName: 'string',
+            totalAmount: 0,
+            totalOfVAT: 0,
+            totalDiscountProduct: 0,
+            tradeDiscount: 0,
+            totalPayment: 0,
+            archived: true,
+            lastModifiedBy: 'string',
+            lastModifiedDate: '2022-10-14T07:22:15.195Z',
+            orderCode: 'string',
+            deliveryDate: '2022-10-14T07:22:15.195Z',
+            prePayment: 0,
+        };
     }
 
     delete() {
