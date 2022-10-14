@@ -29,6 +29,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
     page = 1;
     pageSize = 30;
+    totalPage = 0;
+    pageList: number[] = [];
 
     statusMenu: Config = {
         icon: '<i class="fa-solid fa-flag"></i>',
@@ -94,19 +96,24 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-      this.init();
+      this.init(this.page, this.pageSize);
     }
 
-  init() {
+  init(page: number, pageSize: number) {
     const body = {
       keyword: '',
-      page: this.page,
-      pageSize: this.pageSize,
+      page: page,
+      pageSize: pageSize,
     };
     this.customerService.search(body).subscribe(
         (data) => {
             this.response = data;
-            console.log(this.response.data);
+            this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
+            if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
+            this.pageList = [];
+            for(let i = 1; i <= this.totalPage; i++) {
+              this.pageList.push(i);
+            }
             this.response.data.forEach((element) => {
                 if (element.status == true) element.status = 'Hoạt động';
                 else if (element.status == false) element.status = 'Không hoạt động';
@@ -129,7 +136,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        this.init();
+        this.init(this.page, this.pageSize);
       }
     });
   }
@@ -142,7 +149,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     })
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        this.init();
+        this.init(this.page, this.pageSize);
       }
     });
   }
@@ -213,4 +220,5 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   selection(e: any) {
       console.log(e);
   }
+
 }

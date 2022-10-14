@@ -13,6 +13,7 @@ import { CustomerGroupService } from 'src/app/core/services/customer-group.servi
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 
 export interface InData{
@@ -74,7 +75,8 @@ export class DetailCustomerComponent implements OnInit {
     private customerTypeService: CustomerTypeService,
     private channelService: ChannelService,
     private areaService: AreaService,
-    private provincesService: ProvincesService
+    private provincesService: ProvincesService,
+    private snackbar: SnackbarService
     ) { }
 
   ngOnInit(): void {
@@ -197,7 +199,10 @@ export class DetailCustomerComponent implements OnInit {
       this.buf.dob = null;
     }
     this.customerService.update(this.buf).subscribe(data => {
+      this.snackbar.openSnackbar('Chỉnh sửa thông tin khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
       this.dialogRef.close({event: true});
+    }, (error) => {
+      this.snackbar.openSnackbar('Chỉnh sửa thông tin khách hàng không thành công, vui lòng kiểm tra lại thông tin chỉnh sửa', 2000, 'Đóng', 'center', 'bottom', true);
     });
   }
 
