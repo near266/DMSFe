@@ -16,29 +16,33 @@
         <div class="z-0 ">
           <!-- header -->
           <div class="mt-2 px-2 flex justify-between items-center">
-            <span class="text-xl font-medium">Danh sách sản phẩm ({{totalProducts}} sản phẩm) </span>
+            <span class="text-xl font-medium">Danh sách trả hàng ({{totalReturns}}) </span>
           </div>
           <!-- options select to edit -->
           <div class="flex mt-2 p-2 bg-[#f2f2f2] border-y border-solid border-slate-400">
-            <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="addUser()">
+            <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
               <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
               Thêm mới
             </button>
             <app-menu-bar [menuObj]="menuObj" (message)="select($event)" *ngFor="let menuObj of listMenu">
             </app-menu-bar>
-
           </div>
 
         </div>
         <div class="w-full table-container overflow-scroll">
-          <app-product-table>
-          </app-product-table>
+          <app-returns-table>
+          </app-returns-table>
         </div>
       </div>
     </div>
     <div
       class="fixed bottom-0 right-0 ml-[26px] left-0 h-9 px-2 flex items-center justify-end bg-[#f2f2f2] border-t border-solid border-slate-400">
-      <app-product-pagination></app-product-pagination>
+      <app-returns-pagination></app-returns-pagination>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+<ng-template #statusTml let-label="label" let-className="className" let-icon="icon">
+  <button [ngClass]="[ className ? className : '']">
+    {{ label }}
+  </button>
+</ng-template>

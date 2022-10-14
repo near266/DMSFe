@@ -12,6 +12,9 @@ import { SecretInterceptor } from './core/interceptor/secret.interceptor';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { DataService } from './core/services/data.service';
+import { FormlyModule } from '@ngx-formly/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 
 @NgModule({
     declarations: [AppComponent],
@@ -20,8 +23,8 @@ import { DataService } from './core/services/data.service';
         DatePipe,
         { provide: HTTP_INTERCEPTORS, useClass: SecretInterceptor, multi: true },
         { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
-        DataService
+        DataService,
     ],
     bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
