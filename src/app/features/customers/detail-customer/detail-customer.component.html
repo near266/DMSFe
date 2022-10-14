@@ -112,6 +112,7 @@
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.province}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
             <select #province class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.province" (change)="getDistrict(province.value)">
+              <option disabled value=""> --- Chọn nhóm tỉnh/thành phố --- </option>
               <option *ngFor="let item of listProvinces" value="{{item.name}}">{{item.name}}</option>
             </select>
           </div>
@@ -121,6 +122,7 @@
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.district}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
             <select #district class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.district" (change)="getWard(district.value)">
+              <option disabled value=""> --- Chọn nhóm quận huyện --- </option>
               <option *ngFor="let item of listDistricts" value="{{item.name}}">{{item.name}}</option>
             </select>
           </div>
@@ -130,6 +132,7 @@
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.ward}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
             <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.ward">
+              <option disabled value=""> --- Chọn nhóm xã phường --- </option>
               <option *ngFor="let item of listWards" value="{{item.name}}">{{item.name}}</option>
             </select>
           </div>

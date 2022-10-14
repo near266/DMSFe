@@ -28,7 +28,7 @@ export interface IBody{
   customerTypeId?: any,
   channelId?: any,
   areaId?: any,
-  status: true,
+  status?: any,
   address?: any,
   deliveryAddress?: any,
   province?: any,
@@ -111,10 +111,11 @@ export class DetailCustomerComponent implements OnInit {
       if(this.customer.dob) {
         this.customer.dob = this.datePipe.transform(this.customer.dob, 'dd/MM/yyyy');
       }
+
       this.provincesService.getListProvinces().subscribe(data => {
         this.listProvinces = data;
         this.initDistrict(this.buf.province);
-        this.initWard(this.buf.district);
+
       });
     });
 
@@ -162,7 +163,7 @@ export class DetailCustomerComponent implements OnInit {
       if(data.name == event) {
         this.provincesService.getDistrictsListByID(data.code).subscribe(res => {
           this.listDistricts = res.districts;
-          this.getWard(this.buf.district);
+          this.initWard(this.buf.district);
         });
       }
     });
@@ -197,6 +198,11 @@ export class DetailCustomerComponent implements OnInit {
       this.buf.dob = new Date(this.buf.dob).toISOString();
     } catch (error) {
       this.buf.dob = null;
+    }
+    if(this.buf.status == 'true') {
+      this.buf.status = true;
+    } else if(this.buf.status == 'false') {
+      this.buf.status = false;
     }
     this.customerService.update(this.buf).subscribe(data => {
       this.snackbar.openSnackbar('Chỉnh sửa thông tin khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
