@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
+import { DataService } from 'src/app/core/services/data.service';
 import { EmployeeService } from 'src/app/core/services/employee.service';
 import { AddUserComponent } from './add-user/add-user.component';
 import { DetailUserComponent } from './detail-user/detail-user.component';
@@ -16,7 +17,8 @@ export class UserManageComponent implements OnInit {
         private title: Title,
         private dialog: MatDialog,
         public datePipe: DatePipe,
-        private employeeService: EmployeeService
+        private employeeService: EmployeeService,
+        private dataService: DataService,
     ) { }
 
     pageSizeList = [30, 50, 100, 200, 500]
@@ -32,7 +34,7 @@ export class UserManageComponent implements OnInit {
         });
     }
     DetailUser(id: any) {
-        this.dialog.open(DetailUserComponent, {
+        let dia = this.dialog.open(DetailUserComponent, {
             height: '100vh',
             minWidth: '900px',
             data: {

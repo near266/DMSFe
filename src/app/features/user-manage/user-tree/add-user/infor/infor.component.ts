@@ -39,6 +39,7 @@ export class InforComponent implements OnInit, OnDestroy {
   }
   @Input() status: any
   @Input() id: any
+  @Output() event = new EventEmitter<any>();
 
   employee = new FormGroup({
     id: new FormControl(),
@@ -87,6 +88,7 @@ export class InforComponent implements OnInit, OnDestroy {
         this.employee.addControl('lastModifiedDate', new FormControl(data.lastModifiedDate))
         this.employee.addControl('lastSeenDate', new FormControl(data.lastSeenDate))
         this.employee.addControl('lastSyncDate', new FormControl(data.lastSyncDate))
+        this.employee.addControl('versionMobile', new FormControl(data.versionMobile))
 
         this.avt = data.avatar
 
@@ -128,13 +130,29 @@ export class InforComponent implements OnInit, OnDestroy {
         if (data == 'update') {
           this.employee.removeControl('password')
           this.employee.removeControl('login')
+          this.employee.removeControl('authorities')
           if (this.employee.valid) {
-            console.log(this.employee.value);
+            let sub = this.employeeService.UpdateEmployee(this.employee.value).subscribe(data => {
+              this.snackbar.openSnackbar('Sửa thành công', 5000, 'Đóng', 'center', 'bottom', true);
+              sub.unsubscribe()
+            },
+              () => {
+                this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
+                sub.unsubscribe()
+              })
           }
         }
       }
       if (data == 'delete') {
-        console.log(this.employee.value.id);
+        let sub = this.employeeService.DeleteEmployee(this.employee.value.id).subscribe(data => {
+          this.snackbar.openSnackbar('Đã xóa', 5000, 'Đóng', 'center', 'bottom', true);
+          this.event.emit('delete')
+          sub.unsubscribe()
+        },
+          () => {
+            this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
+            sub.unsubscribe()
+          })
       }
     })
   }

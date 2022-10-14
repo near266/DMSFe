@@ -32,4 +32,19 @@ export class EmployeeService {
         map((response: any) => response)
       )
   }
+
+  UpdateEmployee(body: any): Observable<any> {
+    return this.http.put(gateway_url + '/Employee/UpdateEmployee', body)
+      .pipe(
+        map((response: any) => response)
+      )
+  }
+
+  DeleteEmployee(id: any): Observable<any> {
+    return this.http.delete(gateway_url + '/Employee/DeleteEmployee', { body: { id: id } })
+      .pipe(
+        map((response: any) => response)
+      )
+  }
+
 }

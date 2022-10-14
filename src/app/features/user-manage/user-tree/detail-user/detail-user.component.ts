@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DataService } from 'src/app/core/services/data.service';
 import { DeleteUserComponent } from './delete-user/delete-user.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -14,7 +14,8 @@ export class DetailUserComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public dataDialog: any,
     private dialog: MatDialog,
-    private dataService: DataService
+    private dataService: DataService,
+    public dia: MatDialogRef<any>,
   ) { }
 
   title = 'Thông tin chung'
@@ -37,12 +38,18 @@ export class DetailUserComponent implements OnInit {
   }
 
   DeleteUser() {
-    this.dialog.open(DeleteUserComponent, {
+    this.dia = this.dialog.open(DeleteUserComponent, {
       data: {},
       maxWidth: '520px'
     })
   }
-  Update(){
+  Update() {
     this.dataService.changeEmployee('update')
+  }
+
+  Deleted(e: any) {
+    if (e == 'delete') {
+      this.dia.close()
+    }
   }
 }
