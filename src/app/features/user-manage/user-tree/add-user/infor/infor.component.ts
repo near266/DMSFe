@@ -2,6 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DataService } from 'src/app/core/services/data.service';
+import { EmployeeService } from 'src/app/core/services/employee.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'app-infor',
@@ -12,9 +14,12 @@ export class InforComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    public datePipe: DatePipe
+    public datePipe: DatePipe,
+    private employeeService: EmployeeService,
+    private snackbar: SnackbarService
   ) { }
 
+  type:'text'
   img: any
   avt?: any = "../../../../../../assets/images/female.png"
   entranceDate = {
@@ -33,10 +38,10 @@ export class InforComponent implements OnInit {
   employee = new FormGroup({
     employeeId: new FormControl(),
     status: new FormControl(true),
-    email: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
     employeeCode: new FormControl('', Validators.required),
     employeeName: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
+    password: new FormControl('', [Validators.required]),
     employeeTitle: new FormControl('', Validators.required),
     phone: new FormControl(),
     position: new FormControl(),
@@ -47,8 +52,11 @@ export class InforComponent implements OnInit {
     exitDate: new FormControl(),
     gender: new FormControl(),
     avatar: new FormControl(this.avt),
+    login: new FormControl(),
+    authorities: new FormControl([
+      "ROLE_USER"
+    ]),
   })
-
   ngOnInit(): void {
     if (this.status == 'view' || this.status == 'edit') {
       this.employee.patchValue({
@@ -87,7 +95,17 @@ export class InforComponent implements OnInit {
         this.employee.value.exitDate.setFullYear(this.exitDate.year!, this.exitDate.month! - 1, this.exitDate.date!)
         this.employee.value.exitDate.setHours(7, 0, 0, 0)
         this.employee.value.exitDate = this.employee.value.exitDate.toISOString()
-        console.log(this.employee.value);
+
+        this.employee.value.login = this.employee.value.email
+
+        if (this.employee.valid) {
+          this.employeeService.AddEmployee(this.employee.value).subscribe(data=>{            
+            this.snackbar.openSnackbar('Tạo thành công', 5000, 'Đóng', 'center', 'bottom', true);
+          },
+          ()=>{            
+            this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
+          })
+        }
       }
       if (data == 'delete') {
         console.log(this.employee.value.employeeId);
