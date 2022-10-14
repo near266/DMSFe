@@ -14,6 +14,8 @@ import { DetailCustomerComponent } from './detail-customer/detail-customer.compo
 export class CustomersComponent implements OnInit {
 
   isProvince = false;
+  hasEmployee = false;
+  hasArea = false;
   customer = customers;
 
   statusMenu: Config = {

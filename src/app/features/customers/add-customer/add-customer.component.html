@@ -4,15 +4,18 @@
       <span class="text-lg text-[#888] font-medium italic">Bản ghi mới</span>
     </div>
     <div class="flex justify-between w-[160px]">
-      <button mat-flat-button (click)="isChoseUpdated = !isChoseUpdated" class="bg-[#565869] text-white font-medium mx-1"><i class="fa-solid fa-pen mr-1"></i>Sửa</button>
-      <button type="button" mat-stroked-button (click)="close()" class="text-[#565869] bg-white font-medium"><i class="fa-solid fa-trash mr-1"></i>Đóng</button>
+      <button mat-flat-button class="bg-[#1891C9] text-white font-medium mx-1"><i class="fa-solid fa-circle-check mr-1"></i>Lưu</button>
+      <button type="button" mat-stroked-button (click)="close()" class="text-[#565869] bg-white font-medium"><i class="fa-solid  fa-right-from-bracket mr-1"></i>Đóng</button>
     </div>
   </div>
   <hr class="my-2">
   <div class="w-full flex">
-    <div class="w-2/12 justify-between menu-collapse ">
-      <div class="w-full font-medium text-base">
+    <div class="w-2/12 flex flex-col menu-collapse ">
+      <div class="w-full h-10 font-medium text-base p-2">
         <i class="fa-regular fa-file-lines mr-2"></i><span>Thông tin chung</span>
+      </div>
+      <div class="w-full h-10 font-medium text-base p-2">
+        <i class="fa-solid fa-shuffle mr-2"></i><span>Tuyến bán hàng</span>
       </div>
     </div>
     <div class="w-10/12">

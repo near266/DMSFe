@@ -46,9 +46,12 @@ import { TreeModule } from '@circlon/angular-tree-component';
 import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.component';
 import { MenuCollapseSearchComponent } from './components/menu-collapse-search/menu-collapse-search.component';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
+import { MenuCollapseTreeComponent } from './components/menu-collapse-tree/menu-collapse-tree.component';
+import { EzPaginationComponent } from './components/ez-pagination/ez-pagination.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
-    declarations: [MenuCollapseComponent, MenuBarComponent, MenuCollapseSearchComponent],
+    declarations: [MenuCollapseComponent, MenuBarComponent, MenuCollapseSearchComponent, MenuCollapseTreeComponent, EzPaginationComponent],
     imports: [
         CommonModule,
         MatAutocompleteModule,
@@ -90,6 +93,7 @@ import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
         FormsModule,
         ReactiveFormsModule,
         TreeModule,
+        NgxPaginationModule
     ],
     exports: [
         MatAutocompleteModule,
@@ -120,6 +124,8 @@ import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
         MatChipsModule,
         MatIconModule,
         MenuCollapseSearchComponent,
+        MenuCollapseTreeComponent,
+        EzPaginationComponent,
         MatProgressSpinnerModule,
         MatProgressBarModule,
         MatRippleModule,
@@ -134,6 +140,7 @@ import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
         FormsModule,
         ReactiveFormsModule,
         TreeModule,
+        NgxPaginationModule
     ],
 })
 export class SharedModule {}

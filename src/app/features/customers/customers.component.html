@@ -6,9 +6,14 @@
           <input class="bg-white text-xs h-full" placeholder="Tìm kiếm khách hàng">
       </div>
       <div class="overflow-y-scroll h-full">
-        <div class="w-full items-center hover:font-medium mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-          <i class="text-base mr-3 fa-solid fa-user"></i>
-          <span class="text-sm">Nhân viên</span>
+        <div>
+          <div (click)="hasEmployee = !hasEmployee" class="w-full items-center hover:font-medium mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+            <i class="text-base mr-3 fa-solid fa-user"></i>
+            <span class="text-sm">Nhân viên</span>
+          </div>
+          <div *ngIf="hasEmployee" class="text-xs">
+            <app-menu-collapse-tree></app-menu-collapse-tree>
+          </div>
         </div>
         <app-menu-collapse (Selection)="selection($event)" [Config]="statusMenu"></app-menu-collapse>
         <app-menu-collapse (Selection)="selection($event)" [Config]="locationMenu"></app-menu-collapse>
@@ -25,32 +30,38 @@
           <div *ngIf="isProvince" class="text-xs">
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Tỉnh thành</span>
-              <div class=" bg-white my-1 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
-                  <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
-                  <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm tỉnh thành">
-              </div>
+              <select class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
+                <option>Chọn tỉnh thành</option>
+                <option>No Bug</option>
+              </select>
             </div>
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Quận huyện</span>
-              <div class=" bg-white mt-1 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
-                  <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
-                  <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm quận huyện">
-              </div>
+              <select class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
+                <option>Chọn quận huyện</option>
+                <option>No Bug</option>
+              </select>
             </div>
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Xã phường</span>
-              <div class=" bg-white my-1 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
-                  <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
-                  <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm xã phường">
-              </div>
+              <select class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
+                <option>Chọn xã phường</option>
+                <option>No Bug</option>
+              </select>
             </div>
           </div>
         </div>
-        <div class="w-full items-center hover:font-medium mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-          <i class="text-base mr-3 fa-solid fa-earth-asia"></i>
-          <span class="text-sm">Khu vực</span>
+        <div>
+          <div (click)="hasArea = !hasArea" class="w-full items-center hover:font-medium mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+            <i class="text-base mr-3 fa-solid fa-earth-asia"></i>
+            <span class="text-sm">Khu vực</span>
+          </div>
+          <div *ngIf="hasArea" class="text-xs">
+            <app-menu-collapse-tree></app-menu-collapse-tree>
+          </div>
         </div>
       </div>
+
       <button class="absolute w-5 h-8 top-0 right-0 bg-gray-50 border border-solid border-gray-300"
           (click)="closeSideBar()" *ngIf="class.statusbar">
           <i class="fa-solid fa-caret-left"></i>
