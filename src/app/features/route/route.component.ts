@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
+import { AddRouterComponent } from './add-router/add-router.component';
 
 @Component({
   selector: 'app-route',
@@ -137,12 +138,12 @@ export class RouteComponent implements OnInit {
   ];
   listMenuObj2 = [
     {
-        title: 'Xuất dữ liệu',
-        leftTitleIcon: 'fa-download',
-        listMenuPosition: [
-            { title: 'Được chọn', leftIcon: 'fa-check text-emerald-500', value: 'all' },
-            { title: 'Theo điều kiện tuần', leftIcon: 'fa-filter text-emerald-500', value: 'act' },
-        ],
+      title: 'Xuất dữ liệu',
+      leftTitleIcon: 'fa-download',
+      listMenuPosition: [
+        { title: 'Được chọn', leftIcon: 'fa-check text-emerald-500', value: 'all' },
+        { title: 'Theo điều kiện tuần', leftIcon: 'fa-filter text-emerald-500', value: 'act' },
+      ],
     },
     {
       title: 'Quản trị',
@@ -160,19 +161,27 @@ export class RouteComponent implements OnInit {
   }
   routes = [
     {
-        id: 1,
-        img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
-        status: 'Hoạt động',
-        email: 'zxcvbnm@gmail.com',
-        code: 'NV_01',
-        fullname: 'Hoàng Văn Tú',
-        gender: 'Nam',
-        pos: '',
-        phone: '098765432',
-        add: 'Hà Nội',
-        ver: '3.2.1',
-        lastModifed: '2022-01-01T12:01:01.234Z',
-        lastAsync: '2022-01-01T12:01:01.234Z',
+      id: 1,
+      img: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2021/5/26/913299/Ngan-Ha25.jpg',
+      status: 'Hoạt động',
+      email: 'zxcvbnm@gmail.com',
+      code: 'NV_01',
+      fullname: 'Hoàng Văn Tú',
+      gender: 'Nam',
+      pos: '',
+      phone: '098765432',
+      add: 'Hà Nội',
+      ver: '3.2.1',
+      lastModifed: '2022-01-01T12:01:01.234Z',
+      lastAsync: '2022-01-01T12:01:01.234Z',
     },]
-  Detailroute(id:any){}
+
+  addRoute() {
+    this.dialog.open(AddRouterComponent, {
+      data: {},
+      width: '100%',
+      height: '100%'
+    })
+  }
+  Detailroute(id: any) { }
 }

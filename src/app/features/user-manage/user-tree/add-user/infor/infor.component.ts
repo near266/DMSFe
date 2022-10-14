@@ -89,6 +89,9 @@ export class InforComponent implements OnInit {
         this.employee.value.exitDate = this.employee.value.exitDate.toISOString()
         console.log(this.employee.value);
       }
+      if (data == 'delete') {
+        console.log(this.employee.value.employeeId);
+      }
     })
   }
 
