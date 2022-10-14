@@ -144,6 +144,8 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 this.getDetail();
             }
         });
+        // get body Update
+        this.purchaseOrder.updateOrder.subscribe((data) => console.log(data));
     }
 
     getDetail() {
