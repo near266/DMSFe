@@ -140,7 +140,7 @@
                   <tbody>
                       <tr class="h-14 w-fit text-xs" *ngFor="let user of response.data; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                          <td class="border-x w-fit border-solid align-middle px-2 cursor-pointer" (click)="DetailCustomer(user.customerId)">{{user.customerName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 cursor-pointer" (click)="DetailCustomer(user.id)">{{user.customerName}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer">
                               {{user.customerGroup? user.customerGroup.customerGroupName: ''}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.customerType ? user.customerType.customerTypeName : ''}} </td>
