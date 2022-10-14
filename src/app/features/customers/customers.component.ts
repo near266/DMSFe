@@ -146,10 +146,36 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
 
   add() {
-    this.dialog.open(AddCustomerComponent, {
+    const dialogRef = this.dialog.open(AddCustomerComponent, {
       height: '100vh',
       minWidth: '1100px',
-    })
+    });
+    dialogRef.afterClosed().subscribe(data => {
+      if(data) {
+        const body = {
+          keyword: '',
+          page: this.page,
+          pageSize: this.pageSize
+        };
+        this.customerService.search(body).subscribe(data => {
+          this.response = data;
+          console.log(this.response.data);
+          this.response.data.forEach(element => {
+            if(element.status == true) element.status = 'Hoạt động';
+            else if(element.status == false) element.status = 'Không hoạt động';
+          });
+        }, (error) => {
+            this.snackbar.openSnackbar(
+              error,
+              2000,
+              'Đóng',
+              'center',
+              'bottom',
+              true,
+            );
+        });
+      }
+    });
   }
 
   DetailCustomer(id: any) {

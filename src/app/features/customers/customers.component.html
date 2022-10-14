@@ -142,10 +142,10 @@
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
                           <td class="border-x w-fit border-solid align-middle px-2 cursor-pointer" (click)="DetailCustomer(user.customerId)">{{user.customerName}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer">
-                              {{user.customerGroup.customerGroupName}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.customerType.customerTypeName}} </td>
+                              {{user.customerGroup? user.customerGroup.customerGroupName: ''}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.customerType ? user.customerType.customerTypeName : ''}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.lastModifiedDate}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.channel.channelName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.channel ? user.channel.channelName : ''}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.address}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.deliveryAddress}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.province}}</td>
