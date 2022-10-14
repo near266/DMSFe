@@ -60,7 +60,7 @@
                             <td class="w-10 border-x border-solid align-middle px-2"><input type="checkbox">
                             </td>
                             <td class="border-x border-solid align-middle px-2">
-                                <img class="w-20" [src]="user.avatar">
+                                <img class="h-10" [src]="user.avatar">
                             </td>
                             <td class="border-x w-fit border-solid align-middle px-2">
                                 <span *ngIf="user.status">Hoạt động</span>
@@ -90,16 +90,16 @@
                         </th>
                     </thead>
                     <tbody>
-                        <tr class="h-14 w-fit text-xs" *ngFor="let user of users | paginate: { itemsPerPage: pageSize, currentPage: page }; let o=odd; let e=even;"
+                        <tr class="w-fit text-xs h-10" *ngFor="let user of users | paginate: { itemsPerPage: pageSize, currentPage: page }; let o=odd; let e=even;"
                             [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
                             <td class="border-x w-fit border-solid align-middle px-2">{{user.employeeCode}}</td>
                             <td class="border-x w-fit border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer"
-                                (click)="DetailUser(user.employeeId)">
+                                (click)="DetailUser(user.id)">
                                 {{user.employeeName}} </td>
                             <td class="border-x w-fit border-solid align-middle px-2">
-                                <span *ngIf="user.gender == 1">Nam</span>
-                                <span *ngIf="user.gender == 2">Nữ</span>
-                                <span *ngIf="user.gender == 3">N/A</span>
+                                <span *ngIf="user.gender == 0">Nam</span>
+                                <span *ngIf="user.gender == 1">Nữ</span>
+                                <span *ngIf="user.gender == 2">N/A</span>
                             <td class="border-x w-fit border-solid align-middle px-2">
                                 <div class="flex px-2 py-1 rounded bg-sky-700 text-white">
                                     {{user.employeeTitle}}
@@ -109,11 +109,11 @@
                             <td class="border-x w-fit border-solid align-middle px-2">{{user.department}}</td>
                             <td class="border-x w-fit border-solid align-middle px-2">{{user.phone}} </td>
                             <td class="border-x w-fit border-solid align-middle px-2">{{user.address}}</td>
+                            <td class="border-x w-fit border-solid align-middle px-2">{{user.versionMobile}}</td>
                             <td class="border-x w-fit border-solid align-middle px-2">
                                 {{datePipe.transform(user.lastSeenDate,'dd-MM-YYYY')}}</td>
                             <td class="border-x w-fit border-solid align-middle px-2">
                                 {{datePipe.transform(user.lastSyncDate,'dd-MM-YYYY')}}</td>
-                            <td class="border-x w-fit border-solid align-middle px-2">{{user.versionMobile}}</td>
                         </tr>
                     </tbody>
                 </table>

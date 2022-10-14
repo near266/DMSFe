@@ -31,12 +31,13 @@
             <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.employeeName}}</div>
         </div>
     </div>
-    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2" *ngIf="status != 'view'">
+    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2"
+        *ngIf="status != 'view' && status != 'edit'">
         <div class="font-bold">Mật khẩu</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" formControlName="password" [type]="type"
-                [ngClass]="{'border-red-600':this.employee.get('password')?.errors}">
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" formControlName="password"
+                [type]="type" [ngClass]="{'border-red-600':this.employee.get('password')?.errors}">
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
@@ -44,7 +45,7 @@
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
             <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
-            [ngClass]="{'border-red-600':this.employee.get('employeeTitle')?.errors}"
+                [ngClass]="{'border-red-600':this.employee.get('employeeTitle')?.errors}"
                 formControlName="employeeTitle" *ngIf="status != 'view'">
                 <option value="Chủ sở hữu">Chủ sở hữu</option>
                 <option value="Kế toán">Kế toán</option>
@@ -59,9 +60,11 @@
         <div class="font-bold">Ngôn ngữ</div>
         <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'"
             formControlName="langKey">
-            <option value="vn">Việt Nam</option>
+            <option value="vn">Tiếng Việt</option>
         </select>
-        <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.langKey}}</div>
+        <div class="w-96 text-xs" *ngIf="status == 'view'">
+            <span *ngIf="employee.value.langKey == 'vn'">Tiếng Việt</span>
+        </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Trạng thái</div>
@@ -151,7 +154,11 @@
             <input type="radio" formControlName='gender' id="n/a" [value]="2">
             <label class="mr-4 ml-2 text-sm" for="n/a">N/A</label>
         </div>
-        <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.gender}}</div>
+        <div class="w-96 text-xs" *ngIf="status == 'view'">
+            <span *ngIf="employee.value.gender == 0">Nam</span>
+            <span *ngIf="employee.value.gender == 1">Nữ</span>
+            <span *ngIf="employee.value.gender == 2">N/A</span>
+        </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2 mb-4">
         <div class="font-bold">Ảnh đại diện</div>

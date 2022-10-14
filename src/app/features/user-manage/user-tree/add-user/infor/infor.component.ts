@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/core/services/data.service';
 import { EmployeeService } from 'src/app/core/services/employee.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -10,7 +11,7 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
   templateUrl: './infor.component.html',
   styleUrls: ['./infor.component.scss']
 })
-export class InforComponent implements OnInit {
+export class InforComponent implements OnInit, OnDestroy {
 
   constructor(
     private dataService: DataService,
@@ -19,24 +20,28 @@ export class InforComponent implements OnInit {
     private snackbar: SnackbarService
   ) { }
 
-  type:'text'
+  type: 'text'
+  sub: Subscription
   img: any
   avt?: any = "../../../../../../assets/images/female.png"
   entranceDate = {
     date: 1,
     month: 1,
-    year: 1
+    year: 1,
+    ISOS: new Date()
   }
 
   exitDate = {
     date: 1,
     month: 1,
-    year: 1
+    year: 1,
+    ISOS: new Date()
   }
   @Input() status: any
+  @Input() id: any
 
   employee = new FormGroup({
-    employeeId: new FormControl(),
+    id: new FormControl(),
     status: new FormControl(true),
     email: new FormControl('', [Validators.required, Validators.email]),
     employeeCode: new FormControl('', Validators.required),
@@ -59,56 +64,77 @@ export class InforComponent implements OnInit {
   })
   ngOnInit(): void {
     if (this.status == 'view' || this.status == 'edit') {
-      this.employee.patchValue({
-        employeeId: 'f11d1-d1fd1v1v3-v1-v1-vv1',
-        status: true,
-        email: 'vantu...1',
-        employeeCode: 'vantu...2',
-        employeeName: 'vantu...3',
-        password: 'vantu...4',
-        employeeTitle: 'ceo',
-        phone: '345678',
-        position: 'ceo',
-        department: 'test1',
-        langKey: 'vn',
-        address: 'test3',
-        entranceDate: new Date('2001-12-21T00:00:00.000Z'),
-        exitDate: new Date('2010-10-29T00:00:00.000Z'),
-        gender: 1,
-        avatar: this.avt,
+      let sub = this.employeeService.DetailEmployee(this.id).subscribe(data => {
+        this.employee.patchValue({
+          id: data.id,
+          status: data.status,
+          email: data.email,
+          employeeCode: data.employeeCode,
+          employeeName: data.employeeName,
+          employeeTitle: data.employeeTitle,
+          phone: data.phone,
+          position: data.position,
+          department: data.department,
+          langKey: data.langKey,
+          address: data.address,
+          entranceDate: data.entranceDate,
+          exitDate: data.exitDate,
+          gender: data.gender,
+          avatar: data.avatar,
+        })
+
+        this.employee.addControl('lastModifiedBy', new FormControl(data.lastModifiedBy))
+        this.employee.addControl('lastModifiedDate', new FormControl(data.lastModifiedDate))
+        this.employee.addControl('lastSeenDate', new FormControl(data.lastSeenDate))
+        this.employee.addControl('lastSyncDate', new FormControl(data.lastSyncDate))
+
+        this.avt = data.avatar
+
+        this.entranceDate.ISOS = new Date(this.employee.value.entranceDate)
+        this.exitDate.ISOS = new Date(this.employee.value.exitDate)
+
+        this.entranceDate.date = this.entranceDate.ISOS.getDate()
+        this.entranceDate.month = this.entranceDate.ISOS.getMonth() + 1
+        this.entranceDate.year = this.entranceDate.ISOS.getFullYear()
+
+        this.exitDate.date = this.exitDate.ISOS.getDate()
+        this.exitDate.month = this.exitDate.ISOS.getMonth() + 1
+        this.exitDate.year = this.exitDate.ISOS.getFullYear()
       })
-      this.entranceDate.date = this.employee.value.entranceDate.getDate()
-      this.entranceDate.month = this.employee.value.entranceDate.getMonth() + 1
-      this.entranceDate.year = this.employee.value.entranceDate.getFullYear()
-
-      this.exitDate.date = this.employee.value.exitDate.getDate()
-      this.exitDate.month = this.employee.value.exitDate.getMonth() + 1
-      this.exitDate.year = this.employee.value.exitDate.getFullYear()
     }
-    this.dataService.employee.subscribe(data => {
+    this.sub = this.dataService.employee.subscribe(data => {
       if (data == 'add' || data == 'update') {
-        this.employee.value.entranceDate = new Date()
-        this.employee.value.entranceDate.setFullYear(this.entranceDate.year!, this.entranceDate.month! - 1, this.entranceDate.date!)
-        this.employee.value.entranceDate.setHours(7, 0, 0, 0)
-        this.employee.value.entranceDate = this.employee.value.entranceDate.toISOString()
-        this.employee.value.exitDate = new Date()
-        this.employee.value.exitDate.setFullYear(this.exitDate.year!, this.exitDate.month! - 1, this.exitDate.date!)
-        this.employee.value.exitDate.setHours(7, 0, 0, 0)
-        this.employee.value.exitDate = this.employee.value.exitDate.toISOString()
+        if (data == 'add') {
+          if (this.employee.valid) {
 
-        this.employee.value.login = this.employee.value.email
+            this.entranceDate.ISOS.setFullYear(this.entranceDate.year!, this.entranceDate.month! - 1, this.entranceDate.date!)
+            this.entranceDate.ISOS.setHours(7, 0, 0, 0)
+            this.employee.value.entranceDate = this.entranceDate.ISOS.toISOString()
 
-        if (this.employee.valid) {
-          this.employeeService.AddEmployee(this.employee.value).subscribe(data=>{            
-            this.snackbar.openSnackbar('Tạo thành công', 5000, 'Đóng', 'center', 'bottom', true);
-          },
-          ()=>{            
-            this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
-          })
+            this.exitDate.ISOS.setFullYear(this.exitDate.year!, this.exitDate.month! - 1, this.exitDate.date!)
+            this.exitDate.ISOS.setHours(7, 0, 0, 0)
+            this.employee.value.exitDate = this.exitDate.ISOS.toISOString()
+
+            this.employee.value.login = this.employee.value.email
+
+            this.employeeService.AddEmployee(this.employee.value).subscribe(data => {
+              this.snackbar.openSnackbar('Tạo thành công', 5000, 'Đóng', 'center', 'bottom', true);
+            },
+              () => {
+                this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
+              })
+          }
+        }
+        if (data == 'update') {
+          this.employee.removeControl('password')
+          this.employee.removeControl('login')
+          if (this.employee.valid) {
+            console.log(this.employee.value);
+          }
         }
       }
       if (data == 'delete') {
-        console.log(this.employee.value.employeeId);
+        console.log(this.employee.value.id);
       }
     })
   }
@@ -130,6 +156,10 @@ export class InforComponent implements OnInit {
 
   deleteImage() {
     this.avt = "../../../../../../assets/images/female.png"
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe()
   }
 
 }
