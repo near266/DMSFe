@@ -1,7 +1,7 @@
 <div>
   <div class="w-full flex justify-between">
     <div class="flex flex-col justify-center">
-      <span class="text-lg text-[#888] font-medium italic">{{customer.customerName}}</span>
+      <span class="text-lg text-[#888] font-medium italic">{{customer.customerName}} - {{customer.customerCode}}</span>
     </div>
     <div class="flex justify-between w-[160px]">
       <button *ngIf="isChoseUpdated == false" mat-flat-button (click)="isChoseUpdated = !isChoseUpdated" class="bg-[#565869] text-white font-medium mx-1"><i class="fa-solid fa-pen mr-1"></i>Sửa</button>
@@ -32,7 +32,7 @@
           </div>
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.customerCode}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.customerCode">
+            <input disabled="true" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.customerCode">
           </div>
         </div>
 

@@ -143,7 +143,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
   add() {
     let body = {
       // id: this.form.controls['customerGroupId'].value,
-      customerCode: this.form.controls['customerCode'].value,
+      // customerCode: this.form.controls['customerCode'].value,
       customerName: this.form.controls['customerName'].value !== '' ? this.form.controls['customerName'].value: null,
       customerGroupId: this.form.controls['customerGroupId'].value !== '' ? this.form.controls['customerGroupId'].value: null,
       customerTypeId: this.form.controls['customerTypeId'].value !== '' ? this.form.controls['customerTypeId'].value: null,
