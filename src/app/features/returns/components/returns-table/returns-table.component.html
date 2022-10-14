@@ -33,7 +33,8 @@
           [ngTemplateOutletContext]="{ label: 'Đã duyệt', className: ' bg-blue-600'  }">
         </ng-container>
       </td>
-      <td class="border-x min-w-[200px] border-solid align-middle px-0.5 text-emerald-500 font-medium cursor-pointer">
+      <!-- mã phiếu -->
+      <td class="border-x min-w-[200px] border-solid align-middle px-0.5 text-emerald-500 font-medium cursor-pointer" [routerLink]="['/returns/detail/view_edit', 1]">
         <div class="flex items-center space-x-2">
           {{return.salesCode}}<button
             class="ml-1 text-black border-solid border rounded-md space-x-0.5 border-emerald-500 w-7 h-7 flex items-center justify-center"><i
