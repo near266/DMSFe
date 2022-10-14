@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { map, Observable, pipe } from 'rxjs';
-import { api_url, gateway_url } from '../const/url';
+import { api_gateway_url, api_url, gateway_url } from '../const/url';
 
 @Injectable({
   providedIn: 'root'
