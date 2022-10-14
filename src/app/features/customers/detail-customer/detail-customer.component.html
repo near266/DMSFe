@@ -133,9 +133,9 @@
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Sinh nhật</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.dOB}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.dob}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input type="date" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.dOB">
+            <input type="date" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.dob">
           </div>
         </div>
         <div class="w-full flex mb-6">

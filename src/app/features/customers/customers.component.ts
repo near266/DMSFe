@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
+import { data } from 'jquery';
 import { customers } from 'src/app/core/data/Customers';
 import { Config } from 'src/app/core/model/Config';
+import { Customers } from 'src/app/core/model/Customers';
+import { Response } from 'src/app/core/model/Response';
+import { CustomerService } from 'src/app/core/services/customer.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { DetailCustomerComponent } from './detail-customer/detail-customer.component';
 
@@ -11,12 +16,19 @@ import { DetailCustomerComponent } from './detail-customer/detail-customer.compo
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss']
 })
-export class CustomersComponent implements OnInit {
+export class CustomersComponent implements OnInit, AfterViewInit {
 
   isProvince = false;
   hasEmployee = false;
   hasArea = false;
   customer = customers;
+  response: Response<Customers> = {
+    data: [],
+    totalCount: 0
+  };
+
+  page = 1;
+  pageSize = 30;
 
   statusMenu: Config = {
     icon: '<i class="fa-solid fa-flag"></i>',
@@ -99,8 +111,39 @@ export class CustomersComponent implements OnInit {
 
   constructor(
     private title: Title,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private customerService: CustomerService,
+    private snackbar: SnackbarService,
   ) { }
+
+  ngOnInit(): void {
+    this.title.setTitle('Khách hàng - DMS.Delap');
+  }
+
+  ngAfterViewInit(): void {
+    const body = {
+      keyword: '',
+      page: this.page,
+      pageSize: this.pageSize
+    };
+    this.customerService.search(body).subscribe(data => {
+      this.response = data;
+      console.log(this.response.data);
+      this.response.data.forEach(element => {
+        if(element.status == true) element.status = 'Hoạt động';
+        else if(element.status == false) element.status = 'Không hoạt động';
+      });
+    }, (error) => {
+        this.snackbar.openSnackbar(
+          error,
+          2000,
+          'Đóng',
+          'center',
+          'bottom',
+          true,
+        );
+    });
+  }
 
   add() {
     this.dialog.open(AddCustomerComponent, {
@@ -142,10 +185,6 @@ export class CustomersComponent implements OnInit {
     statusbar: true
   }
 
-
-  ngOnInit(): void {
-    this.title.setTitle('Khách hàng - DMS.Delap')
-  }
   listMenuObj = [
     {
       title: 'Lọc thời gian',

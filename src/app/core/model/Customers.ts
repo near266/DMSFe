@@ -1,10 +1,13 @@
 export class Customers {
   customerId?: string;
-  status?: string;
+  status?: any;
   customerCode?: string;
   customerName?: string;
   customerGroupName?: string;
+  customerGroup?: any;
   customerTypeName?: string;
+  customerType?: any;
+  channel?: any;
   IsLocationVerified?: string;
   IsUpdatedAddress?: string;
   lastModifiedDate?: string;
@@ -13,9 +16,9 @@ export class Customers {
   areaId?: string;
   province?: string;
   district?: string;
-  Ward?: string;
+  ward?: string;
   deliveryAddress?: string;
-  dOB?: string;
+  dob?: any;
   contactName?: string;
   position?: string;
   phone?: string;
