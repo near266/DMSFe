@@ -1,11 +1,12 @@
 <div>
   <div class="w-full flex justify-between">
     <div class="flex flex-col justify-center">
-      <span class="text-lg text-[#888] font-medium italic">{{customer.CustomerName}}</span>
+      <span class="text-lg text-[#888] font-medium italic">{{customer.customerName}}</span>
     </div>
-    <div>
-      <button (click)="isChoseUpdated = !isChoseUpdated" mat-flat-button class="bg-[#565869] text-white font-medium mx-1"><i class="fa-solid fa-page"></i>Sửa</button>
-      <button type="button" (click)="close()" mat-stroked-button class="text-[#565869] bg-white font-medium"><i class="fa-solid fa-page"></i>Đóng</button>
+    <div class="flex justify-between w-[160px]">
+      <button *ngIf="isChoseUpdated == false" mat-flat-button (click)="isChoseUpdated = !isChoseUpdated" class="bg-[#565869] text-white font-medium mx-1"><i class="fa-solid fa-pen mr-1"></i>Sửa</button>
+      <button *ngIf="isChoseUpdated == true" mat-flat-button (click)="isChoseUpdated = !isChoseUpdated" class="bg-[#1891C9] text-white font-medium mx-1"><i class="fa-solid fa-circle-check mr-1"></i>Lưu</button>
+      <button type="button" mat-stroked-button (click)="close()" class="text-[#565869] bg-white font-medium"><i class="fa-solid fa-right-from-bracket mr-1"></i>Đóng</button>
     </div>
   </div>
   <hr class="my-2">
@@ -29,100 +30,82 @@
           <div class="w-4/12 font-semibold flex flex-col justify-center">
             Mã khách hàng
           </div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.id}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.customerId}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput [(ngModel)]="customer.id">
-            </mat-form-field>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.customerId">
           </div>
         </div>
 
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Khách hàng</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.CustomerName}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.customerName}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput [(ngModel)]="customer.CustomerName">
-            </mat-form-field>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.customerName">
           </div>
         </div>
 
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Nhóm khách hàng</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.CustomerGroupId}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.customerGroupName}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-select [(ngModel)]="customer.CustomerGroupId">
-                <mat-option [value]="customer.CustomerGroupId">{{customer.CustomerGroupId}}</mat-option>
-                <mat-option [value]="customer.CustomerGroupId">1</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.customerGroupName">
+              <option>{{customer.customerGroupName}}</option>
+              <option>No Bug</option>
+            </select>
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Loại khách hàng</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.CustomerTypeId}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.customerTypeName}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-select [(ngModel)]="customer.CustomerTypeId">
-                <mat-option [value]="customer.CustomerTypeId">{{customer.CustomerTypeId}}</mat-option>
-                <mat-option [value]="customer.CustomerTypeId">1</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.customerTypeName">
+              <option>{{customer.customerTypeName}}</option>
+              <option>No Bug</option>
+            </select>
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Trạng thái</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.Status}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.status}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-select [(ngModel)]="customer.Status">
-                <mat-option [value]="customer.Status">{{customer.Status}}</mat-option>
-                <mat-option [value]="customer.Status">1</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.status">
+              <option>{{customer.status}}</option>
+              <option>No Bug</option>
+            </select>
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Kênh</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.ChannelId}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.channelName}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-select [(ngModel)]="customer.ChannelId">
-                <mat-option [value]="customer.ChannelId">{{customer.ChannelId}}</mat-option>
-                <mat-option [value]="customer.ChannelId">1</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.channelName">
+              <option>{{customer.channelName}}</option>
+              <option>No Bug</option>
+            </select>
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Địa chỉ</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.Address}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.address}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput [(ngModel)]="customer.Address">
-            </mat-form-field>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.address">
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Địa chỉ giao hàng</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.Address}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.deliveryAddress}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput [(ngModel)]="customer.Address">
-            </mat-form-field>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.deliveryAddress">
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Khu vực</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.AreaId}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.areaId}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-select [(ngModel)]="customer.AreaId">
-                <mat-option [value]="customer.AreaId">{{customer.AreaId}}</mat-option>
-                <mat-option [value]="customer.AreaId">1</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.areaId">
+              <option>{{customer.areaId}}</option>
+              <option>No Bug</option>
+            </select>
           </div>
         </div>
       </div>
@@ -130,78 +113,57 @@
       <div class="w-8/12 px-2 py-4 text-base">
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Tỉnh/Thành phố</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.Province}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.province}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-select [(ngModel)]="customer.Province">
-                <mat-option [value]="customer.Province">{{customer.Province}}</mat-option>
-                <mat-option [value]="customer.Province">1</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.province">
+              <option>{{customer.province}}</option>
+              <option>No Bug</option>
+            </select>
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Quận/Huyện</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.District}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.district}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-select [(ngModel)]="customer.District">
-                <mat-option [value]="customer.District">{{customer.District}}</mat-option>
-                <mat-option [value]="customer.District">1</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.district">
+              <option>{{customer.district}}</option>
+              <option>No Bug</option>
+            </select>
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Sinh nhật</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.DOB}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.dob}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input readonly matInput [matDatepicker]="dob" [(ngModel)]="customer.DOB">
-              <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-              <mat-datepicker #dob>
-                <mat-datepicker-actions>
-                  <button mat-button matDatepickerCancel type="button">Hủy</button>
-                  <button mat-raised-button color="primary" matDatepickerApply>Cập nhật</button>
-                </mat-datepicker-actions>
-              </mat-datepicker>
-            </mat-form-field>
+            <input type="date" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.dob">
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Người liên hệ</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.ContactName}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.contactName}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput [(ngModel)]="customer.ContactName">
-            </mat-form-field>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.contactName">
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Chức vụ</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.Position}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.position}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput [(ngModel)]="customer.Position">
-            </mat-form-field>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.position">
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">SĐT</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.Phone}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.phone}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput [(ngModel)]="customer.Phone">
-            </mat-form-field>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.phone">
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Email</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.Email}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.email}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput [(ngModel)]="customer.Email">
-            </mat-form-field>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.email">
           </div>
         </div>
       </div>
@@ -213,20 +175,16 @@
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Hạn mức công nợ</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.DebtLimit}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.debtLimit}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput [(ngModel)]="customer.DebtLimit">
-            </mat-form-field>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.debtLimit">
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">TK Tiền/Chi phí/Nợ</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.CashAcc}}</div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.cashAcc}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput [(ngModel)]="customer.CashAcc">
-            </mat-form-field>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="customer.cashAcc">
           </div>
         </div>
       </div>

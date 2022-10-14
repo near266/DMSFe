@@ -9,7 +9,7 @@ export class ProvincesService {
 
 
   constructor(private http: HttpClient) { }
-  
+
   urlProvinces = "https://provinces.open-api.vn/api/"
 
   getListProvinces():Observable<any>{

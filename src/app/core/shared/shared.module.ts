@@ -46,10 +46,13 @@ import { TreeModule } from '@circlon/angular-tree-component';
 import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.component';
 import { MenuCollapseSearchComponent } from './components/menu-collapse-search/menu-collapse-search.component';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
+import { MenuCollapseTreeComponent } from './components/menu-collapse-tree/menu-collapse-tree.component';
+import { EzPaginationComponent } from './components/ez-pagination/ez-pagination.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
-    declarations: [MenuCollapseComponent, MenuBarComponent, MenuCollapseSearchComponent, ConfirmDialogComponent],
+    declarations: [MenuCollapseComponent, MenuBarComponent, MenuCollapseSearchComponent, MenuCollapseTreeComponent, EzPaginationComponent, ConfirmDialogComponent],
     imports: [
         CommonModule,
         MatAutocompleteModule,
@@ -91,6 +94,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
         FormsModule,
         ReactiveFormsModule,
         TreeModule,
+        NgxPaginationModule
     ],
     exports: [
         ConfirmDialogComponent,
@@ -122,6 +126,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
         MatChipsModule,
         MatIconModule,
         MenuCollapseSearchComponent,
+        MenuCollapseTreeComponent,
+        EzPaginationComponent,
         MatProgressSpinnerModule,
         MatProgressBarModule,
         MatRippleModule,
@@ -136,6 +142,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
         FormsModule,
         ReactiveFormsModule,
         TreeModule,
+        NgxPaginationModule
     ],
 })
 export class SharedModule {}

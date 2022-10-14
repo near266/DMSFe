@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { tableHeader } from '../../models/table.header';
 import { Product } from '../../models/product';
+import { ProductDialogService } from '../../services/product-dialog.service';
 declare let $: any;
 
 @Component({
@@ -13,7 +14,7 @@ export class ProductTableComponent implements OnInit {
     currentPage: number;
     products: Product[] = [];
     headers = tableHeader;
-    constructor(private productService: ProductService) {}
+    constructor(private productService: ProductService, private productDialogService: ProductDialogService) {}
     ngOnInit(): void {
         this.productService.products$.subscribe((data: Product[]) => {
             this.products = data;
@@ -21,5 +22,8 @@ export class ProductTableComponent implements OnInit {
         this.productService.currentPage$.subscribe((data: number) => {
             this.currentPage = data;
         });
+    }
+    openUpdateProduct(product: Product): void {
+        this.productDialogService.openProductDialog(product);
     }
 }

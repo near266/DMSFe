@@ -40,13 +40,4 @@ export class ProductService {
 
         this.startAndEndIndex.next({ start, end });
     }
-    filterCurrentProducts(page: number) {
-        this.currentPage.next(page);
-        const currentPage = this.currentPage.value;
-        const currentPageSize = this.currentPageSize.value;
-        const start = (currentPage - 1) * currentPageSize;
-        const end = currentPage * currentPageSize;
-        const currentProducts = this.products.value.slice(start, end);
-        this.products.next(currentProducts);
-    }
 }
