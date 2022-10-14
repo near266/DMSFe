@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { map, Observable, pipe } from 'rxjs';
 import { api_url } from '../const/url';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
+    private router: Router
   ) { }
 
   Authenticate(body: any): Observable<any> {
@@ -27,5 +29,10 @@ export class AuthService {
   isLoggednIn() {
     return localStorage.getItem('access_token') != null
   }
-  
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/auth/login']);
+  }
+
 }
