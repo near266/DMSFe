@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map, of, delay, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import purchaseOrdersList from 'src/app/features/orders-mgm/mocks/PurchaseOrders';
-import { apiGwUrl, api_url, gateway_url } from '../const/url';
+import { api_gateway_url, api_url, gateway_url } from '../const/url';
 @Injectable({
     providedIn: 'root',
 })
@@ -47,7 +47,7 @@ export class PurchaseOrderService {
     url = 'https://6346eabf04a6d457579c4afd.mockapi.io/purchaseOrders';
     productUrl = 'https://6346eabf04a6d457579c4afd.mockapi.io/products';
 
-    apiGwUrl = apiGwUrl;
+    api_gateway_url = api_gateway_url;
 
     constructor(private http: HttpClient) {}
     // searchFilterPurchaseOrder(): Observable<any> {
@@ -70,11 +70,11 @@ export class PurchaseOrderService {
     }
 
     update(body: any): Observable<any> {
-        return this.http.put(this.apiGwUrl + '/PurchaseOrder/update', body).pipe(map((reponse: any) => reponse));
+        return this.http.put(this.api_gateway_url + '/PurchaseOrder/update', body).pipe(map((reponse: any) => reponse));
     }
 
     // customer
     searchCustomer(body: any): Observable<any> {
-        return this.http.post(this.apiGwUrl + '/Customer/search', body).pipe(map((reponse: any) => reponse));
+        return this.http.post(this.api_gateway_url + '/Customer/search', body).pipe(map((reponse: any) => reponse));
     }
 }
