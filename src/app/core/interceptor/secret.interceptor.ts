@@ -16,13 +16,16 @@ import {
     take,
     throwError,
   } from 'rxjs';
-  
+
   @Injectable()
   export class SecretInterceptor implements HttpInterceptor {
     intercept(
       request: HttpRequest<any>,
       next: HttpHandler
     ): Observable<HttpEvent<any>> {
+      if (request.url.includes('https://provinces.open-api.vn/api/')) {
+        return next.handle(request);
+      }
       const token = localStorage.getItem('access_token');
       if(token) {
         const AuthRequest = request.clone({setHeaders: {
@@ -34,4 +37,3 @@ import {
       }
     }
   }
-  

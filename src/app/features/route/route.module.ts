@@ -11,10 +11,10 @@ import { LocationRouterComponent } from './location-router/location-router.compo
 import { HistoryComponent } from './history/history.component';
 
 const routes: Routes = [
-  {
-      path: '',
-      component: RouteComponent,
-  },
+    {
+        path: '',
+        component: RouteComponent,
+    },
 ];
 
 @NgModule({
@@ -33,4 +33,4 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ]
 })
-export class RouteModule { }
+export class RouteModule {}

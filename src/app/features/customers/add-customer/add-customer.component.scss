@@ -1,0 +1,11 @@
+.menu-collapse {
+  border-right: 2px solid #F0F1F3;
+}
+
+:host ::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  margin: 0;
+}

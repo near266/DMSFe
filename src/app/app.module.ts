@@ -14,7 +14,6 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { DataService } from './core/services/data.service';
 import { ForgotpasswordComponent } from './features/auth/forgotpassword/forgotpassword.component';
-
 @NgModule({
     declarations: [AppComponent, ForgotpasswordComponent],
     imports: [SharedModule, RouterModule, BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule],

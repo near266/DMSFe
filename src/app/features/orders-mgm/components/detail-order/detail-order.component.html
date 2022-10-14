@@ -31,7 +31,8 @@
                 <mat-label>Nhóm</mat-label>
                 <mat-select formControlName="group" [disabled]="type === 'View'">
                     <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                    <mat-option *ngFor="let group of listGroup" [value]="group.groupId"> {{ group.groupName }}
+                    <mat-option *ngFor="let group of listGroup" [value]="group.groupId">
+                        {{ group.groupName }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -39,15 +40,17 @@
                 <mat-label>Nhân viên đặt</mat-label>
                 <mat-select [disabled]="type === 'View'" formControlName="orderEmployee">
                     <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                    <mat-option *ngFor="let employee of listEmployee" [value]="employee.employeeId"> {{
-                        employee.employeeName }}</mat-option>
+                    <mat-option *ngFor="let employee of listEmployee" [value]="employee.employeeId">
+                        {{ employee.employeeName }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Tuyến</mat-label>
                 <mat-select [disabled]="type === 'View'" formControlName="route">
                     <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                    <mat-option *ngFor="let route of listRoute" [value]="route.routeId"> {{ route.routeName }}
+                    <mat-option *ngFor="let route of listRoute" [value]="route.routeId">
+                        {{ route.routeName }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -86,9 +89,14 @@
                         <label for="simple-search" class="sr-only">Search</label>
                         <div class="relative w-full">
                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
+                                <svg
+                                    aria-hidden="true"
+                                    class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        fill-rule="evenodd"
                                         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                                         clip-rule="evenodd"></path>
                                 </svg>
@@ -96,10 +104,11 @@
                             <input type="text" id="simple-search" class="search-input" placeholder="Search" required />
                         </div>
                     </div>
-                    <button (click)="passingDataFrom(); openDialogProduct()"
+                    <button
+                        (click)="openDialogProduct()"
                         class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
                         <i class="fa-solid fa-filter mr-2 px-2"></i>
-                        <span class="px-2"> Tìm kiếm nâng cao </span>
+                        <span class="px-2">Tìm kiếm nâng cao</span>
                     </button>
                     <button
                         class="text-white flex items-center ml-3 px-1 py-1.5 bg-rose-500 hover:bg-rose-600 rounded-lg hover:font-medium">
@@ -132,7 +141,10 @@
                             <th scope="col" class="custom-th">Tên sản phẩm</th>
                             <th scope="col" class="custom-th">ĐVT</th>
                             <th scope="col" class="custom-th">Kho xuất</th>
-                            <th scope="col" class="custom-th">Số lượng <span class="text-red-500">(Tổng: 0)</span></th>
+                            <th scope="col" class="custom-th">
+                                Số lượng
+                                <span class="text-red-500">(Tổng: 0)</span>
+                            </th>
                             <th scope="col" class="custom-th">Đơn giá</th>
                             <th scope="col" class="custom-th">Thành tiền</th>
                             <th scope="col" class="custom-th">Chiết khấu</th>
@@ -144,16 +156,16 @@
                     <tbody>
                         <tr *ngFor="let product of listProduct; index as i" class="custom-tr">
                             <td class="custom-th">{{ i + 1 }}</td>
-                            <td class="custom-th">{{product.productCode}}</td>
-                            <td class="custom-th">{{product.productName}}</td>
-                            <td class="custom-th">{{product.unitName}}</td>
-                            <td class="custom-th">{{product.warehouseName}}</td>
-                            <td class="custom-th">{{product.quantity}}</td>
-                            <td class="custom-th">{{product.unitPrice | currency:"VND":"symbol"}}</td>
-                            <td class="custom-th">{{product.totalPrice | currency:"VND":"symbol"}}</td>
-                            <td class="custom-th">{{product.discount | currency:"VND":"symbol"}}</td>
-                            <td class="custom-th">{{product.discountRate | percent}}</td>
-                            <td class="custom-th">{{product.note}}</td>
+                            <td class="custom-th">{{ product.productCode }}</td>
+                            <td class="custom-th">{{ product.productName }}</td>
+                            <td class="custom-th">{{ product.unitName }}</td>
+                            <td class="custom-th">{{ product.warehouseName }}</td>
+                            <td class="custom-th">{{ product.quantity }}</td>
+                            <td class="custom-th">{{ product.unitPrice | currency: 'VND':'symbol' }}</td>
+                            <td class="custom-th">{{ product.totalPrice | currency: 'VND':'symbol' }}</td>
+                            <td class="custom-th">{{ product.discount | currency: 'VND':'symbol' }}</td>
+                            <td class="custom-th">{{ product.discountRate | percent }}</td>
+                            <td class="custom-th">{{ product.note }}</td>
                             <td class="custom-th" (click)="stopPropagation($event)">
                                 <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
                             </td>
@@ -170,9 +182,14 @@
                         <label for="simple-search" class="sr-only">Search</label>
                         <div class="relative w-full">
                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
+                                <svg
+                                    aria-hidden="true"
+                                    class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        fill-rule="evenodd"
                                         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                                         clip-rule="evenodd"></path>
                                 </svg>
@@ -180,10 +197,11 @@
                             <input type="text" id="simple-search" class="search-input" placeholder="Search" required />
                         </div>
                     </div>
-                    <button (click)="openDialogProduct()"
+                    <button
+                        (click)="openDialogProduct()"
                         class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
                         <i class="fa-solid fa-filter mr-2 px-2"></i>
-                        <span class="px-2"> Tìm kiếm nâng cao </span>
+                        <span class="px-2">Tìm kiếm nâng cao</span>
                     </button>
                 </div>
             </div>
@@ -196,7 +214,10 @@
                             <th scope="col" class="custom-th">Tên sản phẩm</th>
                             <th scope="col" class="custom-th">ĐVT</th>
                             <th scope="col" class="custom-th">Kho xuất</th>
-                            <th scope="col" class="custom-th">Số lượng <span class="text-red-500">(Tổng: 0)</span></th>
+                            <th scope="col" class="custom-th">
+                                Số lượng
+                                <span class="text-red-500">(Tổng: 0)</span>
+                            </th>
                             <th scope="col" class="custom-th">Ghi chú</th>
                             <th scope="col" class="custom-th">Xóa</th>
                         </tr>
@@ -204,12 +225,12 @@
                     <tbody>
                         <tr *ngFor="let promotionProduct of listPromotionProduct; index as i" class="custom-tr">
                             <td class="custom-th">{{ i + 1 }}</td>
-                            <td class="custom-th">{{promotionProduct.productCode}}</td>
-                            <td class="custom-th">{{promotionProduct.productName}}</td>
-                            <td class="custom-th">{{promotionProduct.unitName}}</td>
-                            <td class="custom-th">{{promotionProduct.warehouseName}}</td>
-                            <td class="custom-th">{{promotionProduct.quantity}}</td>
-                            <td class="custom-th">{{promotionProduct.note}}</td>
+                            <td class="custom-th">{{ promotionProduct.productCode }}</td>
+                            <td class="custom-th">{{ promotionProduct.productName }}</td>
+                            <td class="custom-th">{{ promotionProduct.unitName }}</td>
+                            <td class="custom-th">{{ promotionProduct.warehouseName }}</td>
+                            <td class="custom-th">{{ promotionProduct.quantity }}</td>
+                            <td class="custom-th">{{ promotionProduct.note }}</td>
                             <td class="custom-th" (click)="stopPropagation($event)">
                                 <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
                             </td>
@@ -221,47 +242,56 @@
     </mat-tab-group>
     <div>
         <div class="flex justify-between">
-            <span class="font-medium w-1/3 py-2">Bằng chữ:
-                Chưa biết tính ra nhưu nào
-            </span>
-            <span class="font-medium w-1/3 py-2">Tổng tiền hàng:
-                <span class="font-normal ml-4">{{detailOrderFakeData.totalAmount | currency:"VND":"symbol"}}</span>
-            </span>
-        </div>
-        <div class="flex justify-between">
-            <span class="font-medium w-1/3 py-2 text-green-700">Hạn mức công nợ:
-                <span class="font-normal ml-4">{{detailOrderFakeData.debtLimit | currency:"VND":"symbol"}}</span>
-            </span>
-            <span class="font-medium w-1/3 py-2">Tổng tiền VAT:
-                <span class="font-normal ml-4">{{detailOrderFakeData.totalOfVAT | currency:"VND":"symbol"}}</span>
+            <span class="font-medium w-1/3 py-2">Bằng chữ: Chưa biết tính ra nhưu nào</span>
+            <span class="font-medium w-1/3 py-2">
+                Tổng tiền hàng:
+                <span class="font-normal ml-4">{{ detailOrderFakeData.totalAmount | currency: 'VND':'symbol' }}</span>
             </span>
         </div>
         <div class="flex justify-between">
-            <span class="font-medium w-1/3 py-2 text-green-700">Dư nợ hiện tại:
-                <span class="font-normal ml-4">{{detailOrderFakeData.debtCurrent | currency:"VND":"symbol"}}</span>
+            <span class="font-medium w-1/3 py-2 text-green-700">
+                Hạn mức công nợ:
+                <span class="font-normal ml-4">{{ detailOrderFakeData.debtLimit | currency: 'VND':'symbol' }}</span>
             </span>
-            <span class="font-medium w-1/3 py-2">Chiết khấu sản phẩm:
-                <span class="font-normal ml-4">{{detailOrderFakeData.totalDiscountProduct | currency:"VND":"symbol"}}</span>
+            <span class="font-medium w-1/3 py-2">
+                Tổng tiền VAT:
+                <span class="font-normal ml-4">{{ detailOrderFakeData.totalOfVAT | currency: 'VND':'symbol' }}</span>
             </span>
         </div>
         <div class="flex justify-between">
-            <span class="font-medium w-1/3 py-2 text-green-700">Hình thức thanh toán:
-                <span class="font-normal ml-4">{{detailOrderFakeData.paymentMethod}}</span>
+            <span class="font-medium w-1/3 py-2 text-green-700">
+                Dư nợ hiện tại:
+                <span class="font-normal ml-4">{{ detailOrderFakeData.debtCurrent | currency: 'VND':'symbol' }}</span>
             </span>
-            <span class="font-medium w-1/3 py-2">Chiết khấu đơn hàng:
-                <span class="font-normal ml-4">{{detailOrderFakeData.tradeDiscount | currency:"VND":"symbol"}}</span>
+            <span class="font-medium w-1/3 py-2">
+                Chiết khấu sản phẩm:
+                <span class="font-normal ml-4">
+                    {{ detailOrderFakeData.totalDiscountProduct | currency: 'VND':'symbol' }}
+                </span>
+            </span>
+        </div>
+        <div class="flex justify-between">
+            <span class="font-medium w-1/3 py-2 text-green-700">
+                Hình thức thanh toán:
+                <span class="font-normal ml-4">{{ detailOrderFakeData.paymentMethod }}</span>
+            </span>
+            <span class="font-medium w-1/3 py-2">
+                Chiết khấu đơn hàng:
+                <span class="font-normal ml-4">{{ detailOrderFakeData.tradeDiscount | currency: 'VND':'symbol' }}</span>
             </span>
         </div>
         <div class="flex justify-between">
             <span class="font-medium w-1/3 py-2"></span>
-            <span class="font-medium w-1/3 py-2">Phải thanh toán:
-                <span class="font-normal ml-4">{{detailOrderFakeData.totalPayment | currency:"VND":"symbol"}}</span>
+            <span class="font-medium w-1/3 py-2">
+                Phải thanh toán:
+                <span class="font-normal ml-4">{{ detailOrderFakeData.totalPayment | currency: 'VND':'symbol' }}</span>
             </span>
         </div>
         <div class="flex justify-between">
             <span class="font-medium w-1/3 py-2"></span>
-            <span class="font-medium w-1/3 py-2">Thanh toán trước:
-                <span class="font-normal ml-4">{{detailOrderFakeData.prePayment | currency:"VND":"symbol"}}</span>
+            <span class="font-medium w-1/3 py-2">
+                Thanh toán trước:
+                <span class="font-normal ml-4">{{ detailOrderFakeData.prePayment | currency: 'VND':'symbol' }}</span>
             </span>
         </div>
     </div>

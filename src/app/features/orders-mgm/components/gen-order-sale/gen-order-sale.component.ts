@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ProductListComponent } from '../product-list/product-list.component';
 
 @Component({
@@ -10,7 +10,7 @@ import { ProductListComponent } from '../product-list/product-list.component';
 export class GenOrderSaleComponent implements OnInit {
     statusList = ['Chờ duyệt', 'Đã duyệt', 'Đã giao hàng'];
     groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng'];
-    constructor(private dialog: MatDialog) {}
+    constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<GenOrderSaleComponent>) {}
 
     ngOnInit(): void {}
     stopPropagation(e: any) {
@@ -24,5 +24,8 @@ export class GenOrderSaleComponent implements OnInit {
             width: '100%',
             panelClass: 'full-screen-modal',
         });
+    }
+    save() {
+        this.dialogRef.close('Lưu');
     }
 }

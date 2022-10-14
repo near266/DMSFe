@@ -4,7 +4,8 @@
     <ul class="flex">
         <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Công việc</li>
         <!-- Menu Bán hàng -->
-        <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer flex items-center"
+        <li
+            class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer flex items-center"
             [matMenuTriggerFor]="menu1">
             <span class="mr-1">Bán hàng</span>
             <i class="fa-solid fa-caret-down"></i>
@@ -27,8 +28,7 @@
                 <i class="fa-solid fa-file-invoice text-base mr-2"></i>
                 <span>Phiếu đặt hàng</span>
             </button>
-            <!-- [routerLink]="['ordersale']" -->
-            <button mat-menu-item>
+            <button mat-menu-item [routerLink]="['ordersale']">
                 <i class="fa-solid fa-calculator text-base mr-2"></i>
                 <span>Phiếu bán hàng</span>
             </button>
@@ -46,6 +46,10 @@
             <button mat-menu-item class="flex items-center" (click)="openTree()">
                 <i class="fa-solid fa-list-tree text-base mr-2"></i>
                 <span>Cây đơn vị</span>
+            </button>
+            <button mat-menu-item [routerLink]="['/categories/warehouses']">
+                <i class="fa-solid fa-box-archive text-base mr-2"></i>
+                <span>Kho hàng</span>
             </button>
             <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren1">
                 <i class="fa-solid fa-user-tag text-base mr-2"></i>
@@ -72,29 +76,30 @@
         <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Trợ giúp</li>
     </ul>
     <div class="flex items-center">
-        <div class="mr-5 cursor-pointer hover:opacity-70">
+        <div class="mr-6 cursor-pointer hover:opacity-70">
             <i class="fa-solid fa-bell text-2xl"></i>
         </div>
-        <div class="mr-5 cursor-pointer hover:opacity-70">
+        <div class="mr-6 cursor-pointer hover:opacity-70">
             <i class="fa-solid fa-download text-2xl"></i>
         </div>
-        <div [matMenuTriggerFor]="menu"
+        <div
+            [matMenuTriggerFor]="menu"
             class="cursor-pointer overflow-hidden relative w-12 h-12 bg-gray-100 rounded-full dark:bg-gray-600">
             <img [src]="annonimousAvatar" alt="" />
         </div>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item class="flex items-center">
-                <i class="fa-solid fa-user text-lg mr-2"></i>
-                <span>Tài khoản cá nhân</span>
-            </button>
-            <button mat-menu-item>
-                <i class="fa-solid fa-bell text-lg mr-2"></i>
-                <span>Nhận Email thông báo</span>
-            </button>
-            <button mat-menu-item>
-                <i class="fa-solid fa-right-from-bracket text-lg mr-2"></i>
-                <span>Đăng xuất</span>
-            </button>
-        </mat-menu>
     </div>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item class="flex items-center">
+            <i class="fa-solid fa-user text-lg mr-2"></i>
+            <span>Tài khoản cá nhân</span>
+        </button>
+        <button mat-menu-item>
+            <i class="fa-solid fa-bell text-lg mr-2"></i>
+            <span>Nhận Email thông báo</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+            <i class="fa-solid fa-right-from-bracket text-lg mr-2"></i>
+            <span>Đăng xuất</span>
+        </button>
+    </mat-menu>
 </div>

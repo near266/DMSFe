@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { SidenavService } from './services/sidenav.service';
 import { ProductService } from './services/product.service';
 import { sortList } from './utils/sort';
+import { ProductDialogService } from './services/product-dialog.service';
 
 @Component({
     selector: 'app-product',
@@ -17,15 +18,12 @@ import { sortList } from './utils/sort';
 export class ProductComponent implements OnInit, DoCheck, AfterViewInit {
     @ViewChild('drawer') sidenav: MatSidenav;
     isShowSidebarToMargin = true;
-
     listMenu = sortList;
     sideBarWidth!: string;
     totalProducts: number;
-    type!: string;
-    // listOrder: PurchaseOrder[] = PurchaseOrderList;
 
     constructor(
-        private activatedroute: ActivatedRoute,
+        private dialogService: ProductDialogService,
         public datepipe: DatePipe,
         private sidenavService: SidenavService,
         private router: Router,
@@ -44,5 +42,8 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit {
     ngDoCheck(): void {}
     select(event: any) {
         console.log(event);
+    }
+    addUser() {
+        this.dialogService.openProductDialog();
     }
 }

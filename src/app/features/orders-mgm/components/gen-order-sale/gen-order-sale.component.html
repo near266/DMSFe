@@ -2,16 +2,12 @@
     <div class="bg-white w-full sticky top-[-24px] z-10">
         <div class="p-3 w-full flex justify-between items-center">
             <span style="font-size: 20px !important" class="font-medium">Thêm mới phiếu bán hàng</span>
-            <div class="flex items-center">
+            <div class="flex items-center" (click)="save()">
                 <button class="button-primary-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-check text-white mr-2"></i>
                     <span class="text-white">Lưu</span>
                 </button>
-                <button class="button-success-sm flex items-center justify-between mr-2">
-                    <i class="fa-solid fa-circle-check text-white mr-2"></i>
-                    <span class="text-white">Lưu & Đóng</span>
-                </button>
-                <button class="button-danger" mat-dialog-close>
+                <button class="button-danger" mat-dialog-close="Đóng">
                     <i class="fa-solid fa-ban text-white mr-2"></i>
                     <span class="text-white">Đóng</span>
                 </button>

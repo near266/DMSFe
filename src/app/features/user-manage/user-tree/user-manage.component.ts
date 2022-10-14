@@ -31,7 +31,6 @@ export class UserManageComponent implements OnInit {
             minWidth: '900px',
         });
     }
-
     DetailUser(id: any) {
         this.dialog.open(DetailUserComponent, {
             height: '100vh',

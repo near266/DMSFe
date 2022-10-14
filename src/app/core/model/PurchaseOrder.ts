@@ -62,6 +62,7 @@ export class Route {
 }
 
 export class ListProduct {
+    productId: string;
     productCode: string;
     productName: string;
     unitName: string;
@@ -75,6 +76,7 @@ export class ListProduct {
 }
 
 export class ListPromotionProduct {
+    productId: string;
     productCode: string;
     productName: string;
     unitName: string;

@@ -1,0 +1,8 @@
+<div class=" bg-white mx-6 my-1 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
+  <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
+  <input class="bg-white text-xs h-full w-full"
+    placeholder="Tìm kiếm">
+</div>
+<div class="m-6">
+  <tree-root [ngClass]="'expand-tree'" class="reverse" [nodes]="nodes" [options]="options" (contextmenu)="Config($event)"></tree-root>
+</div>

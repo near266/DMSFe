@@ -14,11 +14,16 @@ import { UserTreeViewComponent } from './user-tree/user-tree-view/user-tree-view
 import { ResetPasswordComponent } from './user-tree/detail-user/reset-password/reset-password.component';
 import { DeleteUserComponent } from './user-tree/detail-user/delete-user/delete-user.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { WarehousesComponent } from './warehouses/warehouses.component';
 
 const routes: Routes = [
     {
         path: 'tree',
         component: UserManageComponent,
+    },
+    {
+      path: 'warehouses',
+      component: WarehousesComponent,
     },
 ];
 
@@ -34,6 +39,7 @@ const routes: Routes = [
         UserTreeViewComponent,
         ResetPasswordComponent,
         DeleteUserComponent,
+        WarehousesComponent,
     ],
     imports: [CommonModule, RouterModule.forChild(routes), SharedModule, NgxPaginationModule],
 })
