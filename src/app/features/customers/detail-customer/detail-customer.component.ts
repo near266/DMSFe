@@ -112,7 +112,7 @@ export class DetailCustomerComponent implements OnInit {
       this.provincesService.getListProvinces().subscribe(data => {
         this.listProvinces = data;
         this.initDistrict(this.buf.province);
-        this.getWard(this.buf.district);
+        this.initWard(this.buf.district);
       });
     });
 
@@ -144,6 +144,8 @@ export class DetailCustomerComponent implements OnInit {
   }
 
   getDistrict(event: any) {
+    this.buf.district = '';
+    this.buf.ward = '';
     this.listProvinces.forEach(data => {
       if(data.name == event) {
         this.provincesService.getDistrictsListByID(data.code).subscribe(res => {
@@ -165,6 +167,16 @@ export class DetailCustomerComponent implements OnInit {
   }
 
   getWard(event: any) {
+    this.buf.ward = '';
+    this.listDistricts.forEach(data => {
+      if(data.name == event) {
+        this.provincesService.getWardsListByID(data.code).subscribe(res => {
+          this.listWards = res.wards;
+        });
+      }
+    });
+  }
+  initWard(event: any) {
     this.listDistricts.forEach(data => {
       if(data.name == event) {
         this.provincesService.getWardsListByID(data.code).subscribe(res => {

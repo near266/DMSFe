@@ -112,6 +112,8 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
   }
 
   getDistrict(event: any) {
+    this.form.controls['district'].setValue('');
+    this.form.controls['ward'].setValue('');
     this.listProvinces.forEach(data => {
       if(data.name == event) {
         this.provincesService.getDistrictsListByID(data.code).subscribe(res => {
@@ -122,6 +124,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
   }
 
   getWard(event: any) {
+    this.form.controls['ward'].setValue('');
     this.listDistricts.forEach(data => {
       if(data.name == event) {
         this.provincesService.getWardsListByID(data.code).subscribe(res => {
