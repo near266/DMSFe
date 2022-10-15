@@ -91,10 +91,17 @@ export class PurchaseOrderService {
             .post(this.api_gateway_url + '/PurchaseOrder/add', body, { responseType: 'text' })
             .pipe(map((reponse: any) => reponse));
     }
+    archive(body: any): Observable<any> {
+        return this.http
+            .put(this.api_gateway_url + '/PurchaseOrder/arhived', body)
+            .pipe(map((reponse: any) => reponse));
+    }
 
     // customer
     searchCustomer(body: any): Observable<any> {
-        return this.http.post(this.api_gateway_url + '/Customer/search', body).pipe(map((reponse: any) => reponse));
+        return this.http
+            .post(this.api_gateway_url + '/Customer/search', body, { responseType: 'json' })
+            .pipe(map((reponse: any) => reponse));
     }
 
     // product
@@ -105,5 +112,10 @@ export class PurchaseOrderService {
     // employee
     getAllEmployees(page: number, pageSize: number): Observable<any> {
         return this.http.get(this.id_url_gw + '/Employee/SearchAllEmployee?page=' + page + '&pageSize=' + pageSize);
+    }
+
+    // warehouse
+    getAllWarehouses(): Observable<any> {
+        return this.http.get(this.api_gateway_url + '/Warehouse/getall').pipe(map((reponse: any) => reponse));
     }
 }

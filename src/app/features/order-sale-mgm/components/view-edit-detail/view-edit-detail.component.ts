@@ -107,28 +107,4 @@ export class ViewEditDetailComponent implements OnInit {
 
         // }
     }
-
-    delete() {
-        let dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            data: {
-                content: 'Bạn có chắc chắn muốn xóa bản ghi này không',
-                action: ['Xóa', 'Hủy'],
-            },
-        });
-        dialogRef.afterClosed().subscribe((data: any) => {
-            if (data === 'Xóa') {
-                this.purchaseOrder.deletePurchase(this.id).subscribe(
-                    (data) => {},
-                    (err) => {
-                        this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
-                    },
-                    () => {
-                        this.snackbar.openSnackbar('Xóa thành công', 100000, 'Đóng', 'center', 'bottom', true);
-                        this.router.navigate(['/orders']);
-                    },
-                );
-            } else {
-            }
-        });
-    }
 }

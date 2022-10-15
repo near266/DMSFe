@@ -26,12 +26,15 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     ];
     groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng'];
     createForm: FormGroup;
+    unitPrices: any = [];
+    quantities: any = [];
+    discount: any = [];
+    quantity: any = 0;
+
     listCustomer: any;
     listChoosenProduct: any = [];
     listEmployee: any = [];
-    unitPrices: any = [];
-    quantities: any = [];
-    quantity: any = 0;
+    listWarehouse: any = [];
     constructor(
         private dataService: DataService,
         private dialog: MatDialog,
@@ -78,26 +81,24 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     }
     ngAfterViewInit(): void {
         // get list customer
-        this.purchaseOrder
-            .searchCustomer({
-                keyword: '',
-                page: 1,
-                pageSize: 1000,
-            })
-            .subscribe((data) => {
-                this.listCustomer = data.data;
-            });
+        this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
+            this.listCustomer = data.data;
+        });
         // get list employee
         this.purchaseOrder.getAllEmployees(1, 10000).subscribe((data) => {
             this.listEmployee = data.data;
         });
+        // get list warehouse
+        this.purchaseOrder.getAllWarehouses().subscribe((data) => {
+            this.listWarehouse = data;
+        });
     }
     ngDoCheck(): void {}
-    countTotal() {
-        this.quantity = 0;
-        for (let index = 0; index < this.quantities.length; index++) {
-            this.quantity += this.quantities[index];
-        }
+    countTotal(product: any) {
+        this.quantity += product.quantity;
+    }
+    discountRate(product: any) {
+        product.discountRate = product.discount / product.totalPrice;
     }
     stopPropagation(e: any) {
         e.stopPropagation();
@@ -121,6 +122,22 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     }
 
     create() {
+        let lastListChoosen = this.listChoosenProduct.map((product: any) => {
+            return {
+                productId: product.id,
+                // productName: product.id,
+                unitId: product.unitId,
+                warehouseId: product.warehouseId,
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount,
+                discountRate: product.discountRate * 100000,
+                note: product.note,
+                type: 0,
+            };
+        });
+        console.log(lastListChoosen);
         const body = {
             orderDate: moment(this.createForm.get('orderDate')?.value).format('YYYY-MM-DD'),
             // groupId: this.createForm.get('groupId')?.value, // Chưa có api get
@@ -130,52 +147,21 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             // routeId: null, // Chưa có API
             type: 0,
             status: this.createForm.get('status')?.value,
-            paymentMethod: 0,
             description: this.createForm.get('description')?.value,
             phone: this.createForm.get('customer.phone')?.value,
             address: this.createForm.get('customer.address')?.value,
             customerName: this.createForm.get('customer.customerName')?.value,
+            archived: false,
+            createdDate: moment(Date.now()).format('YYYY-MM-DD'),
+            deliveryDate: moment(this.createForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
+            listProduct: lastListChoosen,
+            paymentMethod: 0, // có 1 loại payment
+            prePayment: 0,
             totalAmount: 0,
             totalOfVAT: 0,
             totalDiscountProduct: 0,
             tradeDiscount: 0,
             totalPayment: 0,
-            archived: false,
-            createdDate: moment(Date.now()).format('YYYY-MM-DD'),
-            deliveryDate: moment(this.createForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
-            prePayment: 0,
-            // listProduct: [
-            //     {
-            //         purchaseOrderId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            //         productId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            //         productName: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            //         unitId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            //         warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            //         unitPrice: 0,
-            //         quantity: 0,
-            //         totalPrice: 0,
-            //         discount: 0,
-            //         discountRate: 0,
-            //         note: 'string',
-            //         type: 0,
-            //     },
-            // ],
-            // listPromotionProduct: [
-            //     {
-            //         purchaseOrderId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            //         productId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            //         productName: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            //         unitId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            //         warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            //         unitPrice: 0,
-            //         quantity: 0,
-            //         totalPrice: 0,
-            //         discount: 0,
-            //         discountRate: 0,
-            //         note: 'string',
-            //         type: 0,
-            //     },
-            // ],
         };
         this.purchaseOrder.createOrder(body).subscribe(
             (data) => {},
@@ -218,6 +204,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         this.listChoosenProduct = this.listChoosenProduct.filter((product: any) => {
             return product != productRemove;
         });
+        this.quantity -= productRemove.quantity;
     }
 
     selectUnit(value: any, product: any, i: any) {
@@ -226,12 +213,17 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         // } else if (value.type === 'whosale') {
         //     this.unitPrices[i] = product.price;
         // }
+        console.log(product);
+        product.unitId = value.unit.id;
         product.type = value.type;
+        if (value.type === 'retail') {
+            product.unitPrice = product.retailPrice;
+        } else if (value.type === 'whosale') {
+            product.unitPrice = product.price;
+        }
     }
 
-    selectWholeSaleUnit(value: any, product: any) {}
-
-    selectWareHouse(value: any) {
-        console.log(value);
+    selectWareHouse(value: any, product: any) {
+        product.warehouseId = value;
     }
 }

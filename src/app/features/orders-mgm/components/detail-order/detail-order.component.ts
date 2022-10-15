@@ -25,52 +25,12 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     detailOrderForm!: FormGroup;
     detailOrderFakeData: any = [];
     detailOrder: any;
-    listProduct?: ListProduct[] = [];
+    listProduct: any = [];
     listPromotionProduct?: ListPromotionProduct[] = [];
     subscription: Subscription[] = [];
     id: string;
-    listGroup = [
-        {
-            groupId: '1',
-            groupName: 'FT2 - Đông Bắc - QL Tùng (Khu vực Đông Bắc)',
-        },
-        {
-            groupId: '2',
-            groupName: 'FT5 - Bắc Miền Trung - QL Trọng (Khu vực Bắc Miền Trung)',
-        },
-        {
-            groupId: '3',
-            groupName: 'FT7 - Miền Tây NB - QL Duy',
-        },
-    ];
-    listEmployee = [
-        {
-            employeeId: '1',
-            employeeName: 'Nguyễn Văn Tuấn',
-        },
-        {
-            employeeId: '2',
-            employeeName: 'Đặng Xuân Khu',
-        },
-        {
-            employeeId: '3',
-            employeeName: 'Hồ Tuấn Anh',
-        },
-    ];
-    listRoute = [
-        {
-            routeId: '1',
-            routeName: 'Nguyễn Văn Tuấn',
-        },
-        {
-            routeId: '2',
-            routeName: 'Đặng Xuân Khu',
-        },
-        {
-            routeId: '3',
-            routeName: 'Hồ Tuấn Anh',
-        },
-    ];
+    listCustomer: any = [];
+    listEmployee: any = [];
     constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
@@ -85,47 +45,18 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         this.id = localStorage.getItem('purchaseOrderId')!;
         // create Form
         this.detailOrderForm = this.fb.group({
-            orderCode: [''],
-            status: [''],
-            orderDate: [''],
-            deliveryDate: [''],
-            group: [''],
-            orderEmployee: [''],
-            route: [''],
-            customerCode: [''],
-            customerName: [''],
-            phone: [''],
-            address: [''],
-            description: [''],
-            listProduct: this.fb.group({
-                productCode: [''],
-                productName: [''],
-                unitName: [''],
-                warehouseName: [''],
-                quantity: [''],
-                unitPrice: [''],
-                totalPrice: [''],
-                discount: [''],
-                discountRate: [''],
-                note: [''],
+            orderCode: [null],
+            status: [null],
+            orderDate: [null],
+            deliveryDate: [null],
+            orderEmployee: [null],
+            customer: this.fb.group({
+                code: [null],
+                name: [null],
+                phone: [null],
+                address: [null],
             }),
-            listPromotionProduct: this.fb.group({
-                productCode: [''],
-                productName: [''],
-                unitName: [''],
-                warehouseName: [''],
-                quantity: [''],
-                note: [''],
-            }),
-            debtLimit: [''],
-            debtCurrent: [''],
-            paymentMethod: [''],
-            totalAmount: [''],
-            totalOfVAT: [''],
-            totalDiscountProduct: [''],
-            tradeDiscount: [''],
-            totalPayment: [''],
-            prePayment: [''],
+            description: [null],
         });
         // get type (Edit or View) from parent Component
         this.subscription.push(
@@ -144,13 +75,9 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     }
 
     getDetail() {
-        // this.purchaseOrder.getPurchaseDetail(this.id).subscribe((data) => {
-        //     this.detailOrderFakeData = data;
-        //     this.patchValue();
-        // });
         this.purchaseOrder.detail(this.id).subscribe((data) => {
             this.detailOrder = data;
-            console.log(data);
+            console.log(this.detailOrder);
             this.patchValue();
         });
     }
@@ -161,16 +88,17 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             status: this.detailOrder.status,
             orderDate: this.detailOrder.orderDate,
             deliveryDate: this.detailOrder.deliveryDate,
-            group: this.detailOrder.group?.id,
-            orderEmployee: this.detailOrder.orderEmployee?.id,
-            route: this.detailOrder.route?.id,
-            customerCode: this.detailOrder.customerCode,
-            customerName: this.detailOrder.customerName,
-            phone: this.detailOrder.phone,
-            address: this.detailOrder.address,
+            orderEmployee: this.detailOrder.orderEmployee?.id, // đang bị null
+            customer: {
+                code: this.detailOrder.customer?.id,
+                name: this.detailOrder.customer?.customerName,
+                phone: this.detailOrder.phone,
+                address: this.detailOrder.address,
+            },
             description: this.detailOrder.description,
         });
         this.listProduct = this.detailOrder.listProduct;
+        console.log(this.listProduct);
         this.listPromotionProduct = this.detailOrder.listPromotionProduct;
     }
 
@@ -182,6 +110,22 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     ngAfterViewInit(): void {
         this.getDetail();
+        this.getListCustomer();
+        this.getListEmployee();
+    }
+
+    getListCustomer() {
+        this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data: any) => {
+            this.listCustomer = data.data;
+            console.log(typeof this.listCustomer);
+            console.log(this.listCustomer);
+        });
+    }
+
+    getListEmployee() {
+        this.purchaseOrder.getAllEmployees(1, 1000).subscribe((data) => {
+            this.listEmployee = data.data;
+        });
     }
 
     ngDoCheck(): void {}
