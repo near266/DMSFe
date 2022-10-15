@@ -40,14 +40,7 @@ ngOnInit(): void {
         groupId: [null],
         orderEmployeeId: [null],
         warehouseId: [null],
-        customer: this.fb.group({
-            customerCode: [null],
-            customerId: [null],
-            customerName: [null],
-            phone: [null],
-            address: [null],
-        }),
-        routeId: [null],
+        customerId: [null],
         type: [null],
         status: [null],
         paymentMethod: [null],
@@ -63,9 +56,36 @@ ngOnInit(): void {
         archived: [null],
         createdBy: [null],
         createdDate: [null],
-        orderCode: [null],
+        returnCode: [null],
+        returnDate: [null],
         deliveryDate: [null],
         prePayment: [null],
+        listProduct: this.fb.group({
+          purchaseOrderId: [null],
+          productId: [null],
+          unitId: [null],
+          warehouseId: [null],
+          unitPrice: [null],
+          quantity: [null],
+          totalPrice: [null],
+          discount: [null],
+          discountRate: [null],
+          note: [null],
+          type: [null]
+        }),
+        listPromotionProduct: ({
+          purchaseOrderId: [null],
+          productId: [null],
+          unitId: [null],
+          warehouseId: [null],
+          unitPrice: [null],
+          quantity: [null],
+          totalPrice: [null],
+          discount: [null],
+          discountRate: [null],
+          note: [null],
+          type: [null]
+        })
     });
 }
 ngAfterViewInit(): void {
