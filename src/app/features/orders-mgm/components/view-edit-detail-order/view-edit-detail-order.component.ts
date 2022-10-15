@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, HostListener, DoCheck, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import * as moment from 'moment';
 import { map, Subscription } from 'rxjs';
 import { DetailPurchaseOrder } from 'src/app/core/data/PurchaseOrderList';
 import { PurchaseOrder, PurchaseOrderDetail } from 'src/app/core/model/PurchaseOrder';
@@ -21,6 +22,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     statusNow!: number;
     id!: string;
     subscription: Subscription[] = [];
+    detailOrder: any;
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
@@ -34,21 +36,9 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         this.type = 'View';
         this.changeType('View');
         this.id = localStorage.getItem('purchaseOrderId')!;
-        console.log(this.id);
     }
 
     ngAfterViewInit(): void {
-        // get id
-        // setTimeout(() => {
-        //     this.subscription.push(
-        //         this.purchaseOrder.id.subscribe((data) => {
-        //             this.id = data;
-        //             if (this.id) {
-        //                 this.getDetail();
-        //             }
-        //         }),
-        //     );
-        // }, 0);
         this.getDetail();
     }
 
@@ -59,6 +49,8 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     getDetail() {
         this.purchaseOrder.detail(this.id).subscribe((data) => {
             this.statusNow = data.status;
+            this.detailOrder = data;
+            console.log(this.detailOrder);
         });
     }
 
@@ -73,11 +65,35 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
 
     updateOrder(changeTo: number) {
         const body = {
+            purchaseOrderId: this.detailOrder.id,
+            orderDate: this.detailOrder.orderDate,
+            groupId: this.detailOrder.unit?.id,
+            orderEmployeeId: this.detailOrder.orderEmployee?.id,
+            warehouseId: this.detailOrder.warehouse?.id,
+            customerId: this.detailOrder.customer?.id,
+            routeId: this.detailOrder.route?.id,
+            type: this.detailOrder.type,
             status: changeTo,
+            paymentMethod: 0,
+            description: this.detailOrder.description,
+            phone: this.detailOrder.phone,
+            address: this.detailOrder.address,
+            customerName: this.detailOrder.customerName,
+            totalAmount: this.detailOrder.totalAmount,
+            totalOfVAT: this.detailOrder.totalOfVAT,
+            totalDiscountProduct: this.detailOrder.totalDiscountProduct,
+            tradeDiscount: this.detailOrder.tradeDiscount,
+            totalPayment: this.detailOrder.totalPayment,
+            archived: false,
+            // lastModifiedBy: 'string',
+            lastModifiedDate: moment(Date.now()).format('YYYY-MM-DD'),
+            orderCode: this.detailOrder.orderCode,
+            deliveryDate: this.detailOrder.deliveryDate,
+            prePayment: this.detailOrder.prePayment,
         };
         // Chuyển sang trạng thái đã duyệt
         if (changeTo === 2) {
-            this.purchaseOrder.updateStatusPurchaseDetail(body, this.id).subscribe(
+            this.purchaseOrder.update(body).subscribe(
                 (data) => {},
                 (err) => {},
                 () => {
@@ -99,7 +115,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
             });
             dialogRef.afterClosed().subscribe((data) => {
                 if (data === 'Lưu') {
-                    this.purchaseOrder.updateStatusPurchaseDetail(body, this.id).subscribe(
+                    this.purchaseOrder.update(body).subscribe(
                         (data) => {},
                         (err) => {},
                         () => {
@@ -180,23 +196,28 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         };
     }
 
-    delete() {
+    archive() {
         let dialogRef = this.dialog.open(ConfirmDialogComponent, {
             data: {
-                content: 'Bạn có chắc chắn muốn xóa bản ghi này không',
-                action: ['Xóa', 'Hủy'],
+                content: 'Bạn có chắc chắn muốn lưu trữ bản ghi này không',
+                action: ['Lưu trữ', 'Hủy'],
             },
         });
         dialogRef.afterClosed().subscribe((data) => {
-            if (data === 'Xóa') {
-                this.purchaseOrder.deletePurchase(this.id).subscribe(
+            if (data === 'Lưu trữ') {
+                let body = {
+                    id: this.id,
+                };
+                this.purchaseOrder.archive(body).subscribe(
                     (data) => {},
                     (err) => {
                         this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
                     },
                     () => {
-                        this.snackbar.openSnackbar('Xóa thành công', 100000, 'Đóng', 'center', 'bottom', true);
-                        this.router.navigate(['/orders']);
+                        this.snackbar.openSnackbar('Lưu trữ thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                        setTimeout(() => {
+                            this.router.navigate(['/orders']);
+                        }, 1000);
                     },
                 );
             } else {
