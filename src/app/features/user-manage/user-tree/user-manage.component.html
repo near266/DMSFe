@@ -57,14 +57,17 @@
                     <tbody>
                         <tr class="h-14 w-fit text-xs" *ngFor="let user of users | paginate: { itemsPerPage: pageSize, currentPage: page }; let o=odd; let e=even;"
                             [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                            <td class="w-10 border-x border-solid align-middle px-2"><input type="checkbox">
+                            <td class="w-10 h-14 flex flex-row border-x border-solid align-middle px-2">
+                                <input type="checkbox" class="mx-1">
+                                <i class=""></i>
                             </td>
                             <td class="border-x border-solid align-middle px-2">
                                 <img class="h-10" [src]="user.avatar">
                             </td>
                             <td class="border-x w-fit border-solid align-middle px-2">
-                                <span *ngIf="user.status">Hoạt động</span>
-                                <span *ngIf="!user.status">Khóa tài khoản</span>
+                                Hoạt động
+                                <!-- <span *ngIf="user.status">Hoạt động</span>
+                                <span *ngIf="!user.status">Khóa tài khoản</span> -->
                             </td>
                             <td class="border-x w-fit border-solid align-middle px-2">{{user.email}}
                             </td>

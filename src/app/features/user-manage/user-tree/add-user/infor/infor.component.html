@@ -68,39 +68,31 @@
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Trạng thái</div>
-        <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'"
-            formControlName="status">
-            <option [value]="true">Hoạt động</option>
-            <option [value]="false">Khóa tài khoản</option>
-        </select>
-        <div class="w-96 text-xs" *ngIf="status == 'view'">
-            <span *ngIf="employee.value.status">Hoạt động</span>
-            <span *ngIf="!employee.value.status">Khóa tài khoản</span>
-        </div>
+        <div class="w-96 text-xs" *ngIf="status == 'view'">Hoạt động</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Version Mobile
             <i class="fa-solid fa-circle-question"></i>
         </div>
         <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" disabled
-            *ngIf="status != 'view'">
-        <div class="w-96 text-xs" *ngIf="status == 'view'"></div>
+            *ngIf="status != 'view'" [value]="employee.value?.versionMobile || null">
+        <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value?.versionMobile}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Thời gian online cuối
             <i class="fa-solid fa-circle-question"></i>
         </div>
         <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" disabled
-            *ngIf="status != 'view'">
-        <div class="w-96 text-xs" *ngIf="status == 'view'"></div>
+            *ngIf="status != 'view'" [value]="employee.value?.lastSeenDate || null">
+        <div class="w-96 text-xs" *ngIf="status == 'view'">{{datePipe.transform(employee.value?.lastSeenDate,'dd-MM-YYYY')}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Thời gian đồng bộ cuối
             <i class="fa-solid fa-circle-question"></i>
         </div>
         <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" disabled
-            *ngIf="status != 'view'">
-        <div class="w-96 text-xs" *ngIf="status == 'view'"></div>
+            *ngIf="status != 'view'" [value]="employee.value?.lastSyncDate || null">
+        <div class="w-96 text-xs" *ngIf="status == 'view'">{{datePipe.transform(employee.value?.lastSyncDate,'dd-MM-YYYY')}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Số điện thoại</div>

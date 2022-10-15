@@ -27,14 +27,14 @@ export class InforComponent implements OnInit, OnDestroy {
   entranceDate = {
     date: 1,
     month: 1,
-    year: 1,
+    year: 2021,
     ISOS: new Date()
   }
 
   exitDate = {
     date: 1,
     month: 1,
-    year: 1,
+    year: 2022,
     ISOS: new Date()
   }
   @Input() status: any
