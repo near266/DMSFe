@@ -86,8 +86,10 @@ export class PurchaseOrderService {
         return this.http.put(this.api_gateway_url + '/PurchaseOrder/update', body).pipe(map((reponse: any) => reponse));
     }
 
-    create(body: any): Observable<any> {
-        return this.http.post(this.api_gateway_url + '/PurchaseOrder/add', body).pipe(map((reponse: any) => reponse));
+    createOrder(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/PurchaseOrder/add', body, { responseType: 'text' })
+            .pipe(map((reponse: any) => reponse));
     }
 
     // customer

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, DoCheck } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -13,7 +13,7 @@ import { ProductListComponent } from '../product-list/product-list.component';
     templateUrl: './create-purchase-order.component.html',
     styleUrls: ['./create-purchase-order.component.scss'],
 })
-export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit {
+export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCheck {
     statusList = [
         {
             value: 1,
@@ -29,6 +29,9 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit {
     listCustomer: any;
     listChoosenProduct: any = [];
     listEmployee: any = [];
+    unitPrices: any = [];
+    quantities: any = [];
+    quantity: any = 0;
     constructor(
         private dataService: DataService,
         private dialog: MatDialog,
@@ -89,6 +92,13 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit {
             this.listEmployee = data.data;
         });
     }
+    ngDoCheck(): void {}
+    countTotal() {
+        this.quantity = 0;
+        for (let index = 0; index < this.quantities.length; index++) {
+            this.quantity += this.quantities[index];
+        }
+    }
     stopPropagation(e: any) {
         e.stopPropagation();
     }
@@ -114,11 +124,11 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit {
         const body = {
             orderDate: moment(this.createForm.get('orderDate')?.value).format('YYYY-MM-DD'),
             // groupId: this.createForm.get('groupId')?.value, // Chưa có api get
-            // orderEmployeeId: this.createForm.get('orderEmployeeId')?.value,
+            orderEmployeeId: this.createForm.get('orderEmployeeId')?.value,
             // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             customerId: this.createForm.get('customer.customerId')?.value,
             // routeId: null, // Chưa có API
-            // type: 0,
+            type: 0,
             status: this.createForm.get('status')?.value,
             paymentMethod: 0,
             description: this.createForm.get('description')?.value,
@@ -167,12 +177,14 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit {
             //     },
             // ],
         };
-        this.purchaseOrder.create(body).subscribe(
+        this.purchaseOrder.createOrder(body).subscribe(
             (data) => {},
             (err) => {
+                console.log(err);
                 this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
             },
             () => {
+                console.log('Sucesss');
                 this.snackbar.openSnackbar('Tạo mới đơn đặt hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
                 this.router.navigate(['/orders']);
             },
@@ -206,5 +218,20 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit {
         this.listChoosenProduct = this.listChoosenProduct.filter((product: any) => {
             return product != productRemove;
         });
+    }
+
+    selectUnit(value: any, product: any, i: any) {
+        // if (value.type === 'retail') {
+        //     this.unitPrices[i] = product.reatailPrice;
+        // } else if (value.type === 'whosale') {
+        //     this.unitPrices[i] = product.price;
+        // }
+        product.type = value.type;
+    }
+
+    selectWholeSaleUnit(value: any, product: any) {}
+
+    selectWareHouse(value: any) {
+        console.log(value);
     }
 }

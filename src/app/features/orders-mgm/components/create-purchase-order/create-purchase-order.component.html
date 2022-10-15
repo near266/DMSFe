@@ -169,9 +169,9 @@
                                 <th scope="col" class="custom-th">Tên sản phẩm</th>
                                 <th scope="col" class="custom-th">ĐVT</th>
                                 <th scope="col" class="custom-th">Kho xuất</th>
-                                <th scope="col" class="custom-th">
-                                    Số lượng
-                                    <span class="text-red-500">(Tổng: 0)</span>
+                                <th scope="col" class="custom-th flex flex-col">
+                                    <span>Số lượng</span>
+                                    <span class="text-red-500">(Tổng: {{ quantity }})</span>
                                 </th>
                                 <th scope="col" class="custom-th">Đơn giá</th>
                                 <th scope="col" class="custom-th">Thành tiền</th>
@@ -184,19 +184,59 @@
                         <tbody>
                             <tr *ngFor="let product of listChoosenProduct; index as i" class="custom-tr">
                                 <td class="custom-th">{{ i + 1 }}</td>
-                                <td class="custom-th">{{ product.productCode }}</td>
+                                <td class="custom-th">{{ product.sku }}</td>
                                 <td class="custom-th">{{ product.productName }}</td>
-                                <td class="custom-th">Select</td>
-                                <td class="custom-th">Select</td>
                                 <td class="custom-th">
-                                    <mat-form-field appearance="outline" style="width: 120px" floatLabel="always">
-                                        <input type="text" matInput />
+                                    <mat-form-field
+                                        *ngIf="product.unit && product.wholeSaleUnit"
+                                        appearance="outline"
+                                        floatLabel="always"
+                                        style="width: 80px">
+                                        <mat-select (selectionChange)="selectUnit($event.value, product, i)">
+                                            <mat-option
+                                                *ngIf="product.unit"
+                                                [value]="{ id: product.unit.id, type: 'retail' }">
+                                                Lẻ - {{ product.unit.unitName || 'No Data' }}
+                                            </mat-option>
+                                            <mat-option
+                                                *ngIf="product.wholeSaleUnit"
+                                                [value]="{ id: product.wholeSaleUnit.id, type: 'whosale' }">
+                                                Chẵn - {{ product.wholeSaleUnit.unitName || 'No Data' }}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </td>
-                                <td class="custom-th">View ra khi select ĐVT (chẵn hay lẻ)</td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" floatLabel="always" style="width: 80px">
+                                        <mat-select (selectionChange)="selectWareHouse($event.value)">
+                                            <mat-option>1</mat-option>
+                                            <mat-option>1</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                                        <input
+                                            min="0"
+                                            type="number"
+                                            (input)="countTotal()"
+                                            matInput
+                                            [(ngModel)]="quantities[i]"
+                                            [ngModelOptions]="{ standalone: true }" />
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">
+                                    <!-- {{ (unitPrices[i] | currency: 'VND') || 'Chưa có đơn giá' }} -->
+                                    <span *ngIf="product.type === 'retail'">
+                                        {{ (product.retailPrice | currency: 'VND') || 'Chưa có đơn giá' }}
+                                    </span>
+                                    <span *ngIf="product.type === 'whosale'">
+                                        {{ (product.price | currency: 'VND') || 'Chưa có đơn giá' }}
+                                    </span>
+                                </td>
                                 <td class="custom-th">Tính sau khi có 2 cột đơn giá và số lượng</td>
                                 <td class="custom-th">
-                                    <mat-form-field appearance="outline" floatLabel="always" style="width: 120px">
+                                    <mat-form-field appearance="outline" floatLabel="always" style="width: 80px">
                                         <input type="text" matInput />
                                     </mat-form-field>
                                 </td>
