@@ -18,7 +18,7 @@
           type="checkbox"><i *ngIf="product.status" class="fa-solid fa-lock text-base text-[#2e799c]"></i><i
           *ngIf="!product?.status" class="fa-solid fa-lock-open text-base text-[#2e799c]"></i>
       </td>
-      <td class="border-x  border-solid align-middle px-2">{{i}}
+      <td class="border-x  border-solid align-middle px-2">{{i+1}}
       </td>
       <td class="border-x  border-solid align-middle px-2">{{product.brand?.brandName}}
       </td>
@@ -26,8 +26,8 @@
       <td class="border-x  border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer">
         {{product.productName}} </td>
       <td class="border-x  border-solid align-middle px-2">{{product.unit?.unitName}} </td>
-      <td class="border-x  border-solid align-middle px-2">{{product.retailPrice}}</td>
-      <td class="border-x  border-solid align-middle px-2">{{product.vat}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.retailPrice | currency:'VND'}}</td>
+      <td class="border-x  border-solid align-middle px-2">{{(product.vat || 0)/100 | percent}} </td>
       <td class="border-x  border-solid align-middle px-2">{{product.discountAcc}}</td>
       <td class="border-x  border-solid align-middle px-2">{{product.warehouse?.warehouseName}}</td>
       <td class="border-x  border-solid align-middle px-2"> {{product.warehouseAcc}} </td>

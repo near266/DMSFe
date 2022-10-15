@@ -7,8 +7,8 @@
         margin-top: 64px;
     }
 }
-@layer componenst {
+@layer components {
     .mat-drawer:not(.mat-drawer-side) {
         @apply shadow-none #{!important};
     }
-} ;
+}

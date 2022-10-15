@@ -1,0 +1,7 @@
+<div mat-dialog-content class="font-medium">
+  <p class="text-lg p-2">{{data.message}}</p>
+</div>
+<div mat-dialog-actions class="text-white ml-2">
+  <button mat-button type="button" class="confirm-button" [mat-dialog-close]="'okaybaby'">{{data.confirm}}</button>
+  <button mat-button type="button" class="close-button" (click)="onNoClick()" cdkFocusInitial>{{data.cancel}}</button>
+</div>
