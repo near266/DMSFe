@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
@@ -28,6 +29,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
     page = 1;
     pageSize = 30;
+    totalPage = 0;
+    pageList: number[] = [];
 
     statusMenu: Config = {
         icon: '<i class="fa-solid fa-flag"></i>',
@@ -85,6 +88,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         private dialog: MatDialog,
         private customerService: CustomerService,
         private snackbar: SnackbarService,
+        private datePipe: DatePipe,
     ) {}
 
     ngOnInit(): void {
@@ -92,25 +96,38 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        const body = {
-            keyword: '',
-            page: this.page,
-            pageSize: this.pageSize,
-        };
-        this.customerService.search(body).subscribe(
-            (data) => {
-                this.response = data;
-                console.log(this.response.data);
-                this.response.data.forEach((element) => {
-                    if (element.status == true) element.status = 'Hoạt động';
-                    else if (element.status == false) element.status = 'Không hoạt động';
-                });
-            },
-            (error) => {
-                this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
-            },
-        );
+      this.init(this.page, this.pageSize);
     }
+
+  init(page: number, pageSize: number) {
+    const body = {
+      keyword: '',
+      page: page,
+      pageSize: pageSize,
+    };
+    this.customerService.search(body).subscribe(
+        (data) => {
+            this.response = data;
+            this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
+            if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
+            this.pageList = [];
+            for(let i = 1; i <= this.totalPage; i++) {
+              this.pageList.push(i);
+            }
+            this.response.data.forEach((element) => {
+                if (element.status == true) element.status = 'Hoạt động';
+                else if (element.status == false) element.status = 'Không hoạt động';
+                else element.status = 'Không hoạt động';
+                if(element.dob) {
+                  element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
+                }
+            });
+        },
+        (error) => {
+            this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
+        },
+    );
+  }
 
   add() {
     const dialogRef = this.dialog.open(AddCustomerComponent, {
@@ -119,41 +136,22 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        const body = {
-          keyword: '',
-          page: this.page,
-          pageSize: this.pageSize
-        };
-        this.customerService.search(body).subscribe(data => {
-          this.response = data;
-          console.log(this.response.data);
-          this.response.data.forEach(element => {
-            if(element.status == true) element.status = 'Hoạt động';
-            else if(element.status == false) element.status = 'Không hoạt động';
-          });
-        }, (error) => {
-            this.snackbar.openSnackbar(
-              error,
-              2000,
-              'Đóng',
-              'center',
-              'bottom',
-              true,
-            );
-        });
+        this.init(this.page, this.pageSize);
       }
     });
   }
 
   DetailCustomer(id: any) {
-    this.dialog.open(DetailCustomerComponent, {
+    const dialogRef = this.dialog.open(DetailCustomerComponent, {
       height: '100vh',
       minWidth: '1100px',
-      data: {
-        id: id,
-        status: 'view'
-      }
+      data: {id: id}
     })
+    dialogRef.afterClosed().subscribe(data => {
+      if(data) {
+        this.init(this.page, this.pageSize);
+      }
+    });
   }
 
   closeSideBar() {
@@ -222,4 +220,5 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   selection(e: any) {
       console.log(e);
   }
+
 }

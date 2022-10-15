@@ -1,0 +1,78 @@
+<form>
+    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+        <div class="font-bold">Mã tuyến</div>
+        <div class="flex flex-row">
+            <div class="text-red-500 mr-4">*</div>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'"
+                formControlName="email">
+            <div class="w-96 text-xs" *ngIf="status == 'view'">.email}}</div>
+        </div>
+    </div>
+    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+        <div class="font-bold">Tên tuyến</div>
+        <div class="flex flex-row">
+            <div class="text-red-500 mr-4">*</div>
+            <input formControlName="employeeCode"
+                class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'">
+            <div class="w-96 text-xs" *ngIf="status == 'view'">.employeeCode}}</div>
+        </div>
+    </div>
+    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+        <div class="font-bold">Nhóm</div>
+        <div class="flex flex-row">
+            <div class="text-red-500 mr-4">*</div>
+            <input formControlName="employeeName"
+                class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'">
+            <div class="w-96 text-xs" *ngIf="status == 'view'">.employeeName}}</div>
+        </div>
+    </div>
+    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+        <div class="font-bold">Nhân viên</div>
+        <div class="flex flex-row">
+            <div class="text-red-500 mr-4">*</div>
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" formControlName="employeeTitle"
+                *ngIf="status != 'view'">
+                <option value="emp">Nhân viên</option>
+            </select>
+            <div class="w-96 text-xs" *ngIf="status == 'view'">.employeeTitle}}</div>
+        </div>
+    </div>
+    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+        <div class="font-bold">Ngày đi tuyến</div>
+        <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'"
+            formControlName="langKey">
+            <option value="vn">Không giới hạn</option>
+            <option value="2">Thứ 2</option>
+            <option value="3">Thứ 3</option>
+            <option value="4">Thứ 4</option>
+            <option value="5">Thứ 5</option>
+            <option value="6">Thứ 6</option>
+            <option value="7">Thứ 7</option>
+            <option value="cn">Chủ nhật</option>
+        </select>
+        <div class="w-96 text-xs" *ngIf="status == 'view'">.langKey}}</div>
+    </div>
+    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+        <div class="font-bold">Ngày bắt đầu</div>
+        <input formControlName="phone" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" type="date"
+            *ngIf="status != 'view'">
+        <div class="w-96 text-xs" *ngIf="status == 'view'">.phone}}</div>
+    </div>
+    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+        <div class="font-bold">Trạng thái</div>
+        <div class="flex flex-row">
+            <div class="text-red-500 mr-4">*</div>
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" formControlName="employeeTitle"
+                *ngIf="status != 'view'">
+                <option value="ceo">Hoạt động</option>
+            </select>
+            <div class="w-96 text-xs" *ngIf="status == 'view'">.employeeTitle}}</div>
+        </div>
+    </div>
+    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+        <div class="font-bold">Danh sách khách hàng</div>
+        <input formControlName="department" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+            *ngIf="status != 'view'" placeholder="Tìm kiếm khách hàng">
+        <div class="w-96 text-xs" *ngIf="status == 'view'">.department}}</div>
+    </div>
+</form>
