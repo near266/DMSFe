@@ -68,7 +68,15 @@
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Trạng thái</div>
-        <div class="w-96 text-xs">Hoạt động</div>
+        <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'"
+            formControlName="status">
+            <option [value]="true">Hoạt động</option>
+            <option [value]="false">Khóa tài khoản</option>
+        </select>
+        <div class="w-96 text-xs" *ngIf="status == 'view'">
+            <span *ngIf="employee.value.status">Hoạt động</span>
+            <span *ngIf="!employee.value.status">Khóa tài khoản</span>
+        </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Version Mobile

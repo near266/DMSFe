@@ -47,4 +47,11 @@ export class EmployeeService {
       )
   }
 
+  ArchiveEmployee(id: any, LastModifiedBy: any, LastModifiedDate: any): Observable<any> {
+    return this.http.post(gateway_url + '/Employee/ArchivedEmployee?Id=' + id + '&Archived=' + true , {})
+      .pipe(
+        map((response: any) => response)
+      )
+  }
+
 }

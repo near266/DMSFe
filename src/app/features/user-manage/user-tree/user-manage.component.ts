@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { DataService } from 'src/app/core/services/data.service';
 import { EmployeeService } from 'src/app/core/services/employee.service';
@@ -27,14 +27,16 @@ export class UserManageComponent implements OnInit {
     totalPage: number
     totalCount: number
 
+    dia?: any
+
     AddUser() {
-        this.dialog.open(AddUserComponent, {
+        this.dia = this.dialog.open(AddUserComponent, {
             height: '100vh',
             minWidth: '900px',
         });
     }
     DetailUser(id: any) {
-        let dia = this.dialog.open(DetailUserComponent, {
+        this.dia = this.dialog.open(DetailUserComponent, {
             height: '100vh',
             minWidth: '900px',
             data: {
@@ -133,6 +135,12 @@ export class UserManageComponent implements OnInit {
     ngOnInit(): void {
         this.title.setTitle('Cây đơn vị - DMS:Delap');
         this.GetListAll()
+        this.dataService.employee.subscribe(data => {
+            if (data == 'success') {
+                this.GetListAll()
+                this.dia.close()
+            }
+        })
     }
     listMenuObj = [
         {

@@ -44,7 +44,7 @@ export class InforComponent implements OnInit, OnDestroy {
   employee = new FormGroup({
     id: new FormControl(),
     status: new FormControl(true),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email, Validators.minLength(5)]),
     employeeCode: new FormControl('', Validators.required),
     employeeName: new FormControl('', Validators.required),
     password: new FormControl('', [Validators.required]),
@@ -65,7 +65,7 @@ export class InforComponent implements OnInit, OnDestroy {
   })
   ngOnInit(): void {
     if (this.status == 'view' || this.status == 'edit') {
-      let sub = this.employeeService.DetailEmployee(this.id).subscribe(data => {
+      let sub1 = this.employeeService.DetailEmployee(this.id).subscribe(data => {
         this.employee.patchValue({
           id: data.id,
           status: data.status,
@@ -102,6 +102,7 @@ export class InforComponent implements OnInit, OnDestroy {
         this.exitDate.date = this.exitDate.ISOS.getDate()
         this.exitDate.month = this.exitDate.ISOS.getMonth() + 1
         this.exitDate.year = this.exitDate.ISOS.getFullYear()
+        sub1.unsubscribe()
       })
     }
     this.sub = this.dataService.employee.subscribe(data => {
@@ -119,39 +120,50 @@ export class InforComponent implements OnInit, OnDestroy {
 
             this.employee.value.login = this.employee.value.email
 
-            this.employeeService.AddEmployee(this.employee.value).subscribe(data => {
+            let sub5 = this.employeeService.AddEmployee(this.employee.value).subscribe(data => {
               this.snackbar.openSnackbar('Tạo thành công', 5000, 'Đóng', 'center', 'bottom', true);
+              this.dataService.changeEmployee('success')
+              sub5.unsubscribe()
             },
               () => {
                 this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
+                this.dataService.changeEmployee('failed')
+                sub5.unsubscribe()
               })
           }
+          this.dataService.changeEmployee('')
         }
         if (data == 'update') {
           this.employee.removeControl('password')
           this.employee.removeControl('login')
           this.employee.removeControl('authorities')
           if (this.employee.valid) {
-            let sub = this.employeeService.UpdateEmployee(this.employee.value).subscribe(data => {
+            let sub3 = this.employeeService.UpdateEmployee(this.employee.value).subscribe(data => {
               this.snackbar.openSnackbar('Sửa thành công', 5000, 'Đóng', 'center', 'bottom', true);
-              sub.unsubscribe()
+              this.dataService.changeEmployee('success')
+              sub3.unsubscribe()
             },
               () => {
                 this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
-                sub.unsubscribe()
+                this.dataService.changeEmployee('failed')
+                sub3.unsubscribe()
               })
           }
+          this.dataService.changeEmployee('')
         }
       }
       if (data == 'delete') {
-        let sub = this.employeeService.DeleteEmployee(this.employee.value.id).subscribe(data => {
+        let sub4 = this.employeeService.ArchiveEmployee(this.employee.value.id, this.employee.value.lastModifiedBy, this.employee.value.lastModifiedDate).subscribe(data => {
           this.snackbar.openSnackbar('Đã xóa', 5000, 'Đóng', 'center', 'bottom', true);
           this.event.emit('delete')
-          sub.unsubscribe()
+          this.dataService.changeEmployee('success')
+          sub4.unsubscribe()
         },
           () => {
             this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
-            sub.unsubscribe()
+            this.event.emit('delete')
+            this.dataService.changeEmployee('failed')
+            sub4.unsubscribe()
           })
       }
     })
