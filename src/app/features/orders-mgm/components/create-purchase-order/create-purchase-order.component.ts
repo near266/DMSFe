@@ -125,7 +125,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         let lastListChoosen = this.listChoosenProduct.map((product: any) => {
             return {
                 productId: product.id,
-                // productName: product.id,
+                productName: product.productName,
                 unitId: product.unitId,
                 warehouseId: product.warehouseId,
                 unitPrice: product.unitPrice,
