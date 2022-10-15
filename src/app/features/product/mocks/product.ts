@@ -5,11 +5,11 @@ const products: Product[] = [];
 
 for (let i = 0; i < 100; i++) {
     products.push({
-        locked: faker.datatype.boolean(),
-        unitId: faker.helpers.arrayElement(['Hộp', 'Tuýt', 'Lọ', 'Chai', undefined]),
+        status: faker.datatype.boolean(),
+        retailUnitId: faker.helpers.arrayElement(['Hộp', 'Tuýt', 'Lọ', 'Chai', undefined]),
         retailPrice: faker.datatype.float({ min: 1000, max: 100000000000, precision: 2 }),
-        SKU: faker.random.locale().toUpperCase() + faker.commerce.price(100, 10000, 0),
-        VAT: faker.helpers.arrayElement([5, 10, undefined]),
+        sku: faker.random.locale().toUpperCase() + faker.commerce.price(100, 10000, 0),
+        vat: faker.helpers.arrayElement([5, 10, null]),
         discountAcc: faker.commerce.price(1000, 10000, 0),
         warehouseID: faker.address.city(),
         brandId: faker.company.name(),

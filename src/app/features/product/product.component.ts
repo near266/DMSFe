@@ -35,9 +35,7 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit {
     }
     ngAfterViewInit(): void {
         this.sidenavService.setSideNav(this.sidenav);
-        this.router.events.subscribe((e) => {
-            this.sidenavService.close();
-        });
+        this.router.events.subscribe((e) => {});
     }
     ngDoCheck(): void {}
     select(event: any) {

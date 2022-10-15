@@ -1,6 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, NgForm } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import { Subscription } from 'rxjs';
+import { ProductApiService } from '../../../apis/product.api.service';
 import companies from '../../../mocks/companies';
 import status from '../../../mocks/status';
 import { Product } from '../../../models/product';
@@ -12,17 +15,45 @@ import { ProductDialogService } from '../../../services/product-dialog.service';
     styleUrls: ['./add-product-details.component.scss'],
 })
 export class AddProductDetailsComponent implements OnInit {
+    @ViewChild('myForm') myForm: NgForm;
+    @ViewChild('submitButton') submitButton: ElementRef;
+
     @Input() productModel: Product | null;
     @Input() status: string;
-    @Input() toggleEdit: boolean = false;
+    @Input() dialogMode: 'create' | 'edit' | 'view' = 'create';
     form = new FormGroup({});
-
-    model = {};
+    subscription = new Subscription();
+    subscription2 = new Subscription();
+    model = {
+        id: null,
+        brandId: null,
+        conversionNumber: 0,
+        image: null,
+        importPrice: 0,
+        importRetailPrice: 0,
+        inventoryWarning: 0,
+        price: 0,
+        priceAcc: null,
+        productDescription: null,
+        productName: null,
+        retailPrice: 0,
+        revenueAcc: null,
+        sectorId: null,
+        sku: null,
+        status: null,
+        supplierId: null,
+        unitId: null,
+        vat: 0,
+        warehouseAcc: null,
+    };
     brands = companies;
     statusList = status;
     img: any;
     avt?: any = '../../../../../../assets/images/female.png';
     fields: FormlyFieldConfig[] = [
+        {
+            key: 'id',
+        },
         {
             key: 'status',
             type: 'product-select',
@@ -32,43 +63,25 @@ export class AddProductDetailsComponent implements OnInit {
                 required: true,
                 options: status,
             },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel && !this.toggleEdit,
-            },
         },
         {
-            key: 'index',
-            type: 'product-input',
-            templateOptions: {
-                label: 'Số thứ tự',
-                placeholder: 'Nhập số thứ tự',
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
-            },
-        },
-        {
-            key: 'brandID',
+            key: 'brandId',
             type: 'product-select',
+            defaultValue: null,
 
             templateOptions: {
                 label: 'Nhãn hiệu',
-                options: companies,
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
+                options: this.productDialogService.getAllBrands(),
             },
         },
         {
-            key: 'SKU',
+            key: 'sku',
             type: 'product-input',
             templateOptions: {
                 label: 'Mã sản phẩm',
                 placeholder: 'Nhập mã sản phẩm',
             },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
-            },
+
             hooks: {
                 onInit: (field: FormlyFieldConfig) => {
                     field.formControl?.valueChanges.subscribe((value) => {
@@ -85,53 +98,42 @@ export class AddProductDetailsComponent implements OnInit {
                 placeholder: 'Nhập tên sản phẩm',
                 required: true,
             },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
-            },
         },
         {
-            key: 'sectorId',
+            key: 'majorId',
+            defaultValue: null,
             type: 'product-select',
             templateOptions: {
                 label: 'Ngành hàng',
-                options: companies,
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
+                options: this.productDialogService.getAllMajors(),
             },
         },
         {
             key: 'supplierId',
             type: 'product-select',
+            defaultValue: null,
             templateOptions: {
                 label: 'Nhà cung cấp',
                 required: true,
-                options: companies,
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
+                options: this.productDialogService.getAllSuppliers(),
             },
         },
         {
-            key: 'unitId',
+            key: 'wholeSaleUnitId',
             type: 'product-select',
+            defaultValue: null,
             templateOptions: {
                 label: 'ĐVT chẵn',
-                options: companies,
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
+                options: this.productDialogService.getAllUnits(),
             },
         },
         {
-            key: 'unitId2',
+            key: 'retailUnitId',
             type: 'product-select',
+            defaultValue: null,
             templateOptions: {
                 label: 'ĐVT lẻ',
-                options: companies,
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
+                options: this.productDialogService.getAllUnits(),
             },
         },
         {
@@ -141,9 +143,6 @@ export class AddProductDetailsComponent implements OnInit {
                 label: 'Hệ số quy đổi',
                 placeholder: 'Nhập hệ số',
             },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
-            },
         },
         {
             key: 'inventoryWarning',
@@ -151,9 +150,6 @@ export class AddProductDetailsComponent implements OnInit {
             templateOptions: {
                 label: 'Cảnh báo tồn kho',
                 placeholder: 'Nhập số ',
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
             },
         },
         {
@@ -163,19 +159,14 @@ export class AddProductDetailsComponent implements OnInit {
                 label: 'Giá nhập',
                 placeholder: 'Nhập giá',
             },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
-            },
         },
         {
             key: 'importRetailPrice',
             type: 'product-input',
+
             templateOptions: {
                 label: 'Giá nhập lẻ',
                 placeholder: 'Nhập giá',
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
             },
         },
         {
@@ -185,9 +176,6 @@ export class AddProductDetailsComponent implements OnInit {
                 label: 'Giá',
                 placeholder: 'Nhập giá',
             },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
-            },
         },
         {
             key: 'retailPrice',
@@ -196,22 +184,18 @@ export class AddProductDetailsComponent implements OnInit {
                 label: 'Giá bán lẻ',
                 placeholder: 'Nhập giá',
             },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
-            },
         },
         {
-            key: 'VAT',
+            key: 'vat',
             type: 'product-select',
+            defaultValue: null,
+
             templateOptions: {
                 label: 'Thuế VAT',
                 options: [
-                    { value: '5', label: '5%' },
-                    { value: '10', label: '10%' },
+                    { value: 5, label: '5%' },
+                    { value: 10, label: '10%' },
                 ],
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
             },
         },
         {
@@ -221,19 +205,14 @@ export class AddProductDetailsComponent implements OnInit {
                 label: 'Hình ảnh',
                 placeholder: 'Nhập link hình ảnh',
             },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
-            },
         },
         {
             key: 'productDescription',
-            type: 'product-input',
+            type: 'product-textarea',
             templateOptions: {
+                type: 'textarea',
                 label: 'Mô tả',
                 placeholder: 'Nhập mô tả',
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
             },
         },
         {
@@ -243,19 +222,13 @@ export class AddProductDetailsComponent implements OnInit {
                 label: 'Tài khoản doanh thu',
                 placeholder: 'Nhập tài khoản',
             },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
-            },
         },
         {
-            key: 'warehouseAcc',
-            type: 'product-input',
+            key: 'warehouseID',
+            type: 'product-select',
             templateOptions: {
                 label: 'Tài khoản kho',
-                placeholder: 'Nhập tài khoản',
-            },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
+                options: this.productDialogService.getAllWarehouses(),
             },
         },
         {
@@ -265,22 +238,64 @@ export class AddProductDetailsComponent implements OnInit {
                 label: 'Tài khoản giá vốn',
                 placeholder: 'Nhập tài khoản',
             },
-            expressionProperties: {
-                'templateOptions.disabled': () => !!this.productModel,
-            },
         },
     ];
 
-    onSubmit(model: any) {
-        console.log(model);
+    onSubmit(product: Product) {
+        console.log(product);
+        if (!this.form.invalid) {
+            if (!product.id) {
+                delete product.id;
+                this.productApiService.postProduct(product).subscribe({
+                    next: (res) => {
+                        this.dialogRef.closeAll();
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+            } else {
+                product.unitId = product.retailUnitId;
+                delete product.retailUnitId;
+                this.productApiService.updateProduct(product).subscribe({
+                    next: (res) => {
+                        console.log(product);
+                        this.dialogRef.closeAll();
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+            }
+        }
     }
-    constructor(private productDialogService: ProductDialogService) {}
+    constructor(
+        private productDialogService: ProductDialogService,
+        private dialogRef: MatDialog,
+        private productApiService: ProductApiService,
+    ) {}
 
     ngOnInit(): void {
         this.productDialogService.changeHeader('');
-        if (this.productModel) {
-            this.productDialogService.changeHeader(this.productModel.SKU || '');
-        }
+        setTimeout(() => {
+            if (this.productModel) {
+                this.form.patchValue(this.productModel || {});
+                this.productDialogService.changeHeader(this.productModel.sku || '');
+                this.form.disable();
+            }
+        }, 0);
+        this.subscription = this.productDialogService.submitForm$.subscribe(() => {
+            this.submitButton.nativeElement.click();
+        });
+        this.subscription2 = this.productDialogService.toggleEdit$.subscribe((value: boolean) => {
+            if (value) {
+                this.form.enable();
+            }
+        });
+    }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+        this.subscription2.unsubscribe();
     }
     uploadFile($event: any) {
         let file = $event.target.files;
@@ -300,4 +315,5 @@ export class AddProductDetailsComponent implements OnInit {
     deleteImage() {
         this.avt = '../../../../../../assets/images/female.png';
     }
+    manualSubmit() {}
 }

@@ -1,4 +1,4 @@
 export default [
-    { label: 'Đang hoạt động', value: 'active' },
-    { label: 'Khoá', value: 'locked' },
+    { label: 'Đang hoạt động', value: true },
+    { label: 'Khoá', value: false },
 ];

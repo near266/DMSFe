@@ -12,3 +12,9 @@ export class ProductFieldInput extends FieldType<FieldTypeConfig> {}
     templateUrl: './product-field-select.component.html',
 })
 export class ProductFieldSelect extends FieldType<FieldTypeConfig> {}
+
+@Component({
+    selector: 'product-field-textarea',
+    templateUrl: './product-field-textarea.component.html',
+})
+export class ProductFieldTextarea extends FieldType<FieldTypeConfig> {}

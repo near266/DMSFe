@@ -3,8 +3,8 @@
     style="display: flex!important; margin: 0!important;">
     <div class="text-2xl text-gray-500 italic font-semibold tracking-wider flex"><span
         *ngIf="productId===''">{{header}}</span><span *ngIf="productId!==''">{{productId}}</span></div>
-    <div class="flex flex-row text-xs" *ngIf="editMode">
-      <button
+    <div class="flex flex-row text-xs" *ngIf="mode==='create'">
+      <button (click)="submitForm()"
         class="flex flex-row bg-blue-900 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
         <i class="fa-solid fa-circle-check mx-2"></i>
         <span class="mr-2">Lưu</span>
@@ -16,7 +16,20 @@
         <span class="mr-2">Đóng</span>
       </button>
     </div>
-    <div class="flex flex-row text-xs" *ngIf="!editMode">
+    <div class="flex flex-row text-xs" *ngIf="mode==='edit'">
+      <button (click)="submitChange()"
+        class="flex flex-row bg-blue-900 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
+        <i class="fa-solid fa-circle-check mx-2"></i>
+        <span class="mr-2">Lưu thay đổi</span>
+      </button>
+      <button
+        class="flex flex-row bg-gray-300 text-black justify-center items-center px-2 py-3 rounded-r-sm cursor-pointer"
+        mat-dialog-close>
+        <i class="fa-solid fa-right-from-bracket mx-2"></i>
+        <span class="mr-2">Đóng</span>
+      </button>
+    </div>
+    <div class="flex flex-row text-xs" *ngIf="mode==='view'">
       <button (click)="toggleEditMode()"
         class="flex flex-row bg-gray-800 mr-2 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
         <i class="fa-solid fa-file mx-2"></i>
@@ -44,8 +57,8 @@
         {{tab.title}}
       </div>
     </div>
-    <div class="bg-white h-full overflow-y-scroll w-full">
-      <app-add-product-details [productModel]="product" [toggleEdit]="editMode"></app-add-product-details>
+    <div class="bg-white h-full overflow-y-scroll w-full pb-4">
+      <app-add-product-details [productModel]="product" [dialogMode]="mode"></app-add-product-details>
     </div>
   </div>
 </div>

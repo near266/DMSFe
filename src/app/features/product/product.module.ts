@@ -20,6 +20,7 @@ import { ProductFieldWrapper } from './components/add-product-dialog/add-product
 import {
     ProductFieldInput,
     ProductFieldSelect,
+    ProductFieldTextarea,
 } from './components/add-product-dialog/add-product-details/product-field-type/product-field-type.component';
 
 @NgModule({
@@ -34,6 +35,7 @@ import {
         ProductFieldWrapper,
         ProductFieldInput,
         ProductFieldSelect,
+        ProductFieldTextarea,
     ],
     imports: [
         CommonModule,
@@ -45,7 +47,9 @@ import {
             types: [
                 { name: 'product-input', component: ProductFieldInput, wrappers: ['product'] },
                 { name: 'product-select', component: ProductFieldSelect, wrappers: ['product'] },
+                { name: 'product-textarea', component: ProductFieldTextarea, wrappers: ['product'] },
             ],
+            validationMessages: [{ name: 'required', message: 'Trường này là bắt buộc' }],
         }),
         FormlySelectModule,
         FormlyMaterialModule,

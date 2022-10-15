@@ -15,5 +15,6 @@ export class SidenavService {
     public close() {
         return this.sideNav.close();
     }
+
     constructor() {}
 }

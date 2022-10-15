@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Product } from '../../models/product';
@@ -10,7 +10,7 @@ import { ProductDialogService } from '../../services/product-dialog.service';
     styleUrls: ['./add-product-dialog.component.scss'],
 })
 export class AddProductDialogComponent implements OnInit {
-    editMode = true;
+    mode: 'edit' | 'create' | 'view' = 'create';
     title = 'Thông tin chung';
     header = 'Thêm mới sản phẩm';
     subscription: Subscription = new Subscription();
@@ -27,7 +27,7 @@ export class AddProductDialogComponent implements OnInit {
     ngOnInit(): void {
         this.subscribeHeaderChanges();
         if (this.product) {
-            this.editMode = false;
+            this.mode = 'view';
         }
     }
     private subscribeHeaderChanges() {
@@ -40,7 +40,14 @@ export class AddProductDialogComponent implements OnInit {
         this.subscription.unsubscribe();
     }
     toggleEditMode(): void {
-        this.editMode = !this.editMode;
+        this.mode = 'edit';
+        this.productDialogService.toggleEdit$.next(true);
+    }
+    submitForm(): void {
+        this.productDialogService.submitForm$.next(true);
+    }
+    submitChange(): void {
+        this.productDialogService.submitForm$.next(true);
     }
     tabList = [
         { title: 'Thông tin chung', leftIcon: 'fa-regular fa-file-lines' },
