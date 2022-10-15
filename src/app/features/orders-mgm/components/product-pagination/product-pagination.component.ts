@@ -23,7 +23,7 @@ export class ProductPaginationComponent implements OnInit {
             this.setIndexToSecondPageToDiffrentFirstPage(event);
         }
         this.page = event;
-        this.purchaseOrderService.changePage(this.page);
+        this.purchaseOrderService.changeProductPage(this.page);
     }
 
     setIndexToFirstPage() {

@@ -1,4 +1,5 @@
 export class Customers {
+  id?: string;
   customerId?: string;
   status?: any;
   customerCode?: string;
@@ -14,6 +15,7 @@ export class Customers {
   channelName?: string;
   address?: string;
   areaId?: string;
+  area?: any;
   province?: string;
   district?: string;
   ward?: string;

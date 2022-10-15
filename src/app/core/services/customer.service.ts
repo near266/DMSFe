@@ -23,4 +23,18 @@ export class CustomerService {
         map((response: any) => response)
       )
   }
+
+  update(body: any): Observable<any> {
+    return this.http.put(customer_url + '/update', body)
+      .pipe(
+        map((response: any) => response)
+      )
+  }
+
+  get_by_id(id: string): Observable<any> {
+    return this.http.get(customer_url + '/id?Id=' + id)
+      .pipe(
+        map((response: any) => response)
+      )
+  }
 }

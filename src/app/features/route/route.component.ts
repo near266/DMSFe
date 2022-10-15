@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
+import { AddRouterComponent } from './add-router/add-router.component';
 
 @Component({
     selector: 'app-route',

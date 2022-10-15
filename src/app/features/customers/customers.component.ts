@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
@@ -28,6 +29,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
     page = 1;
     pageSize = 30;
+    totalPage = 0;
+    pageList: number[] = [];
 
     statusMenu: Config = {
         icon: '<i class="fa-solid fa-flag"></i>',
@@ -85,6 +88,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         private dialog: MatDialog,
         private customerService: CustomerService,
         private snackbar: SnackbarService,
+        private datePipe: DatePipe,
     ) {}
 
     ngOnInit(): void {
@@ -92,108 +96,129 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        const body = {
-            keyword: '',
-            page: this.page,
-            pageSize: this.pageSize,
-        };
-        this.customerService.search(body).subscribe(
-            (data) => {
-                this.response = data;
-                console.log(this.response.data);
-                this.response.data.forEach((element) => {
-                    if (element.status == true) element.status = 'Hoạt động';
-                    else if (element.status == false) element.status = 'Không hoạt động';
-                });
-            },
-            (error) => {
-                this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
-            },
-        );
+      this.init(this.page, this.pageSize);
     }
 
-    add() {
-        this.dialog.open(AddCustomerComponent, {
-            height: '100vh',
-            minWidth: '1100px',
-        });
-    }
-
-    DetailCustomer(id: any) {
-        this.dialog.open(DetailCustomerComponent, {
-            height: '100vh',
-            minWidth: '1100px',
-            data: {
-                id: id,
-                status: 'view',
-            },
-        });
-    }
-
-    closeSideBar() {
-        this.class = {
-            left: 'w-5',
-            right: 'w-full',
-            statusbar: false,
-        };
-    }
-
-    openSideBar() {
-        this.class = {
-            left: 'w-2/12',
-            right: 'w-10/12',
-            statusbar: true,
-        };
-    }
-
-    class = {
-        left: 'w-2/12',
-        right: 'w-10/12',
-        statusbar: true,
+  init(page: number, pageSize: number) {
+    const body = {
+      keyword: '',
+      page: page,
+      pageSize: pageSize,
     };
-
-    listMenuObj = [
-        {
-            title: 'Lọc thời gian',
-            leftTitleIcon: 'fa-calendar-days',
-            listMenuPosition: [
-                { title: 'Ngày tạo', leftIcon: '', value: 'all' },
-                { title: 'Ngày cập nhật', leftIcon: '', value: 'emp' },
-                { title: 'Sinh nhật', leftIcon: '', value: 'emp' },
-            ],
+    this.customerService.search(body).subscribe(
+        (data) => {
+            this.response = data;
+            this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
+            if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
+            this.pageList = [];
+            for(let i = 1; i <= this.totalPage; i++) {
+              this.pageList.push(i);
+            }
+            this.response.data.forEach((element) => {
+                if (element.status == true) element.status = 'Hoạt động';
+                else if (element.status == false) element.status = 'Không hoạt động';
+                else element.status = 'Không hoạt động';
+                if(element.dob) {
+                  element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
+                }
+            });
         },
-        {
-            title: 'Sắp xếp',
-            leftTitleIcon: 'fa-sort-alpha-asc',
-            listMenuPosition: [
-                { title: 'Tên khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
-                { title: 'Tên khách hàng', leftIcon: 'fa-arrow-up', value: 'emp' },
-
-                { title: 'Mã khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
-                { title: 'Mã khách hàng', leftIcon: 'fa-arrow-up', value: 'emp' },
-
-                // { title: 'Ngày tạo', leftIcon: 'fa-arrow-down', value: 'all' },
-                // { title: 'Ngày tạo', leftIcon: 'fa-arrow-up', value: 'all' },
-
-                // { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-down', value: 'all' },
-                // { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-up', value: 'all' },
-
-                // { title: 'Số lần viếng thăm', leftIcon: 'fa-arrow-down', value: 'all' },
-                // { title: 'Số lần viếng thăm', leftIcon: 'fa-arrow-up', value: 'all' },
-
-                // { title: 'Số lần đặt hàng', leftIcon: 'fa-arrow-down', value: 'all' },
-                // { title: 'Số lần đặt hàng', leftIcon: 'fa-arrow-up', value: 'all' },
-
-                // { title: 'Số lần bán hàng', leftIcon: 'fa-arrow-down', value: 'all' },
-                // { title: 'Số lần bán hàng', leftIcon: 'fa-arrow-up', value: 'all' },
-            ],
+        (error) => {
+            this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
         },
-    ];
+    );
+  }
 
-    Select(e: any) {
-        console.log(e);
+  add() {
+    const dialogRef = this.dialog.open(AddCustomerComponent, {
+      height: '100vh',
+      minWidth: '1100px',
+    });
+    dialogRef.afterClosed().subscribe(data => {
+      if(data) {
+        this.init(this.page, this.pageSize);
+      }
+    });
+  }
+
+  DetailCustomer(id: any) {
+    const dialogRef = this.dialog.open(DetailCustomerComponent, {
+      height: '100vh',
+      minWidth: '1100px',
+      data: {id: id}
+    })
+    dialogRef.afterClosed().subscribe(data => {
+      if(data) {
+        this.init(this.page, this.pageSize);
+      }
+    });
+  }
+
+  closeSideBar() {
+    this.class = {
+      left: 'w-5',
+      right: 'w-full',
+      statusbar: false
     }
-    selection(e: any) {
-        console.log(e);
-    }
+  }
+
+  openSideBar() {
+      this.class = {
+          left: 'w-2/12',
+          right: 'w-10/12',
+          statusbar: true,
+      };
+  }
+
+  class = {
+      left: 'w-2/12',
+      right: 'w-10/12',
+      statusbar: true,
+  };
+
+  listMenuObj = [
+      {
+          title: 'Lọc thời gian',
+          leftTitleIcon: 'fa-calendar-days',
+          listMenuPosition: [
+              { title: 'Ngày tạo', leftIcon: '', value: 'all' },
+              { title: 'Ngày cập nhật', leftIcon: '', value: 'emp' },
+              { title: 'Sinh nhật', leftIcon: '', value: 'emp' },
+          ],
+      },
+      {
+          title: 'Sắp xếp',
+          leftTitleIcon: 'fa-sort-alpha-asc',
+          listMenuPosition: [
+              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
+              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-up', value: 'emp' },
+
+              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
+              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-up', value: 'emp' },
+
+              // { title: 'Ngày tạo', leftIcon: 'fa-arrow-down', value: 'all' },
+              // { title: 'Ngày tạo', leftIcon: 'fa-arrow-up', value: 'all' },
+
+              // { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-down', value: 'all' },
+              // { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-up', value: 'all' },
+
+              // { title: 'Số lần viếng thăm', leftIcon: 'fa-arrow-down', value: 'all' },
+              // { title: 'Số lần viếng thăm', leftIcon: 'fa-arrow-up', value: 'all' },
+
+              // { title: 'Số lần đặt hàng', leftIcon: 'fa-arrow-down', value: 'all' },
+              // { title: 'Số lần đặt hàng', leftIcon: 'fa-arrow-up', value: 'all' },
+
+              // { title: 'Số lần bán hàng', leftIcon: 'fa-arrow-down', value: 'all' },
+              // { title: 'Số lần bán hàng', leftIcon: 'fa-arrow-up', value: 'all' },
+          ],
+      },
+  ];
+
+  Select(e: any) {
+      console.log(e);
+  }
+  selection(e: any) {
+      console.log(e);
+  }
+
 }

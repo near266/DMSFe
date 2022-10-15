@@ -140,12 +140,12 @@
                   <tbody>
                       <tr class="h-14 w-fit text-xs" *ngFor="let user of response.data; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                          <td class="border-x w-fit border-solid align-middle px-2 cursor-pointer" (click)="DetailCustomer(user.customerId)">{{user.customerName}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer">
-                              {{user.customerGroup.customerGroupName}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.customerType.customerTypeName}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 cursor-pointer" (click)="DetailCustomer(user.id)">{{user.customerName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">
+                              {{user.customerGroup? user.customerGroup.customerGroupName: ''}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.customerType ? user.customerType.customerTypeName : ''}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.lastModifiedDate}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.channel.channelName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2">{{user.channel ? user.channel.channelName : ''}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.address}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.deliveryAddress}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.province}}</td>
@@ -166,10 +166,11 @@
       </div>
       <div class="w-full px-2 bg-gray-100 py-1 mb-1 flex flex-row justify-end items-center text-xs">
           <select class="bg-white px-3 py-1 border border-solid border-gray-500 rounded-sm">
-              <option>30 bản ghi/trang</option>
+              <option>{{pageSize}} bản ghi/trang</option>
           </select>
-          <div class="flex w-6 h-6 mx-3 justify-center items-center text-white bg-green-600">1</div>
-          <span>Hiển thị 1 - 9 trên tổng số 9 bản ghi</span>
+          <div *ngFor="let p of pageList" class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer" (click)="init(p, pageSize)">{{p}}</div>
+
+          <span>Hiển thị 1 - {{totalPage}} trên tổng số {{totalPage}} bản ghi</span>
       </div>
   </div>
 </div>

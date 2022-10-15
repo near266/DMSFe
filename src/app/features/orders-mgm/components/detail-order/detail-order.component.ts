@@ -24,6 +24,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     type: string = 'View';
     detailOrderForm!: FormGroup;
     detailOrderFakeData: any = [];
+    detailOrder: any;
     listProduct?: ListProduct[] = [];
     listPromotionProduct?: ListPromotionProduct[] = [];
     subscription: Subscription[] = [];
@@ -81,16 +82,10 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     ) {}
 
     ngOnInit(): void {
-        // pass id to service
-        this.subscription.push(
-            this.activatedRoute.params.subscribe((params) => {
-                this.id = params['id'];
-                this.purchaseOrder.passId(params['id']);
-            }),
-        );
+        this.id = localStorage.getItem('purchaseOrderId')!;
         // create Form
         this.detailOrderForm = this.fb.group({
-            purchaseOrderCode: [''],
+            orderCode: [''],
             status: [''],
             orderDate: [''],
             deliveryDate: [''],
@@ -144,32 +139,39 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 this.getDetail();
             }
         });
+        // get body Update
+        this.purchaseOrder.updateOrder.subscribe((data) => console.log(data));
     }
 
     getDetail() {
-        this.purchaseOrder.getPurchaseDetail(this.id).subscribe((data) => {
-            this.detailOrderFakeData = data;
+        // this.purchaseOrder.getPurchaseDetail(this.id).subscribe((data) => {
+        //     this.detailOrderFakeData = data;
+        //     this.patchValue();
+        // });
+        this.purchaseOrder.detail(this.id).subscribe((data) => {
+            this.detailOrder = data;
+            console.log(data);
             this.patchValue();
         });
     }
 
     patchValue() {
         this.detailOrderForm.patchValue({
-            purchaseOrderCode: this.detailOrderFakeData.purchaseOrderCode,
-            status: this.detailOrderFakeData.status,
-            orderDate: this.detailOrderFakeData.orderDate,
-            deliveryDate: this.detailOrderFakeData.deliveryDate,
-            group: this.detailOrderFakeData.group?.groupId,
-            orderEmployee: this.detailOrderFakeData.orderEmployee?.employeeId,
-            route: this.detailOrderFakeData.route?.routeId,
-            customerCode: this.detailOrderFakeData.customerCode,
-            customerName: this.detailOrderFakeData.customerName,
-            phone: this.detailOrderFakeData.phone,
-            address: this.detailOrderFakeData.address,
-            description: this.detailOrderFakeData.description,
+            orderCode: this.detailOrder.orderCode,
+            status: this.detailOrder.status,
+            orderDate: this.detailOrder.orderDate,
+            deliveryDate: this.detailOrder.deliveryDate,
+            group: this.detailOrder.group?.id,
+            orderEmployee: this.detailOrder.orderEmployee?.id,
+            route: this.detailOrder.route?.id,
+            customerCode: this.detailOrder.customerCode,
+            customerName: this.detailOrder.customerName,
+            phone: this.detailOrder.phone,
+            address: this.detailOrder.address,
+            description: this.detailOrder.description,
         });
-        this.listProduct = this.detailOrderFakeData.listProduct;
-        this.listPromotionProduct = this.detailOrderFakeData.listPromotionProduct;
+        this.listProduct = this.detailOrder.listProduct;
+        this.listPromotionProduct = this.detailOrder.listPromotionProduct;
     }
 
     ngOnDestroy(): void {
@@ -179,14 +181,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     }
 
     ngAfterViewInit(): void {
-        this.subscription.push(
-            this.purchaseOrder.id.subscribe((data) => {
-                this.id = data;
-                if (this.id) {
-                    this.getDetail();
-                }
-            }),
-        );
+        this.getDetail();
     }
 
     ngDoCheck(): void {}

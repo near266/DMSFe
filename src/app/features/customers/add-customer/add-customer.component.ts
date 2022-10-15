@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { customers } from 'src/app/core/data/Customers';
 import { Area } from 'src/app/core/model/Area';
 import { Channel } from 'src/app/core/model/Channel';
@@ -12,7 +12,32 @@ import { CustomerGroupService } from 'src/app/core/services/customer-group.servi
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
+export interface IBody {
+  // id: this.form.controls['customerGroupId'].value,
+  // customerCode: this.form.controls['customerCode'].value,
+  customerName?: any,
+  customerGroupId?: any,
+  customerTypeId?: any,
+  status?: any,
+  channelId?: any,
+  // isUpdateAddress?: new FormControl(false),
+  address?: any,
+  deliveryAddress?: any,
+  areaId?: any,
+  province?:  any,
+  district?: any,
+  ward?: any,
+  dob?: any,
+  contactName?: any,
+  position?: any,
+  phone?:  any,
+  email?: any,
+  avatar?: any,
+  debtLimit?: any,
+  cashAcc?: any
+};
 @Component({
   selector: 'app-add-customer',
   templateUrl: './add-customer.component.html',
@@ -20,17 +45,13 @@ import { ProvincesService } from 'src/app/core/services/provinces.service';
 })
 export class AddCustomerComponent implements OnInit, AfterViewInit {
 
-  customer = customers[0];
   customerGroup: CustomerGroup[] = [];
   customerType: CustomerType[] = [];
   channel: Channel[] = [];
   area: Area[] = [];
   listProvinces: any[] = [];
-  current_province = '';
   listDistricts: any[] = [];
-  current_district = '';
   listWards: any[] = [];
-  current_ward = '';
 
   isChoseUpdated = false;
 
@@ -43,7 +64,9 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
     private customerTypeService: CustomerTypeService,
     private channelService: ChannelService,
     private areaService: AreaService,
-    private provincesService: ProvincesService
+    private snackbar: SnackbarService,
+    private provincesService: ProvincesService,
+    @Inject(MAT_DIALOG_DATA) public data: string,
     ) { }
   ngAfterViewInit(): void {
     this.customerGroupService.get_all().subscribe(data => {
@@ -66,7 +89,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       // customerId: new FormControl(''),
-      // customerCode: new FormControl('', Validators.required),
+      customerCode: new FormControl(''),
       customerName: new FormControl(''),
       customerGroupId: new FormControl(''),
       customerTypeId: new FormControl(''),
@@ -91,6 +114,8 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
   }
 
   getDistrict(event: any) {
+    this.form.controls['district'].setValue('');
+    this.form.controls['ward'].setValue('');
     this.listProvinces.forEach(data => {
       if(data.name == event) {
         this.provincesService.getDistrictsListByID(data.code).subscribe(res => {
@@ -101,6 +126,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
   }
 
   getWard(event: any) {
+    this.form.controls['ward'].setValue('');
     this.listDistricts.forEach(data => {
       if(data.name == event) {
         this.provincesService.getWardsListByID(data.code).subscribe(res => {
@@ -115,33 +141,44 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
   }
 
   add() {
-    const body = {
-      customerName: this.form.controls['customerName'].value,
-      customerGroupId: this.form.controls['customerGroupId'].value,
-      customerTypeId: this.form.controls['customerTypeId'].value,
-      status: this.form.controls['status'].value,
-      channelId: this.form.controls['channelId'].value,
+    let body = {
+      // id: this.form.controls['customerGroupId'].value,
+      // customerCode: this.form.controls['customerCode'].value,
+      customerName: this.form.controls['customerName'].value !== '' ? this.form.controls['customerName'].value: null,
+      customerGroupId: this.form.controls['customerGroupId'].value !== '' ? this.form.controls['customerGroupId'].value: null,
+      customerTypeId: this.form.controls['customerTypeId'].value !== '' ? this.form.controls['customerTypeId'].value: null,
+      status: this.form.controls['status'].value !== '' ? this.form.controls['status'].value: false,
+      channelId: this.form.controls['channelId'].value !== '' ? this.form.controls['channelId'].value: null,
       // isUpdateAddress: new FormControl(false),
-      address: this.form.controls['address'].value,
-      deliveryAddress: this.form.controls['deliveryAddress'].value,
-      areaId: this.form.controls['areaId'].value,
-      province:  this.form.controls['province'].value,
-      district: this.form.controls['district'].value,
-      ward: this.form.controls['ward'].value,
-      dob: new Date(this.form.controls['dob'].value).toISOString(),
-      contactName: this.form.controls['contactName'].value,
-      position: this.form.controls['position'].value,
-      phone:  this.form.controls['phone'].value,
-      email: this.form.controls['email'].value,
-      avatar: this.form.controls['avatar'].value,
-      debtLimit: this.form.controls['debtLimit'].value,
-      cashAcc: this.form.controls['cashAcc'].value
+      address: this.form.controls['address'].value !== '' ? this.form.controls['address'].value: null,
+      deliveryAddress: this.form.controls['deliveryAddress'].value !== '' ? this.form.controls['deliveryAddress'].value: null,
+      areaId: this.form.controls['areaId'].value !== '' ? this.form.controls['areaId'].value: null,
+      province:  this.form.controls['province'].value !== '' ? this.form.controls['province'].value: null,
+      district: this.form.controls['district'].value !== '' ? this.form.controls['district'].value: null,
+      ward: this.form.controls['ward'].value !== '' ? this.form.controls['ward'].value: null,
+      dob: this.form.controls['dob'].value ? new Date(this.form.controls['dob'].value).toISOString(): null,
+      contactName: this.form.controls['contactName'].value !== '' ? this.form.controls['customerName'].value: null,
+      position: this.form.controls['position'].value !== '' ? this.form.controls['position'].value: null,
+      phone:  this.form.controls['phone'].value !== '' ? this.form.controls['phone'].value: null,
+      email: this.form.controls['email'].value !== '' ? this.form.controls['email'].value: null,
+      avatar: this.form.controls['avatar'].value !== '' ? this.form.controls['avatar'].value: null,
+      debtLimit: this.form.controls['debtLimit'].value !== '' ? this.form.controls['debtLimit'].value: null,
+      cashAcc: this.form.controls['cashAcc'].value !== '' ? this.form.controls['cashAcc'].value: null
     }
-    console.log(body);
-    this.customerService.add(body).subscribe(data => {
-      console.log(data);
 
+    if(body.status == 'true') {
+      body.status = true;
+    } else if(body.status == 'false') {
+      body.status = false;
+    }
+
+    this.customerService.add(body).subscribe(data => {
+      this.snackbar.openSnackbar('Thêm khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+      this.dialogRef.close({event: true});
+    }, (error) => {
+      this.snackbar.openSnackbar('Thêm khách hàng không thành công, vui lòng kiểm tra thông tin đã nhập', 2000, 'Đóng', 'center', 'bottom', true);
     });
+
   }
 
 }

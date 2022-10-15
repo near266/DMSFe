@@ -12,6 +12,8 @@ export class DataService {
   status = this.statusSource.asObservable();
   private employeeSource = new BehaviorSubject<any>('');
   employee = this.employeeSource.asObservable();
+  private routeSource = new BehaviorSubject<any>('');
+  route = this.routeSource.asObservable();
 
   constructor() { }
   changeType(type: string) {
@@ -26,6 +28,9 @@ export class DataService {
   }
   changeEmployee(data: any) {
     this.employeeSource.next(data)
+  }
+  changeRoute(data: any) {
+    this.routeSource.next(data)
   }
 
 }

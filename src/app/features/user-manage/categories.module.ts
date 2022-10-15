@@ -13,6 +13,7 @@ import { MenuComponent } from './user-tree/add-user/menu/menu.component';
 import { UserTreeViewComponent } from './user-tree/user-tree-view/user-tree-view.component';
 import { ResetPasswordComponent } from './user-tree/detail-user/reset-password/reset-password.component';
 import { DeleteUserComponent } from './user-tree/detail-user/delete-user/delete-user.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { WarehousesComponent } from './warehouses/warehouses.component';
 
 const routes: Routes = [
@@ -40,6 +41,6 @@ const routes: Routes = [
         DeleteUserComponent,
         WarehousesComponent,
     ],
-    imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
+    imports: [CommonModule, RouterModule.forChild(routes), SharedModule, NgxPaginationModule],
 })
 export class UserManageModule {}

@@ -1,14 +1,13 @@
 <div class="m-[-24px] min-h-screen">
-    <div class=" bg-white w-full sticky top-[-24px] z-10">
-        <div class=" p-3 w-full flex justify-between items-center">
+    <div class="bg-white w-full sticky top-[-24px] z-10">
+        <div class="p-3 w-full flex justify-between items-center">
             <span style="font-size: 20px !important" class="font-medium">Danh sách sản phẩm</span>
             <div class="flex items-center">
-                <button (click)="navigateToClose()" class="button-primary-sm
-                 flex items-center justify-between mr-2">
+                <button (click)="save()" class="button-primary-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-check text-white mr-2"></i>
                     <span class="text-white">Đã xong</span>
                 </button>
-                <button class="button-danger" (click)="navigateToClose(); closeDialog()">
+                <button class="button-danger" (click)="close()">
                     <i class="fa-solid fa-ban text-white mr-2"></i>
                     <span class="text-white">Đóng</span>
                 </button>
@@ -25,10 +24,10 @@
                     <mat-label>[-- Chọn nhãn hiệu --]</mat-label>
                     <mat-select>
                         <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option [value]="1"> 1</mat-option>
-                        <mat-option [value]="1"> 1</mat-option>
-                        <mat-option [value]="1"> 1</mat-option>
-                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -37,10 +36,10 @@
                     <mat-label>[-- Chọn nhà cung cấp --]</mat-label>
                     <mat-select>
                         <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option [value]="1"> 1</mat-option>
-                        <mat-option [value]="1"> 1</mat-option>
-                        <mat-option [value]="1"> 1</mat-option>
-                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -49,10 +48,10 @@
                     <mat-label>[-- Chọn ngành hàng --]</mat-label>
                     <mat-select>
                         <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option [value]="1"> 1</mat-option>
-                        <mat-option [value]="1"> 1</mat-option>
-                        <mat-option [value]="1"> 1</mat-option>
-                        <mat-option [value]="1"> 1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
+                        <mat-option [value]="1">1</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -60,12 +59,16 @@
         <mat-tab-group class="w-full">
             <mat-tab label="Danh sách sản phẩm">
                 <div class="flex justify-end mt-2">
-                    <button *ngIf="!isSelectAll" (click)="isSelectAll = true"
+                    <!-- <button
+                        *ngIf="!isSelectAll"
+                        (click)="isSelectAll = true"
                         class="button-primary-sm flex items-center justify-between mr-2">
                         <i class="fa-solid fa-circle-check text-white mr-2"></i>
                         <span class="text-white">Chọn tất cả sản phẩm</span>
                     </button>
-                    <button *ngIf="isSelectAll" (click)="isSelectAll = false"
+                    <button
+                        *ngIf="isSelectAll"
+                        (click)="isSelectAll = false"
                         class="button-danger-sm flex items-center justify-between mr-2">
                         <i class="fa-solid fa-xmark text-white mr-2"></i>
                         <span class="text-white">Bỏ chọn tất cả</span>
@@ -73,7 +76,7 @@
                     <button class="button-primary-sm flex items-center justify-between mr-2">
                         <i class="fa-sharp fa-solid fa-list-check text-white mr-2"></i>
                         <span class="text-white">Sản phẩm trên trang</span>
-                    </button>
+                    </button> -->
                 </div>
                 <div class="relative sm:rounded-lg mt-2" style="font-size: 12px">
                     <table class="custom-table">
@@ -90,20 +93,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]; index as i" class="custom-tr">
-                                <td class="custom-th">{{ i + 1 }}</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
+                            <tr
+                                *ngFor="
+                                    let product of listProduct
+                                        | paginate
+                                            : {
+                                                  itemsPerPage: pageSize,
+                                                  currentPage: page,
+                                                  totalItems: total
+                                              };
+                                    index as i
+                                "
+                                class="custom-tr">
+                                <td class="custom-th">{{ product?.sku || 'No Data' }}</td>
+                                <td class="custom-th">{{ product?.productName || 'No Data' }}</td>
+                                <td class="custom-th">{{ product.wholeSaleUnit?.unitName || 'No Data' }}</td>
+                                <td class="custom-th">{{ product.unit?.unitName || 'No Data' }}</td>
+                                <td class="custom-th">{{ product.price | currency:"VND" }}</td>
+                                <td class="custom-th">{{ product.retailPrice | currency:"VND" }}</td>
+                                <td class="custom-th">{{ product.vat | currency:"VND" }}</td>
                                 <td class="custom-th" (click)="stopPropagation($event)">
-                                    <button *ngIf="!isSelectAll"
+                                    <button
+                                        (click)="choose(product, i)"
+                                        *ngIf="!isSellect[i]"
                                         class="text-green-600 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">
                                         <span>Chọn</span>
                                     </button>
-                                    <button *ngIf="isSelectAll"
+                                    <button
+                                        *ngIf="isSellect[i]"
                                         class="text-white p-2 bg-green-400 rounded-lg hover:bg-green-500 font-medium">
                                         <i class="fa-solid fa-check mr-2"></i>
                                         <span>Đã chọn</span>
@@ -114,12 +131,8 @@
                     </table>
                 </div>
                 <!-- Pagination -->
-                <div class="w-full px-2 py-1 mt-2 mb-1 flex flex-row justify-end items-center text-xs">
-                    <select class="bg-white px-3 py-1 border border-solid border-gray-500 rounded-sm">
-                        <option>30 bản ghi/trang</option>
-                    </select>
-                    <div class="flex w-6 h-6 mx-3 justify-center items-center text-white bg-green-600">1</div>
-                    <span>Hiển thị 1 - 9 trên tổng số 9 bản ghi</span>
+                <div class="mt-2">
+                    <app-product-pagination></app-product-pagination>
                 </div>
             </mat-tab>
             <mat-tab label="Sản phẩm đã chọn">
@@ -138,16 +151,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]; index as i" class="custom-tr">
-                                <td class="custom-th">{{ i + 1 }}</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
+                            <tr *ngFor="let product of listChoosenProduct; index as i" class="custom-tr">
+                                <td class="custom-th">{{ product?.sku || 'No Data' }}</td>
+                                <td class="custom-th">{{ product?.productName || 'No Data' }}</td>
+                                <td class="custom-th">{{ product.wholeSaleUnit?.unitName || 'No Data' }}</td>
+                                <td class="custom-th">{{ product.unit?.unitName || 'No Data' }}</td>
+                                <td class="custom-th">{{ product.price || 'No Data' }}</td>
+                                <td class="custom-th">{{ product.retailPrice || 'No Data' }}</td>
+                                <td class="custom-th">{{ product.vat || 'No Data' }}</td>
                                 <td class="custom-th text-center" (click)="stopPropagation($event)">
                                     <button
+                                        (click)="unChoose(product, i)"
                                         class="text-red-500 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">
                                         <i class="fa-solid mr-1 fa-xmark text-sm cursor-pointer hover:opacity-70"></i>
                                         <span>Xóa</span>
