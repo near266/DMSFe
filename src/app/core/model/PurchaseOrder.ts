@@ -46,6 +46,28 @@ export class PurchaseOrderDetail {
     prePayment: string;
 }
 
+export interface Product {
+    productId: string;
+    productCode: string;
+    status: string;
+    productName: string;
+    wholeSaleUnit: WholeSaleUnit;
+    retailUnit: RetailUnit;
+    price: string;
+    retailPrice: string;
+    vAT: string;
+}
+
+export interface WholeSaleUnit {
+    unitId: string;
+    unitName: string;
+}
+
+export interface RetailUnit {
+    unitId: string;
+    unitName: string;
+}
+
 export class Group {
     groupId?: string;
     groupName?: string;

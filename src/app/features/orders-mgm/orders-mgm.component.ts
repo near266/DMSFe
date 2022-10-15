@@ -15,7 +15,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     isShowSidebarToMargin = true;
     sideBarWidth!: string;
     type!: string;
-    listOrder: PurchaseOrder[] = [];
+    listOrder: any = [];
     totalCount: number;
 
     page: number = 1;
@@ -41,10 +41,23 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         //     this.total = this.listOrder.length;
         //     this.purchaseOrderService.setTotal(this.total);
         // });
-        this.purchaseOrderService.searchFilterPurchaseOrder().subscribe((data) => {
-            console.log(data);
+        // this.purchaseOrderService.searchFilterPurchaseOrder().subscribe((data) => {
+        //     console.log(data);
+        //     this.listOrder = data.data;
+        //     this.total = data.total;
+        //     this.purchaseOrderService.setTotal(this.total);
+        // });
+        this.search();
+    }
+
+    search() {
+        let body = {
+            page: this.page,
+            pageSize: this.pageSize,
+        };
+        this.purchaseOrderService.search(body).subscribe((data) => {
             this.listOrder = data.data;
-            this.total = data.total;
+            this.total = data.totalCount;
             this.purchaseOrderService.setTotal(this.total);
         });
     }
@@ -76,7 +89,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     }
 
     navigateToDetail(order: any) {
-        // this.purchaseOrderService.passId(order.purchaseOrderId)
-        this.router.navigate(['/orders/detailOrder/viewEdit', order.purchaseOrderId]);
+        localStorage.setItem('purchaseOrderId', order.id);
+        this.router.navigate(['/orders/detailOrder/viewEdit']);
     }
 }

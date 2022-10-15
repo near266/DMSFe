@@ -33,20 +33,23 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     ngOnInit(): void {
         this.type = 'View';
         this.changeType('View');
+        this.id = localStorage.getItem('purchaseOrderId')!;
+        console.log(this.id);
     }
 
     ngAfterViewInit(): void {
         // get id
-        setTimeout(() => {
-            this.subscription.push(
-                this.purchaseOrder.id.subscribe((data) => {
-                    this.id = data;
-                    if (this.id) {
-                        this.getDetail();
-                    }
-                }),
-            );
-        }, 0);
+        // setTimeout(() => {
+        //     this.subscription.push(
+        //         this.purchaseOrder.id.subscribe((data) => {
+        //             this.id = data;
+        //             if (this.id) {
+        //                 this.getDetail();
+        //             }
+        //         }),
+        //     );
+        // }, 0);
+        this.getDetail();
     }
 
     ngOnDestroy(): void {
@@ -54,9 +57,8 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     }
 
     getDetail() {
-        this.purchaseOrder.getPurchaseDetail(this.id).subscribe((data) => {
+        this.purchaseOrder.detail(this.id).subscribe((data) => {
             this.statusNow = data.status;
-            console.log(this.statusNow);
         });
     }
 

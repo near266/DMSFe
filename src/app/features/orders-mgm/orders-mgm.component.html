@@ -180,39 +180,39 @@
                         <td
                             class="cursor-pointer hover:text-blue-500 custom-td border-b"
                             (click)="navigateToDetail(order)">
-                            {{ order.purchaseOrderCode }}
+                            {{ order.orderCode || 'No Data' }}
                         </td>
                         <td class="custom-td border-b">
-                            {{ order.customerCode }}
+                            {{ order.customer?.customerCode || 'No Data' }}
                         </td>
                         <td class="custom-td border-b">
-                            {{ order.customerName }}
+                            {{ order.customer?.customerName || 'No Data' }}
                         </td>
                         <td class="custom-td border-b">
-                            {{ order.address }}
+                            {{ order.address || 'No Data' }}
                         </td>
                         <td class="custom-td border-b">
-                            {{ datepipe.transform(order.orderDate, 'dd/MM/yyyy') || 'No-data' }}
+                            {{ datepipe.transform(order.orderDate, 'dd/MM/yyyy') || 'No Data' }}
                         </td>
                         <td class="custom-td border-b">{{ order.totalPayment | currency: 'VND':'symbol' }}</td>
                         <td class="custom-td border-b">
-                            {{ order.approveBy }}
+                            {{ order.approveBy || 'No Data' }}
                         </td>
                         <td class="custom-td border-b">
-                            {{ datepipe.transform(order.approveDate, 'dd/MM/yyyy') || 'No-data' }}
+                            {{ datepipe.transform(order.approveDate, 'dd/MM/yyyy') || 'No Data' }}
                         </td>
                         <td class="custom-td border-b">
                             {{ order.source }}
                         </td>
                         <td class="custom-td border-b">
-                            {{ datepipe.transform(order.createdDate, 'dd/MM/yyyy') || 'No-data' }}
+                            {{ datepipe.transform(order.createdDate, 'dd/MM/yyyy') || 'No Data' }}
                         </td>
-                        <td class="custom-td border-b">{{ order.createdBy }}</td>
+                        <td class="custom-td border-b">{{ order.createdBy || 'No Data' }}</td>
                         <td class="custom-td border-b">
-                            {{ datepipe.transform(order.lastModifiedDate, 'dd/MM/yyyy') || 'No-data' }}
+                            {{ datepipe.transform(order.lastModifiedDate, 'dd/MM/yyyy') || 'No Data' }}
                         </td>
                         <td class="custom-td border-b">
-                            {{ order.lastModifiedBy }}
+                            {{ order.lastModifiedBy || 'No Data' }}
                         </td>
                         <td class="custom-td border-b">
                             {{ order.description }}

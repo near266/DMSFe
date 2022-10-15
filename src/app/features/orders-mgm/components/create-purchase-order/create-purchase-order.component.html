@@ -1,13 +1,13 @@
-<form [formGroup]="createForm" (ngSubmit)="create()">
+<form [formGroup]="createForm">
     <div class="fixed z-10 bg-white mt-[-64px] w-full">
         <div class="p-3 w-full flex justify-between items-center">
             <span style="font-size: 20px !important" class="font-medium">Thêm mới phiếu đặt hàng</span>
             <div class="flex items-center">
-                <button class="button-primary-sm flex items-center justify-between mr-2">
+                <!-- <button (click)="create()" class="button-primary-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-check text-white mr-2"></i>
                     <span class="text-white">Lưu</span>
-                </button>
-                <button class="button-success-sm flex items-center justify-between mr-2">
+                </button> -->
+                <button (click)="create()" class="button-success-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-circle-check text-white mr-2"></i>
                     <span class="text-white">Lưu & Đóng</span>
                 </button>
@@ -22,10 +22,10 @@
     <div class="p-3 mt-16">
         <div style="font-size: 12px">
             <div class="flex gap-x-6 justify-between">
-                <mat-form-field class="w-full" appearance="outline">
+                <!-- <mat-form-field class="w-full" appearance="outline">
                     <mat-label>Mã phiếu</mat-label>
                     <input matInput [readonly]="true" />
-                </mat-form-field>
+                </mat-form-field> -->
                 <mat-form-field class="w-full" appearance="outline">
                     <mat-label>Trạng thái</mat-label>
                     <mat-select formControlName="status">
@@ -50,7 +50,7 @@
             <div class="flex gap-x-6 justify-between">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Nhóm</mat-label>
-                    <mat-select formControlName="groupId">
+                    <mat-select [disabled]="true" formControlName="groupId">
                         <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
                         <mat-option *ngFor="let city of groupCites" [value]="city">{{ city }}</mat-option>
                     </mat-select>
@@ -59,12 +59,14 @@
                     <mat-label>Nhân viên đặt</mat-label>
                     <mat-select formControlName="orderEmployeeId">
                         <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option *ngFor="let city of groupCites" [value]="city">{{ city }}</mat-option>
+                        <mat-option *ngFor="let employee of listEmployee" [value]="employee.id">
+                            {{ employee.employeeName }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Tuyến</mat-label>
-                    <mat-select formControlName="routeId">
+                    <mat-select formControlName="routeId" [disabled]="true">
                         <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
                         <mat-option *ngFor="let city of groupCites" [value]="city">{{ city }}</mat-option>
                     </mat-select>
@@ -79,13 +81,13 @@
                     <mat-label>Mã khách hàng</mat-label>
                     <mat-select formControlName="customerId" (selectionChange)="setInfoCustomer($event.value)">
                         <mat-option *ngFor="let customer of listCustomer" [value]="customer.id">
-                            {{ customer.customerCode }}
+                            {{ customer.customerCode }} - {{ customer.customerName }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="w-full" appearance="outline">
                     <mat-label>Khách hàng</mat-label>
-                    <input matInput formControlName="customerName" />
+                    <input matInput formControlName="customerName" [readonly]="true" />
                 </mat-form-field>
                 <mat-form-field class="w-1/3" appearance="outline">
                     <mat-label>SĐT</mat-label>
@@ -159,7 +161,7 @@
                     </div>
                 </div>
                 <div class="relative sm:rounded-lg mt-2" style="font-size: 12px">
-                    <table class="custom-table">
+                    <table class="custom-table w-full">
                         <thead class="custom-thead">
                             <tr class="row-customize">
                                 <th scope="col" class="custom-th">#</th>
@@ -180,19 +182,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]; index as i" class="custom-tr">
+                            <tr *ngFor="let product of listChoosenProduct; index as i" class="custom-tr">
                                 <td class="custom-th">{{ i + 1 }}</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th">Value 1</td>
-                                <td class="custom-th" (click)="stopPropagation($event)">
+                                <td class="custom-th">{{ product.productCode }}</td>
+                                <td class="custom-th">{{ product.productName }}</td>
+                                <td class="custom-th">Select</td>
+                                <td class="custom-th">Select</td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" style="width: 120px" floatLabel="always">
+                                        <input type="text" matInput />
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">View ra khi select ĐVT (chẵn hay lẻ)</td>
+                                <td class="custom-th">Tính sau khi có 2 cột đơn giá và số lượng</td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" floatLabel="always" style="width: 120px">
+                                        <input type="text" matInput />
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">Tính khi biết chiết khấu và tổng tiền</td>
+                                <td class="custom-th">
+                                    <mat-form-field
+                                        appearance="outline"
+                                        floatLabel="always"
+                                        style="width: 120px; height: 15px">
+                                        <input type="text" matInput />
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th" (click)="stopPropagation($event); unChoose(product)">
                                     <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
                                 </td>
                             </tr>
@@ -201,7 +218,7 @@
                 </div>
             </mat-tab>
             <!-- Sản phẩm khuyến mại -->
-            <mat-tab label="Sản phẩm khuyến mại">
+            <!-- <mat-tab label="Sản phẩm khuyến mại">
                 <div class="flex items-center mt-2 justify-between">
                     <div class="flex items-center">
                         <div class="flex items-center">
@@ -277,7 +294,7 @@
                         </tbody>
                     </table>
                 </div>
-            </mat-tab>
+            </mat-tab> -->
         </mat-tab-group>
         <div>
             <div class="flex justify-between">
