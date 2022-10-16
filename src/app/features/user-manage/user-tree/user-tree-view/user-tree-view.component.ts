@@ -1,80 +1,57 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ITreeOptions } from '@circlon/angular-tree-component';
+import { EmployeeService } from 'src/app/core/services/employee.service';
 @Component({
-  selector: 'app-user-tree-view',
-  templateUrl: './user-tree-view.component.html',
-  styleUrls: ['./user-tree-view.component.scss']
+    selector: 'app-user-tree-view',
+    templateUrl: './user-tree-view.component.html',
+    styleUrls: ['./user-tree-view.component.scss'],
 })
 export class UserTreeViewComponent implements OnInit {
-  @Input() nodes: any[] = [
-    {
-      id: 'all',
-      name: 'Tất cả',
-      children: [
-        {
-          id: 2, name: 'child1',
-          children: [
-            { id: 4, name: 'child1' },
-            {
-              id: 5, name: 'child2',
-              children: [
-                {
-                  id: 8, name: 'child1',
-                  children: [
-                    { id: 10, name: 'child1' },
-                    { id: 11, name: 'child2' }
-                  ]
-                },
-                {
-                  id: 9, name: 'child2',
-                  children: [
-                    { id: 12, name: 'child1' },
-                    { id: 13, name: 'child2' }
-                  ]
-                }
-              ]
-            },
-            {
-              id: 14, name: 'child2',
-              children: [
-                {
-                  id: 15, name: 'child1',
-                  children: [
-                    { id: 16, name: 'child1' },
-                    { id: 17, name: 'child2' }
-                  ]
-                },
-                {
-                  id: 19, name: 'child2',
-                  children: [
-                    { id: 18, name: 'child1' },
-                    { id: 20, name: 'child2' }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: 3, name: 'child2',
-          children: [
-            { id: 6, name: 'child1' },
-            { id: 7, name: 'child2' }
-          ]
-        }
-      ]
-    }
-  ];
-  options: ITreeOptions = {
-    useCheckbox: true,
-  };
-  settings: any = {}
-  constructor() { }
+    nodes: any[] = [];
+    options: ITreeOptions = {
+        useCheckbox: true,
+        animateExpand: true,
+    };
+    settings: any = {};
+    total: number;
+    constructor(private employeeService: EmployeeService) {}
 
-  ngOnInit(): void {
-  }
-  Config(e: any) { 
-    console.log(e);
-    
-  }
+    ngOnInit(): void {
+        this.employeeService.getTreeEmployee().subscribe((tree) => {
+            console.log(tree);
+            const newTree = { id: 'root', level: -1, name: 'Tất cả', children: [{}] };
+            newTree.children = this.convertTree(tree);
+            this.nodes = [newTree];
+            this.total = this.getTotalItemInTreeWithNoChildren(this.nodes);
+        });
+    }
+    convertTree(tree: any[]) {
+        let nodes: any[] = [];
+        tree.forEach((element: any) => {
+            let node = {
+                id: element.item.id,
+                level: element.item.levelOfNode,
+                name: element.item.name,
+                code: element.item.unitTreeGroup_Code,
+                children: this.convertTree(element.children),
+            };
+            nodes.push(node);
+        });
+        return nodes;
+    }
+    //getTotalItemInTreeWithNoChildren
+    getTotalItemInTreeWithNoChildren(tree: any[]) {
+        let total = 0;
+        tree.forEach((element: any) => {
+            if (element.children.length == 0) {
+                total++;
+            } else {
+                total += this.getTotalItemInTreeWithNoChildren(element.children);
+            }
+        });
+        return total;
+    }
+    Config(e: any) {
+        console.log(e);
+    }
 }

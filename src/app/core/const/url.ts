@@ -1,4 +1,4 @@
-import { environment } from "src/environments/environment";
+import { environment } from 'src/environments/environment';
 
 export const base_url = environment.ID_URL;
 export const api_url = base_url + '/api';
