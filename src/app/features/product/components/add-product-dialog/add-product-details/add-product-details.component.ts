@@ -135,6 +135,7 @@ export class AddProductDetailsComponent implements OnInit {
             templateOptions: {
                 label: 'ĐVT lẻ',
                 options: this.productDialogService.getAllUnits(),
+                required: true,
             },
         },
         {

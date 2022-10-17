@@ -14,29 +14,30 @@
     <tr class="h-14 text-xs"
       *ngFor="let return of returns | paginate: { itemsPerPage: 30, currentPage };let i =index; let o=odd; let e=even;"
       [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-      <td class="space-x-2 w-14 border-x border-solid align-midde h-full pl-2 "><input class="inline" type="checkbox"><i
-          *ngIf="return.locked" class="fa-solid fa-lock text-base text-[#2e799c]"></i><i *ngIf="!return?.locked"
-          class="fa-solid fa-lock-open text-base text-[#2e799c]"></i>
+      <td class="space-x-2 min-w-[50px] border-x border-solid align-midde h-full pl-2 "><input class="inline"
+          type="checkbox"><i *ngIf="!return?.type" class="fa-solid fa-lock text-base text-[#2e799c]"></i><i
+          *ngIf="return.type" class="fa-solid fa-lock-open text-base text-[#2e799c]"></i>
       </td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{i}}
       </td>
-      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.orderer}}
+      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.orderEmployee?.employeeName}}
       </td>
       <td class="border-x min-w-[140px] border-solid  px-2">
-        <ng-container *ngIf="return?.status === 'pending'" [ngTemplateOutlet]="statusTmpl"
+        <ng-container *ngIf="return?.status === Status.PENDING" [ngTemplateOutlet]="statusTmpl"
           [ngTemplateOutletContext]="{ label: 'Chờ duyệt', className: ' bg-yellow-800'  }">
         </ng-container>
-        <ng-container *ngIf="return?.status === 'imported'" [ngTemplateOutlet]="statusTmpl"
+        <ng-container *ngIf="return?.status === Status.IMPORTED" [ngTemplateOutlet]="statusTmpl"
           [ngTemplateOutletContext]="{ label: 'Đã nhập trả', className: ' bg-green-600'  }">
         </ng-container>
-        <ng-container *ngIf="return?.status === 'approved'" [ngTemplateOutlet]="statusTmpl"
+        <ng-container *ngIf="return?.status === Status.APPROVED" [ngTemplateOutlet]="statusTmpl"
           [ngTemplateOutletContext]="{ label: 'Đã duyệt', className: ' bg-blue-600'  }">
         </ng-container>
       </td>
       <!-- mã phiếu -->
-      <td class="border-x min-w-[200px] border-solid align-middle px-0.5 text-emerald-500 font-medium cursor-pointer" [routerLink]="['/returns/detail/view_edit', 1]">
+      <td class="border-x min-w-[200px] border-solid align-middle px-0.5 text-emerald-500 font-medium cursor-pointer"
+        [routerLink]="['/returns/detail/view_edit', 1]">
         <div class="flex items-center space-x-2">
-          {{return.salesCode}}<button
+          {{return.orderCode}}<button
             class="ml-1 text-black border-solid border rounded-md space-x-0.5 border-emerald-500 w-7 h-7 flex items-center justify-center"><i
               class="fa-solid fa-download"></i><span>0</span></button>
           <button
@@ -47,16 +48,16 @@
               class="fa-solid fa-print text-red-500"></i><span>0</span></button>
         </div>
       </td>
-      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.customerCode}} </td>
+      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.customer?.customerCode}} </td>
       <td class="border-x min-w-[170px] border-solid align-middle px-2">{{return.customerName}}</td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.address}} </td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.returnsDate}}</td>
-      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.mandatoryPayment | currency}}</td>
+      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.totalPayment | currency}}</td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">web</td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.orderDate}} </td>
-      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.orderer}} </td>
-      <td class="border-x min-w-[100px] border-solid align-middle px-2"></td>
-      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.orderer}} </td>
+      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.employee?.employeeName}} </td>
+      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.lastModifiedDate}}</td>
+      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.lastModifiedBy}} </td>
       <td class="border-x min-w-[400px] border-solid align-middle px-2">{{return.description}}</td>
     </tr>
   </tbody>

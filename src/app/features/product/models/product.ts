@@ -1,3 +1,4 @@
+import { RetailUnit } from 'src/app/core/model/PurchaseOrder';
 import { warehouses } from './../../../core/data/Warehousers';
 export interface Product {
     id?: string;
@@ -28,9 +29,9 @@ export interface Product {
 
     // table fields
     brand?: Brand;
+    retailUnit?: Unit;
     supplier?: Supplier;
     major?: Major;
-    unit?: Unit;
     wholeSaleUnit?: Unit;
     warehouse?: Warehouse;
 }
