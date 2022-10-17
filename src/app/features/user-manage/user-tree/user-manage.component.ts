@@ -133,7 +133,7 @@ export class UserManageComponent implements OnInit {
     };
 
     ngOnInit(): void {
-        this.title.setTitle('Cây đơn vị - DMS:Delap');
+        this.title.setTitle('Cây đơn vị');
         this.GetListAll()
         this.dataService.employee.subscribe(data => {
             if (data == 'success') {
