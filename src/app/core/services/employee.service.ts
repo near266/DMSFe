@@ -42,4 +42,8 @@ export class EmployeeService {
             .post(gateway_url + '/Employee/ArchivedEmployee?Id=' + id + '&Archived=' + true, {})
             .pipe(map((response: any) => response));
     }
+
+    addGroup(body: any): Observable<any> {
+      return this.http.post(gateway_url + '/AddGroup', body).pipe(map((response: any) => response));
+  }
 }
