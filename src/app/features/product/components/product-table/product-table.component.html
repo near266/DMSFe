@@ -15,8 +15,8 @@
       *ngFor="let product of products | paginate: { itemsPerPage: 30, currentPage };let i =index; let o=odd; let e=even;"
       [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
       <td class="space-x-2 min-w-[56px] border-x border-solid align-midde h-full pl-2 "><input class="inline"
-          type="checkbox"><i *ngIf="product.status" class="fa-solid fa-lock text-base text-[#2e799c]"></i><i
-          *ngIf="!product?.status" class="fa-solid fa-lock-open text-base text-[#2e799c]"></i>
+          type="checkbox"><i *ngIf="!product?.status" class="fa-solid fa-lock text-base text-[#2e799c]"></i><i
+          *ngIf="product.status" class="fa-solid fa-lock-open text-base text-[#2e799c]"></i>
       </td>
       <td class="border-x  border-solid align-middle px-2">{{i+1}}
       </td>
@@ -25,7 +25,7 @@
       <td class="border-x  border-solid align-middle px-2">{{product.sku}}</td>
       <td class="border-x  border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer">
         {{product.productName}} </td>
-      <td class="border-x  border-solid align-middle px-2">{{product.unit?.unitName}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.retailUnit?.unitName}} </td>
       <td class="border-x  border-solid align-middle px-2">{{product.retailPrice | currency:'VND'}}</td>
       <td class="border-x  border-solid align-middle px-2">{{(product.vat || 0)/100 | percent}} </td>
       <td class="border-x  border-solid align-middle px-2">{{product.discountAcc}}</td>
