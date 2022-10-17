@@ -30,23 +30,23 @@
           <div *ngIf="isProvince" class="text-xs">
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Tỉnh thành</span>
-              <select class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
-                <option>Chọn tỉnh thành</option>
-                <option>No Bug</option>
+              <select [(ngModel)]="province" #provinces class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8" (change)="getDistrict(provinces.value)">
+                <option disabled selected value=""> --- Chọn tỉnh thành --- </option>
+                <option *ngFor="let item of listProvinces" value="{{item.name}}">{{item.name}}</option>
               </select>
             </div>
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Quận huyện</span>
-              <select class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
-                <option>Chọn quận huyện</option>
-                <option>No Bug</option>
+              <select [(ngModel)]="district" #districts class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8" (change)="getWard(districts.value)">
+                <option disabled selected value=""> --- Chọn quận huyện --- </option>
+                <option *ngFor="let item of listDistricts" value="{{item.name}}">{{item.name}}</option>
               </select>
             </div>
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Xã phường</span>
-              <select class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
-                <option>Chọn xã phường</option>
-                <option>No Bug</option>
+              <select [(ngModel)]="ward" class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
+                <option disabled selected value=""> --- Chọn xã phường --- </option>
+                <option *ngFor="let item of listWards" value="{{item.name}}">{{item.name}}</option>
               </select>
             </div>
           </div>

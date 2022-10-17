@@ -8,6 +8,7 @@ import { Config } from 'src/app/core/model/Config';
 import { Customers } from 'src/app/core/model/Customers';
 import { Response } from 'src/app/core/model/Response';
 import { CustomerService } from 'src/app/core/services/customer.service';
+import { ProvincesService } from 'src/app/core/services/provinces.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { DetailCustomerComponent } from './detail-customer/detail-customer.component';
@@ -18,87 +19,98 @@ import { DetailCustomerComponent } from './detail-customer/detail-customer.compo
     styleUrls: ['./customers.component.scss'],
 })
 export class CustomersComponent implements OnInit, AfterViewInit {
-    isProvince = false;
-    hasEmployee = false;
-    hasArea = false;
-    customer = customers;
-    response: Response<Customers> = {
-        data: [],
-        totalCount: 0,
-    };
-    keywords = '';
+  isProvince = false;
+  hasEmployee = false;
+  hasArea = false;
+  customer = customers;
+  response: Response<Customers> = {
+      data: [],
+      totalCount: 0,
+  };
+  keywords = '';
+  province = '';
+  district = '';
+  ward = '';
 
-    page = 1;
-    pageSize = 30;
-    totalPage = 0;
-    pageList: number[] = [];
+  page = 1;
+  pageSize = 30;
+  totalPage = 0;
+  pageList: number[] = [];
 
-    statusMenu: Config = {
-        icon: '<i class="fa-solid fa-flag"></i>',
-        title: 'Trạng thái',
-        menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
-    };
-    locationMenu: Config = {
-        icon: '<i class="fa-solid fa-location-dot"></i>',
-        title: 'Vị trí',
-        menuChildrens: ['Tất cả', 'Có vị trí', 'Nghi ngờ sai vị trí', 'Sai vị trí', 'Không vị trí'],
-    };
+  statusMenu: Config = {
+      icon: '<i class="fa-solid fa-flag"></i>',
+      title: 'Trạng thái',
+      menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
+  };
+  locationMenu: Config = {
+      icon: '<i class="fa-solid fa-location-dot"></i>',
+      title: 'Vị trí',
+      menuChildrens: ['Tất cả', 'Có vị trí', 'Nghi ngờ sai vị trí', 'Sai vị trí', 'Không vị trí'],
+  };
 
-    archiveMenu: Config = {
-        icon: '<i class="fa-solid fa-briefcase"></i>',
-        title: 'Lưu trữ',
-        menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
-    };
+  archiveMenu: Config = {
+      icon: '<i class="fa-solid fa-briefcase"></i>',
+      title: 'Lưu trữ',
+      menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
+  };
 
-    customerMenu: Config = {
-        icon: '<i class="fa-solid fa-file"></i>',
-        title: 'KH có mã và không',
-        menuChildrens: ['Tất cả', 'Khách hàng có mã', 'Khách hàng không có mã'],
-    };
+  customerMenu: Config = {
+      icon: '<i class="fa-solid fa-file"></i>',
+      title: 'KH có mã và không',
+      menuChildrens: ['Tất cả', 'Khách hàng có mã', 'Khách hàng không có mã'],
+  };
 
-    categoryMenu: Config = {
-        icon: '<i class="fa-solid fa-grip"></i>',
-        title: 'Loại khách hàng',
-        menuChildrens: [
-            'Tất cả',
-            'VIP 1',
-            'VIP 2',
-            'VIP 3',
-            'VIP 4',
-            'Tiềm năng',
-            'Thân thiết',
-            'Vãng lai',
-            'Không thuộc loại KH nào',
-        ],
-    };
+  categoryMenu: Config = {
+      icon: '<i class="fa-solid fa-grip"></i>',
+      title: 'Loại khách hàng',
+      menuChildrens: [
+          'Tất cả',
+          'VIP 1',
+          'VIP 2',
+          'VIP 3',
+          'VIP 4',
+          'Tiềm năng',
+          'Thân thiết',
+          'Vãng lai',
+          'Không thuộc loại KH nào',
+      ],
+  };
 
-    groupMenu: Config = {
-        icon: '<i class="fa-solid fa-users"></i>',
-        title: 'Nhóm khách hàng',
-        menuChildrens: ['Tất cả', 'Hợp đồng', 'KH lẻ', 'Không thuộc nhóm KH nào'],
-    };
+  groupMenu: Config = {
+      icon: '<i class="fa-solid fa-users"></i>',
+      title: 'Nhóm khách hàng',
+      menuChildrens: ['Tất cả', 'Hợp đồng', 'KH lẻ', 'Không thuộc nhóm KH nào'],
+  };
 
-    channelMenu: Config = {
-        icon: '<i class="fa-solid fa-retweet"></i>',
-        title: 'Kênh',
-        menuChildrens: ['Tất cả', 'OTC', 'ETC', 'Không thuộc kênh nào'],
-    };
+  channelMenu: Config = {
+      icon: '<i class="fa-solid fa-retweet"></i>',
+      title: 'Kênh',
+      menuChildrens: ['Tất cả', 'OTC', 'ETC', 'Không thuộc kênh nào'],
+  };
 
-    constructor(
-        private title: Title,
-        private dialog: MatDialog,
-        private customerService: CustomerService,
-        private snackbar: SnackbarService,
-        private datePipe: DatePipe,
-    ) {}
+  listProvinces: any[] = [];
+  listDistricts: any[] = [];
+  listWards: any[] = [];
 
-    ngOnInit(): void {
-        this.title.setTitle('Khách hàng');
-    }
+  constructor(
+      private title: Title,
+      private dialog: MatDialog,
+      private customerService: CustomerService,
+      private snackbar: SnackbarService,
+      private datePipe: DatePipe,
+      private provincesService: ProvincesService,
+  ) {}
 
-    ngAfterViewInit(): void {
-      this.init('', this.page, this.pageSize);
-    }
+  ngOnInit(): void {
+      this.title.setTitle('Khách hàng');
+  }
+
+  ngAfterViewInit(): void {
+    this.init('', this.page, this.pageSize);
+    this.provincesService.getListProvinces().subscribe(data => {
+      this.listProvinces = data;
+    });
+  }
 
   init(keyword: any, page: number, pageSize: number) {
     const body = {
@@ -224,6 +236,29 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
   search(keyword: any) {
     this.init(keyword, this.page, this.pageSize);
+  }
+
+  getDistrict(event: any) {
+    this.district = '';
+    this.ward = '';
+    this.listProvinces.forEach(data => {
+      if(data.name == event) {
+        this.provincesService.getDistrictsListByID(data.code).subscribe(res => {
+          this.listDistricts = res.districts;
+        });
+      }
+    });
+  }
+
+  getWard(event: any) {
+    this.ward = '';
+    this.listDistricts.forEach(data => {
+      if(data.name == event) {
+        this.provincesService.getWardsListByID(data.code).subscribe(res => {
+          this.listWards = res.wards;
+        });
+      }
+    });
   }
 
 }
