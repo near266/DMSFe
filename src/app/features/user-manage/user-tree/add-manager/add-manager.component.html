@@ -5,7 +5,7 @@
       <span class="text-lg text-[#888] font-medium italic">Thêm quản lý</span>
     </div>
     <div class="flex justify-between w-[160px]">
-      <button mat-flat-button class="bg-[#1891C9] text-white font-medium mx-1"><i class="fa-solid fa-circle-check mr-1"></i>Lưu</button>
+      <button type="button" (click)="save()" mat-flat-button class="bg-[#1891C9] text-white font-medium mx-1"><i class="fa-solid fa-circle-check mr-1"></i>Lưu</button>
       <button type="button" mat-stroked-button class="text-[#565869] bg-white font-medium" (click)="close()"><i class="fa-solid  fa-right-from-bracket mr-1"></i>Đóng</button>
     </div>
   </div>
@@ -14,44 +14,44 @@
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[#2C9212] dark:text-white">
             <tr>
-              <th scope="col" class="py-3 px-2">
+              <th scope="col" class="py-3 px-2 text-center">
                 #
               </th>
-              <th scope="col" class="py-3 px-2">
+              <th scope="col" class="py-3 px-2 text-center">
                 <mat-checkbox color="primary"></mat-checkbox>
               </th>
-                <th scope="col" class="py-3 px-2">
+                <th scope="col" class="py-3 px-2 text-center">
                     Mã nhân viên
                 </th>
-                <th scope="col" class="py-3 px-2">
+                <th scope="col" class="py-3 px-2 text-center">
                     Họ và tên
                 </th>
-                <th scope="col" class="py-3 px-2">
+                <th scope="col" class="py-3 px-2 text-center">
                     Chức danh
                 </th>
-                <th scope="col" class="py-3 px-2">
+                <th scope="col" class="py-3 px-2 text-center">
                     Ảnh đại diên
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let user of response.data; let i=index" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <td class="py-4 px-2">
-                {{i+1}}
+              <td class="py-4 px-2 text-center">
+                {{(i+1) + (page-1)*pageSize}}
               </td>
-              <td class="py-4 px-2">
-                <mat-checkbox color="primary"></mat-checkbox>
+              <td class="py-4 px-2 text-center">
+                <mat-checkbox (change)="selected_items(page, user.id)" [(ngModel)]="user.checked" color="primary"></mat-checkbox>
               </td>
-              <td class="py-4 px-2">
+              <td class="py-4 px-2 text-center">
                   {{user.employeeCode}}
               </td>
-              <td class="py-4 px-2">
+              <td class="py-4 px-2 text-center">
                 {{user.employeeName}}
               </td>
-              <td class="py-4 px-2">
+              <td class="py-4 px-2 text-center">
                   {{user.employeeTitle}}
               </td>
-              <td class="py-4 px-2">
+              <td class="py-4 px-2 flex justify-center text-center items-center align-middle">
                   <img class="h-[25px] w-auto" src="{{user.avatar}}">
               </td>
             </tr>
@@ -62,7 +62,7 @@
       <select class="bg-white px-3 py-1 border border-solid border-gray-500 rounded-sm">
           <option>{{pageSize}} bản ghi/trang</option>
       </select>
-      <div *ngFor="let p of pageList" class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer" (click)="init(p, pageSize)">{{p}}</div>
+      <div *ngFor="let p of pageList" class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer" (click)="paging(p, pageSize)">{{p}}</div>
 
       <span>Hiển thị 1 - {{totalPage}} trên tổng số {{totalPage}} bản ghi</span>
     </div>

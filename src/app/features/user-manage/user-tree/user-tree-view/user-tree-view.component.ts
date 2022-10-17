@@ -18,12 +18,17 @@ export class UserTreeViewComponent implements OnInit {
     action: IActionMapping;
     options: ITreeOptions;
 
-    menubar = [
+    menubar_unit = [
       'Thêm quản lý',
       'Thêm kế toán',
       'Thêm nhóm khách hàng',
-      'Thêm nhân viên',
       'Thêm đơn vị con'
+    ];
+
+    menubar_group = [
+      'Thêm quản lý',
+      'Thêm kế toán',
+      'Thêm nhân viên'
     ];
 
     settings: any = {};
@@ -37,14 +42,7 @@ export class UserTreeViewComponent implements OnInit {
       this.action = {
         mouse: {
           contextMenu: (tree, node, $event) => {
-
             node.data.expand = !node.data.expand;
-
-            // if(node.data.code) {
-              // this.open_add_sales_team(node.data.id);
-            // } else {
-            //   this.open_add_sales_team('');
-            // }
           },
           click: (tree, node, $event) => {
             node.data.expand = !node.data.expand;
@@ -58,8 +56,8 @@ export class UserTreeViewComponent implements OnInit {
       };
 
       this.employeeService.getTreeEmployee().subscribe((tree) => {
-          // console.log(tree);
-          const newTree = { id: 'root', level: -1, name: 'Tất cả', children: [{}], expand: false };
+          console.log(tree);
+          const newTree = { id: 'root', level: -1, name: 'Tất cả', children: [{}], expand: false, menubar: ['Thêm nhóm bán hàng', 'Thêm đơn vị'] };
           newTree.children = this.convertTree(tree);
           this.nodes = [newTree];
           this.total = this.getTotalItemInTreeWithNoChildren(this.nodes);
@@ -74,8 +72,11 @@ export class UserTreeViewComponent implements OnInit {
                 name: element.item.name,
                 code: element.item.unitTreeGroup_Code,
                 children: this.convertTree(element.children),
-                expand: false
+                expand: false,
+                type: element.item.type,
+                menubar: this.menubar_group
             };
+            if(node.type == 0) node.menubar = this.menubar_unit;
             nodes.push(node);
         });
         return nodes;

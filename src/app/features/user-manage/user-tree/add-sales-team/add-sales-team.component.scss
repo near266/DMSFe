@@ -12,3 +12,17 @@
 :host ::ng-deep .mat-dialog-container {
   padding: 0;
 }
+
+:host ::ng-deep .mat-card {
+  padding: 0;
+}
+
+:host ::ng-deep .mat-card-actions {
+   margin-left: 0;
+   margin-right: 0;
+   padding: 0;
+}
+
+:host ::ng-deep .mat-card-actions, .mat-card-subtitle, .mat-card-content {
+  margin: 0;
+}

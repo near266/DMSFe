@@ -14,8 +14,9 @@
     <span class="relative" [class]="node.data.className + 'Index'">{{ node.data.name }}</span>
     <span class="ml-1"
     *ngIf="getTotalItemInTreeWithNoChildren(node.data.children)">({{getTotalItemInTreeWithNoChildren(node.data.children)}})</span>
-    <div *ngIf="node.data.expand == true"  class=" bg-blue-50 z-50 absolute">
-      <div (click)="menuBar(item, node)" class="w-[160px] hover:bg-white p-3" *ngFor="let item of menubar">
+    <div *ngIf="node.data.expand == true"  class=" bg-blue-100 z-50 absolute">
+
+      <div (click)="menuBar(item, node)" class="w-[160px] hover:bg-white p-3 font-medium" *ngFor="let item of node.data.menubar">
         {{item}}
       </div>
     </div>

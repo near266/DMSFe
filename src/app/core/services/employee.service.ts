@@ -45,5 +45,17 @@ export class EmployeeService {
 
     addGroup(body: any): Observable<any> {
       return this.http.post(gateway_url + '/AddGroup', body).pipe(map((response: any) => response));
+    }
+
+    GetAllEmployeeByManager(page: number, pageSize: number): Observable<any> {
+      return this.http.get(gateway_url + '/Employee/GetAllEmployeeByManagaer?page='+ page +'&pagesize=' + pageSize).pipe(map((response: any) => response));
+    }
+
+    GetAllEmployeeByTitle(title: any, page: number, pageSize: number): Observable<any> {
+      return this.http.get(gateway_url + '/Employee/GetAllEmployeeByTitle?title=' + title + '&page='+ page +'&pagesize=' + pageSize).pipe(map((response: any) => response));
+    }
+
+    AddEmployeeUnitTree(body: any): Observable<any> {
+      return this.http.post(gateway_url + '/AddEmployeeUnitTree', body).pipe(map((response: any) => response));
+    }
   }
-}
