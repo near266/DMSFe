@@ -26,6 +26,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         data: [],
         totalCount: 0,
     };
+    keywords = '';
 
     page = 1;
     pageSize = 30;
@@ -92,16 +93,16 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     ) {}
 
     ngOnInit(): void {
-        this.title.setTitle('Khách hàng - DMS.Delap');
+        this.title.setTitle('Khách hàng');
     }
 
     ngAfterViewInit(): void {
-      this.init(this.page, this.pageSize);
+      this.init('', this.page, this.pageSize);
     }
 
-  init(page: number, pageSize: number) {
+  init(keyword: any, page: number, pageSize: number) {
     const body = {
-      keyword: '',
+      keyword: keyword,
       page: page,
       pageSize: pageSize,
     };
@@ -136,7 +137,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        this.init(this.page, this.pageSize);
+        this.init('', this.page, this.pageSize);
       }
     });
   }
@@ -149,7 +150,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     })
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        this.init(this.page, this.pageSize);
+        this.init('', this.page, this.pageSize);
       }
     });
   }
@@ -219,6 +220,10 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
   selection(e: any) {
       console.log(e);
+  }
+
+  search(keyword: any) {
+    this.init(keyword, this.page, this.pageSize);
   }
 
 }

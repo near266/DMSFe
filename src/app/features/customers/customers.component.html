@@ -3,7 +3,7 @@
       <div class=" bg-white mx-6 my-1 h-8 flex items-center border border-solid border-gray-400 rounded-sm"
           *ngIf="class.statusbar">
           <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
-          <input class="bg-white text-xs h-full" placeholder="Tìm kiếm khách hàng">
+          <input #keyword class="bg-white text-xs h-full" placeholder="Tìm kiếm khách hàng" [(ngModel)]="keywords" (keyup.enter)="search(keyword.value)">
       </div>
       <div class="overflow-y-scroll h-full">
         <div>
@@ -168,7 +168,7 @@
           <select class="bg-white px-3 py-1 border border-solid border-gray-500 rounded-sm">
               <option>{{pageSize}} bản ghi/trang</option>
           </select>
-          <div *ngFor="let p of pageList" class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer" (click)="init(p, pageSize)">{{p}}</div>
+          <div *ngFor="let p of pageList" class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer" (click)="init(keywords, p, pageSize)">{{p}}</div>
 
           <span>Hiển thị 1 - {{totalPage}} trên tổng số {{totalPage}} bản ghi</span>
       </div>
