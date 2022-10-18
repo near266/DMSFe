@@ -11,7 +11,8 @@
     color: #e0e0e0;
 }
 
-:host ::ng-deep .mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+:host ::ng-deep .mat-input-element:disabled,
+.mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
     color: black;
 }
 
@@ -33,16 +34,16 @@
 
 .custom {
     &-table {
-        @apply table-auto w-full text-left text-gray-500 dark:text-gray-400;
+        @apply w-full text-left text-gray-500 dark:text-gray-400;
     }
     &-thead {
-        @apply text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400;
+        @apply text-gray-700 uppercase bg-gray-100 border-x dark:bg-gray-700 dark:text-gray-400;
     }
     &-th {
-        @apply py-3 text-center;
+        @apply py-1 text-center border-x max-w-2xl px-1;
     }
     &-tr {
-        @apply cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
+        @apply cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 border-x;
     }
 }
 

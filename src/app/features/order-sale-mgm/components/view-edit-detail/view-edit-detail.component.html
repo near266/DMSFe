@@ -33,13 +33,16 @@
                 <i class="fa-solid fa-pen-to-square text-white mr-2"></i>
                 <span class="text-white">Sửa</span>
             </button>
-            <button *ngIf="type === 'View'" class="button-danger-sm flex items-center justify-between mr-2">
+            <button
+                (click)="archive()"
+                *ngIf="type === 'View'"
+                class="button-danger-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-trash text-white mr-2"></i>
                 <span class="text-white">Xóa</span>
             </button>
             <button
                 *ngIf="type === 'Edit'"
-                (click)="changeType('View')"
+                (click)="changeType('View'); update()"
                 class="button-primary-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-check text-white mr-2"></i>
                 <span class="text-white">Lưu</span>
@@ -67,7 +70,7 @@
             routerLinkActive=" active"
             class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
             <i class="fa-solid fa-pen-to-square mr-2"></i>
-            <span>Đặt hàng</span>
+            <span>Bán hàng</span>
         </div>
         <!-- <div
             [routerLink]="['/ordersale/detail/customer', this.id]"

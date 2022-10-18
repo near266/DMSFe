@@ -23,6 +23,8 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     id!: string;
     subscription: Subscription[] = [];
     detailOrder: any;
+
+    bodyUpdate: any;
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
@@ -36,6 +38,10 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         this.type = 'View';
         this.changeType('View');
         this.id = localStorage.getItem('purchaseOrderId')!;
+        // get body Update
+        this.purchaseOrder.updateOrder.subscribe((data) => {
+            this.bodyUpdate = data;
+        });
     }
 
     ngAfterViewInit(): void {
@@ -50,12 +56,13 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         this.purchaseOrder.detail(this.id).subscribe((data) => {
             this.statusNow = data.status;
             this.detailOrder = data;
+            localStorage.setItem('customerId', data.customer.id);
             console.log(this.detailOrder);
         });
     }
 
     ngDoCheck(): void {
-        this.update();
+        // this.update();
     }
 
     changeType(type: any) {
@@ -63,6 +70,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         this.dataService.changeType(this.type);
     }
 
+    // update status
     updateOrder(changeTo: number) {
         const body = {
             purchaseOrderId: this.detailOrder.id,
@@ -147,53 +155,41 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
                     panelClass: 'full-screen-modal',
                     data: {
                         isSaled: false,
+                        detailOrder: this.detailOrder,
                     },
                 });
-                console.log('Tạo mới đơn bán hàng khi trạng thái hiện tại là đã duyệt');
             } else if (this.statusNow === 3) {
-                this.dialog.open(GenOrderSaleComponent, {
-                    maxWidth: '100vw',
-                    maxHeight: '100vh',
-                    height: '100%',
-                    width: '100%',
-                    panelClass: 'full-screen-modal',
-                    data: {
-                        isSaled: true,
-                    },
-                });
-                console.log('Tạo mới đơn bán hàng khi trạng thái hiện tại là đã bán hàng');
+                // this.dialog.open(GenOrderSaleComponent, {
+                //     maxWidth: '100vw',
+                //     maxHeight: '100vh',
+                //     height: '100%',
+                //     width: '100%',
+                //     panelClass: 'full-screen-modal',
+                //     data: {
+                //         isSaled: true,
+                //     },
+                // });
+                // console.log('Tạo mới đơn bán hàng khi trạng thái hiện tại là đã bán hàng');
             }
         }
     }
 
+    // update body order
     update() {
-        const body = {
-            purchaseOrderId: this.id,
-            orderDate: '2022-10-14T07:22:15.195Z',
-            groupId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            orderEmployeeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            customerId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            routeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            type: 0,
-            status: 0,
-            paymentMethod: 0,
-            description: 'string',
-            phone: 'string',
-            address: 'string',
-            customerName: 'string',
-            totalAmount: 0,
-            totalOfVAT: 0,
-            totalDiscountProduct: 0,
-            tradeDiscount: 0,
-            totalPayment: 0,
-            archived: true,
-            lastModifiedBy: 'string',
-            lastModifiedDate: '2022-10-14T07:22:15.195Z',
-            orderCode: 'string',
-            deliveryDate: '2022-10-14T07:22:15.195Z',
-            prePayment: 0,
-        };
+        const body = this.bodyUpdate;
+        this.purchaseOrder.update(body).subscribe(
+            (data) => {},
+            (err) => {
+                this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+            () => {
+                // custom Status when done
+                this.snackbar.openSnackbar('Cập nhật thành công thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                this.getDetail();
+                // gửi trạng thái để detail-order component biết rồi reload lại data
+                this.purchaseOrder.isSuccessUpdate('Done');
+            },
+        );
     }
 
     archive() {
