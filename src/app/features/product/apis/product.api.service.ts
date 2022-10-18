@@ -37,7 +37,7 @@ export class ProductApiService {
                         ...data,
                         supplierId: data.supplier?.id || null,
                         brandId: data.brand?.id || null,
-                        retailUnitId: data.unit?.id || null,
+                        retailUnitId: data.retailUnit?.id || null,
                         wholeSaleUnitId: data.wholeSaleUnit?.id || null,
                         majorId: data.major?.id || null,
                         warehouseId: data.warehouse?.id || null,
