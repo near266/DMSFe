@@ -17,6 +17,7 @@ import { FormlySelectModule } from '@ngx-formly/core/select';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
+import { CreateReturnTableComponent } from './components/create-return/create-return-table/create-return-table.component';
 
 @NgModule({
     declarations: [
@@ -28,6 +29,7 @@ import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
         DetailReturnComponent,
         ReturnDialogComponent,
         CreateReturnFormComponent,
+        CreateReturnTableComponent,
     ],
     imports: [
         CommonModule,
