@@ -81,5 +81,7 @@
 </div> -->
 <form [formGroup]="form" (ngSubmit)="submit()">
   <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
-  <button #submitButton type="submit" class="hidden"></button>
+  <button #submitButton type="submit" class="">123</button>
 </form>
+<pre>Form values: {{ form?.value | json }}</pre>
+<pre>Form values: {{ model | json }}</pre>

@@ -45,6 +45,7 @@ export class AddProductDetailsComponent implements OnInit {
         supplierId: null,
         unitId: null,
         vat: 0,
+        warehouseId: null,
         warehouseAcc: null,
     };
     brands = companies;
@@ -80,6 +81,7 @@ export class AddProductDetailsComponent implements OnInit {
             type: 'product-input',
             templateOptions: {
                 label: 'Mã sản phẩm',
+                required: true,
                 placeholder: 'Nhập mã sản phẩm',
             },
 
@@ -205,6 +207,7 @@ export class AddProductDetailsComponent implements OnInit {
             type: 'product-input',
             templateOptions: {
                 label: 'Hình ảnh',
+                disabled: true,
                 placeholder: 'Nhập link hình ảnh',
             },
         },
@@ -226,11 +229,19 @@ export class AddProductDetailsComponent implements OnInit {
             },
         },
         {
-            key: 'warehouseID',
+            key: 'warehouseId',
             type: 'product-select',
             templateOptions: {
-                label: 'Tài khoản kho',
+                label: 'Kho',
                 options: this.productDialogService.getAllWarehouses(),
+            },
+        },
+        {
+            key: 'warehouseAcc',
+            type: 'product-input',
+            templateOptions: {
+                label: 'Tài khoản kho',
+                placeholder: 'Nhập tài khoản kho',
             },
         },
         {
@@ -282,6 +293,7 @@ export class AddProductDetailsComponent implements OnInit {
         this.productDialogService.changeHeader('');
         setTimeout(() => {
             if (this.productModel) {
+                console.log(this.productModel);
                 this.form.patchValue(this.productModel || {});
                 this.productDialogService.changeHeader(this.productModel.sku || '');
                 this.form.disable();
