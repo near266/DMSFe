@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import { of, switchMap, tap } from 'rxjs';
 import { Status } from '../../../models/return';
+import * as moment from 'moment';
 import { ReturnFormService } from '../../../services/return-form.service';
 
 @Component({
@@ -10,11 +12,22 @@ import { ReturnFormService } from '../../../services/return-form.service';
     styleUrls: ['./create-return-form.component.scss'],
 })
 export class CreateReturnFormComponent implements OnInit {
-    @Input() formValues = [];
+    formValues = [];
+    products: any[] = [];
+    promotionProducts: any[] = [];
     form = new FormGroup({});
     fields: FormlyFieldConfig[] = [
         {
             key: 'id',
+        },
+        {
+            key: 'customerId',
+        },
+        {
+            key: 'type',
+        },
+        {
+            key: 'warehouseId',
         },
         {
             fieldGroupClassName: 'flex space-x-4 max-w-[1000px] text-[12px]',
@@ -26,16 +39,15 @@ export class CreateReturnFormComponent implements OnInit {
                     templateOptions: {
                         label: 'Mã phiếu bán',
                         placeholder: 'Mã phiếu bán',
-                        required: true,
                         disabled: true,
                         appearance: 'outline',
                         // options: status,
                     },
                 },
                 {
-                    key: 'customerId',
+                    key: 'customerCode',
                     // type: 'product-select',
-                    type: 'input',
+                    type: 'select',
                     className: 'flex-1',
                     defaultValue: null,
                     templateOptions: {
@@ -43,7 +55,14 @@ export class CreateReturnFormComponent implements OnInit {
                         placeholder: 'Mã khách hàng',
                         required: true,
                         appearance: 'outline',
-                        // options: this.productDialogService.getAllBrands(),
+                        valueProp: (option: any) => option,
+                        compareWith: (o1: any, o2: any) => o1.value === o2.value,
+                        options: this.returnFormService.getAllCustomers(),
+                        change: (field, $event) => {
+                            field.form!.get('customerName')?.setValue(field!.formControl!.value.customerName);
+                            field.form!.get('address')?.setValue(field!.formControl!.value.address);
+                            field.form!.get('phone')?.setValue(field!.formControl!.value.phone);
+                        },
                     },
                 },
                 {
@@ -56,8 +75,22 @@ export class CreateReturnFormComponent implements OnInit {
                         label: 'Khách hàng',
                         placeholder: 'Khách hàng',
                         required: true,
+                        // disabled: true,
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
+                    },
+                    hooks: {
+                        onInit: (field: FormlyFieldConfig) => {
+                            field.form?.get('customerCode')?.valueChanges.pipe(
+                                tap((customerId) => {
+                                    field.formControl?.setValue(
+                                        this.returnFormService.filterCustomerById(customerId).subscribe((result) => {
+                                            console.log(result);
+                                        }),
+                                    );
+                                }),
+                            );
+                        },
                     },
                 },
             ],
@@ -72,8 +105,8 @@ export class CreateReturnFormComponent implements OnInit {
                     templateOptions: {
                         label: 'Phòng, nhóm',
                         options: this.returnFormService.getGroupsAndFilter(),
-                        required: true,
                         type: 'select',
+                        // disabled: true,
                         appearance: 'outline',
                         // options: status,
                     },
@@ -86,10 +119,28 @@ export class CreateReturnFormComponent implements OnInit {
                     defaultValue: null,
                     templateOptions: {
                         label: 'Nhân viên đặt',
-                        options: this.returnFormService.getEmployees(),
-                        required: true,
+
+                        // options: this.returnFormService.getEmployees(),
+                        // options: [],
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
+                    },
+                    // Code bên dưới sử dụng khi có sự phụ thuộc của nhóm và nhân viên.
+                    hooks: {
+                        onInit: (field: FormlyFieldConfig) => {
+                            field.props!.options = field.form?.get('groupId')?.valueChanges.pipe(
+                                switchMap((groupId) => {
+                                    return this.returnFormService.getEmployeesByGroupId(groupId).pipe(
+                                        tap((data) => {
+                                            if (data.length) {
+                                                console.log(data);
+                                                field.formControl?.setValue(data[0].value);
+                                            }
+                                        }),
+                                    );
+                                }),
+                            );
+                        },
                     },
                 },
                 {
@@ -100,7 +151,6 @@ export class CreateReturnFormComponent implements OnInit {
                     defaultValue: null,
                     templateOptions: {
                         label: 'Ngày đặt hàng',
-                        required: true,
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -117,7 +167,6 @@ export class CreateReturnFormComponent implements OnInit {
                     templateOptions: {
                         type: 'phoneNumber',
                         label: 'Số điện thoại',
-                        required: true,
                         appearance: 'outline',
                         // options: status,
                     },
@@ -130,7 +179,6 @@ export class CreateReturnFormComponent implements OnInit {
                     defaultValue: null,
                     templateOptions: {
                         label: 'Địa chỉ',
-                        required: true,
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -148,6 +196,7 @@ export class CreateReturnFormComponent implements OnInit {
                         label: 'Mã phiếu trả',
                         placeholder: 'Mã phiếu trả',
                         appearance: 'outline',
+                        disabled: true,
                         // options: status,
                     },
                 },
@@ -159,7 +208,6 @@ export class CreateReturnFormComponent implements OnInit {
                     defaultValue: null,
                     templateOptions: {
                         label: 'Ngày trả hàng',
-                        required: true,
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -198,7 +246,6 @@ export class CreateReturnFormComponent implements OnInit {
                         autosize: true,
                         label: 'Diễn giải',
                         placeholder: 'Diễn giải',
-                        required: true,
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -219,13 +266,59 @@ export class CreateReturnFormComponent implements OnInit {
         customerName: null,
         customerId: null,
         returnDate: new Date(),
+        returnCode: null,
     };
     constructor(private returnFormService: ReturnFormService) {}
 
     ngOnInit(): void {
-        this.returnFormService.getOrderDetailsById('e911d1ad-b680-420a-b799-a6801c737715').subscribe((orderDetails) => {
-            this.form.patchValue(orderDetails);
+        // TODO: remove id
+        // this.returnFormService.formValues$.subscribe((formValues) => {
+        //     this.form.patchValue({
+        //         ...formValues,
+        //         description: `Trả hàng từ phiếu bán hàng [${formValues.orderCode}]`,
+        //     });
+        //     formValues.listProduct.forEach((item: any) => {
+        //         this.products.push({
+        //             productId: item.product?.id,
+        //             unitId: item.unit?.id,
+        //             warehouseId: item.warehouse?.id,
+        //             unitPrice: item.unitPrice || 0,
+        //             quantity: item.quantity,
+        //             totalPrice: item.totalPrice || 0,
+        //             discount: item.discount || 0,
+        //             discountRate: item.discountRate || 0,
+        //             note: item.note,
+        //             type: item.type || 0,
+        //         });
+        //     });
+        //     formValues.listPromotionProduct.forEach((item: any) => {
+        //         this.promotionProducts.push({
+        //             productId: item.product?.id,
+        //             unitId: item.unit?.id,
+        //             warehouseId: item.warehouse?.id,
+        //             unitPrice: item.unitPrice || 0,
+        //             quantity: item.quantity,
+        //             totalPrice: item.totalPrice || 0,
+        //             discount: item.discount || 0,
+        //             discountRate: item.discountRate || 0,
+        //             note: item.note,
+        //             type: item.type || 0,
+        //         });
+        //     });
+        // });
+        this.returnFormService.getAllCustomers().subscribe((result) => {
+            console.log(result);
         });
     }
-    submit() {}
+    submit() {
+        const form = {
+            ...this.form.value,
+            orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
+            returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
+            listProduct: this.products,
+            listProductDiscount: this.promotionProducts,
+        };
+        delete form.id;
+        this.returnFormService.addNewReturn(form);
+    }
 }

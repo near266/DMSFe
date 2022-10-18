@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
-import { Product } from 'src/app/core/model/PurchaseOrder';
 import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
@@ -43,8 +42,8 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
                 this.page = data;
             }),
         );
-        this.productChoose = this.data.listId;
-        this.listChooseProductFirst = this.data.listProd;
+        this.productChoose = this.data?.listId || [];
+        this.listChooseProductFirst = this.data?.listProd || [];
         this.getAllProducts();
     }
 

@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { map, tap } from 'rxjs';
+import { BehaviorSubject, map, Subject, tap } from 'rxjs';
+import { CustomerService } from 'src/app/core/services/customer.service';
 import { ReturnDetailsService } from '../apis/return-details.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ReturnFormService {
-    constructor(private returnDetailsService: ReturnDetailsService) {}
+    constructor(private returnDetailsService: ReturnDetailsService, private customerService: CustomerService) {}
+    formValues$: Subject<any> = new Subject<any>();
+    products$: Subject<any> = new Subject<any>();
     getOrderDetailsById(id: string) {
         // <--- this method is not used in real cases
         return this.returnDetailsService.getOrderDetailsById(id).pipe(
@@ -14,7 +17,8 @@ export class ReturnFormService {
                 console.log(result);
                 return {
                     ...result,
-                    customerId: result.customer?.customerCode || null,
+                    customerId: result.customer?.id || null,
+                    customerCode: result.customer?.customerCode || null,
                     orderId: result.orderCode || null,
                     orderEmployeeId: result.orderEmployee?.id || null,
                 };
@@ -44,6 +48,56 @@ export class ReturnFormService {
                     let label = name;
                     return { value, label };
                 });
+            }),
+        );
+    }
+    getEmployeesByGroupId(id: string) {
+        return this.returnDetailsService.getEmployeesByGroup(id).pipe(
+            map((result) => {
+                return result.data.map((data: any) => {
+                    const { employee } = data;
+                    const value = employee.id;
+                    let label = employee.employeeName;
+                    if (employee.employeeTitle) {
+                        label = employee.employeeName + ' - ' + employee.employeeTitle;
+                    }
+                    console.log({ value, label });
+                    return { value, label };
+                });
+            }),
+        );
+    }
+
+    addNewReturn(form: any) {
+        console.log(form);
+        return this.returnDetailsService.createNewReturn(form).subscribe((res) => {
+            console.log(res);
+        });
+    }
+
+    getAllCustomers() {
+        return this.customerService
+            .search({
+                keyword: '',
+                page: 1,
+                pageSize: 100,
+            })
+            .pipe(
+                map((result) => {
+                    const customers = result.data;
+                    return customers.map((customer: any) => {
+                        const { id: value, customerCode, customerName, address, phone } = customer;
+                        const label = customerCode;
+                        return { value, label, customerName, address, phone };
+                    });
+                }),
+            );
+    }
+
+    filterCustomerById(id: string) {
+        return this.getAllCustomers().pipe(
+            map((result) => {
+                return result.filter((customer: any) => customer.value === id);
             }),
         );
     }
