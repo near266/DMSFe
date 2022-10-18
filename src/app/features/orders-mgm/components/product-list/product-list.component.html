@@ -111,7 +111,7 @@
                                 <td class="custom-th">{{ product.retailUnit?.unitName || 'No Data' }}</td>
                                 <td class="custom-th">{{ product.price | currency: 'VND' }}</td>
                                 <td class="custom-th">{{ product.retailPrice | currency: 'VND' }}</td>
-                                <td class="custom-th">{{ product.vat | currency: 'VND' }}</td>
+                                <td class="custom-th">{{ product.vat | percent }}</td>
                                 <td class="custom-th" (click)="stopPropagation($event)">
                                     <button
                                         (click)="product.isChoose = true; choose(product, i)"
@@ -156,9 +156,9 @@
                                 <td class="custom-th">{{ product?.productName || 'No Data' }}</td>
                                 <td class="custom-th">{{ product.wholeSaleUnit?.unitName || 'No Data' }}</td>
                                 <td class="custom-th">{{ product.unit?.unitName || 'No Data' }}</td>
-                                <td class="custom-th">{{ product.price || 'No Data' }}</td>
-                                <td class="custom-th">{{ product.retailPrice || 'No Data' }}</td>
-                                <td class="custom-th">{{ product.vat || 'No Data' }}</td>
+                                <td class="custom-th">{{ product.price | currency: 'VND' }}</td>
+                                <td class="custom-th">{{ product.retailPrice | currency: 'VND' }}</td>
+                                <td class="custom-th">{{ product.vat | percent }}</td>
                                 <td class="custom-th text-center" (click)="stopPropagation($event)">
                                     <button
                                         (click)="product.isChoose = false; unChoose(product, i)"
