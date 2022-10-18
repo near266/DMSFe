@@ -90,6 +90,8 @@ export class SaleReceiptService {
     }
 
     createReturnOrder(body: any): Observable<any> {
-        return this.http.post(this.api_gateway_url + '/ReturnsOrder/add', body).pipe(map((response: any) => response));
+        return this.http
+            .post(this.api_gateway_url + '/ReturnsOrder/add', body, { responseType: 'text' })
+            .pipe(map((response: any) => response));
     }
 }

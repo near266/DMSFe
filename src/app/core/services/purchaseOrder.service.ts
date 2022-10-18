@@ -15,6 +15,8 @@ export class PurchaseOrderService {
     private updateOrderSource = new BehaviorSubject<any>('');
     private productPageSource = new BehaviorSubject<number>(1);
     private isSucessUpdateSource = new BehaviorSubject<any>('');
+    private productUpdateSource = new BehaviorSubject<any>('');
+
     page = this.pageSource.asObservable();
     total = this.totalSource.asObservable();
     index = this.indexSource.asObservable();
@@ -23,6 +25,7 @@ export class PurchaseOrderService {
     productPage = this.productPageSource.asObservable();
     updateOrder = this.updateOrderSource.asObservable();
     isSucessUpdate = this.isSucessUpdateSource.asObservable();
+    productUpdate = this.productUpdateSource.asObservable();
 
     setTotal(total: number) {
         this.totalSource.next(total);
@@ -47,6 +50,9 @@ export class PurchaseOrderService {
     }
     isSuccessUpdate(msg: string) {
         this.isSucessUpdateSource.next(msg);
+    }
+    sendProductUpdate(list: any) {
+        this.productUpdateSource.next(list);
     }
 
     url = 'https://6346eabf04a6d457579c4afd.mockapi.io/purchaseOrders';
@@ -99,6 +105,11 @@ export class PurchaseOrderService {
     archive(body: any): Observable<any> {
         return this.http
             .put(this.api_gateway_url + '/PurchaseOrder/arhived', body)
+            .pipe(map((reponse: any) => reponse));
+    }
+    updateProductList(body: any): Observable<any> {
+        return this.http
+            .put(this.api_gateway_url + '/PurchaseOrder/updateProduct', body)
             .pipe(map((reponse: any) => reponse));
     }
 

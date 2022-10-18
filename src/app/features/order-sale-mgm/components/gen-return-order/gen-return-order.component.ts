@@ -83,6 +83,7 @@ export class GenReturnOrderComponent implements OnInit, AfterViewInit {
     }
 
     patchValue() {
+        let description = `${this.saleReceipt.description} (Trả hàng theo đơn bán số ${this.saleReceipt.saleCode})`;
         this.genReturnForm.patchValue({
             saleCode: this.saleReceipt.saleCode,
             orderDate: this.saleReceipt.orderDate,
@@ -91,7 +92,7 @@ export class GenReturnOrderComponent implements OnInit, AfterViewInit {
             name: this.saleReceipt.customerName,
             address: this.saleReceipt.address,
             phone: this.saleReceipt.phone,
-            description: this.saleReceipt.description,
+            description: description,
             groupId: this.saleReceipt.group?.id,
         });
     }

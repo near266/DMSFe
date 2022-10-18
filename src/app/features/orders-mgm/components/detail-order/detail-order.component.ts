@@ -185,6 +185,69 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             deliveryDate: moment(this.detailOrderForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
             prePayment: 0,
         });
+        // send body update product
+        this.purchaseOrder.sendProductUpdate(this.getProductListUpdate());
+        // count totalAmount (Tổng tiền hàng)
+        this.countTotalAmount();
+        // count totalDiscountProduct (Chiết khấu sản phẩm)
+        this.countTotalDiscountProduct();
+        // count totalPayment
+        this.countTotalPayment();
+        // number to text
+        this.textMoney = this.doc(this.totalPayment);
+    }
+
+    countTotalAmount() {
+        this.totalAmount = 0;
+        this.getProductListUpdate().forEach((product: any) => {
+            if (product.totalPrice) {
+                this.totalAmount += product.totalPrice;
+            }
+        });
+    }
+
+    countTotalDiscountProduct() {
+        this.totalDiscountProduct = 0;
+        this.getProductListUpdate().forEach((product: any) => {
+            if (product.discount) {
+                this.totalDiscountProduct += product.discount;
+            }
+        });
+    }
+
+    countTotalPayment() {
+        this.totalPayment = 0;
+        if (this.totalAmount) {
+            this.totalPayment = this.totalAmount - this.tradeDiscount;
+        }
+    }
+
+    getProductListUpdate() {
+        // console.log(this.listProduct);
+        let listProductToSent = this.listProduct.map((product: any) => {
+            return {
+                purchaseOrderId: this.id,
+                productId: product.product.id,
+                // productName: product.product.productName,
+                unitId: product.unit.id,
+                warehouseId: product.warehouse.id,
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount,
+                discountRate: product.discountRate,
+                note: product.note,
+                type: product.type,
+            };
+        });
+        return listProductToSent;
+    }
+
+    unChoose(productRemove: any) {
+        console.log(productRemove, this.listProduct);
+        this.listProduct = this.listProduct.filter((product: any) => {
+            return product.product.id != productRemove.product.id;
+        });
     }
 
     setInfoCustomer(id: string) {
@@ -206,6 +269,19 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 address: customer.address,
             },
         });
+    }
+
+    // selectUnit(product: any, value: any) {
+    //     product.unitId = value.unit.id;
+    //     if (value.type === 'retail') {
+    //         product.unitPrice = product.product.retailPrice;
+    //     } else if (value.type === 'whosale') {
+    //         product.unitPrice = product.product.price;
+    //     }
+    // }
+
+    discountRate(product: any) {
+        product.discountRate = product.discount / product.totalPrice;
     }
 
     stopPropagation(e: any) {

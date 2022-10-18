@@ -25,6 +25,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     detailOrder: any;
 
     bodyUpdate: any;
+    listProductUpdate: any;
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
@@ -41,6 +42,10 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         // get body Update
         this.purchaseOrder.updateOrder.subscribe((data) => {
             this.bodyUpdate = data;
+        });
+        // get list Product Update
+        this.purchaseOrder.productUpdate.subscribe((data) => {
+            this.listProductUpdate = data;
         });
     }
 
@@ -184,7 +189,28 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
             },
             () => {
                 // custom Status when done
-                this.snackbar.openSnackbar('Cập nhật thành công thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                this.getDetail();
+                // gửi trạng thái để detail-order component biết rồi reload lại data
+                this.purchaseOrder.isSuccessUpdate('Done');
+            },
+        );
+    }
+
+    // update ProductList
+    updateProductList() {
+        const body = {
+            purchaseOrderProducts: this.listProductUpdate,
+        };
+        console.log(body);
+        this.purchaseOrder.updateProductList(body).subscribe(
+            (data) => {},
+            (err) => {
+                this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+            () => {
+                // custom Status when done
+                this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
                 this.getDetail();
                 // gửi trạng thái để detail-order component biết rồi reload lại data
                 this.purchaseOrder.isSuccessUpdate('Done');
