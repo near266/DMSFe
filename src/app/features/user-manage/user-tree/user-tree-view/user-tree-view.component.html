@@ -4,11 +4,11 @@
     <i *ngIf="node.data.level === -1" class="fa-solid fa-sitemap mr-1 text-blue-600 text-medium"></i>
 
     <!-- T có thử vài icon với vài nhóm khác nhau trả về từ api nếu cần m cứ *ngIf ra thôi là đc, nên bảo BE chỉnh icon giống nhau vs cùng 1 loại type. VD công ty để là company, user,manager,... -->
-    <i *ngIf="node.data.code === 'NNP'" class="fa-solid fa-users mr-1 text-orange-600 text-medium"></i>
-    <i *ngIf="node.data.code === '89990'" class="fa-solid fa-building mr-1 text-green-600 text-medium"></i>
-    <i *ngIf="node.data.code === 'nhom2'" class="fa-solid fa-users mr-1 text-blue-600 text-medium"></i>
+    <i *ngIf="node.data.type == 0 && node.data.level != -1 " class="fa-solid fa-users mr-1 text-orange-600 text-medium"></i>
+    <i *ngIf="node.data.type == 1" class="fa-solid fa-building mr-1 text-green-600 text-medium"></i>
+    <!-- <i *ngIf="node.data.code === 'nhom2'" class="fa-solid fa-users mr-1 text-blue-600 text-medium"></i>
     <i *ngIf="node.data.code === 'DV1'" class="fa-solid fa-user mr-1 text-green-600 text-medium"></i>
-    <i *ngIf="node.data.code === 'dv2'" class="fa-solid fa-user mr-1 text-blue-600 text-medium"></i>
+    <i *ngIf="node.data.code === 'dv2'" class="fa-solid fa-user mr-1 text-blue-600 text-medium"></i> -->
     <!-- ... tương tự với các icon khác -->
 
     <span class="relative" [class]="node.data.className + 'Index'">{{ node.data.name }}</span>
