@@ -46,7 +46,7 @@ export class UserTreeViewComponent implements OnInit {
             node.data.expand = !node.data.expand;
           },
           click: (tree, node, $event) => {
-            node.data.expand = !node.data.expand;
+            node.data.expand = false;
           },
         },
       };
@@ -96,7 +96,8 @@ export class UserTreeViewComponent implements OnInit {
         return total;
     }
     Config(e: any) {
-      // this.menuTrigger.openMenu()
+      e.preventDefault();
+
     }
 
     right_click(event: any) {
