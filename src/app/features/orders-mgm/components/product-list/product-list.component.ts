@@ -108,7 +108,9 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
                 pageSize: 1000,
             })
             .subscribe((data) => {
-                this.listProduct = data.data;
+                if (data) {
+                    this.listProduct = data.data;
+                }
                 this.total = data.totalCount;
                 this.getChoosedProduct();
             });

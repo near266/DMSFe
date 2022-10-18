@@ -56,6 +56,7 @@ export class ViewEditDetailComponent implements OnInit {
         this.saleReceipt.searchReceiptById(this.id).subscribe((data) => {
             this.statusNow = data.status;
             this.detailOrder = data;
+            localStorage.setItem('customerId', data.customer.id);
             console.log(this.statusNow);
         });
     }

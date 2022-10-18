@@ -112,6 +112,11 @@ export class PurchaseOrderService {
             .put(this.api_gateway_url + '/PurchaseOrder/updateProduct', body)
             .pipe(map((reponse: any) => reponse));
     }
+    removeProduct(body: any): Observable<any> {
+        return this.http
+            .delete(this.api_gateway_url + '/PurchaseOrder/removeProduct', body)
+            .pipe(map((reponse: any) => reponse));
+    }
 
     // customer
     searchCustomer(body: any): Observable<any> {

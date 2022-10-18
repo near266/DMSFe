@@ -131,6 +131,7 @@
                             </div>
                         </div>
                         <button
+                            [disabled]="true"
                             (click)="openDialogProduct()"
                             class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
                             <i class="fa-solid fa-filter mr-2 px-2"></i>
@@ -203,25 +204,83 @@
         </mat-tab-group>
         <div>
             <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2">Bằng chữ:</span>
-                <span class="font-medium w-1/3 py-2">Tổng tiền hàng:</span>
+                <span class="font-medium w-1/3 py-2 flex">
+                    <span class="w-1/3">Bằng chữ:</span>
+                    <span>
+                        <span *ngIf="textMoney">{{ textMoney }} đồng</span>
+                    </span>
+                </span>
+                <span class="font-medium w-1/3 py-2 flex">
+                    <span class="w-1/3">Tổng tiền hàng</span>
+                    <span class="font-normal ml-4">{{ totalAmount | currency: 'VND' }}</span>
+                </span>
             </div>
             <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 text-green-700">Hạn mức công nợ:</span>
-                <span class="font-medium w-1/3 py-2">Tổng tiền VAT:</span>
+                <span class="font-medium w-1/3 py-2 text-green-700 flex">
+                    <span class="w-1/2">Hình thức thanh toán:</span>
+                    <span class="font-normal">Thanh toán trực tiếp</span>
+                </span>
+                <span class="font-medium w-1/3 py-2 flex items-end">
+                    <!-- Tổng tiền VAT:
+                    <span class="font-normal ml-4"></span> -->
+                    <span class="w-1/3">Chiết khấu sản phẩm:</span>
+                    <span class="font-normal ml-4">
+                        {{ totalDiscountProduct | currency: 'VND' }}
+                    </span>
+                </span>
             </div>
             <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 text-green-700">Dư nợ hiện tại:</span>
-                <span class="font-medium w-1/3 py-2">Chiết khấu sản phẩm:</span>
+                <span class="font-medium w-1/3 py-2 text-green-700">
+                    <!-- Dư nợ hiện tại:
+                    <span class="font-normal ml-4"></span> -->
+                </span>
+                <span class="font-medium w-1/3 py-2 flex items-end">
+                    <!-- Chiết khấu sản phẩm:
+                    <span class="font-normal ml-4"></span> -->
+                    <span class="w-1/3">Chiết khấu đơn hàng:</span>
+                    <span class="font-normal ml-4">
+                        <input
+                            class="border-b border-gray-700"
+                            type="number"
+                            [(ngModel)]="tradeDiscount"
+                            [ngModelOptions]="{ standalone: true }" />
+                    </span>
+                </span>
             </div>
             <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 text-green-700">Hình thức thanh toán:</span>
-                <span class="font-medium w-1/3 py-2">Chiết khấu đơn hàng:</span>
+                <span class="font-medium w-1/3 py-2 text-green-700">
+                    <!-- Hình thức thanh toán:
+                    <span class="font-normal ml-4"></span> -->
+                </span>
+                <span class="font-medium w-1/3 py-2 flex">
+                    <!-- Chiết khấu đơn hàng:
+                    <span class="font-normal ml-4"></span> -->
+                    <span class="w-1/3">Phải thanh toán:</span>
+                    <span class="font-normal ml-4">
+                        {{ totalPayment | currency: 'VND' }}
+                    </span>
+                </span>
             </div>
             <div class="flex justify-between">
                 <span class="font-medium w-1/3 py-2"></span>
-                <span class="font-medium w-1/3 py-2">Thanh toán trước:</span>
+                <span class="font-medium w-1/3 py-2 flex items-center">
+                    <span class="w-1/3">Thanh toán trước:</span>
+                    <span class="font-normal ml-4">
+                        <input
+                            class="border-b border-gray-700"
+                            type="number"
+                            [(ngModel)]="prePayment"
+                            [ngModelOptions]="{ standalone: true }" />
+                    </span>
+                </span>
             </div>
+            <!-- <div class="flex justify-between">
+                <span class="font-medium w-1/3 py-2"></span>
+                <span class="font-medium w-1/3 py-2">
+                    Thanh toán trước:
+                    <span class="font-normal ml-4"></span>
+                </span>
+            </div> -->
         </div>
     </div>
 </form>

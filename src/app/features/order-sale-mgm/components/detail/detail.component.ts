@@ -65,6 +65,9 @@ export class DetailComponent implements OnInit {
     prePayment: number = 0;
     totalOfVAT: number = 0;
     textMoney: any;
+
+    listChoosenProduct: any = [];
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
@@ -130,7 +133,7 @@ export class DetailComponent implements OnInit {
             this.detailOrder = data;
             console.log(data);
             this.patchValue();
-
+            this.pushListProductToDialog();
             // get all info payment
             this.totalAmount = this.detailOrder.totalAmount;
             this.totalDiscountProduct = this.detailOrder.totalDiscountProduct;
@@ -224,6 +227,15 @@ export class DetailComponent implements OnInit {
         e.stopPropagation();
     }
 
+    pushListProductToDialog() {
+        console.log(this.listProduct);
+        this.listChoosenProduct = this.detailOrder.listProduct.map((product: any) => {
+            return {
+                id: product.product.id,
+            };
+        });
+    }
+
     openDialogProduct() {
         const dialogRef = this.dialog.open(ProductListComponent, {
             maxWidth: '100vw',
@@ -231,6 +243,10 @@ export class DetailComponent implements OnInit {
             height: '100%',
             width: '100%',
             panelClass: 'full-screen-modal',
+            data: {
+                listId: this.listChoosenProduct,
+                listProd: this.detailOrder.listProduct,
+            },
         });
     }
 

@@ -31,10 +31,10 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     discount: any = [];
     quantity: any = 0;
 
-    listCustomer: any;
-    listChoosenProduct: any = [];
-    listEmployee: any = [];
-    listWarehouse: any = [];
+    listCustomer: any[] = [];
+    listChoosenProduct: any[] = [];
+    listEmployee: any[] = [];
+    listWarehouse: any[] = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -136,11 +136,17 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             height: '100%',
             width: '100%',
             panelClass: 'full-screen-modal',
-            data: this.listChoosenProduct,
+            // data: this.listChoosenProduct,
+            data: {
+                listId: [],
+                listProd: this.listChoosenProduct,
+            },
         });
         dialogRef.afterClosed().subscribe((data) => {
+            if (!data.isCancel) {
+                this.listChoosenProduct = data;
+            }
             console.log(data);
-            this.listChoosenProduct = data;
         });
     }
 
@@ -235,7 +241,6 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         // } else if (value.type === 'whosale') {
         //     this.unitPrices[i] = product.price;
         // }
-        console.log(product);
         product.unitId = value.unit.id;
         product.type = value.type;
         if (value.type === 'retail') {
@@ -251,20 +256,30 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
 
     countTotalAmount() {
         this.totalAmount = 0;
-        this.listChoosenProduct.forEach((product: any) => {
+        Array.prototype.forEach.call(this.listChoosenProduct, (product) => {
             if (product.totalPrice) {
                 this.totalAmount += product.totalPrice;
             }
         });
+        // this.listChoosenProduct.forEach((product: any) => {
+        //     if (product.totalPrice) {
+        //         this.totalAmount += product.totalPrice;
+        //     }
+        // });
     }
 
     countTotalDiscountProduct() {
         this.totalDiscountProduct = 0;
-        this.listChoosenProduct.forEach((product: any) => {
+        Array.prototype.forEach.call(this.listChoosenProduct, (product) => {
             if (product.discount) {
                 this.totalDiscountProduct += product.discount;
             }
         });
+        // this.listChoosenProduct.forEach((product: any) => {
+        //     if (product.discount) {
+        //         this.totalDiscountProduct += product.discount;
+        //     }
+        // });
     }
 
     countTotalPayment() {

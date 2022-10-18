@@ -109,7 +109,7 @@
                 <td class="custom-th">{{ product.retailUnit?.unitName || 'No Data' }}</td>
                 <td class="custom-th">{{ product.price | currency: 'VND' }}</td>
                 <td class="custom-th">{{ product.retailPrice | currency: 'VND' }}</td>
-                <td class="custom-th">{{ product.vat | percent }}</td>
+                <td class="custom-th">{{ product.vat / 100 | percent }}</td>
                 <td class="custom-th" (click)="stopPropagation($event)">
                   <button (click)="product.isChoose = true; choose(product, i)" *ngIf="!product.isChoose"
                     class="text-green-600 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">
@@ -153,7 +153,7 @@
                 <td class="custom-th">{{ product.unit?.unitName || 'No Data' }}</td>
                 <td class="custom-th">{{ product.price | currency: 'VND' }}</td>
                 <td class="custom-th">{{ product.retailPrice | currency: 'VND' }}</td>
-                <td class="custom-th">{{ product.vat | percent }}</td>
+                <td class="custom-th">{{ product.vat / 100 | percent }}</td>
                 <td class="custom-th text-center" (click)="stopPropagation($event)">
                   <button (click)="product.isChoose = false; unChoose(product, i)"
                     class="text-red-500 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">

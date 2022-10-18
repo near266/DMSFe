@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductListComponent } from '../product-list/product-list.component';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import * as moment from 'moment';
+import { ConfirmDialogComponent } from 'src/app/core/shared/components/confirm-dialog/confirm-dialog.component';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 @Component({
     selector: 'app-detail-order',
     templateUrl: './detail-order.component.html',
@@ -51,6 +53,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         private router: Router,
         private dataService: DataService,
         private purchaseOrder: PurchaseOrderService,
+        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -244,9 +247,33 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     }
 
     unChoose(productRemove: any) {
-        console.log(productRemove, this.listProduct);
-        this.listProduct = this.listProduct.filter((product: any) => {
-            return product.product.id != productRemove.product.id;
+        // console.log(productRemove.product.id);
+        // this.listProduct = this.listProduct.filter((product: any) => {
+        //     return product.product.id != productRemove.product.id;
+        // });
+        const body = {
+            productId: productRemove.product.id,
+            purchaseOrderId: this.id,
+        };
+        let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            data: {
+                content: 'Bạn có chắc chắn muốn xóa sản phẩm này',
+                action: ['Xóa', 'Hủy'],
+            },
+        });
+        dialogRef.afterClosed().subscribe((data) => {
+            if (data === 'Xóa') {
+                this.purchaseOrder.removeProduct(body).subscribe(
+                    (data) => {},
+                    (err) => {
+                        this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+                    },
+                    () => {
+                        this.snackbar.openSnackbar('Lưu trữ thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                    },
+                );
+            } else {
+            }
         });
     }
 
