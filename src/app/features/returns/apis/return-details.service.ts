@@ -40,4 +40,12 @@ export class ReturnDetailsService {
     createNewReturn(form: any): Observable<any> {
         return this.http.post<any>(this.returnUrl + '/add', form);
     }
+
+    getAllReturns() {
+        return this.http.post<any>(this.returnUrl + '/search', {
+            pageSize: 100,
+            page: 1,
+            keyword: '',
+        });
+    }
 }

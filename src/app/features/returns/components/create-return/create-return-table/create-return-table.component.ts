@@ -54,15 +54,79 @@ export class CreateReturnTableComponent implements OnInit {
         this.productDialogService.getAllWarehouses().subscribe((data) => {
             this.warehouseOptions = data;
         });
+        this.returnFormService.submitProductForm$.subscribe((data) => {
+            if (data && this.productsInput?.length) {
+                const requiredFields = this.productsInput.map((item: any) => {
+                    const {
+                        id,
+                        quantity,
+                        warehouseId,
+                        retailUnitId,
+                        unitPrice,
+                        totalPrice,
+                        discount,
+                        discountRate,
+                        note,
+                    } = item;
+                    return {
+                        productId: id,
+                        unitId: retailUnitId,
+                        warehouseId,
+                        unitPrice,
+                        totalPrice,
+                        quantity,
+                        discount,
+                        discountRate,
+                        note,
+                        type: 0,
+                    };
+                });
+                this.returnFormService.submitInfoForm$.next({
+                    listProduct: requiredFields,
+                    totalAmount: this.calculateTotalPrice(),
+                    totalDiscount: this.calculateDiscountAmount(),
+                    totalDiscountProduct: 0,
+                    totalOfVAT: 0,
+                    totalPayment: this.calculateTotalPrice() - this.calculateDiscountAmount(),
+                });
+            }
+        });
     }
     ngDoCheck(): void {
         if (this.productsInput?.length) {
             this.productQuantitySum = this.productsInput.reduce((acc: number, curr: any) => acc + curr.quantity, 0);
+            this.calculateTotalPrice();
+            this.calculateDiscountAmount();
             // update product totalPrice in productsInput
         }
     }
-    updateItem(item: any) {
+    calculateTotalPrice(): number {
+        //calculate total price of all products in productsInput by the sum of totalPrice of each product
+        let totalPrice = 0;
+        this.productsInput.forEach((item: any) => {
+            totalPrice += item.totalPrice;
+        });
+        this.returnFormService.totalPrice$.next(totalPrice);
+        return totalPrice;
+    }
+    calculateDiscountAmount(): number {
+        let discountAmount = 0;
+        this.productsInput.forEach((item: any) => {
+            discountAmount += item.discount;
+        });
+        this.returnFormService.discountAmount$.next(discountAmount);
+        return discountAmount;
+    }
+    updateItemTotalPrice(item: any) {
         item.totalPrice = item.quantity * item.unitPrice;
+        this.updateDiscountRate(item);
+    }
+    updateDiscountRate(item: any) {
+        if (item.discount && item.totalPrice) {
+            item.discountRate = item.discount / item.totalPrice;
+        } else {
+            item.discountRate = 0;
+        }
     }
 
     // addProduct(formValue: any) {

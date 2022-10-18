@@ -18,9 +18,6 @@ export class CreateReturnFormComponent implements OnInit {
     form = new FormGroup({});
     fields: FormlyFieldConfig[] = [
         {
-            key: 'id',
-        },
-        {
             key: 'customerId',
         },
         {
@@ -254,13 +251,14 @@ export class CreateReturnFormComponent implements OnInit {
         },
     ];
     model = {
-        id: null,
         orderId: null,
         description: null,
         status: 1,
         address: null,
         phone: null,
         orderDate: null,
+        warehouseId: null,
+        type: 0,
         orderEmployeeId: null,
         groupId: null,
         customerName: null,
@@ -308,6 +306,16 @@ export class CreateReturnFormComponent implements OnInit {
         // });
         this.returnFormService.getAllCustomers().subscribe((result) => {
             console.log(result);
+        });
+        this.returnFormService.submitInfoForm$.subscribe((listProduct) => {
+            const form = {
+                ...this.form.value,
+                ...listProduct,
+                listPromotionProduct: [],
+                orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
+                returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
+            };
+            this.returnFormService.addNewReturn(form);
         });
     }
     submit() {

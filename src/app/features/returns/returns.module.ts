@@ -18,6 +18,7 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { CreateReturnTableComponent } from './components/create-return/create-return-table/create-return-table.component';
+import { CreateReturnPromotionTableComponent } from './components/create-return/create-return-promotion-table/create-return-promotion-table.component';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { CreateReturnTableComponent } from './components/create-return/create-re
         ReturnDialogComponent,
         CreateReturnFormComponent,
         CreateReturnTableComponent,
+        CreateReturnPromotionTableComponent,
     ],
     imports: [
         CommonModule,

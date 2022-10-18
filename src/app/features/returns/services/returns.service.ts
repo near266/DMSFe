@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, pipe } from 'rxjs';
+import { ReturnDetailsService } from '../apis/return-details.service';
 import returns from '../mocks/returns';
 import { Return } from '../models/return';
 
@@ -25,7 +26,16 @@ export class ReturnsService {
     public startAndEndIndex$ = this.startAndEndIndex.asObservable();
     public totalReturns = this.defaultReturns.length;
 
-    constructor() {}
+    constructor(private returnDetailsService: ReturnDetailsService) {}
+
+    getAllReturns() {
+        return this.returnDetailsService.getAllReturns().pipe(
+            map((response: any) => {
+                console.log(response);
+                return response.data;
+            }),
+        );
+    }
 
     setCurrentPage(currentPage: number) {
         this.currentPage.next(currentPage);

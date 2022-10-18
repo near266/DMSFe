@@ -8,6 +8,10 @@ import { ReturnDetailsService } from '../apis/return-details.service';
 })
 export class ReturnFormService {
     constructor(private returnDetailsService: ReturnDetailsService, private customerService: CustomerService) {}
+    totalPrice$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    submitInfoForm$: Subject<any> = new Subject<any>();
+    submitProductForm$: Subject<boolean> = new Subject<boolean>();
+    discountAmount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     formValues$: Subject<any> = new Subject<any>();
     products$: Subject<any> = new Subject<any>();
     getOrderDetailsById(id: string) {
@@ -100,5 +104,9 @@ export class ReturnFormService {
                 return result.filter((customer: any) => customer.value === id);
             }),
         );
+    }
+    submitForms() {
+        console.log(123);
+        this.submitProductForm$.next(true);
     }
 }

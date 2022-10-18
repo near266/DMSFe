@@ -71,7 +71,7 @@
           <div class="flex">
             <mat-form-field appearance="outline">
 
-              <input matInput type="number" [(ngModel)]="item.quantity" (change)="updateItem(item)" />
+              <input matInput type="number" [(ngModel)]="item.quantity" (change)="updateItemTotalPrice(item)" />
             </mat-form-field>
 
           </div>
@@ -83,12 +83,14 @@
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-              <input matInput type="number" [(ngModel)]="item.discount" />
+              <input matInput type="number" [(ngModel)]="item.discount" [disabled]="!item.quantity"
+                (change)="updateDiscountRate(item)" />
             </mat-form-field>
 
           </div>
         </td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">{{item.discountRate}}</td>
+        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">{{item.discountRate | percent}}
+        </td>
         <td class="border-x min-w-[200px]  border-solid align-middle px-2  text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
@@ -103,5 +105,5 @@
       </tr>
     </tbody>
   </table>
-  <pre>Form values: {{ productsInput | json }}</pre>
+  <!-- <pre>Form values: {{ productsInput | json }}</pre> -->
 </div>

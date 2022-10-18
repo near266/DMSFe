@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Product } from '../../../product/models/product';
 import { DataService } from 'src/app/core/services/data.service';
+import { readMoney } from 'src/app/core/shared/utils/readMoney';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { ReturnFormService } from '../../services/return-form.service';
@@ -15,6 +16,7 @@ import { ReturnFormService } from '../../services/return-form.service';
 })
 export class CreateReturnComponent implements OnInit {
     formValues: any;
+    totalPrice: number;
     productsInput: any;
     statusList = [
         {
@@ -26,10 +28,11 @@ export class CreateReturnComponent implements OnInit {
             name: 'Đã duyệt',
         },
     ];
-    groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng'];
     createForm: FormGroup;
     listCustomer: any;
     products: any;
+    textMoney: string;
+    discountAmount: number;
     constructor(
         private dataService: DataService,
         private dialog: MatDialog,
@@ -37,7 +40,22 @@ export class CreateReturnComponent implements OnInit {
         private returnFormService: ReturnFormService,
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.returnFormService.totalPrice$.subscribe((data) => {
+            this.totalPrice = data;
+            const ins = new readMoney(data);
+            this.textMoney = ins.doc(data - this.discountAmount);
+        });
+        this.returnFormService.discountAmount$.subscribe((data) => {
+            this.discountAmount = data;
+            const ins = new readMoney(data);
+            this.textMoney = ins.doc(this.totalPrice - data);
+        });
+    }
+    submitForms(): void {
+        console.log('123');
+        this.returnFormService.submitForms();
+    }
 
     stopPropagation(e: any) {
         e.stopPropagation();

@@ -2,6 +2,7 @@ import { Product, Warehouse } from '../../product/models/product';
 
 export interface Return {
     id?: string;
+    returnCode?: string;
     group?: string | null;
     customerName?: string | null;
     prePayment?: string;

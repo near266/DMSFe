@@ -16,11 +16,8 @@ export class ReturnsTableComponent implements OnInit {
     headers = tableHeader;
     constructor(private returnsService: ReturnsService) {}
     ngOnInit(): void {
-        this.returnsService.returns$.subscribe((data: Return[]) => {
+        this.returnsService.getAllReturns().subscribe((data) => {
             this.returns = data;
-        });
-        this.returnsService.currentPage$.subscribe((data: number) => {
-            this.currentPage = data;
         });
     }
     // openUpdateReturn(return: Return): void {
