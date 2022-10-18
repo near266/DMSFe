@@ -66,19 +66,19 @@
     <!-- sidebar -->
     <div class="w-48 fixed mt-16 border-r h-screen mr-1 flex flex-col items-stretch overflow-y-auto">
         <div
-            [routerLink]="['/ordersale/detail/viewEdit', this.id]"
+            [routerLink]="['/ordersale/detail/viewEdit']"
             routerLinkActive=" active"
             class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
             <i class="fa-solid fa-pen-to-square mr-2"></i>
             <span>Bán hàng</span>
         </div>
-        <!-- <div
-            [routerLink]="['/ordersale/detail/customer', this.id]"
+        <div
+            [routerLink]="['/ordersale/detail/customer']"
             routerLinkActive="active"
             class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
             <i class="fa-solid fa-user-secret mr-2"></i>
             <span>Khách hàng</span>
-        </div> -->
+        </div>
     </div>
     <!-- main -->
     <div class="overflow-x-auto w-full ml-48 mt-16">

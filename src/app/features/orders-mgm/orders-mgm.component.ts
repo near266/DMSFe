@@ -42,6 +42,8 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
 
     search() {
         let body = {
+            sortField: 'CreatedDate',
+            isAscending: false,
             page: this.page,
             pageSize: this.pageSize,
         };

@@ -44,6 +44,8 @@ export class OrderSaleMgmComponent implements OnInit {
 
     search() {
         let body = {
+            sortField: 'CreatedDate',
+            isAscending: false,
             page: this.page,
             pageSize: this.pageSize,
         };

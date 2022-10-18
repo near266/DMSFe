@@ -115,6 +115,7 @@
                     </div>
                     <button
                         (click)="openDialogProduct()"
+                        [disabled]="true"
                         class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
                         <i class="fa-solid fa-filter mr-2 px-2"></i>
                         <span class="px-2">Tìm kiếm nâng cao</span>
@@ -173,7 +174,7 @@
                             <td class="custom-th">{{ product.unitPrice | currency: 'VND':'symbol' }}</td>
                             <td class="custom-th">{{ product.totalPrice | currency: 'VND':'symbol' }}</td>
                             <td class="custom-th">{{ product.discount | currency: 'VND':'symbol' }}</td>
-                            <td class="custom-th">{{ product.discountRate | percent }}</td>
+                            <td class="custom-th">{{ product.discountRate / 100 | percent }}</td>
                             <td class="custom-th">{{ product.note }}</td>
                             <td class="custom-th" (click)="stopPropagation($event)">
                                 <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>

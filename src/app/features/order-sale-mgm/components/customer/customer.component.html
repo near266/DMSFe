@@ -1,1 +1,79 @@
-<p>customer works!</p>
+<div class="p-3 flex flex-col w-full">
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Trạng thái:</span>
+        <span *ngIf="customerInfo?.status">Hoạt động</span>
+        <span *ngIf="!customerInfo?.status">Không hoạt động</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Mã khách hàng:</span>
+        <span>{{ customerInfo?.customerCode }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Khách hàng:</span>
+        <span>{{ customerInfo?.customerName }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Nhóm khách hàng:</span>
+        <span>{{ customerInfo?.customerGroup?.customerGroupName || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Loại khách hàng:</span>
+        <span>{{ customerInfo?.customerType?.customerTypeName || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Kênh:</span>
+        <span>{{ customerInfo?.channel?.channelName || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Địa chỉ:</span>
+        <span>{{ customerInfo?.address || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Địa chỉ giao hàng:</span>
+        <span>
+            {{ customerInfo?.deliveryAddress || 'Chưa có' }}
+        </span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Khu vực:</span>
+        <span>{{ customerInfo?.province || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Tỉnh/Thành phố:</span>
+        <span>{{ customerInfo?.province || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Quận/Huyện:</span>
+        <span>{{ customerInfo?.district || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Sinh nhật:</span>
+        <span>{{ (customerInfo?.dob | date: 'dd/MM/yyyy') || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Người liên hệ:</span>
+        <span>{{ customerInfo?.contactName || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Chức vụ:</span>
+        <span>
+            {{ customerInfo?.position || 'Chưa có' }}
+        </span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">SĐT:</span>
+        <span>{{ customerInfo?.phone || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Email:</span>
+        <span>{{ customerInfo?.email || 'Chưa có' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">Hạn mức công nợ:</span>
+        <span>{{ customerInfo?.debtLimit || 0 | currency: 'VND' }}</span>
+    </div>
+    <div class="flex mb-4">
+        <span class="font-medium w-1/5">TK Tiền/Chi phí/Nợ:</span>
+        <span>{{ customerInfo?.cashAcc || 'Chưa có' }}</span>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, DoCheck } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
@@ -12,7 +12,7 @@ import { ProductListComponent } from 'src/app/features/orders-mgm/components/pro
     templateUrl: './gen-return-order.component.html',
     styleUrls: ['./gen-return-order.component.scss'],
 })
-export class GenReturnOrderComponent implements OnInit, AfterViewInit {
+export class GenReturnOrderComponent implements OnInit, AfterViewInit, DoCheck {
     statusList = ['Chờ duyệt', 'Đã duyệt', 'Đã giao hàng'];
     groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng'];
     listEmployees: any = [];
@@ -80,6 +80,46 @@ export class GenReturnOrderComponent implements OnInit, AfterViewInit {
             this.prePayment = this.data.prePayment;
             this.textMoney = this.doc(this.totalPayment);
         }, 0);
+    }
+
+    ngDoCheck(): void {
+        // count totalAmount (Tổng tiền hàng)
+        this.countTotalAmount();
+        // count totalDiscountProduct (Chiết khấu sản phẩm)
+        this.countTotalDiscountProduct();
+        // count totalPayment
+        this.countTotalPayment();
+        // number to text
+        this.textMoney = this.doc(this.totalPayment);
+    }
+
+    discountRate(product: any) {
+        product.discountRate = product.discount / product.totalPrice;
+    }
+
+    countTotalAmount() {
+        this.totalAmount = 0;
+        this.listProduct.forEach((product: any) => {
+            if (product.totalPrice) {
+                this.totalAmount += product.totalPrice;
+            }
+        });
+    }
+
+    countTotalDiscountProduct() {
+        this.totalDiscountProduct = 0;
+        this.listProduct.forEach((product: any) => {
+            if (product.discount) {
+                this.totalDiscountProduct += product.discount;
+            }
+        });
+    }
+
+    countTotalPayment() {
+        this.totalPayment = 0;
+        if (this.totalAmount) {
+            this.totalPayment = this.totalAmount - this.tradeDiscount;
+        }
     }
 
     patchValue() {
