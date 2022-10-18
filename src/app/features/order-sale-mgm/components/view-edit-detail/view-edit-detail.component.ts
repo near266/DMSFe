@@ -10,6 +10,7 @@ import { ConfirmRejectComponent } from 'src/app/features/orders-mgm/components/c
 import { GenOrderSaleComponent } from 'src/app/features/orders-mgm/components/gen-order-sale/gen-order-sale.component';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { GenReturnOrderComponent } from '../gen-return-order/gen-return-order.component';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-view-edit-detail',
@@ -21,6 +22,8 @@ export class ViewEditDetailComponent implements OnInit {
     statusNow!: number;
     id!: string;
     subscription: Subscription[] = [];
+    detailOrder: any = [];
+    bodyUpdate: any = [];
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
@@ -34,20 +37,15 @@ export class ViewEditDetailComponent implements OnInit {
     ngOnInit(): void {
         this.type = 'View';
         this.changeType('View');
+        this.id = localStorage.getItem('receiptOrderId')!;
+        // get body Update
+        this.saleReceipt.updateOrderPass.subscribe((data) => {
+            this.bodyUpdate = data;
+        });
     }
 
     ngAfterViewInit(): void {
-        // get id
-        setTimeout(() => {
-            this.subscription.push(
-                this.saleReceipt.id.subscribe((data) => {
-                    this.id = data;
-                    if (this.id) {
-                        this.getDetail();
-                    }
-                }),
-            );
-        }, 0);
+        this.getDetail();
     }
 
     ngOnDestroy(): void {
@@ -55,8 +53,9 @@ export class ViewEditDetailComponent implements OnInit {
     }
 
     getDetail() {
-        this.saleReceipt.searchById(this.id).subscribe((data) => {
+        this.saleReceipt.searchReceiptById(this.id).subscribe((data) => {
             this.statusNow = data.status;
+            this.detailOrder = data;
             console.log(this.statusNow);
         });
     }
@@ -70,9 +69,35 @@ export class ViewEditDetailComponent implements OnInit {
 
     updateOrder(changeTo: number) {
         const body = {
+            id: this.detailOrder.id,
+            orderDate: this.detailOrder.orderDate,
+            groupId: this.detailOrder.group?.id,
+            saleCode: this.detailOrder.saleCode,
+            saleEmployeeId: this.detailOrder.saleEmployee?.id,
+            orderEmployeeId: this.detailOrder.orderEmployee?.id,
+            warehouseId: this.detailOrder.warehouse?.id,
+            customerId: this.detailOrder.customer?.id,
+            routeId: this.detailOrder.route?.id,
+            type: this.detailOrder.type,
             status: changeTo,
+            paymentMethod: 0,
+            description: this.detailOrder.description,
+            phone: this.detailOrder.phone,
+            address: this.detailOrder.address,
+            customerName: this.detailOrder.customerName,
+            purchaseOrderId: this.detailOrder.purchaseOrderId,
+            deliveryDate: this.detailOrder.deliveryDate,
+            saleDate: this.detailOrder.saleDate,
+            paymentTerm: this.detailOrder.paymentTerm,
+            totalAmount: this.detailOrder.totalAmount,
+            totalOfVAT: this.detailOrder.totalOfVAT,
+            totalDiscountProduct: this.detailOrder.totalDiscountProduct,
+            tradeDiscount: this.detailOrder.tradeDiscount,
+            totalPayment: this.detailOrder.totalPayment,
+            prePayment: this.detailOrder.prePayment,
+            // debtRecord: true,
         };
-        // ấn vào nút trả hàng
+        // ấn vào nút trả hàng -> mở dialog gen phiếu trả
         if (changeTo === 0) {
             let dialogRef = this.dialog.open(GenReturnOrderComponent, {
                 maxWidth: '100vw',
@@ -80,6 +105,7 @@ export class ViewEditDetailComponent implements OnInit {
                 height: '100%',
                 width: '100%',
                 panelClass: 'full-screen-modal',
+                data: this.detailOrder,
             });
             dialogRef.afterClosed().subscribe((data) => {
                 if (data === 'Lưu') {
@@ -91,7 +117,7 @@ export class ViewEditDetailComponent implements OnInit {
         }
         // Ấn vào nút xuất hàng
         else if (changeTo === 4) {
-            this.saleReceipt.updateOrder(this.id, body).subscribe(
+            this.saleReceipt.update(body).subscribe(
                 (data) => {},
                 (err) => {
                     this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
@@ -102,9 +128,52 @@ export class ViewEditDetailComponent implements OnInit {
                 },
             );
         }
-        // Khi ấn vào nút hủy
-        // else if(changeTo === 7 ) {
+    }
 
-        // }
+    // update body order
+    update() {
+        const body = this.bodyUpdate;
+        this.saleReceipt.update(body).subscribe(
+            (data) => {},
+            (err) => {
+                this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+            () => {
+                // custom Status when done
+                this.snackbar.openSnackbar('Cập nhật thành công thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                this.getDetail();
+                // gửi trạng thái để detail-order component biết rồi reload lại data
+                this.saleReceipt.isSuccessUpdate('Done');
+            },
+        );
+    }
+
+    archive() {
+        let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            data: {
+                content: 'Bạn có chắc chắn muốn lưu trữ bản ghi này không',
+                action: ['Lưu trữ', 'Hủy'],
+            },
+        });
+        dialogRef.afterClosed().subscribe((data) => {
+            if (data === 'Lưu trữ') {
+                let body = {
+                    saleRecieptIds: [this.id],
+                };
+                this.saleReceipt.archive(body).subscribe(
+                    (data) => {},
+                    (err) => {
+                        this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+                    },
+                    () => {
+                        this.snackbar.openSnackbar('Lưu trữ thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                        setTimeout(() => {
+                            this.router.navigate(['/ordersale']);
+                        }, 1000);
+                    },
+                );
+            } else {
+            }
+        });
     }
 }

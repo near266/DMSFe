@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductListComponent } from '../product-list/product-list.component';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import * as moment from 'moment';
 @Component({
     selector: 'app-detail-order',
     templateUrl: './detail-order.component.html',
@@ -25,12 +26,23 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     detailOrderForm!: FormGroup;
     detailOrderFakeData: any = [];
     detailOrder: any;
-    listProduct: any = [];
-    listPromotionProduct?: ListPromotionProduct[] = [];
     subscription: Subscription[] = [];
     id: string;
+
+    listPromotionProduct?: ListPromotionProduct[] = [];
+    listProduct: any = [];
     listCustomer: any = [];
     listEmployee: any = [];
+    listGroup: any = [];
+    listChoosenProduct: any = [];
+    listWarehouse: any = [];
+
+    totalAmount: number = 0;
+    totalDiscountProduct: number = 0;
+    tradeDiscount: number = 0;
+    totalPayment: number = 0;
+    prePayment: number = 0;
+    textMoney: any;
     constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
@@ -50,6 +62,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             orderDate: [null],
             deliveryDate: [null],
             orderEmployee: [null],
+            groupId: [null],
             customer: this.fb.group({
                 code: [null],
                 name: [null],
@@ -70,8 +83,12 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 this.getDetail();
             }
         });
-        // get body Update
-        this.purchaseOrder.updateOrder.subscribe((data) => console.log(data));
+        // xem update thành công chưa -> nếu thành công reload lại data
+        this.purchaseOrder.isSucessUpdate.subscribe((data) => {
+            if (data === 'Done') {
+                this.getDetail();
+            }
+        });
     }
 
     getDetail() {
@@ -79,6 +96,14 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             this.detailOrder = data;
             console.log(this.detailOrder);
             this.patchValue();
+            this.pushListProductToDialog();
+            // get all info payment
+            this.totalAmount = this.detailOrder.totalAmount;
+            this.totalDiscountProduct = this.detailOrder.totalDiscountProduct;
+            this.tradeDiscount = this.detailOrder.tradeDiscount;
+            this.totalPayment = this.detailOrder.totalPayment;
+            this.prePayment = this.detailOrder.prePayment;
+            this.textMoney = this.doc(this.totalPayment);
         });
     }
 
@@ -98,7 +123,6 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             description: this.detailOrder.description,
         });
         this.listProduct = this.detailOrder.listProduct;
-        console.log(this.listProduct);
         this.listPromotionProduct = this.detailOrder.listPromotionProduct;
     }
 
@@ -112,13 +136,18 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         this.getDetail();
         this.getListCustomer();
         this.getListEmployee();
+        this.getListWareHouse();
+    }
+
+    getListWareHouse() {
+        this.purchaseOrder.getAllWarehouses().subscribe((data) => {
+            this.listWarehouse = data;
+        });
     }
 
     getListCustomer() {
         this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data: any) => {
             this.listCustomer = data.data;
-            console.log(typeof this.listCustomer);
-            console.log(this.listCustomer);
         });
     }
 
@@ -128,10 +157,68 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         });
     }
 
-    ngDoCheck(): void {}
+    ngDoCheck(): void {
+        this.purchaseOrder.sendBodyUpdate({
+            purchaseOrderId: this.id,
+            orderDate: moment(this.detailOrderForm.get('orderDate')?.value).format('YYYY-MM-DD'),
+            groupId: this.detailOrderForm.get('groupId')?.value,
+            orderEmployeeId: this.detailOrderForm.get('orderEmployee')?.value,
+            // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            customerId: this.detailOrderForm.get('customer.code')?.value,
+            // routeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            type: 0,
+            status: this.detailOrderForm.get('status')?.value,
+            paymentMethod: 0,
+            description: this.detailOrderForm.get('description')?.value,
+            phone: this.detailOrderForm.get('customer.phone')?.value,
+            address: this.detailOrderForm.get('customer.address')?.value,
+            customerName: this.detailOrderForm.get('customer.name')?.value,
+            totalAmount: 0,
+            totalOfVAT: 0,
+            totalDiscountProduct: 0,
+            tradeDiscount: 0,
+            totalPayment: 0,
+            archived: false,
+            // lastModifiedBy: 'string',
+            lastModifiedDate: moment(Date.now()).format('YYYY-MM-DD'),
+            orderCode: this.detailOrder?.orderCode,
+            deliveryDate: moment(this.detailOrderForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
+            prePayment: 0,
+        });
+    }
+
+    setInfoCustomer(id: string) {
+        let customer = this.listCustomer.filter((customer: any) => {
+            return customer.id === id;
+        })[0];
+        console.log(customer);
+        this.detailOrderForm.patchValue({
+            customer: {
+                name: [null],
+                phone: [null],
+                address: [null],
+            },
+        });
+        this.detailOrderForm.patchValue({
+            customer: {
+                name: customer.customerName,
+                phone: customer.phone,
+                address: customer.address,
+            },
+        });
+    }
 
     stopPropagation(e: any) {
         e.stopPropagation();
+    }
+
+    pushListProductToDialog() {
+        console.log(this.listProduct);
+        this.listChoosenProduct = this.detailOrder.listProduct.map((product: any) => {
+            return {
+                id: product.product.id,
+            };
+        });
     }
 
     openDialogProduct() {
@@ -141,6 +228,126 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             height: '100%',
             width: '100%',
             panelClass: 'full-screen-modal',
+            data: {
+                listId: this.listChoosenProduct,
+                listProd: this.detailOrder.listProduct,
+            },
         });
+        dialogRef.afterClosed().subscribe((data) => {
+            if (!data.isCancel) {
+                this.listChoosenProduct = data;
+                this.listProduct = this.listChoosenProduct;
+            }
+        });
+    }
+
+    // number to text
+    doc1so(so: any) {
+        var arr_chuhangdonvi = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+        var resualt = '';
+        resualt = arr_chuhangdonvi[so];
+        return resualt;
+    }
+
+    doc2so(so: any) {
+        so = so.replace(' ', '');
+        var arr_chubinhthuong = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+        var arr_chuhangdonvi = ['mươi', 'mốt', 'hai', 'ba', 'bốn', 'lăm', 'sáu', 'bảy', 'tám', 'chín'];
+        var arr_chuhangchuc = [
+            '',
+            'mười',
+            'hai mươi',
+            'ba mươi',
+            'bốn mươi',
+            'năm mươi',
+            'sáu mươi',
+            'bảy mươi',
+            'tám mươi',
+            'chín mươi',
+        ];
+        var resualt = '';
+        var sohangchuc = so.substr(0, 1);
+        var sohangdonvi = so.substr(1, 1);
+        resualt += arr_chuhangchuc[sohangchuc];
+        if (sohangchuc == 1 && sohangdonvi == 1) resualt += ' ' + arr_chubinhthuong[sohangdonvi];
+        else if (sohangchuc == 1 && sohangdonvi > 1) resualt += ' ' + arr_chuhangdonvi[sohangdonvi];
+        else if (sohangchuc > 1 && sohangdonvi > 0) resualt += ' ' + arr_chuhangdonvi[sohangdonvi];
+
+        return resualt;
+    }
+
+    doc3so(so: any) {
+        var resualt = '';
+        var arr_chubinhthuong = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+        var sohangtram = so.substr(0, 1);
+        var sohangchuc = so.substr(1, 1);
+        var sohangdonvi = so.substr(2, 1);
+        resualt = arr_chubinhthuong[sohangtram] + ' trăm';
+        if (sohangchuc == 0 && sohangdonvi != 0) resualt += ' linh ' + arr_chubinhthuong[sohangdonvi];
+        else if (sohangchuc != 0) resualt += ' ' + this.doc2so(sohangchuc + ' ' + sohangdonvi);
+        return resualt;
+    }
+
+    docsonguyen(so: any) {
+        var result = '';
+        if (so != undefined) {
+            //alert(so);
+            var arr_So: any = [{ ty: '' }, { trieu: '' }, { nghin: '' }, { tram: '' }];
+            var sochuso = so.length;
+            for (var i = sochuso - 1; i >= 0; i--) {
+                if (sochuso - i <= 3) {
+                    if (arr_So['tram'] != undefined) arr_So['tram'] = so.substr(i, 1) + arr_So['tram'];
+                    else arr_So['tram'] = so.substr(i, 1);
+                } else if (sochuso - i > 3 && sochuso - i <= 6) {
+                    if (arr_So['nghin'] != undefined) arr_So['nghin'] = so.substr(i, 1) + arr_So['nghin'];
+                    else arr_So['nghin'] = so.substr(i, 1);
+                } else if (sochuso - i > 6 && sochuso - i <= 9) {
+                    if (arr_So['trieu'] != undefined) arr_So['trieu'] = so.substr(i, 1) + arr_So['trieu'];
+                    else arr_So['trieu'] = so.substr(i, 1);
+                } else {
+                    if (arr_So.ty != undefined) arr_So.ty = so.substr(i, 1) + arr_So.ty;
+                    else arr_So.ty = so.substr(i, 1);
+                }
+                //console.log(arr_So);
+            }
+
+            if (arr_So['ty'] > 0) result += this.doc(arr_So['ty']) + ' tỷ';
+            if (arr_So['trieu'] > 0) {
+                if (arr_So['trieu'].length >= 3 || arr_So['ty'] > 0)
+                    result += ' ' + this.doc3so(arr_So['trieu']) + ' triệu';
+                else if (arr_So['trieu'].length >= 2) result += ' ' + this.doc2so(arr_So['trieu']) + ' triệu';
+                else result += ' ' + this.doc1so(arr_So['trieu']) + ' triệu';
+            }
+            if (arr_So['nghin'] > 0) {
+                if (arr_So['nghin'].length >= 3 || arr_So['trieu'] > 0)
+                    result += ' ' + this.doc3so(arr_So['nghin']) + ' nghìn';
+                else if (arr_So['nghin'].length >= 2) result += ' ' + this.doc2so(arr_So['nghin']) + ' nghìn';
+                else result += ' ' + this.doc1so(arr_So['nghin']) + ' nghìn';
+            }
+            if (arr_So['tram'] > 0) {
+                if (arr_So['tram'].length >= 3 || arr_So['nghin'] > 0) result += ' ' + this.doc3so(arr_So['tram']);
+                else if (arr_So['tram'].length >= 2) result += ' ' + this.doc2so(arr_So['tram']);
+                else result += ' ' + this.doc1so(arr_So['tram']);
+            }
+        }
+        return result;
+    }
+
+    doc(so: any) {
+        var kytuthapphan = ',';
+        var result = '';
+        if (so != undefined) {
+            so = ' ' + so + ' ';
+            so = so.trim();
+            var cautrucso = so.split(kytuthapphan);
+            if (cautrucso[0] != undefined) {
+                result += this.docsonguyen(cautrucso[0]);
+            }
+            if (cautrucso[1] != undefined) {
+                //alert(this.docsonguyen(cautrucso[1]));
+                result += ' phẩy ' + this.docsonguyen(cautrucso[1]);
+            }
+        }
+        return result;
     }
 }

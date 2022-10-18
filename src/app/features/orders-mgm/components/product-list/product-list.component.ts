@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, DoCheck } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
     templateUrl: './product-list.component.html',
     styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, DoCheck {
     isSelectAll = false;
     subscription: Subscription[] = [];
 
@@ -23,7 +23,10 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit {
     pageSize: number = 10;
     total: number = 0;
 
+    productChoose: any = [];
     listChoosenProduct: any = [];
+    listDontChooseProduct: any = [];
+    listChooseProductFirst: any = [];
 
     isSellect = new Array(1000).fill(false);
     constructor(
@@ -40,9 +43,12 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.page = data;
             }),
         );
-        this.listChoosenProduct = this.data;
-        // this.getAllProducts();
+        this.productChoose = this.data.listId;
+        this.listChooseProductFirst = this.data.listProd;
+        this.getAllProducts();
     }
+
+    ngDoCheck(): void {}
 
     ngAfterViewInit(): void {
         // this.subscription.push(
@@ -51,7 +57,13 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit {
         //         this.total = data.total;
         //     }),
         // );
-        this.getAllProducts();
+        // this.getAllProducts();
+        setTimeout(() => {
+            // get listChoosenProduct
+            this.listChoosenProduct = this.listProduct.filter((product: any) => {
+                return product.isChoose;
+            });
+        }, 1000);
     }
 
     ngOnDestroy(): void {
@@ -59,25 +71,33 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit {
             service.unsubscribe();
         });
     }
+
     stopPropagation(e: any) {
         e.stopPropagation();
     }
+
     save() {
         this.dialogRef.close(this.listChoosenProduct);
     }
+
     choose(product: any, i: number) {
         this.isSellect[i] = true;
         this.listChoosenProduct.push(product);
     }
+
     unChoose(productRemove: any, i: number) {
-        this.isSellect[i] = false;
+        // this.isSellect[i] = false;
         this.listChoosenProduct = this.listChoosenProduct.filter((product: any) => {
             return product != productRemove;
         });
     }
+
     close() {
-        this.dialogRef.close([]);
+        this.dialogRef.close({
+            isCancel: true,
+        });
     }
+
     getAllProducts() {
         this.purchaseOrder
             .getAllProduct({
@@ -96,14 +116,22 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     getChoosedProduct() {
-        console.log(this.listChoosenProduct);
-        this.listProduct.forEach((product: any) => {
-            if (Array.prototype.includes.call(this.listChoosenProduct, product)) {
-                product.isChoosen = true;
-            } else {
-                product.isChoosen = false;
-            }
-        });
         console.log(this.listProduct);
+        console.log(this.productChoose);
+        if (this.listProduct && this.productChoose) {
+            for (let i = 0; i < this.listProduct.length; i++) {
+                for (let j = 0; j < this.productChoose.length; j++) {
+                    if (this.listProduct[i].id === this.productChoose[j].id) {
+                        this.listProduct[i].isChoose = true;
+                    }
+                }
+            }
+        }
     }
+
+    // getDontChooseProduct() {
+    //     this.listDontChooseProduct = this.listProduct.filter((product: any) => {
+    //         return !this.productChoose.includes(product.id);
+    //     });
+    // }
 }

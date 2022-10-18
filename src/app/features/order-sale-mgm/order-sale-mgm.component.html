@@ -127,7 +127,7 @@
                 <tbody>
                     <tr
                         *ngFor="
-                            let order of listReceiptOreder
+                            let order of listReceiptOrder
                                 | paginate
                                     : {
                                           itemsPerPage: pageSize,
@@ -141,8 +141,8 @@
                         <td class="custom-td border-b">
                             <mat-checkbox></mat-checkbox>
                         </td>
-                        <td class="custom-td border-b">{{ order.orderEmployee.employeeName }}</td>
-                        <td class="custom-td border-b">{{ order.saleEmployee.employeeName }}</td>
+                        <td class="custom-td border-b">{{ order.orderEmployee?.employeeName }}</td>
+                        <td class="custom-td border-b">{{ order.saleEmployee?.employeeName }}</td>
                         <td class="custom-td border-b">
                             <button
                                 class="button-orange-xs font-normal cursor-default min-w-[90px]"
@@ -170,13 +170,11 @@
                                 <span style="font-size: 12px">Từ chối</span>
                             </button>
                         </td>
-                        <td
-                            class="cursor-pointer hover:text-blue-500 custom-td border-b"
-                            [routerLink]="['/ordersale/detail/viewEdit', order.saleReceiptId]">
-                            {{ order.saleReceiptId }}
+                        <td class="cursor-pointer hover:text-blue-500 custom-td border-b" (click)="detail(order.id)">
+                            {{ order.saleCode }}
                         </td>
                         <td class="custom-td border-b">
-                            {{ order.customerCode }}
+                            {{ order.customer?.customerCode }}
                         </td>
                         <td class="custom-td border-b">
                             {{ order.customerName }}

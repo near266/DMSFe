@@ -42,18 +42,18 @@
             </button>
             <button
                 *ngIf="type === 'Edit'"
-                (click)="changeType('View')"
+                (click)="changeType('View'); update()"
                 class="button-primary-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-check text-white mr-2"></i>
                 <span class="text-white">Lưu</span>
             </button>
-            <button
+            <!-- <button
                 *ngIf="type === 'Edit'"
                 (click)="changeType('View')"
                 class="button-success-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-circle-check text-white mr-2"></i>
                 <span class="text-white">Lưu & Đóng</span>
-            </button>
+            </button> -->
             <button [routerLink]="['/orders']" class="button-cancel-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-ban text-white mr-2"></i>
                 <span class="text-white">Đóng</span>
@@ -72,13 +72,13 @@
             <i class="fa-solid fa-pen-to-square mr-2"></i>
             <span>Đặt hàng</span>
         </div>
-        <!-- <div
-            [routerLink]="['/orders/detailOrder/customer', this.id]"
+        <div
+            [routerLink]="['/orders/detailOrder/customer']"
             routerLinkActive="active"
             class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
             <i class="fa-solid fa-user-secret mr-2"></i>
             <span>Khách hàng</span>
-        </div> -->
+        </div>
     </div>
     <!-- main -->
     <div class="overflow-x-auto w-full ml-48 mt-16">

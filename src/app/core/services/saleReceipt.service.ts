@@ -1,25 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, of, delay, BehaviorSubject } from 'rxjs';
+import { api_gateway_url } from '../const/url';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SaleReceiptService {
     mockApi = 'https://6346eabf04a6d457579c4afd.mockapi.io/salesReceipt';
-
+    api_gateway_url = api_gateway_url;
     private pageSource = new BehaviorSubject<number>(1);
     private totalSource = new BehaviorSubject<number>(1);
     private idSource = new BehaviorSubject<any>('');
     private indexSource = new BehaviorSubject<any>({ startIndex: 1, endIndex: 2 });
     private msgSource = new BehaviorSubject<string>('');
     private productPageSource = new BehaviorSubject<number>(1);
+    private updateOrderSource = new BehaviorSubject<number>(1);
+    private isSucessUpdateSource = new BehaviorSubject<any>('');
     page = this.pageSource.asObservable();
     total = this.totalSource.asObservable();
     index = this.indexSource.asObservable();
     id = this.idSource.asObservable();
     msg = this.msgSource.asObservable();
     productPage = this.msgSource.asObservable();
+    updateOrderPass = this.updateOrderSource.asObservable();
+    isSucessUpdate = this.isSucessUpdateSource.asObservable();
 
     setTotal(total: number) {
         this.totalSource.next(total);
@@ -39,6 +44,12 @@ export class SaleReceiptService {
     changeProductPage(productPage: number) {
         this.productPageSource.next(productPage);
     }
+    sendBodyUpdate(body: any) {
+        this.updateOrderSource.next(body);
+    }
+    isSuccessUpdate(msg: string) {
+        this.isSucessUpdateSource.next(msg);
+    }
 
     constructor(private http: HttpClient) {}
     search(): Observable<any> {
@@ -49,5 +60,36 @@ export class SaleReceiptService {
     }
     updateOrder(id: string, body: any): Observable<any> {
         return this.http.put(this.mockApi + '/' + id, body).pipe(map((reponse: any) => reponse));
+    }
+
+    // API official
+    create(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/SaleReceipt/add', body, { responseType: 'text' })
+            .pipe(map((response: any) => response));
+    }
+
+    searchReceipt(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/SaleReceipt/search', body)
+            .pipe(map((response: any) => response));
+    }
+
+    searchReceiptById(id: string): Observable<any> {
+        return this.http.get(this.api_gateway_url + '/SaleReceipt/id?Id=' + id).pipe(map((response: any) => response));
+    }
+
+    update(body: any): Observable<any> {
+        return this.http.put(this.api_gateway_url + '/SaleReceipt/update', body).pipe(map((response: any) => response));
+    }
+
+    archive(body: any): Observable<any> {
+        return this.http
+            .put(this.api_gateway_url + '/SaleReceipt/arhivedOrUnArchived', body)
+            .pipe(map((response: any) => response));
+    }
+
+    createReturnOrder(body: any): Observable<any> {
+        return this.http.post(this.api_gateway_url + '/ReturnsOrder/add', body).pipe(map((response: any) => response));
     }
 }

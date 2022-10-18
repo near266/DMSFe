@@ -13,15 +13,15 @@ const routes: Routes = [
         children: [
             {
                 path: '',
-                redirectTo: 'viewEdit/:id',
+                redirectTo: 'viewEdit',
                 pathMatch: 'full',
             },
             {
-                path: 'viewEdit/:id',
+                path: 'viewEdit',
                 component: DetailComponent,
             },
             {
-                path: 'customer/:id',
+                path: 'customer',
                 component: CustomerComponent,
             },
         ],

@@ -109,18 +109,18 @@
                                 <td class="custom-th">{{ product?.productName || 'No Data' }}</td>
                                 <td class="custom-th">{{ product.wholeSaleUnit?.unitName || 'No Data' }}</td>
                                 <td class="custom-th">{{ product.retailUnit?.unitName || 'No Data' }}</td>
-                                <td class="custom-th">{{ product.price | currency:"VND" }}</td>
-                                <td class="custom-th">{{ product.retailPrice | currency:"VND" }}</td>
-                                <td class="custom-th">{{ product.vat | currency:"VND" }}</td>
+                                <td class="custom-th">{{ product.price | currency: 'VND' }}</td>
+                                <td class="custom-th">{{ product.retailPrice | currency: 'VND' }}</td>
+                                <td class="custom-th">{{ product.vat | currency: 'VND' }}</td>
                                 <td class="custom-th" (click)="stopPropagation($event)">
                                     <button
-                                        (click)="choose(product, i)"
-                                        *ngIf="!isSellect[i]"
+                                        (click)="product.isChoose = true; choose(product, i)"
+                                        *ngIf="!product.isChoose"
                                         class="text-green-600 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">
                                         <span>Chọn</span>
                                     </button>
                                     <button
-                                        *ngIf="isSellect[i]"
+                                        *ngIf="product.isChoose"
                                         class="text-white p-2 bg-green-400 rounded-lg hover:bg-green-500 font-medium">
                                         <i class="fa-solid fa-check mr-2"></i>
                                         <span>Đã chọn</span>
@@ -161,7 +161,7 @@
                                 <td class="custom-th">{{ product.vat || 'No Data' }}</td>
                                 <td class="custom-th text-center" (click)="stopPropagation($event)">
                                     <button
-                                        (click)="unChoose(product, i)"
+                                        (click)="product.isChoose = false; unChoose(product, i)"
                                         class="text-red-500 p-2 bg-zinc-50 rounded-lg hover:bg-zinc-200 hover:font-medium">
                                         <i class="fa-solid mr-1 fa-xmark text-sm cursor-pointer hover:opacity-70"></i>
                                         <span>Xóa</span>

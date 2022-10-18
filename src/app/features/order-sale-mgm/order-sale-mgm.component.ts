@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
 import { SaleReceipt } from 'src/app/core/model/SaleReceipt';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
@@ -14,8 +14,7 @@ export class OrderSaleMgmComponent implements OnInit {
     isShowSidebarToMargin = true;
     sideBarWidth!: string;
     type!: string;
-    listReceiptOreder: SaleReceipt[] = [];
-    listOrder: PurchaseOrder[] = [];
+    listReceiptOrder: any = [];
     totalCount: number;
 
     page: number = 1;
@@ -26,13 +25,32 @@ export class OrderSaleMgmComponent implements OnInit {
         private activatedroute: ActivatedRoute,
         public datepipe: DatePipe,
         private saleReceiptService: SaleReceiptService,
+        private router: Router,
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.saleReceiptService.page.subscribe((data) => {
+            this.page = data;
+            this.search();
+        });
+    }
 
     ngAfterViewInit(): void {
-        this.saleReceiptService.search().subscribe((data) => {
-            this.listReceiptOreder = data.data;
+        // this.saleReceiptService.search().subscribe((data) => {
+        //     this.listReceiptOreder = data.data;
+        // });
+        this.search();
+    }
+
+    search() {
+        let body = {
+            page: this.page,
+            pageSize: this.pageSize,
+        };
+        this.saleReceiptService.searchReceipt(body).subscribe((data) => {
+            this.listReceiptOrder = data.data;
+            this.total = data.totalCount;
+            this.saleReceiptService.setTotal(this.total);
         });
     }
 
@@ -60,5 +78,10 @@ export class OrderSaleMgmComponent implements OnInit {
             table?.classList.add('width-vw-60');
             table?.classList.remove('width-vw-260');
         }
+    }
+
+    detail(id: string) {
+        localStorage.setItem('receiptOrderId', id);
+        this.router.navigate(['/ordersale/detail/viewEdit']);
     }
 }
