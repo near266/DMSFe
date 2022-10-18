@@ -15,4 +15,5 @@ export class Employee {
   lastModifiedBy?: string;
   lastModifiedDate?: string;
   checked?: boolean;
+  disabled?: boolean;
 }

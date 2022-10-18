@@ -60,7 +60,7 @@ export class InforComponent implements OnInit, OnDestroy {
     avatar: new FormControl(this.avt),
     login: new FormControl(),
     authorities: new FormControl([
-      "ROLE_USER"
+      "MEMBER"
     ]),
   })
   ngOnInit(): void {

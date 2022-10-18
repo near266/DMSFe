@@ -10,6 +10,11 @@ export interface Page {
   checked: any[]
 }
 
+export interface Body {
+  employeeId: string[],
+  unitTreeGroupId: string
+}
+
 @Component({
   selector: 'app-add-employee',
   templateUrl: './add-employee.component.html',
@@ -21,6 +26,11 @@ export class AddEmployeeComponent implements OnInit, AfterViewInit {
   pageSize = 9;
   totalPage = 0;
   response: Response<any> = {
+    data: [],
+    totalCount: 0
+  };
+
+  userList: Response<any> = {
     data: [],
     totalCount: 0
   };
@@ -45,8 +55,17 @@ export class AddEmployeeComponent implements OnInit, AfterViewInit {
     this.employeeService.GetAllEmployeeByTitle('Nhân viên', page, pageSize).subscribe(data => {
       if(data) {
         this.response = data;
-        this.response.data.forEach(element => {
-          element.checked = false;
+        this.employeeService.SearchEmployeeInGroup(this.id, page, 1000).subscribe(res => {
+          this.userList = res;
+          this.response.data.forEach(element => {
+            element.checked = false;
+            this.userList.data.forEach( e => {
+              if(element.id == e.employeeId) {
+                element.checked = true;
+                element.disabled = true;
+              }
+            })
+          });
         });
         this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
         if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
@@ -65,11 +84,17 @@ export class AddEmployeeComponent implements OnInit, AfterViewInit {
   paging(page: number, pageSize: number) {
     this.page = page;
     if (!this.pages[page]) {
-      this.employeeService.GetAllEmployeeByManager(page, pageSize).subscribe(data => {
+      this.employeeService.GetAllEmployeeByTitle('Nhân viên', page, pageSize).subscribe(data => {
         if(data) {
           this.response = data;
           this.response.data.forEach(element => {
             element.checked = false;
+            this.userList.data.forEach( e => {
+              if(element.id == e.employeeId) {
+                element.checked = true;
+                element.disabled = true;
+              }
+            })
           });
           this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
           if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
@@ -105,20 +130,24 @@ export class AddEmployeeComponent implements OnInit, AfterViewInit {
   }
 
   save() {
+    let body: Body = {
+      employeeId: [],
+      unitTreeGroupId: this.id
+    }
     for(let i = 1; i <= this.pages.length; i++) {
       if(this.pages[i]) {
         this.pages[i].checked.forEach(element => {
-          const body = {
-            employeeId: element,
-            unitTreeGroupId: this.id
-          }
-          this.employeeService.AddEmployeeUnitTree(body).subscribe(data =>{
-
-          });
+          body.employeeId.push(element);
         });
       }
     }
-    this.snackbar.openSnackbar('Thêm quản lý thành công', 2000, 'Đóng', 'center', 'bottom', true);
+    this.employeeService.AddEmployeeUnitTree(body).subscribe( data => {
+      this.snackbar.openSnackbar('Thêm quản lý thành công', 2000, 'Đóng', 'center', 'bottom', true);
+      this.dialogRef.close({event: true});
+    }, (error) => {
+      this.snackbar.openSnackbar('Thêm quản lý thất bại, vui lòng kiểm tra lại', 2000, 'Đóng', 'center', 'bottom', true);
+    });
+
   }
 
 }

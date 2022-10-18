@@ -7,6 +7,7 @@ import { AddAccountantComponent } from '../add-accountant/add-accountant.compone
 import { AddEmployeeComponent } from '../add-employee/add-employee.component';
 import { AddManagerComponent } from '../add-manager/add-manager.component';
 import { AddSalesTeamComponent } from '../add-sales-team/add-sales-team.component';
+import { AddUnitComponent } from '../add-unit/add-unit.component';
 
 @Component({
     selector: 'app-user-tree-view',
@@ -21,7 +22,7 @@ export class UserTreeViewComponent implements OnInit {
     menubar_unit = [
       'Thêm quản lý',
       'Thêm kế toán',
-      'Thêm nhóm khách hàng',
+      'Thêm nhóm bán hàng',
       'Thêm đơn vị con'
     ];
 
@@ -116,6 +117,19 @@ export class UserTreeViewComponent implements OnInit {
       });
     }
 
+    open_add_unit(id: string) {
+      let dialogRef = this.dialog.open(AddUnitComponent, {
+        // height: '30vh',
+        minWidth: '800px',
+        data: id
+      });
+      dialogRef.afterClosed().subscribe( data => {
+        if(data) {
+          this.init();
+        }
+      });
+    }
+
     open_add_manager(id: string) {
       let dialogRef = this.dialog.open(AddManagerComponent, {
         height: '100vh',
@@ -166,7 +180,7 @@ export class UserTreeViewComponent implements OnInit {
           this.open_add_accountant(node.data.id);
           return;
         }
-        case 'Thêm nhóm khách hàng': {
+        case 'Thêm nhóm bán hàng': {
           this.open_add_sales_team(node.data.id);
           return;
         }
@@ -175,7 +189,11 @@ export class UserTreeViewComponent implements OnInit {
           return;
         }
         case 'Thêm đơn vị con': {
-
+          this.open_add_unit(node.data.id);
+          return;
+        }
+        case 'Thêm đơn vị': {
+          this.open_add_unit(node.data.id);
           return;
         }
       }

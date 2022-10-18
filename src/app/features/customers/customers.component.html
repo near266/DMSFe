@@ -16,12 +16,12 @@
           </div>
         </div>
         <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
-        <app-menu-collapse (Selection)="selection($event)" [Config]="locationMenu"></app-menu-collapse>
-        <app-menu-collapse (Selection)="selection($event)" [Config]="archiveMenu"></app-menu-collapse>
-        <app-menu-collapse (Selection)="selection($event)" [Config]="customerMenu"></app-menu-collapse>
-        <app-menu-collapse-search (Selection)="selection($event)" [Config]="categoryMenu"></app-menu-collapse-search>
-        <app-menu-collapse-search (Selection)="selection($event)" [Config]="groupMenu"></app-menu-collapse-search>
-        <app-menu-collapse-search (Selection)="selection($event)" [Config]="channelMenu"></app-menu-collapse-search>
+        <app-menu-collapse (Selection)="selectLocation($event)" [Config]="locationMenu"></app-menu-collapse>
+        <app-menu-collapse (Selection)="selectArchive($event)" [Config]="archiveMenu"></app-menu-collapse>
+        <app-menu-collapse (Selection)="selectCustomer($event)" [Config]="customerMenu"></app-menu-collapse>
+        <app-menu-collapse-search (Selection)="selectCategory($event)" [Config]="categoryMenu"></app-menu-collapse-search>
+        <app-menu-collapse-search (Selection)="selectGroup($event)" [Config]="groupMenu"></app-menu-collapse-search>
+        <app-menu-collapse-search (Selection)="selectChannel($event)" [Config]="channelMenu"></app-menu-collapse-search>
         <div>
           <div (click)="isProvince = !isProvince" class="w-full items-center hover:font-medium mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
             <i class="text-base mr-3 fa-solid fa-location-pin"></i>
