@@ -9,12 +9,17 @@ import { DetailUserComponent } from './user-tree/detail-user/detail-user.compone
 import { InforComponent } from './user-tree/add-user/infor/infor.component';
 import { ConfigComponent } from './user-tree/add-user/config/config.component';
 import { AppComponent } from './user-tree/add-user/app/app.component';
+
 import { MenuComponent } from './user-tree/add-user/menu/menu.component';
 import { UserTreeViewComponent } from './user-tree/user-tree-view/user-tree-view.component';
 import { ResetPasswordComponent } from './user-tree/detail-user/reset-password/reset-password.component';
 import { DeleteUserComponent } from './user-tree/detail-user/delete-user/delete-user.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { WarehousesComponent } from './warehouses/warehouses.component';
+import { AddManagerComponent } from './user-tree/add-manager/add-manager.component';
+import { AddAccountantComponent } from './user-tree/add-accountant/add-accountant.component';
+import { AddSalesTeamComponent } from './user-tree/add-sales-team/add-sales-team.component';
+import { AddEmployeeComponent } from './user-tree/add-employee/add-employee.component';
 
 const routes: Routes = [
     {
@@ -36,10 +41,15 @@ const routes: Routes = [
         ConfigComponent,
         AppComponent,
         MenuComponent,
+
         UserTreeViewComponent,
         ResetPasswordComponent,
         DeleteUserComponent,
         WarehousesComponent,
+        AddManagerComponent,
+        AddAccountantComponent,
+        AddSalesTeamComponent,
+        AddEmployeeComponent,
     ],
     imports: [CommonModule, RouterModule.forChild(routes), SharedModule, NgxPaginationModule],
 })

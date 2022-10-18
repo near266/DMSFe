@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Return } from '../../models/return';
 import { tableHeader } from '../../models/table.header';
 import { ReturnsService } from '../../services/returns.service';
+import { Status } from '../../models/return';
 
 @Component({
     selector: 'app-returns-table',
@@ -11,6 +12,7 @@ import { ReturnsService } from '../../services/returns.service';
 export class ReturnsTableComponent implements OnInit {
     currentPage: number;
     returns: Return[] = [];
+    Status = Status;
     headers = tableHeader;
     constructor(private returnsService: ReturnsService) {}
     ngOnInit(): void {

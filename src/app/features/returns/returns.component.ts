@@ -24,9 +24,6 @@ export class ReturnsComponent implements OnInit {
     ) {}
     ngAfterViewInit(): void {
         this.sidenavService.setSideNav(this.sidenav);
-        this.router.events.subscribe((e) => {
-            this.sidenavService.close();
-        });
     }
 
     ngOnInit(): void {

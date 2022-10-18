@@ -111,7 +111,7 @@
           <div class="w-4/12 font-semibold flex flex-col justify-center">Tỉnh/Thành phố</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.province}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <select #province class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.province" (change)="getDistrict(province.value)">
+            <select disabled #province class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.province" (change)="getDistrict(province.value)">
               <option disabled value=""> --- Chọn nhóm tỉnh/thành phố --- </option>
               <option *ngFor="let item of listProvinces" value="{{item.name}}">{{item.name}}</option>
             </select>

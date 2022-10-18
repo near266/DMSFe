@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, NgForm } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import { ProductService } from '../../../services/product.service';
 import { Subscription } from 'rxjs';
 import { ProductApiService } from '../../../apis/product.api.service';
 import companies from '../../../mocks/companies';
@@ -134,6 +135,7 @@ export class AddProductDetailsComponent implements OnInit {
             templateOptions: {
                 label: 'ĐVT lẻ',
                 options: this.productDialogService.getAllUnits(),
+                required: true,
             },
         },
         {
@@ -249,18 +251,18 @@ export class AddProductDetailsComponent implements OnInit {
                 this.productApiService.postProduct(product).subscribe({
                     next: (res) => {
                         this.dialogRef.closeAll();
+                        this.productService.getAllProducts();
                     },
                     error: (err) => {
                         console.log(err);
                     },
                 });
             } else {
-                product.unitId = product.retailUnitId;
-                delete product.retailUnitId;
                 this.productApiService.updateProduct(product).subscribe({
                     next: (res) => {
                         console.log(product);
                         this.dialogRef.closeAll();
+                        this.productService.getAllProducts();
                     },
                     error: (err) => {
                         console.log(err);
@@ -273,6 +275,7 @@ export class AddProductDetailsComponent implements OnInit {
         private productDialogService: ProductDialogService,
         private dialogRef: MatDialog,
         private productApiService: ProductApiService,
+        private productService: ProductService,
     ) {}
 
     ngOnInit(): void {

@@ -50,13 +50,23 @@ import { MenuCollapseTreeComponent } from './components/menu-collapse-tree/menu-
 import { EzPaginationComponent } from './components/ez-pagination/ez-pagination.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
-    declarations: [MenuCollapseComponent, MenuBarComponent, MenuCollapseSearchComponent, MenuCollapseTreeComponent, EzPaginationComponent, ConfirmDialogComponent],
+    declarations: [
+        MenuCollapseComponent,
+        MenuBarComponent,
+        MenuCollapseSearchComponent,
+        MenuCollapseTreeComponent,
+        EzPaginationComponent,
+        ConfirmDialogComponent,
+        ConfirmationDialogComponent,
+    ],
     imports: [
         CommonModule,
         MatAutocompleteModule,
         MatCheckboxModule,
+        MatDialogModule,
         MatDatepickerModule,
         MatFormFieldModule,
         MatInputModule,
@@ -94,7 +104,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
         FormsModule,
         ReactiveFormsModule,
         TreeModule,
-        NgxPaginationModule
+        NgxPaginationModule,
     ],
     exports: [
         ConfirmDialogComponent,
@@ -142,7 +152,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
         FormsModule,
         ReactiveFormsModule,
         TreeModule,
-        NgxPaginationModule
+        NgxPaginationModule,
     ],
 })
 export class SharedModule {}

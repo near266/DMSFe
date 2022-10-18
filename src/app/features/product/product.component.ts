@@ -31,7 +31,7 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit {
     ) {}
 
     ngOnInit(): void {
-        this.totalProducts = this.productService.totalProducts;
+        this.productService.totalProducts$.subscribe((total) => (this.totalProducts = total));
     }
     ngAfterViewInit(): void {
         this.sidenavService.setSideNav(this.sidenav);

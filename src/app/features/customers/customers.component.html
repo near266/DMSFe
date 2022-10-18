@@ -3,7 +3,7 @@
       <div class=" bg-white mx-6 my-1 h-8 flex items-center border border-solid border-gray-400 rounded-sm"
           *ngIf="class.statusbar">
           <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
-          <input class="bg-white text-xs h-full" placeholder="Tìm kiếm khách hàng">
+          <input #keyword class="bg-white text-xs h-full" placeholder="Tìm kiếm khách hàng" [(ngModel)]="keywords" (keyup.enter)="search(keyword.value)">
       </div>
       <div class="overflow-y-scroll h-full">
         <div>
@@ -15,7 +15,7 @@
             <app-menu-collapse-tree></app-menu-collapse-tree>
           </div>
         </div>
-        <app-menu-collapse (Selection)="selection($event)" [Config]="statusMenu"></app-menu-collapse>
+        <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
         <app-menu-collapse (Selection)="selection($event)" [Config]="locationMenu"></app-menu-collapse>
         <app-menu-collapse (Selection)="selection($event)" [Config]="archiveMenu"></app-menu-collapse>
         <app-menu-collapse (Selection)="selection($event)" [Config]="customerMenu"></app-menu-collapse>
@@ -30,23 +30,23 @@
           <div *ngIf="isProvince" class="text-xs">
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Tỉnh thành</span>
-              <select class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
-                <option>Chọn tỉnh thành</option>
-                <option>No Bug</option>
+              <select [(ngModel)]="province" #provinces class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8" (change)="getDistrict(provinces.value)">
+                <option disabled selected value=""> --- Chọn tỉnh thành --- </option>
+                <option *ngFor="let item of listProvinces" value="{{item.name}}">{{item.name}}</option>
               </select>
             </div>
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Quận huyện</span>
-              <select class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
-                <option>Chọn quận huyện</option>
-                <option>No Bug</option>
+              <select [(ngModel)]="district" #districts class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8" (change)="getWard(districts.value)">
+                <option disabled selected value=""> --- Chọn quận huyện --- </option>
+                <option *ngFor="let item of listDistricts" value="{{item.name}}">{{item.name}}</option>
               </select>
             </div>
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Xã phường</span>
-              <select class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
-                <option>Chọn xã phường</option>
-                <option>No Bug</option>
+              <select [(ngModel)]="ward" class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
+                <option disabled selected value=""> --- Chọn xã phường --- </option>
+                <option *ngFor="let item of listWards" value="{{item.name}}">{{item.name}}</option>
               </select>
             </div>
           </div>
@@ -168,7 +168,7 @@
           <select class="bg-white px-3 py-1 border border-solid border-gray-500 rounded-sm">
               <option>{{pageSize}} bản ghi/trang</option>
           </select>
-          <div *ngFor="let p of pageList" class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer" (click)="init(p, pageSize)">{{p}}</div>
+          <div *ngFor="let p of pageList" class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer" (click)="init(keywords, p, pageSize)">{{p}}</div>
 
           <span>Hiển thị 1 - {{totalPage}} trên tổng số {{totalPage}} bản ghi</span>
       </div>

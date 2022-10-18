@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 
@@ -8,6 +9,7 @@ import { Config } from 'src/app/core/model/Config';
 import { Customers } from 'src/app/core/model/Customers';
 import { Response } from 'src/app/core/model/Response';
 import { CustomerService } from 'src/app/core/services/customer.service';
+import { ProvincesService } from 'src/app/core/services/provinces.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { DetailCustomerComponent } from './detail-customer/detail-customer.component';
@@ -18,90 +20,125 @@ import { DetailCustomerComponent } from './detail-customer/detail-customer.compo
     styleUrls: ['./customers.component.scss'],
 })
 export class CustomersComponent implements OnInit, AfterViewInit {
-    isProvince = false;
-    hasEmployee = false;
-    hasArea = false;
-    customer = customers;
-    response: Response<Customers> = {
-        data: [],
-        totalCount: 0,
-    };
+  isProvince = false;
+  hasEmployee = false;
+  hasArea = false;
+  customer = customers;
+  response: Response<Customers> = {
+      data: [],
+      totalCount: 0,
+  };
+  keywords = '';
+  province = '';
+  district = '';
+  ward = '';
+  request: any;
 
-    page = 1;
-    pageSize = 30;
-    totalPage = 0;
-    pageList: number[] = [];
+  page = 1;
+  pageSize = 30;
+  totalPage = 0;
+  pageList: number[] = [];
 
-    statusMenu: Config = {
-        icon: '<i class="fa-solid fa-flag"></i>',
-        title: 'Trạng thái',
-        menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
-    };
-    locationMenu: Config = {
-        icon: '<i class="fa-solid fa-location-dot"></i>',
-        title: 'Vị trí',
-        menuChildrens: ['Tất cả', 'Có vị trí', 'Nghi ngờ sai vị trí', 'Sai vị trí', 'Không vị trí'],
-    };
+  statusMenu: Config = {
+      icon: '<i class="fa-solid fa-flag"></i>',
+      title: 'Trạng thái',
+      menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
+  };
 
-    archiveMenu: Config = {
-        icon: '<i class="fa-solid fa-briefcase"></i>',
-        title: 'Lưu trữ',
-        menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
-    };
-
-    customerMenu: Config = {
-        icon: '<i class="fa-solid fa-file"></i>',
-        title: 'KH có mã và không',
-        menuChildrens: ['Tất cả', 'Khách hàng có mã', 'Khách hàng không có mã'],
-    };
-
-    categoryMenu: Config = {
-        icon: '<i class="fa-solid fa-grip"></i>',
-        title: 'Loại khách hàng',
-        menuChildrens: [
-            'Tất cả',
-            'VIP 1',
-            'VIP 2',
-            'VIP 3',
-            'VIP 4',
-            'Tiềm năng',
-            'Thân thiết',
-            'Vãng lai',
-            'Không thuộc loại KH nào',
-        ],
-    };
-
-    groupMenu: Config = {
-        icon: '<i class="fa-solid fa-users"></i>',
-        title: 'Nhóm khách hàng',
-        menuChildrens: ['Tất cả', 'Hợp đồng', 'KH lẻ', 'Không thuộc nhóm KH nào'],
-    };
-
-    channelMenu: Config = {
-        icon: '<i class="fa-solid fa-retweet"></i>',
-        title: 'Kênh',
-        menuChildrens: ['Tất cả', 'OTC', 'ETC', 'Không thuộc kênh nào'],
-    };
-
-    constructor(
-        private title: Title,
-        private dialog: MatDialog,
-        private customerService: CustomerService,
-        private snackbar: SnackbarService,
-        private datePipe: DatePipe,
-    ) {}
-
-    ngOnInit(): void {
-        this.title.setTitle('Khách hàng - DMS.Delap');
+  selectStatus(event: any) {
+    switch(event) {
+      case 'Tất cả': {
+        event = null;
+        break;
+      }
+      case 'Hoạt động': {
+        event = true;
+        break;
+      }
+      case 'Không hoạt động': {
+        event = false;
+        break;
+      }
+      default:
+        event = null;
     }
+    this.request.status = event;
+  }
 
-    ngAfterViewInit(): void {
-      this.init(this.page, this.pageSize);
-    }
+  locationMenu: Config = {
+      icon: '<i class="fa-solid fa-location-dot"></i>',
+      title: 'Vị trí',
+      menuChildrens: ['Tất cả', 'Có vị trí', 'Nghi ngờ sai vị trí', 'Sai vị trí', 'Không vị trí'],
+  };
 
-  init(page: number, pageSize: number) {
+  archiveMenu: Config = {
+      icon: '<i class="fa-solid fa-briefcase"></i>',
+      title: 'Lưu trữ',
+      menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
+  };
+
+  customerMenu: Config = {
+      icon: '<i class="fa-solid fa-file"></i>',
+      title: 'KH có mã và không',
+      menuChildrens: ['Tất cả', 'Khách hàng có mã', 'Khách hàng không có mã'],
+  };
+
+  categoryMenu: Config = {
+      icon: '<i class="fa-solid fa-grip"></i>',
+      title: 'Loại khách hàng',
+      menuChildrens: [
+          'Tất cả',
+          'VIP 1',
+          'VIP 2',
+          'VIP 3',
+          'VIP 4',
+          'Tiềm năng',
+          'Thân thiết',
+          'Vãng lai',
+          'Không thuộc loại KH nào',
+      ],
+  };
+
+  groupMenu: Config = {
+      icon: '<i class="fa-solid fa-users"></i>',
+      title: 'Nhóm khách hàng',
+      menuChildrens: ['Tất cả', 'Hợp đồng', 'KH lẻ', 'Không thuộc nhóm KH nào'],
+  };
+
+  channelMenu: Config = {
+      icon: '<i class="fa-solid fa-retweet"></i>',
+      title: 'Kênh',
+      menuChildrens: ['Tất cả', 'OTC', 'ETC', 'Không thuộc kênh nào'],
+  };
+
+  listProvinces: any[] = [];
+  listDistricts: any[] = [];
+  listWards: any[] = [];
+
+  constructor(
+      private title: Title,
+      private dialog: MatDialog,
+      private customerService: CustomerService,
+      private snackbar: SnackbarService,
+      private datePipe: DatePipe,
+      private provincesService: ProvincesService,
+      private fb: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+      this.title.setTitle('Khách hàng');
+  }
+
+  ngAfterViewInit(): void {
+    this.init('', this.page, this.pageSize);
+    this.provincesService.getListProvinces().subscribe(data => {
+      this.listProvinces = data;
+    });
+  }
+
+  init(keyword: any, page: number, pageSize: number) {
     const body = {
-      keyword: '',
+      keyword: keyword,
       page: page,
       pageSize: pageSize,
     };
@@ -136,7 +173,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        this.init(this.page, this.pageSize);
+        this.init('', this.page, this.pageSize);
       }
     });
   }
@@ -149,7 +186,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     })
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        this.init(this.page, this.pageSize);
+        this.init('', this.page, this.pageSize);
       }
     });
   }
@@ -217,8 +254,63 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   Select(e: any) {
       console.log(e);
   }
+
   selection(e: any) {
       console.log(e);
+  }
+
+  search(request: any) {
+    this.page = 1;
+    const body = {
+      keyword: '',
+      page: this.page,
+      pageSize: this.pageSize,
+    };
+    this.customerService.search(body).subscribe(
+        (data) => {
+            this.response = data;
+            this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
+            if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
+            this.pageList = [];
+            for(let i = 1; i <= this.totalPage; i++) {
+              this.pageList.push(i);
+            }
+            this.response.data.forEach((element) => {
+                if (element.status == true) element.status = 'Hoạt động';
+                else if (element.status == false) element.status = 'Không hoạt động';
+                else element.status = 'Không hoạt động';
+                if(element.dob) {
+                  element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
+                }
+            });
+        },
+        (error) => {
+            this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
+        },
+    );
+  }
+
+  getDistrict(event: any) {
+    this.district = '';
+    this.ward = '';
+    this.listProvinces.forEach(data => {
+      if(data.name == event) {
+        this.provincesService.getDistrictsListByID(data.code).subscribe(res => {
+          this.listDistricts = res.districts;
+        });
+      }
+    });
+  }
+
+  getWard(event: any) {
+    this.ward = '';
+    this.listDistricts.forEach(data => {
+      if(data.name == event) {
+        this.provincesService.getWardsListByID(data.code).subscribe(res => {
+          this.listWards = res.wards;
+        });
+      }
+    });
   }
 
 }

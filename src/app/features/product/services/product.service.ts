@@ -18,12 +18,13 @@ export class ProductService {
         start: number;
         end: number;
     }>({ start: 1, end: this.defaultPageSize + 1 });
+    private totalProducts: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
     public products$ = this.products.asObservable();
     public currentPage$ = this.currentPage.asObservable();
     public currentPageSize$ = this.currentPageSize.asObservable();
     public startAndEndIndex$ = this.startAndEndIndex.asObservable();
-    public totalProducts = this.defaultProducts.length;
+    public totalProducts$ = this.totalProducts.asObservable();
 
     constructor(private productApiService: ProductApiService) {}
 
@@ -40,10 +41,18 @@ export class ProductService {
         const end = Math.min(currentPage * currentPageSize + 1, this.defaultProducts.length);
         this.startAndEndIndex.next({ start, end });
     }
-    public getAllProducts(settings: any) {
+    public getAllProducts() {
+        const settings = {
+            sortBy: {
+                property: 'createdDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 30,
+        };
         this.productApiService.getAllProducts(settings).subscribe((res: { data: Product[]; totalCount: number }) => {
             this.products.next(res.data);
-            this.totalProducts = res.totalCount;
+            this.totalProducts.next(res.totalCount);
         });
     }
 }

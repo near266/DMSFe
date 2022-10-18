@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
 import { Product } from '../../models/product';
 import { ProductDialogService } from '../../services/product-dialog.service';
 
@@ -17,6 +18,7 @@ export class AddProductDialogComponent implements OnInit {
     productId = '';
     constructor(
         private productDialogService: ProductDialogService,
+        private confirmDialogService: ConfirmDialogService,
         @Inject(MAT_DIALOG_DATA) public product: Product | null,
     ) {
         if (product) {
@@ -48,6 +50,19 @@ export class AddProductDialogComponent implements OnInit {
     }
     submitChange(): void {
         this.productDialogService.submitForm$.next(true);
+    }
+    deleteProduct(): void {
+        this.confirmDialogService
+            .openDialog({
+                message: 'Bạn có muốn xoá sản phẩm này?',
+                confirm: 'Xoá',
+                cancel: 'Đóng',
+            })
+            .subscribe((res) => {
+                if (res) {
+                    this.productDialogService.deleteProduct(this.product?.id);
+                }
+            });
     }
     tabList = [
         { title: 'Thông tin chung', leftIcon: 'fa-regular fa-file-lines' },

@@ -1,9 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { ProductApiService } from '../apis/product.api.service';
 import { AddProductDialogComponent } from '../components/add-product-dialog/add-product-dialog.component';
 import { Product, Supplier } from '../models/product';
+import { ProductService } from './product.service';
 
 @Injectable({
     providedIn: 'root',
@@ -24,7 +26,11 @@ export class ProductDialogService {
         this.header.next(value);
     }
 
-    constructor(private dialogService: MatDialog, private productApiService: ProductApiService) {}
+    constructor(
+        private dialogService: MatDialog,
+        private productApiService: ProductApiService,
+        private productService: ProductService,
+    ) {}
 
     getAllSuppliers(): Observable<{ value: string | undefined; label: string | undefined }[]> {
         return this.productApiService.getAllSuppliers().pipe(
@@ -72,4 +78,18 @@ export class ProductDialogService {
         );
     }
     //same as above for units
+
+    deleteProduct(id: string | undefined) {
+        if (id) {
+            return this.productApiService.deleteProduct(id).subscribe({
+                next: () => {
+                    this.dialogService.closeAll();
+                    this.productService.getAllProducts();
+                },
+                error: (err: HttpErrorResponse) => {
+                    console.log(err);
+                },
+            });
+        }
+    }
 }

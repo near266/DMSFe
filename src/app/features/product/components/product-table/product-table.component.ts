@@ -16,14 +16,7 @@ export class ProductTableComponent implements OnInit {
     headers = tableHeader;
     constructor(private productService: ProductService, private productDialogService: ProductDialogService) {}
     ngOnInit(): void {
-        this.productService.getAllProducts({
-            sortBy: {
-                property: 'createdDate',
-                value: true,
-            },
-            page: 1,
-            pageSize: 10,
-        });
+        this.productService.getAllProducts();
         this.productService.products$.subscribe((data: Product[]) => {
             this.products = data;
         });

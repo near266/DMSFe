@@ -13,7 +13,7 @@ export class ProductPaginationComponent implements OnInit {
     constructor(private productService: ProductService) {}
 
     ngOnInit(): void {
-        this.totalProducts = this.productService.totalProducts;
+        this.productService.totalProducts$.subscribe((total) => (this.totalProducts = total));
         this.productService.startAndEndIndex$.subscribe((data: { start: number; end: number }) => {
             this.startIndex = data.start;
             this.endIndex = data.end;

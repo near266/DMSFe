@@ -97,6 +97,12 @@ tree-node-checkbox {
     order: 1;
 }
 
+tree-viewport {
+  overflow:visible;
+  z-index:10;
+  position: relative;
+}
+
 .button-orange-xs {
     @apply text-white bg-orange-600 hover:bg-orange-700
     focus:ring-4 focus:outline-none focus:ring-orange-200 font-medium rounded-lg
