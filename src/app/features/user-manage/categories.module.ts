@@ -20,6 +20,7 @@ import { AddManagerComponent } from './user-tree/add-manager/add-manager.compone
 import { AddAccountantComponent } from './user-tree/add-accountant/add-accountant.component';
 import { AddSalesTeamComponent } from './user-tree/add-sales-team/add-sales-team.component';
 import { AddEmployeeComponent } from './user-tree/add-employee/add-employee.component';
+import { AddUnitComponent } from './user-tree/add-unit/add-unit.component';
 
 const routes: Routes = [
     {
@@ -50,6 +51,7 @@ const routes: Routes = [
         AddAccountantComponent,
         AddSalesTeamComponent,
         AddEmployeeComponent,
+        AddUnitComponent,
     ],
     imports: [CommonModule, RouterModule.forChild(routes), SharedModule, NgxPaginationModule],
 })

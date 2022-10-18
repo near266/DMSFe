@@ -40,7 +40,7 @@
                 {{(i+1) + (page-1)*pageSize}}
               </td>
               <td class="py-4 px-2 text-center">
-                <mat-checkbox (change)="selected_items(page, user.id)" [(ngModel)]="user.checked" color="primary"></mat-checkbox>
+                <mat-checkbox [disabled]="user.disabled == true" (change)="selected_items(page, user.id)" [(ngModel)]="user.checked" color="primary"></mat-checkbox>
               </td>
               <td class="py-4 px-2 text-center">
                   {{user.employeeCode}}

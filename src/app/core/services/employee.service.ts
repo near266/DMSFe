@@ -58,4 +58,8 @@ export class EmployeeService {
     AddEmployeeUnitTree(body: any): Observable<any> {
       return this.http.post(gateway_url + '/AddEmployeeUnitTree', body).pipe(map((response: any) => response));
     }
+
+    SearchEmployeeInGroup(GroupId: string, page: number, pageSize: number): Observable<any> {
+      return this.http.get(gateway_url + '/SearchEmployeeInGroup?GroupId=' + GroupId + '&page='+ page +'&pagesize=' + pageSize).pipe(map((response: any) => response));
+    }
   }

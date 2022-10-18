@@ -59,8 +59,10 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         event = false;
         break;
       }
-      default:
+      default: {
         event = null;
+        break;
+      }
     }
     this.request.status = event;
   }
@@ -71,17 +73,91 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       menuChildrens: ['Tất cả', 'Có vị trí', 'Nghi ngờ sai vị trí', 'Sai vị trí', 'Không vị trí'],
   };
 
+  selectLocation(event: any) {
+    switch(event) {
+      case 'Tất cả': {
+        event = null;
+        break;
+      }
+      case 'Có vị trí': {
+        event = true;
+        break;
+      }
+      case 'Nghi ngờ sai vị trí': {
+        event = false;
+        break;
+      }
+      case 'Sai vị trí': {
+        event = false;
+        break;
+      }
+      case 'Không vị trí': {
+        event = false;
+        break;
+      }
+      default: {
+        event = null;
+        break;
+      }
+    }
+    this.request.status = event;
+  }
+
   archiveMenu: Config = {
       icon: '<i class="fa-solid fa-briefcase"></i>',
       title: 'Lưu trữ',
       menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
   };
 
+  selectArchive(event: any) {
+    switch(event) {
+      case 'Tất cả': {
+        event = null;
+        break;
+      }
+      case 'Hoạt động': {
+        event = true;
+        break;
+      }
+      case 'Không hoạt động': {
+        event = false;
+        break;
+      }
+      default: {
+        event = null;
+        break;
+      }
+    }
+    this.request.status = event;
+  }
+
   customerMenu: Config = {
       icon: '<i class="fa-solid fa-file"></i>',
       title: 'KH có mã và không',
       menuChildrens: ['Tất cả', 'Khách hàng có mã', 'Khách hàng không có mã'],
   };
+
+  selectCustomer(event: any) {
+    switch(event) {
+      case 'Tất cả': {
+        event = null;
+        break;
+      }
+      case 'Hoạt động': {
+        event = true;
+        break;
+      }
+      case 'Không hoạt động': {
+        event = false;
+        break;
+      }
+      default: {
+        event = null;
+        break;
+      }
+    }
+    this.request.status = event;
+  }
 
   categoryMenu: Config = {
       icon: '<i class="fa-solid fa-grip"></i>',
@@ -99,17 +175,91 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       ],
   };
 
+  selectCategory(event: any) {
+    switch(event) {
+      case 'Tất cả': {
+        event = null;
+        break;
+      }
+      case 'Hoạt động': {
+        event = true;
+        break;
+      }
+      case 'Không hoạt động': {
+        event = false;
+        break;
+      }
+      default: {
+        event = null;
+        break;
+      }
+    }
+    this.request.status = event;
+  }
+
   groupMenu: Config = {
       icon: '<i class="fa-solid fa-users"></i>',
       title: 'Nhóm khách hàng',
       menuChildrens: ['Tất cả', 'Hợp đồng', 'KH lẻ', 'Không thuộc nhóm KH nào'],
   };
 
+  selectGroup(event: any) {
+    switch(event) {
+      case 'Tất cả': {
+        event = null;
+        break;
+      }
+      case 'Hợp đồng': {
+        event = true;
+        break;
+      }
+      case 'KH lẻ': {
+        event = false;
+        break;
+      }
+      case 'Không thuộc nhóm KH nào': {
+        event = false;
+        break;
+      }
+      default: {
+        event = null;
+        break;
+      }
+    }
+    this.request.status = event;
+  }
+
   channelMenu: Config = {
       icon: '<i class="fa-solid fa-retweet"></i>',
       title: 'Kênh',
       menuChildrens: ['Tất cả', 'OTC', 'ETC', 'Không thuộc kênh nào'],
   };
+
+  selectChannel(event: any) {
+    switch(event) {
+      case 'Tất cả': {
+        event = null;
+        break;
+      }
+      case 'Hợp đồng': {
+        event = true;
+        break;
+      }
+      case 'KH lẻ': {
+        event = false;
+        break;
+      }
+      case 'Không thuộc nhóm KH nào': {
+        event = false;
+        break;
+      }
+      default: {
+        event = null;
+        break;
+      }
+    }
+    this.request.status = event;
+  }
 
   listProvinces: any[] = [];
   listDistricts: any[] = [];
