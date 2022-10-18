@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 
@@ -31,6 +32,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   province = '';
   district = '';
   ward = '';
+  request: any;
 
   page = 1;
   pageSize = 30;
@@ -42,6 +44,27 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       title: 'Trạng thái',
       menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
   };
+
+  selectStatus(event: any) {
+    switch(event) {
+      case 'Tất cả': {
+        event = null;
+        break;
+      }
+      case 'Hoạt động': {
+        event = true;
+        break;
+      }
+      case 'Không hoạt động': {
+        event = false;
+        break;
+      }
+      default:
+        event = null;
+    }
+    this.request.status = event;
+  }
+
   locationMenu: Config = {
       icon: '<i class="fa-solid fa-location-dot"></i>',
       title: 'Vị trí',
@@ -99,6 +122,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       private snackbar: SnackbarService,
       private datePipe: DatePipe,
       private provincesService: ProvincesService,
+      private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -230,12 +254,40 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   Select(e: any) {
       console.log(e);
   }
+
   selection(e: any) {
       console.log(e);
   }
 
-  search(keyword: any) {
-    this.init(keyword, this.page, this.pageSize);
+  search(request: any) {
+    this.page = 1;
+    const body = {
+      keyword: '',
+      page: this.page,
+      pageSize: this.pageSize,
+    };
+    this.customerService.search(body).subscribe(
+        (data) => {
+            this.response = data;
+            this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
+            if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
+            this.pageList = [];
+            for(let i = 1; i <= this.totalPage; i++) {
+              this.pageList.push(i);
+            }
+            this.response.data.forEach((element) => {
+                if (element.status == true) element.status = 'Hoạt động';
+                else if (element.status == false) element.status = 'Không hoạt động';
+                else element.status = 'Không hoạt động';
+                if(element.dob) {
+                  element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
+                }
+            });
+        },
+        (error) => {
+            this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
+        },
+    );
   }
 
   getDistrict(event: any) {

@@ -15,7 +15,7 @@
             <app-menu-collapse-tree></app-menu-collapse-tree>
           </div>
         </div>
-        <app-menu-collapse (Selection)="selection($event)" [Config]="statusMenu"></app-menu-collapse>
+        <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
         <app-menu-collapse (Selection)="selection($event)" [Config]="locationMenu"></app-menu-collapse>
         <app-menu-collapse (Selection)="selection($event)" [Config]="archiveMenu"></app-menu-collapse>
         <app-menu-collapse (Selection)="selection($event)" [Config]="customerMenu"></app-menu-collapse>
