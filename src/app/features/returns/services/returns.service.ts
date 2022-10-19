@@ -24,7 +24,7 @@ export class ReturnsService {
     public currentPage$ = this.currentPage.asObservable();
     public currentPageSize$ = this.currentPageSize.asObservable();
     public startAndEndIndex$ = this.startAndEndIndex.asObservable();
-    public totalReturns = this.defaultReturns.length;
+    public totalReturns$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
     constructor(private returnDetailsService: ReturnDetailsService) {}
 
@@ -32,6 +32,7 @@ export class ReturnsService {
         return this.returnDetailsService.getAllReturns().pipe(
             map((response: any) => {
                 console.log(response);
+                this.totalReturns$.next(response.totalCount || 0);
                 return response.data;
             }),
         );

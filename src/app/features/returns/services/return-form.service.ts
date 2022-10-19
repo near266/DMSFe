@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { BehaviorSubject, map, Subject, tap } from 'rxjs';
 import { CustomerService } from 'src/app/core/services/customer.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ReturnDetailsService } from '../apis/return-details.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ReturnFormService {
-    constructor(private returnDetailsService: ReturnDetailsService, private customerService: CustomerService) {}
+    constructor(
+        private returnDetailsService: ReturnDetailsService,
+        private customerService: CustomerService,
+        private snackBarService: SnackbarService,
+        private dialog: MatDialog,
+        private router: Router,
+    ) {}
     totalPrice$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     submitInfoForm$: Subject<any> = new Subject<any>();
     submitProductForm$: Subject<boolean> = new Subject<boolean>();
@@ -74,8 +83,17 @@ export class ReturnFormService {
 
     addNewReturn(form: any) {
         console.log(form);
-        return this.returnDetailsService.createNewReturn(form).subscribe((res) => {
-            console.log(res);
+        return this.returnDetailsService.createNewReturn(form).subscribe({
+            next: (result) => {
+                this.snackBarService.openSnackbar('Tạo phiếu trả hàng thành công', 2000, 'Đóng', 'center', 'top', true);
+                this.totalPrice$.next(0);
+                this.discountAmount$.next(0);
+                this.dialog.closeAll();
+                this.router.navigate(['/returns']);
+            },
+            error: (error) => {
+                this.snackBarService.openSnackbar('Tạo phiếu trả hàng thất bại', 2000, 'Đóng', 'center', 'top', false);
+            },
         });
     }
 

@@ -6,10 +6,6 @@
         <i class="fa-solid fa-check text-white mr-2"></i>
         <span class="text-white">Lưu</span>
       </button>
-      <button class="button-success-sm flex items-center justify-between mr-2">
-        <i class="fa-solid fa-circle-check text-white mr-2"></i>
-        <span class="text-white">Lưu & Đóng</span>
-      </button>
       <button class="button-danger" [routerLink]="['/returns']">
         <i class="fa-solid fa-ban text-white mr-2"></i>
         <span class="text-white">Đóng</span>
@@ -65,6 +61,7 @@
       </div>
       <app-create-return-table></app-create-return-table>
     </mat-tab>
+    <app-create-return-promotion-table></app-create-return-promotion-table>
     <!-- Sản phẩm khuyến mại -->
     <!-- <mat-tab label="Sản phẩm khuyến mại">
       <div class="flex items-center mt-2 justify-between">
@@ -90,47 +87,7 @@
           </button>
         </div>
       </div>
-      <div class="relative sm:rounded-lg mt-2" style="font-size: 12px">
-        <table class="custom-table">
-          <thead class="custom-thead">
-            <tr class="row-customize">
-              <th scope="col" class="custom-th">#</th>
-              <th scope="col" class="custom-th">Mã SP</th>
-              <th scope="col" class="custom-th">Tên sản phẩm</th>
-              <th scope="col" class="custom-th">ĐVT</th>
-              <th scope="col" class="custom-th">Kho xuất</th>
-              <th scope="col" class="custom-th">
-                Số lượng
-                <span class="text-red-500"> </span>
-              </th>
-              <th scope="col" class="custom-th">Đơn giá</th>
-              <th scope="col" class="custom-th">Thành tiền</th>
-              <th scope="col" class="custom-th">Chiết khấu</th>
-              <th scope="col" class="custom-th">Tỷ lệ CK</th>
-              <th scope="col" class="custom-th">Ghi chú</th>
-              <th scope="col" class="custom-th">Xóa</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]; index as i" class="custom-tr">
-              <td class="custom-th">{{ i + 1 }}</td>
-              <td class="custom-th">Value 1</td>
-              <td class="custom-th">Value 1</td>
-              <td class="custom-th">Value 1</td>
-              <td class="custom-th">Value 1</td>
-              <td class="custom-th">Value 1</td>
-              <td class="custom-th">Value 1</td>
-              <td class="custom-th">Value 1</td>
-              <td class="custom-th">Value 1</td>
-              <td class="custom-th">Value 1</td>
-              <td class="custom-th">Value 1</td>
-              <td class="custom-th" (click)="stopPropagation($event)">
-                <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <app-create-return-promotion-table></app-create-return-promotion-table>
     </mat-tab> -->
   </mat-tab-group>
   <div>

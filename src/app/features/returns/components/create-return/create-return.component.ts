@@ -53,7 +53,6 @@ export class CreateReturnComponent implements OnInit {
         });
     }
     submitForms(): void {
-        console.log('123');
         this.returnFormService.submitForms();
     }
 

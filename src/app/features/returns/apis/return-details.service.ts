@@ -38,7 +38,7 @@ export class ReturnDetailsService {
     }
 
     createNewReturn(form: any): Observable<any> {
-        return this.http.post<any>(this.returnUrl + '/add', form);
+        return this.http.post(this.returnUrl + '/add', form, { responseType: 'text' });
     }
 
     getAllReturns() {

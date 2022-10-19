@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Unit } from 'src/app/features/product/models/product';
 import { ProductDialogService } from 'src/app/features/product/services/product-dialog.service';
 import { ReturnFormService } from '../../../services/return-form.service';
@@ -24,6 +25,7 @@ export class CreateReturnTableComponent implements OnInit {
     constructor(
         private returnFormService: ReturnFormService,
         private formBuilder: FormBuilder,
+        private snackbarService: SnackbarService,
         private productDialogService: ProductDialogService,
     ) {}
     stopPropagation(e: any) {
@@ -55,7 +57,7 @@ export class CreateReturnTableComponent implements OnInit {
             this.warehouseOptions = data;
         });
         this.returnFormService.submitProductForm$.subscribe((data) => {
-            if (data && this.productsInput?.length) {
+            if (data && this.productsInput?.length && this.checkValidListProducts()) {
                 const requiredFields = this.productsInput.map((item: any) => {
                     const {
                         id,
@@ -89,6 +91,17 @@ export class CreateReturnTableComponent implements OnInit {
                     totalOfVAT: 0,
                     totalPayment: this.calculateTotalPrice() - this.calculateDiscountAmount(),
                 });
+                this.returnFormService.totalPrice$.next(0);
+                this.returnFormService.discountAmount$.next(0);
+            } else {
+                this.snackbarService.openSnackbar(
+                    'Dữ liệu sản phẩm không hợp lệ',
+                    2000,
+                    'Đóng',
+                    'center',
+                    'top',
+                    false,
+                );
             }
         });
     }
@@ -127,6 +140,15 @@ export class CreateReturnTableComponent implements OnInit {
         } else {
             item.discountRate = 0;
         }
+    }
+    checkValidListProducts(): boolean {
+        let isValid = true;
+        this.productsInput.forEach((item: any) => {
+            if (item.quantity <= 0 || item.warehouseId === null || item.retailUnitId === null) {
+                isValid = false;
+            }
+        });
+        return isValid;
     }
 
     // addProduct(formValue: any) {

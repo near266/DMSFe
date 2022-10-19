@@ -148,6 +148,7 @@ export class CreateReturnFormComponent implements OnInit {
                     defaultValue: null,
                     templateOptions: {
                         label: 'Ngày đặt hàng',
+                        required: true,
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -308,14 +309,19 @@ export class CreateReturnFormComponent implements OnInit {
             console.log(result);
         });
         this.returnFormService.submitInfoForm$.subscribe((listProduct) => {
-            const form = {
-                ...this.form.value,
-                ...listProduct,
-                listPromotionProduct: [],
-                orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
-                returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
-            };
-            this.returnFormService.addNewReturn(form);
+            this.form.markAllAsTouched();
+            if (this.form.valid) {
+                const form = {
+                    ...this.form.value,
+                    customerCode: this.form.value.customerCode.label,
+                    customerId: this.form.value.customerCode.value,
+                    ...listProduct,
+                    listPromotionProduct: [],
+                    orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
+                    returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
+                };
+                this.returnFormService.addNewReturn(form);
+            }
         });
     }
     submit() {

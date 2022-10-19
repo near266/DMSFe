@@ -13,7 +13,9 @@ export class ReturnsPaginationComponent implements OnInit {
     constructor(private returnsService: ReturnsService) {}
 
     ngOnInit(): void {
-        this.totalReturns = this.returnsService.totalReturns;
+        this.returnsService.totalReturns$.subscribe((res) => {
+            this.totalReturns = res;
+        });
         this.returnsService.startAndEndIndex$.subscribe((data: { start: number; end: number }) => {
             this.startIndex = data.start;
             this.endIndex = data.end;

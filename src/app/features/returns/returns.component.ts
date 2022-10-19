@@ -27,7 +27,9 @@ export class ReturnsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.totalReturns = this.returnsService.totalReturns;
+        this.returnsService.totalReturns$.subscribe((res) => {
+            this.totalReturns = res;
+        });
     }
     select(event: any) {
         console.log(event);
