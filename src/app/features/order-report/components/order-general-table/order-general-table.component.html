@@ -1,0 +1,46 @@
+<table id="product" class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10 overflow-x-scroll">
+  <thead class="h-10  border-gray-300 ">
+    <tr>
+      <!-- <th scope="col"
+        class="sticky top-0 z-10 min-w-[56px]  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">
+        <input type="checkbox">
+      </th> -->
+      <th scope="col" *ngFor="let header of headers"
+        class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+        {{header}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- <tr (click)="openUpdateProduct(product)" class="h-14 w-fit text-xs"
+      *ngFor="let product of products | paginate: { itemsPerPage: 30, currentPage };let i =index; let o=odd; let e=even;"
+      [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
+      <td class="space-x-2 min-w-[56px] border-x border-solid align-midde h-full pl-2 "><input class="inline"
+          type="checkbox"><i *ngIf="!product?.status" class="fa-solid fa-lock text-base text-[#2e799c]"></i><i
+          *ngIf="product.status" class="fa-solid fa-lock-open text-base text-[#2e799c]"></i>
+      </td>
+      <td class="border-x  border-solid align-middle px-2">{{i+1}}
+      </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.brand?.brandName}}
+      </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.sku}}</td>
+      <td class="border-x  border-solid align-middle px-2 text-emerald-500 font-medium cursor-pointer">
+        {{product.productName}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.retailUnit?.unitName}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.retailPrice | currency:'VND'}}</td>
+      <td class="border-x  border-solid align-middle px-2">{{(product.vat || 0)/100 | percent}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.discountAcc}}</td>
+      <td class="border-x  border-solid align-middle px-2">{{product.warehouse?.warehouseName}}</td>
+      <td class="border-x  border-solid align-middle px-2"> {{product.warehouseAcc}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.priceAcc}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.inventoryWarning}} </td>
+      <td class="border-x  border-solid align-middle px-2">{{product.barcode}} </td>
+    </tr> -->
+    <tr class="h-14 w-fit text-xs odd:bg-gray-300">
+      <td class="border-x  border-solid align-middle px-2" *ngFor="let i of countHeader">data</td>
+    </tr>
+    <tr class="h-14 w-fit text-base font-medium border-y border-solid border-gray-300">
+      <td colspan="20" class="border-x  border-solid align-middle px-2 text-blue-900 text-right font-bold ">Tổng:</td>
+      <td *ngFor="let item of totalCountNonSpan" class="border-x  border-solid align-middle px-2"></td>
+    </tr>
+  </tbody>
+</table>
