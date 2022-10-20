@@ -157,12 +157,22 @@
                             <span class="px-2">Nhập excel</span>
                         </button>
                         <div>
-                            <select
+                            <mat-select
+                                style="width: fit-content"
+                                [value]="0"
+                                (selectionChange)="setWareHouseToAllProduct($event.value)"
                                 class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium cursor-pointer">
-                                <option value="1" class="bg-white hover:bg-zinc-300">--Chọn kho mặc định--</option>
-                                <option value="2" class="bg-white hover:bg-zinc-300">Kho chính</option>
-                                <option value="3" class="bg-white hover:bg-zinc-300">Hàng NanoFrance</option>
-                            </select>
+                                <mat-option [value]="0" class="bg-white hover:bg-zinc-300">
+                                    --Chọn kho mặc định--
+                                </mat-option>
+                                <mat-option
+                                    *ngFor="let warehouse of listWarehouse"
+                                    [value]="warehouse.id"
+                                    value="2"
+                                    class="bg-white hover:bg-zinc-300">
+                                    {{ warehouse.warehouseName }}
+                                </mat-option>
+                            </mat-select>
                         </div>
                     </div>
                 </div>
@@ -181,8 +191,8 @@
                                 </th>
                                 <th scope="col" class="custom-th">Đơn giá</th>
                                 <th scope="col" class="custom-th">Thành tiền</th>
-                                <th scope="col" class="custom-th">Chiết khấu</th>
-                                <th scope="col" class="custom-th">Tỷ lệ CK</th>
+                                <th scope="col" class="custom-th">Chiết khấu (VNĐ)</th>
+                                <th scope="col" class="custom-th">Tỷ lệ CK (%)</th>
                                 <th scope="col" class="custom-th">Ghi chú</th>
                                 <th scope="col" class="custom-th">Xóa</th>
                             </tr>
@@ -214,7 +224,9 @@
                                 </td>
                                 <td class="custom-th">
                                     <mat-form-field appearance="outline" floatLabel="always" style="width: 80px">
-                                        <mat-select (selectionChange)="selectWareHouse($event.value, product)">
+                                        <mat-select
+                                            (selectionChange)="selectWareHouse($event.value, product)"
+                                            [value]="product.warehouseId">
                                             <mat-option *ngFor="let warehouse of listWarehouse" [value]="warehouse.id">
                                                 {{ warehouse.warehouseName }}
                                             </mat-option>
@@ -258,7 +270,15 @@
                                     </mat-form-field>
                                 </td>
                                 <td class="custom-th">
-                                    {{ product.discountRate | percent: '1.2' }}
+                                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                                        <input
+                                            min="0"
+                                            type="number"
+                                            matInput
+                                            (input)="countDiscount(product)"
+                                            [(ngModel)]="product.discountRate"
+                                            [ngModelOptions]="{ standalone: true }" />
+                                    </mat-form-field>
                                 </td>
                                 <td class="custom-th">
                                     <mat-form-field
@@ -281,85 +301,79 @@
                 </div>
             </mat-tab>
         </mat-tab-group>
-        <div>
-            <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 flex">
-                    <span class="w-1/3">Bằng chữ:</span>
-                    <span>
-                        <span *ngIf="textMoney">{{ textMoney }} đồng</span>
-                    </span>
-                </span>
-                <span class="font-medium w-1/3 py-2 flex">
-                    <span class="w-1/3">Tổng tiền hàng</span>
-                    <span class="font-normal ml-4">{{ totalAmount | currency: 'VND' }}</span>
+        <div class="grid grid-cols-3 w-full gap-y-5 mt-6">
+            <div class="grid grid-cols-4 col-span-2">
+                <span class="font-medium text-red-600">Bằng chữ:</span>
+                <span class="col-span-3">
+                    <span *ngIf="textMoney">{{ textMoney }} đồng</span>
                 </span>
             </div>
-            <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 text-green-700 flex">
-                    <span class="w-1/2">Hình thức thanh toán:</span>
-                    <span class="font-normal">Thanh toán trực tiếp</span>
-                </span>
-                <span class="font-medium w-1/3 py-2 flex items-end">
-                    <!-- Tổng tiền VAT:
-                    <span class="font-normal ml-4"></span> -->
-                    <span class="w-1/3">Chiết khấu sản phẩm:</span>
-                    <span class="font-normal ml-4">
-                        {{ totalDiscountProduct | currency: 'VND' }}
-                    </span>
+            <div class="grid grid-cols-2">
+                <span class="font-medium">Tổng tiền hàng:</span>
+                <span class="font-normal">{{ totalAmount | currency: 'VND' }}</span>
+            </div>
+            <div class="grid grid-cols-4 col-span-2 text-green-600">
+                <span class="font-medium">Hạn mức dư nợ:</span>
+                <span class="col-span-3">Thanh toán trực tiếp</span>
+            </div>
+            <div class="grid grid-cols-2">
+                <span class="font-medium">Chiết khấu sản phẩm:</span>
+                <span class="font-normal">
+                    {{ totalDiscountProduct | currency: 'VND' }}
                 </span>
             </div>
-            <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 text-green-700">
-                    <!-- Dư nợ hiện tại:
-                    <span class="font-normal ml-4"></span> -->
-                </span>
-                <span class="font-medium w-1/3 py-2 flex items-end">
-                    <!-- Chiết khấu sản phẩm:
-                    <span class="font-normal ml-4"></span> -->
-                    <span class="w-1/3">Chiết khấu đơn hàng:</span>
-                    <span class="font-normal ml-4">
-                        <input
-                            class="border-b border-gray-700"
-                            type="number"
-                            [(ngModel)]="tradeDiscount"
-                            [ngModelOptions]="{ standalone: true }" />
-                    </span>
+            <div class="grid grid-cols-4 col-span-2 text-green-600">
+                <span class="font-medium">Dư nợ hiện tại:</span>
+                <span class="col-span-3">Thanh toán trực tiếp</span>
+            </div>
+            <div class="grid grid-cols-2">
+                <span class="font-medium">Chiết khấu đơn hàng:</span>
+                <span class="font-normal">
+                    <input
+                        
+                        class="border-b border-gray-700"
+                        type="number"
+                        [(ngModel)]="tradeDiscount"
+                        [ngModelOptions]="{ standalone: true }" />
                 </span>
             </div>
-            <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 text-green-700">
-                    <!-- Hình thức thanh toán:
-                    <span class="font-normal ml-4"></span> -->
-                </span>
-                <span class="font-medium w-1/3 py-2 flex">
-                    <!-- Chiết khấu đơn hàng:
-                    <span class="font-normal ml-4"></span> -->
-                    <span class="w-1/3">Phải thanh toán:</span>
-                    <span class="font-normal ml-4">
-                        {{ totalPayment | currency: 'VND' }}
-                    </span>
+            <div class="grid grid-cols-4 col-span-2 text-green-600">
+                <span class="font-medium">Loại thanh toán:</span>
+                <span class="col-span-3">Thanh toán trực tiếp</span>
+            </div>
+            <div class="grid grid-cols-2">
+                <span class="font-medium">Phải thanh toán:</span>
+                <span class="font-normal">
+                    {{ totalPayment | currency: 'VND' }}
                 </span>
             </div>
-            <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2"></span>
-                <span class="font-medium w-1/3 py-2 flex items-center">
-                    <span class="w-1/3">Thanh toán trước:</span>
-                    <span class="font-normal ml-4">
-                        <input
-                            class="border-b border-gray-700"
-                            type="number"
-                            [(ngModel)]="prePayment"
-                            [ngModelOptions]="{ standalone: true }" />
-                    </span>
+            <div class="grid grid-cols-4 col-span-2 items-center">
+                <span class="font-medium text-green-600">Hạn thanh toán:</span>
+                <span style="font-size: 12px" class="col-span-3">
+                    <mat-form-field appearance="outline">
+                        <input matInput [matDatepicker]="pickerDate" formControlName="paymentTerm" />
+                        <mat-datepicker-toggle matSuffix [for]="pickerDate"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDate></mat-datepicker>
+                    </mat-form-field>
                 </span>
             </div>
-            <!-- <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2"></span>
-                <span class="font-medium w-1/3 py-2">
-                    Thanh toán trước:
-                    <span class="font-normal ml-4"></span>
+            <span class="grid grid-cols-2">
+                <span class="font-medium text-green-600">Thanh toán trước:</span>
+                <span class="font-normal">
+                    <input
+                        class="border-b border-gray-700"
+                        type="number"
+                        [(ngModel)]="prePayment"
+                        [ngModelOptions]="{ standalone: true }" />
                 </span>
-            </div> -->
+            </span>
+            <div class="grid grid-cols-4 col-span-2"></div>
+            <div class="grid grid-cols-2">
+                <span class="font-medium text-blue-600">Ghi công nợ:</span>
+                <span class="font-normal">
+                    <mat-checkbox formControlName="debtRecord" class="example-margin"></mat-checkbox>
+                </span>
+            </div>
         </div>
     </div>
 </form>

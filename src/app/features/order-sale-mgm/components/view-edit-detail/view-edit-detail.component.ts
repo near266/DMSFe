@@ -24,6 +24,12 @@ export class ViewEditDetailComponent implements OnInit {
     subscription: Subscription[] = [];
     detailOrder: any = [];
     bodyUpdate: any = [];
+
+    listProductUpdate: any;
+    listProductRemove: any = [];
+    listProductAdd: any = [];
+
+    isRemove = false;
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
@@ -42,6 +48,19 @@ export class ViewEditDetailComponent implements OnInit {
         this.saleReceipt.updateOrderPass.subscribe((data) => {
             this.bodyUpdate = data;
         });
+        // get list Product Update
+        this.saleReceipt.productUpdate.subscribe((data) => {
+            this.listProductUpdate = data;
+        });
+        // get list Product Remove
+        this.saleReceipt.productRemove.subscribe((data) => {
+            this.listProductRemove = data.list;
+            this.isRemove = data.isRemove;
+        });
+        // get list product add
+        this.saleReceipt.productAdd.subscribe((data) => {
+            this.listProductAdd = data;
+        });
     }
 
     ngAfterViewInit(): void {
@@ -56,7 +75,7 @@ export class ViewEditDetailComponent implements OnInit {
         this.saleReceipt.searchReceiptById(this.id).subscribe((data) => {
             this.statusNow = data.status;
             this.detailOrder = data;
-            localStorage.setItem('customerId', data.customer.id);
+            localStorage.setItem('customerId', data.customer?.id);
             console.log(this.statusNow);
         });
     }
@@ -68,6 +87,7 @@ export class ViewEditDetailComponent implements OnInit {
         this.dataService.changeType(this.type);
     }
 
+    // update status
     updateOrder(changeTo: number) {
         const body = {
             id: this.detailOrder.id,
@@ -145,6 +165,74 @@ export class ViewEditDetailComponent implements OnInit {
                 this.getDetail();
                 // gửi trạng thái để detail-order component biết rồi reload lại data
                 this.saleReceipt.isSuccessUpdate('Done');
+            },
+        );
+    }
+
+    // update ProductList
+    updateProductList() {
+        // update detail Product
+        this.updateDetailProduct();
+        // remove Product
+        this.removeProduct();
+        // add product
+        this.addProduct();
+    }
+
+    updateDetailProduct() {
+        const body = {
+            saleRecieptProducts: this.listProductUpdate,
+        };
+        this.saleReceipt.updateProductList(body).subscribe(
+            (data) => {},
+            (err) => {
+                this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+            () => {
+                // custom Status when done
+                this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                this.getDetail();
+                // gửi trạng thái để detail-order component biết rồi reload lại data
+                this.saleReceipt.isSuccessUpdate('Done');
+            },
+        );
+    }
+
+    removeProduct() {
+        const removeList = {
+            listIdRemove: this.listProductRemove,
+            purchaseOrderId: this.id,
+        };
+        if (this.isRemove) {
+            this.saleReceipt.removeProduct(removeList).subscribe(
+                (data) => {},
+                (err) => {
+                    console.log('Xóa sản phẩm thất bại');
+                },
+                () => {
+                    console.log('Xóa sản phẩm thành công');
+                    // custom Status when done
+                    // this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                    // this.getDetail();
+                    // gửi trạng thái để detail-order component biết rồi reload lại data
+                    this.saleReceipt.isSuccessUpdate('Done');
+                    this.saleReceipt.sendProductRemove({ isRemove: false, list: [] });
+                },
+            );
+        }
+    }
+
+    addProduct() {
+        const bodyAdd = {
+            saleRecieptProducts: this.listProductAdd,
+        };
+        this.saleReceipt.addProduct(bodyAdd).subscribe(
+            (data) => {},
+            (err) => {
+                console.log('Them sp that bai');
+            },
+            () => {
+                console.log('Them sp thanh cong');
             },
         );
     }
