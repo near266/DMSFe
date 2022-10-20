@@ -1,0 +1,42 @@
+<mat-sidenav-container [hasBackdrop]="false">
+  <mat-sidenav [mode]="'side'" class="fixed" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" #sidenav
+    [position]="'start'" class=" overflow-hidden relative z-50 navbar-container">
+    <div class="w-60 bg-[#f2f2f2] "></div>
+  </mat-sidenav>
+  <mat-sidenav-content class="">
+    <div class=" bg-[#f2f2f2] fixed bottom-0 top-16 z-10 border-r border-gray-300 border-solid">
+      <button (click)="sidenav.toggle()"
+        class=" h-5 flex items-center justify-center border-solid border-2 border-slate-400 py-4 px-2">
+        <i *ngIf="sidenav?.opened" class="fa-solid fa-caret-right"></i>
+        <i *ngIf="!sidenav?.opened" class="fa-solid fa-caret-left"></i>
+      </button>
+    </div>
+    <div class="flex h-full w-full pl-[26px] pb-9">
+      <div class="flex w-full h-full relative flex-col">
+        <div class="z-0 ">
+          <!-- header -->
+          <div class="mt-2 px-2 flex justify-between items-center">
+            <span class="text-xl font-medium">Danh sách sản phẩm ( 0 sản phẩm) </span>
+          </div>
+          <!-- options select to edit -->
+          <div class="flex mt-2 p-2 bg-[#f2f2f2] border-y border-solid border-slate-400">
+            <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="null">
+              <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
+              Thêm mới
+            </button>
+            <!-- <app-menu-bar [menuObj]="menuObj" (message)="select($event)" *ngFor="let menuObj of listMenu"></app-menu-bar> -->
+
+          </div>
+
+        </div>
+        <div class="w-full table-container overflow-scroll">
+          <!-- <app-product-table></app-product-table> -->
+        </div>
+      </div>
+    </div>
+    <div
+      class="fixed bottom-0 right-0 ml-[26px] left-0 h-9 px-2 flex items-center justify-end bg-[#f2f2f2] border-t border-solid border-slate-400">
+      <!-- <app-product-pagination></app-product-pagination> -->
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
