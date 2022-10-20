@@ -11,17 +11,19 @@ import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecretInterceptor } from './core/interceptor/secret.interceptor';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { DataService } from './core/services/data.service';
 import { ForgotpasswordComponent } from './features/auth/forgotpassword/forgotpassword.component';
+import { OrderReportComponent } from './features/order-report/order-report.component';
 @NgModule({
-    declarations: [AppComponent, ForgotpasswordComponent],
+    declarations: [AppComponent, ForgotpasswordComponent, OrderReportComponent],
     imports: [SharedModule, RouterModule, BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule],
     providers: [
         DatePipe,
         { provide: HTTP_INTERCEPTORS, useClass: SecretInterceptor, multi: true },
         { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
         DataService,
+        CurrencyPipe
     ],
     bootstrap: [AppComponent],
 })

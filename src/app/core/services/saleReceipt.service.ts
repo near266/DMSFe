@@ -17,6 +17,10 @@ export class SaleReceiptService {
     private productPageSource = new BehaviorSubject<number>(1);
     private updateOrderSource = new BehaviorSubject<number>(1);
     private isSucessUpdateSource = new BehaviorSubject<any>('');
+    private productUpdateSource = new BehaviorSubject<any>('');
+    private productRemoveSource = new BehaviorSubject<any>('');
+    private productAddSource = new BehaviorSubject<any>('');
+
     page = this.pageSource.asObservable();
     total = this.totalSource.asObservable();
     index = this.indexSource.asObservable();
@@ -25,6 +29,9 @@ export class SaleReceiptService {
     productPage = this.msgSource.asObservable();
     updateOrderPass = this.updateOrderSource.asObservable();
     isSucessUpdate = this.isSucessUpdateSource.asObservable();
+    productUpdate = this.productUpdateSource.asObservable();
+    productRemove = this.productRemoveSource.asObservable();
+    productAdd = this.productAddSource.asObservable();
 
     setTotal(total: number) {
         this.totalSource.next(total);
@@ -49,6 +56,15 @@ export class SaleReceiptService {
     }
     isSuccessUpdate(msg: string) {
         this.isSucessUpdateSource.next(msg);
+    }
+    sendProductUpdate(list: any) {
+        this.productUpdateSource.next(list);
+    }
+    sendProductRemove(list: any) {
+        this.productRemoveSource.next(list);
+    }
+    sendProductAdd(list: any) {
+        this.productAddSource.next(list);
     }
 
     constructor(private http: HttpClient) {}
@@ -93,5 +109,23 @@ export class SaleReceiptService {
         return this.http
             .post(this.api_gateway_url + '/ReturnsOrder/add', body, { responseType: 'text' })
             .pipe(map((response: any) => response));
+    }
+    updateProductList(body: any): Observable<any> {
+        return this.http
+            .put(this.api_gateway_url + '/SaleReceipt/updateProduct', body)
+            .pipe(map((reponse: any) => reponse));
+    }
+    removeProduct(bodyGet: any): Observable<any> {
+        const options = {
+            body: bodyGet,
+        };
+        return this.http
+            .delete(this.api_gateway_url + '/SaleReceipt/removeProduct', options)
+            .pipe(map((reponse: any) => reponse));
+    }
+    addProduct(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/SaleReceipt/addProduct', body)
+            .pipe(map((reponse: any) => reponse));
     }
 }

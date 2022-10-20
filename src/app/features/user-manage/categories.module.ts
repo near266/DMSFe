@@ -54,5 +54,6 @@ const routes: Routes = [
         AddUnitComponent,
     ],
     imports: [CommonModule, RouterModule.forChild(routes), SharedModule, NgxPaginationModule],
+    exports: [UserTreeViewComponent]
 })
 export class UserManageModule {}

@@ -59,9 +59,11 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
         // this.getAllProducts();
         setTimeout(() => {
             // get listChoosenProduct
-            this.listChoosenProduct = this.listProduct.filter((product: any) => {
-                return product.isChoose;
-            });
+            if (this.listProduct) {
+                this.listChoosenProduct = this.listProduct.filter((product: any) => {
+                    return product.isChoose;
+                });
+            }
         }, 1000);
     }
 
@@ -111,7 +113,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
                 if (data) {
                     this.listProduct = data.data;
                 }
-                this.total = data.totalCount;
+                this.total = data?.totalCount;
                 this.getChoosedProduct();
             });
     }

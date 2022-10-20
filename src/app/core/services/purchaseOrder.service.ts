@@ -16,6 +16,8 @@ export class PurchaseOrderService {
     private productPageSource = new BehaviorSubject<number>(1);
     private isSucessUpdateSource = new BehaviorSubject<any>('');
     private productUpdateSource = new BehaviorSubject<any>('');
+    private productRemoveSource = new BehaviorSubject<any>('');
+    private productAddSource = new BehaviorSubject<any>('');
 
     page = this.pageSource.asObservable();
     total = this.totalSource.asObservable();
@@ -26,6 +28,8 @@ export class PurchaseOrderService {
     updateOrder = this.updateOrderSource.asObservable();
     isSucessUpdate = this.isSucessUpdateSource.asObservable();
     productUpdate = this.productUpdateSource.asObservable();
+    productRemove = this.productRemoveSource.asObservable();
+    productAdd = this.productAddSource.asObservable();
 
     setTotal(total: number) {
         this.totalSource.next(total);
@@ -53,6 +57,12 @@ export class PurchaseOrderService {
     }
     sendProductUpdate(list: any) {
         this.productUpdateSource.next(list);
+    }
+    sendProductRemove(list: any) {
+        this.productRemoveSource.next(list);
+    }
+    sendProductAdd(list: any) {
+        this.productAddSource.next(list);
     }
 
     url = 'https://6346eabf04a6d457579c4afd.mockapi.io/purchaseOrders';
@@ -112,9 +122,17 @@ export class PurchaseOrderService {
             .put(this.api_gateway_url + '/PurchaseOrder/updateProduct', body)
             .pipe(map((reponse: any) => reponse));
     }
-    removeProduct(body: any): Observable<any> {
+    removeProduct(bodyGet: any): Observable<any> {
+        const options = {
+            body: bodyGet,
+        };
         return this.http
-            .delete(this.api_gateway_url + '/PurchaseOrder/removeProduct', body)
+            .delete(this.api_gateway_url + '/PurchaseOrder/removeProduct', options)
+            .pipe(map((reponse: any) => reponse));
+    }
+    addProduct(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/PurchaseOrder/addProduct', body)
             .pipe(map((reponse: any) => reponse));
     }
 

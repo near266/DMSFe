@@ -1,7 +1,7 @@
 <div
     class="w-full z-20 header-shadow bg-zinc-100 h-16 flex items-center justify-between px-3 fixed top-0 right-0 left-0">
     <img src="./../../../../assets/images/logo.png" class="h-5/6" alt="" />
-    <ul class="flex">
+    <ul class="flex md:space-x-10 lg:space-x-20">
         <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Công việc</li>
         <!-- Menu Bán hàng -->
         <li
@@ -71,7 +71,23 @@
             </mat-menu>
         </mat-menu>
         <!-- Menu Báo cáo -->
-        <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Báo cáo</li>
+        <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="report">Báo cáo <i class="fa-solid fa-caret-down ml-1"></i></li>
+        <mat-menu #report="matMenu" class="mt-1">
+          <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="orderReport" >
+            <i class="fa-regular fa-file-excel mr-2"></i>
+            <span>Báo cáo đặt hàng</span>
+          </button>
+          <mat-menu #orderReport="matMenu">
+            <button mat-menu-item class="flex items-center" [routerLink]="['report/summaryOrders']" routerLinkActive="text-green-500">
+              <i class="fa-solid fa-list mr-1"></i>
+                <span>Tổng hợp đặt hàng</span>
+            </button>
+        </mat-menu>
+          <button mat-menu-item [routerLink]="['product']">
+            <i class="fa-solid fa-chart-line mr-2"></i>
+              <span>Báo cáo bán hàng</span>
+          </button>
+      </mat-menu>
         <!-- Menu trợ giúp -->
         <li class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer">Trợ giúp</li>
     </ul>

@@ -26,6 +26,10 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
 
     bodyUpdate: any;
     listProductUpdate: any;
+    listProductRemove: any = [];
+    listProductAdd: any = [];
+
+    isRemove = false;
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
@@ -47,6 +51,15 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         this.purchaseOrder.productUpdate.subscribe((data) => {
             this.listProductUpdate = data;
         });
+        // get list Product Remove
+        this.purchaseOrder.productRemove.subscribe((data) => {
+            this.listProductRemove = data.list;
+            this.isRemove = data.isRemove;
+        });
+        // get list product add
+        this.purchaseOrder.productAdd.subscribe((data) => {
+            this.listProductAdd = data;
+        });
     }
 
     ngAfterViewInit(): void {
@@ -61,8 +74,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         this.purchaseOrder.detail(this.id).subscribe((data) => {
             this.statusNow = data.status;
             this.detailOrder = data;
-            localStorage.setItem('customerId', data.customer.id);
-            console.log(this.detailOrder);
+            localStorage.setItem('customerId', data.customer?.id);
         });
     }
 
@@ -199,10 +211,18 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
 
     // update ProductList
     updateProductList() {
+        // update detail Product
+        this.updateDetailProduct();
+        // remove Product
+        this.removeProduct();
+        // add product
+        this.addProduct();
+    }
+
+    updateDetailProduct() {
         const body = {
             purchaseOrderProducts: this.listProductUpdate,
         };
-        console.log(body);
         this.purchaseOrder.updateProductList(body).subscribe(
             (data) => {},
             (err) => {
@@ -214,6 +234,45 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
                 this.getDetail();
                 // gửi trạng thái để detail-order component biết rồi reload lại data
                 this.purchaseOrder.isSuccessUpdate('Done');
+            },
+        );
+    }
+
+    removeProduct() {
+        const removeList = {
+            listIdRemove: this.listProductRemove,
+            purchaseOrderId: this.id,
+        };
+        if (this.isRemove) {
+            this.purchaseOrder.removeProduct(removeList).subscribe(
+                (data) => {},
+                (err) => {
+                    console.log('Xóa sản phẩm thất bại');
+                },
+                () => {
+                    console.log('Xóa sản phẩm thành công');
+                    // custom Status when done
+                    // this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                    // this.getDetail();
+                    // gửi trạng thái để detail-order component biết rồi reload lại data
+                    this.purchaseOrder.isSuccessUpdate('Done');
+                    this.purchaseOrder.sendProductRemove({ isRemove: false, list: [] });
+                },
+            );
+        }
+    }
+
+    addProduct() {
+        const bodyAdd = {
+            purchaseOrderProducts: this.listProductAdd,
+        };
+        this.purchaseOrder.addProduct(bodyAdd).subscribe(
+            (data) => {},
+            (err) => {
+                console.log('Them sp that bai');
+            },
+            () => {
+                console.log('Them sp thanh cong');
             },
         );
     }

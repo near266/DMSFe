@@ -151,17 +151,22 @@
                             <span class="px-2">Nhập excel</span>
                         </button>
                         <div>
-                            <select
+                            <mat-select
+                                style="width: fit-content"
+                                [value]="0"
+                                (selectionChange)="setWareHouseToAllProduct($event.value)"
                                 class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium cursor-pointer">
-                                <option class="bg-white hover:bg-zinc-300">--Chọn kho mặc định--</option>
-                                <option
+                                <mat-option [value]="0" class="bg-white hover:bg-zinc-300">
+                                    --Chọn kho mặc định--
+                                </mat-option>
+                                <mat-option
                                     *ngFor="let warehouse of listWarehouse"
                                     [value]="warehouse.id"
                                     value="2"
                                     class="bg-white hover:bg-zinc-300">
                                     {{ warehouse.warehouseName }}
-                                </option>
-                            </select>
+                                </mat-option>
+                            </mat-select>
                         </div>
                     </div>
                 </div>
@@ -180,8 +185,8 @@
                                 </th>
                                 <th scope="col" class="custom-th">Đơn giá</th>
                                 <th scope="col" class="custom-th">Thành tiền</th>
-                                <th scope="col" class="custom-th">Chiết khấu</th>
-                                <th scope="col" class="custom-th">Tỷ lệ CK</th>
+                                <th scope="col" class="custom-th">Chiết khấu (VNĐ)</th>
+                                <th scope="col" class="custom-th">Tỷ lệ CK (%)</th>
                                 <th scope="col" class="custom-th">Ghi chú</th>
                                 <th scope="col" class="custom-th">Xóa</th>
                             </tr>
@@ -197,7 +202,9 @@
                                         appearance="outline"
                                         floatLabel="always"
                                         style="width: 100px">
-                                        <mat-select (selectionChange)="selectUnit($event.value, product, i)">
+                                        <mat-select
+                                            value="{ unit: {{ product.retailUnit }}, type: 'retail' }"
+                                            (selectionChange)="selectUnit($event.value, product, i)">
                                             <mat-option
                                                 *ngIf="product.retailUnit"
                                                 [value]="{ unit: product.retailUnit, type: 'retail' }">
@@ -213,7 +220,9 @@
                                 </td>
                                 <td class="custom-th">
                                     <mat-form-field appearance="outline" floatLabel="always" style="width: 80px">
-                                        <mat-select (selectionChange)="selectWareHouse($event.value, product)">
+                                        <mat-select
+                                            (selectionChange)="selectWareHouse($event.value, product)"
+                                            [value]="product.warehouseId">
                                             <mat-option *ngFor="let warehouse of listWarehouse" [value]="warehouse.id">
                                                 {{ warehouse.warehouseName }}
                                             </mat-option>
@@ -248,7 +257,6 @@
                                 <td class="custom-th">
                                     <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
                                         <input
-                                            min="0"
                                             type="number"
                                             matInput
                                             (input)="discountRate(product)"
@@ -257,7 +265,17 @@
                                     </mat-form-field>
                                 </td>
                                 <td class="custom-th">
-                                    {{ product.discountRate | percent: '1.2' }}
+                                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                                        <input
+                                            min="0"
+                                            type="number"
+                                            matInput
+                                            (input)="countDiscount(product)"
+                                            [(ngModel)]="product.discountRate"
+                                            [ngModelOptions]="{ standalone: true }" />
+                                    </mat-form-field>
+
+                                    <!-- {{ product.discountRate | percent: '1.2' }} -->
                                 </td>
                                 <td class="custom-th">
                                     <mat-form-field
