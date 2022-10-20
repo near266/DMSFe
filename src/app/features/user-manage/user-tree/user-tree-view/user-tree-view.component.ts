@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
-import { IActionMapping, ITreeOptions, } from '@circlon/angular-tree-component';
+import { IActionMapping, ITreeOptions, TreeComponent, TreeNode, TreeNodeComponent, } from '@circlon/angular-tree-component';
+import { Response } from 'src/app/core/model/Response';
 import { EmployeeService } from 'src/app/core/services/employee.service';
 import { AddAccountantComponent } from '../add-accountant/add-accountant.component';
 import { AddEmployeeComponent } from '../add-employee/add-employee.component';
@@ -19,6 +20,8 @@ export class UserTreeViewComponent implements OnInit {
     action: IActionMapping;
     options: ITreeOptions;
 
+    @ViewChild(TreeComponent) private tree: TreeComponent;
+
     menubar_unit = [
       'Thêm quản lý',
       'Thêm kế toán',
@@ -32,38 +35,120 @@ export class UserTreeViewComponent implements OnInit {
       'Thêm nhân viên'
     ];
 
+    array_index: any[] = [];
+
     settings: any = {};
     total: number;
     constructor(private employeeService: EmployeeService, private dialog: MatDialog) {}
 
     ngOnInit(): void {
+      this.nodes.push({ id: 'root', level: -1, name: 'Tất cả', expand: false, children: [], menubar: ['Thêm nhóm bán hàng', 'Thêm đơn vị'], hasChildren: true });
       this.init();
     }
     init() {
-      this.action = {
-        mouse: {
-          contextMenu: (tree, node, $event) => {
-            node.data.expand = !node.data.expand;
-          },
-          click: (tree, node, $event) => {
-            node.data.expand = false;
-          },
-        },
-      };
-      this.options = {
-        useCheckbox: true,
-        animateExpand: true,
-        actionMapping: this.action
-      };
-
       this.employeeService.getTreeEmployee().subscribe((tree) => {
-          console.log(tree);
-          const newTree = { id: 'root', level: -1, name: 'Tất cả', children: [{}], expand: false, menubar: ['Thêm nhóm bán hàng', 'Thêm đơn vị'] };
-          newTree.children = this.convertTree(tree);
-          this.nodes = [newTree];
-          this.total = this.getTotalItemInTreeWithNoChildren(this.nodes);
+          this.addNodeToArray(tree, 'root');
+          this.array_index[0].children.forEach((element: any) => {
+            let node = {
+              id: element.id,
+              level: element.level,
+              name: element.name,
+              code: element.code,
+              expand: element.expand,
+              type: element.type,
+              menubar: element.menubar,
+              hasChildren: element.hasChildren
+            };
+            this.nodes[0].children.push(node);
+          });
+
+
+          // this.nodes[0].children = [newTree];
+          this.nodes[0].children.push({
+            id: 'undefined',
+            level: 0,
+            name: 'Chưa thuộc phòng/nhóm',
+            code: '',
+            expand: false,
+            type: 1,
+            menubar: this.menubar_group,
+            hasChildren: false
+          });
+          this.action = {
+            mouse: {
+              contextMenu: (tree, node, $event) => {
+                node.data.expand = !node.data.expand;
+              },
+              click: (tree, node, $event) => {
+                node.data.expand = false;
+              },
+            },
+          };
+          this.options = {
+            useCheckbox: true,
+            animateExpand: true,
+            actionMapping: this.action,
+            getChildren: this.getChildren.bind(this),
+          };
+          // this.total = this.getTotalItemInTreeWithNoChildren(this.nodes);
       });
     }
+
+    getChildren(node: any) {
+      let newNodes: any;
+      this.array_index.forEach(e => {
+        if(node.data.id == e.id) {
+          // console.log(e.children);
+          this.employeeService.SearchEmployeeInGroup(node.data.id, 1, 1000).subscribe((response: Response<any>) => {
+            let res = response;
+            res.data.forEach((element: any) => {
+              e.children.push({
+                id: element.employeeId,
+                name: element.employee.employeeName,
+                code: 'Nhân viên',
+                expand: false,
+                type: 2,
+                menubar: [],
+                hasChildren: false
+              });
+            });
+            newNodes = e.children.map((c: any) => Object.assign({}, c));
+          });
+
+        }
+      });
+      // newNodes = this.asyncChildren.map((c) => Object.assign({}, c));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(newNodes), 1000);
+      });
+    }
+
+    addNodeToArray(tree: any[], parent: any) {
+      let nodes: any[] = [];
+      tree.forEach((element: any) => {
+          let node = {
+              id: element.item.id,
+              level: element.item.levelOfNode,
+              name: element.item.name,
+              code: element.item.unitTreeGroup_Code,
+              expand: false,
+              type: element.item.type,
+              menubar: this.menubar_group,
+              hasChildren: true
+          };
+          if(element.children.length == 0) node.hasChildren = false;
+          if(node.type == 0) node.menubar = this.menubar_unit;
+          nodes.push(node);
+      });
+      this.array_index.push({
+        id: parent,
+        children: nodes
+      });
+      tree.forEach((element: any) => {
+        if(element.children.length > 0) this.addNodeToArray(element.children, element.item.id);
+      });
+    }
+
     convertTree(tree: any[]) {
         let nodes: any[] = [];
         tree.forEach((element: any) => {
@@ -75,8 +160,10 @@ export class UserTreeViewComponent implements OnInit {
                 children: this.convertTree(element.children),
                 expand: false,
                 type: element.item.type,
-                menubar: this.menubar_group
+                menubar: this.menubar_group,
+                hasChildren: true
             };
+            if(node.children.length == 0) node.hasChildren = false;
             if(node.type == 0) node.menubar = this.menubar_unit;
             nodes.push(node);
         });
@@ -97,11 +184,6 @@ export class UserTreeViewComponent implements OnInit {
     }
     Config(e: any) {
       e.preventDefault();
-
-    }
-
-    right_click(event: any) {
-      console.log(event);
 
     }
 
