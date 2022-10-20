@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, pipe } from 'rxjs';
-import { ReturnDetailsService } from '../apis/return-details.service';
+import { ReturnApiService } from '../apis/return-api.service';
 import returns from '../mocks/returns';
 import { Return } from '../models/return';
 
@@ -26,10 +26,10 @@ export class ReturnsService {
     public startAndEndIndex$ = this.startAndEndIndex.asObservable();
     public totalReturns$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-    constructor(private returnDetailsService: ReturnDetailsService) {}
+    constructor(private returnApiService: ReturnApiService) {}
 
     getAllReturns() {
-        return this.returnDetailsService.getAllReturns().pipe(
+        return this.returnApiService.getAllReturns().pipe(
             map((response: any) => {
                 console.log(response);
                 this.totalReturns$.next(response.totalCount || 0);

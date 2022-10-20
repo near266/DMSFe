@@ -16,7 +16,6 @@ import { ReturnFormService } from '../../services/return-form.service';
 })
 export class CreateReturnComponent implements OnInit {
     formValues: any;
-    totalPrice: number;
     productsInput: any;
     statusList = [
         {
@@ -31,6 +30,7 @@ export class CreateReturnComponent implements OnInit {
     createForm: FormGroup;
     listCustomer: any;
     products: any;
+    totalPrice: number;
     textMoney: string;
     discountAmount: number;
     constructor(

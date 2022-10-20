@@ -1,0 +1,94 @@
+<form [formGroup]="detailOrderForm" class="p-3 w-full">
+  <app-detail-return-info></app-detail-return-info>
+  <mat-tab-group>
+    <!-- Sản phẩm đặt hàng -->
+    <mat-tab label="Sản phẩm đặt hàng">
+      <app-detail-return-table-edit *ngIf="currentMode === ComponentModeList.EDIT"></app-detail-return-table-edit>
+      <app-detail-return-table *ngIf="currentMode === ComponentModeList.VIEW"></app-detail-return-table>
+    </mat-tab>
+    <!-- Sản phẩm khuyến mại -->
+    <mat-tab label="Sản phẩm khuyến mại">
+      <div class="flex items-center mt-2 justify-between">
+        <div class="flex items-center">
+          <div class="flex items-center">
+            <label for="simple-search" class="sr-only">Search</label>
+            <div class="relative w-full">
+              <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <input type="text" id="simple-search" class="search-input" placeholder="Search" required />
+            </div>
+          </div>
+          <button (click)="openDialogProduct()"
+            class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
+            <i class="fa-solid fa-filter mr-2 px-2"></i>
+            <span class="px-2">Tìm kiếm nâng cao</span>
+          </button>
+        </div>
+      </div>
+      <div class="relative sm:rounded-lg mt-2" style="font-size: 12px">
+        <table class="custom-table">
+          <thead class="custom-thead">
+            <tr class="row-customize">
+              <th scope="col" class="custom-th">#</th>
+              <th scope="col" class="custom-th">Mã SP</th>
+              <th scope="col" class="custom-th">Tên sản phẩm</th>
+              <th scope="col" class="custom-th">ĐVT</th>
+              <th scope="col" class="custom-th">Kho xuất</th>
+              <th scope="col" class="custom-th">
+                Số lượng
+                <span class="text-red-500">(Tổng: 0)</span>
+              </th>
+              <th scope="col" class="custom-th">Ghi chú</th>
+              <th scope="col" class="custom-th">Xóa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let promotionProduct of listPromotionProduct; index as i" class="custom-tr">
+              <td class="custom-th">{{ i + 1 }}</td>
+              <td class="custom-th">{{ promotionProduct.productCode }}</td>
+              <td class="custom-th">{{ promotionProduct.productName }}</td>
+              <td class="custom-th">{{ promotionProduct.unitName }}</td>
+              <td class="custom-th">{{ promotionProduct.warehouseName }}</td>
+              <td class="custom-th">{{ promotionProduct.quantity }}</td>
+              <td class="custom-th">{{ promotionProduct.note }}</td>
+              <td class="custom-th" (click)="stopPropagation($event)">
+                <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  <div>
+
+    <div>
+      <div class="flex justify-between">
+        <span class="font-medium w-1/3 py-2">Bằng chữ: {{textMoney}} {{textMoney?'đồng':''}}</span>
+        <span class="font-medium w-1/3 py-2">Tổng tiền hàng: {{totalPrice | currency: 'VND'}}</span>
+      </div>
+      <div class="flex justify-between">
+        <!-- <span class="font-medium w-1/3 py-2 text-green-700">Hạn mức công nợ:</span> -->
+        <!-- <span class="font-medium w-1/3 py-2">Tổng tiền VAT:</span> -->
+      </div>
+      <div class="flex justify-between">
+        <!-- <span class="font-medium w-1/3 py-2 text-green-700">Dư nợ hiện tại:</span> -->
+        <!-- <span class="font-medium w-1/3 py-2">Chiết khấu sản phẩm: </span> -->
+      </div>
+      <div class="flex justify-between">
+        <span class="font-medium w-1/3 py-2 text-green-700">Hình thức thanh toán:</span>
+        <span class="font-medium w-1/3 py-2">Chiết khấu đơn hàng: {{discountAmount | currency: 'VND'}}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="font-medium w-1/3 py-2"></span>
+        <span class="font-medium w-1/3 py-2">Phải thanh toán:{{totalPrice - discountAmount | currency: 'VND'}} </span>
+      </div>
+    </div>
+  </div>
+</form>
