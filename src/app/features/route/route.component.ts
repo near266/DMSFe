@@ -209,7 +209,7 @@ export class RouteComponent implements OnInit, AfterViewInit {
   openDetailRoute(id: any) {
     const dialogRef = this.dialog.open(AddRouterComponent, {
       height: '95vh',
-      minWidth: '900px',
+      minWidth: '50%',
       data: {
         "id": id
       }

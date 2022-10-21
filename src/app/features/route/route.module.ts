@@ -10,6 +10,7 @@ import { InforRouterComponent } from './infor-router/infor-router.component';
 import { LocationRouterComponent } from './location-router/location-router.component';
 import { HistoryComponent } from './history/history.component';
 import { UserManageModule } from '../user-manage/categories.module';
+import { TreeGroupComponent } from './tree-group/tree-group.component';
 
 const routes: Routes = [
     {
@@ -27,6 +28,7 @@ const routes: Routes = [
     InforRouterComponent,
     LocationRouterComponent,
     HistoryComponent,
+    TreeGroupComponent,
   ],
   imports: [
     CommonModule,
