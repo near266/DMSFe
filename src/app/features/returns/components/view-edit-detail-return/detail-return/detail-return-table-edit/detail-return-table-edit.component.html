@@ -70,9 +70,10 @@
         <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-              <input matInput type="number" [(ngModel)]="item.quantity" (change)="updateItemTotalPrice(item)" />
+              <input matInput currencyMask
+                [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                [ngModel]="item.quantity" (ngModelChange)="item.quantity=$event;updateItemTotalPrice(item)" />
             </mat-form-field>
-
           </div>
         </td>
         <td class="border-x  border-solid align-middle px-2 text-center">{{item.unitPrice | currency:'VND':'symbol'}}
