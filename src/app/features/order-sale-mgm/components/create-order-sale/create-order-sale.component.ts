@@ -70,7 +70,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
 
     ngAfterViewInit(): void {
         // get list employee
-        this.purchaseOrder.getAllEmployees(1, 1000).subscribe((data) => {
+        this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
             this.listEmployee = data.data;
         });
         // get list customer

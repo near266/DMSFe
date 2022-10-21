@@ -34,7 +34,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     type: string = 'View';
     isRemove = false;
 
-    listPromotionProduct?: ListPromotionProduct[] = [];
+    listPromotionProduct: any = [];
     listProduct: any = [];
     listCustomer: any = [];
     listEmployee: any = [];
@@ -43,6 +43,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     listWarehouse: any = [];
     listProductRemove: any = [];
     listProductAdd: any = [];
+    listPromotionProductAdd: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -193,10 +194,16 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             },
             description: this.detailOrder.description,
         });
+        // get list product
         this.listProduct = this.detailOrder.listProduct;
+        // get list promotion product
         this.listPromotionProduct = this.detailOrder.listPromotionProduct;
+        console.log(this.listPromotionProduct);
         // loop to map warehouseId
         this.listProduct.forEach((product: any) => {
+            product.warehouseId = product.warehouse?.id;
+        });
+        this.listPromotionProduct.forEach((product: any) => {
             product.warehouseId = product.warehouse?.id;
         });
         console.log(this.listProduct);
@@ -220,7 +227,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     getListEmployee() {
         this.subscription.push(
-            this.purchaseOrder.getAllEmployees(1, 1000).subscribe((data) => {
+            this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
                 this.listEmployee = data.data;
             }),
         );

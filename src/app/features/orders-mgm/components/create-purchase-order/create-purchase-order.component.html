@@ -22,10 +22,6 @@
     <div class="p-3 mt-16">
         <div style="font-size: 12px">
             <div class="flex gap-x-6 justify-between">
-                <!-- <mat-form-field class="w-full" appearance="outline">
-                    <mat-label>Mã phiếu</mat-label>
-                    <input matInput [readonly]="true" />
-                </mat-form-field> -->
                 <mat-form-field class="w-full" appearance="outline">
                     <mat-label>Trạng thái</mat-label>
                     <mat-select formControlName="status">
@@ -310,8 +306,8 @@
                 <span class="font-normal">{{ totalAmount | currency: 'VND' }}</span>
             </div>
             <div class="grid grid-cols-4 col-span-2 text-green-600">
-                <span class="font-medium">Hình thức thanh toán:</span>
-                <span class="col-span-3">Thanh toán trực tiếp</span>
+                <span class="font-medium">Hạn mức dư nợ:</span>
+                <span class="col-span-3"></span>
             </div>
             <div class="grid grid-cols-2">
                 <span class="font-medium">Chiết khấu sản phẩm:</span>
@@ -319,7 +315,10 @@
                     {{ totalDiscountProduct | currency: 'VND' }}
                 </span>
             </div>
-            <div class="grid grid-cols-4 col-span-2"></div>
+            <div class="grid grid-cols-4 col-span-2 text-green-600">
+                <span class="font-medium">Dư nợ hiện tại:</span>
+                <span class="col-span-3"></span>
+            </div>
             <div class="grid grid-cols-2">
                 <span class="font-medium">Chiết khấu đơn hàng:</span>
                 <span class="font-normal">
@@ -330,7 +329,10 @@
                         [ngModelOptions]="{ standalone: true }" />
                 </span>
             </div>
-            <div class="grid grid-cols-4 col-span-2"></div>
+            <div class="grid grid-cols-4 col-span-2 text-green-600">
+                <span class="font-medium">Hình thức thanh toán:</span>
+                <span class="col-span-3">Thanh toán trực tiếp</span>
+            </div>
             <div class="grid grid-cols-2">
                 <span class="font-medium">Phải thanh toán:</span>
                 <span class="font-normal">

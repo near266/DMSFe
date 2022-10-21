@@ -149,12 +149,38 @@ export class PurchaseOrderService {
     }
 
     // employee
-    getAllEmployees(page: number, pageSize: number): Observable<any> {
-        return this.http.get(this.id_url_gw + '/Employee/SearchAllEmployee?page=' + page + '&pageSize=' + pageSize);
+    getAllEmployees(keyword: any, page: number, pageSize: number): Observable<any> {
+        return this.http.get(
+            this.id_url_gw +
+                '/Employee/SearchAllEmployee?keyword=' +
+                keyword +
+                '&page=' +
+                page +
+                '&pageSize=' +
+                pageSize,
+        );
     }
 
     // warehouse
     getAllWarehouses(): Observable<any> {
         return this.http.get(this.api_gateway_url + '/Warehouse/getall').pipe(map((reponse: any) => reponse));
+    }
+
+    // route
+    getAllRoute(page: number, pageSize: number): Observable<any> {
+        return this.http
+            .get(this.id_url_gw + '/Route/SearchAllRoute?page=' + page + '&pagesize=' + pageSize)
+            .pipe(map((reponse: any) => reponse));
+    }
+
+    getRouteByCustomerId(id: string): Observable<any> {
+        return this.http
+            .get(this.id_url_gw + '/Route/GetRouteByCustomerId?CustomerId=' + id)
+            .pipe(map((reponse: any) => reponse));
+    }
+
+    // group
+    getAllGroup(type: number): Observable<any> {
+        return this.http.get(this.id_url_gw + '/GetAllGroupByType?type=' + type).pipe(map((reponse: any) => reponse));
     }
 }

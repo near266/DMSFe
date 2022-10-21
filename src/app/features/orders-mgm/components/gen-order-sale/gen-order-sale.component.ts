@@ -2,10 +2,12 @@ import { Component, Inject, OnInit, AfterViewInit, DoCheck } from '@angular/core
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Route, Router } from '@angular/router';
+import { info } from 'console';
 import * as moment from 'moment';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { ProductListComponent } from '../product-list/product-list.component';
 
 @Component({
@@ -17,9 +19,17 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     statusList = ['Chờ duyệt', 'Đã duyệt', 'Đã giao hàng'];
     groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng'];
     listEmployee: any = [];
+    listEmployee1: any = [];
+    listEmployee2: any = [];
     listCustomer: any = [];
     relatedOrder: any = [];
     listProduct: any = [];
+    listCustomerSearched: any = [];
+    listRouteSearched: any;
+    routeIdSearched: any;
+    listAllRoute: any = [];
+    listGroup: any = [];
+
     listProductToSentAPI: any = [];
     genOrderForm: FormGroup;
 
@@ -29,6 +39,10 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     totalPayment: number = 0;
     prePayment: number = 0;
     textMoney: any;
+
+    pageRoute: number;
+    pageRouteSize: number;
+    saleDefaultId: string;
     constructor(
         private dialog: MatDialog,
         public dialogRef: MatDialogRef<GenOrderSaleComponent>,
@@ -38,9 +52,12 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         private saleReceipt: SaleReceiptService,
         private snackbar: SnackbarService,
         private router: Router,
+        private numberToText: NumberToTextService,
     ) {}
 
     ngOnInit(): void {
+        // parse token to get id login
+        this.saleDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
         this.genOrderForm = this.fb.group({
             orderDate: [null],
             saleDate: [null],
@@ -48,7 +65,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             groupId: [null],
             orderEmployeeId: [null],
             routeId: [null],
-            saleEmployee: [null],
+            saleEmployeeId: [this.saleDefaultId],
             customerId: [null],
             customerName: [null],
             phone: [null],
@@ -65,17 +82,26 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.tradeDiscount = this.relatedOrder.tradeDiscount;
         this.totalPayment = this.relatedOrder.totalPayment;
         this.prePayment = this.relatedOrder.prePayment;
-        this.textMoney = this.doc(this.totalPayment);
+        this.textMoney = this.numberToText.doc(this.totalPayment);
     }
 
     ngAfterViewInit(): void {
         // get list employee
-        this.purchaseOrder.getAllEmployees(1, 1000).subscribe((data) => {
+        this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
             this.listEmployee = data.data;
+            this.listEmployee1 = this.listEmployee;
+            this.listEmployee2 = this.listEmployee;
         });
         // get list customer
         this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
             this.listCustomer = data.data;
+        });
+        // get list route
+        this.getAllRoute();
+
+        // get list grouo
+        this.purchaseOrder.getAllGroup(1).subscribe((data) => {
+            this.listGroup = data;
         });
     }
 
@@ -87,7 +113,24 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         // count totalPayment
         this.countTotalPayment();
         // number to text
-        this.textMoney = this.doc(this.totalPayment);
+        this.textMoney = this.numberToText.doc(this.totalPayment);
+
+        // this.getRouteByCustomerId(this.genOrderForm.get('customerId')?.value);
+    }
+
+    parseJwt(token: any) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(
+            window
+                .atob(base64)
+                .split('')
+                .map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                })
+                .join(''),
+        );
+        return JSON.parse(jsonPayload);
     }
 
     discountRate(product: any) {
@@ -112,6 +155,25 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
     }
 
+    getAllRoute() {
+        this.purchaseOrder.getAllRoute(1, 1000).subscribe((data) => {
+            this.listAllRoute = data.data;
+        });
+    }
+
+    getRouteByCustomerId(customerId: any) {
+        this.routeIdSearched = null;
+        // get route ID
+        this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
+            this.routeIdSearched = data.routeId;
+            // get employee in route
+            this.genOrderForm.patchValue({
+                orderEmployeeId: data.route.employeeId,
+            });
+            console.log(this.routeIdSearched);
+        });
+    }
+
     countTotalPayment() {
         this.totalPayment = 0;
         if (this.totalAmount) {
@@ -129,7 +191,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.genOrderForm.patchValue({
             orderDate: this.relatedOrder.orderDate,
             deliveryDate: this.relatedOrder.deliveryDate,
-            orderEmployeeId: this.relatedOrder.orderEmployee.id,
+            orderEmployeeId: this.relatedOrder.orderEmployee?.id,
             // groupId: [null],
             // routeId: [null],
             customerId: this.relatedOrder.customer?.id,
@@ -154,6 +216,29 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
     }
 
+    searchListCustomer(e: any) {
+        let body = {
+            keyword: e.target.value,
+            page: 1,
+            pageSize: 100,
+        };
+        this.purchaseOrder.searchCustomer(body).subscribe((data) => {
+            this.listCustomerSearched = data.data;
+        });
+    }
+
+    searchListEmployee1(e: any) {
+        this.purchaseOrder.getAllEmployees(e.target.value, 1, 1000).subscribe((data) => {
+            this.listEmployee1 = data.data;
+        });
+    }
+
+    searchListEmployee2(e: any) {
+        this.purchaseOrder.getAllEmployees(e.target.value, 1, 1000).subscribe((data) => {
+            this.listEmployee2 = data.data;
+        });
+    }
+
     createSaleReceipt() {
         let listProductToSentAPI = this.listProduct.map((product: any) => {
             return {
@@ -172,7 +257,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         const body = {
             orderDate: moment(this.genOrderForm.get('orderDate')?.value).format('YYYY-MM-DD'),
             groupId: 'ef6c9edf-5445-4dbf-b0f3-d65d6412cfc0',
-            saleEmployeeId: this.genOrderForm.get('saleEmployee')?.value.id,
+            saleEmployeeId: this.genOrderForm.get('saleEmployeeId')?.value.id,
             // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             customerId: this.genOrderForm.get('customerId')?.value,
             // routeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -192,7 +277,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             archived: false,
             // createdBy: 'string',
             createdDate: moment(Date.now()).format('YYYY-MM-DD'),
-            saleReceiptCode: this.genOrderForm.get('saleEmployee')?.value.employeeCode,
+            // saleReceiptCode: this.genOrderForm.get('saleEmployee')?.value.employeeCode,
             purchaseOrderId: this.relatedOrder.id,
             deliveryDate: moment(this.genOrderForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
             saleDate: moment(this.genOrderForm.get('saleDate')?.value).format('YYYY-MM-DD'),
@@ -207,6 +292,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
                 this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
             },
             () => {
+                // this.updateStatus();
                 this.snackbar.openSnackbar('Thêm mới đơn bán hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
                 this.dialogRef.close();
                 this.router.navigate(['/orders']);
@@ -214,113 +300,42 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         );
     }
 
-    // number to text
-    doc1so(so: any) {
-        var arr_chuhangdonvi = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var resualt = '';
-        resualt = arr_chuhangdonvi[so];
-        return resualt;
-    }
-
-    doc2so(so: any) {
-        so = so.replace(' ', '');
-        var arr_chubinhthuong = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var arr_chuhangdonvi = ['mươi', 'mốt', 'hai', 'ba', 'bốn', 'lăm', 'sáu', 'bảy', 'tám', 'chín'];
-        var arr_chuhangchuc = [
-            '',
-            'mười',
-            'hai mươi',
-            'ba mươi',
-            'bốn mươi',
-            'năm mươi',
-            'sáu mươi',
-            'bảy mươi',
-            'tám mươi',
-            'chín mươi',
-        ];
-        var resualt = '';
-        var sohangchuc = so.substr(0, 1);
-        var sohangdonvi = so.substr(1, 1);
-        resualt += arr_chuhangchuc[sohangchuc];
-        if (sohangchuc == 1 && sohangdonvi == 1) resualt += ' ' + arr_chubinhthuong[sohangdonvi];
-        else if (sohangchuc == 1 && sohangdonvi > 1) resualt += ' ' + arr_chuhangdonvi[sohangdonvi];
-        else if (sohangchuc > 1 && sohangdonvi > 0) resualt += ' ' + arr_chuhangdonvi[sohangdonvi];
-
-        return resualt;
-    }
-
-    doc3so(so: any) {
-        var resualt = '';
-        var arr_chubinhthuong = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var sohangtram = so.substr(0, 1);
-        var sohangchuc = so.substr(1, 1);
-        var sohangdonvi = so.substr(2, 1);
-        resualt = arr_chubinhthuong[sohangtram] + ' trăm';
-        if (sohangchuc == 0 && sohangdonvi != 0) resualt += ' linh ' + arr_chubinhthuong[sohangdonvi];
-        else if (sohangchuc != 0) resualt += ' ' + this.doc2so(sohangchuc + ' ' + sohangdonvi);
-        return resualt;
-    }
-
-    docsonguyen(so: any) {
-        var result = '';
-        if (so != undefined) {
-            //alert(so);
-            var arr_So: any = [{ ty: '' }, { trieu: '' }, { nghin: '' }, { tram: '' }];
-            var sochuso = so.length;
-            for (var i = sochuso - 1; i >= 0; i--) {
-                if (sochuso - i <= 3) {
-                    if (arr_So['tram'] != undefined) arr_So['tram'] = so.substr(i, 1) + arr_So['tram'];
-                    else arr_So['tram'] = so.substr(i, 1);
-                } else if (sochuso - i > 3 && sochuso - i <= 6) {
-                    if (arr_So['nghin'] != undefined) arr_So['nghin'] = so.substr(i, 1) + arr_So['nghin'];
-                    else arr_So['nghin'] = so.substr(i, 1);
-                } else if (sochuso - i > 6 && sochuso - i <= 9) {
-                    if (arr_So['trieu'] != undefined) arr_So['trieu'] = so.substr(i, 1) + arr_So['trieu'];
-                    else arr_So['trieu'] = so.substr(i, 1);
-                } else {
-                    if (arr_So.ty != undefined) arr_So.ty = so.substr(i, 1) + arr_So.ty;
-                    else arr_So.ty = so.substr(i, 1);
-                }
-                //console.log(arr_So);
-            }
-
-            if (arr_So['ty'] > 0) result += this.doc(arr_So['ty']) + ' tỷ';
-            if (arr_So['trieu'] > 0) {
-                if (arr_So['trieu'].length >= 3 || arr_So['ty'] > 0)
-                    result += ' ' + this.doc3so(arr_So['trieu']) + ' triệu';
-                else if (arr_So['trieu'].length >= 2) result += ' ' + this.doc2so(arr_So['trieu']) + ' triệu';
-                else result += ' ' + this.doc1so(arr_So['trieu']) + ' triệu';
-            }
-            if (arr_So['nghin'] > 0) {
-                if (arr_So['nghin'].length >= 3 || arr_So['trieu'] > 0)
-                    result += ' ' + this.doc3so(arr_So['nghin']) + ' nghìn';
-                else if (arr_So['nghin'].length >= 2) result += ' ' + this.doc2so(arr_So['nghin']) + ' nghìn';
-                else result += ' ' + this.doc1so(arr_So['nghin']) + ' nghìn';
-            }
-            if (arr_So['tram'] > 0) {
-                if (arr_So['tram'].length >= 3 || arr_So['nghin'] > 0) result += ' ' + this.doc3so(arr_So['tram']);
-                else if (arr_So['tram'].length >= 2) result += ' ' + this.doc2so(arr_So['tram']);
-                else result += ' ' + this.doc1so(arr_So['tram']);
-            }
-        }
-        return result;
-    }
-
-    doc(so: any) {
-        var kytuthapphan = ',';
-        var result = '';
-        if (so != undefined) {
-            so = ' ' + so + ' ';
-            so = so.trim();
-            var cautrucso = so.split(kytuthapphan);
-            if (cautrucso[0] != undefined) {
-                result += this.docsonguyen(cautrucso[0]);
-            }
-            if (cautrucso[1] != undefined) {
-                //alert(this.docsonguyen(cautrucso[1]));
-                result += ' phẩy ' + this.docsonguyen(cautrucso[1]);
-            }
-        }
-        return result;
+    updateStatus() {
+        const body = {
+            purchaseOrderId: this.relatedOrder.id,
+            orderDate: this.relatedOrder.orderDate,
+            groupId: this.relatedOrder.unit?.id,
+            orderEmployeeId: this.relatedOrder.orderEmployee?.id,
+            warehouseId: this.relatedOrder.warehouse?.id,
+            customerId: this.relatedOrder.customer?.id,
+            routeId: this.relatedOrder.route?.id,
+            type: this.relatedOrder.type,
+            status: 3,
+            paymentMethod: 0,
+            description: this.relatedOrder.description,
+            phone: this.relatedOrder.phone,
+            address: this.relatedOrder.address,
+            customerName: this.relatedOrder.customerName,
+            totalAmount: this.relatedOrder.totalAmount,
+            totalOfVAT: this.relatedOrder.totalOfVAT,
+            totalDiscountProduct: this.relatedOrder.totalDiscountProduct,
+            tradeDiscount: this.relatedOrder.tradeDiscount,
+            totalPayment: this.relatedOrder.totalPayment,
+            archived: false,
+            // lastModifiedBy: 'string',
+            lastModifiedDate: moment(Date.now()).format('YYYY-MM-DD'),
+            orderCode: this.relatedOrder.orderCode,
+            deliveryDate: this.relatedOrder.deliveryDate,
+            prePayment: this.relatedOrder.prePayment,
+        };
+        this.purchaseOrder.update(body).subscribe(
+            (data) => {},
+            (err) => {},
+            () => {
+                this.snackbar.openSnackbar('Thêm mới đơn bán hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                this.dialogRef.close();
+                this.router.navigate(['/orders']);
+            },
+        );
     }
 }

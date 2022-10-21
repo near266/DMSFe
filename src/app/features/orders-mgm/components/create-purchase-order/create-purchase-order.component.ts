@@ -36,6 +36,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     listChoosenProduct: any[] = [];
     listEmployee: any[] = [];
     listWarehouse: any[] = [];
+    listChoosenProduct2: any[] = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -46,6 +47,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     value: any;
     formattedAmount: any = '0';
     defaultUnit = "{ unit: product.retailUnit, type: 'retail' }";
+    orderDefaultId: string;
     constructor(
         private dataService: DataService,
         private dialog: MatDialog,
@@ -61,12 +63,13 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     }
 
     ngOnInit(): void {
-        console.log(moment(Date.now()).format('YYYY-MM-DD'));
+        // parse token to get id login
+        this.orderDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
         this.createForm = this.fb.group({
             purchaseOrderId: [null],
             orderDate: [moment(Date.now()).format('YYYY-MM-DD')],
             groupId: [null],
-            orderEmployeeId: [null],
+            orderEmployeeId: [this.orderDefaultId],
             warehouseId: [null],
             customer: this.fb.group({
                 customerCode: [null],
@@ -107,7 +110,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             this.listCustomer = data.data;
         });
         // get list employee
-        this.purchaseOrder.getAllEmployees(1, 10000).subscribe((data) => {
+        this.purchaseOrder.getAllEmployees('', 1, 10000).subscribe((data) => {
             this.listEmployee = data.data;
         });
         // get list warehouse
@@ -130,6 +133,21 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         // this.countDiscount();
         // this.countTotalPrice();
         // this.countDiscountRate();
+    }
+
+    parseJwt(token: any) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(
+            window
+                .atob(base64)
+                .split('')
+                .map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                })
+                .join(''),
+        );
+        return JSON.parse(jsonPayload);
     }
 
     countDiscount(product: any) {
@@ -210,6 +228,14 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         this.dataService.openProductList('create', 'Đây là tạo sản phẩm');
     }
 
+    pushListProductToDialog() {
+        this.listChoosenProduct2 = this.listChoosenProduct.map((product: any) => {
+            return {
+                id: product.id,
+            };
+        });
+    }
+
     openDialogProduct() {
         const dialogRef = this.dialog.open(ProductListComponent, {
             maxWidth: '100vw',
@@ -219,7 +245,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             panelClass: 'full-screen-modal',
             // data: this.listChoosenProduct,
             data: {
-                listId: [],
+                listId: this.listChoosenProduct2,
                 listProd: this.listChoosenProduct,
             },
         });
@@ -229,7 +255,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
                 this.listChoosenProduct.forEach((product: any) => {
                     product.warehouseId = product.warehouse?.id;
                 });
-                console.log(data);
+                this.pushListProductToDialog();
             }
         });
     }

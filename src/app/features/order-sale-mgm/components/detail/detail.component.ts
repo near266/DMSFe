@@ -341,7 +341,7 @@ export class DetailComponent implements OnInit {
     }
 
     getListEmployee() {
-        this.purchaseOrder.getAllEmployees(1, 1000).subscribe((data) => {
+        this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
             this.listEmployee = data.data;
             console.log(this.listEmployee);
         });

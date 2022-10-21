@@ -40,32 +40,47 @@
             <div class="flex gap-x-6 justify-between">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Nhóm</mat-label>
-                    <mat-select [disabled]="true">
-                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option *ngFor="let city of groupCites" [value]="city">{{ city }}</mat-option>
+                    <mat-select>
+                        <!-- <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" /> -->
+                        <mat-option *ngFor="let group of listGroup" [value]="group.id">
+                            {{ group.unitTreeGroup_Code }} - {{ group.name }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Nhân viên đặt</mat-label>
-                    <mat-select formControlName="orderEmployeeId" [disabled]="true">
-                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option *ngFor="let employee of listEmployee" [value]="employee.id">
+                    <mat-select formControlName="orderEmployeeId">
+                        <input
+                            (input)="searchListEmployee2($event)"
+                            placeholder="Tìm kiếm..."
+                            style="padding-left: 12px"
+                            matInput
+                            class="h-10 rounded-sm" />
+                        <mat-option *ngFor="let employee of listEmployee2" [value]="employee.id">
                             {{ employee.employeeCode }} - {{ employee.employeeName }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Tuyến</mat-label>
-                    <mat-select [disabled]="true">
-                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option *ngFor="let city of groupCites" [value]="city">{{ city }}</mat-option>
+                    <mat-select [value]="routeIdSearched">
+                        <!-- <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" /> -->
+                        <mat-option>--Chọn tuyến--</mat-option>
+                        <mat-option *ngFor="let route of listAllRoute" [value]="route.id">
+                            {{ route.routeName }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Nhân viên bán</mat-label>
-                    <mat-select formControlName="saleEmployee">
-                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option *ngFor="let employee of listEmployee" [value]="employee">
+                    <mat-select formControlName="saleEmployeeId">
+                        <input
+                            (input)="searchListEmployee1($event)"
+                            placeholder="Tìm kiếm..."
+                            style="padding-left: 12px"
+                            matInput
+                            class="h-10 rounded-sm" />
+                        <mat-option *ngFor="let employee of listEmployee1" [value]="employee.id">
                             {{ employee.employeeCode }} - {{ employee.employeeName }}
                         </mat-option>
                     </mat-select>
@@ -74,9 +89,15 @@
             <div class="flex gap-x-6 justify-between">
                 <mat-form-field class="w-1/3" appearance="outline">
                     <mat-label>Mã Khách hàng</mat-label>
-                    <mat-select [disabled]="true" formControlName="customerId">
-                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option *ngFor="let customer of listCustomer" [value]="customer.id">
+                    <mat-select formControlName="customerId" (selectionChange)="getRouteByCustomerId($event.value)">
+                        <input
+                            (input)="searchListCustomer($event)"
+                            placeholder="Tìm kiếm..."
+                            style="padding-left: 12px"
+                            matInput
+                            class="h-10 rounded-sm" />
+                        <mat-option>--Chọn khách hàng--</mat-option>
+                        <mat-option *ngFor="let customer of listCustomerSearched" [value]="customer.id">
                             {{ customer.customerCode }} - {{ customer.customerName }}
                         </mat-option>
                     </mat-select>
