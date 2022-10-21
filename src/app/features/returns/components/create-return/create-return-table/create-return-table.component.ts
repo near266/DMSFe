@@ -37,7 +37,6 @@ export class CreateReturnTableComponent implements OnInit {
         this.returnFormService.products$.subscribe((data) => {
             const res = data.map((item: any) => {
                 return {
-                    ...item,
                     vat: item?.vat,
                     sku: item.sku,
                     productName: item.productName,
@@ -69,30 +68,23 @@ export class CreateReturnTableComponent implements OnInit {
         this.returnFormService.submitProductForm$.subscribe((data) => {
             if (data && this.productsInput?.length && this.checkValidListProducts()) {
                 const requiredFields = this.productsInput.map((item: any) => {
-                    const {
-                        id,
-                        quantity,
-                        warehouseId,
-                        retailUnitId,
-                        unitPrice,
-                        totalPrice,
-                        discount,
-                        discountRate,
-                        note,
-                    } = item;
                     return {
-                        productId: id,
-                        unitId: retailUnitId,
-                        warehouseId,
-                        unitPrice,
-                        totalPrice,
-                        quantity,
-                        discount,
-                        discountRate,
-                        note,
-                        type: 0,
+                        productId: item.productId,
+                        unitId: item.unitId,
+                        warehouseId: item.warehouseId,
+                        unitPrice: item.unitPrice,
+                        quantity: item.quantity,
+                        totalPrice: item.totalPrice,
+                        discount: item.discount,
+                        discountRate: item.discountRate,
+                        note: item.note,
+                        type: item.type,
+                        salesQuantity: item.salesQuantity,
+                        exportQuantity: item.exportQuantity,
+                        returnsQuantity: item.returnsQuantity,
                     };
                 });
+                console.log(requiredFields);
                 this.returnFormService.submitInfoForm$.next({
                     listProduct: requiredFields,
                     totalAmount: this.calculateTotalPrice(),
@@ -117,7 +109,10 @@ export class CreateReturnTableComponent implements OnInit {
     }
     ngDoCheck(): void {
         if (this.productsInput?.length) {
-            this.productQuantitySum = this.productsInput.reduce((acc: number, curr: any) => acc + curr.quantity, 0);
+            this.productQuantitySum = this.productsInput.reduce(
+                (acc: number, curr: any) => acc + curr.returnsQuantity,
+                0,
+            );
             this.calculateTotalPrice();
             this.calculateDiscountAmount();
             // update product totalPrice in productsInput
@@ -141,7 +136,9 @@ export class CreateReturnTableComponent implements OnInit {
         return discountAmount;
     }
     updateItemTotalPrice(item: any) {
-        item.totalPrice = item.quantity * item.unitPrice;
+        item.totalPrice = item.returnsQuantity * item.unitPrice;
+        item.salesQuantity = item.returnsQuantity;
+        item.quantity = item.returnsQuantity;
         this.updateDiscountRate(item);
     }
     updateDiscountRate(item: any) {
@@ -154,7 +151,7 @@ export class CreateReturnTableComponent implements OnInit {
     checkValidListProducts(): boolean {
         let isValid = true;
         this.productsInput.forEach((item: any) => {
-            if (item.quantity <= 0 || item.warehouseId === null || item.retailUnitId === null) {
+            if (item.salesQuantity <= 0 || item.warehouseId === null || item.unitId === null) {
                 isValid = false;
             }
         });

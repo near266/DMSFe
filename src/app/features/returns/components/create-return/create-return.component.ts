@@ -62,7 +62,7 @@ export class CreateReturnComponent implements OnInit {
     passingDataFrom() {
         this.dataService.openProductList('create', 'Đây là tạo sản phẩm');
     }
-    openDialogProduct() {
+    openDialogProduct(type: string) {
         const dialogRef = this.dialog
             .open(ProductListComponent, {
                 maxWidth: '100vw',
@@ -73,7 +73,11 @@ export class CreateReturnComponent implements OnInit {
             })
             .afterClosed()
             .subscribe((data) => {
-                this.returnFormService.products$.next(data);
+                if (type === 'products') {
+                    this.returnFormService.products$.next(data);
+                } else {
+                    this.returnFormService.promotionProducts$.next(data);
+                }
             });
     }
 
