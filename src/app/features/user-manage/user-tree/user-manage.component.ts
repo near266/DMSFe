@@ -46,6 +46,11 @@ export class UserManageComponent implements OnInit {
         });
     }
 
+    searchUser(event: any) {
+      console.log(event);
+
+    }
+
     closeSideBar() {
         this.class = {
             left: 'w-5',

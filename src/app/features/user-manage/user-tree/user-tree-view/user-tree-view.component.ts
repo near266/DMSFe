@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { IActionMapping, ITreeOptions, TreeComponent, TreeNode, TreeNodeComponent, TREE_ACTIONS} from '@circlon/angular-tree-component';
@@ -19,8 +19,10 @@ export class UserTreeViewComponent implements OnInit {
     nodes: any[] = [];
     action: IActionMapping;
     options: ITreeOptions;
+    currentNode: any;
 
     @ViewChild(TreeComponent) private tree: TreeComponent;
+    @Output() newItemEvent = new EventEmitter<string>();
 
     menubar_unit = [
       'Thêm quản lý',
@@ -65,16 +67,6 @@ export class UserTreeViewComponent implements OnInit {
             };
             this.nodes[0].children.push(node);
           });
-          // this.nodes[0].children.push({
-          //   id: 'undefined',
-          //   level: 0,
-          //   name: 'Chưa thuộc phòng/nhóm',
-          //   code: '',
-          //   expand: false,
-          //   type: 1,
-          //   menubar: this.menubar_group,
-          //   hasChildren: false
-          // });
           this.action = {
             mouse: {
               contextMenu: (tree, node, $event) => {
@@ -82,6 +74,7 @@ export class UserTreeViewComponent implements OnInit {
               },
               click: (tree, node, $event) => {
                 node.data.expand = false;
+                this.newItemEvent.emit(node.data.id);
               }
             },
           };
@@ -91,6 +84,8 @@ export class UserTreeViewComponent implements OnInit {
             actionMapping: this.action,
             getChildren: this.getChildren.bind(this),
           };
+          const expandRoot = this.tree.treeModel.getNodeById('root');
+          expandRoot.expand();
           // this.total = this.getTotalItemInTreeWithNoChildren(this.nodes);
       });
     }
@@ -104,7 +99,7 @@ export class UserTreeViewComponent implements OnInit {
             let res = response;
             res.data.forEach((element: any) => {
               e.children.push({
-                id: element.employeeId,
+                id: element.employee.id,
                 name: element.employee.employeeName,
                 code: 'Nhân viên',
                 expand: false,
@@ -133,7 +128,7 @@ export class UserTreeViewComponent implements OnInit {
             let res = response;
             res.data.forEach((element: any) => {
               e.children.push({
-                id: element.employeeId,
+                id: element.employee.id,
                 name: element.employee.employeeName,
                 code: 'Nhân viên',
                 expand: false,
