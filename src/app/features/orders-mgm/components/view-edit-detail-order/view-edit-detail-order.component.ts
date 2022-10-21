@@ -26,10 +26,14 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
 
     bodyUpdate: any;
     listProductUpdate: any;
+    listProductPromotionUpdate: any;
     listProductRemove: any = [];
+    listProductPromotionRemove: any = [];
     listProductAdd: any = [];
+    listProductPromotionAdd: any = [];
 
-    isRemove = false;
+    isRemoveProduct = false;
+    isRemovePromotion = false;
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
@@ -51,14 +55,27 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         this.purchaseOrder.productUpdate.subscribe((data) => {
             this.listProductUpdate = data;
         });
+        // get list Product Promotion Update
+        this.purchaseOrder.productPromotionUpdate.subscribe((data) => {
+            this.listProductPromotionUpdate = data;
+        });
         // get list Product Remove
         this.purchaseOrder.productRemove.subscribe((data) => {
             this.listProductRemove = data.list;
-            this.isRemove = data.isRemove;
+            this.isRemoveProduct = data.isRemove;
+        });
+        // get list Product Promotion Remove
+        this.purchaseOrder.productPromotionRemove.subscribe((data) => {
+            this.listProductPromotionRemove = data.list;
+            this.isRemovePromotion = data.isRemove;
         });
         // get list product add
         this.purchaseOrder.productAdd.subscribe((data) => {
             this.listProductAdd = data;
+        });
+        // get list product promotion add
+        this.purchaseOrder.productPromotionAdd.subscribe((data) => {
+            this.listProductPromotionAdd = data;
         });
     }
 
@@ -220,10 +237,28 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     }
 
     updateDetailProduct() {
-        const body = {
+        // update Product
+        const bodyProduct = {
             purchaseOrderProducts: this.listProductUpdate,
         };
-        this.purchaseOrder.updateProductList(body).subscribe(
+        this.purchaseOrder.updateProductList(bodyProduct).subscribe(
+            (data) => {},
+            (err) => {
+                this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+            () => {
+                // custom Status when done
+                this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                this.getDetail();
+                // gửi trạng thái để detail-order component biết rồi reload lại data
+                this.purchaseOrder.isSuccessUpdate('Done');
+            },
+        );
+        // update Product Promotion
+        const bodyPromotion = {
+            purchaseOrderProducts: this.listProductPromotionUpdate,
+        };
+        this.purchaseOrder.updateProductList(bodyPromotion).subscribe(
             (data) => {},
             (err) => {
                 this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
@@ -239,12 +274,13 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     }
 
     removeProduct() {
-        const removeList = {
+        // remove product
+        const removeListProduct = {
             listIdRemove: this.listProductRemove,
             purchaseOrderId: this.id,
         };
-        if (this.isRemove) {
-            this.purchaseOrder.removeProduct(removeList).subscribe(
+        if (this.isRemoveProduct) {
+            this.purchaseOrder.removeProduct(removeListProduct).subscribe(
                 (data) => {},
                 (err) => {
                     console.log('Xóa sản phẩm thất bại');
@@ -260,13 +296,45 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
                 },
             );
         }
+        // remove product Promotion
+        const removeListPromotion = {
+            listIdRemove: this.listProductPromotionRemove,
+            purchaseOrderId: this.id,
+        };
+        if (this.isRemovePromotion) {
+            this.purchaseOrder.removeProduct(removeListPromotion).subscribe(
+                (data) => {},
+                (err) => {
+                    console.log('Xóa sản phẩm thất bại');
+                },
+                () => {
+                    console.log('Xóa sản phẩm thành công');
+                    this.purchaseOrder.isSuccessUpdate('Done');
+                    this.purchaseOrder.sendProductPromotionRemove({ isRemove: false, list: [] });
+                },
+            );
+        }
     }
 
     addProduct() {
-        const bodyAdd = {
+        // add product
+        const bodyAddProduct = {
             purchaseOrderProducts: this.listProductAdd,
         };
-        this.purchaseOrder.addProduct(bodyAdd).subscribe(
+        this.purchaseOrder.addProduct(bodyAddProduct).subscribe(
+            (data) => {},
+            (err) => {
+                console.log('Them sp that bai');
+            },
+            () => {
+                console.log('Them sp thanh cong');
+            },
+        );
+        // add promotion
+        const bodyAddPromotion = {
+            purchaseOrderProducts: this.listProductPromotionAdd,
+        };
+        this.purchaseOrder.addProduct(bodyAddPromotion).subscribe(
             (data) => {},
             (err) => {
                 console.log('Them sp that bai');

@@ -228,14 +228,18 @@
                                 <td class="custom-th">
                                     <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
                                         <input
-                                            min="0"
-                                            type="number"
-                                            (input)="
-                                                countTotal(product);
-                                                product.totalPrice = product.quantity * product.unitPrice
-                                            "
+                                            currencyMask
+                                            [options]="{
+                                                suffix: '',
+                                                thousands: '.',
+                                                prefix: '',
+                                                decimal: ',',
+                                                precision: 0,
+                                                allowNegative: false
+                                            }"
                                             matInput
-                                            [(ngModel)]="product.quantity"
+                                            [ngModel]="product.quantity"
+                                            (ngModelChange)="product.quantity = $event; updateTotalPrice(product)"
                                             [ngModelOptions]="{ standalone: true }" />
                                     </mat-form-field>
                                 </td>

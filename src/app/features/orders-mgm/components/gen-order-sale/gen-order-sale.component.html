@@ -40,7 +40,7 @@
             <div class="flex gap-x-6 justify-between">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Nhóm</mat-label>
-                    <mat-select>
+                    <mat-select formControlName="groupId">
                         <!-- <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" /> -->
                         <mat-option *ngFor="let group of listGroup" [value]="group.id">
                             {{ group.unitTreeGroup_Code }} - {{ group.name }}
@@ -152,7 +152,6 @@
                             </div>
                         </div>
                         <button
-                            [disabled]="true"
                             (click)="openDialogProduct()"
                             class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
                             <i class="fa-solid fa-filter mr-2 px-2"></i>
@@ -171,12 +170,22 @@
                             <span class="px-2">Nhập excel</span>
                         </button>
                         <div>
-                            <select
-                                class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium cursor-pointer">
-                                <option value="1" class="bg-white hover:bg-zinc-300">--Chọn kho mặc định--</option>
-                                <option value="2" class="bg-white hover:bg-zinc-300">Kho chính</option>
+                            <mat-select
+                                style="width: fit-content"
+                                (selectionChange)="setWareHouseToAllProduct($event.value)"
+                                class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium cursor-pointer"
+                                [value]="0">
+                                <mat-option [value]="0" class="bg-white hover:bg-zinc-300">
+                                    --Chọn kho mặc định--
+                                </mat-option>
+                                <mat-option
+                                    *ngFor="let warehouse of listWarehouse"
+                                    [value]="warehouse.id"
+                                    class="bg-white hover:bg-zinc-300">
+                                    {{ warehouse.warehouseName }}
+                                </mat-option>
                                 <option value="3" class="bg-white hover:bg-zinc-300">Hàng NanoFrance</option>
-                            </select>
+                            </mat-select>
                         </div>
                     </div>
                 </div>
@@ -206,15 +215,247 @@
                                 <td class="custom-th">{{ i + 1 }}</td>
                                 <td class="custom-th">{{ product.product.sku }}</td>
                                 <td class="custom-th">{{ product.product.productName }}</td>
-                                <td class="custom-th">{{ product.unit.unitName }}</td>
-                                <td class="custom-th">{{ product.warehouse.warehouseName }}</td>
-                                <td class="custom-th">{{ product.quantity }}</td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" floatLabel="always" style="width: 100px">
+                                        <mat-select [value]="product.unit.id">
+                                            <mat-option
+                                                (click)="
+                                                    product.unitId = product?.product?.retailUnit?.id;
+                                                    product.unitPrice = product.product.retailPrice;
+                                                    product.totalPrice = product.quantity * product.unitPrice;
+                                                    discountRate(product)
+                                                "
+                                                [value]="product?.product?.retailUnit?.id">
+                                                Lẻ - {{ product?.product?.retailUnit?.unitName || 'No Data' }}
+                                            </mat-option>
+                                            <mat-option
+                                                (click)="
+                                                    product.unitId = product?.product?.wholeSaleUnit?.id;
+                                                    product.unitPrice = product.product.price;
+                                                    product.totalPrice = product.quantity * product.unitPrice;
+                                                    discountRate(product)
+                                                "
+                                                [value]="product?.product?.wholeSaleUnit?.id">
+                                                Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" floatLabel="always" style="width: 100px">
+                                        <mat-select
+                                            [value]="product.warehouseId"
+                                            (selectionChange)="product.warehouseId = $event.value">
+                                            <mat-option *ngFor="let warehouse of listWarehouse" [value]="warehouse.id">
+                                                {{ warehouse.warehouseName }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                                        <input
+                                            min="0"
+                                            type="number"
+                                            matInput
+                                            [(ngModel)]="product.quantity"
+                                            (input)="
+                                                product.totalPrice = product.quantity * product.unitPrice;
+                                                discountRate(product)
+                                            "
+                                            [ngModelOptions]="{ standalone: true }" />
+                                    </mat-form-field>
+                                </td>
                                 <td class="custom-th">{{ product.unitPrice | currency: 'VND':'symbol' }}</td>
                                 <td class="custom-th">{{ product.totalPrice | currency: 'VND':'symbol' }}</td>
-                                <td class="custom-th">{{ product.discount | currency: 'VND':'symbol' }}</td>
-                                <td class="custom-th">{{ product.discountRate | percent }}</td>
-                                <td class="custom-th">{{ product.note }}</td>
-                                <td class="custom-th" (click)="stopPropagation($event)">
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                                        <input
+                                            min="0"
+                                            type="number"
+                                            matInput
+                                            [(ngModel)]="product.discount"
+                                            (input)="discountRate(product)"
+                                            [ngModelOptions]="{ standalone: true }" />
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                                        <input
+                                            min="0"
+                                            type="number"
+                                            matInput
+                                            (input)="countDiscount(product)"
+                                            [(ngModel)]="product.discountRate"
+                                            [ngModelOptions]="{ standalone: true }" />
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                                        <input
+                                            type="text"
+                                            matInput
+                                            [(ngModel)]="product.note"
+                                            [ngModelOptions]="{ standalone: true }" />
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th" (click)="stopPropagation($event); unChoose(product)">
+                                    <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </mat-tab>
+            <!-- Sản phẩm khuyến mại -->
+            <mat-tab label="Sản phẩm khuyến mại">
+                <div class="flex items-center mt-2 justify-between">
+                    <div class="flex items-center">
+                        <div class="flex items-center">
+                            <label for="simple-search" class="sr-only">Search</label>
+                            <div class="relative w-full">
+                                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                                    <svg
+                                        aria-hidden="true"
+                                        class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <input
+                                    type="text"
+                                    id="simple-search"
+                                    class="search-input"
+                                    placeholder="Search"
+                                    required />
+                            </div>
+                        </div>
+                        <button
+                            (click)="openDialogProductPromotion()"
+                            class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
+                            <i class="fa-solid fa-filter mr-2 px-2"></i>
+                            <span class="px-2">Tìm kiếm nâng cao</span>
+                        </button>
+                        <button
+                            class="text-white flex items-center ml-3 px-1 py-1.5 bg-rose-500 hover:bg-rose-600 rounded-lg hover:font-medium">
+                            <i class="h-full fa-solid fa-bookmark mr-2 px-2"></i>
+                            <span class="px-2">Khuyến mại</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center">
+                        <button
+                            class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium mr-3">
+                            <i class="fa-solid fa-file-import mr-2 px-2"></i>
+                            <span class="px-2">Nhập excel</span>
+                        </button>
+                        <div>
+                            <mat-select
+                                style="width: fit-content"
+                                (selectionChange)="setWareHouseToAllProductPromotion($event.value)"
+                                class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium cursor-pointer"
+                                [value]="0">
+                                <mat-option [value]="0" class="bg-white hover:bg-zinc-300">
+                                    --Chọn kho mặc định--
+                                </mat-option>
+                                <mat-option
+                                    *ngFor="let warehouse of listWarehouse"
+                                    [value]="warehouse.id"
+                                    class="bg-white hover:bg-zinc-300">
+                                    {{ warehouse.warehouseName }}
+                                </mat-option>
+                                <option value="3" class="bg-white hover:bg-zinc-300">Hàng NanoFrance</option>
+                            </mat-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative sm:rounded-lg mt-2" style="font-size: 12px">
+                    <table class="custom-table">
+                        <thead class="custom-thead">
+                            <tr class="row-customize">
+                                <th scope="col" class="custom-th">#</th>
+                                <th scope="col" class="custom-th">Mã SP</th>
+                                <th scope="col" class="custom-th">Tên sản phẩm</th>
+                                <th scope="col" class="custom-th">ĐVT</th>
+                                <th scope="col" class="custom-th">Kho xuất</th>
+                                <th scope="col" class="custom-th">
+                                    Số lượng
+                                    <!-- <span class="text-red-500">(Tổng: 0)</span> -->
+                                </th>
+                                <th scope="col" class="custom-th">Ghi chú</th>
+                                <th scope="col" class="custom-th">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of listPromotionProduct; index as i" class="custom-tr">
+                                <td class="custom-th">{{ i + 1 }}</td>
+                                <td class="custom-th">{{ product.product.sku }}</td>
+                                <td class="custom-th">{{ product.product.productName }}</td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" floatLabel="always" style="width: 100px">
+                                        <mat-select [value]="product.unit.id">
+                                            <mat-option
+                                                (click)="
+                                                    product.unitId = product?.product?.retailUnit?.id;
+                                                    product.unitPrice = product.product.retailPrice;
+                                                    product.totalPrice = product.quantity * product.unitPrice;
+                                                    discountRate(product)
+                                                "
+                                                [value]="product?.product?.retailUnit?.id">
+                                                Lẻ - {{ product?.product?.retailUnit?.unitName || 'No Data' }}
+                                            </mat-option>
+                                            <mat-option
+                                                (click)="
+                                                    product.unitId = product?.product?.wholeSaleUnit?.id;
+                                                    product.unitPrice = product.product.price;
+                                                    product.totalPrice = product.quantity * product.unitPrice;
+                                                    discountRate(product)
+                                                "
+                                                [value]="product?.product?.wholeSaleUnit?.id">
+                                                Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" floatLabel="always" style="width: 100px">
+                                        <mat-select
+                                            [value]="product.warehouseId"
+                                            (selectionChange)="product.warehouseId = $event.value">
+                                            <mat-option *ngFor="let warehouse of listWarehouse" [value]="warehouse.id">
+                                                {{ warehouse.warehouseName }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                                        <input
+                                            min="0"
+                                            type="number"
+                                            matInput
+                                            [(ngModel)]="product.quantity"
+                                            (input)="
+                                                product.totalPrice = product.quantity * product.unitPrice;
+                                                discountRate(product)
+                                            "
+                                            [ngModelOptions]="{ standalone: true }" />
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th">
+                                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                                        <input
+                                            type="text"
+                                            matInput
+                                            [(ngModel)]="product.note"
+                                            [ngModelOptions]="{ standalone: true }" />
+                                    </mat-form-field>
+                                </td>
+                                <td class="custom-th" (click)="stopPropagation($event); unChoosePromotion(product)">
                                     <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
                                 </td>
                             </tr>
@@ -223,85 +464,78 @@
                 </div>
             </mat-tab>
         </mat-tab-group>
-        <div>
-            <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 flex">
-                    <span class="w-1/3">Bằng chữ:</span>
-                    <span>
-                        <span *ngIf="textMoney">{{ textMoney }} đồng</span>
-                    </span>
-                </span>
-                <span class="font-medium w-1/3 py-2 flex">
-                    <span class="w-1/3">Tổng tiền hàng</span>
-                    <span class="font-normal ml-4">{{ totalAmount | currency: 'VND' }}</span>
+        <div class="grid grid-cols-3 w-full gap-y-5 mt-6">
+            <div class="grid grid-cols-4 col-span-2">
+                <span class="font-medium text-red-600">Bằng chữ:</span>
+                <span class="col-span-3">
+                    <span *ngIf="textMoney">{{ textMoney }} đồng</span>
                 </span>
             </div>
-            <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 text-green-700 flex">
-                    <span class="w-1/2">Hình thức thanh toán:</span>
-                    <span class="font-normal">Thanh toán trực tiếp</span>
-                </span>
-                <span class="font-medium w-1/3 py-2 flex items-end">
-                    <!-- Tổng tiền VAT:
-                    <span class="font-normal ml-4"></span> -->
-                    <span class="w-1/3">Chiết khấu sản phẩm:</span>
-                    <span class="font-normal ml-4">
-                        {{ totalDiscountProduct | currency: 'VND' }}
-                    </span>
+            <div class="grid grid-cols-2">
+                <span class="font-medium">Tổng tiền hàng:</span>
+                <span class="font-normal">{{ totalAmount | currency: 'VND' }}</span>
+            </div>
+            <div class="grid grid-cols-4 col-span-2 text-green-600">
+                <span class="font-medium">Hạn mức dư nợ:</span>
+                <span class="col-span-3">Thanh toán trực tiếp</span>
+            </div>
+            <div class="grid grid-cols-2">
+                <span class="font-medium">Chiết khấu sản phẩm:</span>
+                <span class="font-normal">
+                    {{ totalDiscountProduct | currency: 'VND' }}
                 </span>
             </div>
-            <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 text-green-700">
-                    <!-- Dư nợ hiện tại:
-                    <span class="font-normal ml-4"></span> -->
-                </span>
-                <span class="font-medium w-1/3 py-2 flex items-end">
-                    <!-- Chiết khấu sản phẩm:
-                    <span class="font-normal ml-4"></span> -->
-                    <span class="w-1/3">Chiết khấu đơn hàng:</span>
-                    <span class="font-normal ml-4">
-                        <input
-                            class="border-b border-gray-700"
-                            type="number"
-                            [(ngModel)]="tradeDiscount"
-                            [ngModelOptions]="{ standalone: true }" />
-                    </span>
+            <div class="grid grid-cols-4 col-span-2 text-green-600">
+                <span class="font-medium">Dư nợ hiện tại:</span>
+                <span class="col-span-3">Thanh toán trực tiếp</span>
+            </div>
+            <div class="grid grid-cols-2">
+                <span class="font-medium">Chiết khấu đơn hàng:</span>
+                <span class="font-normal">
+                    <input
+                        class="border-b border-gray-700"
+                        type="number"
+                        [(ngModel)]="tradeDiscount"
+                        [ngModelOptions]="{ standalone: true }" />
                 </span>
             </div>
-            <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2 text-green-700">
-                    <!-- Hình thức thanh toán:
-                    <span class="font-normal ml-4"></span> -->
-                </span>
-                <span class="font-medium w-1/3 py-2 flex">
-                    <!-- Chiết khấu đơn hàng:
-                    <span class="font-normal ml-4"></span> -->
-                    <span class="w-1/3">Phải thanh toán:</span>
-                    <span class="font-normal ml-4">
-                        {{ totalPayment | currency: 'VND' }}
-                    </span>
+            <div class="grid grid-cols-4 col-span-2 text-green-600">
+                <span class="font-medium">Loại thanh toán:</span>
+                <span class="col-span-3">Thanh toán trực tiếp</span>
+            </div>
+            <div class="grid grid-cols-2">
+                <span class="font-medium">Phải thanh toán:</span>
+                <span class="font-normal">
+                    {{ totalPayment | currency: 'VND' }}
                 </span>
             </div>
-            <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2"></span>
-                <span class="font-medium w-1/3 py-2 flex items-center">
-                    <span class="w-1/3">Thanh toán trước:</span>
-                    <span class="font-normal ml-4">
-                        <input
-                            class="border-b border-gray-700"
-                            type="number"
-                            [(ngModel)]="prePayment"
-                            [ngModelOptions]="{ standalone: true }" />
-                    </span>
+            <div class="grid grid-cols-4 col-span-2 items-center">
+                <span class="font-medium text-green-600">Hạn thanh toán:</span>
+                <span style="font-size: 12px" class="col-span-3">
+                    <mat-form-field appearance="outline">
+                        <input matInput [matDatepicker]="pickerDate" formControlName="paymentTerm" />
+                        <mat-datepicker-toggle matSuffix [for]="pickerDate"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDate></mat-datepicker>
+                    </mat-form-field>
                 </span>
             </div>
-            <!-- <div class="flex justify-between">
-                <span class="font-medium w-1/3 py-2"></span>
-                <span class="font-medium w-1/3 py-2">
-                    Thanh toán trước:
-                    <span class="font-normal ml-4"></span>
+            <span class="grid grid-cols-2">
+                <span class="font-medium text-green-600">Thanh toán trước:</span>
+                <span class="font-normal">
+                    <input
+                        class="border-b border-gray-700"
+                        type="number"
+                        [(ngModel)]="prePayment"
+                        [ngModelOptions]="{ standalone: true }" />
                 </span>
-            </div> -->
+            </span>
+            <div class="grid grid-cols-4 col-span-2"></div>
+            <div class="grid grid-cols-2">
+                <span class="font-medium text-blue-600">Ghi công nợ:</span>
+                <span class="font-normal">
+                    <mat-checkbox formControlName="debtRecord" class="example-margin"></mat-checkbox>
+                </span>
+            </div>
         </div>
     </div>
 </form>

@@ -277,7 +277,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             };
         });
         const body = {
-            orderDate: moment(this.createForm.get('orderDate')?.value).format('YYYY-MM-DD'),
+            orderDate: moment(this.createForm.get('orderDate')?.value).format('YYYY-MM-DDTHH:mm:ss'),
             // groupId: 'ef6c9edf-5445-4dbf-b0f3-d65d6412cfc0', // Chưa có api get
             orderEmployeeId: this.createForm.get('orderEmployeeId')?.value,
             // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -290,7 +290,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             address: this.createForm.get('customer.address')?.value,
             customerName: this.createForm.get('customer.customerName')?.value,
             archived: false,
-            createdDate: moment(Date.now()).format('YYYY-MM-DD'),
+            createdDate: moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss'),
             deliveryDate: moment(this.createForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
             listProduct: lastListChoosen,
             paymentMethod: 0, // có 1 loại payment
@@ -314,6 +314,10 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
                 this.router.navigate(['/orders']);
             },
         );
+    }
+    updateTotalPrice(product:any) {
+        this.countTotal(product);
+        product.totalPrice = product.quantity * product.unitPrice;
     }
 
     setInfoCustomer(id: string) {

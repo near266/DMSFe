@@ -52,6 +52,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 @NgModule({
     declarations: [
         MenuCollapseComponent,
@@ -107,6 +108,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
         NgxPaginationModule,
     ],
     exports: [
+        CurrencyMaskModule,
         ConfirmDialogComponent,
         MatAutocompleteModule,
         MatCheckboxModule,
