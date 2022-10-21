@@ -60,7 +60,7 @@ export class AddAccountantComponent implements OnInit {
           this.response.data.forEach(element => {
             element.checked = false;
             this.userList.data.forEach( e => {
-              if(element.id == e.employeeId) {
+              if(element.id == e.employee.id) {
                 element.checked = true;
                 element.disabled = true;
               }
@@ -90,7 +90,7 @@ export class AddAccountantComponent implements OnInit {
           this.response.data.forEach(element => {
             element.checked = false;
             this.userList.data.forEach( e => {
-              if(element.id == e.employeeId) {
+              if(element.id == e.employee.id) {
                 element.checked = true;
                 element.disabled = true;
               }

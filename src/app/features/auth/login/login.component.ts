@@ -23,7 +23,12 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-    this.auth.Authenticate(this.loginForm.value).subscribe(data => {
+    const body = {
+      username: this.loginForm.controls['username'].value,
+      password: this.loginForm.controls['password'].value,
+      rememberMe: true
+    }
+    this.auth.Authenticate(body).subscribe(data => {
       this.auth.setToken(data.id_token)
       this.router.navigate([""]);
     })
