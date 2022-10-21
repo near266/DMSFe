@@ -69,6 +69,9 @@ export class ViewEditDetailReturnComponent implements OnInit {
     toggleEditMode(_: boolean) {
         this.returnDetailsService.currentMode$.next(_ ? ComponentMode.EDIT : ComponentMode.VIEW);
     }
+    updateReturn() {
+        this.returnDetailsService.updateReturnProducts$.next(true);
+    }
 
     updateOrder(changeTo: number) {
         const body = {

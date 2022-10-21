@@ -146,6 +146,75 @@ export class DetailReturnComponent implements OnInit {
             height: '100%',
             width: '100%',
             panelClass: 'full-screen-modal',
+            data: {
+                listId: this.returnDetailsService.returnListProducts$.getValue().map((product) => {
+                    return { id: product.product?.id };
+                }),
+            },
         });
+        dialogRef.afterClosed().subscribe((data) => {
+            if (!data.isCancel) {
+                console.log(data);
+                console.log(this.formatFormProduct(data));
+                console.log(this.returnDetailsService.returnListProducts$.getValue());
+                // this.listChoosenProduct = data;
+                // this.listProduct = this.listChoosenProduct;
+                if (this.formatFormProduct(data)) {
+                    const result = this.formatFormProduct(data);
+                    //push items in result to current returnListProducts
+                    this.returnDetailsService.returnListProducts$.next([
+                        ...this.returnDetailsService.returnListProducts$.getValue(),
+                        ...result,
+                    ]);
+                }
+            }
+        });
+    }
+
+    formatFormProduct(data: any) {
+        if (data.length > 0) {
+            let List = data.map((product: any) => {
+                return {
+                    product: {
+                        id: product.id,
+                        sku: product.sku,
+                        productName: product.productName,
+                        retailPrice: product.retailPrice,
+                        price: product.price,
+                        vat: product.vat,
+                        warehouseId: product?.warehouse?.id,
+                        retailUnit: product.retailUnit,
+                        wholeSaleUnit: product.wholeSaleUnit,
+                    },
+                    unit: {
+                        id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
+                        unitCode: product?.retailUnit?.unitCode,
+                        unitName: product?.retailUnit?.unitName,
+                    },
+                    warehouse: {
+                        id: product?.warehouse?.id || null,
+                        warehouseCode: product?.warehouse?.warehouseCode || null,
+                        warehouseName: product?.warehouse?.warehouseName || null,
+                    },
+                    unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
+                    quantity: 0,
+                    totalPrice: 0,
+                    discount: 0,
+                    discountRate: 0,
+                    note: null,
+                    type: 1,
+                };
+            });
+            const existedIds = this.returnDetailsService.returnListProducts$.getValue().map((product) => {
+                return product.product?.id;
+            });
+            List = List.filter((product: any) => {
+                return !existedIds.includes(product.product?.id);
+            });
+
+            return List;
+        } else {
+            return false;
+        }
     }
 }

@@ -12,6 +12,7 @@ export class DetailReturnTableComponent implements OnInit {
     constructor(private returnDetailsService: ReturnDetailsService) {}
 
     ngOnInit(): void {
+        this.productsInput = this.returnDetailsService.returnListProducts$.getValue();
         this.returnDetailsService.returnListProducts$.subscribe((_) => {
             this.productsInput = _;
             this.returnDetailsService.totalPrice$.next(this.getSumOfTotalPrice());

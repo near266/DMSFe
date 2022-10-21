@@ -70,7 +70,6 @@
         <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-
               <input matInput type="number" [(ngModel)]="item.quantity" (change)="updateItemTotalPrice(item)" />
             </mat-form-field>
 
@@ -83,10 +82,11 @@
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-              <input matInput type="number" [(ngModel)]="item.discount" [disabled]="!item.quantity"
-                (change)="updateDiscountRate(item)" />
+              <input currencyMask
+                [options]="{ suffix: 'đ', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                matInput [ngModel]="item.discount" (ngModelChange)="item.discount=$event;updateDiscountRate(item)"
+                [disabled]="!item.quantity" />
             </mat-form-field>
-
           </div>
         </td>
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">{{item.discountRate | percent}}
@@ -99,7 +99,8 @@
 
           </div>
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center" (click)="$event.stopPropagation()">
+        <td class="border-x  border-solid align-middle px-2 text-center"
+          (click)="removeProductFromReturn(item.product?.id)">
           <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
         </td>
       </tr>

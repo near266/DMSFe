@@ -50,7 +50,7 @@
         <td class="border-x  border-solid align-middle px-2 text-center">{{item.product.productName}}</td>
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-[12px] text-center">
           <div class="flex">
-            {{item.product.retailUnit.unitName}}
+            {{item.product.retailUnit?.unitName}}
           </div>
         </td>
         <td class="border-x max-w-[120px]  align-middle px-2 text-center">
@@ -68,7 +68,7 @@
         <td class="border-x  border-solid align-middle px-2 text-center">{{item.totalPrice | currency:'VND':'symbol'}}
         </td>
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
-          {{item.discount}}
+          {{item.discount | currency:'VND':'symbol'}}
         </td>
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">{{item.discountRate | percent}}
         </td>

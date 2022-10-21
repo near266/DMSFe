@@ -101,6 +101,7 @@ export class DetailReturnInfoComponent implements OnInit {
             fieldGroup: [
                 {
                     className: 'flex-1 ',
+                    defaultValue: null,
                     key: 'groupId',
                     type: 'select',
                     templateOptions: {
@@ -306,6 +307,11 @@ export class DetailReturnInfoComponent implements OnInit {
             this.returnDetailsService.currentMode$.subscribe((mode) => {
                 console.log(123);
                 this.disableField = mode === ComponentMode.VIEW;
+            }),
+            this.returnDetailsService.updateReturnInfo$.subscribe((_) => {
+                if (_) {
+                    console.log(this.form.getRawValue());
+                }
             }),
         );
     }

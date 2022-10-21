@@ -9,19 +9,26 @@ import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { ViewEditDetailReturnComponent } from './view-edit-detail-return.component';
 import { DetailReturnComponent } from './detail-return/detail-return.component';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { DetailReturnTableComponent } from './detail-return/detail-return-table/detail-return-table.component';
 import { DetailReturnTableEditComponent } from './detail-return/detail-return-table-edit/detail-return-table-edit.component';
 
 @NgModule({
-    declarations: [DetailReturnInfoComponent, ViewEditDetailReturnComponent, DetailReturnComponent, DetailReturnTableComponent, DetailReturnTableEditComponent],
+    declarations: [
+        DetailReturnInfoComponent,
+        ViewEditDetailReturnComponent,
+        DetailReturnComponent,
+        DetailReturnTableComponent,
+        DetailReturnTableEditComponent,
+    ],
     imports: [
         CommonModule,
         ViewEditDetailReturnRoutingModule,
         SharedModule,
         FormlyModule.forChild(),
-
+        CurrencyMaskModule,
         FormlySelectModule,
         FormlyMaterialModule,
         FormlyMatDatepickerModule,

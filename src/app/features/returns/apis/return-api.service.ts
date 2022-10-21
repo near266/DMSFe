@@ -52,4 +52,22 @@ export class ReturnApiService {
     getReturnById(id: string | null): Observable<any> {
         return this.http.get<any>(this.returnUrl + '/id?Id=' + id);
     }
+    deleteProductFromReturn({ productId, returnsId }: any) {
+        return this.http.delete(this.returnUrl + '/removeProduct', {
+            body: {
+                productId,
+                returnsId,
+            },
+        });
+    }
+    addProductToReturn(payload: any[]) {
+        return this.http.post(this.returnUrl + '/addProduct', {
+            returnsProducts: [...payload],
+        });
+    }
+    updateProductToReturn(payload: any[]) {
+        return this.http.put(this.returnUrl + '/updateProduct', {
+            returnsProducts: [...payload],
+        });
+    }
 }

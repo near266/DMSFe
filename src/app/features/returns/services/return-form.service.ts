@@ -124,7 +124,6 @@ export class ReturnFormService {
         );
     }
     submitForms() {
-        console.log(123);
         this.submitProductForm$.next(true);
     }
 }

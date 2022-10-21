@@ -25,7 +25,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
     productChoose: any = [];
     listChoosenProduct: any = [];
     listDontChooseProduct: any = [];
-    listChooseProductFirst: any = [];
 
     isSellect = new Array(1000).fill(false);
     constructor(
@@ -43,7 +42,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
             }),
         );
         this.productChoose = this.data?.listId || [];
-        this.listChooseProductFirst = this.data?.listProd || [];
+
         this.getAllProducts();
     }
 

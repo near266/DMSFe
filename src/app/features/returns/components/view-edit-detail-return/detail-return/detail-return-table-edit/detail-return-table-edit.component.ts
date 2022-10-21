@@ -1,6 +1,8 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { ProductDialogService } from 'src/app/features/product/services/product-dialog.service';
 import { ReturnDetailsService } from 'src/app/features/returns/services/return-details.service';
+import * as _ from 'lodash';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
     selector: 'app-detail-return-table-edit',
@@ -15,9 +17,40 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
     constructor(
         private returnDetailsService: ReturnDetailsService,
         private productDialogService: ProductDialogService,
-    ) {}
-
+        private snackbarService: SnackbarService,
+    ) {
+        this.checkAndUpdate = _.debounce(this.checkAndUpdate, 1);
+    }
+    checkAndUpdate() {
+        if (this.productsInput?.length) {
+            this.productQuantitySum = this.productsInput.reduce((acc: number, curr: any) => acc + curr.quantity, 0);
+            this.calculateTotalPrice();
+            this.calculateDiscountAmount();
+            // update product totalPrice in productsInput
+        }
+    }
     ngOnInit(): void {
+        this.returnDetailsService.updateReturnProducts$.subscribe((res) => {
+            if (res && this.returnDetailsService.checkValidListProducts()) {
+                this.returnDetailsService.compareReturnListProductsWithInitialListProductAndUpdate().subscribe({
+                    next: (res) => {
+                        this.returnDetailsService.updateReturnInfo$.next(true);
+                    },
+                    error: (err) => {
+                        this.snackbarService.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'top', false);
+                    },
+                });
+            } else {
+                this.snackbarService.openSnackbar(
+                    'Danh sách sản phẩm không hợp lệ',
+                    2000,
+                    'Đóng',
+                    'center',
+                    'top',
+                    false,
+                );
+            }
+        });
         this.productDialogService.getAllUnits().subscribe((data) => {
             this.unitOptions = data;
         });
@@ -33,12 +66,7 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
         });
     }
     ngDoCheck(): void {
-        if (this.productsInput?.length) {
-            this.productQuantitySum = this.productsInput.reduce((acc: number, curr: any) => acc + curr.quantity, 0);
-            this.calculateTotalPrice();
-            this.calculateDiscountAmount();
-            // update product totalPrice in productsInput
-        }
+        this.checkAndUpdate();
     }
     calculateTotalPrice(): number {
         //calculate total price of all products in productsInput by the sum of totalPrice of each product
@@ -73,5 +101,9 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
         } else {
             item.discountRate = 0;
         }
+    }
+    removeProductFromReturn(index: string) {
+        this.productsInput.splice(+index, 1);
+        this.returnDetailsService.returnListProducts$.next(this.productsInput);
     }
 }
