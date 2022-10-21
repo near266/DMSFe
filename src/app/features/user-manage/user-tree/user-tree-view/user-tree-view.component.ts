@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
-import { IActionMapping, ITreeOptions, TreeComponent, TreeNode, TreeNodeComponent, } from '@circlon/angular-tree-component';
+import { IActionMapping, ITreeOptions, TreeComponent, TreeNode, TreeNodeComponent, TREE_ACTIONS} from '@circlon/angular-tree-component';
 import { Response } from 'src/app/core/model/Response';
 import { EmployeeService } from 'src/app/core/services/employee.service';
 import { AddAccountantComponent } from '../add-accountant/add-accountant.component';
@@ -42,10 +42,14 @@ export class UserTreeViewComponent implements OnInit {
     constructor(private employeeService: EmployeeService, private dialog: MatDialog) {}
 
     ngOnInit(): void {
-      this.nodes.push({ id: 'root', level: -1, name: 'Tất cả', expand: false, children: [], menubar: ['Thêm nhóm bán hàng', 'Thêm đơn vị'], hasChildren: true });
       this.init();
     }
+
     init() {
+      this.nodes.push({ id: 'root', level: -1, name: 'Tất cả', expand: false, children: [], menubar: ['Thêm nhóm bán hàng', 'Thêm đơn vị'], hasChildren: true });
+      this.init_tree();
+    }
+    init_tree() {
       this.employeeService.getTreeEmployee().subscribe((tree) => {
           this.addNodeToArray(tree, 'root');
           this.array_index[0].children.forEach((element: any) => {
@@ -61,19 +65,16 @@ export class UserTreeViewComponent implements OnInit {
             };
             this.nodes[0].children.push(node);
           });
-
-
-          // this.nodes[0].children = [newTree];
-          this.nodes[0].children.push({
-            id: 'undefined',
-            level: 0,
-            name: 'Chưa thuộc phòng/nhóm',
-            code: '',
-            expand: false,
-            type: 1,
-            menubar: this.menubar_group,
-            hasChildren: false
-          });
+          // this.nodes[0].children.push({
+          //   id: 'undefined',
+          //   level: 0,
+          //   name: 'Chưa thuộc phòng/nhóm',
+          //   code: '',
+          //   expand: false,
+          //   type: 1,
+          //   menubar: this.menubar_group,
+          //   hasChildren: false
+          // });
           this.action = {
             mouse: {
               contextMenu: (tree, node, $event) => {
@@ -81,7 +82,7 @@ export class UserTreeViewComponent implements OnInit {
               },
               click: (tree, node, $event) => {
                 node.data.expand = false;
-              },
+              }
             },
           };
           this.options = {
@@ -123,6 +124,33 @@ export class UserTreeViewComponent implements OnInit {
       });
     }
 
+    updateNode(node: any) {
+      let newNodes: any;
+      this.array_index.forEach(e => {
+        if(node.data.id == e.id) {
+          // console.log(e.children);
+          e.children = [];
+          this.employeeService.SearchEmployeeInGroup(node.data.id, 1, 1000).subscribe((response: Response<any>) => {
+            let res = response;
+            res.data.forEach((element: any) => {
+              e.children.push({
+                id: element.employeeId,
+                name: element.employee.employeeName,
+                code: 'Nhân viên',
+                expand: false,
+                type: 2,
+                menubar: [],
+                hasChildren: false
+              });
+            });
+            newNodes = e.children.map((c: any) => Object.assign({}, c));
+            this.tree.treeModel.update();
+          });
+
+        }
+      });
+    }
+
     addNodeToArray(tree: any[], parent: any) {
       let nodes: any[] = [];
       tree.forEach((element: any) => {
@@ -136,7 +164,7 @@ export class UserTreeViewComponent implements OnInit {
               menubar: this.menubar_group,
               hasChildren: true
           };
-          if(element.children.length == 0) node.hasChildren = false;
+          // if(element.children.length == 0) node.hasChildren = false;
           if(node.type == 0) node.menubar = this.menubar_unit;
           nodes.push(node);
       });
@@ -145,7 +173,7 @@ export class UserTreeViewComponent implements OnInit {
         children: nodes
       });
       tree.forEach((element: any) => {
-        if(element.children.length > 0) this.addNodeToArray(element.children, element.item.id);
+        this.addNodeToArray(element.children, element.item.id);
       });
     }
 
@@ -187,7 +215,7 @@ export class UserTreeViewComponent implements OnInit {
 
     }
 
-    open_add_sales_team(id: string) {
+    open_add_sales_team(id: string, node: any) {
       let dialogRef = this.dialog.open(AddSalesTeamComponent, {
         // height: '30vh',
         minWidth: '800px',
@@ -195,12 +223,13 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          this.init();
+          this.updateNode(node);
+
         }
       });
     }
 
-    open_add_unit(id: string) {
+    open_add_unit(id: string, node: any) {
       let dialogRef = this.dialog.open(AddUnitComponent, {
         // height: '30vh',
         minWidth: '800px',
@@ -208,12 +237,13 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          this.init();
+          this.updateNode(node);
+
         }
       });
     }
 
-    open_add_manager(id: string) {
+    open_add_manager(id: string, node: any) {
       let dialogRef = this.dialog.open(AddManagerComponent, {
         height: '100vh',
         minWidth: '1100px',
@@ -221,12 +251,13 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          this.init();
+          this.updateNode(node);
+
         }
       });
     }
 
-    open_add_accountant(id: string) {
+    open_add_accountant(id: string, node: any) {
       let dialogRef = this.dialog.open(AddAccountantComponent, {
         height: '100vh',
         minWidth: '1100px',
@@ -234,12 +265,13 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          this.init();
+          this.updateNode(node);
+
         }
       });
     }
 
-    open_add_employee(id: string) {
+    open_add_employee(id: string, node: any) {
       let dialogRef = this.dialog.open(AddEmployeeComponent, {
         height: '100vh',
         minWidth: '1100px',
@@ -247,36 +279,39 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          this.init();
+          this.updateNode(node);
+
         }
       });
     }
 
     menuBar(keyword: string, node: any) {
       // if(node)
+      console.log(node);
+
       switch(keyword) {
         case 'Thêm quản lý': {
-          this.open_add_manager(node.data.id);
+          this.open_add_manager(node.data.id, node);
           return;
         }
         case 'Thêm kế toán': {
-          this.open_add_accountant(node.data.id);
+          this.open_add_accountant(node.data.id, node);
           return;
         }
         case 'Thêm nhóm bán hàng': {
-          this.open_add_sales_team(node.data.id);
+          this.open_add_sales_team(node.data.id, node);
           return;
         }
         case 'Thêm nhân viên': {
-          this.open_add_employee(node.data.id);
+          this.open_add_employee(node.data.id, node);
           return;
         }
         case 'Thêm đơn vị con': {
-          this.open_add_unit(node.data.id);
+          this.open_add_unit(node.data.id, node);
           return;
         }
         case 'Thêm đơn vị': {
-          this.open_add_unit(node.data.id);
+          this.open_add_unit(node.data.id, node);
           return;
         }
       }
