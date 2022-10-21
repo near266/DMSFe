@@ -11,7 +11,7 @@ const routes: Routes = [
         component: CreateReturnComponent,
     },
     {
-        path: 'detail',
+        path: 'details',
         loadChildren: () =>
             import('./components/view-edit-detail-return/view-edit-detail-return.module').then(
                 (m) => m.ViewEditDetailReturnModule,

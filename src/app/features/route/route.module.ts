@@ -9,6 +9,7 @@ import { DetailRouterComponent } from './detail-router/detail-router.component';
 import { InforRouterComponent } from './infor-router/infor-router.component';
 import { LocationRouterComponent } from './location-router/location-router.component';
 import { HistoryComponent } from './history/history.component';
+import { UserManageModule } from '../user-manage/categories.module';
 
 const routes: Routes = [
     {
@@ -30,6 +31,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     SharedModule,
+    UserManageModule,
     RouterModule.forChild(routes)
   ]
 })
