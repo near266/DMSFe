@@ -74,7 +74,9 @@ export class UserTreeViewComponent implements OnInit {
               },
               click: (tree, node, $event) => {
                 node.data.expand = false;
-                this.newItemEvent.emit(node.data.id);
+                if(node.data.type != 2) {
+                  this.newItemEvent.emit(node.data.id);
+                }
               }
             },
           };
@@ -285,9 +287,6 @@ export class UserTreeViewComponent implements OnInit {
     }
 
     menuBar(keyword: string, node: any) {
-      // if(node)
-
-
       switch(keyword) {
         case 'Thêm quản lý': {
           this.open_add_manager(node.data.id, node);
