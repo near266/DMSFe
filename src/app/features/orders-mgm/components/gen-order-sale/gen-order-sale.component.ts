@@ -66,10 +66,11 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
 
     ngOnInit(): void {
         // parse token to get id login
+        this.relatedOrder = this.data.detailOrder;
         this.saleDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
         this.genOrderForm = this.fb.group({
             orderDate: [null],
-            saleDate: [null],
+            saleDate: [moment(Date.now()).format('YYYY-MM-DD')],
             deliveryDate: [null],
             groupId: [null],
             orderEmployeeId: [null],
@@ -83,9 +84,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             debtRecord: [false],
             paymentTerm: [null],
         });
-        this.relatedOrder = this.data.detailOrder;
         this.listProduct = this.relatedOrder.listProduct;
-        this.patchValue();
         // get all info payment
         console.log(this.relatedOrder);
         this.totalAmount = this.relatedOrder.totalAmount;
@@ -94,6 +93,11 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.totalPayment = this.relatedOrder.totalPayment;
         this.prePayment = this.relatedOrder.prePayment;
         this.textMoney = this.numberToText.doc(this.totalPayment);
+
+        // get list customer
+        this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
+            this.listCustomer = data?.data;
+        });
     }
 
     ngAfterViewInit(): void {
@@ -103,10 +107,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             this.listEmployee1 = this.listEmployee;
             this.listEmployee2 = this.listEmployee;
         });
-        // get list customer
-        this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
-            this.listCustomer = data?.data;
-        });
+
         // get list route
         this.getAllRoute();
 
@@ -116,6 +117,10 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
         // get list wareHouse
         this.getListWareHouse();
+
+        setTimeout(() => {
+            this.patchValue();
+        }, 0);
     }
 
     ngDoCheck(): void {
@@ -194,17 +199,21 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     getRouteByCustomerId(customerId: any) {
-        this.routeIdSearched = null;
+        this.genOrderForm.patchValue({
+            routeId: null,
+        });
         // get route ID
         if (customerId) {
             this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
-                this.routeIdSearched = data.route?.id;
+                this.genOrderForm.patchValue({
+                    routeId: data?.route?.id,
+                });
                 // get employee in route
                 this.genOrderForm.patchValue({
-                    orderEmployeeId: data.route?.employee?.id,
+                    orderEmployeeId: data?.route?.employee?.id,
                 });
                 // get group by customerID
-                this.groupIdSearched = data.route?.unitTreeGroup?.id;
+                this.groupIdSearched = data?.route?.unitTreeGroup?.id;
                 this.genOrderForm.patchValue({
                     groupId: this.groupIdSearched,
                 });
@@ -229,8 +238,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     patchValue() {
-        this.pushListProductToDialog();
-        this.pushListProductPromotionToDialog();
         let description;
         if (this.relatedOrder.description) {
             description = `Bán hàng theo phiếu đặt hàng số [${this.relatedOrder.orderCode}]`;
@@ -261,6 +268,20 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.listPromotionProduct.forEach((product: any) => {
             product.warehouseId = product.warehouse?.id;
         });
+        // loop to get unitId
+        this.listProduct.forEach((product: any) => {
+            product.unitId = product.unit?.id;
+        });
+        this.listPromotionProduct.forEach((product: any) => {
+            product.unitId = product.unit?.id;
+        });
+        // set route and group if have customerId
+        if (this.relatedOrder?.customer?.id) {
+            this.getRouteByCustomerId(this.relatedOrder?.customer?.id);
+        }
+
+        this.pushListProductToDialog();
+        this.pushListProductPromotionToDialog();
     }
 
     countDiscount(product: any) {
@@ -306,6 +327,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
                         unitName: product?.retailUnit?.unitName,
                     },
                     warehouseId: product?.warehouse?.id,
+                    unitId: product?.retailUnit?.id, // mặc định là đvt lẻ
                     unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
                     quantity: 0,
                     totalPrice: 0,
@@ -341,7 +363,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             pageSize: 100,
         };
         this.purchaseOrder.searchCustomer(body).subscribe((data) => {
-            this.listCustomerSearched = data.data;
+            this.listCustomer = data.data;
         });
     }
 
@@ -372,31 +394,18 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
                 type: product.type,
             };
         });
+        console.log(listProductToSentAPI);
         return listProductToSentAPI;
     }
 
     createSaleReceipt() {
-        // let listProductToSentAPI = this.listProduct.map((product: any) => {
-        //     return {
-        //         productId: product.product.id,
-        //         unitId: product.unit.id,
-        //         warehouseId: product.warehouse.id,
-        //         unitPrice: product.unitPrice,
-        //         quantity: product.quantity,
-        //         totalPrice: product.totalPrice,
-        //         discount: product.discount,
-        //         discountRate: product.discountRate * 100,
-        //         note: product.note,
-        //         type: product.type,
-        //     };
-        // });
         const body = {
             orderDate: moment(this.genOrderForm.get('orderDate')?.value).format('YYYY-MM-DD'),
-            groupId: 'ef6c9edf-5445-4dbf-b0f3-d65d6412cfc0',
-            saleEmployeeId: this.genOrderForm.get('saleEmployeeId')?.value.id,
+            groupId: this.genOrderForm.get('groupId')?.value,
+            saleEmployeeId: this.genOrderForm.get('saleEmployeeId')?.value,
             // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             customerId: this.genOrderForm.get('customerId')?.value,
-            // routeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            routeId: this.genOrderForm.get('routeId')?.value,
             orderEmployeeId: this.genOrderForm.get('orderEmployeeId')?.value,
             type: 0,
             status: 3,
@@ -423,6 +432,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             listPromotionProduct: this.formatProductToSentAPI(this.listPromotionProduct),
             debtRecord: this.genOrderForm.get('debtRecord')?.value,
         };
+        console.log(body);
         this.saleReceipt.create(body).subscribe(
             (data) => {},
             (err) => {
@@ -435,6 +445,19 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
                 // this.router.navigate(['/orders']);
             },
         );
+    }
+
+    selectUnit(product: any, type: any) {
+        if (type === 'retail') {
+            product.unitId = product?.product?.retailUnit?.id;
+            product.unitPrice = product.product.retailPrice;
+        } else if (type == 'whosale') {
+            product.unitId = product?.product?.wholeSaleUnit?.id;
+            product.unitPrice = product.product.price;
+        }
+        console.log(product.unitId);
+        product.totalPrice = product.quantity * product.unitPrice;
+        this.discountRate(product);
     }
 
     updateStatus() {
@@ -477,7 +500,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     pushListProductToDialog() {
-        this.listChoosenProduct = this.relatedOrder.listProduct.map((product: any) => {
+        this.listChoosenProduct = this.listProduct.map((product: any) => {
             return {
                 id: product.product.id,
             };
@@ -485,7 +508,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     pushListProductPromotionToDialog() {
-        this.listChoosenProductPromotion = this.relatedOrder.listPromotionProduct.map((product: any) => {
+        this.listChoosenProductPromotion = this.listPromotionProduct.map((product: any) => {
             return {
                 id: product.product.id,
             };

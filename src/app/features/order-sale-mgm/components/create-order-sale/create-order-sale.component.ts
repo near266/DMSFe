@@ -155,7 +155,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             totalPayment: this.totalPayment,
             archived: false,
             createdDate: moment(Date.now()).format('YYYY-MM-DD'),
-            saleReceiptCode: this.createSale.get('saleEmployee')?.value.employeeCode,
+            saleReceiptCode: this.createSale.get('saleEmployee')?.value?.employeeCode,
             deliveryDate: moment(this.createSale.get('deliveryDate')?.value).format('YYYY-MM-DD'),
             saleDate: moment(this.createSale.get('saleDate')?.value).format('YYYY-MM-DD'),
             paymentTerm: moment(this.createSale.get('paymentTerm')?.value).format('YYYY-MM-DD'),

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, DoCheck, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { NumberToTextService } from 'src/app/core/shared/services/number-to-text
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestroy {
     statusList = statusList;
     statusNow!: number;
     type: string = 'View';
@@ -28,40 +28,11 @@ export class DetailComponent implements OnInit {
     isRemove = false;
 
     listProduct: any = [];
-    listPromotionProduct?: ListPromotionProduct[] = [];
+    listPromotionProduct: any = [];
     listEmployee: any = [];
     listCustomer: any = [];
     listProductAdd: any = [];
     listProductRemove: any = [];
-
-    listGroup = [
-        {
-            groupId: '1',
-            groupName: 'FT2 - Đông Bắc - QL Tùng (Khu vực Đông Bắc)',
-        },
-        {
-            groupId: '2',
-            groupName: 'FT5 - Bắc Miền Trung - QL Trọng (Khu vực Bắc Miền Trung)',
-        },
-        {
-            groupId: '3',
-            groupName: 'FT7 - Miền Tây NB - QL Duy',
-        },
-    ];
-    listRoute = [
-        {
-            routeId: '1',
-            routeName: 'Nguyễn Văn Tuấn',
-        },
-        {
-            routeId: '2',
-            routeName: 'Đặng Xuân Khu',
-        },
-        {
-            routeId: '3',
-            routeName: 'Hồ Tuấn Anh',
-        },
-    ];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -73,6 +44,8 @@ export class DetailComponent implements OnInit {
 
     listChoosenProduct: any = [];
     listWarehouse: any = [];
+    listRoute: any = [];
+    listGroup: any = [];
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -94,9 +67,9 @@ export class DetailComponent implements OnInit {
             saleDate: [null],
             saleEmployee: [null],
             deliveryDate: [null],
-            group: [null],
+            groupId: [null],
             orderEmployee: [null],
-            route: [null],
+            routeId: [null],
             customer: this.fb.group({
                 code: [null],
                 name: [null],
@@ -150,6 +123,8 @@ export class DetailComponent implements OnInit {
         this.getListCustomer();
         this.getListEmployee();
         this.getListWareHouse();
+        this.getListGroup();
+        this.getListRoute();
     }
 
     ngDoCheck(): void {
@@ -258,7 +233,6 @@ export class DetailComponent implements OnInit {
                 type: product.type,
             };
         });
-        console.log(listProductAdd);
         return listProductAdd;
     }
 
@@ -311,10 +285,10 @@ export class DetailComponent implements OnInit {
             orderDate: this.detailOrder.orderDate,
             saleDate: this.detailOrder.saleDate,
             deliveryDate: this.detailOrder.deliveryDate,
-            group: this.detailOrder.group?.groupId,
+            groupId: this.detailOrder.group?.id,
             orderEmployee: this.detailOrder.orderEmployee?.id,
             saleEmployee: this.detailOrder.saleEmployee?.id,
-            route: this.detailOrder.route?.routeId,
+            routeId: this.detailOrder.route?.id,
             customer: {
                 code: this.detailOrder.customer?.id,
                 phone: this.detailOrder.phone,
@@ -332,6 +306,9 @@ export class DetailComponent implements OnInit {
         this.listProduct.forEach((product: any) => {
             product.warehouseId = product.warehouse?.id;
         });
+        this.listPromotionProduct.forEach((product: any) => {
+            product.warehouseId = product.warehouse?.id;
+        });
     }
 
     getListCustomer() {
@@ -343,7 +320,6 @@ export class DetailComponent implements OnInit {
     getListEmployee() {
         this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
             this.listEmployee = data.data;
-            console.log(this.listEmployee);
         });
     }
 
@@ -353,6 +329,16 @@ export class DetailComponent implements OnInit {
                 this.listWarehouse = data;
             }),
         );
+    }
+
+    getListRoute() {
+        this.purchaseOrder.getAllRoute(1, 1000).subscribe((data) => (this.listRoute = data.data));
+    }
+
+    getListGroup() {
+        this.purchaseOrder.getAllGroup(1).subscribe((data) => {
+            this.listGroup = data;
+        });
     }
 
     getProductListUpdate() {
@@ -373,7 +359,6 @@ export class DetailComponent implements OnInit {
                 type: product.type,
             };
         });
-        console.log(listProductToSent);
         return listProductToSent;
     }
 
@@ -400,7 +385,6 @@ export class DetailComponent implements OnInit {
     }
 
     pushListProductToDialog() {
-        console.log(this.listProduct);
         this.listChoosenProduct = this.detailOrder.listProduct.map((product: any) => {
             return {
                 id: product.product.id,

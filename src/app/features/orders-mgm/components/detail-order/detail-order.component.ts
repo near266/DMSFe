@@ -367,7 +367,12 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     unChoose(productRemove: any) {
         // send to service
-        this.listProductRemove.push(productRemove.product.id);
+        this.listProductRemove.push({
+            productId: productRemove.product.id,
+            type: productRemove.type,
+            unitId: productRemove.unit?.id,
+            warehouseId: productRemove.warehouseId,
+        });
         this.isRemove = true;
         this.purchaseOrder.sendProductRemove({
             isRemove: this.isRemove,
