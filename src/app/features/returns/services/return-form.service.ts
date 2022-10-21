@@ -4,14 +4,14 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, map, Subject, tap } from 'rxjs';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { ReturnDetailsService } from '../apis/return-details.service';
+import { ReturnApiService } from '../apis/return-api.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ReturnFormService {
     constructor(
-        private returnDetailsService: ReturnDetailsService,
+        private returnApiService: ReturnApiService,
         private customerService: CustomerService,
         private snackBarService: SnackbarService,
         private dialog: MatDialog,
@@ -25,7 +25,7 @@ export class ReturnFormService {
     products$: Subject<any> = new Subject<any>();
     getOrderDetailsById(id: string) {
         // <--- this method is not used in real cases
-        return this.returnDetailsService.getOrderDetailsById(id).pipe(
+        return this.returnApiService.getOrderDetailsById(id).pipe(
             map((result) => {
                 console.log(result);
                 return {
@@ -39,7 +39,7 @@ export class ReturnFormService {
         );
     }
     getEmployees() {
-        return this.returnDetailsService.getEmployees().pipe(
+        return this.returnApiService.getEmployees().pipe(
             map((result) => {
                 return result.data.map((data: any) => {
                     const { id: value, employeeName, employeeTitle } = data;
@@ -54,7 +54,7 @@ export class ReturnFormService {
     }
 
     getGroupsAndFilter() {
-        return this.returnDetailsService.getGroups().pipe(
+        return this.returnApiService.getGroups().pipe(
             map((result) => {
                 return result.map((data: any) => {
                     const { id: value, name } = data;
@@ -65,7 +65,7 @@ export class ReturnFormService {
         );
     }
     getEmployeesByGroupId(id: string) {
-        return this.returnDetailsService.getEmployeesByGroup(id).pipe(
+        return this.returnApiService.getEmployeesByGroup(id).pipe(
             map((result) => {
                 return result.data.map((data: any) => {
                     const { employee } = data;
@@ -83,7 +83,7 @@ export class ReturnFormService {
 
     addNewReturn(form: any) {
         console.log(form);
-        return this.returnDetailsService.createNewReturn(form).subscribe({
+        return this.returnApiService.createNewReturn(form).subscribe({
             next: (result) => {
                 this.snackBarService.openSnackbar('Tạo phiếu trả hàng thành công', 2000, 'Đóng', 'center', 'top', true);
                 this.totalPrice$.next(0);

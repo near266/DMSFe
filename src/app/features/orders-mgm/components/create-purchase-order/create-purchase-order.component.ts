@@ -7,7 +7,8 @@ import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ProductListComponent } from '../product-list/product-list.component';
-
+import { CurrencyPipe } from '@angular/common';
+import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 @Component({
     selector: 'app-create-purchase-order',
     templateUrl: './create-purchase-order.component.html',
@@ -42,6 +43,9 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     totalPayment: number = 0;
     prePayment: number = 0;
     textMoney: any;
+    value: any;
+    formattedAmount: any = '0';
+    defaultUnit = "{ unit: product.retailUnit, type: 'retail' }";
     constructor(
         private dataService: DataService,
         private dialog: MatDialog,
@@ -49,12 +53,18 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         private purchaseOrder: PurchaseOrderService,
         private snackbar: SnackbarService,
         private router: Router,
+        private numberToText: NumberToTextService,
     ) {}
 
+    transformAmount(element: any) {
+        console.log(element.value);
+    }
+
     ngOnInit(): void {
+        console.log(moment(Date.now()).format('YYYY-MM-DD'));
         this.createForm = this.fb.group({
             purchaseOrderId: [null],
-            orderDate: [null],
+            orderDate: [moment(Date.now()).format('YYYY-MM-DD')],
             groupId: [null],
             orderEmployeeId: [null],
             warehouseId: [null],
@@ -82,9 +92,13 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             createdBy: [null],
             createdDate: [null],
             orderCode: [null],
-            deliveryDate: [null],
+            deliveryDate: [moment(Date.now()).format('YYYY-MM-DD')],
             prePayment: [null],
         });
+    }
+
+    format(event: any) {
+        event.target.value = Number(event.target.value).toLocaleString('en');
     }
 
     ngAfterViewInit(): void {
@@ -110,16 +124,83 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         // count totalPayment
         this.countTotalPayment();
         // number to text
-        this.textMoney = this.doc(this.totalPayment);
+        this.textMoney = this.numberToText.doc(this.totalPayment);
+
+        // tính cho từng sản phẩm
+        // this.countDiscount();
+        // this.countTotalPrice();
+        // this.countDiscountRate();
     }
 
+    countDiscount(product: any) {
+        if (product.totalPrice) {
+            product.discount = (product.discountRate / 100) * product.totalPrice;
+        }
+    }
+    // Tính cho đơn hàng
     countTotal(product: any) {
         this.quantity += product.quantity;
     }
 
-    discountRate(product: any) {
-        product.discountRate = product.discount / product.totalPrice;
+    countTotalAmount() {
+        this.totalAmount = 0;
+        Array.prototype.forEach.call(this.listChoosenProduct, (product) => {
+            if (product.totalPrice) {
+                this.totalAmount += product.totalPrice;
+            }
+        });
     }
+
+    countTotalDiscountProduct() {
+        this.totalDiscountProduct = 0;
+        Array.prototype.forEach.call(this.listChoosenProduct, (product) => {
+            if (product.discount) {
+                this.totalDiscountProduct += product.discount;
+            }
+        });
+    }
+
+    countTotalPayment() {
+        this.totalPayment = 0;
+        if (this.totalAmount) {
+            this.totalPayment = this.totalAmount - this.tradeDiscount - this.totalDiscountProduct;
+        }
+    }
+
+    // tính cho từng sản phẩm
+    discountRate(product: any) {
+        if (product.totalPrice) {
+            product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
+        }
+    }
+
+    // countDiscountRate() {
+    //     console.log(1);
+    //     this.listChoosenProduct.forEach((product: any) => {
+    //         if (product.discount && product.totalPrice) {
+    //             product.discountRate = (product.discount / product.totalPrice) * 100;
+    //         }
+    //     });
+    // }
+
+    // countTotalPrice() {
+    //     console.log(1);
+
+    //     this.listChoosenProduct.forEach((product: any) => {
+    //         if (product.quantity && product.unitPrice) {
+    //             product.totalPrice = product.quantity * product.unitPrice;
+    //         }
+    //     });
+    // }
+
+    // countDiscount() {
+    //     console.log(1);
+    //     this.listChoosenProduct.forEach((product: any) => {
+    //         if (product.discountRate && product.totalPrice) {
+    //             product.discount = (product.discountRate / 100) * product.totalPrice;
+    //         }
+    //     });
+    // }
 
     stopPropagation(e: any) {
         e.stopPropagation();
@@ -145,8 +226,11 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         dialogRef.afterClosed().subscribe((data) => {
             if (!data.isCancel) {
                 this.listChoosenProduct = data;
+                this.listChoosenProduct.forEach((product: any) => {
+                    product.warehouseId = product.warehouse?.id;
+                });
+                console.log(data);
             }
-            console.log(data);
         });
     }
 
@@ -161,7 +245,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
                 quantity: product.quantity,
                 totalPrice: product.totalPrice,
                 discount: product.discount | 0,
-                discountRate: (product.discountRate * 100000) | 0,
+                discountRate: product.discountRate | 0,
                 note: product.note,
                 type: 0,
             };
@@ -236,11 +320,6 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     }
 
     selectUnit(value: any, product: any, i: any) {
-        // if (value.type === 'retail') {
-        //     this.unitPrices[i] = product.reatailPrice;
-        // } else if (value.type === 'whosale') {
-        //     this.unitPrices[i] = product.price;
-        // }
         product.unitId = value.unit.id;
         product.type = value.type;
         if (value.type === 'retail') {
@@ -254,148 +333,12 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         product.warehouseId = value;
     }
 
-    countTotalAmount() {
-        this.totalAmount = 0;
-        Array.prototype.forEach.call(this.listChoosenProduct, (product) => {
-            if (product.totalPrice) {
-                this.totalAmount += product.totalPrice;
-            }
-        });
-        // this.listChoosenProduct.forEach((product: any) => {
-        //     if (product.totalPrice) {
-        //         this.totalAmount += product.totalPrice;
-        //     }
-        // });
-    }
-
-    countTotalDiscountProduct() {
-        this.totalDiscountProduct = 0;
-        Array.prototype.forEach.call(this.listChoosenProduct, (product) => {
-            if (product.discount) {
-                this.totalDiscountProduct += product.discount;
-            }
-        });
-        // this.listChoosenProduct.forEach((product: any) => {
-        //     if (product.discount) {
-        //         this.totalDiscountProduct += product.discount;
-        //     }
-        // });
-    }
-
-    countTotalPayment() {
-        this.totalPayment = 0;
-        if (this.totalAmount) {
-            this.totalPayment = this.totalAmount - this.tradeDiscount;
+    setWareHouseToAllProduct(id: any) {
+        console.log(this.listChoosenProduct);
+        if (id != 0) {
+            this.listChoosenProduct.forEach((product: any) => {
+                product.warehouseId = id;
+            });
         }
-    }
-
-    // number to text
-    doc1so(so: any) {
-        var arr_chuhangdonvi = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var resualt = '';
-        resualt = arr_chuhangdonvi[so];
-        return resualt;
-    }
-
-    doc2so(so: any) {
-        so = so.replace(' ', '');
-        var arr_chubinhthuong = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var arr_chuhangdonvi = ['mươi', 'mốt', 'hai', 'ba', 'bốn', 'lăm', 'sáu', 'bảy', 'tám', 'chín'];
-        var arr_chuhangchuc = [
-            '',
-            'mười',
-            'hai mươi',
-            'ba mươi',
-            'bốn mươi',
-            'năm mươi',
-            'sáu mươi',
-            'bảy mươi',
-            'tám mươi',
-            'chín mươi',
-        ];
-        var resualt = '';
-        var sohangchuc = so.substr(0, 1);
-        var sohangdonvi = so.substr(1, 1);
-        resualt += arr_chuhangchuc[sohangchuc];
-        if (sohangchuc == 1 && sohangdonvi == 1) resualt += ' ' + arr_chubinhthuong[sohangdonvi];
-        else if (sohangchuc == 1 && sohangdonvi > 1) resualt += ' ' + arr_chuhangdonvi[sohangdonvi];
-        else if (sohangchuc > 1 && sohangdonvi > 0) resualt += ' ' + arr_chuhangdonvi[sohangdonvi];
-
-        return resualt;
-    }
-
-    doc3so(so: any) {
-        var resualt = '';
-        var arr_chubinhthuong = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var sohangtram = so.substr(0, 1);
-        var sohangchuc = so.substr(1, 1);
-        var sohangdonvi = so.substr(2, 1);
-        resualt = arr_chubinhthuong[sohangtram] + ' trăm';
-        if (sohangchuc == 0 && sohangdonvi != 0) resualt += ' linh ' + arr_chubinhthuong[sohangdonvi];
-        else if (sohangchuc != 0) resualt += ' ' + this.doc2so(sohangchuc + ' ' + sohangdonvi);
-        return resualt;
-    }
-
-    docsonguyen(so: any) {
-        var result = '';
-        if (so != undefined) {
-            //alert(so);
-            var arr_So: any = [{ ty: '' }, { trieu: '' }, { nghin: '' }, { tram: '' }];
-            var sochuso = so.length;
-            for (var i = sochuso - 1; i >= 0; i--) {
-                if (sochuso - i <= 3) {
-                    if (arr_So['tram'] != undefined) arr_So['tram'] = so.substr(i, 1) + arr_So['tram'];
-                    else arr_So['tram'] = so.substr(i, 1);
-                } else if (sochuso - i > 3 && sochuso - i <= 6) {
-                    if (arr_So['nghin'] != undefined) arr_So['nghin'] = so.substr(i, 1) + arr_So['nghin'];
-                    else arr_So['nghin'] = so.substr(i, 1);
-                } else if (sochuso - i > 6 && sochuso - i <= 9) {
-                    if (arr_So['trieu'] != undefined) arr_So['trieu'] = so.substr(i, 1) + arr_So['trieu'];
-                    else arr_So['trieu'] = so.substr(i, 1);
-                } else {
-                    if (arr_So.ty != undefined) arr_So.ty = so.substr(i, 1) + arr_So.ty;
-                    else arr_So.ty = so.substr(i, 1);
-                }
-                //console.log(arr_So);
-            }
-
-            if (arr_So['ty'] > 0) result += this.doc(arr_So['ty']) + ' tỷ';
-            if (arr_So['trieu'] > 0) {
-                if (arr_So['trieu'].length >= 3 || arr_So['ty'] > 0)
-                    result += ' ' + this.doc3so(arr_So['trieu']) + ' triệu';
-                else if (arr_So['trieu'].length >= 2) result += ' ' + this.doc2so(arr_So['trieu']) + ' triệu';
-                else result += ' ' + this.doc1so(arr_So['trieu']) + ' triệu';
-            }
-            if (arr_So['nghin'] > 0) {
-                if (arr_So['nghin'].length >= 3 || arr_So['trieu'] > 0)
-                    result += ' ' + this.doc3so(arr_So['nghin']) + ' nghìn';
-                else if (arr_So['nghin'].length >= 2) result += ' ' + this.doc2so(arr_So['nghin']) + ' nghìn';
-                else result += ' ' + this.doc1so(arr_So['nghin']) + ' nghìn';
-            }
-            if (arr_So['tram'] > 0) {
-                if (arr_So['tram'].length >= 3 || arr_So['nghin'] > 0) result += ' ' + this.doc3so(arr_So['tram']);
-                else if (arr_So['tram'].length >= 2) result += ' ' + this.doc2so(arr_So['tram']);
-                else result += ' ' + this.doc1so(arr_So['tram']);
-            }
-        }
-        return result;
-    }
-
-    doc(so: any) {
-        var kytuthapphan = ',';
-        var result = '';
-        if (so != undefined) {
-            so = ' ' + so + ' ';
-            so = so.trim();
-            var cautrucso = so.split(kytuthapphan);
-            if (cautrucso[0] != undefined) {
-                result += this.docsonguyen(cautrucso[0]);
-            }
-            if (cautrucso[1] != undefined) {
-                //alert(this.docsonguyen(cautrucso[1]));
-                result += ' phẩy ' + this.docsonguyen(cautrucso[1]);
-            }
-        }
-        return result;
     }
 }

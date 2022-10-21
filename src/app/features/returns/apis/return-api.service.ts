@@ -7,7 +7,7 @@ import { Return } from '../models/return';
 @Injectable({
     providedIn: 'root',
 })
-export class ReturnDetailsService {
+export class ReturnApiService {
     private endPoint = environment.API_URL + '/gw/PurchaseOrder';
     private EmployeeUrl = environment.ID_URL + '/gw/Employee';
     private returnUrl = environment.API_URL + '/gw/ReturnsOrder';
@@ -47,5 +47,9 @@ export class ReturnDetailsService {
             page: 1,
             keyword: '',
         });
+    }
+
+    getReturnById(id: string | null): Observable<any> {
+        return this.http.get<any>(this.returnUrl + '/id?Id=' + id);
     }
 }

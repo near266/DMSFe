@@ -112,7 +112,6 @@
                     </div>
                     <button
                         *ngIf="type === 'Edit'"
-                        [disabled]="true"
                         (click)="openDialogProduct()"
                         class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
                         <i class="fa-solid fa-filter mr-2 px-2"></i>
@@ -132,12 +131,23 @@
                         <span class="px-2">Nhập excel</span>
                     </button>
                     <div>
-                        <select
-                            class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium cursor-pointer">
-                            <option value="1" class="bg-white hover:bg-zinc-300">--Chọn kho mặc định--</option>
-                            <option value="2" class="bg-white hover:bg-zinc-300">Kho chính</option>
+                        <mat-select
+                            style="width: fit-content"
+                            (selectionChange)="setWareHouseToAllProduct($event.value)"
+                            [disabled]="type === 'View'"
+                            class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium cursor-pointer"
+                            [value]="0">
+                            <mat-option [value]="0" class="bg-white hover:bg-zinc-300">
+                                --Chọn kho mặc định--
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let warehouse of listWarehouse"
+                                [value]="warehouse.id"
+                                class="bg-white hover:bg-zinc-300">
+                                {{ warehouse.warehouseName }}
+                            </mat-option>
                             <option value="3" class="bg-white hover:bg-zinc-300">Hàng NanoFrance</option>
-                        </select>
+                        </mat-select>
                     </div>
                 </div>
             </div>
@@ -156,13 +166,14 @@
                             </th>
                             <th scope="col" class="custom-th">Đơn giá</th>
                             <th scope="col" class="custom-th">Thành tiền</th>
-                            <th scope="col" class="custom-th">Chiết khấu</th>
-                            <th scope="col" class="custom-th">Tỷ lệ CK</th>
+                            <th scope="col" class="custom-th">Chiết khấu (VNĐ)</th>
+                            <th scope="col" class="custom-th">Tỷ lệ CK (%)</th>
                             <th scope="col" class="custom-th">Ghi chú</th>
                             <th *ngIf="type === 'Edit'" scope="col" class="custom-th">Xóa</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- list available product -->
                         <tr *ngFor="let product of listProduct; index as i" class="custom-tr">
                             <td class="custom-th">{{ i + 1 }}</td>
                             <td class="custom-th">{{ product.product.sku }}</td>
@@ -201,15 +212,15 @@
                                 </mat-form-field>
                             </td>
                             <td class="custom-th">
-                                <div *ngIf="type === 'View'" class="py-2">{{ product.warehouse?.warehouseName }}</div>
+                                <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div>
                                 <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
                                     floatLabel="always"
                                     style="width: 100px">
                                     <mat-select
-                                        [value]="product.warehouse.id"
-                                        (selectionChange)="product.warehouse.id = $event.value">
+                                        [value]="product.warehouseId"
+                                        (selectionChange)="product.warehouseId = $event.value">
                                         <mat-option *ngFor="let warehouse of listWarehouse" [value]="warehouse.id">
                                             {{ warehouse.warehouseName }}
                                         </mat-option>
@@ -217,7 +228,7 @@
                                 </mat-form-field>
                             </td>
                             <td class="custom-th">
-                                <div *ngIf="type === 'View'" class="py-2">{{ product.quantity }}</div>
+                                <div *ngIf="type === 'View'">{{ product.quantity }}</div>
                                 <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
@@ -238,7 +249,9 @@
                             <td class="custom-th">{{ product.unitPrice | currency: 'VND':'symbol' }}</td>
                             <td class="custom-th">{{ product.totalPrice | currency: 'VND':'symbol' }}</td>
                             <td class="custom-th">
-                                <div *ngIf="type === 'View'" class="py-2">{{ product.discount }}</div>
+                                <div *ngIf="type === 'View'">
+                                    {{ product.discount | currency: 'VND':'symbol' }}
+                                </div>
                                 <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
@@ -253,7 +266,22 @@
                                         [ngModelOptions]="{ standalone: true }" />
                                 </mat-form-field>
                             </td>
-                            <td class="custom-th">{{ product.discountRate / 100 | percent }}</td>
+                            <td class="custom-th">
+                                <span *ngIf="type === 'View'">{{ product.discountRate / 100 | percent: '0.1' }}</span>
+                                <mat-form-field
+                                    *ngIf="type === 'Edit'"
+                                    appearance="outline"
+                                    style="width: 80px"
+                                    floatLabel="always">
+                                    <input
+                                        min="0"
+                                        type="number"
+                                        matInput
+                                        (input)="countDiscount(product)"
+                                        [(ngModel)]="product.discountRate"
+                                        [ngModelOptions]="{ standalone: true }" />
+                                </mat-form-field>
+                            </td>
                             <td class="custom-th">
                                 <div *ngIf="type === 'View'">
                                     {{ product.note }}
@@ -274,6 +302,136 @@
                                 *ngIf="type === 'Edit'"
                                 class="custom-th"
                                 (click)="stopPropagation($event); unChoose(product)">
+                                <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
+                            </td>
+                        </tr>
+                        <!-- list add product -->
+                        <tr *ngFor="let product of listProductAdd; index as i" class="custom-tr">
+                            <td class="custom-th">{{ i + 1 }}</td>
+                            <td class="custom-th">{{ product.product.sku }}</td>
+                            <td class="custom-th">{{ product.product.productName }}</td>
+                            <td class="custom-th">
+                                <span *ngIf="type === 'View'">
+                                    {{ product.unit.unitName }}
+                                </span>
+                                <mat-form-field
+                                    *ngIf="type === 'Edit'"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    style="width: 100px">
+                                    <mat-select [value]="product.unit.id">
+                                        <mat-option
+                                            (click)="
+                                                product.unitId = product?.product?.retailUnit?.id;
+                                                product.unitPrice = product.product.retailPrice;
+                                                product.totalPrice = product.quantity * product.unitPrice;
+                                                discountRate(product)
+                                            "
+                                            [value]="product?.product?.retailUnit?.id">
+                                            Lẻ - {{ product?.product?.retailUnit?.unitName || 'No Data' }}
+                                        </mat-option>
+                                        <mat-option
+                                            (click)="
+                                                product.unitId = product?.product?.wholeSaleUnit?.id;
+                                                product.unitPrice = product.product.price;
+                                                product.totalPrice = product.quantity * product.unitPrice;
+                                                discountRate(product)
+                                            "
+                                            [value]="product?.product?.wholeSaleUnit?.id">
+                                            Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                            <td class="custom-th">
+                                <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div>
+                                <mat-form-field
+                                    *ngIf="type === 'Edit'"
+                                    appearance="outline"
+                                    floatLabel="always"
+                                    style="width: 100px">
+                                    <mat-select
+                                        [value]="product.warehouseId"
+                                        (selectionChange)="product.warehouseId = $event.value">
+                                        <mat-option *ngFor="let warehouse of listWarehouse" [value]="warehouse.id">
+                                            {{ warehouse.warehouseName }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                            <td class="custom-th">
+                                <div *ngIf="type === 'View'">{{ product.quantity }}</div>
+                                <mat-form-field
+                                    *ngIf="type === 'Edit'"
+                                    appearance="outline"
+                                    style="width: 80px"
+                                    floatLabel="always">
+                                    <input
+                                        min="0"
+                                        type="number"
+                                        matInput
+                                        [(ngModel)]="product.quantity"
+                                        (input)="
+                                            product.totalPrice = product.quantity * product.unitPrice;
+                                            discountRate(product)
+                                        "
+                                        [ngModelOptions]="{ standalone: true }" />
+                                </mat-form-field>
+                            </td>
+                            <td class="custom-th">{{ product.unitPrice | currency: 'VND':'symbol' }}</td>
+                            <td class="custom-th">{{ product.totalPrice | currency: 'VND':'symbol' }}</td>
+                            <td class="custom-th">
+                                <div *ngIf="type === 'View'">{{ product.discount }}</div>
+                                <mat-form-field
+                                    *ngIf="type === 'Edit'"
+                                    appearance="outline"
+                                    style="width: 80px"
+                                    floatLabel="always">
+                                    <input
+                                        min="0"
+                                        type="number"
+                                        matInput
+                                        [(ngModel)]="product.discount"
+                                        (input)="discountRate(product)"
+                                        [ngModelOptions]="{ standalone: true }" />
+                                </mat-form-field>
+                            </td>
+                            <td class="custom-th">
+                                <span *ngIf="type === 'View'">{{ product.discountRate / 100 | percent }}</span>
+                                <mat-form-field
+                                    *ngIf="type === 'Edit'"
+                                    appearance="outline"
+                                    style="width: 80px"
+                                    floatLabel="always">
+                                    <input
+                                        min="0"
+                                        type="number"
+                                        matInput
+                                        (input)="countDiscount(product)"
+                                        [(ngModel)]="product.discountRate"
+                                        [ngModelOptions]="{ standalone: true }" />
+                                </mat-form-field>
+                            </td>
+                            <td class="custom-th">
+                                <div *ngIf="type === 'View'">
+                                    {{ product.note }}
+                                </div>
+                                <mat-form-field
+                                    *ngIf="type === 'Edit'"
+                                    appearance="outline"
+                                    style="width: 80px"
+                                    floatLabel="always">
+                                    <input
+                                        type="text"
+                                        matInput
+                                        [(ngModel)]="product.note"
+                                        [ngModelOptions]="{ standalone: true }" />
+                                </mat-form-field>
+                            </td>
+                            <td
+                                *ngIf="type === 'Edit'"
+                                class="custom-th"
+                                (click)="stopPropagation($event); unChooseFromListAdd(product)">
                                 <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
                             </td>
                         </tr>

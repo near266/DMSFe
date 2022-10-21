@@ -9,82 +9,54 @@ import { ProductListComponent } from 'src/app/features/orders-mgm/components/pro
 import { Subscription } from 'rxjs';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { statusList } from 'src/app/core/data/PurchaseOrderList';
-
+import { ReturnDetailsService } from '../../../services/return-details.service';
+import { readMoney } from 'src/app/core/shared/utils/readMoney';
+import { ComponentMode } from '../../../models/componentMode';
 
 @Component({
-  selector: 'app-detail-return',
-  templateUrl: './detail-return.component.html',
-  styleUrls: ['./detail-return.component.scss']
+    selector: 'app-detail-return',
+    templateUrl: './detail-return.component.html',
+    styleUrls: ['./detail-return.component.scss'],
 })
 export class DetailReturnComponent implements OnInit {
-
-  statusList = statusList;
+    statusList = statusList;
     statusNow!: number;
-    type: string = 'View';
+    ComponentModeList = ComponentMode;
     detailOrderForm!: FormGroup;
+    currentMode: ComponentMode;
     detailOrderFakeData: any = [];
+    totalPrice: number;
+    textMoney: string;
+    discountAmount: number;
     listProduct?: ListProduct[] = [];
     listPromotionProduct?: ListPromotionProduct[] = [];
     subscription: Subscription[] = [];
     id: string;
-    listGroup = [
-        {
-            groupId: '1',
-            groupName: 'FT2 - Đông Bắc - QL Tùng (Khu vực Đông Bắc)',
-        },
-        {
-            groupId: '2',
-            groupName: 'FT5 - Bắc Miền Trung - QL Trọng (Khu vực Bắc Miền Trung)',
-        },
-        {
-            groupId: '3',
-            groupName: 'FT7 - Miền Tây NB - QL Duy',
-        },
-    ];
-    listEmployee = [
-        {
-            employeeId: '1',
-            employeeName: 'Nguyễn Văn Tuấn',
-        },
-        {
-            employeeId: '2',
-            employeeName: 'Đặng Xuân Khu',
-        },
-        {
-            employeeId: '3',
-            employeeName: 'Hồ Tuấn Anh',
-        },
-    ];
-    listRoute = [
-        {
-            routeId: '1',
-            routeName: 'Nguyễn Văn Tuấn',
-        },
-        {
-            routeId: '2',
-            routeName: 'Đặng Xuân Khu',
-        },
-        {
-            routeId: '3',
-            routeName: 'Hồ Tuấn Anh',
-        },
-    ];
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
         private dataservice: DataService,
         private dialog: MatDialog,
         private saleReceipt: SaleReceiptService,
+        private returnDetailsService: ReturnDetailsService,
     ) {}
 
     ngOnInit(): void {
+        this.returnDetailsService.currentMode$.subscribe((mode) => {
+            this.currentMode = mode;
+        });
         // pass id to service
-        this.subscription.push(
-            this.activatedRoute.params.subscribe((params) => {
-                this.id = params['id'];
-                this.saleReceipt.passId(params['id']);
-            }),
-        );
+        this.returnDetailsService.totalPrice$.subscribe((data) => {
+            this.totalPrice = data;
+            const ins = new readMoney(data);
+            this.textMoney = ins.doc(data - this.discountAmount);
+        });
+        this.returnDetailsService.discountAmount$.subscribe((data) => {
+            this.discountAmount = data;
+            const ins = new readMoney(data);
+            this.textMoney = ins.doc(this.totalPrice - data);
+        });
         // create Form
         this.detailOrderForm = this.fb.group({
             saleReceiptCode: [''],
@@ -112,11 +84,7 @@ export class DetailReturnComponent implements OnInit {
             status: [''],
         });
         // get type (Edit or View) from parent Component
-        this.subscription.push(
-            this.dataservice.type.subscribe((data: any) => {
-                this.type = data;
-            }),
-        );
+
         // get isChangeStatus
         this.saleReceipt.msg.subscribe((data) => {
             if (data === 'Done') {
@@ -163,16 +131,7 @@ export class DetailReturnComponent implements OnInit {
         });
     }
 
-    ngAfterViewInit(): void {
-        this.subscription.push(
-            this.saleReceipt.id.subscribe((data) => {
-                this.id = data;
-                if (this.id) {
-                    this.getDetail();
-                }
-            }),
-        );
-    }
+    ngAfterViewInit(): void {}
 
     ngDoCheck(): void {}
 
@@ -189,5 +148,4 @@ export class DetailReturnComponent implements OnInit {
             panelClass: 'full-screen-modal',
         });
     }
-
 }

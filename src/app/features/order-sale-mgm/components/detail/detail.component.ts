@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { statusList } from 'src/app/core/data/PurchaseOrderList';
 import * as moment from 'moment';
+import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 
 @Component({
     selector: 'app-detail',
@@ -24,11 +25,15 @@ export class DetailComponent implements OnInit {
     detailOrder: any = [];
     id: string;
     subscription: Subscription[] = [];
+    isRemove = false;
 
     listProduct: any = [];
     listPromotionProduct?: ListPromotionProduct[] = [];
     listEmployee: any = [];
     listCustomer: any = [];
+    listProductAdd: any = [];
+    listProductRemove: any = [];
+
     listGroup = [
         {
             groupId: '1',
@@ -67,6 +72,7 @@ export class DetailComponent implements OnInit {
     textMoney: any;
 
     listChoosenProduct: any = [];
+    listWarehouse: any = [];
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -75,6 +81,7 @@ export class DetailComponent implements OnInit {
         private dialog: MatDialog,
         private saleReceipt: SaleReceiptService,
         private purchaseOrder: PurchaseOrderService,
+        private numberToText: NumberToTextService,
     ) {}
 
     ngOnInit(): void {
@@ -107,6 +114,8 @@ export class DetailComponent implements OnInit {
             totalPayment: [null],
             prePayment: [null],
             status: [null],
+            paymentTerm: [null],
+            debtRecord: [false],
         });
         // get type (Edit or View) from parent Component
         this.subscription.push(
@@ -124,47 +133,10 @@ export class DetailComponent implements OnInit {
         this.saleReceipt.isSucessUpdate.subscribe((data) => {
             if (data === 'Done') {
                 this.getDetail();
+                // nếu update thành công -> list AddProduct  = []
+                this.listProductAdd = [];
             }
         });
-    }
-
-    getDetail() {
-        this.saleReceipt.searchReceiptById(this.id).subscribe((data) => {
-            this.detailOrder = data;
-            console.log(data);
-            this.patchValue();
-            this.pushListProductToDialog();
-            // get all info payment
-            this.totalAmount = this.detailOrder.totalAmount;
-            this.totalDiscountProduct = this.detailOrder.totalDiscountProduct;
-            this.tradeDiscount = this.detailOrder.tradeDiscount;
-            this.totalPayment = this.detailOrder.totalPayment;
-            this.prePayment = this.detailOrder.prePayment;
-            this.textMoney = this.doc(this.totalPayment);
-        });
-    }
-
-    patchValue() {
-        this.detailOrderForm.patchValue({
-            saleReceiptCode: this.detailOrder.saleCode,
-            orderDate: this.detailOrder.orderDate,
-            saleDate: this.detailOrder.saleDate,
-            deliveryDate: this.detailOrder.deliveryDate,
-            group: this.detailOrder.group?.groupId,
-            orderEmployee: this.detailOrder.orderEmployee?.id,
-            saleEmployee: this.detailOrder.saleEmployee?.id,
-            route: this.detailOrder.route?.routeId,
-            customer: {
-                code: this.detailOrder?.customer.id,
-                phone: this.detailOrder.phone,
-                address: this.detailOrder.address,
-                name: this.detailOrder.customerName,
-            },
-            description: this.detailOrder.description,
-            status: this.detailOrder.status,
-        });
-        this.listProduct = this.detailOrder.listProduct;
-        this.listPromotionProduct = this.detailOrder.listPromotionProduct;
     }
 
     ngOnDestroy(): void {
@@ -177,6 +149,7 @@ export class DetailComponent implements OnInit {
         this.getDetail();
         this.getListCustomer();
         this.getListEmployee();
+        this.getListWareHouse();
     }
 
     ngDoCheck(): void {
@@ -200,13 +173,164 @@ export class DetailComponent implements OnInit {
             purchaseOrderId: this.detailOrder?.purchaseOrder?.id, // ?
             deliveryDate: moment(this.detailOrderForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
             saleDate: moment(this.detailOrderForm.get('saleDate')?.value).format('YYYY-MM-DD'),
-            paymentTerm: '2022-10-04T00:00:00',
+            paymentTerm: moment(this.detailOrderForm.get('paymentTerm')?.value).format('YYYY-MM-DD'),
             totalAmount: this.totalAmount,
             totalOfVAT: this.totalOfVAT,
             totalDiscountProduct: this.totalDiscountProduct,
             tradeDiscount: this.tradeDiscount,
             totalPayment: this.totalPayment,
             prePayment: this.prePayment,
+            debtRecord: this.detailOrderForm.get('debtRecord')?.value,
+        });
+        // send body update product
+        this.saleReceipt.sendProductUpdate(this.getProductListUpdate());
+        // send body add product
+        this.saleReceipt.sendProductAdd(this.getProductListAdd());
+        // count totalAmount (Tổng tiền hàng)
+        this.countTotalAmount();
+        // count totalDiscountProduct (Chiết khấu sản phẩm)
+        this.countTotalDiscountProduct();
+        // count totalPayment
+        this.countTotalPayment();
+        // number to text
+        this.textMoney = this.numberToText.doc(this.totalPayment);
+    }
+
+    countTotalAmount() {
+        this.totalAmount = 0;
+        let tt1 = 0;
+        let tt2 = 0;
+        // list sản phẩm có sẵn (update)
+        this.getProductListUpdate().forEach((product: any) => {
+            if (product.totalPrice) {
+                tt1 += product.totalPrice;
+            }
+        });
+        // list sản phẩm thêm vào
+        this.listProductAdd.forEach((product: any) => {
+            if (product.totalPrice) {
+                tt2 += product.totalPrice;
+            }
+        });
+        this.totalAmount = tt1 + tt2;
+    }
+
+    countTotalDiscountProduct() {
+        this.totalDiscountProduct = 0;
+        let tt1 = 0;
+        let tt2 = 0;
+        // list sản phẩm có sẵn (update)
+        this.getProductListUpdate().forEach((product: any) => {
+            if (product.discount) {
+                tt1 += product.discount;
+            }
+        });
+        // list sản phẩm thêm vào
+        this.listProductAdd.forEach((product: any) => {
+            if (product.discount) {
+                tt2 += product.discount;
+            }
+        });
+        this.totalDiscountProduct = tt1 + tt2;
+    }
+
+    countTotalPayment() {
+        this.totalPayment = 0;
+        if (this.totalAmount) {
+            this.totalPayment = this.totalAmount - this.tradeDiscount - this.totalDiscountProduct;
+        }
+    }
+
+    getProductListAdd() {
+        let listProductAdd = this.listProductAdd.map((product: any) => {
+            return {
+                saleRecieptId: this.id,
+                productId: product?.product?.id,
+                // productName: product.product.productName,
+                unitId: product.unit.id,
+                warehouseId: product.warehouseId,
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount || 0,
+                discountRate: product.discountRate || 0,
+                note: product.note,
+                type: product.type,
+            };
+        });
+        console.log(listProductAdd);
+        return listProductAdd;
+    }
+
+    discountRate(product: any) {
+        if (product.totalPrice) {
+            product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
+        }
+    }
+
+    countDiscount(product: any) {
+        console.log(1);
+        if (product.totalPrice) {
+            product.discount = (product.discountRate / 100) * product.totalPrice;
+        }
+    }
+
+    unChoose(productRemove: any) {
+        // send to service
+        this.listProductRemove.push(productRemove.product.id);
+        this.isRemove = true;
+        this.saleReceipt.sendProductRemove({
+            isRemove: this.isRemove,
+            list: this.listProductRemove,
+        });
+        // remove to list product
+        this.listProduct = this.listProduct.filter((product: any) => {
+            return productRemove.product.id != product?.product?.id;
+        });
+    }
+
+    getDetail() {
+        this.saleReceipt.searchReceiptById(this.id).subscribe((data) => {
+            this.detailOrder = data;
+            console.log(data);
+            this.patchValue();
+            this.pushListProductToDialog();
+            // get all info payment
+            this.totalAmount = this.detailOrder.totalAmount;
+            this.totalDiscountProduct = this.detailOrder.totalDiscountProduct;
+            this.tradeDiscount = this.detailOrder.tradeDiscount;
+            this.totalPayment = this.detailOrder.totalPayment;
+            this.prePayment = this.detailOrder.prePayment;
+            this.textMoney = this.numberToText.doc(this.totalPayment);
+        });
+    }
+
+    patchValue() {
+        this.detailOrderForm.patchValue({
+            saleReceiptCode: this.detailOrder.saleCode,
+            orderDate: this.detailOrder.orderDate,
+            saleDate: this.detailOrder.saleDate,
+            deliveryDate: this.detailOrder.deliveryDate,
+            group: this.detailOrder.group?.groupId,
+            orderEmployee: this.detailOrder.orderEmployee?.id,
+            saleEmployee: this.detailOrder.saleEmployee?.id,
+            route: this.detailOrder.route?.routeId,
+            customer: {
+                code: this.detailOrder.customer?.id,
+                phone: this.detailOrder.phone,
+                address: this.detailOrder.address,
+                name: this.detailOrder.customerName,
+            },
+            description: this.detailOrder.description,
+            status: this.detailOrder.status,
+            paymentTerm: this.detailOrder.paymentTerm,
+            debtRecord: this.detailOrder.debtRecord,
+        });
+        this.listProduct = this.detailOrder.listProduct;
+        this.listPromotionProduct = this.detailOrder.listPromotionProduct;
+        // loop to map warehouseId
+        this.listProduct.forEach((product: any) => {
+            product.warehouseId = product.warehouse?.id;
         });
     }
 
@@ -223,8 +347,56 @@ export class DetailComponent implements OnInit {
         });
     }
 
+    getListWareHouse() {
+        this.subscription.push(
+            this.purchaseOrder.getAllWarehouses().subscribe((data) => {
+                this.listWarehouse = data;
+            }),
+        );
+    }
+
+    getProductListUpdate() {
+        // console.log(this.listProduct);
+        let listProductToSent = this.listProduct.map((product: any) => {
+            return {
+                saleRecieptId: this.id,
+                productId: product?.product?.id,
+                // productName: product.product.productName,
+                unitId: product.unit.id,
+                warehouseId: product.warehouseId,
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount || 0,
+                discountRate: product.discountRate || 0,
+                note: product.note,
+                type: product.type,
+            };
+        });
+        console.log(listProductToSent);
+        return listProductToSent;
+    }
+
     stopPropagation(e: any) {
         e.stopPropagation();
+    }
+
+    setWareHouseToAllProduct(value: any) {
+        if (value != 0) {
+            this.listProduct.forEach((product: any) => {
+                product.warehouseId = value;
+            });
+            this.listProductAdd.forEach((product: any) => {
+                product.warehouseId = value;
+            });
+        }
+    }
+
+    unChooseFromListAdd(productRemove: any) {
+        // remove from list add
+        this.listProductAdd = this.listProductAdd.filter((product: any) => {
+            return productRemove.product.id != product?.product?.id;
+        });
     }
 
     pushListProductToDialog() {
@@ -248,115 +420,70 @@ export class DetailComponent implements OnInit {
                 listProd: this.detailOrder.listProduct,
             },
         });
-    }
-
-    // number to text
-    doc1so(so: any) {
-        var arr_chuhangdonvi = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var resualt = '';
-        resualt = arr_chuhangdonvi[so];
-        return resualt;
-    }
-
-    doc2so(so: any) {
-        so = so.replace(' ', '');
-        var arr_chubinhthuong = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var arr_chuhangdonvi = ['mươi', 'mốt', 'hai', 'ba', 'bốn', 'lăm', 'sáu', 'bảy', 'tám', 'chín'];
-        var arr_chuhangchuc = [
-            '',
-            'mười',
-            'hai mươi',
-            'ba mươi',
-            'bốn mươi',
-            'năm mươi',
-            'sáu mươi',
-            'bảy mươi',
-            'tám mươi',
-            'chín mươi',
-        ];
-        var resualt = '';
-        var sohangchuc = so.substr(0, 1);
-        var sohangdonvi = so.substr(1, 1);
-        resualt += arr_chuhangchuc[sohangchuc];
-        if (sohangchuc == 1 && sohangdonvi == 1) resualt += ' ' + arr_chubinhthuong[sohangdonvi];
-        else if (sohangchuc == 1 && sohangdonvi > 1) resualt += ' ' + arr_chuhangdonvi[sohangdonvi];
-        else if (sohangchuc > 1 && sohangdonvi > 0) resualt += ' ' + arr_chuhangdonvi[sohangdonvi];
-
-        return resualt;
-    }
-
-    doc3so(so: any) {
-        var resualt = '';
-        var arr_chubinhthuong = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var sohangtram = so.substr(0, 1);
-        var sohangchuc = so.substr(1, 1);
-        var sohangdonvi = so.substr(2, 1);
-        resualt = arr_chubinhthuong[sohangtram] + ' trăm';
-        if (sohangchuc == 0 && sohangdonvi != 0) resualt += ' linh ' + arr_chubinhthuong[sohangdonvi];
-        else if (sohangchuc != 0) resualt += ' ' + this.doc2so(sohangchuc + ' ' + sohangdonvi);
-        return resualt;
-    }
-
-    docsonguyen(so: any) {
-        var result = '';
-        if (so != undefined) {
-            //alert(so);
-            var arr_So: any = [{ ty: '' }, { trieu: '' }, { nghin: '' }, { tram: '' }];
-            var sochuso = so.length;
-            for (var i = sochuso - 1; i >= 0; i--) {
-                if (sochuso - i <= 3) {
-                    if (arr_So['tram'] != undefined) arr_So['tram'] = so.substr(i, 1) + arr_So['tram'];
-                    else arr_So['tram'] = so.substr(i, 1);
-                } else if (sochuso - i > 3 && sochuso - i <= 6) {
-                    if (arr_So['nghin'] != undefined) arr_So['nghin'] = so.substr(i, 1) + arr_So['nghin'];
-                    else arr_So['nghin'] = so.substr(i, 1);
-                } else if (sochuso - i > 6 && sochuso - i <= 9) {
-                    if (arr_So['trieu'] != undefined) arr_So['trieu'] = so.substr(i, 1) + arr_So['trieu'];
-                    else arr_So['trieu'] = so.substr(i, 1);
-                } else {
-                    if (arr_So.ty != undefined) arr_So.ty = so.substr(i, 1) + arr_So.ty;
-                    else arr_So.ty = so.substr(i, 1);
+        dialogRef.afterClosed().subscribe((data) => {
+            if (!data.isCancel) {
+                // this.listChoosenProduct = data;
+                // this.listProduct = this.listChoosenProduct;
+                if (this.formatFormProduct(data)) {
+                    let listAdd = this.listAddProduct(this.formatFormProduct(data));
+                    this.listProductAdd = [];
+                    this.listProductAdd = listAdd;
+                    console.log(listAdd);
+                    // listAdd.forEach((product: any) => {
+                    //     this.listProduct.push(product);
+                    // });
                 }
-                //console.log(arr_So);
             }
-
-            if (arr_So['ty'] > 0) result += this.doc(arr_So['ty']) + ' tỷ';
-            if (arr_So['trieu'] > 0) {
-                if (arr_So['trieu'].length >= 3 || arr_So['ty'] > 0)
-                    result += ' ' + this.doc3so(arr_So['trieu']) + ' triệu';
-                else if (arr_So['trieu'].length >= 2) result += ' ' + this.doc2so(arr_So['trieu']) + ' triệu';
-                else result += ' ' + this.doc1so(arr_So['trieu']) + ' triệu';
-            }
-            if (arr_So['nghin'] > 0) {
-                if (arr_So['nghin'].length >= 3 || arr_So['trieu'] > 0)
-                    result += ' ' + this.doc3so(arr_So['nghin']) + ' nghìn';
-                else if (arr_So['nghin'].length >= 2) result += ' ' + this.doc2so(arr_So['nghin']) + ' nghìn';
-                else result += ' ' + this.doc1so(arr_So['nghin']) + ' nghìn';
-            }
-            if (arr_So['tram'] > 0) {
-                if (arr_So['tram'].length >= 3 || arr_So['nghin'] > 0) result += ' ' + this.doc3so(arr_So['tram']);
-                else if (arr_So['tram'].length >= 2) result += ' ' + this.doc2so(arr_So['tram']);
-                else result += ' ' + this.doc1so(arr_So['tram']);
-            }
-        }
-        return result;
+        });
     }
 
-    doc(so: any) {
-        var kytuthapphan = ',';
-        var result = '';
-        if (so != undefined) {
-            so = ' ' + so + ' ';
-            so = so.trim();
-            var cautrucso = so.split(kytuthapphan);
-            if (cautrucso[0] != undefined) {
-                result += this.docsonguyen(cautrucso[0]);
-            }
-            if (cautrucso[1] != undefined) {
-                //alert(this.docsonguyen(cautrucso[1]));
-                result += ' phẩy ' + this.docsonguyen(cautrucso[1]);
-            }
+    // format form add product to view Detail
+    formatFormProduct(data: any) {
+        if (data.length > 0) {
+            let List = data.map((product: any) => {
+                return {
+                    product: {
+                        id: product.id,
+                        sku: product.sku,
+                        productName: product.productName,
+                        retailPrice: product.retailPrice,
+                        price: product.price,
+                        vat: product.vat,
+                        warehouseId: product?.warehouse?.id,
+                        retailUnit: product.retailUnit,
+                        wholeSaleUnit: product.wholeSaleUnit,
+                    },
+                    unit: {
+                        id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
+                        unitCode: product?.retailUnit?.unitCode,
+                        unitName: product?.retailUnit?.unitName,
+                    },
+                    warehouseId: product?.warehouse?.id,
+                    unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
+                    quantity: 0,
+                    totalPrice: 0,
+                    discount: 0,
+                    discountRate: 0,
+                    note: null,
+                    type: 1,
+                };
+            });
+            return List;
         }
-        return result;
+    }
+
+    // loop to reduce available product
+    listAddProduct(list: any) {
+        let listAddProduct = [];
+        console.log(this.listProduct.length, list.length);
+        if (list && this.listProduct) {
+            let listAvailbleIds = this.listProduct.map((product: any) => {
+                return product?.product?.id;
+            });
+            listAddProduct = list.filter((product: any) => {
+                return !listAvailbleIds.includes(product.product.id);
+            });
+        }
+        return listAddProduct;
     }
 }

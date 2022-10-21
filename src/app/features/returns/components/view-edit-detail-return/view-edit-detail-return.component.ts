@@ -1,72 +1,73 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { map, Subscription } from 'rxjs';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { map, Subscription, switchMap } from 'rxjs';
+import { ActivatedRoute, NavigationExtras, ParamMap, Router } from '@angular/router';
 import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ConfirmDialogComponent } from 'src/app/core/shared/components/confirm-dialog/confirm-dialog.component';
 import { ConfirmRejectComponent } from 'src/app/features/orders-mgm/components/confirm-reject/confirm-reject.component';
 import { GenOrderSaleComponent } from 'src/app/features/orders-mgm/components/gen-order-sale/gen-order-sale.component';
-import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { GenReturnOrderComponent } from 'src/app/features/order-sale-mgm/components/gen-return-order/gen-return-order.component';
+import { ReturnDetailsService } from '../../services/return-details.service';
+import { HttpParams } from '@angular/common/http';
+import { ComponentMode } from '../../models/componentMode';
+import { Status } from '../../models/return';
 
 @Component({
-  selector: 'app-view-edit-detail-return',
-  templateUrl: './view-edit-detail-return.component.html',
-  styleUrls: ['./view-edit-detail-return.component.scss']
+    selector: 'app-view-edit-detail-return',
+    templateUrl: './view-edit-detail-return.component.html',
+    styleUrls: ['./view-edit-detail-return.component.scss'],
 })
 export class ViewEditDetailReturnComponent implements OnInit {
-
-  type!: string;
-    statusNow!: number;
+    type!: ComponentMode;
+    status: Status;
+    StatusList = Status;
     id!: string;
     subscription: Subscription[] = [];
+    ComponentMode = ComponentMode;
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
         private dataService: DataService,
         private snackbar: SnackbarService,
         private dialog: MatDialog,
-        private saleReceipt: SaleReceiptService,
+        private returnDetailsService: ReturnDetailsService,
         private purchaseOrder: PurchaseOrderService,
     ) {}
 
     ngOnInit(): void {
-        this.type = 'View';
-        this.changeType('View');
-    }
-
-    ngAfterViewInit(): void {
-        // get id
-        setTimeout(() => {
-            this.subscription.push(
-                this.saleReceipt.id.subscribe((data) => {
-                    this.id = data;
-                    if (this.id) {
-                        this.getDetail();
-                    }
+        this.activatedRoute.paramMap
+            .pipe(
+                switchMap((params: ParamMap) => {
+                    const id = params.get('id');
+                    return this.returnDetailsService.getReturnById(id);
                 }),
-            );
-        }, 0);
+            )
+            .subscribe((data) => {
+                console.log(data);
+                this.status = data.status;
+            });
+        this.returnDetailsService.currentMode$.subscribe((_) => {
+            this.type = _;
+        });
     }
 
     ngOnDestroy(): void {
         this.subscription.forEach((service) => service.unsubscribe());
     }
 
-    getDetail() {
-        this.saleReceipt.searchById(this.id).subscribe((data) => {
-            this.statusNow = data.status;
-            console.log(this.statusNow);
-        });
+    closeAndReset() {
+        this.returnDetailsService.currentMode$.next(ComponentMode.VIEW);
+        this.returnDetailsService.returnDetails$.next({});
+        this.returnDetailsService.returnListProducts$.next([]);
+        this.router.navigate(['/returns']);
     }
 
     ngDoCheck(): void {}
 
-    changeType(type: any) {
-        this.type = type;
-        this.dataService.changeType(this.type);
+    toggleEditMode(_: boolean) {
+        this.returnDetailsService.currentMode$.next(_ ? ComponentMode.EDIT : ComponentMode.VIEW);
     }
 
     updateOrder(changeTo: number) {
@@ -92,16 +93,6 @@ export class ViewEditDetailReturnComponent implements OnInit {
         }
         // Ấn vào nút xuất hàng
         else if (changeTo === 4) {
-            this.saleReceipt.updateOrder(this.id, body).subscribe(
-                (data) => {},
-                (err) => {
-                    this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
-                },
-                () => {
-                    this.snackbar.openSnackbar('Xuất hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
-                    this.getDetail();
-                },
-            );
         }
         // Khi ấn vào nút hủy
         // else if(changeTo === 7 ) {
