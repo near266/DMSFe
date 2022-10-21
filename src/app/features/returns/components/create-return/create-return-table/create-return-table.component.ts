@@ -38,17 +38,27 @@ export class CreateReturnTableComponent implements OnInit {
             const res = data.map((item: any) => {
                 return {
                     ...item,
+                    vat: item?.vat,
+                    sku: item.sku,
+                    productName: item.productName,
+                    productId: item.id,
                     warehouseId: item.warehouse?.id || null,
-                    retailUnitId: item.retailUnit?.id || null,
+                    unitId: item.retailUnit?.id || null,
                     quantity: 0,
                     discount: 0,
                     unitPrice: item.retailPrice,
                     totalPrice: 0,
+                    discountRate: 0,
                     note: null,
+                    type: 1,
+                    salesQuantity: 0,
+                    exportQuantity: 0,
+                    returnsQuantity: 0,
                 };
             });
 
             this.productsInput = res;
+            console.log(res);
         });
         this.productDialogService.getAllUnits().subscribe((data) => {
             this.unitOptions = data;

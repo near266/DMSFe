@@ -21,13 +21,14 @@ export class UserManageComponent implements OnInit {
         private dataService: DataService,
     ) { }
 
-    pageSizeList = [30, 50, 100, 200, 500]
-    pageSize = 30
-    page = 1
-    totalPage: number
-    totalCount: number
-
-    dia?: any
+    pageSizeList = [30, 50, 100, 200, 500];
+    pageSize = 30;
+    page = 1;
+    totalPage: number;
+    totalCount: number;
+    api  = '';
+    groupId = '';
+    dia?: any;
 
     AddUser() {
         this.dia = this.dialog.open(AddUserComponent, {
@@ -44,6 +45,28 @@ export class UserManageComponent implements OnInit {
                 status: 'view',
             },
         });
+    }
+
+    searchUser(event: any) {
+      console.log(event);
+      this.employeeService.SearchEmployeeInGroup(event, 1, 1000).subscribe( data => {
+        if(data) {
+          this.page = 1;
+          console.log(data);
+          this.totalCount = data.totalCount;
+            if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
+                this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
+            }
+            else {
+                this.totalPage = Math.round(this.totalCount / this.pageSize)
+            }
+            this.users = []
+            data.data.forEach((element: any) => {
+                this.users.push(element.employee);
+            });
+        }
+
+      });
     }
 
     closeSideBar() {
@@ -232,7 +255,8 @@ export class UserManageComponent implements OnInit {
     }
 
     ChangePage(e: any) {
-        this.page = e
+        this.page = e;
+
     }
 
     ChangePageSize() {

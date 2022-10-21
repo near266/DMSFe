@@ -3,7 +3,7 @@
   <mat-tab-group>
     <!-- Sản phẩm đặt hàng -->
     <mat-tab label="Sản phẩm đặt hàng">
-      <div class="flex items-center">
+      <!-- <div class="flex items-center">
         <div class="flex items-center">
           <label for="simple-search" class="sr-only">Search</label>
           <div class="relative w-full">
@@ -28,7 +28,7 @@
           <i class="h-full fa-solid fa-bookmark mr-2 px-2"></i>
           <span class="px-2">Khuyến mại</span>
         </button>
-      </div>
+      </div> -->
       <app-detail-return-table-edit *ngIf="currentMode === ComponentModeList.EDIT"></app-detail-return-table-edit>
       <app-detail-return-table *ngIf="currentMode === ComponentModeList.VIEW"></app-detail-return-table>
     </mat-tab>
