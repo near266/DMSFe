@@ -125,10 +125,9 @@ export class UserTreeViewComponent implements OnInit {
     }
 
     updateNode(node: any) {
-      let newNodes: any;
+      let newNode = this.tree.treeModel.getNodeById(node.data.id);
       this.array_index.forEach(e => {
         if(node.data.id == e.id) {
-          // console.log(e.children);
           e.children = [];
           this.employeeService.SearchEmployeeInGroup(node.data.id, 1, 1000).subscribe((response: Response<any>) => {
             let res = response;
@@ -143,8 +142,8 @@ export class UserTreeViewComponent implements OnInit {
                 hasChildren: false
               });
             });
-            newNodes = e.children.map((c: any) => Object.assign({}, c));
-            this.tree.treeModel.update();
+            newNode.data.children = e.children;
+            newNode.treeModel.update();
           });
 
         }
@@ -223,8 +222,9 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          this.updateNode(node);
-
+          if(node.data.children) {
+            this.updateNode(node);
+          }
         }
       });
     }
@@ -237,8 +237,9 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          this.updateNode(node);
-
+          if(node.data.children) {
+            this.updateNode(node);
+          }
         }
       });
     }
@@ -251,8 +252,9 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          this.updateNode(node);
-
+          if(node.data.children) {
+            this.updateNode(node);
+          }
         }
       });
     }
@@ -265,8 +267,9 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          this.updateNode(node);
-
+          if(node.data.children) {
+            this.updateNode(node);
+          }
         }
       });
     }
@@ -279,15 +282,16 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          this.updateNode(node);
-
+          if(node.data.children) {
+            this.updateNode(node);
+          }
         }
       });
     }
 
     menuBar(keyword: string, node: any) {
       // if(node)
-      console.log(node);
+
 
       switch(keyword) {
         case 'Thêm quản lý': {
