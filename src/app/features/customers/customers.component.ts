@@ -33,6 +33,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   district = '';
   ward = '';
   request: any;
+  current_page = 1;
 
   page = 1;
   pageSize = 30;
@@ -292,6 +293,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       page: page,
       pageSize: pageSize,
     };
+    this.current_page = page;
     this.customerService.search(body).subscribe(
         (data) => {
             this.response = data;
