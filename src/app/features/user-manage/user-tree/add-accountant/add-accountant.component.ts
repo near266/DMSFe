@@ -23,12 +23,13 @@ export interface Body {
 export class AddAccountantComponent implements OnInit {
 
   page = 1;
-  pageSize = 9;
+  pageSize = 6;
   totalPage = 0;
   response: Response<any> = {
     data: [],
     totalCount: 0
   };
+  current_page = 1;
 
   userList: Response<any> = {
     data: [],
@@ -83,6 +84,7 @@ export class AddAccountantComponent implements OnInit {
 
   paging(page: number, pageSize: number) {
     this.page = page;
+    this.current_page = page;
     if (!this.pages[page]) {
       this.employeeService.GetAllEmployeeByTitle('Kế toán', page, pageSize).subscribe(data => {
         if(data) {

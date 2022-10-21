@@ -48,25 +48,40 @@ export class UserManageComponent implements OnInit {
     }
 
     searchUser(event: any) {
-      console.log(event);
-      this.employeeService.SearchEmployeeInGroup(event, 1, 1000).subscribe( data => {
-        if(data) {
-          this.page = 1;
-          console.log(data);
-          this.totalCount = data.totalCount;
-            if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
-                this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
-            }
-            else {
-                this.totalPage = Math.round(this.totalCount / this.pageSize)
-            }
-            this.users = []
-            data.data.forEach((element: any) => {
-                this.users.push(element.employee);
-            });
-        }
-
-      });
+      if (event != 'root') {
+        this.employeeService.SearchEmployeeInGroup(event, 1, 1000).subscribe( data => {
+          if(data) {
+            this.page = 1;
+            console.log(data);
+            this.totalCount = data.totalCount;
+              if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
+                  this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
+              }
+              else {
+                  this.totalPage = Math.round(this.totalCount / this.pageSize)
+              }
+              this.users = []
+              data.data.forEach((element: any) => {
+                  this.users.push(element.employee);
+              });
+          }
+        });
+      } else {
+          let sub = this.employeeService.GetAllEmployee(1, this.pageSize).subscribe(data => {
+          this.totalCount = data.totalCount
+          if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
+              this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
+          }
+          else {
+              this.totalPage = Math.round(this.totalCount / this.pageSize)
+          }
+          this.users = []
+          data.data.forEach((element: any) => {
+              this.users.push(element)
+          });
+          sub.unsubscribe()
+      })
+      }
     }
 
     closeSideBar() {

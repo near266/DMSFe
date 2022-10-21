@@ -30,6 +30,9 @@ export class EmployeeService {
     UpdateEmployee(body: any): Observable<any> {
         return this.http.put(gateway_url + '/Employee/UpdateEmployee', body).pipe(map((response: any) => response));
     }
+    UpdateUser(body: any): Observable<any> {
+      return this.http.put(api_url + '/admin/Users?id=' + body.id, body).pipe(map((response: any) => response));
+  }
 
     DeleteEmployee(id: any): Observable<any> {
         return this.http

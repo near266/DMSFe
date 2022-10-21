@@ -38,7 +38,7 @@ export class UserTreeViewComponent implements OnInit {
     ];
 
     array_index: any[] = [];
-
+    node_expand = '';
     settings: any = {};
     total: number;
     constructor(private employeeService: EmployeeService, private dialog: MatDialog) {}
@@ -70,13 +70,27 @@ export class UserTreeViewComponent implements OnInit {
           this.action = {
             mouse: {
               contextMenu: (tree, node, $event) => {
+                if(node.treeModel.getNodeById(this.node_expand)) {
+                  let n = node.treeModel.getNodeById(this.node_expand);
+                  n.data.expand = false;
+                  n.treeModel.update();
+                }
                 node.data.expand = !node.data.expand;
+                this.node_expand = node.data.id;
               },
               click: (tree, node, $event) => {
-                node.data.expand = false;
-                if(node.data.type != 2) {
+                if(node.data.type != 2 && node.data.expand == false) {
                   this.newItemEvent.emit(node.data.id);
+                  node.data.expand = false;
+                } else {
+                  node.data.expand = false;
                 }
+                if(node.treeModel.getNodeById(this.node_expand)) {
+                  let n = node.treeModel.getNodeById(this.node_expand);
+                  n.data.expand = false;
+                  n.treeModel.update();
+                }
+                this.node_expand = node.data.id;
               }
             },
           };

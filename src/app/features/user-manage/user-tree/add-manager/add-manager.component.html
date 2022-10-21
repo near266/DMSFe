@@ -1,5 +1,5 @@
 
-<div class="relative w-full h-full">
+<div class="relative p-[24px] w-full h-full">
   <div class="w-full flex justify-between">
     <div class="flex flex-col justify-center">
       <span class="text-lg text-[#888] font-medium italic">Thêm quản lý</span>
@@ -62,7 +62,9 @@
       <select class="bg-white px-3 py-1 border border-solid border-gray-500 rounded-sm">
           <option>{{pageSize}} bản ghi/trang</option>
       </select>
-      <div *ngFor="let p of pageList" class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer" (click)="paging(p, pageSize)">{{p}}</div>
+      <i *ngIf="current_page > 1" class="fa-solid fa-backward mx-1" (click)="paging(current_page-1, pageSize)"></i>
+      <div class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer">{{current_page}}</div>
+      <i *ngIf="current_page < totalPage" class="fa-solid fa-forward mx-1" (click)="paging(current_page+1, pageSize)"></i>
 
       <span>Hiển thị 1 - {{totalPage}} trên tổng số {{totalPage}} bản ghi</span>
     </div>

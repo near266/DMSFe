@@ -23,13 +23,13 @@ export interface Body {
 export class AddManagerComponent implements OnInit, AfterViewInit {
 
   page = 1;
-  pageSize = 9;
+  pageSize = 6;
   totalPage = 0;
   response: Response<any> = {
     data: [],
     totalCount: 0
   };
-
+  current_page = 1;
   userList: Response<any> = {
     data: [],
     totalCount: 0
@@ -83,6 +83,7 @@ export class AddManagerComponent implements OnInit, AfterViewInit {
 
   paging(page: number, pageSize: number) {
     this.page = page;
+    this.current_page = page;
     if (!this.pages[page]) {
       this.employeeService.GetAllEmployeeByManager(page, pageSize).subscribe(data => {
         if(data) {
