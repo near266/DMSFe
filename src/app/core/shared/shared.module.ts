@@ -5,6 +5,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
@@ -51,6 +52,7 @@ import { EzPaginationComponent } from './components/ez-pagination/ez-pagination.
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 @NgModule({
@@ -119,6 +121,8 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
         MenuBarComponent,
         MatSelectModule,
         MatSliderModule,
+        CurrencyMaskModule,
+
         MatSlideToggleModule,
         MatMenuModule,
         MatSidenavModule,

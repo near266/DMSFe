@@ -74,7 +74,9 @@
           <div class="flex">
             <mat-form-field appearance="outline">
 
-              <input matInput type="number" [(ngModel)]="item.salesQuantity" (change)="updateItemTotalPrice(item)" />
+              <input matInput currencyMask
+                [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                [ngModel]="item.salesQuantity" (ngModelChange)="item.salesQuantity=$event" />
             </mat-form-field>
 
           </div>
@@ -84,7 +86,10 @@
         <td class="border-x max-w-[100px]  border-solid align-middle px-2 text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-              <input matInput type="number" [(ngModel)]="item.returnsQuantity" (change)="updateDiscountRate(item)" />
+              <input matInput currencyMask
+                [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                [ngModel]="item.returnsQuantity"
+                (ngModelChange)="item.returnsQuantity=$event;updateItemTotalPrice(item)" />
             </mat-form-field>
 
           </div>
@@ -98,7 +103,9 @@
 
           <div class="flex">
             <mat-form-field appearance="outline">
-              <input matInput type="number" [(ngModel)]="item.discount" (change)="updateDiscountRate(item)" />
+              <input matInput currencyMask
+                [options]="{ suffix: 'đ', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                [ngModel]="item.discount" (ngModelChange)="item.discount=$event;updateDiscountRate(item)" />
             </mat-form-field>
           </div>
         </td>

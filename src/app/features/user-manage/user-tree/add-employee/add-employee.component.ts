@@ -23,7 +23,7 @@ export interface Body {
 export class AddEmployeeComponent implements OnInit, AfterViewInit {
 
   page = 1;
-  pageSize = 9;
+  pageSize = 6;
   totalPage = 0;
   response: Response<any> = {
     data: [],
@@ -34,6 +34,7 @@ export class AddEmployeeComponent implements OnInit, AfterViewInit {
     data: [],
     totalCount: 0
   };
+  current_page = 1;
 
   pages: Page[] = [];
 
@@ -83,6 +84,7 @@ export class AddEmployeeComponent implements OnInit, AfterViewInit {
 
   paging(page: number, pageSize: number) {
     this.page = page;
+    this.current_page = page;
     if (!this.pages[page]) {
       this.employeeService.GetAllEmployeeByTitle('Nhân viên', page, pageSize).subscribe(data => {
         if(data) {

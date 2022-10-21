@@ -35,7 +35,7 @@
               <input type="text" id="simple-search" class="search-input" placeholder="Search" required />
             </div>
           </div>
-          <button (click)="openDialogProduct()"
+          <button (click)="openDialogProduct('products')"
             class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
             <i class="fa-solid fa-filter mr-2 px-2"></i>
             <span class="px-2">Tìm kiếm nâng cao</span>
@@ -61,9 +61,8 @@
       </div>
       <app-create-return-table></app-create-return-table>
     </mat-tab>
-    <app-create-return-promotion-table></app-create-return-promotion-table>
     <!-- Sản phẩm khuyến mại -->
-    <!-- <mat-tab label="Sản phẩm khuyến mại">
+    <mat-tab label="Sản phẩm khuyến mại">
       <div class="flex items-center mt-2 justify-between">
         <div class="flex items-center">
           <div class="flex items-center">
@@ -80,7 +79,7 @@
               <input type="text" id="simple-search" class="search-input" placeholder="Search" required />
             </div>
           </div>
-          <button [routerLink]="['/orders/products']"
+          <button (click)="openDialogProduct('promotion')"
             class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
             <i class="fa-solid fa-filter mr-2 px-2"></i>
             <span class="px-2">Tìm kiếm nâng cao</span>
@@ -88,7 +87,7 @@
         </div>
       </div>
       <app-create-return-promotion-table></app-create-return-promotion-table>
-    </mat-tab> -->
+    </mat-tab>
   </mat-tab-group>
   <div>
     <div class="flex justify-between">

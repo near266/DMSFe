@@ -118,14 +118,37 @@ export class InforComponent implements OnInit, OnDestroy {
             this.exitDate.ISOS.setHours(7, 0, 0, 0)
             this.employee.value.exitDate = this.exitDate.ISOS.toISOString()
 
-            this.employee.value.login = this.employee.value.email
+            this.employee.controls['login'].setValue(this.employee.controls['email'].value);
+
+            switch(this.employee.controls['employeeTitle'].value) {
+              case 'Nhân viên': {
+                this.employee.controls['authorities'].setValue(["MEMBER"]);
+                break;
+              }
+              case 'Nhân viên dùng gói Basic': {
+                this.employee.controls['authorities'].setValue(["MEMBER"]);
+                break;
+              }
+              case 'Kế toán': {
+                this.employee.controls['authorities'].setValue(["ACCOUNTANT", "MEMBER"]);
+                break;
+              }
+              case 'Giám sát': {
+                this.employee.controls['authorities'].setValue(["MANAGER", "ACCOUNTANT", "MEMBER"]);
+                break;
+              }
+              case 'Chủ sở hữu': {
+                this.employee.controls['authorities'].setValue(["SALE_ADMIN" ,"MANAGER", "ACCOUNTANT", "MEMBER"]);
+                break;
+              }
+            }
 
             let sub5 = this.employeeService.AddEmployee(this.employee.value).subscribe(data => {
               this.snackbar.openSnackbar('Tạo thành công', 5000, 'Đóng', 'center', 'bottom', true);
               this.dataService.changeEmployee('success')
               sub5.unsubscribe()
             },
-              () => {
+              (error) => {
                 this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
                 this.dataService.changeEmployee('failed')
                 sub5.unsubscribe()
@@ -137,6 +160,30 @@ export class InforComponent implements OnInit, OnDestroy {
           this.employee.removeControl('password')
           this.employee.removeControl('login')
           this.employee.removeControl('authorities')
+          // this.employee.controls['login'].setValue(this.employee.controls['email'].value);
+
+          // switch(this.employee.controls['employeeTitle'].value) {
+          //   case 'Nhân viên': {
+          //     this.employee.controls['authorities'].setValue(["MEMBER"]);
+          //     break;
+          //   }
+          //   case 'Nhân viên dùng gói Basic': {
+          //     this.employee.controls['authorities'].setValue(["MEMBER"]);
+          //     break;
+          //   }
+          //   case 'Kế toán': {
+          //     this.employee.controls['authorities'].setValue(["ACCOUNTANT", "MEMBER"]);
+          //     break;
+          //   }
+          //   case 'Giám sát': {
+          //     this.employee.controls['authorities'].setValue(["MANAGER", "ACCOUNTANT", "MEMBER"]);
+          //     break;
+          //   }
+          //   case 'Chủ sở hữu': {
+          //     this.employee.controls['authorities'].setValue(["SALE_ADMIN" ,"MANAGER", "ACCOUNTANT", "MEMBER"]);
+          //     break;
+          //   }
+          // }
           if (this.employee.valid) {
             let sub3 = this.employeeService.UpdateEmployee(this.employee.value).subscribe(data => {
               this.snackbar.openSnackbar('Sửa thành công', 5000, 'Đóng', 'center', 'bottom', true);

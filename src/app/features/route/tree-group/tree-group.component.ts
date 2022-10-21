@@ -1,28 +1,27 @@
-import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { IActionMapping, ITreeOptions, TreeComponent, TreeNode, TreeNodeComponent, TREE_ACTIONS} from '@circlon/angular-tree-component';
 import { Response } from 'src/app/core/model/Response';
 import { EmployeeService } from 'src/app/core/services/employee.service';
-import { AddAccountantComponent } from '../add-accountant/add-accountant.component';
-import { AddEmployeeComponent } from '../add-employee/add-employee.component';
-import { AddManagerComponent } from '../add-manager/add-manager.component';
-import { AddSalesTeamComponent } from '../add-sales-team/add-sales-team.component';
-import { AddUnitComponent } from '../add-unit/add-unit.component';
+import { AddAccountantComponent } from '../../user-manage/user-tree/add-accountant/add-accountant.component';
+import { AddEmployeeComponent } from '../../user-manage/user-tree/add-employee/add-employee.component';
+import { AddManagerComponent } from '../../user-manage/user-tree/add-manager/add-manager.component';
+import { AddSalesTeamComponent } from '../../user-manage/user-tree/add-sales-team/add-sales-team.component';
+import { AddUnitComponent } from '../../user-manage/user-tree/add-unit/add-unit.component';
 
 @Component({
-    selector: 'app-user-tree-view',
-    templateUrl: './user-tree-view.component.html',
-    styleUrls: ['./user-tree-view.component.scss'],
+  selector: 'app-tree-group',
+  templateUrl: './tree-group.component.html',
+  styleUrls: ['./tree-group.component.scss']
 })
-export class UserTreeViewComponent implements OnInit {
-    nodes: any[] = [];
+export class TreeGroupComponent implements OnInit {
+
+  nodes: any[] = [];
     action: IActionMapping;
     options: ITreeOptions;
-    currentNode: any;
 
     @ViewChild(TreeComponent) private tree: TreeComponent;
-    @Output() newItemEvent = new EventEmitter<string>();
 
     menubar_unit = [
       'Thêm quản lý',
@@ -38,7 +37,7 @@ export class UserTreeViewComponent implements OnInit {
     ];
 
     array_index: any[] = [];
-    node_expand = '';
+
     settings: any = {};
     total: number;
     constructor(private employeeService: EmployeeService, private dialog: MatDialog) {}
@@ -67,30 +66,30 @@ export class UserTreeViewComponent implements OnInit {
             };
             this.nodes[0].children.push(node);
           });
+          // this.nodes[0].children.push({
+          //   id: 'undefined',
+          //   level: 0,
+          //   name: 'Chưa thuộc phòng/nhóm',
+          //   code: '',
+          //   expand: false,
+          //   type: 1,
+          //   menubar: this.menubar_group,
+          //   hasChildren: false
+          // });
           this.action = {
             mouse: {
               contextMenu: (tree, node, $event) => {
-                if(node.treeModel.getNodeById(this.node_expand)) {
-                  let n = node.treeModel.getNodeById(this.node_expand);
-                  n.data.expand = false;
-                  n.treeModel.update();
-                }
                 node.data.expand = !node.data.expand;
-                this.node_expand = node.data.id;
               },
               click: (tree, node, $event) => {
-                if(node.data.type != 2 && node.data.expand == false) {
-                  this.newItemEvent.emit(node.data.id);
-                  node.data.expand = false;
-                } else {
-                  node.data.expand = false;
-                }
-                if(node.treeModel.getNodeById(this.node_expand)) {
-                  let n = node.treeModel.getNodeById(this.node_expand);
-                  n.data.expand = false;
-                  n.treeModel.update();
-                }
-                this.node_expand = node.data.id;
+                node.data.expand = false;
+                console.log(node.id);
+              },
+              checkboxClick: (tree, node, $event) => {
+                node.data.expand = false;
+                console.log(node.id);
+                console.log(node.data.name);
+
               }
             },
           };
@@ -100,8 +99,6 @@ export class UserTreeViewComponent implements OnInit {
             actionMapping: this.action,
             getChildren: this.getChildren.bind(this),
           };
-          const expandRoot = this.tree.treeModel.getNodeById('root');
-          expandRoot.expand();
           // this.total = this.getTotalItemInTreeWithNoChildren(this.nodes);
       });
     }
@@ -110,22 +107,23 @@ export class UserTreeViewComponent implements OnInit {
       let newNodes: any;
       this.array_index.forEach(e => {
         if(node.data.id == e.id) {
+          newNodes = e.children.map((c: any) => Object.assign({}, c));
           // console.log(e.children);
-          this.employeeService.SearchEmployeeInGroup(node.data.id, 1, 1000).subscribe((response: Response<any>) => {
-            let res = response;
-            res.data.forEach((element: any) => {
-              e.children.push({
-                id: element.employee.id,
-                name: element.employee.employeeName,
-                code: 'Nhân viên',
-                expand: false,
-                type: 2,
-                menubar: [],
-                hasChildren: false
-              });
-            });
-            newNodes = e.children.map((c: any) => Object.assign({}, c));
-          });
+          // this.employeeService.SearchEmployeeInGroup(node.data.id, 1, 1000).subscribe((response: Response<any>) => {
+          //   let res = response;
+          //   res.data.forEach((element: any) => {
+          //     e.children.push({
+          //       id: element.employeeId,
+          //       name: element.employee.employeeName,
+          //       code: 'Nhân viên',
+          //       expand: false,
+          //       type: 2,
+          //       menubar: [],
+          //       hasChildren: false
+          //     });
+          //   });
+          //   newNodes = e.children.map((c: any) => Object.assign({}, c));
+          // });
 
         }
       });
@@ -136,15 +134,16 @@ export class UserTreeViewComponent implements OnInit {
     }
 
     updateNode(node: any) {
-      let newNode = this.tree.treeModel.getNodeById(node.data.id);
+      let newNodes: any;
       this.array_index.forEach(e => {
         if(node.data.id == e.id) {
+          // console.log(e.children);
           e.children = [];
           this.employeeService.SearchEmployeeInGroup(node.data.id, 1, 1000).subscribe((response: Response<any>) => {
             let res = response;
             res.data.forEach((element: any) => {
               e.children.push({
-                id: element.employee.id,
+                id: element.employeeId,
                 name: element.employee.employeeName,
                 code: 'Nhân viên',
                 expand: false,
@@ -153,8 +152,8 @@ export class UserTreeViewComponent implements OnInit {
                 hasChildren: false
               });
             });
-            newNode.data.children = e.children;
-            newNode.treeModel.update();
+            newNodes = e.children.map((c: any) => Object.assign({}, c));
+            this.tree.treeModel.update();
           });
 
         }
@@ -174,7 +173,7 @@ export class UserTreeViewComponent implements OnInit {
               menubar: this.menubar_group,
               hasChildren: true
           };
-          // if(element.children.length == 0) node.hasChildren = false;
+          if(element.children.length == 0) node.hasChildren = false;
           if(node.type == 0) node.menubar = this.menubar_unit;
           nodes.push(node);
       });
@@ -233,9 +232,8 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          if(node.data.children) {
-            this.updateNode(node);
-          }
+          this.updateNode(node);
+
         }
       });
     }
@@ -248,9 +246,8 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          if(node.data.children) {
-            this.updateNode(node);
-          }
+          this.updateNode(node);
+
         }
       });
     }
@@ -263,9 +260,8 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          if(node.data.children) {
-            this.updateNode(node);
-          }
+          this.updateNode(node);
+
         }
       });
     }
@@ -278,9 +274,8 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          if(node.data.children) {
-            this.updateNode(node);
-          }
+          this.updateNode(node);
+
         }
       });
     }
@@ -293,14 +288,16 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          if(node.data.children) {
-            this.updateNode(node);
-          }
+          this.updateNode(node);
+
         }
       });
     }
 
     menuBar(keyword: string, node: any) {
+      // if(node)
+      console.log(node);
+
       switch(keyword) {
         case 'Thêm quản lý': {
           this.open_add_manager(node.data.id, node);
@@ -328,4 +325,5 @@ export class UserTreeViewComponent implements OnInit {
         }
       }
     }
+
 }

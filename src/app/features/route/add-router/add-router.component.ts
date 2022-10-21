@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { DataService } from 'src/app/core/services/data.service';
-
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { RouteService } from 'src/app/core/services/route.service';
 @Component({
   selector: 'app-add-router',
   templateUrl: './add-router.component.html',
@@ -9,13 +10,18 @@ import { DataService } from 'src/app/core/services/data.service';
 export class AddRouterComponent implements OnInit {
 
   constructor(
-    private dataService: DataService
+    private dataService: DataService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private _routeSer: RouteService,
   ) { }
 
   title = 'Thông tin chung'
 
   ngOnInit(): void {
+    console.log(this.data);
   }
+
+
 
   add(e: any) {
     this.dataService.changeEmployee('add')

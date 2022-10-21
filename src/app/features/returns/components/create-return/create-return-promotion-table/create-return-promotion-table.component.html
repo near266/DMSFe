@@ -13,27 +13,20 @@
           Tên sản phẩm</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          ĐVT lẻ</th>
+          ĐVT</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           Kho xuất</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Số lượng
-          <span class="text-red-500">(Tổng: {{productQuantitySum}})</span>
+          SL bán
         </th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Đơn giá</th>
+          SL đã xuất</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Thành tiền</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Chiết khấu</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Tỷ lệ CK</th>
+          SL trả</th>
         <th scope="col"
           class="sticky top-0 z-10 min-w-[200px] border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           Ghi chú</th>
@@ -51,7 +44,7 @@
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-[12px] text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-              <mat-select [(ngModel)]="item.retailUnitId">
+              <mat-select [(ngModel)]="item.unitId">
                 <mat-option *ngFor="let option of unitOptions" value="{{option.value}}">{{option.label}}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -70,28 +63,27 @@
         <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-
-              <input matInput type="number" [(ngModel)]="item.quantity" (change)="updateItemTotalPrice(item)" />
+              <input matInput currencyMask
+                [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                [ngModel]="item.salesQuantity" (ngModelChange)="item.salesQuantity=$event" />
             </mat-form-field>
 
           </div>
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center">{{item.unitPrice | currency:'VND':'symbol'}}
+        <td class="border-x  border-solid align-middle px-2 text-center">{{item.exportQuantity}}
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center">{{item.totalPrice | currency:'VND':'symbol'}}
-        </td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
+        <td class="border-x max-w-[120px]  border-solid align-middle px-2 text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-              <input matInput type="number" [(ngModel)]="item.discount" [disabled]="!item.quantity"
-                (change)="updateDiscountRate(item)" />
+              <input matInput currencyMask
+                [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                [ngModel]="item.returnsQuantity" (ngModelChange)="item.returnsQuantity=$event;item.salesQuantity = item.returnsQuantity;
+                item.quantity = item.returnsQuantity;" />
             </mat-form-field>
 
           </div>
         </td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">{{item.discountRate | percent}}
-        </td>
-        <td class="border-x min-w-[200px]  border-solid align-middle px-2  text-center">
+        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
               <textarea matInput [rows]="1" [(ngModel)]="item.note"></textarea>
