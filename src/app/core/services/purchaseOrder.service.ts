@@ -190,16 +190,14 @@ export class PurchaseOrderService {
     }
 
     // route
-    getAllRoute(page: number, pageSize: number): Observable<any> {
+    getAllRoute(page: number, pageSize: number, keyword: any): Observable<any> {
         return this.http
-            .get(this.id_url_gw + '/Route/SearchAllRoute?page=' + page + '&pagesize=' + pageSize)
+            .get(this.api_gateway_url + '/Route/getall?keyword=' + keyword + '&page=' + page + '&pagesize=' + pageSize)
             .pipe(map((reponse: any) => reponse));
     }
 
     getRouteByCustomerId(id: string): Observable<any> {
-        return this.http
-            .get(this.id_url_gw + '/Route/GetRouteByCustomerId?CustomerId=' + id)
-            .pipe(map((reponse: any) => reponse));
+        return this.http.get(this.api_gateway_url + '/Route/by_cusId?Id=' + id).pipe(map((reponse: any) => reponse));
     }
 
     // group

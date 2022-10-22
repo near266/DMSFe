@@ -25,7 +25,6 @@ import { NumberToTextService } from 'src/app/core/shared/services/number-to-text
 export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
     statusList = statusList;
     detailOrderForm!: FormGroup;
-    detailOrderFakeData: any = [];
     subscription: Subscription[] = [];
 
     statusNow!: number;
@@ -39,6 +38,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     listCustomer: any = [];
     listEmployee: any = [];
     listGroup: any = [];
+    listRoute: any = [];
     listChoosenProduct: any = [];
     listWarehouse: any = [];
     listProductRemove: any = [];
@@ -75,6 +75,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             deliveryDate: [null],
             orderEmployee: [null],
             groupId: [null],
+            routeId: [null],
             customer: this.fb.group({
                 code: [null],
                 name: [null],
@@ -167,6 +168,8 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         this.getListCustomer();
         this.getListEmployee();
         this.getListWareHouse();
+        this.getListRoute();
+        this.getListGroup();
     }
 
     getDetail() {
@@ -194,6 +197,8 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             orderDate: this.detailOrder.orderDate,
             deliveryDate: this.detailOrder.deliveryDate,
             orderEmployee: this.detailOrder.orderEmployee?.id, // đang bị null
+            routeId: this.detailOrder?.route?.id,
+            groupId: this.detailOrder?.group?.id,
             customer: {
                 code: this.detailOrder.customer?.id,
                 name: this.detailOrder.customer?.customerName,
@@ -226,7 +231,8 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     getListCustomer() {
         this.subscription.push(
             this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data: any) => {
-                this.listCustomer = data?.data;
+                this.listCustomer = data.data;
+                console.log(this.listCustomer);
             }),
         );
     }
@@ -237,6 +243,14 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 this.listEmployee = data.data;
             }),
         );
+    }
+
+    getListRoute() {
+        this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => (this.listRoute = data.data));
+    }
+
+    getListGroup() {
+        this.purchaseOrder.getAllGroup(1).subscribe((data) => (this.listGroup = data));
     }
 
     countTotalAmount() {
@@ -386,7 +400,13 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     unChoosePromotion(productRemove: any) {
         // send to service
-        this.listProductPromotionRemove.push(productRemove.product.id);
+        this.listProductPromotionRemove.push({
+            productId: productRemove.product.id,
+            type: productRemove.type,
+            unitId: productRemove.unit?.id,
+            warehouseId: productRemove.warehouseId,
+        });
+        console.log(this.listProductPromotionRemove);
         this.isRemove = true;
         this.purchaseOrder.sendProductPromotionRemove({
             isRemove: this.isRemove,

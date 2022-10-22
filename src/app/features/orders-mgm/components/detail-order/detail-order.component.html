@@ -29,13 +29,11 @@
         <div class="flex gap-x-6 justify-between">
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                 <mat-label>Nhóm</mat-label>
-                <mat-select [disabled]="true">
-                    <input
-                        formControlName="groupId"
-                        placeholder="Tìm kiếm..."
-                        style="padding-left: 12px"
-                        matInput
-                        class="h-10 rounded-sm" />
+                <mat-select formControlName="groupId" [disabled]="type === 'View'">
+                    <!-- <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" /> -->
+                    <mat-option *ngFor="let group of listGroup" [value]="group.id">
+                        {{ group.name }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
@@ -49,8 +47,11 @@
             </mat-form-field>
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                 <mat-label>Tuyến</mat-label>
-                <mat-select [disabled]="true">
+                <mat-select formControlName="routeId" [disabled]="type === 'View'">
                     <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <mat-option *ngFor="let route of listRoute" [value]="route.id">
+                        {{ route.routeName }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -178,10 +179,13 @@
                             <td class="custom-th">{{ product.product.sku }}</td>
                             <td class="custom-th">{{ product.product.productName }}</td>
                             <td class="custom-th">
-                                <span *ngIf="type === 'View'">
+                                <!-- <span *ngIf="type === 'View'">
+                                    {{ product.unit.unitName }}
+                                </span> -->
+                                <span>
                                     {{ product.unit.unitName }}
                                 </span>
-                                <mat-form-field
+                                <!-- <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
                                     floatLabel="always"
@@ -208,11 +212,12 @@
                                             Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
                                         </mat-option>
                                     </mat-select>
-                                </mat-form-field>
+                                </mat-form-field> -->
                             </td>
                             <td class="custom-th">
-                                <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div>
-                                <mat-form-field
+                                <!-- <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div> -->
+                                <div>{{ product.warehouse?.warehouseName }}</div>
+                                <!-- <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
                                     floatLabel="always"
@@ -224,7 +229,7 @@
                                             {{ warehouse.warehouseName }}
                                         </mat-option>
                                     </mat-select>
-                                </mat-form-field>
+                                </mat-form-field> -->
                             </td>
                             <td class="custom-th">
                                 <div *ngIf="type === 'View'">{{ product.quantity }}</div>
@@ -526,10 +531,13 @@
                             <td class="custom-th">{{ product.product.sku }}</td>
                             <td class="custom-th">{{ product.product.productName }}</td>
                             <td class="custom-th">
-                                <span *ngIf="type === 'View'">
+                                <!-- <span *ngIf="type === 'View'">
+                                    {{ product.unit.unitName }}
+                                </span> -->
+                                <span>
                                     {{ product.unit.unitName }}
                                 </span>
-                                <mat-form-field
+                                <!-- <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
                                     floatLabel="always"
@@ -556,11 +564,12 @@
                                             Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
                                         </mat-option>
                                     </mat-select>
-                                </mat-form-field>
+                                </mat-form-field> -->
                             </td>
                             <td class="custom-th">
-                                <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div>
-                                <mat-form-field
+                                <!-- <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div> -->
+                                <div>{{ product.warehouse?.warehouseName }}</div>
+                                <!-- <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
                                     floatLabel="always"
@@ -572,7 +581,7 @@
                                             {{ warehouse.warehouseName }}
                                         </mat-option>
                                     </mat-select>
-                                </mat-form-field>
+                                </mat-form-field> -->
                             </td>
                             <td class="custom-th">
                                 <div *ngIf="type === 'View'">{{ product.quantity }}</div>

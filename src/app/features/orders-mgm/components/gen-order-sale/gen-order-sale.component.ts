@@ -67,13 +67,14 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     ngOnInit(): void {
         // parse token to get id login
         this.relatedOrder = this.data.detailOrder;
+        console.log(this.relatedOrder?.orderEmployee?.id);
         this.saleDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
         this.genOrderForm = this.fb.group({
             orderDate: [null],
             saleDate: [moment(Date.now()).format('YYYY-MM-DD')],
             deliveryDate: [null],
             groupId: [null],
-            orderEmployeeId: [null],
+            orderEmployeeId: [this.relatedOrder?.orderEmployee?.id],
             routeId: [null],
             saleEmployeeId: [this.saleDefaultId],
             customerId: [null],
@@ -193,7 +194,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     getAllRoute() {
-        this.purchaseOrder.getAllRoute(1, 1000).subscribe((data) => {
+        this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => {
             this.listAllRoute = data.data;
         });
     }
@@ -205,18 +206,20 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         // get route ID
         if (customerId) {
             this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
-                this.genOrderForm.patchValue({
-                    routeId: data?.route?.id,
-                });
-                // get employee in route
-                this.genOrderForm.patchValue({
-                    orderEmployeeId: data?.route?.employee?.id,
-                });
-                // get group by customerID
-                this.groupIdSearched = data?.route?.unitTreeGroup?.id;
-                this.genOrderForm.patchValue({
-                    groupId: this.groupIdSearched,
-                });
+                if (data) {
+                    this.genOrderForm.patchValue({
+                        routeId: data?.route?.id,
+                    });
+                    // get employee in route
+                    this.genOrderForm.patchValue({
+                        orderEmployeeId: data?.route?.employee?.id,
+                    });
+                    // get group by customerID
+                    this.groupIdSearched = data?.route?.unitTreeGroup?.id;
+                    this.genOrderForm.patchValue({
+                        groupId: this.groupIdSearched,
+                    });
+                }
             });
             // get customer ID and patch Value
             this.purchaseOrder.getCustomerById(customerId).subscribe((data) => {

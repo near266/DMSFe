@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { map, Subscription } from 'rxjs';
+import { map, Subscription, forkJoin } from 'rxjs';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
@@ -76,7 +76,6 @@ export class ViewEditDetailComponent implements OnInit {
             this.statusNow = data.status;
             this.detailOrder = data;
             localStorage.setItem('customerId', data.customer?.id);
-            console.log(this.statusNow);
         });
     }
 
@@ -144,11 +143,52 @@ export class ViewEditDetailComponent implements OnInit {
                     this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
                 },
                 () => {
-                    this.snackbar.openSnackbar('Xuất hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                    if (this.detailOrder?.purchaseOrder?.id) {
+                        this.updatePurchaseOrderStatus(4);
+                    }
                     this.getDetail();
                 },
             );
         }
+    }
+
+    updatePurchaseOrderStatus(status: number) {
+        this.purchaseOrder.detail(this.detailOrder?.purchaseOrder?.id).subscribe((data) => {
+            const body = {
+                purchaseOrderId: data.id,
+                orderDate: data.orderDate,
+                groupId: data.unit?.id,
+                orderEmployeeId: data.orderEmployee?.id,
+                warehouseId: data.warehouse?.id,
+                customerId: data.customer?.id,
+                routeId: data.route?.id,
+                type: data.type,
+                status: 4,
+                paymentMethod: 0,
+                description: data.description,
+                phone: data.phone,
+                address: data.address,
+                customerName: data.customerName,
+                totalAmount: data.totalAmount,
+                totalOfVAT: data.totalOfVAT,
+                totalDiscountProduct: data.totalDiscountProduct,
+                tradeDiscount: data.tradeDiscount,
+                totalPayment: data.totalPayment,
+                archived: false,
+                // lastModifiedBy: 'string',
+                lastModifiedDate: moment(Date.now()).format('YYYY-MM-DD'),
+                orderCode: data.orderCode,
+                deliveryDate: data.deliveryDate,
+                prePayment: data.prePayment,
+            };
+            this.purchaseOrder.update(body).subscribe(
+                (data) => {},
+                (err) => {},
+                () => {
+                    this.snackbar.openSnackbar('Xuất hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                },
+            );
+        });
     }
 
     // update body order
@@ -171,55 +211,32 @@ export class ViewEditDetailComponent implements OnInit {
 
     // update ProductList
     updateProductList() {
-        // update detail Product
-        this.updateDetailProduct();
+        // update detail Product and Add
+        this.updateDetailAndAddProduct();
         // remove Product
         this.removeProduct();
-        // add product
-        this.addProduct();
     }
 
-    updateDetailProduct() {
-        const body = {
+    updateDetailAndAddProduct() {
+        const bodyUpdate = {
             saleRecieptProducts: this.listProductUpdate,
         };
-        this.saleReceipt.updateProductList(body).subscribe(
+        const updateDetail = this.saleReceipt.updateProductList(bodyUpdate);
+        const bodyAdd = {
+            saleRecieptProducts: this.listProductAdd,
+        };
+        const addProduct = this.saleReceipt.addProduct(bodyAdd);
+        forkJoin([updateDetail, addProduct]).subscribe(
             (data) => {},
             (err) => {
                 this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
             },
             () => {
-                // custom Status when done
                 this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
-                this.getDetail();
                 // gửi trạng thái để detail-order component biết rồi reload lại data
                 this.saleReceipt.isSuccessUpdate('Done');
             },
         );
-    }
-
-    removeProduct() {
-        const removeList = {
-            listIdRemove: this.listProductRemove,
-            purchaseOrderId: this.id,
-        };
-        if (this.isRemove) {
-            this.saleReceipt.removeProduct(removeList).subscribe(
-                (data) => {},
-                (err) => {
-                    console.log('Xóa sản phẩm thất bại');
-                },
-                () => {
-                    console.log('Xóa sản phẩm thành công');
-                    // custom Status when done
-                    // this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
-                    // this.getDetail();
-                    // gửi trạng thái để detail-order component biết rồi reload lại data
-                    this.saleReceipt.isSuccessUpdate('Done');
-                    this.saleReceipt.sendProductRemove({ isRemove: false, list: [] });
-                },
-            );
-        }
     }
 
     addProduct() {
@@ -235,6 +252,23 @@ export class ViewEditDetailComponent implements OnInit {
                 console.log('Them sp thanh cong');
             },
         );
+    }
+
+    removeProduct() {
+        const removeList = {
+            listIdRemove: this.listProductRemove,
+            purchaseOrderId: this.id,
+        };
+        if (this.isRemove) {
+            this.saleReceipt.removeProduct(removeList).subscribe(
+                (data) => {},
+                (err) => {},
+                () => {
+                    this.saleReceipt.isSuccessUpdate('Done');
+                    this.saleReceipt.sendProductRemove({ isRemove: false, list: [] });
+                },
+            );
+        }
     }
 
     archive() {

@@ -112,6 +112,11 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
         });
     }
 
+    textMoneyGen(money: any) {
+        console.log('ok');
+        this.textMoney = this.numberToText.doc(money);
+    }
+
     ngOnDestroy(): void {
         this.subscription.forEach((service) => {
             service.unsubscribe();
@@ -157,10 +162,6 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
             prePayment: this.prePayment,
             debtRecord: this.detailOrderForm.get('debtRecord')?.value,
         });
-        // send body update product
-        this.saleReceipt.sendProductUpdate(this.getProductListUpdate());
-        // send body add product
-        this.saleReceipt.sendProductAdd(this.getProductListAdd());
         // count totalAmount (Tổng tiền hàng)
         this.countTotalAmount();
         // count totalDiscountProduct (Chiết khấu sản phẩm)
@@ -216,26 +217,6 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
         }
     }
 
-    getProductListAdd() {
-        let listProductAdd = this.listProductAdd.map((product: any) => {
-            return {
-                saleRecieptId: this.id,
-                productId: product?.product?.id,
-                // productName: product.product.productName,
-                unitId: product.unit.id,
-                warehouseId: product.warehouseId,
-                unitPrice: product.unitPrice,
-                quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount || 0,
-                discountRate: product.discountRate || 0,
-                note: product.note,
-                type: product.type,
-            };
-        });
-        return listProductAdd;
-    }
-
     discountRate(product: any) {
         if (product.totalPrice) {
             product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
@@ -247,20 +228,6 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
         if (product.totalPrice) {
             product.discount = (product.discountRate / 100) * product.totalPrice;
         }
-    }
-
-    unChoose(productRemove: any) {
-        // send to service
-        this.listProductRemove.push(productRemove.product.id);
-        this.isRemove = true;
-        this.saleReceipt.sendProductRemove({
-            isRemove: this.isRemove,
-            list: this.listProductRemove,
-        });
-        // remove to list product
-        this.listProduct = this.listProduct.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
     }
 
     getDetail() {
@@ -303,12 +270,12 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
         this.listProduct = this.detailOrder.listProduct;
         this.listPromotionProduct = this.detailOrder.listPromotionProduct;
         // loop to map warehouseId
-        this.listProduct.forEach((product: any) => {
-            product.warehouseId = product.warehouse?.id;
-        });
-        this.listPromotionProduct.forEach((product: any) => {
-            product.warehouseId = product.warehouse?.id;
-        });
+        // this.listProduct.forEach((product: any) => {
+        //     product.warehouseId = product.warehouse?.id;
+        // });
+        // this.listPromotionProduct.forEach((product: any) => {
+        //     product.warehouseId = product.warehouse?.id;
+        // });
     }
 
     getListCustomer() {
@@ -332,7 +299,7 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     }
 
     getListRoute() {
-        this.purchaseOrder.getAllRoute(1, 1000).subscribe((data) => (this.listRoute = data.data));
+        this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => (this.listRoute = data.data));
     }
 
     getListGroup() {
