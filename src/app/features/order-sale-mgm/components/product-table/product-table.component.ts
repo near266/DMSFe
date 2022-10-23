@@ -77,12 +77,11 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
         // send list product add
         this.sendListProductAdd();
         this.listProduct$.emit(this.listProduct);
-        this.listProductAdd$.emit(this.listProduct);
+        this.listProductAdd$.emit(this.listProductAdd);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         this.listProduct = this.formatService.formatUnitIdAndWareHouseId(this.listProduct);
-        console.log(this.listProduct);
     }
 
     sendBodyUpdateProduct() {
@@ -143,7 +142,6 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
     }
 
     countDiscount(product: any) {
-        console.log(1);
         if (product.totalPrice) {
             product.discount = (product.discountRate / 100) * product.totalPrice;
         }
@@ -159,7 +157,6 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
     }
 
     unChoose(productRemove: any) {
-        console.log(productRemove);
         // send to service
         this.listProductRemove.push({
             productId: productRemove?.product?.id,

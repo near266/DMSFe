@@ -35,7 +35,6 @@ export class CustomerComponent implements OnInit, DoCheck, OnDestroy, AfterViewI
     getCustomerInfo() {
         this.customerService.get_by_id(this.customerId).subscribe((data) => {
             this.customerInfo = data;
-            console.log(this.customerInfo);
         });
     }
 }

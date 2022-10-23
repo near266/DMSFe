@@ -245,12 +245,8 @@ export class ViewEditDetailComponent implements OnInit {
         };
         this.saleReceipt.addProduct(bodyAdd).subscribe(
             (data) => {},
-            (err) => {
-                console.log('Them sp that bai');
-            },
-            () => {
-                console.log('Them sp thanh cong');
-            },
+            (err) => {},
+            () => {},
         );
     }
 

@@ -118,8 +118,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
     }
 
     getChoosedProduct() {
-        console.log(this.listProduct);
-        console.log(this.productChoose);
         if (this.listProduct && this.productChoose) {
             for (let i = 0; i < this.listProduct.length; i++) {
                 for (let j = 0; j < this.productChoose.length; j++) {

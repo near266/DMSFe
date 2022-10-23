@@ -61,7 +61,14 @@
                 <mat-select
                     [disabled]="type === 'View'"
                     formControlName="code"
-                    (selectionChange)="setInfoCustomer($event.value)">
+                    (selectionChange)="setInfoCustomer($event.value); setRouteGroupAndEmployee($event.value)">
+                    <input
+                        (input)="searchListCustomer($event)"
+                        placeholder="Tìm kiếm..."
+                        style="padding-left: 12px"
+                        matInput
+                        class="h-10 rounded-sm" />
+                    <mat-option>--Chọn khách hàng--</mat-option>
                     <mat-option *ngFor="let customer of listCustomer" [value]="customer.id">
                         {{ customer.customerCode }} - {{ customer.customerName }}
                     </mat-option>
@@ -738,8 +745,8 @@
             <span class="font-normal">{{ totalAmount | currency: 'VND' }}</span>
         </div>
         <div class="grid grid-cols-4 col-span-2 text-green-600">
-            <span class="font-medium">Hình thức thanh toán:</span>
-            <span class="col-span-3">Thanh toán trực tiếp</span>
+            <span class="font-medium">Hạn mức dư nợ:</span>
+            <span class="col-span-3">{{ debtLimit }}</span>
         </div>
         <div class="grid grid-cols-2">
             <span class="font-medium">Chiết khấu sản phẩm:</span>
@@ -747,19 +754,24 @@
                 {{ totalDiscountProduct | currency: 'VND' }}
             </span>
         </div>
-        <div class="grid grid-cols-4 col-span-2"></div>
+        <div class="grid grid-cols-4 col-span-2 text-green-600">
+            <span class="font-medium">Dư nợ hiện tại:</span>
+            <span class="col-span-3"></span>
+        </div>
         <div class="grid grid-cols-2">
             <span class="font-medium">Chiết khấu đơn hàng:</span>
             <span class="font-normal">
                 <input
-                    [readonly]="type === 'View'"
                     class="border-b border-gray-700"
                     type="number"
                     [(ngModel)]="tradeDiscount"
                     [ngModelOptions]="{ standalone: true }" />
             </span>
         </div>
-        <div class="grid grid-cols-4 col-span-2"></div>
+        <div class="grid grid-cols-4 col-span-2 text-green-600">
+            <span class="font-medium">Hình thức thanh toán:</span>
+            <span class="col-span-3">Thanh toán trực tiếp</span>
+        </div>
         <div class="grid grid-cols-2">
             <span class="font-medium">Phải thanh toán:</span>
             <span class="font-normal">
@@ -771,7 +783,6 @@
             <span class="font-medium">Thanh toán trước:</span>
             <span class="font-normal">
                 <input
-                    [readonly]="type === 'View'"
                     class="border-b border-gray-700"
                     type="number"
                     [(ngModel)]="prePayment"

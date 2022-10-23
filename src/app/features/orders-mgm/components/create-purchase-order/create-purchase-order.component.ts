@@ -39,6 +39,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     listWarehouse: any[] = [];
     listChoosenProduct2: any[] = [];
 
+    debtLimit: any;
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
     tradeDiscount: number = 0;
@@ -58,10 +59,6 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         private router: Router,
         private numberToText: NumberToTextService,
     ) {}
-
-    transformAmount(element: any) {
-        console.log(element.value);
-    }
 
     ngOnInit(): void {
         // parse token to get id login
@@ -284,11 +281,9 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         this.purchaseOrder.createOrder(body).subscribe(
             (data) => {},
             (err) => {
-                console.log(err);
                 this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
             },
             () => {
-                console.log('Sucesss');
                 this.snackbar.openSnackbar('Tạo mới đơn đặt hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
                 this.router.navigate(['/orders']);
             },
@@ -320,6 +315,10 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
                 address: customer.address,
             },
         });
+        // set hạn mức dư nợ
+        this.purchaseOrder.getCustomerById(id).subscribe((data) => {
+            this.debtLimit = data?.debtLimit;
+        });
     }
 
     unChoose(productRemove: any) {
@@ -344,7 +343,6 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     }
 
     setWareHouseToAllProduct(id: any) {
-        console.log(this.listChoosenProduct);
         if (id != 0) {
             this.listChoosenProduct.forEach((product: any) => {
                 product.warehouseId = id;
@@ -371,12 +369,15 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         });
     }
 
-    setRouteGroup(customerId: any) {
+    setRouteGroupAndEmployee(customerId: any) {
         this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
-            this.createForm.patchValue({
-                routeId: data.route?.id,
-                groupId: data.route?.unitTreeGroup?.id,
-            });
+            if (data) {
+                this.createForm.patchValue({
+                    routeId: data?.route?.id,
+                    groupId: data?.route?.unitTreeGroup?.id,
+                    orderEmployeeId: data?.route?.employee?.id,
+                });
+            }
         });
     }
 }

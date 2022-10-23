@@ -84,7 +84,7 @@
                     <mat-label>Mã khách hàng</mat-label>
                     <mat-select
                         formControlName="customerId"
-                        (selectionChange)="setInfoCustomer($event.value); setRouteGroup($event.value)">
+                        (selectionChange)="setInfoCustomer($event.value); setRouteGroupAndEmployee($event.value)">
                         <input
                             (input)="searchListCustomer($event)"
                             placeholder="Tìm kiếm..."
@@ -326,7 +326,7 @@
             </div>
             <div class="grid grid-cols-4 col-span-2 text-green-600">
                 <span class="font-medium">Hạn mức dư nợ:</span>
-                <span class="col-span-3"></span>
+                <span class="col-span-3">{{ debtLimit }}</span>
             </div>
             <div class="grid grid-cols-2">
                 <span class="font-medium">Chiết khấu sản phẩm:</span>

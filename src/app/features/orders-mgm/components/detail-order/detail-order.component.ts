@@ -53,6 +53,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     totalPayment: number = 0;
     prePayment: number = 0;
     textMoney: any;
+    debtLimit: any;
     constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
@@ -119,7 +120,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             orderEmployeeId: this.detailOrderForm.get('orderEmployee')?.value,
             // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             customerId: this.detailOrderForm.get('customer.code')?.value,
-            // routeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            routeId: this.detailOrderForm.get('routeId')?.value,
             type: 0,
             status: this.detailOrderForm.get('status')?.value,
             paymentMethod: 0,
@@ -186,6 +187,10 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 this.totalPayment = this.detailOrder.totalPayment;
                 this.prePayment = this.detailOrder.prePayment;
                 this.textMoney = this.numberToText.doc(this.totalPayment);
+                // set hạn mức dư nợ
+                this.purchaseOrder.getCustomerById(this.detailOrder?.customer?.id).subscribe((data) => {
+                    this.debtLimit = data?.debtLimit;
+                });
             }),
         );
     }
@@ -228,11 +233,21 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         );
     }
 
+    searchListCustomer(e: any) {
+        let body = {
+            keyword: e.target.value,
+            page: 1,
+            pageSize: 100,
+        };
+        this.purchaseOrder.searchCustomer(body).subscribe((data) => {
+            this.listCustomer = data.data;
+        });
+    }
+
     getListCustomer() {
         this.subscription.push(
             this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data: any) => {
                 this.listCustomer = data.data;
-                console.log(this.listCustomer);
             }),
         );
     }
@@ -406,7 +421,6 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             unitId: productRemove.unit?.id,
             warehouseId: productRemove.warehouseId,
         });
-        console.log(this.listProductPromotionRemove);
         this.isRemove = true;
         this.purchaseOrder.sendProductPromotionRemove({
             isRemove: this.isRemove,
@@ -449,6 +463,10 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 phone: customer.phone,
                 address: customer.address,
             },
+        });
+        // set hạn mức dư nợ
+        this.purchaseOrder.getCustomerById(id).subscribe((data) => {
+            this.debtLimit = data?.debtLimit;
         });
     }
 
@@ -502,7 +520,6 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     }
 
     openDialogProductPromotion() {
-        console.log(this.listChoosenProductPromotion);
         const dialogRef = this.dialog.open(ProductListComponent, {
             maxWidth: '100vw',
             maxHeight: '100vh',
@@ -517,11 +534,9 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         dialogRef.afterClosed().subscribe((data) => {
             if (!data.isCancel) {
                 if (this.formatFormProductPromotion(data)) {
-                    console.log(data);
                     let listAdd = this.listAddProductPromotion(this.formatFormProductPromotion(data));
                     this.listPromotionProductAdd = [];
                     this.listPromotionProductAdd = listAdd;
-                    console.log(this.listPromotionProductAdd);
                 }
             }
         });
@@ -547,6 +562,18 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 product.warehouseId = value;
             });
         }
+    }
+
+    setRouteGroupAndEmployee(customerId: any) {
+        this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
+            if (data) {
+                this.detailOrderForm.patchValue({
+                    routeId: data.route?.id,
+                    groupId: data.route?.unitTreeGroup?.id,
+                    orderEmployee: data.route?.employee?.id,
+                });
+            }
+        });
     }
 
     // format form add product to view Detail
@@ -622,7 +649,6 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     // loop to reduce available product
     listAddProduct(list: any) {
         let listAddProduct = [];
-        console.log(this.listProduct.length, list.length);
         if (list && this.listProduct) {
             let listAvailbleIds = this.listProduct.map((product: any) => {
                 return product?.product?.id;
@@ -649,7 +675,6 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     }
 
     countDiscount(product: any) {
-        console.log(1);
         if (product.totalPrice) {
             product.discount = (product.discountRate / 100) * product.totalPrice;
         }

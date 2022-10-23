@@ -15,7 +15,8 @@ import { ProductListComponent } from 'src/app/features/orders-mgm/components/pro
     styleUrls: ['./create-order-sale.component.scss'],
 })
 export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
-    groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng'];
+    listRoute: any = [];
+    listGroup: any = [];
     createSale: FormGroup;
 
     listEmployee: any = [];
@@ -35,6 +36,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
     quantities: any = [];
     discount: any = [];
     quantity: any = 0;
+    debtLimit: any;
     constructor(
         private dialog: MatDialog,
         private fb: FormBuilder,
@@ -50,7 +52,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             orderDate: [moment(Date.now()).format('YYYY-MM-DD')],
             saleDate: [moment(Date.now()).format('YYYY-MM-DD')],
             deliveryDate: [moment(Date.now()).format('YYYY-MM-DD')],
-            paymentTerm: [null],
+            paymentTerm: [moment(Date.now()).format('YYYY-MM-DD')],
             groupId: [null],
             orderEmployeeId: [null],
             routeId: [null],
@@ -81,6 +83,12 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         this.purchaseOrder.getAllWarehouses().subscribe((data) => {
             this.listWarehouse = data;
         });
+        // get list route
+        this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => {
+            this.listRoute = data.data;
+        });
+        // get list group
+        this.purchaseOrder.getAllGroup(1).subscribe((data) => (this.listGroup = data));
     }
 
     ngDoCheck(): void {
@@ -92,6 +100,37 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         this.countTotalPayment();
         // number to text
         this.textMoney = this.numberToText.doc(this.totalPayment);
+    }
+
+    searchListRoute(e: any) {
+        this.purchaseOrder.getAllRoute(1, 1000, e.target.value).subscribe((data) => {
+            if (data) {
+                this.listRoute = data.data;
+            }
+        });
+    }
+
+    setRouteGroupAndEmployee(customer: any) {
+        this.purchaseOrder.getRouteByCustomerId(customer?.id).subscribe((data) => {
+            if (data) {
+                this.createSale.patchValue({
+                    routeId: data?.route?.id,
+                    groupId: data?.route?.unitTreeGroup?.id,
+                    orderEmployeeId: data?.route?.employee?.id,
+                });
+            }
+        });
+    }
+
+    searchListCustomer(e: any) {
+        let body = {
+            keyword: e.target.value,
+            page: 1,
+            pageSize: 100,
+        };
+        this.purchaseOrder.searchCustomer(body).subscribe((data) => {
+            this.listCustomer = data.data;
+        });
     }
 
     stopPropagation(e: any) {
@@ -195,6 +234,10 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
                 address: value.address,
             },
         });
+        // set hạn mức dư nợ
+        this.purchaseOrder.getCustomerById(value?.id).subscribe((data) => {
+            this.debtLimit = data?.debtLimit;
+        });
     }
 
     selectUnit(value: any, product: any, i: any) {
@@ -212,7 +255,6 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
     }
 
     setWareHouseToAllProduct(id: any) {
-        console.log(this.listChoosenProduct);
         if (id != 0) {
             this.listChoosenProduct.forEach((product: any) => {
                 product.warehouseId = id;

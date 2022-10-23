@@ -109,7 +109,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         const body = {
             purchaseOrderId: this.detailOrder.id,
             orderDate: this.detailOrder.orderDate,
-            groupId: this.detailOrder.unit?.id,
+            groupId: this.detailOrder.group?.id,
             orderEmployeeId: this.detailOrder.orderEmployee?.id,
             warehouseId: this.detailOrder.warehouse?.id,
             customerId: this.detailOrder.customer?.id,
@@ -282,11 +282,8 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         if (this.isRemoveProduct) {
             this.purchaseOrder.removeProduct(removeListProduct).subscribe(
                 (data) => {},
-                (err) => {
-                    console.log('Xóa sản phẩm thất bại');
-                },
+                (err) => {},
                 () => {
-                    console.log('Xóa sản phẩm thành công');
                     // custom Status when done
                     // this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
                     // this.getDetail();
@@ -304,11 +301,8 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         if (this.isRemovePromotion) {
             this.purchaseOrder.removeProduct(removeListPromotion).subscribe(
                 (data) => {},
-                (err) => {
-                    console.log('Xóa sản phẩm thất bại');
-                },
+                (err) => {},
                 () => {
-                    console.log('Xóa sản phẩm thành công');
                     this.purchaseOrder.isSuccessUpdate('Done');
                     this.purchaseOrder.sendProductPromotionRemove({ isRemove: false, list: [] });
                 },
@@ -323,12 +317,8 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         };
         this.purchaseOrder.addProduct(bodyAddProduct).subscribe(
             (data) => {},
-            (err) => {
-                console.log('Them sp that bai');
-            },
-            () => {
-                console.log('Them sp thanh cong');
-            },
+            (err) => {},
+            () => {},
         );
         // add promotion
         const bodyAddPromotion = {
@@ -336,12 +326,8 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         };
         this.purchaseOrder.addProduct(bodyAddPromotion).subscribe(
             (data) => {},
-            (err) => {
-                console.log('Them sp that bai');
-            },
-            () => {
-                console.log('Them sp thanh cong');
-            },
+            (err) => {},
+            () => {},
         );
     }
 

@@ -67,7 +67,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     ngOnInit(): void {
         // parse token to get id login
         this.relatedOrder = this.data.detailOrder;
-        console.log(this.relatedOrder?.orderEmployee?.id);
         this.saleDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
         this.genOrderForm = this.fb.group({
             orderDate: [null],
@@ -83,11 +82,10 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             address: [null],
             description: [null],
             debtRecord: [false],
-            paymentTerm: [null],
+            paymentTerm: [moment(Date.now()).format('YYYY-MM-DD')],
         });
         this.listProduct = this.relatedOrder.listProduct;
         // get all info payment
-        console.log(this.relatedOrder);
         this.totalAmount = this.relatedOrder.totalAmount;
         this.totalDiscountProduct = this.relatedOrder.totalDiscountProduct;
         this.tradeDiscount = this.relatedOrder.tradeDiscount;
@@ -228,7 +226,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
                     phone: data.phone,
                     address: data.address,
                 });
-                console.log(data.id);
             });
         }
     }
@@ -347,7 +344,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     // loop to reduce available product
     listAddProduct(list: any) {
         let listAddProduct = [];
-        console.log(this.listProduct.length, list.length);
         if (list && this.listProduct) {
             let listAvailbleIds = this.listProduct.map((product: any) => {
                 return product?.product?.id;
@@ -397,7 +393,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
                 type: product.type,
             };
         });
-        console.log(listProductToSentAPI);
         return listProductToSentAPI;
     }
 
@@ -435,7 +430,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             listPromotionProduct: this.formatProductToSentAPI(this.listPromotionProduct),
             debtRecord: this.genOrderForm.get('debtRecord')?.value,
         };
-        console.log(body);
         this.saleReceipt.create(body).subscribe(
             (data) => {},
             (err) => {
@@ -458,7 +452,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             product.unitId = product?.product?.wholeSaleUnit?.id;
             product.unitPrice = product.product.price;
         }
-        console.log(product.unitId);
         product.totalPrice = product.quantity * product.unitPrice;
         this.discountRate(product);
     }
@@ -495,7 +488,14 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             (data) => {},
             (err) => {},
             () => {
-                this.snackbar.openSnackbar('Thêm mới đơn bán hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                this.snackbar.openSnackbar(
+                    'Thêm mới đơn bán hàng thành công. Lưu ý: Thông tin thay đổi ở phiếu bán hàng sẽ không được cập nhật ở phiếu đặt hàng',
+                    5000,
+                    'Đóng',
+                    'center',
+                    'bottom',
+                    true,
+                );
                 this.dialogRef.close();
                 this.router.navigate(['/orders']);
             },
@@ -544,7 +544,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     openDialogProductPromotion() {
-        console.log(this.listChoosenProductPromotion);
         const dialogRef = this.dialog.open(ProductListComponent, {
             maxWidth: '100vw',
             maxHeight: '100vh',

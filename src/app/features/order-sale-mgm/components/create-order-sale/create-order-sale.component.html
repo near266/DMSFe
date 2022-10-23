@@ -42,7 +42,7 @@
                     <mat-label>Nhóm</mat-label>
                     <mat-select formControlName="groupId">
                         <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option *ngFor="let city of groupCites" [value]="city">{{ city }}</mat-option>
+                        <mat-option *ngFor="let group of listGroup" [value]="group.id">{{ group.name }}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-full">
@@ -57,8 +57,15 @@
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Tuyến</mat-label>
                     <mat-select formControlName="routeId">
-                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option *ngFor="let city of groupCites" [value]="city">{{ city }}</mat-option>
+                        <input
+                            (input)="searchListRoute($event)"
+                            placeholder="Tìm kiếm..."
+                            style="padding-left: 12px"
+                            matInput
+                            class="h-10 rounded-sm" />
+                        <mat-option *ngFor="let route of listRoute" [value]="route.id">
+                            {{ route.routeName }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-full">
@@ -74,8 +81,15 @@
             <div class="flex gap-x-6 justify-between" formGroupName="customer">
                 <mat-form-field class="w-1/3" appearance="outline">
                     <mat-label>Mã Khách hàng</mat-label>
-                    <mat-select formControlName="id" (selectionChange)="setInfoCustomer($event.value)">
-                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <mat-select
+                        formControlName="id"
+                        (selectionChange)="setInfoCustomer($event.value); setRouteGroupAndEmployee($event.value)">
+                        <input
+                            (input)="searchListCustomer($event)"
+                            placeholder="Tìm kiếm..."
+                            style="padding-left: 12px"
+                            matInput
+                            class="h-10 rounded-sm" />
                         <mat-option *ngFor="let customer of listCustomer" [value]="customer">
                             {{ customer.customerCode }} - {{ customer.customerName }}
                         </mat-option>
@@ -314,7 +328,7 @@
             </div>
             <div class="grid grid-cols-4 col-span-2 text-green-600">
                 <span class="font-medium">Hạn mức dư nợ:</span>
-                <span class="col-span-3">Thanh toán trực tiếp</span>
+                <span class="col-span-3">{{ debtLimit }}</span>
             </div>
             <div class="grid grid-cols-2">
                 <span class="font-medium">Chiết khấu sản phẩm:</span>
@@ -324,7 +338,7 @@
             </div>
             <div class="grid grid-cols-4 col-span-2 text-green-600">
                 <span class="font-medium">Dư nợ hiện tại:</span>
-                <span class="col-span-3">Thanh toán trực tiếp</span>
+                <span class="col-span-3"></span>
             </div>
             <div class="grid grid-cols-2">
                 <span class="font-medium">Chiết khấu đơn hàng:</span>

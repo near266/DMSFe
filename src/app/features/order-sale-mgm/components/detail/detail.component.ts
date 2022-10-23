@@ -41,6 +41,7 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     prePayment: number = 0;
     totalOfVAT: number = 0;
     textMoney: any;
+    debtLimit: any;
 
     listChoosenProduct: any = [];
     listWarehouse: any = [];
@@ -113,7 +114,6 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     }
 
     textMoneyGen(money: any) {
-        console.log('ok');
         this.textMoney = this.numberToText.doc(money);
     }
 
@@ -224,7 +224,6 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     }
 
     countDiscount(product: any) {
-        console.log(1);
         if (product.totalPrice) {
             product.discount = (product.discountRate / 100) * product.totalPrice;
         }
@@ -233,7 +232,6 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     getDetail() {
         this.saleReceipt.searchReceiptById(this.id).subscribe((data) => {
             this.detailOrder = data;
-            console.log(data);
             this.patchValue();
             this.pushListProductToDialog();
             // get all info payment
@@ -243,6 +241,10 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
             this.totalPayment = this.detailOrder.totalPayment;
             this.prePayment = this.detailOrder.prePayment;
             this.textMoney = this.numberToText.doc(this.totalPayment);
+            // set hạn mức dư nợ
+            this.purchaseOrder.getCustomerById(this.detailOrder?.customer?.id).subscribe((data) => {
+                this.debtLimit = data?.debtLimit;
+            });
         });
     }
 
@@ -281,6 +283,42 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     getListCustomer() {
         this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data: any) => {
             this.listCustomer = data.data;
+        });
+    }
+
+    setInfoCustomer(id: string) {
+        let customer = this.listCustomer.filter((customer: any) => {
+            return customer.id === id;
+        })[0];
+        this.detailOrderForm.patchValue({
+            customer: {
+                name: [null],
+                phone: [null],
+                address: [null],
+            },
+        });
+        this.detailOrderForm.patchValue({
+            customer: {
+                name: customer.customerName,
+                phone: customer.phone,
+                address: customer.address,
+            },
+        });
+        // set hạn mức dư nợ
+        this.purchaseOrder.getCustomerById(id).subscribe((data) => {
+            this.debtLimit = data?.debtLimit;
+        });
+    }
+
+    setRouteGroupAndEmployee(customerId: any) {
+        this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
+            if (data) {
+                this.detailOrderForm.patchValue({
+                    routeId: data.route?.id,
+                    groupId: data.route?.unitTreeGroup?.id,
+                    orderEmployee: data.route?.employee?.id,
+                });
+            }
         });
     }
 
@@ -344,12 +382,12 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
         }
     }
 
-    unChooseFromListAdd(productRemove: any) {
-        // remove from list add
-        this.listProductAdd = this.listProductAdd.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
-    }
+    // unChooseFromListAdd(productRemove: any) {
+    //     // remove from list add
+    //     this.listProductAdd = this.listProductAdd.filter((product: any) => {
+    //         return productRemove.product.id != product?.product?.id;
+    //     });
+    // }
 
     pushListProductToDialog() {
         this.listChoosenProduct = this.detailOrder.listProduct.map((product: any) => {
@@ -359,82 +397,82 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
         });
     }
 
-    openDialogProduct() {
-        const dialogRef = this.dialog.open(ProductListComponent, {
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            height: '100%',
-            width: '100%',
-            panelClass: 'full-screen-modal',
-            data: {
-                listId: this.listChoosenProduct,
-                listProd: this.detailOrder.listProduct,
-            },
-        });
-        dialogRef.afterClosed().subscribe((data) => {
-            if (!data.isCancel) {
-                // this.listChoosenProduct = data;
-                // this.listProduct = this.listChoosenProduct;
-                if (this.formatFormProduct(data)) {
-                    let listAdd = this.listAddProduct(this.formatFormProduct(data));
-                    this.listProductAdd = [];
-                    this.listProductAdd = listAdd;
-                    console.log(listAdd);
-                    // listAdd.forEach((product: any) => {
-                    //     this.listProduct.push(product);
-                    // });
-                }
-            }
-        });
-    }
+    // openDialogProduct() {
+    //     const dialogRef = this.dialog.open(ProductListComponent, {
+    //         maxWidth: '100vw',
+    //         maxHeight: '100vh',
+    //         height: '100%',
+    //         width: '100%',
+    //         panelClass: 'full-screen-modal',
+    //         data: {
+    //             listId: this.listChoosenProduct,
+    //             listProd: this.detailOrder.listProduct,
+    //         },
+    //     });
+    //     dialogRef.afterClosed().subscribe((data) => {
+    //         if (!data.isCancel) {
+    //             // this.listChoosenProduct = data;
+    //             // this.listProduct = this.listChoosenProduct;
+    //             if (this.formatFormProduct(data)) {
+    //                 let listAdd = this.listAddProduct(this.formatFormProduct(data));
+    //                 this.listProductAdd = [];
+    //                 this.listProductAdd = listAdd;
+    //                 console.log(listAdd);
+    //                 // listAdd.forEach((product: any) => {
+    //                 //     this.listProduct.push(product);
+    //                 // });
+    //             }
+    //         }
+    //     });
+    // }
 
     // format form add product to view Detail
-    formatFormProduct(data: any) {
-        if (data.length > 0) {
-            let List = data.map((product: any) => {
-                return {
-                    product: {
-                        id: product.id,
-                        sku: product.sku,
-                        productName: product.productName,
-                        retailPrice: product.retailPrice,
-                        price: product.price,
-                        vat: product.vat,
-                        warehouseId: product?.warehouse?.id,
-                        retailUnit: product.retailUnit,
-                        wholeSaleUnit: product.wholeSaleUnit,
-                    },
-                    unit: {
-                        id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
-                        unitCode: product?.retailUnit?.unitCode,
-                        unitName: product?.retailUnit?.unitName,
-                    },
-                    warehouseId: product?.warehouse?.id,
-                    unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
-                    quantity: 0,
-                    totalPrice: 0,
-                    discount: 0,
-                    discountRate: 0,
-                    note: null,
-                    type: 1,
-                };
-            });
-            return List;
-        }
-    }
+    // formatFormProduct(data: any) {
+    //     if (data.length > 0) {
+    //         let List = data.map((product: any) => {
+    //             return {
+    //                 product: {
+    //                     id: product.id,
+    //                     sku: product.sku,
+    //                     productName: product.productName,
+    //                     retailPrice: product.retailPrice,
+    //                     price: product.price,
+    //                     vat: product.vat,
+    //                     warehouseId: product?.warehouse?.id,
+    //                     retailUnit: product.retailUnit,
+    //                     wholeSaleUnit: product.wholeSaleUnit,
+    //                 },
+    //                 unit: {
+    //                     id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
+    //                     unitCode: product?.retailUnit?.unitCode,
+    //                     unitName: product?.retailUnit?.unitName,
+    //                 },
+    //                 warehouseId: product?.warehouse?.id,
+    //                 unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
+    //                 quantity: 0,
+    //                 totalPrice: 0,
+    //                 discount: 0,
+    //                 discountRate: 0,
+    //                 note: null,
+    //                 type: 1,
+    //             };
+    //         });
+    //         return List;
+    //     }
+    // }
 
     // loop to reduce available product
-    listAddProduct(list: any) {
-        let listAddProduct = [];
-        console.log(this.listProduct.length, list.length);
-        if (list && this.listProduct) {
-            let listAvailbleIds = this.listProduct.map((product: any) => {
-                return product?.product?.id;
-            });
-            listAddProduct = list.filter((product: any) => {
-                return !listAvailbleIds.includes(product.product.id);
-            });
-        }
-        return listAddProduct;
-    }
+    // listAddProduct(list: any) {
+    //     let listAddProduct = [];
+    //     console.log(this.listProduct.length, list.length);
+    //     if (list && this.listProduct) {
+    //         let listAvailbleIds = this.listProduct.map((product: any) => {
+    //             return product?.product?.id;
+    //         });
+    //         listAddProduct = list.filter((product: any) => {
+    //             return !listAvailbleIds.includes(product.product.id);
+    //         });
+    //     }
+    //     return listAddProduct;
+    // }
 }
