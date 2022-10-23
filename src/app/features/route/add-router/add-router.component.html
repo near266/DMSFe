@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="bg-white h-full overflow-y-scroll w-full">
-            <app-infor-router [idRoute]="data.id" [ngClass]="{'hidden':title != 'Thông tin chung'}"></app-infor-router>
+            <app-infor-router [idRoute]="data?.id" [typeRoute]="data?.type" [ngClass]="{'hidden':title != 'Thông tin chung'}"></app-infor-router>
             <app-location-router [ngClass]="{'hidden':title != 'Bản đồ'}"></app-location-router>
             <app-history [ngClass]="{'hidden':title != 'Lịch sử KH'}"></app-history>
         </div>

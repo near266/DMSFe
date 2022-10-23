@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { RouteService } from 'src/app/core/services/route.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { RootInfoRoute } from '../models/infor-router';
 
 @Component({
@@ -18,33 +19,34 @@ export class InforRouterComponent implements OnInit {
     public datePipe: DatePipe,
     private _routeSer: RouteService,
     private fb: FormBuilder,
-    private customerGroupSer: CustomerGroupService
+    private customerGroupSer: CustomerGroupService,
+    private _snackBar: SnackbarService
   ) { }
 
   @Input() status: any;
   @Input() idRoute: any;
+  @Input() typeRoute:any;
   formatDate:any;
   showGroup:boolean = false;
   RootInfoRouteDetail :RootInfoRoute =  new RootInfoRoute;
   groupName:any;
   formInforRouteUpdate =  this.fb.group({
+    id: [''],
     routeCode: [''],
     routeName: [''],
     employeeId: [''],
-    // employee: [''],
     unitTreeGroupId: [''],
-    // unitTreeGroup: [''],
     routeDate: [''],
     startedDate: [''],
     status: true,
+    // employee: [''],
+    // unitTreeGroup: [''],
     // routeCustomer: [''],
-    id: [''],
     // createdBy: [''],
     // createdDate: [''],
     // lastModifiedBy: [null],
     // lastModifiedDate: [null]
   });
-
 
   EmployeeInGroup:any;
   ngOnInit(): void {
@@ -53,21 +55,34 @@ export class InforRouterComponent implements OnInit {
     this.dataService.employee.subscribe({
       next: data => {
         console.log(data);
-        console.log('OK');
         this.formInforRouteUpdate.patchValue({
-          startedDate: new Date(this.formatDate).toISOString(),
+          // startedDate: new Date(this.formatDate).toISOString(),
           id: this.RootInfoRouteDetail.id,
           unitTreeGroupId: this.RootInfoRouteDetail.unitTreeGroupId,
           employeeId: this.RootInfoRouteDetail.employeeId,
-
         });
-        console.log(this.formInforRouteUpdate.value);
-        this._routeSer.UpdateRoute(this.formInforRouteUpdate.value).subscribe({
-          next: data => {
-            console.log(data);
-            this.getRouteDetail();
-          }
-        })
+        console.log("Form Update", this.formInforRouteUpdate.value);
+        if(this.typeRoute === "update"){
+          console.log('Update');
+          this._routeSer.UpdateRoute(this.formInforRouteUpdate.value).subscribe({
+            next: data => {
+              console.log(data);
+              this.getRouteDetail();
+              // this._snackBar.openSnackbar("Update thành công!", 3000, "", "right", "bottom", true)
+            }
+          })
+        }else{
+          console.log("Add");
+          console.log("Form Add", this.formInforRouteUpdate.value);
+          this._routeSer.AddRoute(this.formInforRouteUpdate.value).subscribe({
+            next: data => {
+              console.log(data);
+              this.getRouteDetail();
+            }
+          })
+        }
+
+
       }
     })
 
@@ -96,7 +111,6 @@ export class InforRouterComponent implements OnInit {
       next: data => {
         console.log(data);
         this.EmployeeInGroup = data.data;
-
       }
     })
   }
