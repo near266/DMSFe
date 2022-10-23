@@ -21,8 +21,8 @@ export class UserManageComponent implements OnInit {
         private dataService: DataService,
     ) { }
 
-    pageSizeList = [30, 50, 100, 200, 500];
-    pageSize = 30;
+    pageSizeList = [10, 30, 50, 100, 200, 500];
+    pageSize = 10;
     page = 1;
     totalPage: number;
     totalCount: number;
@@ -271,13 +271,14 @@ export class UserManageComponent implements OnInit {
 
     ChangePage(e: any) {
         this.page = e;
-
+        this.GetListAll()
     }
 
     ChangePageSize() {
         if (this.page * this.pageSize > this.totalCount) {
             this.page = 1
         }
+        this.GetListAll()
     }
 
     users: any = [];
