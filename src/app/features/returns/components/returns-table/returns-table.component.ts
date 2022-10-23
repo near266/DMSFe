@@ -13,10 +13,18 @@ export class ReturnsTableComponent implements OnInit {
     currentPage: number;
     returns: Return[] = [];
     Status = Status;
+    totalItems: number;
     headers = tableHeader;
     constructor(private returnsService: ReturnsService) {}
     ngOnInit(): void {
-        this.returnsService.getAllReturns().subscribe((data) => {
+        this.returnsService.getInititalReturns();
+        this.returnsService.currentPage$.subscribe((page) => {
+            this.currentPage = page;
+        });
+        this.returnsService.totalReturns$.subscribe((total) => {
+            this.totalItems = total;
+        });
+        this.returnsService.returns$.subscribe((data) => {
             this.returns = data;
         });
     }

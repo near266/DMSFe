@@ -10,18 +10,26 @@
           Mã SP</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Tên sản phẩm</th>
+          Sản phẩm</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          ĐVT lẻ</th>
+          ĐVT</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Kho xuất</th>
+          Kho nhập</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Số lượng
+          SL bán
+        </th>
+        <th scope="col"
+          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+          VAT</th>
+        <th scope="col"
+          class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+          SL trả
           <span class="text-red-500">(Tổng: {{productQuantitySum}})</span>
         </th>
+
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           Đơn giá</th>
@@ -31,9 +39,6 @@
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           Chiết khấu</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Tỷ lệ CK</th>
         <th scope="col"
           class="sticky top-0 z-10 min-w-[200px] border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           Ghi chú</th>
@@ -68,17 +73,34 @@
           </div>
         </td>
         <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
+          {{item?.salesQuantity}}
+        </td>
+        <td class="border-x  border-solid align-middle px-2 text-center">{{item?.vat/100 || 0 | percent}}
+        </td>
+        <td class="border-x max-w-[100px]  border-solid align-middle px-2 text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-              <input matInput currencyMask
+              <input currencyMask
                 [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
-                [ngModel]="item.quantity" (ngModelChange)="item.quantity=$event;updateItemTotalPrice(item)" />
+                matInput [ngModel]="item.returnsQuantity"
+                (ngModelChange)="item.returnsQuantity=$event;updateItemTotalPrice(item)" [max]="item.salesQuantity" />
             </mat-form-field>
           </div>
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center">{{item.unitPrice | currency:'VND':'symbol'}}
+        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
+          <div class="flex">
+            <mat-form-field appearance="outline">
+              <input currencyMask
+                [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                matInput [ngModel]="item.unitPrice" (ngModelChange)="item.unitPrice=$event;updateItemTotalPrice(item)"
+                [disabled]="!item.quantity" />
+            </mat-form-field>
+          </div>
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center">{{item.totalPrice | currency:'VND':'symbol'}}
+        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center"><input currencyMask
+            [options]="{ suffix: 'đ', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+            matInput [ngModel]="item.totalPrice" (ngModelChange)="item.totalPrice=$event;updateItemTotalPrice(item)"
+            [disabled]="true" class="disabled:opacity-100 disabled:text-black" />
         </td>
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
           <div class="flex">
@@ -86,11 +108,9 @@
               <input currencyMask
                 [options]="{ suffix: 'đ', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
                 matInput [ngModel]="item.discount" (ngModelChange)="item.discount=$event;updateDiscountRate(item)"
-                [disabled]="!item.quantity" />
+                [disabled]="!item.quantity" [max]="item.totalPrice" />
             </mat-form-field>
           </div>
-        </td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">{{item.discountRate | percent}}
         </td>
         <td class="border-x min-w-[200px]  border-solid align-middle px-2  text-center">
           <div class="flex">

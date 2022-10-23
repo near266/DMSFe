@@ -315,11 +315,12 @@ export class CreateReturnFormComponent implements OnInit {
                     ...this.form.value,
                     customerCode: this.form.value.customerCode.label,
                     customerId: this.form.value.customerCode.value,
-                    ...listProduct,
-                    listPromotionProduct: [],
+                    ...listProduct.listProduct,
+                    listPromotionProduct: listProduct.listPromotionProduct,
                     orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
                     returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
                 };
+                console.log(form);
                 this.returnFormService.addNewReturn(form);
             }
         });

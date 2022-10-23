@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import * as moment from 'moment';
 import { map, Subscription, switchMap, tap } from 'rxjs';
 import { ComponentMode } from 'src/app/features/returns/models/componentMode';
 import { Status } from 'src/app/features/returns/models/return';
@@ -221,6 +222,7 @@ export class DetailReturnInfoComponent implements OnInit {
                     className: 'flex-1',
                     defaultValue: null,
                     templateOptions: {
+                        required: true,
                         label: 'Ngày trả hàng',
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
@@ -302,15 +304,33 @@ export class DetailReturnInfoComponent implements OnInit {
     ngOnInit(): void {
         this.subscription.push(
             this.returnDetailsService.returnDetails$.subscribe((_) => {
+                console.log(_);
                 this.form.patchValue(_);
             }),
             this.returnDetailsService.currentMode$.subscribe((mode) => {
                 console.log(123);
                 this.disableField = mode === ComponentMode.VIEW;
             }),
-            this.returnDetailsService.updateReturnInfo$.subscribe((_) => {
-                if (_) {
-                    console.log(this.form.getRawValue());
+            this.returnDetailsService.updateReturnInfo$.subscribe((value: any) => {
+                if (value) {
+                    this.form.markAllAsTouched();
+
+                    if (this.form.valid) {
+                        const form = {
+                            ...this.form.getRawValue(),
+                            customerId: this.form.getRawValue().customerCode?.value,
+                            orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
+                            returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
+                            totalOfVAT: 0,
+                            totalDiscountProduct: 0,
+                            tradeDiscount: 0,
+                            status: value?.status || this.form.value.status,
+                            totalPayment: value.totalPayment,
+                        };
+                        delete form.customerCode;
+                        this.returnFormService.updateReturn(form);
+                    }
+                    // console.log(this.form.getRawValue());
                 }
             }),
         );
