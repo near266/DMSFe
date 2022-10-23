@@ -28,13 +28,17 @@ export class AddRouteComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.customerService.getall(1, 10000).subscribe(data => {
       this.response = data;
-      this.customerService.SearchAllRouteByCustomerId(this.id).subscribe( data => {
+      this.customerService.SearchAllRouteByCustomerId(this.id).subscribe( res => {
         this.response.data.forEach( (e: any) => {
-          data.list.forEach((element: any) => {
-            if(e.id != element.id) {
-              this.data.push(e);
+          let check = true;
+          res.list.forEach((element: any) => {
+            if(e.id.includes(element.id)) {
+              check = false;
             }
           });
+          if(check == true) {
+            this.data.push(e);
+          }
         });
       });
     });
@@ -44,28 +48,42 @@ export class AddRouteComponent implements OnInit, AfterViewInit {
   }
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close({event: true});
   }
 
   change(id: string) {
     if(this.list.indexOf(id) != -1) {
       this.list.splice(this.list.indexOf(id), 1);
+      this.delete(id);
     } else {
       this.list.push(id);
+      this.submit(id);
     }
   }
 
-  submit() {
+  delete(id: string) {
     const body = {
-      routeid: [this.id],
-      listCustomer: this.list
+      routeId: id,
+      customerId: [this.id]
+    };
+    this.customerService.deleteCusFromRoute(body).subscribe(data => {
+      this.snackbar.openSnackbar('Xóa tuyến thành công', 2000, 'Đóng', 'center', 'bottom', true);
+
+    }, (error) => {
+      this.snackbar.openSnackbar('Xóa tuyến không thành công', 2000, 'Đóng', 'center', 'bottom', true);
+    });
+  }
+
+  submit(id: string) {
+    const body = {
+      routeid: id,
+      listCustomer: [this.id]
     };
 
     this.customerService.addCusToRoute(body).subscribe(data => {
       this.snackbar.openSnackbar('Thêm tuyến thành công', 2000, 'Đóng', 'center', 'bottom', true);
-      this.dialogRef.close({event: true});
     }, (error) => {
-      this.snackbar.openSnackbar('Thêm tuyến không thành công, vui lòng kiểm tra lại thông tin chỉnh sửa', 2000, 'Đóng', 'center', 'bottom', true);
+      this.snackbar.openSnackbar('Thêm tuyến không thành công', 2000, 'Đóng', 'center', 'bottom', true);
     });
   }
 

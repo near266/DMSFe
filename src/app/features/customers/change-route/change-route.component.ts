@@ -32,10 +32,17 @@ export class ChangeRouteComponent implements OnInit, AfterViewInit {
   }
 
   open() {
-    this.dialog.open(AddRouteComponent, {
+    let dialogRef = this.dialog.open(AddRouteComponent, {
       minWidth: '400px',
       data: this.id
     });
+    dialogRef.afterClosed().subscribe(data => {
+      if(data) {
+        this.customerService.SearchAllRouteByCustomerId(this.id).subscribe( data => {
+          this.response = data;
+        });
+      }
+    })
   }
 
   delete(id: string) {
@@ -45,10 +52,13 @@ export class ChangeRouteComponent implements OnInit, AfterViewInit {
     };
     this.customerService.deleteCusFromRoute(body).subscribe(data => {
       if(data) {
+        this.snackbar.openSnackbar('Xóa tuyến thành công', 2000, 'Đóng', 'center', 'bottom', true);
         this.customerService.SearchAllRouteByCustomerId(this.id).subscribe( data => {
           this.response = data;
         });
       }
+    }, (error) => {
+      this.snackbar.openSnackbar('Xóa tuyến không thành công', 2000, 'Đóng', 'center', 'bottom', true);
     });
   }
 

@@ -3,14 +3,14 @@
     <div class="flex flex-col justify-center">
       <span class="text-lg text-[#888] font-medium italic">Thêm tuyến</span>
     </div>
-    <div class="flex justify-between w-[160px]">
-      <button type="submit" mat-flat-button (click)="submit()" class="bg-[#1891C9] text-white font-medium mx-1"><i class="fa-solid fa-circle-check mr-1"></i>Lưu</button>
+    <div class="flex justify-between">
+      <!-- <button type="submit" mat-flat-button (click)="submit()" class="bg-[#1891C9] text-white font-medium mx-1"><i class="fa-solid fa-circle-check mr-1"></i>Lưu</button> -->
       <button type="button" mat-stroked-button (click)="close()" class="text-[#565869] bg-white font-medium"><i class="fa-solid fa-right-from-bracket mr-1"></i>Đóng</button>
     </div>
   </div>
   <hr class="my-2">
   <div class="w-full flex flex-col h-[40vh] overflow-y-scroll">
-    <div *ngFor="let item of data" class="px-[16px] mb-2">
+      <div *ngFor="let item of data" class="px-[16px] mb-2">
         <mat-checkbox (change)="change(item.id)" color="primary">{{item.routeName}}</mat-checkbox>
     </div>
   </div>
