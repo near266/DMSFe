@@ -25,7 +25,8 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             name: 'Đã duyệt',
         },
     ];
-    groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng'];
+    listRoute: any = [];
+    listGroup: any = [];
     createForm: FormGroup;
     unitPrices: any = [];
     quantities: any = [];
@@ -117,6 +118,12 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         this.purchaseOrder.getAllWarehouses().subscribe((data) => {
             this.listWarehouse = data;
         });
+        // get list route
+        this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => {
+            this.listRoute = data.data;
+        });
+        // get list group
+        this.purchaseOrder.getAllGroup(1).subscribe((data) => (this.listGroup = data));
     }
 
     ngDoCheck(): void {
@@ -192,34 +199,6 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         }
     }
 
-    // countDiscountRate() {
-    //     console.log(1);
-    //     this.listChoosenProduct.forEach((product: any) => {
-    //         if (product.discount && product.totalPrice) {
-    //             product.discountRate = (product.discount / product.totalPrice) * 100;
-    //         }
-    //     });
-    // }
-
-    // countTotalPrice() {
-    //     console.log(1);
-
-    //     this.listChoosenProduct.forEach((product: any) => {
-    //         if (product.quantity && product.unitPrice) {
-    //             product.totalPrice = product.quantity * product.unitPrice;
-    //         }
-    //     });
-    // }
-
-    // countDiscount() {
-    //     console.log(1);
-    //     this.listChoosenProduct.forEach((product: any) => {
-    //         if (product.discountRate && product.totalPrice) {
-    //             product.discount = (product.discountRate / 100) * product.totalPrice;
-    //         }
-    //     });
-    // }
-
     stopPropagation(e: any) {
         e.stopPropagation();
     }
@@ -278,11 +257,11 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         });
         const body = {
             orderDate: moment(this.createForm.get('orderDate')?.value).format('YYYY-MM-DDTHH:mm:ss'),
-            // groupId: 'ef6c9edf-5445-4dbf-b0f3-d65d6412cfc0', // Chưa có api get
+            groupId: this.createForm.get('groupId')?.value, // Chưa có api get
             orderEmployeeId: this.createForm.get('orderEmployeeId')?.value,
             // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             customerId: this.createForm.get('customer.customerId')?.value,
-            // routeId: null, // Chưa có API
+            routeId: this.createForm.get('routeId')?.value, // Chưa có API
             type: 0,
             status: this.createForm.get('status')?.value,
             description: this.createForm.get('description')?.value,
@@ -315,7 +294,8 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             },
         );
     }
-    updateTotalPrice(product:any) {
+
+    updateTotalPrice(product: any) {
         this.countTotal(product);
         product.totalPrice = product.quantity * product.unitPrice;
     }
@@ -370,5 +350,33 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
                 product.warehouseId = id;
             });
         }
+    }
+
+    searchListCustomer(e: any) {
+        let body = {
+            keyword: e.target.value,
+            page: 1,
+            pageSize: 100,
+        };
+        this.purchaseOrder.searchCustomer(body).subscribe((data) => {
+            this.listCustomer = data.data;
+        });
+    }
+
+    searchListRoute(e: any) {
+        this.purchaseOrder.getAllRoute(1, 1000, e.target.value).subscribe((data) => {
+            if (data) {
+                this.listRoute = data.data;
+            }
+        });
+    }
+
+    setRouteGroup(customerId: any) {
+        this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
+            this.createForm.patchValue({
+                routeId: data.route?.id,
+                groupId: data.route?.unitTreeGroup?.id,
+            });
+        });
     }
 }

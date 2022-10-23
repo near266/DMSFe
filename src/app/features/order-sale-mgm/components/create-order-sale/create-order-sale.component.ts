@@ -135,7 +135,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         });
         const body = {
             orderDate: moment(this.createSale.get('orderDate')?.value).format('YYYY-MM-DD'),
-            groupId: 'ef6c9edf-5445-4dbf-b0f3-d65d6412cfc0',
+            groupId: this.createSale.get('groupId')?.value,
             saleEmployeeId: this.createSale.get('saleEmployee')?.value,
             // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             customerId: this.createSale.get('customer')?.value?.id?.id,

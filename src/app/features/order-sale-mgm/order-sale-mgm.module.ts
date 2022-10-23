@@ -12,6 +12,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CustomerComponent } from './components/customer/customer.component';
 import { ProductsComponent } from './components/products/products.component';
 import { GenReturnOrderComponent } from './components/gen-return-order/gen-return-order.component';
+import { ProductPromotionTableComponent } from './components/product-promotion-table/product-promotion-table.component';
+import { ProductTableComponent } from './components/product-table/product-table.component';
 
 const routes: Routes = [
     {
@@ -25,9 +27,7 @@ const routes: Routes = [
     {
         path: 'detail',
         loadChildren: () =>
-            import('./components/view-edit-detail/view-edit-detail.module').then(
-                (m) => m.ViewEditDetailModule,
-            ),
+            import('./components/view-edit-detail/view-edit-detail.module').then((m) => m.ViewEditDetailModule),
     },
 ];
 
@@ -42,6 +42,8 @@ const routes: Routes = [
         CustomerComponent,
         ProductsComponent,
         GenReturnOrderComponent,
+        ProductPromotionTableComponent,
+        ProductTableComponent,
     ],
     imports: [CommonModule, SharedModule, RouterModule.forChild(routes), NgxPaginationModule],
 })
