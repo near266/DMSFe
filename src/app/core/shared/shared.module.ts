@@ -5,6 +5,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgSelectModule } from '@ng-select/ng-select';
+
 
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -156,6 +158,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
         FormsModule,
         ReactiveFormsModule,
         TreeModule,
+        NgSelectModule,
         NgxPaginationModule,
     ],
 })

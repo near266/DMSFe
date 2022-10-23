@@ -1,22 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { of, switchMap, tap } from 'rxjs';
-import { Status } from '../../../models/return';
 import * as moment from 'moment';
-import { ReturnFormService } from '../../../services/return-form.service';
+import { debounce, Subscription, switchMap, tap, timer } from 'rxjs';
+import { Status } from 'src/app/features/returns/models/return';
+import { ReturnFormService } from 'src/app/features/returns/services/return-form.service';
+import { ReturnOrderService } from 'src/app/features/returns/services/return-order.service';
 
 @Component({
-    selector: 'app-create-return-form',
-    templateUrl: './create-return-form.component.html',
-    styleUrls: ['./create-return-form.component.scss'],
+    selector: 'app-return-order-info',
+    templateUrl: './return-order-info.component.html',
+    styleUrls: ['./return-order-info.component.scss'],
 })
-export class CreateReturnFormComponent implements OnInit {
-    formValues = [];
-    products: any[] = [];
-    promotionProducts: any[] = [];
+export class ReturnOrderInfoComponent implements OnInit {
+    private subscription: Subscription[] = [];
+    disableField: boolean = false;
+    constructor(private returnFormService: ReturnFormService, private returnDetailsService: ReturnOrderService) {}
     form = new FormGroup({});
     fields: FormlyFieldConfig[] = [
+        { key: 'id' },
         {
             key: 'customerId',
         },
@@ -31,12 +34,13 @@ export class CreateReturnFormComponent implements OnInit {
             fieldGroup: [
                 {
                     className: 'flex-1 ',
-                    key: 'orderId',
+                    key: 'saleCode',
                     type: 'input',
+                    defaultValue: null,
                     templateOptions: {
                         label: 'Mã phiếu bán',
-                        placeholder: 'Mã phiếu bán',
                         disabled: true,
+                        placeholder: 'Mã phiếu bán',
                         appearance: 'outline',
                         // options: status,
                     },
@@ -44,13 +48,13 @@ export class CreateReturnFormComponent implements OnInit {
                 {
                     key: 'customerCode',
                     // type: 'product-select',
-                    type: 'autocomplete-formly',
+                    type: 'select',
                     className: 'flex-1',
                     defaultValue: null,
                     templateOptions: {
                         label: 'Mã khách hàng',
                         placeholder: 'Mã khách hàng',
-                        required: true,
+                        disabled: true,
                         appearance: 'outline',
                         valueProp: (option: any) => option,
                         compareWith: (o1: any, o2: any) => o1.value === o2.value,
@@ -71,7 +75,7 @@ export class CreateReturnFormComponent implements OnInit {
                     templateOptions: {
                         label: 'Khách hàng',
                         placeholder: 'Khách hàng',
-                        required: true,
+                        disabled: true,
                         // disabled: true,
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
@@ -97,14 +101,14 @@ export class CreateReturnFormComponent implements OnInit {
             fieldGroup: [
                 {
                     className: 'flex-1 ',
+                    defaultValue: null,
                     key: 'groupId',
                     type: 'select',
                     templateOptions: {
                         label: 'Phòng, nhóm',
                         options: this.returnFormService.getGroupsAndFilter(),
                         type: 'select',
-                        required: true,
-                        // disabled: true,
+                        disabled: true,
                         appearance: 'outline',
                         // options: status,
                     },
@@ -114,15 +118,12 @@ export class CreateReturnFormComponent implements OnInit {
                     // type: 'product-select',
                     className: 'flex-1',
                     type: 'select',
-
                     defaultValue: null,
                     templateOptions: {
                         label: 'Nhân viên đặt',
-
+                        disabled: true,
                         // options: this.returnFormService.getEmployees(),
                         // options: [],
-                        required: true,
-
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -153,6 +154,7 @@ export class CreateReturnFormComponent implements OnInit {
                     templateOptions: {
                         label: 'Ngày đặt hàng',
                         required: true,
+                        disabled: true,
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -181,8 +183,6 @@ export class CreateReturnFormComponent implements OnInit {
                     defaultValue: null,
                     templateOptions: {
                         label: 'Địa chỉ',
-                        required: true,
-
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -211,9 +211,8 @@ export class CreateReturnFormComponent implements OnInit {
                     className: 'flex-1',
                     defaultValue: null,
                     templateOptions: {
-                        label: 'Ngày trả hàng',
                         required: true,
-
+                        label: 'Ngày trả hàng',
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -225,8 +224,7 @@ export class CreateReturnFormComponent implements OnInit {
                     className: 'flex-1',
                     defaultValue: null,
                     templateOptions: {
-                        label: 'Khách hàng',
-                        placeholder: 'Khách hàng',
+                        label: 'Trạng thái',
                         required: true,
                         options: [
                             { value: Status.PENDING, label: 'Chờ Duyệt' },
@@ -260,6 +258,7 @@ export class CreateReturnFormComponent implements OnInit {
         },
     ];
     model = {
+        id: null,
         orderId: null,
         description: null,
         status: 1,
@@ -275,73 +274,51 @@ export class CreateReturnFormComponent implements OnInit {
         returnDate: new Date(),
         returnCode: null,
     };
-    constructor(private returnFormService: ReturnFormService) {}
 
     ngOnInit(): void {
-        // TODO: remove id
-        // this.returnFormService.formValues$.subscribe((formValues) => {
-        //     this.form.patchValue({
-        //         ...formValues,
-        //         description: `Trả hàng từ phiếu bán hàng [${formValues.orderCode}]`,
-        //     });
-        //     formValues.listProduct.forEach((item: any) => {
-        //         this.products.push({
-        //             productId: item.product?.id,
-        //             unitId: item.unit?.id,
-        //             warehouseId: item.warehouse?.id,
-        //             unitPrice: item.unitPrice || 0,
-        //             quantity: item.quantity,
-        //             totalPrice: item.totalPrice || 0,
-        //             discount: item.discount || 0,
-        //             discountRate: item.discountRate || 0,
-        //             note: item.note,
-        //             type: item.type || 0,
-        //         });
-        //     });
-        //     formValues.listPromotionProduct.forEach((item: any) => {
-        //         this.promotionProducts.push({
-        //             productId: item.product?.id,
-        //             unitId: item.unit?.id,
-        //             warehouseId: item.warehouse?.id,
-        //             unitPrice: item.unitPrice || 0,
-        //             quantity: item.quantity,
-        //             totalPrice: item.totalPrice || 0,
-        //             discount: item.discount || 0,
-        //             discountRate: item.discountRate || 0,
-        //             note: item.note,
-        //             type: item.type || 0,
-        //         });
-        //     });
-        // });
-        this.returnFormService.getAllCustomers().subscribe((result) => {
-            console.log(result);
-        });
-        this.returnFormService.submitInfoForm$.subscribe((listProduct) => {
-            this.form.markAllAsTouched();
-            if (this.form.valid) {
-                const form = {
-                    ...this.form.value,
-                    customerCode: this.form.value.customerCode.label,
-                    customerId: this.form.value.customerCode.value,
-                    ...listProduct.listProduct,
-                    listPromotionProduct: listProduct.listPromotionProduct,
-                    orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
-                    returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
-                };
-                console.log(form);
-                this.returnFormService.addNewReturn(form);
-            }
-        });
+        this.subscription.push(
+            this.returnDetailsService.returnInfo$.subscribe((_) => {
+                setTimeout(() => {
+                    this.form.patchValue(_);
+                }, 1);
+            }),
+            this.returnDetailsService.submitFormPromotionList$
+                .pipe(debounce(() => timer(100)))
+                .subscribe((value: any) => {
+                    if (value) {
+                        this.form.markAllAsTouched();
+                        if (this.form.valid) {
+                            const form = {
+                                ...this.form.getRawValue(),
+                                ...value,
+                                customerId: this.form.getRawValue().customerCode?.value,
+                                orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
+                                returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
+                                totalOfVAT: 0,
+                                totalAmount: this.returnDetailsService.totalPrice$.getValue(),
+                                totalDiscountProduct: this.returnDetailsService.discountAmount$.getValue(),
+                                totalPayment:
+                                    this.returnDetailsService.totalPrice$.getValue() -
+                                    this.returnDetailsService.discountAmount$.getValue(),
+                                tradeDiscount: 0,
+                                status: this.form.value.status || 1,
+                            };
+                            delete form.customerCode;
+                            delete form.id;
+                            // this.returnFormService.updateReturn(form);
+                            this.returnFormService.addNewReturn(form);
+                        }
+                        // console.log(this.form.getRawValue());
+                    }
+                }),
+        );
     }
     submit() {
-        const form = {
-            ...this.form.value,
-            orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
-            returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
-            listProduct: this.products,
-            listProductDiscount: this.promotionProducts,
-        };
-        delete form.id;
-        this.returnFormService.addNewReturn(form);
+        console.log('123');
+    }
+    ngOnDestroy() {
+        this.subscription.forEach((_) => {
+            _.unsubscribe();
+        });
     }
 }

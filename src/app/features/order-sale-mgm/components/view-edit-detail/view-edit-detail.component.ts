@@ -11,6 +11,7 @@ import { GenOrderSaleComponent } from 'src/app/features/orders-mgm/components/ge
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { GenReturnOrderComponent } from '../gen-return-order/gen-return-order.component';
 import * as moment from 'moment';
+import { ReturnOrderService } from 'src/app/features/returns/services/return-order.service';
 
 @Component({
     selector: 'app-view-edit-detail',
@@ -33,6 +34,7 @@ export class ViewEditDetailComponent implements OnInit {
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
+        private returnOrderService: ReturnOrderService,
         private dataService: DataService,
         private snackbar: SnackbarService,
         private dialog: MatDialog,
@@ -119,21 +121,13 @@ export class ViewEditDetailComponent implements OnInit {
         };
         // ấn vào nút trả hàng -> mở dialog gen phiếu trả
         if (changeTo === 0) {
-            let dialogRef = this.dialog.open(GenReturnOrderComponent, {
-                maxWidth: '100vw',
-                maxHeight: '100vh',
-                height: '100%',
-                width: '100%',
-                panelClass: 'full-screen-modal',
-                data: this.detailOrder,
-            });
-            dialogRef.afterClosed().subscribe((data) => {
-                if (data === 'Lưu') {
-                    // call api create returnOrder
-                    this.snackbar.openSnackbar('Tạo phiếu trả thành công', 2000, 'Đóng', 'center', 'bottom', true);
-                } else {
-                }
-            });
+            const { listProduct, listPromotionProduct, ...orderInfo } = this.detailOrder;
+            this.returnOrderService.returnInfo$.next(this.returnOrderService.formatInfo(orderInfo));
+            this.returnOrderService.returnProductList$.next(this.returnOrderService.formatListProduct(listProduct));
+            this.returnOrderService.returnPromotionList$.next(
+                this.returnOrderService.formatListProduct(listPromotionProduct),
+            );
+            this.router.navigate(['returns/return_from_order']);
         }
         // Ấn vào nút xuất hàng
         else if (changeTo === 4) {

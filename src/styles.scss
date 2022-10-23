@@ -2,10 +2,20 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+@import '~@ng-select/ng-select/themes/material.theme.css';
 
 html,
 body {
     height: 100%;
+}
+.ng-select .ng-select-container:after {
+    top: 0;
+}
+.ng-select .ng-select-container.ng-appearance-outline {
+    min-height: 52px;
+}
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+    padding: 8px;
 }
 
 body {
@@ -15,11 +25,11 @@ body {
     // overflow-x: hidden;
 }
 
-input, textarea {
-  outline: none;
-  border: none;
+input,
+textarea {
+    outline: none;
+    border: none;
 }
-
 
 @import '~@circlon/angular-tree-component/css/angular-tree-component.css';
 
@@ -104,9 +114,9 @@ tree-node-checkbox {
 }
 
 tree-viewport {
-  overflow:visible;
-  z-index:10;
-  position: relative;
+    overflow: visible;
+    z-index: 10;
+    position: relative;
 }
 
 .button-orange-xs {

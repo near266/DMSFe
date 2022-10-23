@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CreateReturnFromOrderComponent } from './components/create-return/create-return-from-order/create-return-from-order.component';
 import { CreateReturnComponent } from './components/create-return/create-return.component';
 import { ReturnsComponent } from './returns.component';
 
@@ -9,6 +10,10 @@ const routes: Routes = [
     {
         path: 'create_return_order',
         component: CreateReturnComponent,
+    },
+    {
+        path: 'return_from_order',
+        component: CreateReturnFromOrderComponent,
     },
     {
         path: 'details',
