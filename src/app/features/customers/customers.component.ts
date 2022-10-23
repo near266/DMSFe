@@ -285,7 +285,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.init('', this.page, this.pageSize);
+    this.page = 1;
+    this.init(this.keywords, this.page, this.pageSize);
     this.provincesService.getListProvinces().subscribe(data => {
       this.listProvinces = data;
     });
@@ -331,7 +332,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        this.init('', this.page, this.pageSize);
+        this.page = 1;
+        this.init(this.keywords, this.page, this.pageSize);
       }
     });
   }
@@ -344,7 +346,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     })
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        this.init('', this.page, this.pageSize);
+        this.init(this.keywords, this.page, this.pageSize);
       }
     });
   }
@@ -419,8 +421,13 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
   search(request: any) {
     this.page = 1;
+    if(request == null || request == undefined) {
+      this.keywords = '';
+    } else {
+      this.keywords = request;
+    }
     const body = {
-      keyword: '',
+      keyword: this.keywords,
       page: this.page,
       pageSize: this.pageSize,
     };
