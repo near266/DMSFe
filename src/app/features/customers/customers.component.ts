@@ -24,6 +24,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   hasEmployee = false;
   hasArea = false;
   customer = customers;
+  role: string;
+  listRole: string[] = [];
   response: Response<Customers> = {
       data: [],
       totalCount: 0,
@@ -271,13 +273,15 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       private dialog: MatDialog,
       private customerService: CustomerService,
       private snackbar: SnackbarService,
-      private datePipe: DatePipe,
+      public datePipe: DatePipe,
       private provincesService: ProvincesService,
       private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
       this.title.setTitle('Khách hàng');
+      this.role = '' + localStorage.getItem('role');
+      this.listRole = this.role.split(',');
   }
 
   ngAfterViewInit(): void {

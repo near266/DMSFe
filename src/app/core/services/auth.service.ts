@@ -23,7 +23,10 @@ export class AuthService {
 
   setToken(token: string) {
     localStorage.setItem("access_token", token)
+  }
 
+  setRoles(role: string) {
+    localStorage.setItem("role", role);
   }
 
   isLoggednIn() {
