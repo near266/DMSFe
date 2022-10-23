@@ -421,6 +421,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
   search(request: any) {
     this.page = 1;
+    this.current_page = 1;
     if(request == null || request == undefined) {
       this.keywords = '';
     } else {
