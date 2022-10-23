@@ -40,22 +40,32 @@ export class ReturnApiService {
     createNewReturn(form: any): Observable<any> {
         return this.http.post(this.returnUrl + '/add', form, { responseType: 'text' });
     }
+    updateReturn(form: any): Observable<any> {
+        return this.http.put(this.returnUrl + '/update', form, { responseType: 'text' });
+    }
 
-    getAllReturns() {
+    deleteReturn(id: string) {
+        console.log(id);
+        return this.http.delete(this.returnUrl + '/delete', { body: { returnsIds: [id] } });
+    }
+
+    getAllReturns(page: number) {
         return this.http.post<any>(this.returnUrl + '/search', {
-            pageSize: 100,
-            page: 1,
+            pageSize: 30,
+            page,
             keyword: '',
+            sortField: 'lastModifiedDate',
+            isAscending: true,
         });
     }
 
     getReturnById(id: string | null): Observable<any> {
         return this.http.get<any>(this.returnUrl + '/id?Id=' + id);
     }
-    deleteProductFromReturn({ productId, returnsId }: any) {
+    deleteProductFromReturn({ listIdRemove, returnsId }: any) {
         return this.http.delete(this.returnUrl + '/removeProduct', {
             body: {
-                productId,
+                listIdRemove,
                 returnsId,
             },
         });

@@ -1,5 +1,5 @@
 <div class="relative mt-2" style="font-size: 12px">
-  <table class="min-w-full w-full border-spacing-0 border-separate bg-gray-300 z-10">
+  <table class="min-w-full border-spacing-0 border-separate bg-gray-300 z-10">
     <thead class="h-10  border-gray-300 ">
       <tr>
         <th scope="col"
@@ -10,35 +10,23 @@
           Mã SP</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Sản phẩm</th>
+          Tên sản phẩm</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           ĐVT</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Kho nhập</th>
+          Kho xuất</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           SL bán
         </th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          VAT</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          SL trả
-          <span class="text-red-500">(Tổng: {{productQuantitySum}})</span>
-        </th>
-
+          SL đã xuất</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Đơn giá</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Thành tiền</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Chiết khấu</th>
+          SL trả</th>
         <th scope="col"
           class="sticky top-0 z-10 min-w-[200px] border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           Ghi chú</th>
@@ -59,33 +47,18 @@
           </div>
         </td>
         <td class="border-x max-w-[120px]  align-middle px-2 text-center">
-          <div class="flex">
-            {{item.warehouse?.warehouseName}}
-          </div>
+          {{item.warehouse?.warehouseName}}
         </td>
         <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
-          <div class="flex">
-            {{item.salesQuantity}}
-          </div>
+          {{item.salesQuantity}}
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center">
-          {{item.product?.vat/100 || 0 | percent}}
+        <td class="border-x  border-solid align-middle px-2 text-center">{{item.exportQuantity}}
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center">{{item.returnsQuantity}}
+        <td class="border-x max-w-[120px]  border-solid align-middle px-2 text-center">
+          {{item.returnsQuantity}}
         </td>
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
-          {{item.unitPrice | currency:'VND':'symbol'}}
-        </td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
-          {{item.totalPrice | currency:'VND':'symbol'}}
-        </td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
-          {{item.discount | currency:'VND':'symbol'}}
-        </td>
-        <td class="border-x min-w-[200px]  border-solid align-middle px-2  text-center">
-          <div class="flex">
-            {{item.note}}
-          </div>
+          {{item.note}}
         </td>
         <td class="border-x  border-solid align-middle px-2 text-center">
           <i (click)="removeProductFromReturn(item.product?.id)"

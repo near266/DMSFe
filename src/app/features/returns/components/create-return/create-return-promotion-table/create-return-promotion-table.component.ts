@@ -19,6 +19,9 @@ export class CreateReturnPromotionTableComponent implements OnInit {
         private snackbar: SnackbarService,
     ) {}
     checkValidListProducts(): boolean {
+        if (!this.productsInput?.length) {
+            return true;
+        }
         let isValid = true;
         this.productsInput.forEach((item: any) => {
             if (item.salesQuantity <= 0 || item.warehouseId === null || item.unitId === null) {
@@ -35,26 +38,31 @@ export class CreateReturnPromotionTableComponent implements OnInit {
         this.productDialogService.getAllWarehouses().subscribe((data) => {
             this.warehouseOptions = data;
         });
-        this.returnFormService.submitProductForm$.subscribe((data) => {
-            if (data && this.productsInput?.length && this.checkValidListProducts()) {
-                const requiredFields = this.productsInput.map((item: any) => {
-                    return {
-                        productId: item.productId,
-                        unitId: item.unitId,
-                        warehouseId: item.warehouseId,
-                        unitPrice: item.unitPrice,
-                        quantity: item.quantity,
-                        totalPrice: item.totalPrice,
-                        discount: item.discount,
-                        discountRate: item.discountRate,
-                        note: item.note,
-                        type: item.type,
-                        salesQuantity: item.salesQuantity,
-                        exportQuantity: item.exportQuantity,
-                        returnsQuantity: item.returnsQuantity,
-                    };
+        this.returnFormService.submitPromotionForm$.subscribe((data) => {
+            if (data && this.checkValidListProducts()) {
+                const requiredFields = this.productsInput?.length
+                    ? this.productsInput.map((item: any) => {
+                          return {
+                              productId: item.productId,
+                              unitId: item.unitId,
+                              warehouseId: item.warehouseId,
+                              unitPrice: item.unitPrice,
+                              quantity: item.quantity,
+                              totalPrice: item.totalPrice,
+                              discount: item.discount,
+                              discountRate: item.discountRate,
+                              note: item.note,
+                              type: item.type,
+                              salesQuantity: item.salesQuantity,
+                              exportQuantity: item.exportQuantity,
+                              returnsQuantity: item.returnsQuantity,
+                          };
+                      })
+                    : [];
+                this.returnFormService.submitInfoForm$.next({
+                    listProduct: data,
+                    listPromotionProduct: requiredFields?.length ? requiredFields : [],
                 });
-                console.log(requiredFields);
                 // this.returnFormService.submitInfoForm$.next({
                 //     listProduct: requiredFields,
                 //     totalAmount: this.calculateTotalPrice(),
@@ -66,7 +74,7 @@ export class CreateReturnPromotionTableComponent implements OnInit {
                 // this.returnFormService.totalPrice$.next(0);
                 // this.returnFormService.discountAmount$.next(0);
             } else {
-                this.snackbar.openSnackbar('Dữ liệu sản phẩm không hợp lệ', 2000, 'Đóng', 'center', 'top', false);
+                this.snackbar.openSnackbar('Sản phẩm khuyến mãi không hợp lệ', 2000, 'Đóng', 'center', 'top', false);
             }
         });
 

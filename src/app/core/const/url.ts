@@ -7,6 +7,7 @@ export const route_api = gateway_url + '/Route';
 
 export const api_gateway_url = environment.API_URL + '/gw';
 export const customer_url = api_gateway_url + '/Customer';
+export const route_customer_url = api_gateway_url + '/Route';
 export const customer_group_url = api_gateway_url + '/CustomerGroup';
 export const customer_type_url = api_gateway_url + '/CustomerType';
 export const channel_url = api_gateway_url + '/Channel';

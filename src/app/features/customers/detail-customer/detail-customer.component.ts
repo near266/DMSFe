@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { customers } from 'src/app/core/data/Customers';
 import { Area } from 'src/app/core/model/Area';
 import { Channel } from 'src/app/core/model/Channel';
@@ -14,6 +14,7 @@ import { CustomerTypeService } from 'src/app/core/services/customer-type.service
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { AddRouteComponent } from '../add-route/add-route.component';
 
 
 export interface InData{
@@ -55,6 +56,8 @@ export class DetailCustomerComponent implements OnInit {
 
   };
 
+  tabs = 'Information';
+
   buf: IBody;
 
   customerGroup: CustomerGroup[] = [];
@@ -76,7 +79,8 @@ export class DetailCustomerComponent implements OnInit {
     private channelService: ChannelService,
     private areaService: AreaService,
     private provincesService: ProvincesService,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private dialog: MatDialog
     ) { }
 
   ngOnInit(): void {
@@ -192,6 +196,8 @@ export class DetailCustomerComponent implements OnInit {
   close() {
     this.dialogRef.close();
   }
+
+  
 
   submit() {
     try {

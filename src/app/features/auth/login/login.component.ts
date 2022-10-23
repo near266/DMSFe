@@ -29,7 +29,8 @@ export class LoginComponent implements OnInit {
       rememberMe: true
     }
     this.auth.Authenticate(body).subscribe(data => {
-      this.auth.setToken(data.id_token)
+      this.auth.setToken(data.id_token);
+      this.auth.setRoles(data.role);
       this.router.navigate([""]);
     })
   }

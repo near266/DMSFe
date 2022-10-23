@@ -13,6 +13,8 @@ import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { DetailReturnTableComponent } from './detail-return/detail-return-table/detail-return-table.component';
 import { DetailReturnTableEditComponent } from './detail-return/detail-return-table-edit/detail-return-table-edit.component';
+import { DetailReturnPromotionComponent } from './detail-return/detail-return-promotion/detail-return-promotion.component';
+import { DetailReturnTablePromotionEditComponent } from './detail-return/detail-return-table-promotion-edit/detail-return-table-promotion-edit.component';
 
 @NgModule({
     declarations: [
@@ -21,6 +23,8 @@ import { DetailReturnTableEditComponent } from './detail-return/detail-return-ta
         DetailReturnComponent,
         DetailReturnTableComponent,
         DetailReturnTableEditComponent,
+        DetailReturnPromotionComponent,
+        DetailReturnTablePromotionEditComponent,
     ],
     imports: [
         CommonModule,
