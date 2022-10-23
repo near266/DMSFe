@@ -12,12 +12,11 @@ export class DetailReturnTableComponent implements OnInit {
     constructor(private returnDetailsService: ReturnDetailsService) {}
 
     ngOnInit(): void {
-        this.productsInput = this.returnDetailsService.returnListProducts$.getValue();
         this.returnDetailsService.returnListProducts$.subscribe((_) => {
             this.productsInput = _;
             this.returnDetailsService.totalPrice$.next(this.getSumOfTotalPrice());
             this.returnDetailsService.discountAmount$.next(this.getSumOfDiscount());
-            this.productQuantitySum = this.productsInput.reduce((a, b) => +a + +b.quantity, 0);
+            this.productQuantitySum = this.productsInput.reduce((a, b) => +a + +b.returnsQuantity, 0);
         });
     }
     getSumOfTotalPrice() {
@@ -25,5 +24,10 @@ export class DetailReturnTableComponent implements OnInit {
     }
     getSumOfDiscount() {
         return this.productsInput.reduce((a, b) => +a + +b.discount, 0);
+    }
+    removeProductFromReturn(id: string) {
+        //find id in listProduct.product and remove
+        this.productsInput = this.productsInput.filter((item) => item.product.id !== id);
+        this.returnDetailsService.returnListProducts$.next(this.productsInput);
     }
 }

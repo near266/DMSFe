@@ -103,6 +103,7 @@ export class CreateReturnFormComponent implements OnInit {
                         label: 'Phòng, nhóm',
                         options: this.returnFormService.getGroupsAndFilter(),
                         type: 'select',
+                        required: true,
                         // disabled: true,
                         appearance: 'outline',
                         // options: status,
@@ -113,12 +114,15 @@ export class CreateReturnFormComponent implements OnInit {
                     // type: 'product-select',
                     className: 'flex-1',
                     type: 'select',
+
                     defaultValue: null,
                     templateOptions: {
                         label: 'Nhân viên đặt',
 
                         // options: this.returnFormService.getEmployees(),
                         // options: [],
+                        required: true,
+
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -177,6 +181,8 @@ export class CreateReturnFormComponent implements OnInit {
                     defaultValue: null,
                     templateOptions: {
                         label: 'Địa chỉ',
+                        required: true,
+
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -206,6 +212,8 @@ export class CreateReturnFormComponent implements OnInit {
                     defaultValue: null,
                     templateOptions: {
                         label: 'Ngày trả hàng',
+                        required: true,
+
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
@@ -315,11 +323,12 @@ export class CreateReturnFormComponent implements OnInit {
                     ...this.form.value,
                     customerCode: this.form.value.customerCode.label,
                     customerId: this.form.value.customerCode.value,
-                    ...listProduct,
-                    listPromotionProduct: [],
+                    ...listProduct.listProduct,
+                    listPromotionProduct: listProduct.listPromotionProduct,
                     orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
                     returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
                 };
+                console.log(form);
                 this.returnFormService.addNewReturn(form);
             }
         });

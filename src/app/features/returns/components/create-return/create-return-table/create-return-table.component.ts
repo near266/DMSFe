@@ -84,8 +84,7 @@ export class CreateReturnTableComponent implements OnInit {
                         returnsQuantity: item.returnsQuantity,
                     };
                 });
-                console.log(requiredFields);
-                this.returnFormService.submitInfoForm$.next({
+                this.returnFormService.submitPromotionForm$.next({
                     listProduct: requiredFields,
                     totalAmount: this.calculateTotalPrice(),
                     totalDiscount: this.calculateDiscountAmount(),

@@ -13,6 +13,7 @@ import { ReturnDetailsService } from '../../services/return-details.service';
 import { HttpParams } from '@angular/common/http';
 import { ComponentMode } from '../../models/componentMode';
 import { Status } from '../../models/return';
+import { ReturnFormService } from '../../services/return-form.service';
 
 @Component({
     selector: 'app-view-edit-detail-return',
@@ -29,11 +30,10 @@ export class ViewEditDetailReturnComponent implements OnInit {
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
-        private dataService: DataService,
         private snackbar: SnackbarService,
         private dialog: MatDialog,
+        private returnFormService: ReturnFormService,
         private returnDetailsService: ReturnDetailsService,
-        private purchaseOrder: PurchaseOrderService,
     ) {}
 
     ngOnInit(): void {
@@ -41,6 +41,7 @@ export class ViewEditDetailReturnComponent implements OnInit {
             .pipe(
                 switchMap((params: ParamMap) => {
                     const id = params.get('id');
+                    this.id = id!;
                     return this.returnDetailsService.getReturnById(id);
                 }),
             )
@@ -55,6 +56,14 @@ export class ViewEditDetailReturnComponent implements OnInit {
 
     ngOnDestroy(): void {
         this.subscription.forEach((service) => service.unsubscribe());
+    }
+
+    updateStatus(status: Status) {
+        this.returnDetailsService.updateReturnInfo$.next({
+            totalPayment: this.returnDetailsService.totalPrice$.getValue(),
+            discountAmount: this.returnDetailsService.discountAmount$.getValue(),
+            status,
+        });
     }
 
     closeAndReset() {
@@ -73,37 +82,7 @@ export class ViewEditDetailReturnComponent implements OnInit {
         this.returnDetailsService.updateReturnProducts$.next(true);
     }
 
-    updateOrder(changeTo: number) {
-        const body = {
-            status: changeTo,
-        };
-        // ấn vào nút trả hàng
-        if (changeTo === 0) {
-            let dialogRef = this.dialog.open(GenReturnOrderComponent, {
-                maxWidth: '100vw',
-                maxHeight: '100vh',
-                height: '100%',
-                width: '100%',
-                panelClass: 'full-screen-modal',
-            });
-            dialogRef.afterClosed().subscribe((data) => {
-                if (data === 'Lưu') {
-                    // call api create returnOrder
-                    this.snackbar.openSnackbar('Tạo phiếu trả thành công', 2000, 'Đóng', 'center', 'bottom', true);
-                } else {
-                }
-            });
-        }
-        // Ấn vào nút xuất hàng
-        else if (changeTo === 4) {
-        }
-        // Khi ấn vào nút hủy
-        // else if(changeTo === 7 ) {
-
-        // }
-    }
-
-    delete() {
+    deleteReturn() {
         let dialogRef = this.dialog.open(ConfirmDialogComponent, {
             data: {
                 content: 'Bạn có chắc chắn muốn xóa bản ghi này không',
@@ -112,16 +91,7 @@ export class ViewEditDetailReturnComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((data: any) => {
             if (data === 'Xóa') {
-                this.purchaseOrder.deletePurchase(this.id).subscribe(
-                    (data) => {},
-                    (err) => {
-                        this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
-                    },
-                    () => {
-                        this.snackbar.openSnackbar('Xóa thành công', 100000, 'Đóng', 'center', 'bottom', true);
-                        this.router.navigate(['/orders']);
-                    },
-                );
+                this.returnFormService.deleteReturn(this.id);
             } else {
             }
         });

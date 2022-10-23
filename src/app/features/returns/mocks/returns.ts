@@ -16,5 +16,3 @@ for (let i = 0; i < 100; i++) {
         totalVAT: faker.helpers.arrayElement([5, 10]),
     });
 }
-
-export default returns;

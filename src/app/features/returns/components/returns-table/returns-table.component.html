@@ -12,7 +12,7 @@
   </thead>
   <tbody>
     <tr class="h-14 text-xs"
-      *ngFor="let return of returns | paginate: { itemsPerPage: 30, currentPage };let i =index; let o=odd; let e=even;"
+      *ngFor="let return of returns | paginate: { itemsPerPage: 30, currentPage,totalItems };let i =index; let o=odd; let e=even;"
       [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
       <td class="space-x-2 min-w-[50px] border-x border-solid align-midde h-full pl-2 "><input class="inline"
           type="checkbox"><i *ngIf="!return?.type" class="fa-solid fa-lock text-base text-[#2e799c]"></i><i

@@ -5,6 +5,8 @@ import { BehaviorSubject, map, Subject, tap } from 'rxjs';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ReturnApiService } from '../apis/return-api.service';
+import { ReturnDetailsService } from './return-details.service';
+import { ReturnsService } from './returns.service';
 
 @Injectable({
     providedIn: 'root',
@@ -13,13 +15,16 @@ export class ReturnFormService {
     constructor(
         private returnApiService: ReturnApiService,
         private customerService: CustomerService,
+        private returnsService: ReturnsService,
+        private returnDetailsService: ReturnDetailsService,
         private snackBarService: SnackbarService,
         private dialog: MatDialog,
         private router: Router,
     ) {}
     totalPrice$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     submitInfoForm$: Subject<any> = new Subject<any>();
-    submitProductForm$: Subject<boolean> = new Subject<boolean>();
+    submitProductForm$: Subject<any> = new Subject<any>();
+    submitPromotionForm$: Subject<any> = new Subject<any>();
     discountAmount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     formValues$: Subject<any> = new Subject<any>();
     products$: Subject<any> = new Subject<any>();
@@ -94,6 +99,37 @@ export class ReturnFormService {
             },
             error: (error) => {
                 this.snackBarService.openSnackbar('Tạo phiếu trả hàng thất bại', 2000, 'Đóng', 'center', 'top', false);
+            },
+        });
+    }
+    updateReturn(form: any) {
+        return this.returnApiService.updateReturn(form).subscribe({
+            next: (result) => {
+                this.snackBarService.openSnackbar('Cập nhật trả hàng thành công', 2000, 'Đóng', 'center', 'top', true);
+                this.totalPrice$.next(0);
+                this.discountAmount$.next(0);
+                this.returnsService.setCurrentPage(1);
+                this.dialog.closeAll();
+                this.returnDetailsService.currentMode$.next(0);
+                this.router.navigate(['/returns']);
+            },
+            error: (error) => {
+                this.snackBarService.openSnackbar('Tạo phiếu trả hàng thất bại', 2000, 'Đóng', 'center', 'top', false);
+            },
+        });
+    }
+
+    deleteReturn(id: string) {
+        return this.returnApiService.deleteReturn(id).subscribe({
+            next: (result) => {
+                this.snackBarService.openSnackbar('Xóa phiếu trả hàng thành công', 2000, 'Đóng', 'center', 'top', true);
+                this.totalPrice$.next(0);
+                this.discountAmount$.next(0);
+                this.dialog.closeAll();
+                this.router.navigate(['/returns']);
+            },
+            error: (error) => {
+                this.snackBarService.openSnackbar('Xóa phiếu trả hàng thất bại', 2000, 'Đóng', 'center', 'top', false);
             },
         });
     }

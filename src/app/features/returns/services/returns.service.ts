@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, pipe } from 'rxjs';
+import { BehaviorSubject, map, pipe, take } from 'rxjs';
 import { ReturnApiService } from '../apis/return-api.service';
-import returns from '../mocks/returns';
+
 import { Return } from '../models/return';
 
 @Injectable({
@@ -10,8 +10,7 @@ import { Return } from '../models/return';
 export class ReturnsService {
     private readonly defaultPage = 1;
     private readonly defaultPageSize = 30;
-    private readonly defaultReturns = returns;
-
+    private readonly defaultReturns = [];
     private returns: BehaviorSubject<Return[]> = new BehaviorSubject<Return[]>(this.defaultReturns);
     private currentPage: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultPage);
     private currentPageSize: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultPageSize);
@@ -28,10 +27,16 @@ export class ReturnsService {
 
     constructor(private returnApiService: ReturnApiService) {}
 
-    getAllReturns() {
-        return this.returnApiService.getAllReturns().pipe(
+    getInititalReturns(page: number = 1) {
+        this.getReturnsByPage(1)
+            .pipe(take(1))
+            .subscribe((res) => {
+                this.returns.next(res);
+            });
+    }
+    getReturnsByPage(page: number) {
+        return this.returnApiService.getAllReturns(page).pipe(
             map((response: any) => {
-                console.log(response);
                 this.totalReturns$.next(response.totalCount || 0);
                 return response.data;
             }),
@@ -39,16 +44,21 @@ export class ReturnsService {
     }
 
     setCurrentPage(currentPage: number) {
-        this.currentPage.next(currentPage);
-        this.calculateStartAndEndPage();
+        this.getReturnsByPage(currentPage).subscribe((data) => {
+            this.returns.next(data);
+            this.currentPage.next(currentPage);
+            this.calculateStartAndEndPage();
+        });
     }
 
     calculateStartAndEndPage() {
-        const currentPage = this.currentPage.value;
-        const currentPageSize = this.currentPageSize.value;
+        const currentPage = this.currentPage.getValue();
+        const currentPageSize = this.currentPageSize.getValue();
         const start = (currentPage - 1) * currentPageSize + 1;
         //end is the length of defaultReturns if it is bigger than length of defaultReturns
-        const end = Math.min(currentPage * currentPageSize + 1, this.defaultReturns.length);
+        console.log(currentPageSize, currentPage, start);
+
+        const end = Math.min(currentPage * currentPageSize + 1, this.totalReturns$?.getValue() || 0);
 
         this.startAndEndIndex.next({ start, end });
     }

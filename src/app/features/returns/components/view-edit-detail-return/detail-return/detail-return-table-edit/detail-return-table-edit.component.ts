@@ -23,7 +23,10 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
     }
     checkAndUpdate() {
         if (this.productsInput?.length) {
-            this.productQuantitySum = this.productsInput.reduce((acc: number, curr: any) => acc + curr.quantity, 0);
+            this.productQuantitySum = this.productsInput.reduce(
+                (acc: number, curr: any) => acc + curr.returnsQuantity,
+                0,
+            );
             this.calculateTotalPrice();
             this.calculateDiscountAmount();
             // update product totalPrice in productsInput
@@ -31,24 +34,21 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
     }
     ngOnInit(): void {
         this.returnDetailsService.updateReturnProducts$.subscribe((res) => {
+            this.returnDetailsService.returnListProducts$.next(this.productsInput);
             if (res && this.returnDetailsService.checkValidListProducts()) {
                 this.returnDetailsService.compareReturnListProductsWithInitialListProductAndUpdate().subscribe({
                     next: (res) => {
-                        this.returnDetailsService.updateReturnInfo$.next(true);
+                        this.returnDetailsService.updateReturnInfo$.next({
+                            totalPayment: this.returnDetailsService.totalPrice$.getValue(),
+                            discountAmount: this.returnDetailsService.discountAmount$.getValue(),
+                        });
                     },
                     error: (err) => {
                         this.snackbarService.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'top', false);
                     },
                 });
             } else {
-                this.snackbarService.openSnackbar(
-                    'Danh sách sản phẩm không hợp lệ',
-                    2000,
-                    'Đóng',
-                    'center',
-                    'top',
-                    false,
-                );
+                this.snackbarService.openSnackbar('Sản phẩm không hợp lệ', 2000, 'Đóng', 'center', 'top', false);
             }
         });
         this.productDialogService.getAllUnits().subscribe((data) => {
@@ -59,10 +59,9 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
         });
         this.returnDetailsService.returnListProducts$.subscribe((_) => {
             this.productsInput = _;
-            console.log(_);
             this.returnDetailsService.totalPrice$.next(this.getSumOfTotalPrice());
             this.returnDetailsService.discountAmount$.next(this.getSumOfDiscount());
-            this.productQuantitySum = this.productsInput.reduce((a, b) => +a + +b.quantity, 0);
+            this.productQuantitySum = this.productsInput.reduce((a, b) => +a + +b.returnsQuantity, 0);
         });
     }
     ngDoCheck(): void {
@@ -92,7 +91,7 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
         return this.productsInput.reduce((a, b) => +a + +b.discount, 0);
     }
     updateItemTotalPrice(item: any) {
-        item.totalPrice = item.quantity * item.unitPrice;
+        item.totalPrice = item.returnsQuantity * item.unitPrice;
         this.updateDiscountRate(item);
     }
     updateDiscountRate(item: any) {
@@ -102,8 +101,9 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
             item.discountRate = 0;
         }
     }
-    removeProductFromReturn(index: string) {
-        this.productsInput.splice(+index, 1);
+    removeProductFromReturn(id: string) {
+        //find id in listProduct.product and remove
+        this.productsInput = this.productsInput.filter((item) => item.product.id !== id);
         this.returnDetailsService.returnListProducts$.next(this.productsInput);
     }
 }
