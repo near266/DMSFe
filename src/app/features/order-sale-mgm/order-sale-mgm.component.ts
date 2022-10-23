@@ -50,6 +50,8 @@ export class OrderSaleMgmComponent implements OnInit {
             pageSize: this.pageSize,
         };
         this.saleReceiptService.searchReceipt(body).subscribe((data) => {
+          console.log(data);
+
             this.listReceiptOrder = data.data;
             this.total = data.totalCount;
             this.saleReceiptService.setTotal(this.total);
@@ -85,5 +87,33 @@ export class OrderSaleMgmComponent implements OnInit {
     detail(id: string) {
         localStorage.setItem('receiptOrderId', id);
         this.router.navigate(['/ordersale/detail/viewEdit']);
+    }
+
+    export(){
+      let body = {
+        filter: {
+          keyword: '',
+            deliveryDate: '',
+            orderEmployeeId: '',
+            customerTypeId: '',
+            customerGroupId: '',
+            areaId: '',
+            productKey: '',
+            status: '',
+            printStatus: null,
+            paymentMethod: '',
+            page: '',
+            pageSize: '',
+            sortField: '',
+            isAscending: null,
+            fromDate: '',
+            toDate: '',
+            dateFilter: '',
+        },
+        listId: [''],
+        type: null,
+      }
+      console.log("export");
+      console.log(body);
     }
 }
