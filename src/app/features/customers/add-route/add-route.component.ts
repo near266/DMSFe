@@ -31,11 +31,13 @@ export class AddRouteComponent implements OnInit, AfterViewInit {
       this.customerService.SearchAllRouteByCustomerId(this.id).subscribe( res => {
         this.response.data.forEach( (e: any) => {
           let check = true;
-          res.list.forEach((element: any) => {
-            if(e.id.includes(element.id)) {
-              check = false;
-            }
-          });
+          if(res.list) {
+            res.list.forEach((element: any) => {
+              if(e.id.includes(element.id)) {
+                check = false;
+              }
+            });
+          }
           if(check == true) {
             this.data.push(e);
           }
