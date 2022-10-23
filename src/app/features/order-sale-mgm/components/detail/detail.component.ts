@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, DoCheck, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { NumberToTextService } from 'src/app/core/shared/services/number-to-text
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestroy {
     statusList = statusList;
     statusNow!: number;
     type: string = 'View';
@@ -28,40 +28,11 @@ export class DetailComponent implements OnInit {
     isRemove = false;
 
     listProduct: any = [];
-    listPromotionProduct?: ListPromotionProduct[] = [];
+    listPromotionProduct: any = [];
     listEmployee: any = [];
     listCustomer: any = [];
     listProductAdd: any = [];
     listProductRemove: any = [];
-
-    listGroup = [
-        {
-            groupId: '1',
-            groupName: 'FT2 - Đông Bắc - QL Tùng (Khu vực Đông Bắc)',
-        },
-        {
-            groupId: '2',
-            groupName: 'FT5 - Bắc Miền Trung - QL Trọng (Khu vực Bắc Miền Trung)',
-        },
-        {
-            groupId: '3',
-            groupName: 'FT7 - Miền Tây NB - QL Duy',
-        },
-    ];
-    listRoute = [
-        {
-            routeId: '1',
-            routeName: 'Nguyễn Văn Tuấn',
-        },
-        {
-            routeId: '2',
-            routeName: 'Đặng Xuân Khu',
-        },
-        {
-            routeId: '3',
-            routeName: 'Hồ Tuấn Anh',
-        },
-    ];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -73,6 +44,8 @@ export class DetailComponent implements OnInit {
 
     listChoosenProduct: any = [];
     listWarehouse: any = [];
+    listRoute: any = [];
+    listGroup: any = [];
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -94,9 +67,9 @@ export class DetailComponent implements OnInit {
             saleDate: [null],
             saleEmployee: [null],
             deliveryDate: [null],
-            group: [null],
+            groupId: [null],
             orderEmployee: [null],
-            route: [null],
+            routeId: [null],
             customer: this.fb.group({
                 code: [null],
                 name: [null],
@@ -139,6 +112,11 @@ export class DetailComponent implements OnInit {
         });
     }
 
+    textMoneyGen(money: any) {
+        console.log('ok');
+        this.textMoney = this.numberToText.doc(money);
+    }
+
     ngOnDestroy(): void {
         this.subscription.forEach((service) => {
             service.unsubscribe();
@@ -150,6 +128,8 @@ export class DetailComponent implements OnInit {
         this.getListCustomer();
         this.getListEmployee();
         this.getListWareHouse();
+        this.getListGroup();
+        this.getListRoute();
     }
 
     ngDoCheck(): void {
@@ -182,10 +162,6 @@ export class DetailComponent implements OnInit {
             prePayment: this.prePayment,
             debtRecord: this.detailOrderForm.get('debtRecord')?.value,
         });
-        // send body update product
-        this.saleReceipt.sendProductUpdate(this.getProductListUpdate());
-        // send body add product
-        this.saleReceipt.sendProductAdd(this.getProductListAdd());
         // count totalAmount (Tổng tiền hàng)
         this.countTotalAmount();
         // count totalDiscountProduct (Chiết khấu sản phẩm)
@@ -241,27 +217,6 @@ export class DetailComponent implements OnInit {
         }
     }
 
-    getProductListAdd() {
-        let listProductAdd = this.listProductAdd.map((product: any) => {
-            return {
-                saleRecieptId: this.id,
-                productId: product?.product?.id,
-                // productName: product.product.productName,
-                unitId: product.unit.id,
-                warehouseId: product.warehouseId,
-                unitPrice: product.unitPrice,
-                quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount || 0,
-                discountRate: product.discountRate || 0,
-                note: product.note,
-                type: product.type,
-            };
-        });
-        console.log(listProductAdd);
-        return listProductAdd;
-    }
-
     discountRate(product: any) {
         if (product.totalPrice) {
             product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
@@ -273,20 +228,6 @@ export class DetailComponent implements OnInit {
         if (product.totalPrice) {
             product.discount = (product.discountRate / 100) * product.totalPrice;
         }
-    }
-
-    unChoose(productRemove: any) {
-        // send to service
-        this.listProductRemove.push(productRemove.product.id);
-        this.isRemove = true;
-        this.saleReceipt.sendProductRemove({
-            isRemove: this.isRemove,
-            list: this.listProductRemove,
-        });
-        // remove to list product
-        this.listProduct = this.listProduct.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
     }
 
     getDetail() {
@@ -311,10 +252,10 @@ export class DetailComponent implements OnInit {
             orderDate: this.detailOrder.orderDate,
             saleDate: this.detailOrder.saleDate,
             deliveryDate: this.detailOrder.deliveryDate,
-            group: this.detailOrder.group?.groupId,
+            groupId: this.detailOrder.group?.id,
             orderEmployee: this.detailOrder.orderEmployee?.id,
             saleEmployee: this.detailOrder.saleEmployee?.id,
-            route: this.detailOrder.route?.routeId,
+            routeId: this.detailOrder.route?.id,
             customer: {
                 code: this.detailOrder.customer?.id,
                 phone: this.detailOrder.phone,
@@ -329,9 +270,12 @@ export class DetailComponent implements OnInit {
         this.listProduct = this.detailOrder.listProduct;
         this.listPromotionProduct = this.detailOrder.listPromotionProduct;
         // loop to map warehouseId
-        this.listProduct.forEach((product: any) => {
-            product.warehouseId = product.warehouse?.id;
-        });
+        // this.listProduct.forEach((product: any) => {
+        //     product.warehouseId = product.warehouse?.id;
+        // });
+        // this.listPromotionProduct.forEach((product: any) => {
+        //     product.warehouseId = product.warehouse?.id;
+        // });
     }
 
     getListCustomer() {
@@ -341,9 +285,8 @@ export class DetailComponent implements OnInit {
     }
 
     getListEmployee() {
-        this.purchaseOrder.getAllEmployees(1, 1000).subscribe((data) => {
+        this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
             this.listEmployee = data.data;
-            console.log(this.listEmployee);
         });
     }
 
@@ -353,6 +296,16 @@ export class DetailComponent implements OnInit {
                 this.listWarehouse = data;
             }),
         );
+    }
+
+    getListRoute() {
+        this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => (this.listRoute = data.data));
+    }
+
+    getListGroup() {
+        this.purchaseOrder.getAllGroup(1).subscribe((data) => {
+            this.listGroup = data;
+        });
     }
 
     getProductListUpdate() {
@@ -373,7 +326,6 @@ export class DetailComponent implements OnInit {
                 type: product.type,
             };
         });
-        console.log(listProductToSent);
         return listProductToSent;
     }
 
@@ -400,7 +352,6 @@ export class DetailComponent implements OnInit {
     }
 
     pushListProductToDialog() {
-        console.log(this.listProduct);
         this.listChoosenProduct = this.detailOrder.listProduct.map((product: any) => {
             return {
                 id: product.product.id,

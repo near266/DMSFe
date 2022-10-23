@@ -16,8 +16,11 @@ export class PurchaseOrderService {
     private productPageSource = new BehaviorSubject<number>(1);
     private isSucessUpdateSource = new BehaviorSubject<any>('');
     private productUpdateSource = new BehaviorSubject<any>('');
+    private productPromotionUpdateSource = new BehaviorSubject<any>('');
     private productRemoveSource = new BehaviorSubject<any>('');
+    private productPromotionRemoveSource = new BehaviorSubject<any>('');
     private productAddSource = new BehaviorSubject<any>('');
+    private productPromotionAddSource = new BehaviorSubject<any>('');
 
     page = this.pageSource.asObservable();
     total = this.totalSource.asObservable();
@@ -28,8 +31,11 @@ export class PurchaseOrderService {
     updateOrder = this.updateOrderSource.asObservable();
     isSucessUpdate = this.isSucessUpdateSource.asObservable();
     productUpdate = this.productUpdateSource.asObservable();
+    productPromotionUpdate = this.productPromotionUpdateSource.asObservable();
     productRemove = this.productRemoveSource.asObservable();
+    productPromotionRemove = this.productPromotionRemoveSource.asObservable();
     productAdd = this.productAddSource.asObservable();
+    productPromotionAdd = this.productPromotionAddSource.asObservable();
 
     setTotal(total: number) {
         this.totalSource.next(total);
@@ -55,14 +61,27 @@ export class PurchaseOrderService {
     isSuccessUpdate(msg: string) {
         this.isSucessUpdateSource.next(msg);
     }
+    // update product
     sendProductUpdate(list: any) {
         this.productUpdateSource.next(list);
     }
+    sendProductPromotionUpdate(list: any) {
+        this.productPromotionUpdateSource.next(list);
+    }
+    // remove product
     sendProductRemove(list: any) {
         this.productRemoveSource.next(list);
     }
+    sendProductPromotionRemove(list: any) {
+        this.productPromotionRemoveSource.next(list);
+    }
+
+    // add product
     sendProductAdd(list: any) {
         this.productAddSource.next(list);
+    }
+    sendProductPromotionAdd(list: any) {
+        this.productPromotionAddSource.next(list);
     }
 
     url = 'https://6346eabf04a6d457579c4afd.mockapi.io/purchaseOrders';
@@ -143,18 +162,46 @@ export class PurchaseOrderService {
             .pipe(map((reponse: any) => reponse));
     }
 
+    getCustomerById(id: string): Observable<any> {
+        return this.http.get(this.api_gateway_url + '/Customer/id?Id=' + id).pipe(map((reponse: any) => reponse));
+    }
+
     // product
     getAllProduct(body: any): Observable<any> {
         return this.http.post(this.api_gateway_url + '/Catalog/search', body).pipe(map((reponse: any) => reponse));
     }
 
     // employee
-    getAllEmployees(page: number, pageSize: number): Observable<any> {
-        return this.http.get(this.id_url_gw + '/Employee/SearchAllEmployee?page=' + page + '&pageSize=' + pageSize);
+    getAllEmployees(keyword: any, page: number, pageSize: number): Observable<any> {
+        return this.http.get(
+            this.id_url_gw +
+                '/Employee/SearchAllEmployee?keyword=' +
+                keyword +
+                '&page=' +
+                page +
+                '&pageSize=' +
+                pageSize,
+        );
     }
 
     // warehouse
     getAllWarehouses(): Observable<any> {
         return this.http.get(this.api_gateway_url + '/Warehouse/getall').pipe(map((reponse: any) => reponse));
+    }
+
+    // route
+    getAllRoute(page: number, pageSize: number, keyword: any): Observable<any> {
+        return this.http
+            .get(this.api_gateway_url + '/Route/getall?keyword=' + keyword + '&page=' + page + '&pagesize=' + pageSize)
+            .pipe(map((reponse: any) => reponse));
+    }
+
+    getRouteByCustomerId(id: string): Observable<any> {
+        return this.http.get(this.api_gateway_url + '/Route/by_cusId?Id=' + id).pipe(map((reponse: any) => reponse));
+    }
+
+    // group
+    getAllGroup(type: number): Observable<any> {
+        return this.http.get(this.id_url_gw + '/GetAllGroupByType?type=' + type).pipe(map((reponse: any) => reponse));
     }
 }

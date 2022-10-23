@@ -196,10 +196,10 @@
                         </td>
                         <td class="custom-td border-b">{{ order.totalPayment | currency: 'VND':'symbol' }}</td>
                         <td class="custom-td border-b">
-                            {{ order.approveBy || 'No Data' }}
+                            {{ order.approved?.employeeName }}
                         </td>
                         <td class="custom-td border-b">
-                            {{ datepipe.transform(order.approveDate, 'dd/MM/yyyy') || 'No Data' }}
+                            {{ datepipe.transform(order.approvedDate, 'dd/MM/yyyy') }}
                         </td>
                         <td class="custom-td border-b">
                             {{ order.source }}

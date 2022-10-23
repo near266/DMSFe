@@ -144,7 +144,7 @@ export class GenReturnOrderComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     getListEmployees() {
-        this.purchaseOrder.getAllEmployees(1, 1000).subscribe((data) => {
+        this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
             this.listEmployees = data.data;
         });
     }

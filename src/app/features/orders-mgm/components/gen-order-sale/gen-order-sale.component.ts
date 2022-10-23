@@ -2,10 +2,12 @@ import { Component, Inject, OnInit, AfterViewInit, DoCheck } from '@angular/core
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Route, Router } from '@angular/router';
+import { info } from 'console';
 import * as moment from 'moment';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { ProductListComponent } from '../product-list/product-list.component';
 
 @Component({
@@ -17,11 +19,27 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     statusList = ['Chờ duyệt', 'Đã duyệt', 'Đã giao hàng'];
     groupCites = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng'];
     listEmployee: any = [];
+    listEmployee1: any = [];
+    listEmployee2: any = [];
     listCustomer: any = [];
     relatedOrder: any = [];
     listProduct: any = [];
+    listCustomerSearched: any = [];
+    listRouteSearched: any;
+    routeIdSearched: any;
+    groupIdSearched: any;
+    listAllRoute: any = [];
+    listGroup: any = [];
+    listPromotionProductAdd: any = [];
+
     listProductToSentAPI: any = [];
     genOrderForm: FormGroup;
+    listChoosenProductPromotion: any = [];
+    listChoosenProduct: any = [];
+    listPromotionProduct: any = [];
+    listWarehouse: any = [];
+    listProductPromotionRemove: any = [];
+    listProductAdd: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -29,6 +47,11 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     totalPayment: number = 0;
     prePayment: number = 0;
     textMoney: any;
+    isRemove = false;
+
+    pageRoute: number;
+    pageRouteSize: number;
+    saleDefaultId: string;
     constructor(
         private dialog: MatDialog,
         public dialogRef: MatDialogRef<GenOrderSaleComponent>,
@@ -38,26 +61,31 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         private saleReceipt: SaleReceiptService,
         private snackbar: SnackbarService,
         private router: Router,
+        private numberToText: NumberToTextService,
     ) {}
 
     ngOnInit(): void {
+        // parse token to get id login
+        this.relatedOrder = this.data.detailOrder;
+        console.log(this.relatedOrder?.orderEmployee?.id);
+        this.saleDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
         this.genOrderForm = this.fb.group({
             orderDate: [null],
-            saleDate: [null],
+            saleDate: [moment(Date.now()).format('YYYY-MM-DD')],
             deliveryDate: [null],
             groupId: [null],
-            orderEmployeeId: [null],
+            orderEmployeeId: [this.relatedOrder?.orderEmployee?.id],
             routeId: [null],
-            saleEmployee: [null],
+            saleEmployeeId: [this.saleDefaultId],
             customerId: [null],
             customerName: [null],
             phone: [null],
             address: [null],
             description: [null],
+            debtRecord: [false],
+            paymentTerm: [null],
         });
-        this.relatedOrder = this.data.detailOrder;
         this.listProduct = this.relatedOrder.listProduct;
-        this.patchValue();
         // get all info payment
         console.log(this.relatedOrder);
         this.totalAmount = this.relatedOrder.totalAmount;
@@ -65,18 +93,35 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.tradeDiscount = this.relatedOrder.tradeDiscount;
         this.totalPayment = this.relatedOrder.totalPayment;
         this.prePayment = this.relatedOrder.prePayment;
-        this.textMoney = this.doc(this.totalPayment);
+        this.textMoney = this.numberToText.doc(this.totalPayment);
+
+        // get list customer
+        this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
+            this.listCustomer = data?.data;
+        });
     }
 
     ngAfterViewInit(): void {
         // get list employee
-        this.purchaseOrder.getAllEmployees(1, 1000).subscribe((data) => {
+        this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
             this.listEmployee = data.data;
+            this.listEmployee1 = this.listEmployee;
+            this.listEmployee2 = this.listEmployee;
         });
-        // get list customer
-        this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
-            this.listCustomer = data.data;
+
+        // get list route
+        this.getAllRoute();
+
+        // get list group
+        this.purchaseOrder.getAllGroup(1).subscribe((data) => {
+            this.listGroup = data;
         });
+        // get list wareHouse
+        this.getListWareHouse();
+
+        setTimeout(() => {
+            this.patchValue();
+        }, 0);
     }
 
     ngDoCheck(): void {
@@ -87,11 +132,47 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         // count totalPayment
         this.countTotalPayment();
         // number to text
-        this.textMoney = this.doc(this.totalPayment);
+        this.textMoney = this.numberToText.doc(this.totalPayment);
+
+        // this.getRouteByCustomerId(this.genOrderForm.get('customerId')?.value);
+    }
+
+    getListWareHouse() {
+        this.purchaseOrder.getAllWarehouses().subscribe((data) => {
+            this.listWarehouse = data;
+        });
+    }
+
+    parseJwt(token: any) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(
+            window
+                .atob(base64)
+                .split('')
+                .map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                })
+                .join(''),
+        );
+        return JSON.parse(jsonPayload);
     }
 
     discountRate(product: any) {
-        product.discountRate = product.discount / product.totalPrice;
+        if (product.totalPrice) {
+            product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
+        }
+    }
+
+    setWareHouseToAllProduct(value: any) {
+        if (value != 0) {
+            this.listProduct.forEach((product: any) => {
+                product.warehouseId = value;
+            });
+            this.listProductAdd.forEach((product: any) => {
+                product.warehouseId = value;
+            });
+        }
     }
 
     countTotalAmount() {
@@ -112,10 +193,50 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
     }
 
+    getAllRoute() {
+        this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => {
+            this.listAllRoute = data.data;
+        });
+    }
+
+    getRouteByCustomerId(customerId: any) {
+        this.genOrderForm.patchValue({
+            routeId: null,
+        });
+        // get route ID
+        if (customerId) {
+            this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
+                if (data) {
+                    this.genOrderForm.patchValue({
+                        routeId: data?.route?.id,
+                    });
+                    // get employee in route
+                    this.genOrderForm.patchValue({
+                        orderEmployeeId: data?.route?.employee?.id,
+                    });
+                    // get group by customerID
+                    this.groupIdSearched = data?.route?.unitTreeGroup?.id;
+                    this.genOrderForm.patchValue({
+                        groupId: this.groupIdSearched,
+                    });
+                }
+            });
+            // get customer ID and patch Value
+            this.purchaseOrder.getCustomerById(customerId).subscribe((data) => {
+                this.genOrderForm.patchValue({
+                    customerName: data.customerCode,
+                    phone: data.phone,
+                    address: data.address,
+                });
+                console.log(data.id);
+            });
+        }
+    }
+
     countTotalPayment() {
         this.totalPayment = 0;
         if (this.totalAmount) {
-            this.totalPayment = this.totalAmount - this.tradeDiscount;
+            this.totalPayment = this.totalAmount - this.tradeDiscount - this.totalDiscountProduct;
         }
     }
 
@@ -129,7 +250,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.genOrderForm.patchValue({
             orderDate: this.relatedOrder.orderDate,
             deliveryDate: this.relatedOrder.deliveryDate,
-            orderEmployeeId: this.relatedOrder.orderEmployee.id,
+            orderEmployeeId: this.relatedOrder.orderEmployee?.id,
             // groupId: [null],
             // routeId: [null],
             customerId: this.relatedOrder.customer?.id,
@@ -138,44 +259,156 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             address: this.relatedOrder.address,
             description: description,
         });
+
+        // get list product
+        this.listProduct = this.relatedOrder.listProduct;
+        // get list promotion product
+        this.listPromotionProduct = this.relatedOrder.listPromotionProduct;
+        // loop to map warehouseId
+        this.listProduct.forEach((product: any) => {
+            product.warehouseId = product.warehouse?.id;
+        });
+        this.listPromotionProduct.forEach((product: any) => {
+            product.warehouseId = product.warehouse?.id;
+        });
+        // loop to get unitId
+        this.listProduct.forEach((product: any) => {
+            product.unitId = product.unit?.id;
+        });
+        this.listPromotionProduct.forEach((product: any) => {
+            product.unitId = product.unit?.id;
+        });
+        // set route and group if have customerId
+        if (this.relatedOrder?.customer?.id) {
+            this.getRouteByCustomerId(this.relatedOrder?.customer?.id);
+        }
+
+        this.pushListProductToDialog();
+        this.pushListProductPromotionToDialog();
+    }
+
+    countDiscount(product: any) {
+        if (product.totalPrice) {
+            product.discount = (product.discountRate / 100) * product.totalPrice;
+        }
+    }
+
+    setWareHouseToAllProductPromotion(value: any) {
+        if (value != 0) {
+            this.listPromotionProduct.forEach((product: any) => {
+                product.warehouseId = value;
+            });
+            this.listPromotionProductAdd.forEach((product: any) => {
+                product.warehouseId = value;
+            });
+        }
     }
 
     stopPropagation(e: any) {
         e.stopPropagation();
     }
 
-    openDialogProduct() {
-        const dialogRef = this.dialog.open(ProductListComponent, {
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            height: '100%',
-            width: '100%',
-            panelClass: 'full-screen-modal',
+    // format form add product to view Detail
+    formatFormProduct(data: any) {
+        if (data.length > 0) {
+            let List = data.map((product: any) => {
+                return {
+                    product: {
+                        id: product.id,
+                        sku: product.sku,
+                        productName: product.productName,
+                        retailPrice: product.retailPrice,
+                        price: product.price,
+                        vat: product.vat,
+                        warehouseId: product?.warehouse?.id,
+                        retailUnit: product.retailUnit,
+                        wholeSaleUnit: product.wholeSaleUnit,
+                    },
+                    unit: {
+                        id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
+                        unitCode: product?.retailUnit?.unitCode,
+                        unitName: product?.retailUnit?.unitName,
+                    },
+                    warehouseId: product?.warehouse?.id,
+                    unitId: product?.retailUnit?.id, // mặc định là đvt lẻ
+                    unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
+                    quantity: 0,
+                    totalPrice: 0,
+                    discount: 0,
+                    discountRate: 0,
+                    note: null,
+                    type: 1,
+                };
+            });
+            return List;
+        }
+    }
+
+    // loop to reduce available product
+    listAddProduct(list: any) {
+        let listAddProduct = [];
+        console.log(this.listProduct.length, list.length);
+        if (list && this.listProduct) {
+            let listAvailbleIds = this.listProduct.map((product: any) => {
+                return product?.product?.id;
+            });
+            listAddProduct = list.filter((product: any) => {
+                return !listAvailbleIds.includes(product.product.id);
+            });
+        }
+        return listAddProduct;
+    }
+
+    searchListCustomer(e: any) {
+        let body = {
+            keyword: e.target.value,
+            page: 1,
+            pageSize: 100,
+        };
+        this.purchaseOrder.searchCustomer(body).subscribe((data) => {
+            this.listCustomer = data.data;
         });
     }
 
-    createSaleReceipt() {
-        let listProductToSentAPI = this.listProduct.map((product: any) => {
+    searchListEmployee1(e: any) {
+        this.purchaseOrder.getAllEmployees(e.target.value, 1, 1000).subscribe((data) => {
+            this.listEmployee1 = data.data;
+        });
+    }
+
+    searchListEmployee2(e: any) {
+        this.purchaseOrder.getAllEmployees(e.target.value, 1, 1000).subscribe((data) => {
+            this.listEmployee2 = data.data;
+        });
+    }
+
+    formatProductToSentAPI(list: any) {
+        let listProductToSentAPI = list.map((product: any) => {
             return {
-                productId: product.product.id,
-                unitId: product.unit.id,
-                warehouseId: product.warehouse.id,
+                productId: product.product?.id,
+                unitId: product.unitId,
+                warehouseId: product.warehouseId,
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
                 totalPrice: product.totalPrice,
                 discount: product.discount,
-                discountRate: product.discountRate * 100,
+                discountRate: product.discountRate,
                 note: product.note,
                 type: product.type,
             };
         });
+        console.log(listProductToSentAPI);
+        return listProductToSentAPI;
+    }
+
+    createSaleReceipt() {
         const body = {
             orderDate: moment(this.genOrderForm.get('orderDate')?.value).format('YYYY-MM-DD'),
-            groupId: 'ef6c9edf-5445-4dbf-b0f3-d65d6412cfc0',
-            saleEmployeeId: this.genOrderForm.get('saleEmployee')?.value.id,
+            groupId: this.genOrderForm.get('groupId')?.value,
+            saleEmployeeId: this.genOrderForm.get('saleEmployeeId')?.value,
             // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             customerId: this.genOrderForm.get('customerId')?.value,
-            // routeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            routeId: this.genOrderForm.get('routeId')?.value,
             orderEmployeeId: this.genOrderForm.get('orderEmployeeId')?.value,
             type: 0,
             status: 3,
@@ -191,21 +424,76 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             totalPayment: this.totalPayment,
             archived: false,
             // createdBy: 'string',
-            createdDate: moment(Date.now()).format('YYYY-MM-DD'),
-            saleReceiptCode: this.genOrderForm.get('saleEmployee')?.value.employeeCode,
+            createdDate: moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss'),
+            // saleReceiptCode: this.genOrderForm.get('saleEmployee')?.value.employeeCode,
             purchaseOrderId: this.relatedOrder.id,
             deliveryDate: moment(this.genOrderForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
             saleDate: moment(this.genOrderForm.get('saleDate')?.value).format('YYYY-MM-DD'),
-            paymentTerm: '2022-10-16T05:26:34.266Z',
+            paymentTerm: moment(this.genOrderForm.get('paymentTerm')?.value).format('YYYY-MM-DD'),
             prePayment: this.prePayment,
-            debtRecord: true,
-            listProduct: listProductToSentAPI,
+            listProduct: this.formatProductToSentAPI(this.listProduct),
+            listPromotionProduct: this.formatProductToSentAPI(this.listPromotionProduct),
+            debtRecord: this.genOrderForm.get('debtRecord')?.value,
         };
+        console.log(body);
         this.saleReceipt.create(body).subscribe(
             (data) => {},
             (err) => {
                 this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
             },
+            () => {
+                this.updateStatus();
+                // this.snackbar.openSnackbar('Thêm mới đơn bán hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                // this.dialogRef.close();
+                // this.router.navigate(['/orders']);
+            },
+        );
+    }
+
+    selectUnit(product: any, type: any) {
+        if (type === 'retail') {
+            product.unitId = product?.product?.retailUnit?.id;
+            product.unitPrice = product.product.retailPrice;
+        } else if (type == 'whosale') {
+            product.unitId = product?.product?.wholeSaleUnit?.id;
+            product.unitPrice = product.product.price;
+        }
+        console.log(product.unitId);
+        product.totalPrice = product.quantity * product.unitPrice;
+        this.discountRate(product);
+    }
+
+    updateStatus() {
+        const body = {
+            purchaseOrderId: this.relatedOrder.id,
+            orderDate: this.relatedOrder.orderDate,
+            groupId: this.relatedOrder.unit?.id,
+            orderEmployeeId: this.relatedOrder.orderEmployee?.id,
+            warehouseId: this.relatedOrder.warehouse?.id,
+            customerId: this.relatedOrder.customer?.id,
+            routeId: this.relatedOrder.route?.id,
+            type: this.relatedOrder.type,
+            status: 3,
+            paymentMethod: 0,
+            description: this.relatedOrder.description,
+            phone: this.relatedOrder.phone,
+            address: this.relatedOrder.address,
+            customerName: this.relatedOrder.customerName,
+            totalAmount: this.relatedOrder.totalAmount,
+            totalOfVAT: this.relatedOrder.totalOfVAT,
+            totalDiscountProduct: this.relatedOrder.totalDiscountProduct,
+            tradeDiscount: this.relatedOrder.tradeDiscount,
+            totalPayment: this.relatedOrder.totalPayment,
+            archived: false,
+            // lastModifiedBy: 'string',
+            lastModifiedDate: moment(Date.now()).format('YYYY-MM-DD'),
+            orderCode: this.relatedOrder.orderCode,
+            deliveryDate: this.relatedOrder.deliveryDate,
+            prePayment: this.relatedOrder.prePayment,
+        };
+        this.purchaseOrder.update(body).subscribe(
+            (data) => {},
+            (err) => {},
             () => {
                 this.snackbar.openSnackbar('Thêm mới đơn bán hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
                 this.dialogRef.close();
@@ -214,113 +502,135 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         );
     }
 
-    // number to text
-    doc1so(so: any) {
-        var arr_chuhangdonvi = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var resualt = '';
-        resualt = arr_chuhangdonvi[so];
-        return resualt;
+    pushListProductToDialog() {
+        this.listChoosenProduct = this.listProduct.map((product: any) => {
+            return {
+                id: product.product.id,
+            };
+        });
     }
 
-    doc2so(so: any) {
-        so = so.replace(' ', '');
-        var arr_chubinhthuong = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var arr_chuhangdonvi = ['mươi', 'mốt', 'hai', 'ba', 'bốn', 'lăm', 'sáu', 'bảy', 'tám', 'chín'];
-        var arr_chuhangchuc = [
-            '',
-            'mười',
-            'hai mươi',
-            'ba mươi',
-            'bốn mươi',
-            'năm mươi',
-            'sáu mươi',
-            'bảy mươi',
-            'tám mươi',
-            'chín mươi',
-        ];
-        var resualt = '';
-        var sohangchuc = so.substr(0, 1);
-        var sohangdonvi = so.substr(1, 1);
-        resualt += arr_chuhangchuc[sohangchuc];
-        if (sohangchuc == 1 && sohangdonvi == 1) resualt += ' ' + arr_chubinhthuong[sohangdonvi];
-        else if (sohangchuc == 1 && sohangdonvi > 1) resualt += ' ' + arr_chuhangdonvi[sohangdonvi];
-        else if (sohangchuc > 1 && sohangdonvi > 0) resualt += ' ' + arr_chuhangdonvi[sohangdonvi];
-
-        return resualt;
+    pushListProductPromotionToDialog() {
+        this.listChoosenProductPromotion = this.listPromotionProduct.map((product: any) => {
+            return {
+                id: product.product.id,
+            };
+        });
     }
 
-    doc3so(so: any) {
-        var resualt = '';
-        var arr_chubinhthuong = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
-        var sohangtram = so.substr(0, 1);
-        var sohangchuc = so.substr(1, 1);
-        var sohangdonvi = so.substr(2, 1);
-        resualt = arr_chubinhthuong[sohangtram] + ' trăm';
-        if (sohangchuc == 0 && sohangdonvi != 0) resualt += ' linh ' + arr_chubinhthuong[sohangdonvi];
-        else if (sohangchuc != 0) resualt += ' ' + this.doc2so(sohangchuc + ' ' + sohangdonvi);
-        return resualt;
-    }
-
-    docsonguyen(so: any) {
-        var result = '';
-        if (so != undefined) {
-            //alert(so);
-            var arr_So: any = [{ ty: '' }, { trieu: '' }, { nghin: '' }, { tram: '' }];
-            var sochuso = so.length;
-            for (var i = sochuso - 1; i >= 0; i--) {
-                if (sochuso - i <= 3) {
-                    if (arr_So['tram'] != undefined) arr_So['tram'] = so.substr(i, 1) + arr_So['tram'];
-                    else arr_So['tram'] = so.substr(i, 1);
-                } else if (sochuso - i > 3 && sochuso - i <= 6) {
-                    if (arr_So['nghin'] != undefined) arr_So['nghin'] = so.substr(i, 1) + arr_So['nghin'];
-                    else arr_So['nghin'] = so.substr(i, 1);
-                } else if (sochuso - i > 6 && sochuso - i <= 9) {
-                    if (arr_So['trieu'] != undefined) arr_So['trieu'] = so.substr(i, 1) + arr_So['trieu'];
-                    else arr_So['trieu'] = so.substr(i, 1);
-                } else {
-                    if (arr_So.ty != undefined) arr_So.ty = so.substr(i, 1) + arr_So.ty;
-                    else arr_So.ty = so.substr(i, 1);
+    openDialogProduct() {
+        const dialogRef = this.dialog.open(ProductListComponent, {
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            height: '100%',
+            width: '100%',
+            panelClass: 'full-screen-modal',
+            data: {
+                listId: this.listChoosenProduct,
+                listProd: this.relatedOrder.listProduct,
+            },
+        });
+        dialogRef.afterClosed().subscribe((data) => {
+            if (!data.isCancel) {
+                if (this.formatFormProduct(data)) {
+                    let listAdd = this.listAddProduct(this.formatFormProduct(data));
+                    listAdd.forEach((product: any) => {
+                        this.listProduct.push(product);
+                    });
+                    this.pushListProductToDialog();
                 }
-                //console.log(arr_So);
             }
-
-            if (arr_So['ty'] > 0) result += this.doc(arr_So['ty']) + ' tỷ';
-            if (arr_So['trieu'] > 0) {
-                if (arr_So['trieu'].length >= 3 || arr_So['ty'] > 0)
-                    result += ' ' + this.doc3so(arr_So['trieu']) + ' triệu';
-                else if (arr_So['trieu'].length >= 2) result += ' ' + this.doc2so(arr_So['trieu']) + ' triệu';
-                else result += ' ' + this.doc1so(arr_So['trieu']) + ' triệu';
-            }
-            if (arr_So['nghin'] > 0) {
-                if (arr_So['nghin'].length >= 3 || arr_So['trieu'] > 0)
-                    result += ' ' + this.doc3so(arr_So['nghin']) + ' nghìn';
-                else if (arr_So['nghin'].length >= 2) result += ' ' + this.doc2so(arr_So['nghin']) + ' nghìn';
-                else result += ' ' + this.doc1so(arr_So['nghin']) + ' nghìn';
-            }
-            if (arr_So['tram'] > 0) {
-                if (arr_So['tram'].length >= 3 || arr_So['nghin'] > 0) result += ' ' + this.doc3so(arr_So['tram']);
-                else if (arr_So['tram'].length >= 2) result += ' ' + this.doc2so(arr_So['tram']);
-                else result += ' ' + this.doc1so(arr_So['tram']);
-            }
-        }
-        return result;
+        });
     }
 
-    doc(so: any) {
-        var kytuthapphan = ',';
-        var result = '';
-        if (so != undefined) {
-            so = ' ' + so + ' ';
-            so = so.trim();
-            var cautrucso = so.split(kytuthapphan);
-            if (cautrucso[0] != undefined) {
-                result += this.docsonguyen(cautrucso[0]);
+    openDialogProductPromotion() {
+        console.log(this.listChoosenProductPromotion);
+        const dialogRef = this.dialog.open(ProductListComponent, {
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            height: '100%',
+            width: '100%',
+            panelClass: 'full-screen-modal',
+            data: {
+                listId: this.listChoosenProductPromotion,
+                listProd: this.relatedOrder.listPromotionProduct,
+            },
+        });
+        dialogRef.afterClosed().subscribe((data) => {
+            if (!data.isCancel) {
+                if (this.formatFormProductPromotion(data)) {
+                    let listAdd = this.listAddProductPromotion(this.formatFormProductPromotion(data));
+                    listAdd.forEach((product: any) => {
+                        this.listPromotionProduct.push(product);
+                    });
+                    this.pushListProductPromotionToDialog();
+                }
             }
-            if (cautrucso[1] != undefined) {
-                //alert(this.docsonguyen(cautrucso[1]));
-                result += ' phẩy ' + this.docsonguyen(cautrucso[1]);
-            }
+        });
+    }
+
+    // format form add product Promotion to view Detail
+    formatFormProductPromotion(data: any) {
+        if (data.length > 0) {
+            let List = data.map((product: any) => {
+                return {
+                    product: {
+                        id: product.id,
+                        sku: product.sku,
+                        productName: product.productName,
+                        retailPrice: product.retailPrice,
+                        price: product.price,
+                        vat: product.vat,
+                        warehouseId: product?.warehouse?.id,
+                        retailUnit: product.retailUnit,
+                        wholeSaleUnit: product.wholeSaleUnit,
+                    },
+                    unit: {
+                        id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
+                        unitCode: product?.retailUnit?.unitCode,
+                        unitName: product?.retailUnit?.unitName,
+                    },
+                    warehouseId: product?.warehouse?.id,
+                    unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
+                    quantity: 0,
+                    totalPrice: 0,
+                    discount: 0,
+                    discountRate: 0,
+                    note: null,
+                    type: 2,
+                };
+            });
+            return List;
         }
-        return result;
+    }
+
+    // loop to reduce available product promotion
+    listAddProductPromotion(list: any) {
+        let listAddProduct = [];
+        if (list && this.listPromotionProduct) {
+            let listAvailbleIds = this.listPromotionProduct.map((product: any) => {
+                return product?.product?.id;
+            });
+            listAddProduct = list.filter((product: any) => {
+                return !listAvailbleIds.includes(product.product.id);
+            });
+        }
+        return listAddProduct;
+    }
+
+    unChoosePromotion(productRemove: any) {
+        // remove to list product
+        this.listPromotionProduct = this.listPromotionProduct.filter((product: any) => {
+            return productRemove.product.id != product?.product?.id;
+        });
+        this.pushListProductPromotionToDialog();
+    }
+
+    unChoose(productRemove: any) {
+        // remove to list product
+        this.listProduct = this.listProduct.filter((product: any) => {
+            return productRemove.product.id != product?.product?.id;
+        });
+        this.pushListProductToDialog();
     }
 }

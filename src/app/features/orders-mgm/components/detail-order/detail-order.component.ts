@@ -25,7 +25,6 @@ import { NumberToTextService } from 'src/app/core/shared/services/number-to-text
 export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
     statusList = statusList;
     detailOrderForm!: FormGroup;
-    detailOrderFakeData: any = [];
     subscription: Subscription[] = [];
 
     statusNow!: number;
@@ -34,15 +33,19 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     type: string = 'View';
     isRemove = false;
 
-    listPromotionProduct?: ListPromotionProduct[] = [];
+    listPromotionProduct: any = [];
     listProduct: any = [];
     listCustomer: any = [];
     listEmployee: any = [];
     listGroup: any = [];
+    listRoute: any = [];
     listChoosenProduct: any = [];
     listWarehouse: any = [];
     listProductRemove: any = [];
+    listProductPromotionRemove: any = [];
     listProductAdd: any = [];
+    listPromotionProductAdd: any = [];
+    listChoosenProductPromotion: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -72,6 +75,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             deliveryDate: [null],
             orderEmployee: [null],
             groupId: [null],
+            routeId: [null],
             customer: this.fb.group({
                 code: [null],
                 name: [null],
@@ -101,6 +105,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                     this.getDetail();
                     // nếu update thành công -> list AddProduct  = []
                     this.listProductAdd = [];
+                    this.listPromotionProductAdd = [];
                 }
             }),
         );
@@ -136,8 +141,12 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         });
         // send body update product
         this.purchaseOrder.sendProductUpdate(this.getProductListUpdate());
+        // send body update product promotion
+        this.purchaseOrder.sendProductPromotionUpdate(this.getPromotionProductListUpdate());
         // send body add product
         this.purchaseOrder.sendProductAdd(this.getProductListAdd());
+        // send body add product promotion
+        this.purchaseOrder.sendProductPromotionAdd(this.getProductPromotionListAdd());
         // count totalAmount (Tổng tiền hàng)
         this.countTotalAmount();
         // count totalDiscountProduct (Chiết khấu sản phẩm)
@@ -159,6 +168,8 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         this.getListCustomer();
         this.getListEmployee();
         this.getListWareHouse();
+        this.getListRoute();
+        this.getListGroup();
     }
 
     getDetail() {
@@ -167,6 +178,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 this.detailOrder = data;
                 this.patchValue();
                 this.pushListProductToDialog();
+                this.pushListProductPromotionToDialog();
                 // get all info payment
                 this.totalAmount = this.detailOrder.totalAmount;
                 this.totalDiscountProduct = this.detailOrder.totalDiscountProduct;
@@ -185,6 +197,8 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             orderDate: this.detailOrder.orderDate,
             deliveryDate: this.detailOrder.deliveryDate,
             orderEmployee: this.detailOrder.orderEmployee?.id, // đang bị null
+            routeId: this.detailOrder?.route?.id,
+            groupId: this.detailOrder?.group?.id,
             customer: {
                 code: this.detailOrder.customer?.id,
                 name: this.detailOrder.customer?.customerName,
@@ -193,13 +207,17 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             },
             description: this.detailOrder.description,
         });
+        // get list product
         this.listProduct = this.detailOrder.listProduct;
+        // get list promotion product
         this.listPromotionProduct = this.detailOrder.listPromotionProduct;
         // loop to map warehouseId
         this.listProduct.forEach((product: any) => {
             product.warehouseId = product.warehouse?.id;
         });
-        console.log(this.listProduct);
+        this.listPromotionProduct.forEach((product: any) => {
+            product.warehouseId = product.warehouse?.id;
+        });
     }
 
     getListWareHouse() {
@@ -214,16 +232,25 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         this.subscription.push(
             this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data: any) => {
                 this.listCustomer = data.data;
+                console.log(this.listCustomer);
             }),
         );
     }
 
     getListEmployee() {
         this.subscription.push(
-            this.purchaseOrder.getAllEmployees(1, 1000).subscribe((data) => {
+            this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
                 this.listEmployee = data.data;
             }),
         );
+    }
+
+    getListRoute() {
+        this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => (this.listRoute = data.data));
+    }
+
+    getListGroup() {
+        this.purchaseOrder.getAllGroup(1).subscribe((data) => (this.listGroup = data));
     }
 
     countTotalAmount() {
@@ -292,6 +319,26 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         return listProductToSent;
     }
 
+    getPromotionProductListUpdate() {
+        let listProductToSent = this.listPromotionProduct.map((product: any) => {
+            return {
+                purchaseOrderId: this.id,
+                productId: product?.product?.id,
+                // productName: product.product.productName,
+                unitId: product.unit.id,
+                warehouseId: product.warehouseId,
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount || 0,
+                discountRate: product.discountRate || 0,
+                note: product.note,
+                type: product.type,
+            };
+        });
+        return listProductToSent;
+    }
+
     getProductListAdd() {
         let listProductAdd = this.listProductAdd.map((product: any) => {
             return {
@@ -312,9 +359,34 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         return listProductAdd;
     }
 
+    getProductPromotionListAdd() {
+        let listProductAdd = this.listPromotionProductAdd.map((product: any) => {
+            return {
+                purchaseOrderId: this.id,
+                productId: product?.product?.id,
+                // productName: product.product.productName,
+                unitId: product.unit.id,
+                warehouseId: product.warehouseId,
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount || 0,
+                discountRate: product.discountRate || 0,
+                note: product.note,
+                type: product.type,
+            };
+        });
+        return listProductAdd;
+    }
+
     unChoose(productRemove: any) {
         // send to service
-        this.listProductRemove.push(productRemove.product.id);
+        this.listProductRemove.push({
+            productId: productRemove.product.id,
+            type: productRemove.type,
+            unitId: productRemove.unit?.id,
+            warehouseId: productRemove.warehouseId,
+        });
         this.isRemove = true;
         this.purchaseOrder.sendProductRemove({
             isRemove: this.isRemove,
@@ -326,9 +398,36 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         });
     }
 
+    unChoosePromotion(productRemove: any) {
+        // send to service
+        this.listProductPromotionRemove.push({
+            productId: productRemove.product.id,
+            type: productRemove.type,
+            unitId: productRemove.unit?.id,
+            warehouseId: productRemove.warehouseId,
+        });
+        console.log(this.listProductPromotionRemove);
+        this.isRemove = true;
+        this.purchaseOrder.sendProductPromotionRemove({
+            isRemove: this.isRemove,
+            list: this.listProductPromotionRemove,
+        });
+        // remove to list product
+        this.listPromotionProduct = this.listPromotionProduct.filter((product: any) => {
+            return productRemove.product.id != product?.product?.id;
+        });
+    }
+
     unChooseFromListAdd(productRemove: any) {
         // remove from list add
         this.listProductAdd = this.listProductAdd.filter((product: any) => {
+            return productRemove.product.id != product?.product?.id;
+        });
+    }
+
+    unChooseFromListAddPromotion(productRemove: any) {
+        // remove from list add
+        this.listPromotionProductAdd = this.listPromotionProductAdd.filter((product: any) => {
             return productRemove.product.id != product?.product?.id;
         });
     }
@@ -353,15 +452,6 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         });
     }
 
-    // selectUnit(product: any, value: any) {
-    //     product.unitId = value.unit.id;
-    //     if (value.type === 'retail') {
-    //         product.unitPrice = product.product.retailPrice;
-    //     } else if (value.type === 'whosale') {
-    //         product.unitPrice = product.product.price;
-    //     }
-    // }
-
     discountRate(product: any) {
         if (product.totalPrice) {
             product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
@@ -374,6 +464,14 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     pushListProductToDialog() {
         this.listChoosenProduct = this.detailOrder.listProduct.map((product: any) => {
+            return {
+                id: product.product.id,
+            };
+        });
+    }
+
+    pushListProductPromotionToDialog() {
+        this.listChoosenProductPromotion = this.detailOrder.listPromotionProduct.map((product: any) => {
             return {
                 id: product.product.id,
             };
@@ -394,16 +492,36 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         });
         dialogRef.afterClosed().subscribe((data) => {
             if (!data.isCancel) {
-                // this.listChoosenProduct = data;
-                // this.listProduct = this.listChoosenProduct;
                 if (this.formatFormProduct(data)) {
                     let listAdd = this.listAddProduct(this.formatFormProduct(data));
                     this.listProductAdd = [];
                     this.listProductAdd = listAdd;
-                    console.log(listAdd);
-                    // listAdd.forEach((product: any) => {
-                    //     this.listProduct.push(product);
-                    // });
+                }
+            }
+        });
+    }
+
+    openDialogProductPromotion() {
+        console.log(this.listChoosenProductPromotion);
+        const dialogRef = this.dialog.open(ProductListComponent, {
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            height: '100%',
+            width: '100%',
+            panelClass: 'full-screen-modal',
+            data: {
+                listId: this.listChoosenProductPromotion,
+                listProd: this.detailOrder.listPromotionProduct,
+            },
+        });
+        dialogRef.afterClosed().subscribe((data) => {
+            if (!data.isCancel) {
+                if (this.formatFormProductPromotion(data)) {
+                    console.log(data);
+                    let listAdd = this.listAddProductPromotion(this.formatFormProductPromotion(data));
+                    this.listPromotionProductAdd = [];
+                    this.listPromotionProductAdd = listAdd;
+                    console.log(this.listPromotionProductAdd);
                 }
             }
         });
@@ -418,7 +536,17 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 product.warehouseId = value;
             });
         }
-        console.log(this.listProductAdd, this.listProduct);
+    }
+
+    setWareHouseToAllProductPromotion(value: any) {
+        if (value != 0) {
+            this.listPromotionProduct.forEach((product: any) => {
+                product.warehouseId = value;
+            });
+            this.listPromotionProductAdd.forEach((product: any) => {
+                product.warehouseId = value;
+            });
+        }
     }
 
     // format form add product to view Detail
@@ -456,12 +584,61 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         }
     }
 
+    // format form add product Promotion to view Detail
+    formatFormProductPromotion(data: any) {
+        if (data.length > 0) {
+            let List = data.map((product: any) => {
+                return {
+                    product: {
+                        id: product.id,
+                        sku: product.sku,
+                        productName: product.productName,
+                        retailPrice: product.retailPrice,
+                        price: product.price,
+                        vat: product.vat,
+                        warehouseId: product?.warehouse?.id,
+                        retailUnit: product.retailUnit,
+                        wholeSaleUnit: product.wholeSaleUnit,
+                    },
+                    unit: {
+                        id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
+                        unitCode: product?.retailUnit?.unitCode,
+                        unitName: product?.retailUnit?.unitName,
+                    },
+                    warehouseId: product?.warehouse?.id,
+                    unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
+                    quantity: 0,
+                    totalPrice: 0,
+                    discount: 0,
+                    discountRate: 0,
+                    note: null,
+                    type: 2,
+                };
+            });
+            return List;
+        }
+    }
+
     // loop to reduce available product
     listAddProduct(list: any) {
         let listAddProduct = [];
         console.log(this.listProduct.length, list.length);
         if (list && this.listProduct) {
             let listAvailbleIds = this.listProduct.map((product: any) => {
+                return product?.product?.id;
+            });
+            listAddProduct = list.filter((product: any) => {
+                return !listAvailbleIds.includes(product.product.id);
+            });
+        }
+        return listAddProduct;
+    }
+
+    // loop to reduce available product promotion
+    listAddProductPromotion(list: any) {
+        let listAddProduct = [];
+        if (list && this.listPromotionProduct) {
+            let listAvailbleIds = this.listPromotionProduct.map((product: any) => {
                 return product?.product?.id;
             });
             listAddProduct = list.filter((product: any) => {

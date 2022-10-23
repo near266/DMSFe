@@ -158,34 +158,34 @@ export class InforComponent implements OnInit, OnDestroy {
         }
         if (data == 'update') {
           this.employee.removeControl('password')
-          // this.employee.removeControl('login')
-          // this.employee.removeControl('authorities')
-          this.employee.controls['login'].setValue(this.employee.controls['email'].value);
+          this.employee.removeControl('login')
+          this.employee.removeControl('authorities')
+          // this.employee.controls['login'].setValue(this.employee.controls['email'].value);
 
-          switch(this.employee.controls['employeeTitle'].value) {
-            case 'Nhân viên': {
-              this.employee.controls['authorities'].setValue(["MEMBER"]);
-              break;
-            }
-            case 'Nhân viên dùng gói Basic': {
-              this.employee.controls['authorities'].setValue(["MEMBER"]);
-              break;
-            }
-            case 'Kế toán': {
-              this.employee.controls['authorities'].setValue(["ACCOUNTANT", "MEMBER"]);
-              break;
-            }
-            case 'Giám sát': {
-              this.employee.controls['authorities'].setValue(["MANAGER", "ACCOUNTANT", "MEMBER"]);
-              break;
-            }
-            case 'Chủ sở hữu': {
-              this.employee.controls['authorities'].setValue(["SALE_ADMIN" ,"MANAGER", "ACCOUNTANT", "MEMBER"]);
-              break;
-            }
-          }
+          // switch(this.employee.controls['employeeTitle'].value) {
+          //   case 'Nhân viên': {
+          //     this.employee.controls['authorities'].setValue(["MEMBER"]);
+          //     break;
+          //   }
+          //   case 'Nhân viên dùng gói Basic': {
+          //     this.employee.controls['authorities'].setValue(["MEMBER"]);
+          //     break;
+          //   }
+          //   case 'Kế toán': {
+          //     this.employee.controls['authorities'].setValue(["ACCOUNTANT", "MEMBER"]);
+          //     break;
+          //   }
+          //   case 'Giám sát': {
+          //     this.employee.controls['authorities'].setValue(["MANAGER", "ACCOUNTANT", "MEMBER"]);
+          //     break;
+          //   }
+          //   case 'Chủ sở hữu': {
+          //     this.employee.controls['authorities'].setValue(["SALE_ADMIN" ,"MANAGER", "ACCOUNTANT", "MEMBER"]);
+          //     break;
+          //   }
+          // }
           if (this.employee.valid) {
-            let sub3 = this.employeeService.UpdateUser(this.employee.value).subscribe(data => {
+            let sub3 = this.employeeService.UpdateEmployee(this.employee.value).subscribe(data => {
               this.snackbar.openSnackbar('Sửa thành công', 5000, 'Đóng', 'center', 'bottom', true);
               this.dataService.changeEmployee('success')
               sub3.unsubscribe()

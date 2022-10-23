@@ -70,7 +70,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
 
     ngAfterViewInit(): void {
         // get list employee
-        this.purchaseOrder.getAllEmployees(1, 1000).subscribe((data) => {
+        this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
             this.listEmployee = data.data;
         });
         // get list customer
@@ -135,7 +135,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         });
         const body = {
             orderDate: moment(this.createSale.get('orderDate')?.value).format('YYYY-MM-DD'),
-            groupId: 'ef6c9edf-5445-4dbf-b0f3-d65d6412cfc0',
+            groupId: this.createSale.get('groupId')?.value,
             saleEmployeeId: this.createSale.get('saleEmployee')?.value,
             // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             customerId: this.createSale.get('customer')?.value?.id?.id,
@@ -155,7 +155,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             totalPayment: this.totalPayment,
             archived: false,
             createdDate: moment(Date.now()).format('YYYY-MM-DD'),
-            saleReceiptCode: this.createSale.get('saleEmployee')?.value.employeeCode,
+            saleReceiptCode: this.createSale.get('saleEmployee')?.value?.employeeCode,
             deliveryDate: moment(this.createSale.get('deliveryDate')?.value).format('YYYY-MM-DD'),
             saleDate: moment(this.createSale.get('saleDate')?.value).format('YYYY-MM-DD'),
             paymentTerm: moment(this.createSale.get('paymentTerm')?.value).format('YYYY-MM-DD'),
