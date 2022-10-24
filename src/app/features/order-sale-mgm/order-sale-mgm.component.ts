@@ -21,6 +21,8 @@ export class OrderSaleMgmComponent implements OnInit {
     total: number = 0;
     id:any = [];
 
+  formFilter: any;
+
     constructor(
         private activatedroute: ActivatedRoute,
         public datepipe: DatePipe,
@@ -50,9 +52,9 @@ export class OrderSaleMgmComponent implements OnInit {
             pageSize: this.pageSize,
         };
         this.saleReceiptService.searchReceipt(body).subscribe((data) => {
-          console.log(data);
+          // console.log(data);
 
-            this.listReceiptOrder = data.data;
+            this.listReceiptOrder = data?.data;
             this.total = data.totalCount;
             this.saleReceiptService.setTotal(this.total);
         });
@@ -90,48 +92,51 @@ export class OrderSaleMgmComponent implements OnInit {
     }
 
     chooseID(event:any,id:any){
-      console.log(event.checked);
+      // console.log(event.checked);
       if(event.checked == true){
         this.id.push(id);
       }else{
         this.id.splice(this.id.indexOf(id),1)
       }
-      console.log(this.id);
+      // console.log(this.id);
+    }
+
+    formFilterChild(event:any){
+      // console.log(event);
+      this.formFilter = event
     }
 
     export(){
-      let body = {
-        filter: null,
-        // null || {
-        //   keyword: '',
-        //     deliveryDate: '',
-        //     orderEmployeeId: '',
-        //     customerTypeId: '',
-        //     customerGroupId: '',
-        //     areaId: '',
-        //     productKey: '',
-        //     status: '',
-        //     printStatus: null,
-        //     paymentMethod: '',
-        //     page: '',
-        //     pageSize: '',
-        //     sortField: '',
-        //     isAscending: null,
-        //     fromDate: '',
-        //     toDate: '',
-        //     dateFilter: '',
-        // },
-        listId: this.id,
-        type: 2,
+      let body;
+      if(this.id.length == 0){
+        body = {
+          filter:this.formFilter,
+          listId: null,
+          type: 1,
+        }
+      }else{
+        body = {
+          // filter: {
+          //   page: 1,
+          //   pageSize: Number.MAX_VALUE,
+          // },
+          filter: null,
+          listId: this.id,
+          type: 2,
+        }
       }
-      console.log(body);
+      // console.log(this.id);
 
+      // console.log(body);
       this.saleReceiptService.export(body).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
+
+          const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url= window.URL.createObjectURL(blob);
+          window.open(url);
         }
       })
-      console.log("export");
-      console.log(body);
+      // console.log("export");
     }
 }
