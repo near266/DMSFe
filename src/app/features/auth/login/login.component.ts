@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
 
         });
     }
-
+    
     getSafe() {
       return this.sanitizer.bypassSecurityTrustUrl(this.downloadForIOS);
     }
