@@ -21,14 +21,37 @@ export class UserManageComponent implements OnInit {
         private dataService: DataService,
     ) { }
 
-    pageSizeList = [10, 30, 50, 100, 200, 500];
-    pageSize = 10;
+    pageSizeList = [30, 50, 100, 200, 500];
+    pageSize = 30;
     page = 1;
     totalPage: number;
     totalCount: number;
-    api  = '';
+    api = '';
     groupId = '';
     dia?: any;
+    body = {
+        keyword: '',
+        position: "string",
+        page: this.page,
+        pagesize: this.pageSize
+    }
+
+    SearchEmployee() {
+        let sub = this.employeeService.SearchEmployee(this.body).subscribe(data => {
+            this.totalCount = data.totalCount
+            if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
+                this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
+            }
+            else {
+                this.totalPage = Math.round(this.totalCount / this.pageSize)
+            }
+            this.users = []
+            data.data.forEach((element: any) => {
+                this.users.push(element)
+            });
+            sub.unsubscribe()
+        })
+    }
 
     AddUser() {
         this.dia = this.dialog.open(AddUserComponent, {
@@ -48,40 +71,40 @@ export class UserManageComponent implements OnInit {
     }
 
     searchUser(event: any) {
-      if (event != 'root') {
-        this.employeeService.SearchEmployeeInGroup(event, 1, 1000).subscribe( data => {
-          if(data) {
-            this.page = 1;
-            console.log(data);
-            this.totalCount = data.totalCount;
-              if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
-                  this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
-              }
-              else {
-                  this.totalPage = Math.round(this.totalCount / this.pageSize)
-              }
-              this.users = []
-              data.data.forEach((element: any) => {
-                  this.users.push(element.employee);
-              });
-          }
-        });
-      } else {
-          let sub = this.employeeService.GetAllEmployee(1, this.pageSize).subscribe(data => {
-          this.totalCount = data.totalCount
-          if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
-              this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
-          }
-          else {
-              this.totalPage = Math.round(this.totalCount / this.pageSize)
-          }
-          this.users = []
-          data.data.forEach((element: any) => {
-              this.users.push(element)
-          });
-          sub.unsubscribe()
-      })
-      }
+        if (event != 'root') {
+            this.employeeService.SearchEmployeeInGroup(event, 1, 1000).subscribe(data => {
+                if (data) {
+                    this.page = 1;
+                    console.log(data);
+                    this.totalCount = data.totalCount;
+                    if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
+                        this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
+                    }
+                    else {
+                        this.totalPage = Math.round(this.totalCount / this.pageSize)
+                    }
+                    this.users = []
+                    data.data.forEach((element: any) => {
+                        this.users.push(element.employee);
+                    });
+                }
+            });
+        } else {
+            let sub = this.employeeService.GetAllEmployee(1, this.pageSize).subscribe(data => {
+                this.totalCount = data.totalCount
+                if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
+                    this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
+                }
+                else {
+                    this.totalPage = Math.round(this.totalCount / this.pageSize)
+                }
+                this.users = []
+                data.data.forEach((element: any) => {
+                    this.users.push(element)
+                });
+                sub.unsubscribe()
+            })
+        }
     }
 
     closeSideBar() {
@@ -104,70 +127,6 @@ export class UserManageComponent implements OnInit {
         left: 'w-3/12',
         right: 'w-9/12',
         statusbar: true,
-    };
-
-    item = {
-        level: 1,
-        name: 'level1',
-        tree: [
-            {
-                level: 2,
-                name: 'level2',
-                tree: [
-                    {
-                        level: 3,
-                        name: 'level3',
-                        tree: [
-                            {
-                                level: 4,
-                                name: 'level4',
-                                tree: null,
-                            },
-                        ],
-                    },
-                    {
-                        level: 3,
-
-                        name: 'level3+2',
-                        tree: [
-                            {
-                                level: 4,
-                                name: 'level4',
-                                tree: null,
-                            },
-                        ],
-                    },
-                    {
-                        level: 3,
-                        name: 'level3+3',
-                        tree: [
-                            {
-                                level: 4,
-                                name: 'level4',
-                                tree: null,
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                level: 2,
-                name: 'level2.2',
-                tree: [
-                    {
-                        level: 3,
-                        name: 'level3.2',
-                        tree: [
-                            {
-                                level: 4,
-                                name: 'level4.2',
-                                tree: null,
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
     };
 
     ngOnInit(): void {

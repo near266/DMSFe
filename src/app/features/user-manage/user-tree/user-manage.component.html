@@ -3,7 +3,7 @@
     <div class="w-72 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm"
       *ngIf="class.statusbar">
       <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
-      <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm nhân viên">
+      <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm nhân viên" (keydown)="SearchEmployee()" [(ngModel)]="body.keyword" name="search">
     </div>
     <div class="overflow-scroll h-full">
       <div class="w-72 bg-white mx-3 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm"
