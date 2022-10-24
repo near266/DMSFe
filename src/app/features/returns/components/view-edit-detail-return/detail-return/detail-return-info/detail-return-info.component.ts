@@ -36,7 +36,7 @@ export class DetailReturnInfoComponent implements OnInit {
             fieldGroup: [
                 {
                     className: 'flex-1 ',
-                    key: 'orderId',
+                    key: 'saleCode',
                     type: 'input',
                     templateOptions: {
                         label: 'Mã phiếu bán',
