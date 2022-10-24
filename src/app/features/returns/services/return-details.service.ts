@@ -26,6 +26,7 @@ export class ReturnDetailsService {
             tap((data) => {
                 data.groupId = data.group?.id;
                 data.orderEmployeeId = data.orderEmployee?.id;
+                data.saleCode = data.saleReciept?.saleCode;
                 data.customerCode = {
                     value: data.customer?.id || null,
                 };

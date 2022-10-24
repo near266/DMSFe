@@ -1,3 +1,4 @@
+import { OrderEmployee } from './../../../core/model/PurchaseOrder';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 
@@ -62,7 +63,8 @@ export class ReturnOrderService {
     formatInfo(info: any) {
         console.log(info);
         return {
-            saleCode: info.saleCode,
+            saleCode: info?.saleCode || null,
+            saleRecieptId: info?.id || null,
             customerId: info.customer?.id || null,
             customerName: info.customer?.customerName || null,
             groupId: info.group?.id,
@@ -71,10 +73,9 @@ export class ReturnOrderService {
             phone: info?.phone || null,
             address: info?.address || null,
             description: 'Trả hàng theo phiếu đặt hàng số [' + info?.saleCode + ']',
-            customerCode: {
-                label: info.customer?.customerCode || null,
-                value: info.customer?.id || null,
-            },
+            customerCode: info.customer?.customerCode || null,
+            orderEmployeeName: info.orderEmployee?.employeeName || null,
+            groupName: info.group?.name,
         };
     }
 }
