@@ -16,6 +16,8 @@ export class ChangeRouteComponent implements OnInit, AfterViewInit {
     list: []
   };
 
+  listRole: string[] = [];
+
   constructor(
     private customerService: CustomerService,
     private dialog: MatDialog,
@@ -28,7 +30,7 @@ export class ChangeRouteComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
+    this.listRole = ('' + localStorage.getItem('role')).split(',');
   }
 
   open() {

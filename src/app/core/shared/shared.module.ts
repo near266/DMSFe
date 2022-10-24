@@ -5,9 +5,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { NgSelectModule } from '@ng-select/ng-select';
 
-
+import {NgSelectModule} from '@ng-select/ng-select'
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
@@ -52,9 +51,9 @@ import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { MenuCollapseTreeComponent } from './components/menu-collapse-tree/menu-collapse-tree.component';
 import { EzPaginationComponent } from './components/ez-pagination/ez-pagination.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
-import { CurrencyMaskModule } from 'ng2-currency-mask';
 @NgModule({
     declarations: [
         MenuCollapseComponent,
@@ -108,6 +107,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
         ReactiveFormsModule,
         TreeModule,
         NgxPaginationModule,
+        NgSelectModule
     ],
     exports: [
         CurrencyMaskModule,
@@ -138,6 +138,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
         MatTreeModule,
         MatButtonModule,
         MatButtonToggleModule,
+        NgSelectModule,
         MatBadgeModule,
         MatChipsModule,
         MatIconModule,
@@ -158,7 +159,6 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
         FormsModule,
         ReactiveFormsModule,
         TreeModule,
-        NgSelectModule,
         NgxPaginationModule,
     ],
 })

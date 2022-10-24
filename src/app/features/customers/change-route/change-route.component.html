@@ -1,5 +1,5 @@
 <div class="w-full flex justify-end mb-2">
-  <button (click)="open()" mat-flat-button class="bg-[#1891C9] text-white"><i class="fa-solid fa-circle-check mr-1"></i> Thêm tuyến</button>
+  <button *ngIf="listRole.length > 1" (click)="open()" mat-flat-button class="bg-[#1891C9] text-white"><i class="fa-solid fa-circle-check mr-1"></i> Thêm tuyến</button>
 </div>
 <div class="overflow-x-auto relative">
   <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -37,7 +37,7 @@
                 {{item.employee.employeeName}}
               </td>
               <td class="py-4 px-6">
-                <i (click)="delete(item.id)" class="fa-solid fa-circle-xmark cursor-pointer"></i>
+                <i *ngIf="listRole.length > 1" (click)="delete(item.id)" class="fa-solid fa-circle-xmark cursor-pointer"></i>
               </td>
           </tr>
 

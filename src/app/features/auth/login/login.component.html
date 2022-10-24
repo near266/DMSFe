@@ -29,13 +29,13 @@
         <div class="flex flex-col h-full justify-center align-middle text-red-500 font-medium cursor-pointer"
           [routerLink]="'../forgotpassword'"><span>Quên mật khẩu?</span></div>
       </div>
-      <div class="flex justify-center mb-2">
+      <div class="flex justify-center mb-6">
         <button type="submit" mat-flat-button class="bg-[#0EAF8F] text-white text-lg font-medium">Đăng nhập</button>
       </div>
     </form>
-    <div class="flex justify-between">
-      <a type="button" mat-flat-button class="bg-[#0EAF8F] text-white text-base font-medium" href="https://fitolabs-api.eztek.net/gw/InstallLink/android"><i class="fa-brands fa-android"></i> Tải xuống cho Android</a>
-      <a type="button" mat-flat-button class="bg-[#0EAF8F] text-white text-base font-medium" href="itms-services://?action=download-manifest&amp;url=https://fitolabs-api.eztek.net/gw/InstallLink/fitolabs_manifest.plist"><i class="fa-brands fa-apple"></i> Tải xuống cho IOS</a>
+    <div class="lg:flex justify-between lg:space-x-3 px-3 lg:px-0 space-y-4 text-center lg:space-y-0">
+      <a type="button" mat-flat-button class="bg-[#0EAF8F] text-white font-medium w-3/5" href="{{downloadForAndroid}}"><i class="fa-brands fa-android"></i> Tải xuống cho Android</a>
+      <a type="button" mat-flat-button class="bg-[#0EAF8F] text-white font-medium w-3/5" href="{{downloadForIOS}}"><i class="fa-brands fa-apple"></i> Tải xuống cho IOS</a>
     </div>
   </div>
 </div>
