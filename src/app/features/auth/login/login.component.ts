@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { api_gateway_url } from 'src/app/core/const/url';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
@@ -11,6 +12,9 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
+
+  downloadForAndroid = api_gateway_url + '/InstallLink/android';
+  downloadForIOS = 'itms-services://?action=download-manifest&amp;url='+ api_gateway_url + '/InstallLink/fitolabs_manifest.plist';
 
   constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) { }
 
