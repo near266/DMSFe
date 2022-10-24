@@ -11,7 +11,7 @@ export class EmployeeService {
 
   GetAllEmployee(page: any, pageSize: any): Observable<any> {
     return this.http
-      .post(gateway_url + '/Employee/SearchAllEmployee', {
+      .post(gateway_url + '/Employee/SearchAllEmployeePost', {
         page: page,
         pagesize: pageSize
       })

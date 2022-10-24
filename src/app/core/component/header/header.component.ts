@@ -8,9 +8,10 @@ import { AuthService } from '../../services/auth.service';
     styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-    role: string;
+    roles: string;
     listRole: string[] = [];
     isAdmin = false;
+    role: string;
     annonimousAvatar = './../../../../assets/images/annonimous.jpg';
     constructor(
         private router: Router,
@@ -18,8 +19,9 @@ export class HeaderComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-      this.role = '' + localStorage.getItem('role');
-      this.listRole = this.role.split(',');
+      this.role = '' + localStorage.getItem('roleMain');
+      this.roles = '' + localStorage.getItem('role');
+      this.listRole = this.roles.split(',');
       this.listRole.forEach(element => {
         if(element.includes('SALE_ADMIN')) {
           this.isAdmin = true;
