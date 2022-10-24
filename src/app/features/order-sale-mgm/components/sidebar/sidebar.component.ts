@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Config } from 'src/app/core/model/Config';
+import { DataService } from '../../services/data.service';
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
@@ -9,6 +10,7 @@ export class SidebarComponent implements OnInit {
     @Output() isShowSidebarOutput = new EventEmitter<boolean>();
     isShowSidebar = true;
     isSearchByBill = false;
+    searchText: string = '';
     statusMenu: Config = {
         icon: '<i class="fa-solid fa-flag-usa"></i>',
         title: 'Trạng thái',
@@ -44,10 +46,14 @@ export class SidebarComponent implements OnInit {
         title: 'Lưu trữ',
         menuChildrens: ['Tất cả', 'Mở', 'Khóa'],
     };
-    constructor() {}
+    constructor(private dataService: DataService) {}
 
     ngOnInit(): void {
         this.isShowSidebarOutput.emit(this.isShowSidebar);
+    }
+
+    searchKeyword() {
+        this.dataService.searchKeyword(this.searchText);
     }
 
     toggleShowSidebar() {

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
 import { SaleReceipt } from 'src/app/core/model/SaleReceipt';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
+import { DataService } from './services/data.service';
 
 @Component({
     selector: 'app-order-sale-mgm',
@@ -22,18 +23,36 @@ export class OrderSaleMgmComponent implements OnInit {
     id: any = [];
     roleMain = 'member';
 
+    searchAllBody = {
+        sortField: 'CreatedDate',
+        isAscending: false,
+        page: this.page,
+        pageSize: this.pageSize,
+    };
+
     constructor(
         private activatedroute: ActivatedRoute,
         public datepipe: DatePipe,
         private saleReceiptService: SaleReceiptService,
         private router: Router,
+        private dataService: DataService,
     ) {}
 
     ngOnInit(): void {
         this.roleMain = localStorage.getItem('roleMain')!;
         this.saleReceiptService.page.subscribe((data) => {
             this.page = data;
-            this.search();
+            this.search(this.searchAllBody);
+        });
+        this.dataService.searchText.subscribe((data) => {
+            const body = {
+                keyword: data,
+                sortField: 'CreatedDate',
+                isAscending: false,
+                page: this.page,
+                pageSize: this.pageSize,
+            };
+            this.search(body);
         });
     }
 
@@ -41,16 +60,10 @@ export class OrderSaleMgmComponent implements OnInit {
         // this.saleReceiptService.search().subscribe((data) => {
         //     this.listReceiptOreder = data.data;
         // });
-        this.search();
+        this.search(this.searchAllBody);
     }
 
-    search() {
-        let body = {
-            sortField: 'CreatedDate',
-            isAscending: false,
-            page: this.page,
-            pageSize: this.pageSize,
-        };
+    search(body: any) {
         this.saleReceiptService.searchReceipt(body).subscribe((data) => {
             console.log(data);
 

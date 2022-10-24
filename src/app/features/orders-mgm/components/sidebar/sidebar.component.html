@@ -8,6 +8,7 @@
             <input matInput class="bg-white" [(ngModel)]="searchText" />
         </mat-form-field>
         <i
+        (click)="searchKeyword()"
             matSuffix
             class="ml-1 text-center mr-1 px-1 py-2 rounded-md bg-zinc-300 h-full w-full hover:opacity-70 font-bold cursor-pointer fa-solid text-base icon fa-magnifying-glass"></i>
     </div>

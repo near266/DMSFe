@@ -155,7 +155,9 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             if (!data.isCancel) {
                 this.listChoosenProduct = data;
                 this.listChoosenProduct.forEach((product: any) => {
-                    product.warehouseId = product.warehouse?.id;
+                    product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+                    product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+                    product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
                 });
             }
         });
@@ -248,14 +250,16 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         }
     }
 
-    selectUnit(value: any, product: any, i: any) {
-        product.unitId = value.unit.id;
-        product.type = value.type;
-        if (value.type === 'retail') {
+    selectUnit(product: any, type: any) {
+        if (type === 'retail') {
+            product.unitId = product?.retailUnit?.id;
             product.unitPrice = product.retailPrice;
-        } else if (value.type === 'whosale') {
+        } else if (type == 'whosale') {
+            product.unitId = product?.wholeSaleUnit?.id;
             product.unitPrice = product.price;
         }
+        product.totalPrice = product.quantity * product.unitPrice;
+        this.discountRate(product);
     }
 
     selectWareHouse(value: any, product: any) {

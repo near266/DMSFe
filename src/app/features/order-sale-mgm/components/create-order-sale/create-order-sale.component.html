@@ -236,15 +236,17 @@
                                         appearance="outline"
                                         floatLabel="always"
                                         style="width: 100px">
-                                        <mat-select (selectionChange)="selectUnit($event.value, product, i)">
+                                        <mat-select [value]="product.unitId">
                                             <mat-option
+                                                (click)="selectUnit(product, 'retail')"
                                                 *ngIf="product.retailUnit"
-                                                [value]="{ unit: product.retailUnit, type: 'retail' }">
+                                                [value]="product?.retailUnit?.id">
                                                 Lẻ - {{ product.retailUnit.unitName || 'No Data' }}
                                             </mat-option>
                                             <mat-option
+                                                (click)="selectUnit(product, 'whosale')"
                                                 *ngIf="product.wholeSaleUnit"
-                                                [value]="{ unit: product.wholeSaleUnit, type: 'whosale' }">
+                                                [value]="product?.wholeSaleUnit?.id">
                                                 Chẵn - {{ product.wholeSaleUnit.unitName || 'No Data' }}
                                             </mat-option>
                                         </mat-select>
