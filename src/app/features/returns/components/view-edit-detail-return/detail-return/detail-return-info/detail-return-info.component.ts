@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import * as moment from 'moment';
-import { map, Subscription, switchMap, tap } from 'rxjs';
+import { debounce, map, Subscription, switchMap, tap, timer } from 'rxjs';
 import { ComponentMode } from 'src/app/features/returns/models/componentMode';
 import { Status } from 'src/app/features/returns/models/return';
 import { ReturnDetailsService } from 'src/app/features/returns/services/return-details.service';
@@ -26,11 +26,18 @@ export class DetailReturnInfoComponent implements OnInit {
             key: 'customerId',
         },
         {
+            key: 'saleRecieptId',
+        },
+        {
             key: 'type',
         },
         {
             key: 'warehouseId',
         },
+        {
+            key: 'orderEmployeeId',
+        },
+        { key: 'groupId' },
         {
             fieldGroupClassName: 'flex space-x-4 max-w-[1000px] text-[12px]',
             fieldGroup: [
@@ -49,22 +56,13 @@ export class DetailReturnInfoComponent implements OnInit {
                 {
                     key: 'customerCode',
                     // type: 'product-select',
-                    type: 'select',
+                    type: 'input',
                     className: 'flex-1',
                     defaultValue: null,
                     templateOptions: {
                         label: 'Mã khách hàng',
-                        placeholder: 'Mã khách hàng',
                         disabled: true,
                         appearance: 'outline',
-                        valueProp: (option: any) => option,
-                        compareWith: (o1: any, o2: any) => o1.value === o2.value,
-                        options: this.returnFormService.getAllCustomers(),
-                        change: (field, $event) => {
-                            field.form!.get('customerName')?.setValue(field!.formControl!.value.customerName);
-                            field.form!.get('address')?.setValue(field!.formControl!.value.address);
-                            field.form!.get('phone')?.setValue(field!.formControl!.value.phone);
-                        },
                     },
                 },
                 {
@@ -81,19 +79,6 @@ export class DetailReturnInfoComponent implements OnInit {
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
-                    hooks: {
-                        onInit: (field: FormlyFieldConfig) => {
-                            field.form?.get('customerCode')?.valueChanges.pipe(
-                                tap((customerId) => {
-                                    field.formControl?.setValue(
-                                        this.returnFormService.filterCustomerById(customerId).subscribe((result) => {
-                                            console.log(result);
-                                        }),
-                                    );
-                                }),
-                            );
-                        },
-                    },
                 },
             ],
         },
@@ -103,22 +88,20 @@ export class DetailReturnInfoComponent implements OnInit {
                 {
                     className: 'flex-1 ',
                     defaultValue: null,
-                    key: 'groupId',
-                    type: 'select',
+                    key: 'groupName',
+                    type: 'input',
                     templateOptions: {
                         label: 'Phòng, nhóm',
-                        options: this.returnFormService.getGroupsAndFilter(),
-                        type: 'select',
                         disabled: true,
                         appearance: 'outline',
                         // options: status,
                     },
                 },
                 {
-                    key: 'orderEmployeeId',
+                    key: 'orderEmployeeName',
                     // type: 'product-select',
                     className: 'flex-1',
-                    type: 'select',
+                    type: 'input',
                     defaultValue: null,
                     templateOptions: {
                         label: 'Nhân viên đặt',
@@ -127,23 +110,6 @@ export class DetailReturnInfoComponent implements OnInit {
                         // options: [],
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
-                    },
-                    // Code bên dưới sử dụng khi có sự phụ thuộc của nhóm và nhân viên.
-                    hooks: {
-                        onInit: (field: FormlyFieldConfig) => {
-                            field.props!.options = field.form?.get('groupId')?.valueChanges.pipe(
-                                switchMap((groupId) => {
-                                    return this.returnFormService.getEmployeesByGroupId(groupId).pipe(
-                                        tap((data) => {
-                                            if (data.length) {
-                                                console.log(data);
-                                                field.formControl?.setValue(data[0].value);
-                                            }
-                                        }),
-                                    );
-                                }),
-                            );
-                        },
                     },
                 },
                 {
@@ -311,23 +277,25 @@ export class DetailReturnInfoComponent implements OnInit {
                 console.log(123);
                 this.disableField = mode === ComponentMode.VIEW;
             }),
-            this.returnDetailsService.updateReturnInfo$.subscribe((value: any) => {
+            this.returnDetailsService.updateReturnInfo$.pipe(debounce(() => timer(50))).subscribe((value: any) => {
                 if (value) {
                     this.form.markAllAsTouched();
-
                     if (this.form.valid) {
                         const form = {
                             ...this.form.getRawValue(),
-                            customerId: this.form.getRawValue().customerCode?.value,
+                            customerId: this.form.getRawValue()?.customerId || null,
                             orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
                             returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
                             totalOfVAT: 0,
-                            totalDiscountProduct: 0,
+                            totalDiscountProduct: value.discountAmount,
                             tradeDiscount: 0,
                             status: value?.status || this.form.value.status,
                             totalPayment: value.totalPayment,
                         };
                         delete form.customerCode;
+                        delete form.saleCode;
+                        delete form.orderEmployeeName;
+                        delete form.groupName;
                         this.returnFormService.updateReturn(form);
                     }
                     // console.log(this.form.getRawValue());
@@ -342,5 +310,6 @@ export class DetailReturnInfoComponent implements OnInit {
         this.subscription.forEach((_) => {
             _.unsubscribe();
         });
+        this.returnDetailsService.currentMode$.next(0);
     }
 }

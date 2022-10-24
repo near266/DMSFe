@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { RolesService } from 'src/app/core/services/roles.service';
 import { sortList } from '../product/utils/sort';
 import { ReturnsService } from './services/returns.service';
 import { SidenavService } from './services/sidenav.service';
@@ -20,12 +22,15 @@ export class ReturnsComponent implements OnInit {
     constructor(
         private sidenavService: SidenavService,
         private router: Router,
+        private rolesService: RolesService,
         private returnsService: ReturnsService,
     ) {}
     ngAfterViewInit(): void {
         this.sidenavService.setSideNav(this.sidenav);
     }
-
+    requiredRoles(role: string) {
+        return this.rolesService.requiredRoles(role);
+    }
     ngOnInit(): void {
         this.returnsService.totalReturns$.subscribe((res) => {
             this.totalReturns = res;
