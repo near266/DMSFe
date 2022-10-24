@@ -23,7 +23,7 @@
         </div>
         <!-- options select to edit -->
         <div class="flex mt-2">
-            <button class="p-2 button-option mr-2" [matMenuTriggerFor]="addMenu">
+            <button [disabled]="roleMain === 'member'" class="p-2 button-option mr-2" [matMenuTriggerFor]="addMenu">
                 <i class="fa-solid fa-plus text-green-700 text-sm font-bold mr-1"></i>
                 <span>Thêm mới</span>
                 <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
@@ -31,7 +31,7 @@
             <!-- menu thêm mới của Phiếu đặt hàng | Phiếu bán hàng | Phiếu trả hàng -->
             <mat-menu #addMenu="matMenu">
                 <!-- phiếu đặt hàng -->
-                <div *ngIf="roleMain != 'member'">
+                <div>
                     <button mat-menu-item class="flex text-sm" [routerLink]="['/ordersale/create']">
                         <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
                         <span class="text-sm">Thêm mới đơn hàng</span>
