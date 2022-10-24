@@ -44,6 +44,6 @@ export class LoginComponent implements OnInit {
     }
 
     getSafe() {
-      return this.sanitizer.bypassSecurityTrustResourceUrl(this.downloadForIOS);
+      return this.sanitizer.bypassSecurityTrustUrl(this.downloadForIOS);
     }
 }
