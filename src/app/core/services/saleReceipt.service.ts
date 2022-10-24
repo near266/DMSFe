@@ -128,4 +128,10 @@ export class SaleReceiptService {
             .post(this.api_gateway_url + '/SaleReceipt/addProduct', body)
             .pipe(map((reponse: any) => reponse));
     }
+    export(body:any):Observable<any>{
+      return this.http.post(this.api_gateway_url + "SaleReceipt/export", body)
+      .pipe(
+        map(res => res)
+      )
+    }
 }

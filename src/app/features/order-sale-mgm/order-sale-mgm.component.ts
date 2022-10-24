@@ -16,10 +16,10 @@ export class OrderSaleMgmComponent implements OnInit {
     type!: string;
     listReceiptOrder: any = [];
     totalCount: number;
-
     page: number = 1;
     pageSize: number = 30;
     total: number = 0;
+    id:any = [];
 
     constructor(
         private activatedroute: ActivatedRoute,
@@ -89,30 +89,48 @@ export class OrderSaleMgmComponent implements OnInit {
         this.router.navigate(['/ordersale/detail/viewEdit']);
     }
 
+    chooseID(event:any,id:any){
+      console.log(event.checked);
+      if(event.checked == true){
+        this.id.push(id);
+      }else{
+        this.id.splice(this.id.indexOf(id),1)
+      }
+      console.log(this.id);
+    }
+
     export(){
       let body = {
-        filter: {
-          keyword: '',
-            deliveryDate: '',
-            orderEmployeeId: '',
-            customerTypeId: '',
-            customerGroupId: '',
-            areaId: '',
-            productKey: '',
-            status: '',
-            printStatus: null,
-            paymentMethod: '',
-            page: '',
-            pageSize: '',
-            sortField: '',
-            isAscending: null,
-            fromDate: '',
-            toDate: '',
-            dateFilter: '',
-        },
-        listId: [''],
-        type: null,
+        filter: null,
+        // null || {
+        //   keyword: '',
+        //     deliveryDate: '',
+        //     orderEmployeeId: '',
+        //     customerTypeId: '',
+        //     customerGroupId: '',
+        //     areaId: '',
+        //     productKey: '',
+        //     status: '',
+        //     printStatus: null,
+        //     paymentMethod: '',
+        //     page: '',
+        //     pageSize: '',
+        //     sortField: '',
+        //     isAscending: null,
+        //     fromDate: '',
+        //     toDate: '',
+        //     dateFilter: '',
+        // },
+        listId: this.id,
+        type: 2,
       }
+      console.log(body);
+
+      this.saleReceiptService.export(body).subscribe({
+        next: data => {
+          console.log(data);
+        }
+      })
       console.log("export");
       console.log(body);
     }
