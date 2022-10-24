@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { RolesService } from '../../services/roles.service';
 
 @Component({
     selector: 'app-header',
@@ -15,7 +16,8 @@ export class HeaderComponent implements OnInit {
     annonimousAvatar = './../../../../assets/images/annonimous.jpg';
     constructor(
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private rolesService: RolesService
     ) { }
 
     ngOnInit(): void {
@@ -31,6 +33,13 @@ export class HeaderComponent implements OnInit {
 
     logout() {
       this.authService.logout();
+    }
+    requiredRoles(role: string){
+      return this.rolesService.requiredRoles(role)
+    }
+
+    onlyRole(role: string) {
+      return this.rolesService.onlyRole(role)
     }
 
     openTree() {

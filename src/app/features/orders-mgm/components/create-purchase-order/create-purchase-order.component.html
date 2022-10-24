@@ -91,6 +91,7 @@
                             style="padding-left: 12px"
                             matInput
                             class="h-10 rounded-sm" />
+                        <mat-option [value]="0">--Chọn khách hàng--</mat-option>
                         <mat-option *ngFor="let customer of listCustomer" [value]="customer.id">
                             {{ customer.customerCode }} - {{ customer.customerName }}
                         </mat-option>

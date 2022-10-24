@@ -9,17 +9,11 @@ export class SidebarComponent implements OnInit {
     @Output() isShowSidebarOutput = new EventEmitter<boolean>();
     isShowSidebar = true;
     isSearchByBill = false;
+    searchText: string = '';
     statusMenu: Config = {
         icon: '<i class="fa-solid fa-flag"></i>',
         title: 'Trạng thái',
-        menuChildrens: [
-            'Tất cả',
-            'Chờ duyệt',
-            'Đã duyệt',
-            'Đã bán hàng',
-            'Đã xuất hàng',
-            'Từ chối'
-        ],
+        menuChildrens: ['Tất cả', 'Chờ duyệt', 'Đã duyệt', 'Đã bán hàng', 'Đã xuất hàng', 'Từ chối'],
     };
     statusPrintMenu: Config = {
         icon: '<i class="fa-solid fa-print"></i>',

@@ -80,7 +80,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         });
         // get list customer
         this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
-            this.listCustomer = data.data;
+            this.listCustomer = data?.data;
         });
         // get list warehouse
         this.purchaseOrder.getAllWarehouses().subscribe((data) => {
@@ -134,7 +134,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             pageSize: 100,
         };
         this.purchaseOrder.searchCustomer(body).subscribe((data) => {
-            this.listCustomer = data.data;
+            this.listCustomer = data?.data;
         });
     }
 

@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CustomerService } from 'src/app/core/services/customer.service';
+import { RolesService } from 'src/app/core/services/roles.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AddRouteComponent } from '../add-route/add-route.component';
 
@@ -21,7 +22,8 @@ export class ChangeRouteComponent implements OnInit, AfterViewInit {
   constructor(
     private customerService: CustomerService,
     private dialog: MatDialog,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private rolesService: RolesService
   ) {}
   ngAfterViewInit(): void {
     this.customerService.SearchAllRouteByCustomerId(this.id).subscribe( data => {
@@ -45,6 +47,11 @@ export class ChangeRouteComponent implements OnInit, AfterViewInit {
         });
       }
     })
+  }
+
+  requiredRoles(role: string){
+    
+    return this.rolesService.requiredRoles(role)
   }
 
   delete(id: string) {
