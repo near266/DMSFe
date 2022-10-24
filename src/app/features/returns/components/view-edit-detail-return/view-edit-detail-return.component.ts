@@ -14,6 +14,7 @@ import { HttpParams } from '@angular/common/http';
 import { ComponentMode } from '../../models/componentMode';
 import { Status } from '../../models/return';
 import { ReturnFormService } from '../../services/return-form.service';
+import { RolesService } from 'src/app/core/services/roles.service';
 
 @Component({
     selector: 'app-view-edit-detail-return',
@@ -31,6 +32,7 @@ export class ViewEditDetailReturnComponent implements OnInit {
         public activatedRoute: ActivatedRoute,
         public router: Router,
         private snackbar: SnackbarService,
+        private rolesService: RolesService,
         private dialog: MatDialog,
         private returnFormService: ReturnFormService,
         private returnDetailsService: ReturnDetailsService,
@@ -54,13 +56,18 @@ export class ViewEditDetailReturnComponent implements OnInit {
         });
     }
 
+    requiredRoles(role: string) {
+        return this.rolesService.requiredRoles(role);
+    }
+
     ngOnDestroy(): void {
         this.subscription.forEach((service) => service.unsubscribe());
     }
 
     updateStatus(status: Status) {
         this.returnDetailsService.updateReturnInfo$.next({
-            totalPayment: this.returnDetailsService.totalPrice$.getValue(),
+            totalPayment:
+                this.returnDetailsService.totalPrice$.getValue() - this.returnDetailsService.discountAmount$.getValue(),
             discountAmount: this.returnDetailsService.discountAmount$.getValue(),
             status,
         });

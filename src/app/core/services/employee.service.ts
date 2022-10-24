@@ -11,7 +11,7 @@ export class EmployeeService {
 
   GetAllEmployee(page: any, pageSize: any): Observable<any> {
     return this.http
-      .post(gateway_url + '/Employee/SearchAllEmployee', {
+      .post(gateway_url + '/Employee/SearchAllEmployeePost', {
         page: page,
         pagesize: pageSize
       })
@@ -71,6 +71,11 @@ export class EmployeeService {
   }
 
   SearchEmployeeInGroup(GroupId: string, page: number, pageSize: number): Observable<any> {
-    return this.http.get(gateway_url + '/SearchEmployeeInGroup?GroupId=' + GroupId + '&page=' + page + '&pagesize=' + pageSize).pipe(map((response: any) => response));
+    const body = {
+      GroupId: GroupId,
+      page: page,
+      pageSize: pageSize
+    }
+    return this.http.post(gateway_url + '/SearchEmployeeInGroup', body).pipe(map((response: any) => response));
   }
 }

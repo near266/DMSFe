@@ -20,7 +20,8 @@
           </div>
           <!-- options select to edit -->
           <div class="flex mt-2 p-2 bg-[#f2f2f2] border-y border-solid border-slate-400">
-            <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" [matMenuTriggerFor]="addMenu"><i
+            <button *ngIf="requiredRoles('accountant') | async"
+              class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" [matMenuTriggerFor]="addMenu"><i
                 class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>Thêm mới</button>
             <mat-menu #addMenu="matMenu">
               <!-- phiếu đặt hàng -->

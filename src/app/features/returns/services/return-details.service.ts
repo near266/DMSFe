@@ -24,15 +24,18 @@ export class ReturnDetailsService {
     getReturnById(id: string | null) {
         return this.returnApiService.getReturnById(id).pipe(
             tap((data) => {
+                console.log(data);
                 data.groupId = data.group?.id;
+                data.saleRecieptId = data.saleReciept?.id || null;
                 data.orderEmployeeId = data.orderEmployee?.id;
+                data.orderEmployeeName = data.orderEmployee?.employeeName || null;
+                data.groupName = data.group?.name || null;
+                data.customerId = data.customer?.id || null;
+                data.orderEmployeePhone = data.orderEmployee?.phone;
                 data.saleCode = data.saleReciept?.saleCode;
-                data.customerCode = {
-                    value: data.customer?.id || null,
-                };
+                data.customerCode = data.customer?.customerCode;
                 this.returnDetails$.next(data);
                 this.returnListProducts$.next(data.listProduct);
-                console.log(data.listProduct);
                 this.promotionListProduct$.next(data.listPromotionProduct);
                 this.initialListProduct = JSON.parse(JSON.stringify(data.listProduct));
                 this.initialListPromotionProduct = JSON.parse(JSON.stringify(data.listPromotionProduct));

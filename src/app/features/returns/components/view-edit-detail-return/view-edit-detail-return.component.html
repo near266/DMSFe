@@ -1,7 +1,7 @@
 <div class="fixed z-10 bg-white w-full">
   <div class="p-3 w-full flex justify-between items-center">
     <div>
-      <div class="flex">
+      <div class="flex" *ngIf="requiredRoles('accountant') | async">
         <button *ngIf="status!==StatusList.PENDING" (click)="updateStatus(StatusList.IMPORTED)"
           class="button-danger-sm flex items-center justify-between mr-2">
           <i class="fa-solid fa-file-export text-white mr-2"></i>
@@ -22,17 +22,17 @@
       </div>
     </div>
     <div class="flex items-center">
-      <button *ngIf="type === ComponentMode.VIEW" (click)="toggleEditMode(true)"
+      <button *ngIf="type === ComponentMode.VIEW && requiredRoles('accountant') | async" (click)="toggleEditMode(true)"
         class="button-primary-sm flex items-center justify-between mr-2">
         <i class="fa-solid fa-pen-to-square text-white mr-2"></i>
         <span class="text-white">Sửa</span>
       </button>
-      <button *ngIf="type === ComponentMode.VIEW" (click)="deleteReturn()"
+      <button *ngIf="type === ComponentMode.VIEW && requiredRoles('accountant') | async" (click)="deleteReturn()"
         class="button-danger-sm flex items-center justify-between mr-2">
         <i class="fa-solid fa-trash text-white mr-2"></i>
         <span class="text-white">Xóa</span>
       </button>
-      <button *ngIf="type === ComponentMode.EDIT" (click)="updateReturn()"
+      <button *ngIf="type === ComponentMode.EDIT && requiredRoles('accountant') | async" (click)="updateReturn()"
         class="button-primary-sm flex items-center justify-between mr-2">
         <i class="fa-solid fa-check text-white mr-2"></i>
         <span class="text-white">Lưu</span>

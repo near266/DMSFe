@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgSelectConfig } from '@ng-select/ng-select';
+import { RolesService } from './core/services/roles.service';
 
 @Component({
     selector: 'app-root',
@@ -7,8 +8,11 @@ import { NgSelectConfig } from '@ng-select/ng-select';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-    constructor(private config: NgSelectConfig) {
+    constructor(private config: NgSelectConfig, private rolesService: RolesService) {
         this.config.notFoundText = 'Không tồn tại';
+    }
+    ngOnInit() {
+        this.rolesService.fetchRoles();
     }
 
     title = 'dms-fe';
