@@ -312,6 +312,12 @@
                     </table>
                 </div>
             </mat-tab>
+            <!-- Sản phẩm khuyến mại -->
+            <mat-tab label="Sản phẩm khuyến mại">
+                <app-promotion-table
+                    [listWarehouse]="listWarehouse"
+                    (listPromotionProductAdd$)="setProductPromotionAdd($event)"></app-promotion-table>
+            </mat-tab>
         </mat-tab-group>
         <div class="grid grid-cols-3 w-full gap-y-5 mt-6">
             <div class="grid grid-cols-4 col-span-2">

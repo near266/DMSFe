@@ -54,6 +54,8 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     prePayment: number = 0;
     textMoney: any;
     debtLimit: any;
+    defaultCustomer: any;
+    defaultOrderEmployee: any;
     constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
@@ -166,8 +168,8 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     ngAfterViewInit(): void {
         this.getDetail();
-        this.getListCustomer();
-        this.getListEmployee();
+        // this.getListCustomer();
+        // this.getListEmployee();
         this.getListWareHouse();
         this.getListRoute();
         this.getListGroup();
@@ -177,6 +179,10 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         this.subscription.push(
             this.purchaseOrder.detail(this.id).subscribe((data) => {
                 this.detailOrder = data;
+                // lấy ra default customer (trước khi patch value)
+                this.defaultCustomer = this.detailOrder?.customer;
+                // lấy ra default employee
+                this.defaultOrderEmployee = this.detailOrder?.orderEmployee;
                 this.patchValue();
                 this.pushListProductToDialog();
                 this.pushListProductPromotionToDialog();
@@ -237,10 +243,19 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         let body = {
             keyword: e.target.value,
             page: 1,
-            pageSize: 100,
+            pageSize: 30,
         };
+        // phải filter ra thằng customer đã có sẵn
         this.purchaseOrder.searchCustomer(body).subscribe((data) => {
-            this.listCustomer = data.data;
+            this.listCustomer = data.data?.filter((customer: any) => {
+                return customer?.id != this.defaultCustomer?.id;
+            });
+        });
+    }
+
+    searchListEmployee(e: any) {
+        this.purchaseOrder.getAllEmployees(e.target.value, 1, 30).subscribe((data) => {
+            this.listEmployee = data.data;
         });
     }
 
@@ -678,5 +693,9 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         if (product.totalPrice) {
             product.discount = (product.discountRate / 100) * product.totalPrice;
         }
+    }
+
+    test(customerIdDefault: any) {
+        console.log(customerIdDefault);
     }
 }

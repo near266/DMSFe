@@ -26,9 +26,6 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
     @Input() listProduct: any = [];
     @Input() listWarehouse: any = [];
     @Input() saleReceiptId: any = [];
-    // @Output() totalAmount$ = new EventEmitter<any>();
-    // @Output() totalDiscountProduct$ = new EventEmitter<any>();
-    // @Output() totalPayment$ = new EventEmitter<any>();
 
     @Output() listProduct$ = new EventEmitter<any>();
     @Output() listProductAdd$ = new EventEmitter<any>();
@@ -76,6 +73,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
         this.sendBodyUpdateProduct();
         // send list product add
         this.sendListProductAdd();
+        // mục đích để tính lại giá tiền
         this.listProduct$.emit(this.listProduct);
         this.listProductAdd$.emit(this.listProductAdd);
     }
