@@ -24,7 +24,7 @@ export class AddRouterComponent implements OnInit {
 
 
   add(e: any) {
-    this.dataService.changeEmployee('add')
+    this.dataService.changeEmployee('add');
   }
 
   tabList = [

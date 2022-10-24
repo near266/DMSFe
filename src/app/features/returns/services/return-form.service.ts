@@ -88,7 +88,6 @@ export class ReturnFormService {
     }
 
     addNewReturn(form: any) {
-        console.log(form);
         return this.returnApiService.createNewReturn(form).subscribe({
             next: (result) => {
                 this.snackBarService.openSnackbar('Tạo phiếu trả hàng thành công', 2000, 'Đóng', 'center', 'top', true);

@@ -201,17 +201,21 @@ export class RouteComponent implements OnInit, AfterViewInit {
 
   openAddRoute() {
     const dialogRef = this.dialog.open(AddRouterComponent, {
-      height: '100vh',
-      minWidth: '900px',
+      height: '95vh',
+      minWidth: '900px',data: {
+        "type": "add"
+      }
     });
   }
+
 
   openDetailRoute(id: any) {
     const dialogRef = this.dialog.open(AddRouterComponent, {
       height: '95vh',
       minWidth: '50%',
       data: {
-        "id": id
+        "id": id,
+        "type": "update"
       }
     });
   }

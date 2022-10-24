@@ -1,0 +1,70 @@
+<div class="fixed z-10 bg-white w-full">
+  <div class="p-3 w-full flex justify-between items-center">
+    <span class="font-medium text-[20px]">Thêm mới phiếu trả hàng</span>
+    <div class="flex items-center">
+      <button (click)="submitAddReturnForm()" type="button"
+        class="button-primary-sm flex items-center justify-between mr-2">
+        <i class="fa-solid fa-check text-white mr-2"></i>
+        <span class="text-white">Lưu</span>
+      </button>
+      <button class="button-danger" [routerLink]="['/returns']">
+        <i class="fa-solid fa-ban text-white mr-2"></i>
+        <span class="text-white">Đóng</span>
+      </button>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+</div>
+<div class="p-3 mt-16">
+  <app-return-order-info></app-return-order-info>
+  <mat-tab-group>
+    <!-- Sản phẩm đặt hàng -->
+    <mat-tab label="Sản phẩm đặt hàng">
+      <div class="flex items-center mt-2 justify-between">
+        <div class="flex items-center">
+
+        </div>
+        <!-- <div class="flex items-center">
+          <button
+            class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium mr-3">
+            <i class="fa-solid fa-file-import mr-2 px-2"></i>
+            <span class="px-2">Nhập excel</span>
+          </button>
+          <div>
+            <select
+              class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium cursor-pointer">
+            </select>
+          </div>
+        </div> -->
+      </div>
+      <app-return-order-products></app-return-order-products>
+    </mat-tab>
+    <!-- Sản phẩm khuyến mại -->
+    <mat-tab label="Sản phẩm khuyến mại">
+      <div class="flex items-center mt-2 justify-between">
+
+      </div>
+      <app-return-order-promotion></app-return-order-promotion>
+    </mat-tab>
+  </mat-tab-group>
+  <div>
+    <div class="flex justify-between">
+      <span class="font-medium w-1/3 py-2">Bằng chữ: {{textMoney}} {{textMoney?'đồng':''}}</span>
+      <span class="font-medium w-1/3 py-2">Tổng tiền hàng: {{totalPrice | currency: 'VND'}}</span>
+    </div>
+    <div class="flex justify-between">
+
+    </div>
+    <div class="flex justify-between">
+
+    </div>
+    <div class="flex justify-between">
+      <span class="font-medium w-1/3 py-2 text-green-700">Hình thức thanh toán:</span>
+      <span class="font-medium w-1/3 py-2">Chiết khấu đơn hàng: {{discountAmount | currency: 'VND'}}</span>
+    </div>
+    <div class="flex justify-between">
+      <span class="font-medium w-1/3 py-2"></span>
+      <span class="font-medium w-1/3 py-2">Phải thanh toán:{{totalPrice - discountAmount | currency: 'VND'}} </span>
+    </div>
+  </div>
+</div>

@@ -285,7 +285,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.init('', this.page, this.pageSize);
+    this.page = 1;
+    this.init(this.keywords, this.page, this.pageSize);
     this.provincesService.getListProvinces().subscribe(data => {
       this.listProvinces = data;
     });
@@ -300,24 +301,26 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     this.current_page = page;
     this.customerService.search(body).subscribe(
         (data) => {
-            this.response = data;
-            this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
-            if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
-            this.pageList = [];
-            for(let i = 1; i <= this.totalPage; i++) {
-              this.pageList.push(i);
+            if(data) {
+              this.response = data;
+              this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
+              if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
+              this.pageList = [];
+              for(let i = 1; i <= this.totalPage; i++) {
+                this.pageList.push(i);
+              }
+              this.response.data.forEach((element) => {
+                  if (element.status == true) element.status = 'Hoạt động';
+                  else if (element.status == false) element.status = 'Không hoạt động';
+                  else element.status = 'Không hoạt động';
+                  if(element.dob) {
+                    element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
+                  }
+              });
             }
-            this.response.data.forEach((element) => {
-                if (element.status == true) element.status = 'Hoạt động';
-                else if (element.status == false) element.status = 'Không hoạt động';
-                else element.status = 'Không hoạt động';
-                if(element.dob) {
-                  element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
-                }
-            });
         },
         (error) => {
-            this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
+            this.snackbar.openSnackbar('Không thể tải danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
         },
     );
   }
@@ -329,7 +332,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        this.init('', this.page, this.pageSize);
+        this.page = 1;
+        this.init(this.keywords, this.page, this.pageSize);
       }
     });
   }
@@ -342,7 +346,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     })
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
-        this.init('', this.page, this.pageSize);
+        this.init(this.keywords, this.page, this.pageSize);
       }
     });
   }
@@ -417,8 +421,14 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
   search(request: any) {
     this.page = 1;
+    this.current_page = 1;
+    if(request == null || request == undefined) {
+      this.keywords = '';
+    } else {
+      this.keywords = request;
+    }
     const body = {
-      keyword: '',
+      keyword: this.keywords,
       page: this.page,
       pageSize: this.pageSize,
     };

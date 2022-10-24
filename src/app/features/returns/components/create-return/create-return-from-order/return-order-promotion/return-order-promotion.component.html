@@ -10,35 +10,23 @@
           Mã SP</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Sản phẩm</th>
+          Tên sản phẩm</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           ĐVT</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Kho nhập</th>
+          Kho xuất</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           SL bán
         </th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          VAT</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          SL trả
-          <span class="text-red-500">(Tổng: {{productQuantitySum}})</span>
-        </th>
-
+          SL đã xuất</th>
         <th scope="col"
           class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Đơn giá</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Thành tiền</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Chiết khấu</th>
+          SL trả</th>
         <th scope="col"
           class="sticky top-0 z-10 min-w-[200px] border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
           Ghi chú</th>
@@ -55,74 +43,37 @@
         <td class="border-x  border-solid align-middle px-2 text-center">{{item.product.productName}}</td>
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-[12px] text-center">
           <div class="flex">
-            <mat-form-field appearance="outline">
-              <mat-select [disabled]="true" [(ngModel)]="item.unit.id">
-                <mat-option *ngFor="let option of unitOptions" value="{{option.value}}">{{option.label}}</mat-option>
-              </mat-select>
-            </mat-form-field>
+            {{item.unit?.unitName}}
           </div>
         </td>
         <td class="border-x max-w-[120px]  align-middle px-2 text-center">
-          <div class="flex">
-            <mat-form-field appearance="outline">
-              <mat-select [disabled]="true" [(ngModel)]="item.warehouse.id">
-                <mat-option *ngFor="let option of warehouseOptions" value="{{option.value}}">{{option.label}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+          {{item.warehouse?.warehouseName}}
         </td>
         <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
-          {{item?.salesQuantity}}
+          {{item.salesQuantity}}
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center">{{item?.vat/100 || 0 | percent}}
+        <td class="border-x max-w-[40px] border-solid align-middle px-2 text-center">{{item.exportQuantity}}
         </td>
-        <td class="border-x max-w-[100px]  border-solid align-middle px-2 text-center">
+        <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
               <input currencyMask
                 [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
                 matInput [ngModel]="item.returnsQuantity"
-                (ngModelChange)="item.returnsQuantity=$event;updateItemTotalPrice(item)" [max]="item.salesQuantity" />
+                (ngModelChange)="item.returnsQuantity=$event;checkReturnsQuantity(item)" [max]="item.salesQuantity" />
             </mat-form-field>
           </div>
         </td>
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
-          <div class="flex">
-            <mat-form-field appearance="outline">
-              <input currencyMask
-                [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
-                matInput [ngModel]="item.unitPrice" (ngModelChange)="item.unitPrice=$event;updateItemTotalPrice(item)"
-                [disabled]="!item.quantity" />
-            </mat-form-field>
-          </div>
-        </td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center"><input currencyMask
-            [options]="{ suffix: 'đ', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
-            matInput [ngModel]="item.totalPrice" (ngModelChange)="item.totalPrice=$event;updateItemTotalPrice(item)"
-            [disabled]="true" class="disabled:opacity-100 disabled:text-black" />
-        </td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
-          <div class="flex">
-            <mat-form-field appearance="outline">
-              <input currencyMask
-                [options]="{ suffix: 'đ', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
-                matInput [ngModel]="item.discount" (ngModelChange)="item.discount=$event;updateDiscountRate(item)"
-                [disabled]="!item.quantity" [max]="item.totalPrice" />
-            </mat-form-field>
-          </div>
-        </td>
-        <td class="border-x min-w-[200px]  border-solid align-middle px-2  text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
               <textarea matInput [rows]="1" [(ngModel)]="item.note"></textarea>
             </mat-form-field>
-
           </div>
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center"
-          (click)="removeProductFromReturn(item.product?.id)">
-          <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
+        <td class="border-x  border-solid align-middle px-2 text-center">
+          <i (click)="removeProductFromReturn(item.product?.id)"
+            class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
         </td>
       </tr>
     </tbody>

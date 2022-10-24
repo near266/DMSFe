@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { IActionMapping, ITreeOptions, TreeComponent, TreeNode, TreeNodeComponent, TREE_ACTIONS} from '@circlon/angular-tree-component';
@@ -20,8 +20,13 @@ export class TreeGroupComponent implements OnInit {
   nodes: any[] = [];
     action: IActionMapping;
     options: ITreeOptions;
-
     @ViewChild(TreeComponent) private tree: TreeComponent;
+
+
+    idAndName:any = {
+      id: "",
+      name: ""
+    }
 
     menubar_unit = [
       'Thêm quản lý',
@@ -41,6 +46,7 @@ export class TreeGroupComponent implements OnInit {
     settings: any = {};
     total: number;
     constructor(private employeeService: EmployeeService, private dialog: MatDialog) {}
+    @Output() getIdName = new EventEmitter<any>();
 
     ngOnInit(): void {
       this.init();
@@ -52,6 +58,7 @@ export class TreeGroupComponent implements OnInit {
     }
     init_tree() {
       this.employeeService.getTreeEmployee().subscribe((tree) => {
+        console.log(tree);
           this.addNodeToArray(tree, 'root');
           this.array_index[0].children.forEach((element: any) => {
             let node = {
@@ -66,16 +73,7 @@ export class TreeGroupComponent implements OnInit {
             };
             this.nodes[0].children.push(node);
           });
-          // this.nodes[0].children.push({
-          //   id: 'undefined',
-          //   level: 0,
-          //   name: 'Chưa thuộc phòng/nhóm',
-          //   code: '',
-          //   expand: false,
-          //   type: 1,
-          //   menubar: this.menubar_group,
-          //   hasChildren: false
-          // });
+
           this.action = {
             mouse: {
               contextMenu: (tree, node, $event) => {
@@ -83,23 +81,26 @@ export class TreeGroupComponent implements OnInit {
               },
               click: (tree, node, $event) => {
                 node.data.expand = false;
-                console.log(node.id);
-              },
-              checkboxClick: (tree, node, $event) => {
-                node.data.expand = false;
-                console.log(node.id);
-                console.log(node.data.name);
+                this.idAndName = {
+                  id: node.id,
+                  name: node.data.name
+                };
+                this.getIdName.emit(this.idAndName)
 
-              }
+              },
+              // checkboxClick: (tree, node, $event) => {
+              //   node.data.expand = false;
+              //   console.log(node.id);
+              //   console.log(node.data.name);
+              // }
             },
           };
           this.options = {
-            useCheckbox: true,
+            useCheckbox: false,
             animateExpand: true,
             actionMapping: this.action,
             getChildren: this.getChildren.bind(this),
           };
-          // this.total = this.getTotalItemInTreeWithNoChildren(this.nodes);
       });
     }
 
@@ -261,7 +262,6 @@ export class TreeGroupComponent implements OnInit {
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
           this.updateNode(node);
-
         }
       });
     }
@@ -289,7 +289,6 @@ export class TreeGroupComponent implements OnInit {
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
           this.updateNode(node);
-
         }
       });
     }

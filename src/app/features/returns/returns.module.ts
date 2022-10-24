@@ -18,6 +18,11 @@ import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { FormlyMatTextAreaModule } from '@ngx-formly/material/textarea';
 import { CreateReturnTableComponent } from './components/create-return/create-return-table/create-return-table.component';
 import { CreateReturnPromotionTableComponent } from './components/create-return/create-return-promotion-table/create-return-promotion-table.component';
+import { CreateReturnFromOrderComponent } from './components/create-return/create-return-from-order/create-return-from-order.component';
+import { ReturnOrderInfoComponent } from './components/create-return/create-return-from-order/return-order-info/return-order-info.component';
+import { ReturnOrderProductsComponent } from './components/create-return/create-return-from-order/return-order-products/return-order-products.component';
+import { ReturnOrderPromotionComponent } from './components/create-return/create-return-from-order/return-order-promotion/return-order-promotion.component';
+import { NgSelectFormlyComponent } from './types/ng-select.type';
 
 @NgModule({
     declarations: [
@@ -25,22 +30,33 @@ import { CreateReturnPromotionTableComponent } from './components/create-return/
         ReturnsPaginationComponent,
         ReturnsTableComponent,
         CreateReturnComponent,
-
+        NgSelectFormlyComponent,
         ReturnDialogComponent,
         CreateReturnFormComponent,
         CreateReturnTableComponent,
         CreateReturnPromotionTableComponent,
+        CreateReturnFromOrderComponent,
+        ReturnOrderInfoComponent,
+        ReturnOrderProductsComponent,
+        ReturnOrderPromotionComponent,
     ],
     imports: [
         CommonModule,
         ReturnsRoutingModule,
         NgxPaginationModule,
-        SharedModule,
-        FormlyModule.forChild(),
+        FormlyModule.forChild({
+            types: [
+                {
+                    name: 'autocomplete-formly',
+                    component: NgSelectFormlyComponent,
+                },
+            ],
+        }),
         FormlySelectModule,
         FormlyMaterialModule,
         FormlyMatDatepickerModule,
         FormlyMatTextAreaModule,
+        SharedModule,
     ],
 })
 export class ReturnsModule {}
