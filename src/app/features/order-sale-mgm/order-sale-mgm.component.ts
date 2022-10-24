@@ -19,7 +19,8 @@ export class OrderSaleMgmComponent implements OnInit {
     page: number = 1;
     pageSize: number = 30;
     total: number = 0;
-    id:any = [];
+    id: any = [];
+    roleMain = 'member';
 
     constructor(
         private activatedroute: ActivatedRoute,
@@ -29,6 +30,7 @@ export class OrderSaleMgmComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.roleMain = localStorage.getItem('roleMain')!;
         this.saleReceiptService.page.subscribe((data) => {
             this.page = data;
             this.search();
@@ -50,7 +52,7 @@ export class OrderSaleMgmComponent implements OnInit {
             pageSize: this.pageSize,
         };
         this.saleReceiptService.searchReceipt(body).subscribe((data) => {
-          console.log(data);
+            console.log(data);
 
             this.listReceiptOrder = data.data;
             this.total = data.totalCount;
@@ -89,49 +91,49 @@ export class OrderSaleMgmComponent implements OnInit {
         this.router.navigate(['/ordersale/detail/viewEdit']);
     }
 
-    chooseID(event:any,id:any){
-      console.log(event.checked);
-      if(event.checked == true){
-        this.id.push(id);
-      }else{
-        this.id.splice(this.id.indexOf(id),1)
-      }
-      console.log(this.id);
+    chooseID(event: any, id: any) {
+        console.log(event.checked);
+        if (event.checked == true) {
+            this.id.push(id);
+        } else {
+            this.id.splice(this.id.indexOf(id), 1);
+        }
+        console.log(this.id);
     }
 
-    export(){
-      let body = {
-        filter: null,
-        // null || {
-        //   keyword: '',
-        //     deliveryDate: '',
-        //     orderEmployeeId: '',
-        //     customerTypeId: '',
-        //     customerGroupId: '',
-        //     areaId: '',
-        //     productKey: '',
-        //     status: '',
-        //     printStatus: null,
-        //     paymentMethod: '',
-        //     page: '',
-        //     pageSize: '',
-        //     sortField: '',
-        //     isAscending: null,
-        //     fromDate: '',
-        //     toDate: '',
-        //     dateFilter: '',
-        // },
-        listId: this.id,
-        type: 2,
-      }
-      console.log(body);
+    export() {
+        let body = {
+            filter: null,
+            // null || {
+            //   keyword: '',
+            //     deliveryDate: '',
+            //     orderEmployeeId: '',
+            //     customerTypeId: '',
+            //     customerGroupId: '',
+            //     areaId: '',
+            //     productKey: '',
+            //     status: '',
+            //     printStatus: null,
+            //     paymentMethod: '',
+            //     page: '',
+            //     pageSize: '',
+            //     sortField: '',
+            //     isAscending: null,
+            //     fromDate: '',
+            //     toDate: '',
+            //     dateFilter: '',
+            // },
+            listId: this.id,
+            type: 2,
+        };
+        console.log(body);
 
-      this.saleReceiptService.export(body).subscribe({
-        next: data => {
-          console.log(data);
-        }
-      })
-      console.log("export");
-      console.log(body);
+        this.saleReceiptService.export(body).subscribe({
+            next: (data) => {
+                console.log(data);
+            },
+        });
+        console.log('export');
+        console.log(body);
     }
 }

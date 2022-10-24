@@ -4,21 +4,21 @@
             <div class="flex" *ngIf="statusNow">
                 <button
                     (click)="updateOrder(2)"
-                    *ngIf="type === 'View' && (statusNow === 1 || statusNow === 5)"
+                    *ngIf="type === 'View' && (statusNow === 1 || statusNow === 5) && !(roleMain === 'member')"
                     class="button-primary-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-thumbs-up text-white mr-2"></i>
                     <span class="text-white">Duyệt</span>
                 </button>
                 <button
                     (click)="updateOrder(5)"
-                    *ngIf="type === 'View' && statusNow === 1"
+                    *ngIf="type === 'View' && statusNow === 1 && !(roleMain === 'member')"
                     class="button-primary-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-thumbs-down text-white mr-2"></i>
                     <span class="text-white">Từ chối</span>
                 </button>
                 <button
                     (click)="updateOrder(3)"
-                    *ngIf="type === 'View' && statusNow === 2"
+                    *ngIf="type === 'View' && statusNow === 2 && !(roleMain === 'member')"
                     class="button-primary-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-calculator text-white mr-2"></i>
                     <span class="text-white">Bán hàng</span>
@@ -27,21 +27,21 @@
         </div>
         <div class="flex items-center">
             <button
-                *ngIf="type === 'View'"
+                *ngIf="type === 'View' && !(roleMain === 'member')"
                 (click)="changeType('Edit')"
                 class="button-primary-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-pen-to-square text-white mr-2"></i>
                 <span class="text-white">Sửa</span>
             </button>
             <button
-                *ngIf="type === 'View'"
+                *ngIf="type === 'View' && !(roleMain === 'member')"
                 (click)="archive()"
                 class="button-danger-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-trash text-white mr-2"></i>
                 <span class="text-white">Xóa</span>
             </button>
             <button
-                *ngIf="type === 'Edit'"
+                *ngIf="type === 'Edit' && !(roleMain === 'member')"
                 (click)="changeType('View'); update(); updateProductList()"
                 class="button-primary-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-check text-white mr-2"></i>

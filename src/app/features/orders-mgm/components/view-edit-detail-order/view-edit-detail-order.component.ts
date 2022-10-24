@@ -23,6 +23,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     id!: string;
     subscription: Subscription[] = [];
     detailOrder: any;
+    roleMain = 'member';
 
     bodyUpdate: any;
     listProductUpdate: any;
@@ -44,6 +45,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
     ) {}
 
     ngOnInit(): void {
+        this.roleMain = localStorage.getItem('roleMain')!;
         this.type = 'View';
         this.changeType('View');
         this.id = localStorage.getItem('purchaseOrderId')!;

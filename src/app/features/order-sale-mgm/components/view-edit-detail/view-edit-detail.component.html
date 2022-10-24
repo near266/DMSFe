@@ -4,14 +4,14 @@
             <div class="flex" *ngIf="statusNow">
                 <button
                     (click)="updateOrder(0)"
-                    *ngIf="type === 'View' && (statusNow === 3 || statusNow === 4)"
+                    *ngIf="type === 'View' && (statusNow === 3 || statusNow === 4) && (!roleMain === 'member')"
                     class="button-danger-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-file-export text-white mr-2"></i>
                     <span class="text-white">Trả hàng</span>
                 </button>
                 <button
                     (click)="updateOrder(4)"
-                    *ngIf="type === 'View' && statusNow === 3"
+                    *ngIf="type === 'View' && statusNow === 3 && (!roleMain === 'member')"
                     class="button-primary-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-repeat text-white mr-2"></i>
                     <span class="text-white">Xuất hàng</span>
@@ -27,7 +27,7 @@
         </div>
         <div class="flex items-center">
             <button
-                *ngIf="type === 'View'"
+                *ngIf="type === 'View' && !(roleMain === 'member')"
                 (click)="changeType('Edit')"
                 class="button-primary-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-pen-to-square text-white mr-2"></i>
@@ -35,7 +35,7 @@
             </button>
             <button
                 (click)="archive()"
-                *ngIf="type === 'View'"
+                *ngIf="type === 'View' && !(roleMain === 'member')"
                 class="button-danger-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-trash text-white mr-2"></i>
                 <span class="text-white">Xóa</span>

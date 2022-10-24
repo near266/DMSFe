@@ -26,6 +26,7 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     id: string;
     subscription: Subscription[] = [];
     isRemove = false;
+    roleMain = 'member';
 
     listProduct: any = [];
     listPromotionProduct: any = [];
@@ -61,6 +62,7 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     ) {}
 
     ngOnInit(): void {
+        this.roleMain = localStorage.getItem('roleMain')!;
         // get id
         this.id = localStorage.getItem('receiptOrderId')!;
         // create Form

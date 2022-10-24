@@ -22,6 +22,7 @@ export class ViewEditDetailComponent implements OnInit {
     type!: string;
     statusNow!: number;
     id!: string;
+    roleMain: string = 'member';
     subscription: Subscription[] = [];
     detailOrder: any = [];
     bodyUpdate: any = [];
@@ -47,6 +48,7 @@ export class ViewEditDetailComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.roleMain = localStorage.getItem('roleMain')!;
         this.type = 'View';
         this.changeType('View');
         this.id = localStorage.getItem('receiptOrderId')!;
