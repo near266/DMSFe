@@ -19,7 +19,7 @@ export class EmployeeService {
   }
   SearchEmployee(body: any): Observable<any> {
     return this.http
-      .post(gateway_url + '/Employee/SearchAllEmployee', body)
+      .post(gateway_url + '/Employee/SearchAllEmployeePost', body)
       .pipe(map((response: any) => response));
   }
 
