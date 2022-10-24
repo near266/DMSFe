@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { RolesService } from 'src/app/core/services/roles.service';
 import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
 import { Product } from '../../models/product';
 import { ProductDialogService } from '../../services/product-dialog.service';
@@ -18,6 +19,7 @@ export class AddProductDialogComponent implements OnInit {
     productId = '';
     constructor(
         private productDialogService: ProductDialogService,
+        private rolesService: RolesService,
         private confirmDialogService: ConfirmDialogService,
         @Inject(MAT_DIALOG_DATA) public product: Product | null,
     ) {
@@ -31,6 +33,9 @@ export class AddProductDialogComponent implements OnInit {
         if (this.product) {
             this.mode = 'view';
         }
+    }
+    requiredRoles(role: string) {
+        return this.rolesService.requiredRoles(role);
     }
     private subscribeHeaderChanges() {
         this.subscription = this.productDialogService.header$.subscribe((value) => {

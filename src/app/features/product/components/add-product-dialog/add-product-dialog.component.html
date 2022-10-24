@@ -30,12 +30,12 @@
       </button>
     </div>
     <div class="flex flex-row text-xs" *ngIf="mode==='view'">
-      <button (click)="toggleEditMode()"
+      <button (click)="toggleEditMode()" *ngIf="requiredRoles('accountant') | async"
         class="flex flex-row bg-gray-800 mr-2 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
         <i class="fa-solid fa-file mx-2"></i>
         <span class="mr-2">Sửa</span>
       </button>
-      <button (click)="deleteProduct()"
+      <button (click)="deleteProduct()" *ngIf="requiredRoles('accountant') | async"
         class="flex flex-row bg-gray-300 text-black opacity-80  justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
         <i class="fa-solid fa-trash mx-2"></i>
         <span class="mr-2">Xoá</span>
