@@ -9,6 +9,7 @@ import { SidenavService } from './services/sidenav.service';
 import { ProductService } from './services/product.service';
 import { sortList } from './utils/sort';
 import { ProductDialogService } from './services/product-dialog.service';
+import { RolesService } from 'src/app/core/services/roles.service';
 
 @Component({
     selector: 'app-product',
@@ -27,6 +28,7 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit {
         public datepipe: DatePipe,
         private sidenavService: SidenavService,
         private router: Router,
+        private rolesService: RolesService,
         private productService: ProductService,
     ) {}
 
@@ -43,5 +45,8 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit {
     }
     addUser() {
         this.dialogService.openProductDialog();
+    }
+    requiredRoles(role: string) {
+        return this.rolesService.requiredRoles(role);
     }
 }

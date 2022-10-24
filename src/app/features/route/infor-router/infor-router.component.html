@@ -3,7 +3,7 @@
         <div class="font-bold">Mã tuyến</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'" [ngModel]="RootInfoRouteDetail.routeCode" formControlName="routeCode">
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'" [ngModel]="RootInfoRouteDetail?.routeCode" formControlName="routeCode">
             <div class="w-96 text-xs" *ngIf="status == 'view'">.email}}</div>
         </div>
     </div>
@@ -11,7 +11,7 @@
         <div class="font-bold">Tên tuyến</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
-            <input formControlName="routeName" [ngModel]="RootInfoRouteDetail.routeName"
+            <input formControlName="routeName" [ngModel]="RootInfoRouteDetail?.routeName"
                 class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'">
             <div class="w-96 text-xs" *ngIf="status == 'view'">.employeeCode}}</div>
         </div>
@@ -32,8 +32,8 @@
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
             <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
-                *ngIf="status != 'view'">
-                <option *ngFor="let item of EmployeeInGroup" value="emp">{{item.employee.employeeName}}</option>
+                *ngIf="status != 'view'" formControlName="employeeId" [ngModel]="RootInfoRouteDetail?.employee.id">
+                <option *ngFor="let item of EmployeeInGroup" [value]="item.employee.id">{{item.employee.employeeName}}</option>
             </select>
             <div class="w-96 text-xs" *ngIf="status == 'view'">.employeeTitle}}</div>
         </div>
@@ -41,7 +41,7 @@
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Ngày đi tuyến</div>
         <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'"
-          formControlName="routeDate" [ngModel]="RootInfoRouteDetail.routeDate">
+          formControlName="routeDate" [ngModel]="RootInfoRouteDetail?.routeDate">
           <option value="vn">Không giới hạn</option>
           <option value="2">Thứ 2</option>
           <option value="3">Thứ 3</option>
@@ -63,7 +63,7 @@
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
             <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
-            formControlName="status" [ngModel]="RootInfoRouteDetail.status">
+            formControlName="status" [ngModel]="RootInfoRouteDetail?.status">
                 <option [value]="true">Hoạt động</option>
                 <option [value]="false">Khoá</option>
             </select>

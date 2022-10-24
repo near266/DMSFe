@@ -9,7 +9,7 @@ import { customer_group_url, gateway_url } from '../const/url';
 export class CustomerGroupService {
 
   constructor(private http: HttpClient) { }
-  url = gateway_url + "/SearchEmployeeInGroup"
+  url = gateway_url + "/SearchEmployeeInGroupPost"
   get_all(): Observable<any> {
     return this.http.get(customer_group_url + '/getall')
       .pipe(
@@ -17,8 +17,8 @@ export class CustomerGroupService {
       )
   }
 
-  SearchEmployeeInGroup(id:any, page:any, pageSize:any):Observable<any>{
-    return this.http.get(this.url + "?GroupId=" + id + "&page=" + page + "&pagesize="+ pageSize)
+  SearchEmployeeInGroup(body:any):Observable<any>{
+    return this.http.post(this.url, body)
     .pipe(
       map(res => res)
     )

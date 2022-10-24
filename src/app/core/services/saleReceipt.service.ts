@@ -144,7 +144,8 @@ export class SaleReceiptService {
             .pipe(map((reponse: any) => reponse));
     }
     export(body:any):Observable<any>{
-      return this.http.post(this.api_gateway_url + "SaleReceipt/export", body)
+      let optionHeader = {responseType: 'text'}
+      return this.http.post(this.api_gateway_url + "/SaleReceipt/export", body, { responseType: 'blob'})
       .pipe(
         map(res => res)
       )

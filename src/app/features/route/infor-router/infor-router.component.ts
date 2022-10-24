@@ -13,6 +13,7 @@ import { RootInfoRoute } from '../models/infor-router';
   styleUrls: ['./infor-router.component.scss']
 })
 export class InforRouterComponent implements OnInit {
+  unitTreeGroupIdTemp:any = "";
 
   constructor(
     private dataService: DataService,
@@ -28,8 +29,10 @@ export class InforRouterComponent implements OnInit {
   @Input() typeRoute:any;
   formatDate:any;
   showGroup:boolean = false;
-  RootInfoRouteDetail :RootInfoRoute =  new RootInfoRoute;
+  RootInfoRouteDetail :RootInfoRoute;
   groupName:any;
+
+
   formInforRouteUpdate =  this.fb.group({
     id: [''],
     routeCode: [''],
@@ -39,13 +42,6 @@ export class InforRouterComponent implements OnInit {
     routeDate: [''],
     startedDate: [''],
     status: true,
-    // employee: [''],
-    // unitTreeGroup: [''],
-    // routeCustomer: [''],
-    // createdBy: [''],
-    // createdDate: [''],
-    // lastModifiedBy: [null],
-    // lastModifiedDate: [null]
   });
 
   EmployeeInGroup:any;
@@ -54,35 +50,39 @@ export class InforRouterComponent implements OnInit {
     this.getRouteDetail();
     this.dataService.employee.subscribe({
       next: data => {
-        console.log(data);
+        if(data !== ""){
+          console.log("Patch",data);
         this.formInforRouteUpdate.patchValue({
           // startedDate: new Date(this.formatDate).toISOString(),
+          unitTreeGroupId: this.RootInfoRouteDetail.unitTreeGroup?.id,
           id: this.RootInfoRouteDetail.id,
-          unitTreeGroupId: this.RootInfoRouteDetail.unitTreeGroupId,
-          employeeId: this.RootInfoRouteDetail.employeeId,
         });
         console.log("Form Update", this.formInforRouteUpdate.value);
-        if(this.typeRoute === "update"){
+
+        if(this.typeRoute == "update"){
           console.log('Update');
           this._routeSer.UpdateRoute(this.formInforRouteUpdate.value).subscribe({
             next: data => {
               console.log(data);
               this.getRouteDetail();
-              // this._snackBar.openSnackbar("Update thành công!", 3000, "", "right", "bottom", true)
+              this._snackBar.openSnackbar("Cập nhật thành công!", 3000, "", "right", "bottom", true)
             }
           })
         }else{
-          console.log("Add");
+          // this.formInforRouteUpdate.removeControl('id');
+          // this.formInforRouteUpdate.setValue({
+          //   unitTreeGroupId: this.unitTreeGroupIdTemp
+          // })
           console.log("Form Add", this.formInforRouteUpdate.value);
           this._routeSer.AddRoute(this.formInforRouteUpdate.value).subscribe({
             next: data => {
               console.log(data);
               this.getRouteDetail();
+              this._snackBar.openSnackbar("Tạo tuyến thành công!", 3000, "", "right", "bottom", true)
             }
           })
         }
-
-
+        }
       }
     })
 
@@ -91,7 +91,7 @@ export class InforRouterComponent implements OnInit {
     this._routeSer.GetRouteById(this.idRoute).subscribe({
       next: data => {
         console.log(data);
-        this.RootInfoRouteDetail = data as RootInfoRoute;
+        this.RootInfoRouteDetail = data;
         this.formatDate = data.startedDate.split("T")[0];
         console.log(this.formatDate);
         this.groupName = data.unitTreeGroup.name;
@@ -100,14 +100,24 @@ export class InforRouterComponent implements OnInit {
     })
   };
   getIdName(event:any){
-    console.log(event);
     this.groupName = event.name;
     this.showGroup = !this.showGroup;
+    this.unitTreeGroupIdTemp = event.id
+    this.formInforRouteUpdate.patchValue({
+      unitTreeGroupId: event.id
+    })
     this.SearchEmployeeInGroup(event.id)
   }
 
   SearchEmployeeInGroup(id:any){
-    this.customerGroupSer.SearchEmployeeInGroup(id, "1", "10000").subscribe({
+    let body = {
+      groupId: id,
+      page: 1,
+      pagesize: 10000
+
+    }
+    console.log(body);
+    this.customerGroupSer.SearchEmployeeInGroup(body).subscribe({
       next: data => {
         console.log(data);
         this.EmployeeInGroup = data.data;

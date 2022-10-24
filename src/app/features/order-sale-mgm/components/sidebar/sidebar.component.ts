@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Config } from 'src/app/core/model/Config';
 import { DataService } from '../../services/data.service';
 @Component({
@@ -8,6 +9,7 @@ import { DataService } from '../../services/data.service';
 })
 export class SidebarComponent implements OnInit {
     @Output() isShowSidebarOutput = new EventEmitter<boolean>();
+    @Output() formFilterFromChild = new EventEmitter<any>();
     isShowSidebar = true;
     isSearchByBill = false;
     searchText: string = '';
@@ -46,7 +48,27 @@ export class SidebarComponent implements OnInit {
         title: 'Lưu trữ',
         menuChildrens: ['Tất cả', 'Mở', 'Khóa'],
     };
-    constructor(private dataService: DataService) {}
+    constructor(private fb: FormBuilder, private dataService: DataService) {}
+
+    formFilter = this.fb.group({
+        keyword: null,
+        deliveryDate: null,
+        orderEmployeeId: null,
+        customerTypeId: null,
+        customerGroupId: null,
+        areaId: null,
+        productKey: null,
+        status: null,
+        printStatus: true,
+        paymentMethod: null,
+        // page: 1,
+        // pageSize: 100000,
+        sortField: null,
+        isAscending: true,
+        fromDate: null,
+        toDate: null,
+        dateFilter: null,
+    });
 
     ngOnInit(): void {
         this.isShowSidebarOutput.emit(this.isShowSidebar);
@@ -59,6 +81,11 @@ export class SidebarComponent implements OnInit {
     toggleShowSidebar() {
         this.isShowSidebar = !this.isShowSidebar;
         this.isShowSidebarOutput.emit(this.isShowSidebar);
+    }
+
+    filter() {
+        // console.log(this.formFilter.value);
+        this.formFilterFromChild.emit(this.formFilter.value);
     }
 
     selection1(e: any) {
