@@ -55,6 +55,7 @@ export class DetailCustomerComponent implements OnInit {
     id: '',
 
   };
+  listRole: string[] = [];
 
   tabs = 'Information';
 
@@ -84,6 +85,7 @@ export class DetailCustomerComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.listRole = ('' + localStorage.getItem('role')).split(',');
     this.customerService.get_by_id(this.data.id).subscribe(data => {
       this.customer = data as Customers;
       this.buf = {
@@ -197,7 +199,7 @@ export class DetailCustomerComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  
+
 
   submit() {
     try {

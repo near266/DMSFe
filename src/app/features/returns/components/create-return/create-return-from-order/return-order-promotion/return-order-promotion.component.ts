@@ -24,6 +24,11 @@ export class ReturnOrderPromotionComponent implements OnInit {
                     listProduct: _,
                     listPromotionProduct: this.returnDetailsService.formatSubmitListProduct(this.productsInput),
                 });
+            } else {
+                this.returnDetailsService.submitFormPromotionList$.next({
+                    listProduct: _,
+                    listPromotionProduct: [],
+                });
             }
         });
     }
@@ -48,12 +53,11 @@ export class ReturnOrderPromotionComponent implements OnInit {
     checkAndSubmit(): boolean {
         let check = true;
         if (!this.productsInput?.length) {
-            this.snackBarService.openSnackbar('Dữ liệu trống', 2000, 'Đóng', 'center', 'bottom', false);
             return false;
         }
         console.log(this.productsInput.length);
         this.productsInput.forEach((item: any) => {
-            if (!item.warehouseId || !this.productsInput?.length) {
+            if (!item.warehouseId) {
                 this.snackBarService.openSnackbar('Dữ liệu không hợp lệ', 2000, 'Đóng', 'center', 'bottom', false);
                 check = false;
             }
