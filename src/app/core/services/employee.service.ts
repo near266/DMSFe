@@ -10,8 +10,12 @@ export class EmployeeService {
     constructor(private http: HttpClient) {}
 
     GetAllEmployee(page: any, pageSize: any): Observable<any> {
+      const body = {
+        page: page,
+        pageSize: pageSize
+      };
         return this.http
-            .get(gateway_url + '/Employee/SearchAllEmployee?page=' + page + '&pagesize=' + pageSize)
+            .post(gateway_url + '/Employee/SearchAllEmployee', body)
             .pipe(map((response: any) => response));
     }
 
@@ -63,6 +67,11 @@ export class EmployeeService {
     }
 
     SearchEmployeeInGroup(GroupId: string, page: number, pageSize: number): Observable<any> {
-      return this.http.get(gateway_url + '/SearchEmployeeInGroup?GroupId=' + GroupId + '&page='+ page +'&pagesize=' + pageSize).pipe(map((response: any) => response));
+      const body = {
+        GroupId: GroupId,
+        page: page,
+        pageSize: pageSize
+      }
+      return this.http.post(gateway_url + '/SearchEmployeeInGroup', body).pipe(map((response: any) => response));
     }
   }
