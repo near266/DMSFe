@@ -209,13 +209,11 @@
                                 <td class="custom-th">{{ product.productName }}</td>
                                 <td class="custom-th">
                                     <mat-form-field
-                                        *ngIf="product.retailUnit && product.wholeSaleUnit"
+                                        *ngIf="product.retailUnit || product.wholeSaleUnit"
                                         appearance="outline"
                                         floatLabel="always"
                                         style="width: 100px">
-                                        <mat-select
-                                            value="{ unit: {{ product.retailUnit }}, type: 'retail' }"
-                                            (selectionChange)="selectUnit($event.value, product, i)">
+                                        <mat-select (selectionChange)="selectUnit($event.value, product, i)">
                                             <mat-option
                                                 *ngIf="product.retailUnit"
                                                 [value]="{ unit: product.retailUnit, type: 'retail' }">
