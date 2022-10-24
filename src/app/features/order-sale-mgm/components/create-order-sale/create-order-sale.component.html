@@ -41,15 +41,21 @@
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Nhóm</mat-label>
                     <mat-select formControlName="groupId">
-                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                        <!-- <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" /> -->
                         <mat-option *ngFor="let group of listGroup" [value]="group.id">{{ group.name }}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Nhân viên đặt</mat-label>
                     <mat-select formControlName="orderEmployeeId">
-                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option *ngFor="let employee of listEmployee" [value]="employee.id">
+                        <input
+                            placeholder="Tìm kiếm..."
+                            style="padding-left: 12px"
+                            matInput
+                            class="h-10 rounded-sm"
+                            (input)="searchListEmployeeOrder($event)" />
+                        <mat-option>--Chọn nhân viên đặt--</mat-option>
+                        <mat-option *ngFor="let employee of listEmployeeOrder" [value]="employee.id">
                             {{ employee.employeeCode }} - {{ employee.employeeName }}
                         </mat-option>
                     </mat-select>
@@ -63,6 +69,7 @@
                             style="padding-left: 12px"
                             matInput
                             class="h-10 rounded-sm" />
+                        <mat-option>--Chọn tuyến--</mat-option>
                         <mat-option *ngFor="let route of listRoute" [value]="route.id">
                             {{ route.routeName }}
                         </mat-option>
@@ -71,8 +78,14 @@
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Nhân viên bán</mat-label>
                     <mat-select formControlName="saleEmployee">
-                        <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
-                        <mat-option *ngFor="let employee of listEmployee" [value]="employee.id">
+                        <input
+                            placeholder="Tìm kiếm..."
+                            style="padding-left: 12px"
+                            matInput
+                            class="h-10 rounded-sm"
+                            (input)="searchListEmployeeSale($event)" />
+                        <mat-option>--Chọn nhân viên bán--</mat-option>
+                        <mat-option *ngFor="let employee of listEmployeeSale" [value]="employee.id">
                             {{ employee.employeeCode }} - {{ employee.employeeName }}
                         </mat-option>
                     </mat-select>
@@ -90,6 +103,7 @@
                             style="padding-left: 12px"
                             matInput
                             class="h-10 rounded-sm" />
+                        <mat-option [value]="0">--Chọn khách hàng--</mat-option>
                         <mat-option *ngFor="let customer of listCustomer" [value]="customer">
                             {{ customer.customerCode }} - {{ customer.customerName }}
                         </mat-option>
@@ -313,6 +327,12 @@
                         </tbody>
                     </table>
                 </div>
+            </mat-tab>
+            <!-- Sản phẩm khuyến mại -->
+            <mat-tab label="Sản phẩm khuyến mại">
+                <sale-create-promotion-table
+                    [listWarehouse]="listWarehouse"
+                    (listPromotionProductAdd$)="setProductPromotionAdd($event)"></sale-create-promotion-table>
             </mat-tab>
         </mat-tab-group>
         <div class="grid grid-cols-3 w-full gap-y-5 mt-6">

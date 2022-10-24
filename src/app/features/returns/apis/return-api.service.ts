@@ -54,8 +54,8 @@ export class ReturnApiService {
             pageSize: 30,
             page,
             keyword: '',
-            sortField: 'lastModifiedDate',
-            isAscending: true,
+            sortField: 'createdDate',
+            isAscending: false,
         });
     }
 

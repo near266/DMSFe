@@ -38,6 +38,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     listEmployee: any[] = [];
     listWarehouse: any[] = [];
     listChoosenProduct2: any[] = [];
+    listPromotionProductAdd: any = [];
 
     debtLimit: any;
     totalAmount: number = 0;
@@ -269,6 +270,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             createdDate: moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss'),
             deliveryDate: moment(this.createForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
             listProduct: lastListChoosen,
+            listPromotionProduct: this.listPromotionProductAdd,
             paymentMethod: 0, // có 1 loại payment
             prePayment: this.prePayment,
             totalAmount: this.totalAmount,
@@ -379,5 +381,9 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
                 });
             }
         });
+    }
+
+    setProductPromotionAdd(e: any) {
+        this.listPromotionProductAdd = e;
     }
 }
