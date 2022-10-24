@@ -38,12 +38,12 @@
             </button>
         </mat-menu>
         <!-- Menu Danh mục -->
-        <li *ngIf="role != 'accountant'" class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="menu2">
+        <li *ngIf="!(onlyRole('accountant') | async)" class="mr-4 text-base font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="menu2">
             <span class="mr-1">Danh mục</span>
             <i class="fa-solid fa-caret-down"></i>
         </li>
         <mat-menu #menu2="matMenu">
-            <button *ngIf="isAdmin" mat-menu-item class="flex items-center" (click)="openTree()">
+            <button *ngIf="requiredRoles('sale_admin') | async" mat-menu-item class="flex items-center" (click)="openTree()">
                 <i class="fa-solid fa-sitemap text-base mr-2"></i>
                 <span>Cây đơn vị</span>
             </button>

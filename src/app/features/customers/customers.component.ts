@@ -10,6 +10,7 @@ import { Customers } from 'src/app/core/model/Customers';
 import { Response } from 'src/app/core/model/Response';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
+import { RolesService } from 'src/app/core/services/roles.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { DetailCustomerComponent } from './detail-customer/detail-customer.component';
@@ -275,7 +276,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       private snackbar: SnackbarService,
       public datePipe: DatePipe,
       private provincesService: ProvincesService,
-      private fb: FormBuilder
+      private fb: FormBuilder,
+      private rolesService: RolesService
   ) {}
 
   ngOnInit(): void {
@@ -323,6 +325,10 @@ export class CustomersComponent implements OnInit, AfterViewInit {
             this.snackbar.openSnackbar('Không thể tải danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
         },
     );
+  }
+
+  requiredRoles(role: string){
+    return this.rolesService.requiredRoles(role)
   }
 
   add() {

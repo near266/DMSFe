@@ -35,7 +35,7 @@
     </form>
     <div class="lg:flex justify-between lg:space-x-3 px-3 lg:px-0 space-y-4 text-center lg:space-y-0">
       <a type="button" mat-flat-button class="bg-[#0EAF8F] text-white font-medium w-3/5" href="{{downloadForAndroid}}"><i class="text-lg fa-brands fa-android mr-2"></i> Tải xuống cho Android</a>
-      <a type="button" mat-flat-button class="bg-[#0EAF8F] text-white font-medium w-3/5" href="{{downloadForIOS}}"><i class="text-lg fa-brands fa-apple h-fit mr-2"></i> <span>Tải xuống cho IOS</span></a>
+      <a type="button" mat-flat-button class="bg-[#0EAF8F] text-white font-medium w-3/5" download [href]="getSafe()"><i class="text-lg fa-brands fa-apple h-fit mr-2"></i> <span>Tải xuống cho IOS</span></a>
     </div>
   </div>
 </div>
