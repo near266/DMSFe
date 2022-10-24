@@ -35,7 +35,12 @@
             </button>
             <button
                 (click)="archive()"
-                *ngIf="type === 'View' && !(roleMain === 'member')"
+                *ngIf="
+                    type === 'View' &&
+                    !(roleMain === 'member') &&
+                    !(roleMain === 'accountant') &&
+                    !(roleMain === 'manager')
+                "
                 class="button-danger-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-trash text-white mr-2"></i>
                 <span class="text-white">Xóa</span>

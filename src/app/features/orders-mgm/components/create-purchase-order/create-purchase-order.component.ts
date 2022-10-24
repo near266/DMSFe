@@ -353,14 +353,16 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     }
 
     searchListCustomer(e: any) {
-        let body = {
-            keyword: e.target.value,
-            page: 1,
-            pageSize: 100,
-        };
-        this.purchaseOrder.searchCustomer(body).subscribe((data) => {
-            this.listCustomer = data.data;
-        });
+        if (e != 0) {
+            let body = {
+                keyword: e.target.value,
+                page: 1,
+                pageSize: 100,
+            };
+            this.purchaseOrder.searchCustomer(body).subscribe((data) => {
+                this.listCustomer = data.data;
+            });
+        }
     }
 
     searchListRoute(e: any) {

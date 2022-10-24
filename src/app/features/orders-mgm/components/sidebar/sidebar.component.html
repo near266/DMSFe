@@ -3,11 +3,13 @@
         <div class="py-1 px-1.5 bg-zinc-300 rounded cursor-pointer" (click)="toggleShowSidebar()">
             <i class="w-1/12 fa-solid fa-bars text-lg cursor-pointer hover:opacity-70"></i>
         </div>
-        <mat-form-field class="w-10/12 text-[12px]" appearance="outline">
+        <mat-form-field class="w-8/12 ml-1 text-[12px]" appearance="outline">
             <mat-label>Tìm kiếm phiếu đặt hàng</mat-label>
-            <input matInput class="bg-white" />
-            <i matPrefix class="text-[#0EAF8F] mr-1 fa-solid -translate-y-1 text-base icon fa-magnifying-glass"> </i>
+            <input matInput class="bg-white" [(ngModel)]="searchText" />
         </mat-form-field>
+        <i
+            matSuffix
+            class="ml-1 text-center mr-1 px-1 py-2 rounded-md bg-zinc-300 h-full w-full hover:opacity-70 font-bold cursor-pointer fa-solid text-base icon fa-magnifying-glass"></i>
     </div>
     <div class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
         <i class="fa-solid fa-user mr-3 text-base"></i>
@@ -43,7 +45,8 @@
         <span class="text-sm">Người duyệt</span>
     </div>
     <!-- Tìm kiếm theo sản phẩm -->
-    <div (click)="isSearchByBill = !isSearchByBill"
+    <div
+        (click)="isSearchByBill = !isSearchByBill"
         class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
         <i class="fa-solid fa-magnifying-glass mr-3 text-base"></i>
         <span class="text-sm">Tìm kiếm theo sản phẩm</span>
@@ -52,7 +55,7 @@
         <mat-form-field class="w-10/12 text-[12px]" appearance="outline">
             <mat-label>Tìm sản phẩm</mat-label>
             <input matInput class="bg-white" />
-            <i matPrefix class="text-[#0EAF8F] mr-1 fa-solid -translate-y-1 text-base icon fa-magnifying-glass"> </i>
+            <i matPrefix class="text-[#0EAF8F] mr-1 fa-solid -translate-y-1 text-base icon fa-magnifying-glass"></i>
         </mat-form-field>
     </div>
 </div>

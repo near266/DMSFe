@@ -77,7 +77,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             orderDate: [null],
             saleDate: [moment(Date.now()).format('YYYY-MM-DD')],
             deliveryDate: [null],
-            groupId: [null],
+            groupId: [this.relatedOrder?.group?.id],
             orderEmployeeId: [this.relatedOrder?.orderEmployee?.id],
             routeId: [null],
             saleEmployeeId: [this.saleDefaultId],
@@ -510,7 +510,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         const body = {
             purchaseOrderId: this.relatedOrder.id,
             orderDate: this.relatedOrder.orderDate,
-            groupId: this.relatedOrder.unit?.id,
+            groupId: this.relatedOrder.group?.id,
             orderEmployeeId: this.relatedOrder.orderEmployee?.id,
             warehouseId: this.relatedOrder.warehouse?.id,
             customerId: this.relatedOrder.customer?.id,
