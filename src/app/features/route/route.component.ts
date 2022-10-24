@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import { Title } from '@angular/platform-browser';
 import { Response } from 'src/app/core/model/Response';
 import { Route } from 'src/app/core/model/Route';
@@ -15,24 +16,46 @@ import { AddRouterComponent } from './add-router/add-router.component';
 export class RouteComponent implements OnInit, AfterViewInit {
 
   page = 1;
-  pageSize = 30;
   totalCount = 0;
   response: Response<Route> = {
     data: [],
     totalCount: 0
   };
+  isRole:any = localStorage.getItem('role')
 
   constructor(private title: Title, private dialog: MatDialog, private routeService: RouteService, public datePipe: DatePipe) {}
 
+
+  // MatPaginator Inputs
+  length:number;
+  pageSize = 30;
+
+  // pageSizeOptions: number[] = [5, 10, 25, 100];
+
+  // MatPaginator Output
+  pageEvent: PageEvent;
+  // firstPageLabel = $localize`First page`;
+  // itemsPerPageLabel = $localize`Items per page:`;
+  // lastPageLabel = $localize`Last page`;
+
+  // You can set labels to an arbitrary string too, or dynamically compute
+  // it through other third-party internationalization libraries.
+  nextPageLabel = 'Next page';
+  previousPageLabel = 'Previous page';
+
+
   ngOnInit(): void {
-      this.title.setTitle('Quản lý tuyến');
+    this.title.setTitle('Quản lý tuyến');
+    this.checkIsRole();
   }
   ngAfterViewInit(): void {
-    this.init();
+    this.init(this.page);
   }
 
-  init() {
-    this.routeService.SearchAllRoute(this.page, this.pageSize).subscribe( data => {
+  init(page:any) {
+    this.routeService.SearchAllRoute(page, this.pageSize).subscribe( data => {
+      // console.log(data);
+      this.length = data.totalCount
       this.response = data;
     });
   }
@@ -218,5 +241,27 @@ export class RouteComponent implements OnInit, AfterViewInit {
         "type": "update"
       }
     });
+  }
+
+  changePage(event: any){
+    console.log(event);
+    this.init((event.pageIndex + 1).toString())
+  }
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+  console.log(setPageSizeOptionsInput);
+  console.log("A");
+
+    if (setPageSizeOptionsInput) {
+    //  this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+    }
+  };
+  checkIsRole(){
+    if(this.isRole.includes('MANAGER') || this.isRole.includes('SALE_ADMIN')){
+      return true;
+    }else{
+      return false;
+    }
+    return;
   }
 }

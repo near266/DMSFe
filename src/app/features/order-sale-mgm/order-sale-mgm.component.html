@@ -139,7 +139,7 @@
                         class="custom-row">
                         <td class="custom-td border-b">{{ i + 1 }}</td>
                         <td class="custom-td border-b">
-                            <mat-checkbox></mat-checkbox>
+                            <mat-checkbox (change)="chooseID($event,order.id)"></mat-checkbox>
                         </td>
                         <td class="custom-td border-b">{{ order.orderEmployee?.employeeName }}</td>
                         <td class="custom-td border-b">{{ order.saleEmployee?.employeeName }}</td>
