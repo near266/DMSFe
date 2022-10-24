@@ -18,8 +18,11 @@ export class SaleReceiptService {
     private updateOrderSource = new BehaviorSubject<number>(1);
     private isSucessUpdateSource = new BehaviorSubject<any>('');
     private productUpdateSource = new BehaviorSubject<any>('');
+    private productPromotionUpdateSource = new BehaviorSubject<any>('');
     private productRemoveSource = new BehaviorSubject<any>('');
+    private productPromotionRemoveSource = new BehaviorSubject<any>('');
     private productAddSource = new BehaviorSubject<any>('');
+    private productPromotionAddSource = new BehaviorSubject<any>('');
 
     page = this.pageSource.asObservable();
     total = this.totalSource.asObservable();
@@ -30,8 +33,11 @@ export class SaleReceiptService {
     updateOrderPass = this.updateOrderSource.asObservable();
     isSucessUpdate = this.isSucessUpdateSource.asObservable();
     productUpdate = this.productUpdateSource.asObservable();
+    productPromotionUpdate = this.productPromotionUpdateSource.asObservable();
     productRemove = this.productRemoveSource.asObservable();
+    productPromotionRemove = this.productPromotionRemoveSource.asObservable();
     productAdd = this.productAddSource.asObservable();
+    productPromotionAdd = this.productPromotionAddSource.asObservable();
 
     setTotal(total: number) {
         this.totalSource.next(total);
@@ -60,11 +66,20 @@ export class SaleReceiptService {
     sendProductUpdate(list: any) {
         this.productUpdateSource.next(list);
     }
+    sendProductPromotionUpdate(list: any) {
+        this.productPromotionUpdateSource.next(list);
+    }
     sendProductRemove(list: any) {
         this.productRemoveSource.next(list);
     }
+    sendProductPromotionRemove(list: any) {
+        this.productPromotionRemoveSource.next(list);
+    }
     sendProductAdd(list: any) {
         this.productAddSource.next(list);
+    }
+    sendProductPromotionAdd(list: any) {
+        this.productPromotionAddSource.next(list);
     }
 
     constructor(private http: HttpClient) {}

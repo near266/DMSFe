@@ -15,6 +15,7 @@ import { ViewEditDetailOrderComponent } from './components/view-edit-detail-orde
 import { ConfirmRejectComponent } from './components/confirm-reject/confirm-reject.component';
 import { GenOrderSaleComponent } from './components/gen-order-sale/gen-order-sale.component';
 import { ProductPaginationComponent } from './components/product-pagination/product-pagination.component';
+import { PromotionTableComponent } from './components/create-purchase-order/promotion-table/promotion-table.component';
 @NgModule({
     declarations: [
         SidebarComponent,
@@ -26,7 +27,8 @@ import { ProductPaginationComponent } from './components/product-pagination/prod
         PanagationComponent,
         ConfirmRejectComponent,
         GenOrderSaleComponent,
-        ProductPaginationComponent
+        ProductPaginationComponent,
+        PromotionTableComponent
     ],
     imports: [CommonModule, SharedModule, OrdersMgmRoutingModule, RouterModule, NgxPaginationModule],
 })

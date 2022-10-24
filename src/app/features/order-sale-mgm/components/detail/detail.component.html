@@ -27,8 +27,7 @@
         <div class="flex gap-x-6 justify-between">
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Nhóm</mat-label>
-                <mat-select formControlName="groupId">
-                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                <mat-select formControlName="groupId" [disabled]="type === 'View'">
                     <mat-option *ngFor="let group of listGroup" [value]="group.id">
                         {{ group.unitTreeGroup_Code }} - {{ group.name }}
                     </mat-option>
@@ -37,7 +36,15 @@
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Nhân viên đặt</mat-label>
                 <mat-select [disabled]="type === 'View'" formControlName="orderEmployee">
-                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <input
+                        (input)="searchListEmployee($event)"
+                        placeholder="Tìm kiếm..."
+                        style="padding-left: 12px"
+                        matInput
+                        class="h-10 rounded-sm" />
+                    <mat-option *ngIf="defaultOrderEmployee" [value]="defaultOrderEmployee.id">
+                        {{ defaultOrderEmployee.employeeCode }} - {{ defaultOrderEmployee.employeeName }}
+                    </mat-option>
                     <mat-option *ngFor="let employee of listEmployee" [value]="employee.id">
                         {{ employee.employeeName }}
                     </mat-option>
@@ -45,8 +52,7 @@
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Tuyến</mat-label>
-                <mat-select formControlName="routeId">
-                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                <mat-select formControlName="routeId" [disabled]="type === 'View'">
                     <mat-option *ngFor="let route of listRoute" [value]="route.id">
                         {{ route.routeName }}
                     </mat-option>
@@ -69,6 +75,18 @@
                     [disabled]="type === 'View'"
                     formControlName="code"
                     (selectionChange)="setInfoCustomer($event.value); setRouteGroupAndEmployee($event.value)">
+                    <input
+                        (input)="searchListCustomer($event)"
+                        placeholder="Tìm kiếm..."
+                        style="padding-left: 12px"
+                        matInput
+                        class="h-10 rounded-sm" />
+                    <mat-option
+                        (click)="setRouteGroupAndEmployee(defaultCustomer?.id)"
+                        *ngIf="defaultCustomer"
+                        [value]="defaultCustomer?.id">
+                        {{ defaultCustomer?.customerCode }} - {{ defaultCustomer?.customerName }}
+                    </mat-option>
                     <mat-option *ngFor="let customer of listCustomer" [value]="customer.id">
                         {{ customer.customerCode }} - {{ customer.customerName }}
                     </mat-option>
@@ -105,7 +123,8 @@
         <mat-tab label="Sản phẩm khuyến mại">
             <app-product-promotion-table
                 [listPromotionProduct]="listPromotionProduct"
-                [listWarehouse]="listWarehouse"></app-product-promotion-table>
+                [listWarehouse]="listWarehouse"
+                [saleReceiptId]="id"></app-product-promotion-table>
         </mat-tab>
     </mat-tab-group>
     <div class="grid grid-cols-3 w-full gap-y-5 mt-6">

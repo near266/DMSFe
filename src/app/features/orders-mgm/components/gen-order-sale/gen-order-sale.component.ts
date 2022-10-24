@@ -52,6 +52,8 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     pageRoute: number;
     pageRouteSize: number;
     saleDefaultId: string;
+    debtLimit: any;
+    defaultCustomer: any;
     constructor(
         private dialog: MatDialog,
         public dialogRef: MatDialogRef<GenOrderSaleComponent>,
@@ -67,6 +69,9 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     ngOnInit(): void {
         // parse token to get id login
         this.relatedOrder = this.data.detailOrder;
+        console.log(this.relatedOrder);
+        // lấy ra default customer (trước khi patch value)
+        this.defaultCustomer = this.relatedOrder?.customer;
         this.saleDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
         this.genOrderForm = this.fb.group({
             orderDate: [null],
@@ -94,9 +99,9 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.textMoney = this.numberToText.doc(this.totalPayment);
 
         // get list customer
-        this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
-            this.listCustomer = data?.data;
-        });
+        // this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
+        //     this.listCustomer = data?.data;
+        // });
     }
 
     ngAfterViewInit(): void {
@@ -197,37 +202,79 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
     }
 
-    getRouteByCustomerId(customerId: any) {
-        this.genOrderForm.patchValue({
-            routeId: null,
-        });
-        // get route ID
-        if (customerId) {
-            this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
-                if (data) {
-                    this.genOrderForm.patchValue({
-                        routeId: data?.route?.id,
-                    });
-                    // get employee in route
-                    this.genOrderForm.patchValue({
-                        orderEmployeeId: data?.route?.employee?.id,
-                    });
-                    // get group by customerID
-                    this.groupIdSearched = data?.route?.unitTreeGroup?.id;
-                    this.genOrderForm.patchValue({
-                        groupId: this.groupIdSearched,
-                    });
-                }
-            });
-            // get customer ID and patch Value
-            this.purchaseOrder.getCustomerById(customerId).subscribe((data) => {
+    // getRouteByCustomerId(customerId: any) {
+    //     this.genOrderForm.patchValue({
+    //         routeId: null,
+    //     });
+    //     // get route ID
+    //     if (customerId) {
+    //         this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
+    //             if (data) {
+    //                 this.genOrderForm.patchValue({
+    //                     routeId: data?.route?.id,
+    //                 });
+    //                 // get employee in route
+    //                 this.genOrderForm.patchValue({
+    //                     orderEmployeeId: data?.route?.employee?.id,
+    //                 });
+    //                 // get group by customerID
+    //                 this.groupIdSearched = data?.route?.unitTreeGroup?.id;
+    //                 this.genOrderForm.patchValue({
+    //                     groupId: this.groupIdSearched,
+    //                 });
+    //             }
+    //         });
+    //         // get customer ID and patch Value
+    //         this.purchaseOrder.getCustomerById(customerId).subscribe((data) => {
+    //             this.genOrderForm.patchValue({
+    //                 customerName: data.customerCode,
+    //                 phone: data.phone,
+    //                 address: data.address,
+    //             });
+    //         });
+    //     }
+    // }
+
+    setRouteGroupAndEmployee(customerId: any) {
+        this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
+            if (data) {
                 this.genOrderForm.patchValue({
-                    customerName: data.customerCode,
-                    phone: data.phone,
-                    address: data.address,
+                    routeId: data.route?.id,
+                    groupId: data.route?.unitTreeGroup?.id,
+                    orderEmployeeId: data.route?.employee?.id,
                 });
-            });
-        }
+            }
+        });
+    }
+
+    setInfoCustomer(id: string) {
+        // let customer = this.listCustomer.filter((customer: any) => {
+        //     return customer.id === id;
+        // })[0];
+        let customer: any;
+        this.purchaseOrder.getCustomerById(id).subscribe((data) => {
+            if (data) {
+                customer = data;
+                this.genOrderForm.patchValue({
+                    customer: {
+                        name: [null],
+                        phone: [null],
+                        address: [null],
+                    },
+                });
+                this.genOrderForm.patchValue({
+                    customer: {
+                        name: customer?.customerName,
+                        phone: customer?.phone,
+                        address: customer?.address,
+                    },
+                });
+                // set hạn mức dư nợ
+                this.purchaseOrder.getCustomerById(id).subscribe((data) => {
+                    this.debtLimit = data?.debtLimit;
+                });
+            }
+        });
     }
 
     countTotalPayment() {
@@ -277,7 +324,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
         // set route and group if have customerId
         if (this.relatedOrder?.customer?.id) {
-            this.getRouteByCustomerId(this.relatedOrder?.customer?.id);
+            this.setRouteGroupAndEmployee(this.relatedOrder?.customer?.id);
         }
 
         this.pushListProductToDialog();
@@ -361,8 +408,11 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             page: 1,
             pageSize: 100,
         };
+        // phải filter ra thằng customer đã có sẵn
         this.purchaseOrder.searchCustomer(body).subscribe((data) => {
-            this.listCustomer = data.data;
+            this.listCustomer = data.data?.filter((customer: any) => {
+                return customer?.id != this.defaultCustomer?.id;
+            });
         });
     }
 

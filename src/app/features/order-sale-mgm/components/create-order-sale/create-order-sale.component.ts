@@ -19,11 +19,13 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
     listGroup: any = [];
     createSale: FormGroup;
 
-    listEmployee: any = [];
+    listEmployeeSale: any = [];
+    listEmployeeOrder: any = [];
     listCustomer: any = [];
     listProduct: any = [];
     listChoosenProduct = new Array<any>();
     listWarehouse: any = [];
+    listPromotionProductAdd: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -73,7 +75,8 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
     ngAfterViewInit(): void {
         // get list employee
         this.purchaseOrder.getAllEmployees('', 1, 1000).subscribe((data) => {
-            this.listEmployee = data.data;
+            this.listEmployeeSale = data.data;
+            this.listEmployeeOrder = data.data;
         });
         // get list customer
         this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
@@ -111,15 +114,17 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
     }
 
     setRouteGroupAndEmployee(customer: any) {
-        this.purchaseOrder.getRouteByCustomerId(customer?.id).subscribe((data) => {
-            if (data) {
-                this.createSale.patchValue({
-                    routeId: data?.route?.id,
-                    groupId: data?.route?.unitTreeGroup?.id,
-                    orderEmployeeId: data?.route?.employee?.id,
-                });
-            }
-        });
+        if (customer != 0) {
+            this.purchaseOrder.getRouteByCustomerId(customer?.id).subscribe((data) => {
+                if (data) {
+                    this.createSale.patchValue({
+                        routeId: data?.route?.id,
+                        groupId: data?.route?.unitTreeGroup?.id,
+                        orderEmployeeId: data?.route?.employee?.id,
+                    });
+                }
+            });
+        }
     }
 
     searchListCustomer(e: any) {
@@ -178,7 +183,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             saleEmployeeId: this.createSale.get('saleEmployee')?.value,
             // warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             customerId: this.createSale.get('customer')?.value?.id?.id,
-            // routeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            routeId: this.createSale.get('routeId')?.value,
             orderEmployeeId: this.createSale.get('orderEmployeeId')?.value,
             type: 0,
             status: 3, //?
@@ -201,6 +206,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             prePayment: this.prePayment,
             debtRecord: this.createSale.get('debtRecord')?.value,
             listProduct: lastListChoosen,
+            listPromotionProduct: this.listPromotionProductAdd,
             source: 'Web',
         };
         this.saleReceipt.create(body).subscribe(
@@ -227,17 +233,19 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
     }
 
     setInfoCustomer(value: any) {
-        this.createSale.patchValue({
-            customer: {
-                name: value.customerName,
-                phone: value.phone,
-                address: value.address,
-            },
-        });
-        // set hạn mức dư nợ
-        this.purchaseOrder.getCustomerById(value?.id).subscribe((data) => {
-            this.debtLimit = data?.debtLimit;
-        });
+        if (value != 0) {
+            this.createSale.patchValue({
+                customer: {
+                    name: value.customerName,
+                    phone: value.phone,
+                    address: value.address,
+                },
+            });
+            // set hạn mức dư nợ
+            this.purchaseOrder.getCustomerById(value?.id).subscribe((data) => {
+                this.debtLimit = data?.debtLimit;
+            });
+        }
     }
 
     selectUnit(value: any, product: any, i: any) {
@@ -260,6 +268,18 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
                 product.warehouseId = id;
             });
         }
+    }
+
+    searchListEmployeeSale(e: any) {
+        this.purchaseOrder
+            .getAllEmployees(e.target.value, 1, 1000)
+            .subscribe((data) => (this.listEmployeeSale = data?.data));
+    }
+
+    searchListEmployeeOrder(e: any) {
+        this.purchaseOrder
+            .getAllEmployees(e.target.value, 1, 1000)
+            .subscribe((data) => (this.listEmployeeOrder = data?.data));
     }
 
     countTotal(product: any) {
@@ -301,5 +321,9 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         if (product.totalPrice) {
             product.discount = (product.discountRate / 100) * product.totalPrice;
         }
+    }
+
+    setProductPromotionAdd(e: any) {
+        this.listPromotionProductAdd = e;
     }
 }

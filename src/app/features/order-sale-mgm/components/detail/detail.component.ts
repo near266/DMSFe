@@ -42,6 +42,8 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     totalOfVAT: number = 0;
     textMoney: any;
     debtLimit: any;
+    defaultCustomer: any;
+    defaultOrderEmployee: any;
 
     listChoosenProduct: any = [];
     listWarehouse: any = [];
@@ -125,7 +127,7 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
 
     ngAfterViewInit(): void {
         this.getDetail();
-        this.getListCustomer();
+        // this.getListCustomer();
         this.getListEmployee();
         this.getListWareHouse();
         this.getListGroup();
@@ -136,13 +138,13 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
         this.saleReceipt.sendBodyUpdate({
             id: this.detailOrder.id,
             orderDate: moment(this.detailOrderForm.get('orderDate')?.value).format('YYYY-MM-DD'),
-            groupId: this.detailOrderForm.get('group')?.value,
+            groupId: this.detailOrderForm.get('groupId')?.value,
             saleCode: this.detailOrder.saleCode,
             saleEmployeeId: this.detailOrderForm.get('saleEmployee')?.value,
             orderEmployeeId: this.detailOrderForm.get('orderEmployee')?.value,
             warehouseId: this.detailOrder.warehouse?.id,
             customerId: this.detailOrderForm.get('customer.code')?.value,
-            routeId: this.detailOrderForm.get('route')?.value,
+            routeId: this.detailOrderForm.get('routeId')?.value,
             type: this.detailOrder.type,
             status: this.detailOrderForm.get('status')?.value,
             paymentMethod: 0,
@@ -232,6 +234,10 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     getDetail() {
         this.saleReceipt.searchReceiptById(this.id).subscribe((data) => {
             this.detailOrder = data;
+            // lấy ra default customer (trước khi patch value)
+            this.defaultCustomer = this.detailOrder?.customer;
+            // lấy ra default employee
+            this.defaultOrderEmployee = this.detailOrder?.orderEmployee;
             this.patchValue();
             this.pushListProductToDialog();
             // get all info payment
@@ -245,6 +251,26 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
             this.purchaseOrder.getCustomerById(this.detailOrder?.customer?.id).subscribe((data) => {
                 this.debtLimit = data?.debtLimit;
             });
+        });
+    }
+
+    searchListCustomer(e: any) {
+        let body = {
+            keyword: e.target.value,
+            page: 1,
+            pageSize: 30,
+        };
+        // phải filter ra thằng customer đã có sẵn
+        this.purchaseOrder.searchCustomer(body).subscribe((data) => {
+            this.listCustomer = data.data?.filter((customer: any) => {
+                return customer?.id != this.defaultCustomer?.id;
+            });
+        });
+    }
+
+    searchListEmployee(e: any) {
+        this.purchaseOrder.getAllEmployees(e.target.value, 1, 30).subscribe((data) => {
+            this.listEmployee = data.data;
         });
     }
 

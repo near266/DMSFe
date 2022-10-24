@@ -39,7 +39,15 @@
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                 <mat-label>Nhân viên đặt</mat-label>
                 <mat-select [disabled]="type === 'View'" formControlName="orderEmployee">
-                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
+                    <input
+                        (input)="searchListEmployee($event)"
+                        placeholder="Tìm kiếm..."
+                        style="padding-left: 12px"
+                        matInput
+                        class="h-10 rounded-sm" />
+                    <mat-option *ngIf="defaultOrderEmployee" [value]="defaultOrderEmployee.id">
+                        {{ defaultOrderEmployee.employeeCode }} - {{ defaultOrderEmployee.employeeName }}
+                    </mat-option>
                     <mat-option *ngFor="let employee of listEmployee" [value]="employee.id">
                         {{ employee.employeeName }}
                     </mat-option>
@@ -48,7 +56,6 @@
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                 <mat-label>Tuyến</mat-label>
                 <mat-select formControlName="routeId" [disabled]="type === 'View'">
-                    <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
                     <mat-option *ngFor="let route of listRoute" [value]="route.id">
                         {{ route.routeName }}
                     </mat-option>
@@ -68,7 +75,12 @@
                         style="padding-left: 12px"
                         matInput
                         class="h-10 rounded-sm" />
-                    <mat-option>--Chọn khách hàng--</mat-option>
+                    <mat-option
+                        (click)="setRouteGroupAndEmployee(defaultCustomer?.id)"
+                        *ngIf="defaultCustomer"
+                        [value]="defaultCustomer?.id">
+                        {{ defaultCustomer?.customerCode }} - {{ defaultCustomer?.customerName }}
+                    </mat-option>
                     <mat-option *ngFor="let customer of listCustomer" [value]="customer.id">
                         {{ customer.customerCode }} - {{ customer.customerName }}
                     </mat-option>
@@ -481,7 +493,6 @@
                         <span class="px-2">Tìm kiếm nâng cao</span>
                     </button>
                     <button
-                        (click)="getProductListUpdate()"
                         class="text-white flex items-center ml-3 px-1 py-1.5 bg-rose-500 hover:bg-rose-600 rounded-lg hover:font-medium">
                         <i class="h-full fa-solid fa-bookmark mr-2 px-2"></i>
                         <span class="px-2">Khuyến mại</span>

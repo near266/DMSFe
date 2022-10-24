@@ -26,10 +26,14 @@ export class ViewEditDetailComponent implements OnInit {
     bodyUpdate: any = [];
 
     listProductUpdate: any;
+    listProductPromotionUpdate: any;
     listProductRemove: any = [];
     listProductAdd: any = [];
+    listProductPromotionAdd: any = [];
+    listProductPromotionRemove: any = [];
 
-    isRemove = false;
+    isRemoveProduct = false;
+    isRemovePromotion = false;
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
@@ -55,11 +59,25 @@ export class ViewEditDetailComponent implements OnInit {
         // get list Product Remove
         this.saleReceipt.productRemove.subscribe((data) => {
             this.listProductRemove = data.list;
-            this.isRemove = data.isRemove;
+            this.isRemoveProduct = data.isRemove;
         });
         // get list product add
         this.saleReceipt.productAdd.subscribe((data) => {
             this.listProductAdd = data;
+        });
+
+        // get list ProductPromotion Add
+        this.saleReceipt.productPromotionAdd.subscribe((data) => {
+            this.listProductPromotionAdd = data;
+        });
+        // get list ProductPromotion Remove
+        this.saleReceipt.productPromotionRemove.subscribe((data) => {
+            this.listProductPromotionRemove = data.list;
+            this.isRemovePromotion = data.isRemove;
+        });
+        // get list ProductPromotion Update
+        this.saleReceipt.productPromotionUpdate.subscribe((data) => {
+            this.listProductPromotionUpdate = data;
         });
     }
 
@@ -212,19 +230,77 @@ export class ViewEditDetailComponent implements OnInit {
     // update ProductList
     updateProductList() {
         // update detail Product and Add
-        this.updateDetailAndAddProduct();
-        // remove Product
-        this.removeProduct();
+        // this.updateDetailAndAddProduct();
+        this.updateDetailAndAddProductAndPromotion();
+        // remove Product & Product Promotion
+        this.removeProductAndProductPromotion();
+        // update detail ProductPromtion and Add
+        // this.updateDetailAndAddProductPromotion();
     }
 
     updateDetailAndAddProduct() {
         const bodyUpdate = {
             saleRecieptProducts: this.listProductUpdate,
         };
-        const updateDetail = this.saleReceipt.updateProductList(bodyUpdate);
         const bodyAdd = {
             saleRecieptProducts: this.listProductAdd,
         };
+        const updateDetail = this.saleReceipt.updateProductList(bodyUpdate);
+        const addProduct = this.saleReceipt.addProduct(bodyAdd);
+        forkJoin([updateDetail, addProduct]).subscribe(
+            (data) => {},
+            (err) => {
+                this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+            () => {
+                this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                // gửi trạng thái để detail-order component biết rồi reload lại data
+                this.saleReceipt.isSuccessUpdate('Done');
+            },
+        );
+    }
+
+    updateDetailAndAddProductAndPromotion() {
+        // Product
+        const bodyUpdateProduct = {
+            saleRecieptProducts: this.listProductUpdate,
+        };
+        const bodyAddProduct = {
+            saleRecieptProducts: this.listProductAdd,
+        };
+        // Promotion
+        const bodyUpdatePromotion = {
+            saleRecieptProducts: this.listProductPromotionUpdate,
+        };
+        const bodyAddPromotion = {
+            saleRecieptProducts: this.listProductPromotionAdd,
+        };
+
+        const updateDetailProduct = this.saleReceipt.updateProductList(bodyUpdateProduct);
+        const addProduct = this.saleReceipt.addProduct(bodyAddProduct);
+        const updateDetailPromotion = this.saleReceipt.updateProductList(bodyUpdatePromotion);
+        const addPromotion = this.saleReceipt.addProduct(bodyAddPromotion);
+        forkJoin([updateDetailProduct, addProduct, updateDetailPromotion, addPromotion]).subscribe(
+            (data) => {},
+            (err) => {
+                this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+            () => {
+                this.snackbar.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                // gửi trạng thái để detail-order component biết rồi reload lại data
+                this.saleReceipt.isSuccessUpdate('Done');
+            },
+        );
+    }
+
+    updateDetailAndAddProductPromotion() {
+        const bodyUpdate = {
+            saleRecieptProducts: this.listProductPromotionUpdate,
+        };
+        const bodyAdd = {
+            saleRecieptProducts: this.listProductPromotionAdd,
+        };
+        const updateDetail = this.saleReceipt.updateProductList(bodyUpdate);
         const addProduct = this.saleReceipt.addProduct(bodyAdd);
         forkJoin([updateDetail, addProduct]).subscribe(
             (data) => {},
@@ -250,18 +326,25 @@ export class ViewEditDetailComponent implements OnInit {
         );
     }
 
-    removeProduct() {
-        const removeList = {
-            listIdRemove: this.listProductRemove,
-            purchaseOrderId: this.id,
-        };
-        if (this.isRemove) {
-            this.saleReceipt.removeProduct(removeList).subscribe(
+    removeProductAndProductPromotion() {
+        if (this.isRemovePromotion || this.isRemoveProduct) {
+            const removeProductList = {
+                listIdRemove: this.listProductRemove,
+                purchaseOrderId: this.id,
+            };
+            const removePromotionList = {
+                listIdRemove: this.listProductPromotionRemove,
+                purchaseOrderId: this.id,
+            };
+            const removeProduct = this.saleReceipt.removeProduct(removeProductList);
+            const removePromotion = this.saleReceipt.removeProduct(removePromotionList);
+            forkJoin([removeProduct, removePromotion]).subscribe(
                 (data) => {},
                 (err) => {},
                 () => {
-                    this.saleReceipt.isSuccessUpdate('Done');
                     this.saleReceipt.sendProductRemove({ isRemove: false, list: [] });
+                    this.saleReceipt.sendProductPromotionRemove({ isRemove: false, list: [] });
+                    this.saleReceipt.isSuccessUpdate('Done');
                 },
             );
         }
