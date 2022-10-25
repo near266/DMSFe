@@ -3,6 +3,35 @@
     border-top-width: 2px;
 }
 
+:host ::ng-deep .mat-select-panel {
+    // max-width: 500px;
+    max-width: fit-content !important;
+    // width: 500px;
+    background-color: red;
+}
+
+:host ::ng-deep .mat-option {
+    white-space: nowrap;
+    /* overflow: hidden; */
+    text-overflow: ellipsis;
+    display: block;
+    line-height: 48px;
+    height: 48px;
+    /* padding: 0 16px; */
+    text-align: left;
+    text-decoration: none;
+    max-width: 100%;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    flex-direction: row;
+    min-width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
 :host ::ng-deep .mat-form-field-wrapper {
     padding-bottom: 8px !important;
 }

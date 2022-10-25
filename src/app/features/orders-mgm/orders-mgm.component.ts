@@ -38,7 +38,13 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     ngOnInit(): void {
         this.purchaseOrderService.page.subscribe((data) => {
             this.page = data;
-            this.search(this.searchAllBody);
+            let body = {
+                sortField: 'CreatedDate',
+                isAscending: false,
+                page: this.page,
+                pageSize: this.pageSize,
+            };
+            this.search(body);
         });
         this.dataService.searchText.subscribe((data) => {
             const body = {

@@ -1,5 +1,6 @@
 import { Component, OnChanges, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { FormatService } from '../../../services/format.service';
 
@@ -13,7 +14,12 @@ export class PromotionTableComponent implements OnInit, OnChanges {
     @Output() listPromotionProductAdd$ = new EventEmitter<[]>();
     listChoosenProductPromotion: any = [];
     listPromotionProductAdd: any = [];
-    constructor(private dialog: MatDialog, private formatService: FormatService) {}
+    listSearchedProduct: any = [];
+    constructor(
+        private dialog: MatDialog,
+        private formatService: FormatService,
+        private purchaseOrder: PurchaseOrderService,
+    ) {}
 
     ngOnInit(): void {}
 
@@ -87,11 +93,33 @@ export class PromotionTableComponent implements OnInit, OnChanges {
         this.pushListProductPromotionToDialog();
     }
 
+    searchListProduct(e: any) {
+        const body = {
+            keyword: e.target.value,
+            sortBy: {
+                property: 'CreatedDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 5,
+        };
+        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+            console.log(data);
+            this.listSearchedProduct = data?.data;
+        });
+    }
+
     pushListProductPromotionToDialog() {
         this.listChoosenProductPromotion = this.listPromotionProductAdd.map((product: any) => {
             return {
                 id: product.product.id,
             };
         });
+    }
+
+    addProductPromotionBySearch(product: any) {
+        let productAfterFormat = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
+        this.listPromotionProductAdd.push(productAfterFormat[0]);
+        this.pushListProductPromotionToDialog();
     }
 }

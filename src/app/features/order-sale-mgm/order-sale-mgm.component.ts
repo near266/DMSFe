@@ -22,7 +22,7 @@ export class OrderSaleMgmComponent implements OnInit {
     total: number = 0;
     id: any = [];
     roleMain = 'member';
-    formFilterReceive:any;
+    formFilterReceive: any;
 
     searchAllBody = {
         sortField: 'CreatedDate',
@@ -43,7 +43,13 @@ export class OrderSaleMgmComponent implements OnInit {
         this.roleMain = localStorage.getItem('roleMain')!;
         this.saleReceiptService.page.subscribe((data) => {
             this.page = data;
-            this.search(this.searchAllBody);
+            let body = {
+                sortField: 'CreatedDate',
+                isAscending: false,
+                page: this.page,
+                pageSize: this.pageSize,
+            };
+            this.search(body);
         });
         this.dataService.searchText.subscribe((data) => {
             const body = {
@@ -67,7 +73,6 @@ export class OrderSaleMgmComponent implements OnInit {
     search(body: any) {
         this.saleReceiptService.searchReceipt(body).subscribe((data) => {
             console.log(data);
-
             this.listReceiptOrder = data.data;
             this.total = data.totalCount;
             this.saleReceiptService.setTotal(this.total);
@@ -115,36 +120,41 @@ export class OrderSaleMgmComponent implements OnInit {
         console.log(this.id);
     }
 
-    receiveFilter(event:any){
-      console.log(event);
-      this.formFilterReceive = event;
-
+    receiveFilter(event: any) {
+        console.log(event);
+        this.formFilterReceive = event;
     }
 
     export() {
-      let body;
-      if(this.id.length == 0){
-        body = {
-          filter: this.formFilterReceive,
-          listId: null,
-          type: 1,
-        };
-      }else{
-        body = {
-          filter: null,
-            listId: this.id,
-            type: 2,
+        let body;
+        if (this.id.length == 0) {
+            body = {
+                filter: this.formFilterReceive,
+                listId: null,
+                type: 1,
+            };
+        } else {
+            body = {
+                filter: null,
+                listId: this.id,
+                type: 2,
+            };
         }
-      }
-      console.log(body);
-      this.saleReceiptService.export(body).subscribe({
-          next: (data) => {
-            const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-            const url = window.URL.createObjectURL(blob);
-            window.open(url)
-          },
-      });
-      console.log('export');
-      console.log(body);
+        console.log(body);
+        this.saleReceiptService.export(body).subscribe({
+            next: (data) => {
+                const blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url);
+            },
+        });
+        console.log('export');
+        console.log(body);
+    }
+
+    filter(body: any) {
+        this.search(body);
     }
 }

@@ -39,6 +39,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     listWarehouse: any[] = [];
     listChoosenProduct2: any[] = [];
     listPromotionProductAdd: any = [];
+    listSearchedProduct: any[] = [];
 
     debtLimit: any;
     totalAmount: number = 0;
@@ -392,4 +393,38 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     setProductPromotionAdd(e: any) {
         this.listPromotionProductAdd = e;
     }
+
+    searchListProduct(e: any) {
+        const body = {
+            keyword: e.target.value,
+            sortBy: {
+                property: 'CreatedDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 5,
+        };
+        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+            console.log(data);
+            this.listSearchedProduct = data?.data;
+        });
+    }
+
+    addProductBySearch(product: any) {
+        product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+        product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+        product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+        this.listChoosenProduct.push(product);
+        this.pushListProductToDialog();
+    }
+
+    addProductPromotionBySearch(product: any) {
+        product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+        product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+        product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+        this.listChoosenProduct.push(product);
+        this.pushListProductToDialog();
+    }
+
+    
 }

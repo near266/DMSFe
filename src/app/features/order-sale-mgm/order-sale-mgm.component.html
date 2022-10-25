@@ -1,8 +1,10 @@
 <div class="flex w-full">
     <div class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
-        <app-sidebar (isShowSidebarOutput)="isShowSidebar($event)" (formFilterFromChild)="receiveFilter($event)"></app-sidebar>
+        <app-sidebar
+            (isShowSidebarOutput)="isShowSidebar($event)"
+            (formFilterFromChild)="receiveFilter($event)"
+            (bodyFilter)="filter($event)"></app-sidebar>
     </div>
-
     <div
         [ngClass]="{ 'ml-60': isShowSidebarToMargin, 'ml-10': !isShowSidebarToMargin }"
         class="fixed bottom-10 top-16 z-0 px-5">
