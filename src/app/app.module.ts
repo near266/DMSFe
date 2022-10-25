@@ -27,6 +27,7 @@ registerLocaleData(localeVi);
         { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
         DataService,
         CurrencyPipe,
+
     ],
     bootstrap: [AppComponent],
 })
