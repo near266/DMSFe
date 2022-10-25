@@ -22,7 +22,7 @@
             <span class="text-sm">Nhân viên</span>
           </div>
           <div *ngIf="hasEmployee" class="text-xs">
-            <app-menu-collapse-tree></app-menu-collapse-tree>
+            <app-menu-collapse-tree (newItemEvent)="searchUser($event)"></app-menu-collapse-tree>
           </div>
         </div>
         <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
@@ -140,25 +140,25 @@
                   <tbody *ngIf="response != null">
                       <tr class="h-14 w-fit text-xs" *ngFor="let user of response.data; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                          <td class="border-x w-fit border-solid align-middle px-2 cursor-pointer" (click)="DetailCustomer(user.id)">{{user.customerName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md cursor-pointer" (click)="DetailCustomer(user.id)">{{user.customerName}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2">
                               {{user.customerGroup? user.customerGroup.customerGroupName: ''}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.customerType ? user.customerType.customerTypeName : ''}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{this.datePipe.transform(user.lastModifiedDate, 'dd/MM/yyyy')}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.channel ? user.channel.channelName : ''}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.address}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.deliveryAddress}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.province}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.district}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2"> {{user.dob}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.contactName}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.position}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.phone}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.email}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.debtLimit}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.cashAcc}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.createdBy}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2">{{user.lastModifiedBy}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.customerType ? user.customerType.customerTypeName : ''}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{this.datePipe.transform(user.lastModifiedDate, 'dd/MM/yyyy')}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.channel ? user.channel.channelName : ''}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.address}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.deliveryAddress}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.province}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.district}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md"> {{user.dob}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.contactName}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.position}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.phone}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.email}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.debtLimit}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.cashAcc}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.createdBy}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md">{{user.lastModifiedBy}} </td>
                       </tr>
                   </tbody>
               </table>

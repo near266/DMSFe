@@ -1,31 +1,26 @@
-<div class=" bg-white mx-6 my-1 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
-  <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
-  <input class="bg-white text-xs h-full w-full"
-    placeholder="Tìm kiếm">
-</div>
-<div class="m-6">
-  <tree-root [ngClass]="'expand-tree'" class="reverse" [nodes]="nodes" [options]="options" (contextmenu)="Config($event)">
-    <ng-template #treeNodeTemplate let-node let-index="index">
-      <!-- Đây là điều kiện để đặt cái icon tất cả -->
-      <i *ngIf="node.data.level === -1" class="fa-solid fa-sitemap mr-1 text-blue-600 text-medium"></i>
+<tree-root #tree [ngClass]="'expand-tree'" class="reverse"  [nodes]="nodes" [options]="options" (contextmenu)="Config($event)">
+  <ng-template #treeNodeTemplate let-node  let-index="index">
+    <!-- Đây là điều kiện để đặt cái icon tất cả -->
+    <i *ngIf="node.data.level === -1" class="fa-solid fa-sitemap mr-1 text-blue-600 text-medium"></i>
 
+    <!-- T có thử vài icon với vài nhóm khác nhau trả về từ api nếu cần m cứ *ngIf ra thôi là đc, nên bảo BE chỉnh icon giống nhau vs cùng 1 loại type. VD công ty để là company, user,manager,... -->
+    <i *ngIf="node.data.type == 0 && node.data.level != -1 " class="fa-solid fa-building  mr-1 text-orange-600 text-medium"></i>
+    <i *ngIf="node.data.type == 1" class="fa-solid fa-users mr-1 text-green-600 text-medium"></i>
+    <i *ngIf="node.data.type == 2" class="fa-solid mr-1 text-[#0369A1] fa-user"></i>
+    <!-- <i *ngIf="node.data.code === 'nhom2'" class="fa-solid fa-users mr-1 text-blue-600 text-medium"></i>
+    <i *ngIf="node.data.code === 'DV1'" class="fa-solid fa-user mr-1 text-green-600 text-medium"></i>
+    <i *ngIf="node.data.code === 'dv2'" class="fa-solid fa-user mr-1 text-blue-600 text-medium"></i> -->
+    <!-- ... tương tự với các icon khác -->
 
-      <!-- T có thử vài icon với vài nhóm khác nhau trả về từ api nếu cần m cứ *ngIf ra thôi là đc, nên bảo BE chỉnh icon giống nhau vs cùng 1 loại type. VD công ty để là company, user,manager,... -->
-      <i *ngIf="node.data.code === 'NNP'" class="fa-solid fa-users mr-1 text-orange-600 text-medium"></i>
-      <i *ngIf="node.data.code === '89990'" class="fa-solid fa-building mr-1 text-green-600 text-medium"></i>
-      <i *ngIf="node.data.code === 'nhom2'" class="fa-solid fa-users mr-1 text-blue-600 text-medium"></i>
-      <i *ngIf="node.data.code === 'DV1'" class="fa-solid fa-user mr-1 text-green-600 text-medium"></i>
-      <i *ngIf="node.data.code === 'dv2'" class="fa-solid fa-user mr-1 text-blue-600 text-medium"></i>
-      <!-- ... tương tự với các icon khác -->
+    <span class="relative" [class]="node.data.className + 'Index'">{{ node.data.name }}</span>
+    <!-- <span class="ml-1"
+    *ngIf="getTotalItemInTreeWithNoChildren(node.data.children)">({{getTotalItemInTreeWithNoChildren(node.data.children)}})</span> -->
+    <div *ngIf="node.data.expand == true"  class=" bg-blue-100 z-50 absolute">
 
+      <div (click)="menuBar(item, node)" class="w-[160px] hover:bg-white p-3 font-medium" *ngFor="let item of node.data.menubar">
+        {{item}}
+      </div>
+    </div>
+  </ng-template>
+</tree-root>
 
-
-      <span [class]="node.data.className + 'Index'">{{ node.data.name }}</span>
-      <span class="ml-1"
-        *ngIf="getTotalItemInTreeWithNoChildren(node.data.children)">({{getTotalItemInTreeWithNoChildren(node.data.children)}})</span>
-    </ng-template>
-    <ng-template #loadingTemplate let-node>
-      <div [class]="node.data.className + 'Loading'">Loading {{ node.data.title }}...</div>
-    </ng-template>
-  </tree-root>
-</div>

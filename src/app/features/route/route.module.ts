@@ -33,7 +33,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     SharedModule,
-    UserManageModule,
+    // UserManageModule,
     RouterModule.forChild(routes)
   ]
 })

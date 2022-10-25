@@ -22,6 +22,7 @@ export class OrderSaleMgmComponent implements OnInit {
     total: number = 0;
     id: any = [];
     roleMain = 'member';
+    formFilterReceive:any;
 
     searchAllBody = {
         sortField: 'CreatedDate',
@@ -114,39 +115,36 @@ export class OrderSaleMgmComponent implements OnInit {
         console.log(this.id);
     }
 
+    receiveFilter(event:any){
+      console.log(event);
+      this.formFilterReceive = event;
+
+    }
+
     export() {
-        let body = {
-            filter: null,
-            // null || {
-            //   keyword: '',
-            //     deliveryDate: '',
-            //     orderEmployeeId: '',
-            //     customerTypeId: '',
-            //     customerGroupId: '',
-            //     areaId: '',
-            //     productKey: '',
-            //     status: '',
-            //     printStatus: null,
-            //     paymentMethod: '',
-            //     page: '',
-            //     pageSize: '',
-            //     sortField: '',
-            //     isAscending: null,
-            //     fromDate: '',
-            //     toDate: '',
-            //     dateFilter: '',
-            // },
+      let body;
+      if(this.id.length == 0){
+        body = {
+          filter: this.formFilterReceive,
+          listId: null,
+          type: 1,
+        };
+      }else{
+        body = {
+          filter: null,
             listId: this.id,
             type: 2,
-        };
-        console.log(body);
-
-        this.saleReceiptService.export(body).subscribe({
-            next: (data) => {
-                console.log(data);
-            },
-        });
-        console.log('export');
-        console.log(body);
+        }
+      }
+      console.log(body);
+      this.saleReceiptService.export(body).subscribe({
+          next: (data) => {
+            const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+            const url = window.URL.createObjectURL(blob);
+            window.open(url)
+          },
+      });
+      console.log('export');
+      console.log(body);
     }
 }
