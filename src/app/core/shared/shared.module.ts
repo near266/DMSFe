@@ -107,7 +107,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
         ReactiveFormsModule,
         TreeModule,
         NgxPaginationModule,
-        NgSelectModule
+        NgSelectModule,
     ],
     exports: [
         CurrencyMaskModule,
