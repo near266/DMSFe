@@ -34,6 +34,7 @@ export class AddProductDetailsComponent implements OnInit {
         importRetailPrice: 0,
         inventoryWarning: 0,
         price: 0,
+        stt: 0,
         priceAcc: null,
         productDescription: null,
         productName: null,
@@ -65,6 +66,16 @@ export class AddProductDetailsComponent implements OnInit {
                 placeholder: 'Trạng thái',
                 required: true,
                 options: status,
+            },
+        },
+        {
+            key: 'stt',
+            type: 'product-input',
+            defaultValue: null,
+            templateOptions: {
+                type: 'number',
+                label: 'Số thứ tự',
+                placeholder: 'Số thứ tự',
             },
         },
         {
@@ -281,9 +292,8 @@ export class AddProductDetailsComponent implements OnInit {
             } else {
                 this.productApiService.updateProduct(product).subscribe({
                     next: (res) => {
-                        console.log(product);
                         this.dialogRef.closeAll();
-                        this.productService.getAllProducts();
+                        this.productService.getInititalProducts(1);
                     },
                     error: (err) => {
                         console.log(err);

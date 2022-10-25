@@ -10,6 +10,7 @@ import { ProductService } from './services/product.service';
 import { sortList } from './utils/sort';
 import { ProductDialogService } from './services/product-dialog.service';
 import { RolesService } from 'src/app/core/services/roles.service';
+import { FilterService } from './services/filter.service';
 
 @Component({
     selector: 'app-product',
@@ -28,6 +29,7 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit {
         public datepipe: DatePipe,
         private sidenavService: SidenavService,
         private router: Router,
+        private filterService: FilterService,
         private rolesService: RolesService,
         private productService: ProductService,
     ) {}
@@ -42,6 +44,9 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit {
     ngDoCheck(): void {}
     select(event: any) {
         console.log(event);
+        this.filterService.currentFiler$.next(event.key);
+        this.filterService.isAscending$.next(event.isAsc);
+        this.productService.getProductsByPage(1);
     }
     addUser() {
         this.dialogService.openProductDialog();

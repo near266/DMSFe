@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, take, tap } from 'rxjs';
 import { ProductApiService } from '../apis/product.api.service';
-import products from '../mocks/product';
 import { Product } from '../models/product';
+import { FilterService } from './filter.service';
 @Injectable({
     providedIn: 'root',
 })
@@ -26,33 +26,50 @@ export class ProductService {
     public startAndEndIndex$ = this.startAndEndIndex.asObservable();
     public totalProducts$ = this.totalProducts.asObservable();
 
-    constructor(private productApiService: ProductApiService) {}
+    constructor(private productApiService: ProductApiService, private filterService: FilterService) {}
 
     setCurrentPage(currentPage: number) {
-        this.currentPage.next(currentPage);
-        this.calculateStartAndEndPage();
+        this.getProductsByPage(currentPage).subscribe((data: any) => {
+            this.products.next(data.data);
+            this.totalProducts.next(data.totalCount);
+            this.currentPage.next(currentPage);
+            this.calculateStartAndEndPage();
+        });
+    }
+    getInititalProducts(page: number = 1) {
+        this.getProductsByPage(1)
+            .pipe(take(1))
+            .subscribe((res: any) => {
+                this.products.next(res.data);
+                this.totalProducts.next(res.totalCount || 0);
+            });
+    }
+    getProductsByPage(page: number) {
+        const type =
+            this.filterService.currentFiler$.getValue() === ''
+                ? 'CreatedDate'
+                : this.filterService.currentFiler$.getValue();
+        const ascending = this.filterService.isAscending$.getValue();
+        const settings = {
+            sortBy: {
+                property: type,
+                value: ascending,
+            },
+            page,
+            pageSize: 30,
+        };
+        return this.productApiService.getAllProducts(settings);
     }
 
     calculateStartAndEndPage() {
-        const currentPage = this.currentPage.value;
-        const currentPageSize = this.currentPageSize.value;
+        const currentPage = this.currentPage.getValue();
+        const currentPageSize = this.currentPageSize.getValue();
         const start = (currentPage - 1) * currentPageSize + 1;
-        //end is the length of defaultProducts if it is bigger than length of defaultProducts
-        const end = Math.min(currentPage * currentPageSize + 1, this.defaultProducts.length);
+        //end is the length of defaultReturns if it is bigger than length of defaultReturns
+        console.log(currentPageSize, currentPage, start);
+
+        const end = Math.min(currentPage * currentPageSize + 1, this.totalProducts?.getValue() || 0);
+
         this.startAndEndIndex.next({ start, end });
-    }
-    public getAllProducts() {
-        const settings = {
-            sortBy: {
-                property: 'createdDate',
-                value: true,
-            },
-            page: 1,
-            pageSize: 30,
-        };
-        this.productApiService.getAllProducts(settings).subscribe((res: { data: Product[]; totalCount: number }) => {
-            this.products.next(res.data);
-            this.totalProducts.next(res.totalCount);
-        });
     }
 }

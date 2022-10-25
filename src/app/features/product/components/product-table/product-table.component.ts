@@ -14,11 +14,15 @@ export class ProductTableComponent implements OnInit {
     currentPage: number;
     products: Product[] = [];
     headers = tableHeader;
+    totalItems: number;
     constructor(private productService: ProductService, private productDialogService: ProductDialogService) {}
     ngOnInit(): void {
-        this.productService.getAllProducts();
+        this.productService.getInititalProducts();
         this.productService.products$.subscribe((data: Product[]) => {
             this.products = data;
+        });
+        this.productService.totalProducts$.subscribe((data: number) => {
+            this.totalItems = data;
         });
         this.productService.currentPage$.subscribe((data: number) => {
             this.currentPage = data;

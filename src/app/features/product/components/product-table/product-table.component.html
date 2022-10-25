@@ -12,13 +12,13 @@
   </thead>
   <tbody>
     <tr (click)="openUpdateProduct(product)" class="h-14 w-fit text-xs"
-      *ngFor="let product of products | paginate: { itemsPerPage: 30, currentPage };let i =index; let o=odd; let e=even;"
+      *ngFor="let product of products | paginate: { itemsPerPage: 30, currentPage,totalItems };let i =index; let o=odd; let e=even;"
       [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
       <td class="space-x-2 min-w-[56px] border-x border-solid align-midde h-full pl-2 "><input class="inline"
           type="checkbox"><i *ngIf="!product?.status" class="fa-solid fa-lock text-base text-[#2e799c]"></i><i
           *ngIf="product.status" class="fa-solid fa-lock-open text-base text-[#2e799c]"></i>
       </td>
-      <td class="border-x  border-solid align-middle px-2">{{i+1}}
+      <td class="border-x  border-solid align-middle px-2">{{product?.stt}}
       </td>
       <td class="border-x  border-solid align-middle px-2">{{product.brand?.brandName}}
       </td>

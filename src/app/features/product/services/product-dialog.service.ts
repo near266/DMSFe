@@ -84,7 +84,7 @@ export class ProductDialogService {
             return this.productApiService.deleteProduct(id).subscribe({
                 next: () => {
                     this.dialogService.closeAll();
-                    this.productService.getAllProducts();
+                    this.productService.getInititalProducts(1);
                 },
                 error: (err: HttpErrorResponse) => {
                     console.log(err);
