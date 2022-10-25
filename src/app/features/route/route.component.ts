@@ -235,7 +235,7 @@ export class RouteComponent implements OnInit, AfterViewInit {
   openDetailRoute(id: any) {
     const dialogRef = this.dialog.open(AddRouterComponent, {
       height: '95vh',
-      minWidth: '50%',
+      minWidth: '95%',
       data: {
         "id": id,
         "type": "update"
@@ -244,14 +244,12 @@ export class RouteComponent implements OnInit, AfterViewInit {
   }
 
   changePage(event: any){
-    console.log(event);
+    // console.log(event);
     this.init((event.pageIndex + 1).toString())
   }
 
   setPageSizeOptions(setPageSizeOptionsInput: string) {
-  console.log(setPageSizeOptionsInput);
-  console.log("A");
-
+    // console.log(setPageSizeOptionsInput);
     if (setPageSizeOptionsInput) {
     //  this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
     }
@@ -266,8 +264,7 @@ export class RouteComponent implements OnInit, AfterViewInit {
   }
 
   searchUser(request: any) {
-    console.log(request);
-
+    // console.log(request);
     if (request != 'root') {
 
     } else {

@@ -41,29 +41,28 @@ export class InforRouterComponent implements OnInit {
     unitTreeGroupId: [''],
     routeDate: [''],
     startedDate: [''],
-    status: true,
+    status: [''],
   });
 
   EmployeeInGroup:any;
   ngOnInit(): void {
-    console.log(this.idRoute);
+    // console.log(this.idRoute);
     this.getRouteDetail();
     this.dataService.employee.subscribe({
       next: data => {
         if(data !== ""){
-          console.log("Patch",data);
-        this.formInforRouteUpdate.patchValue({
-          // startedDate: new Date(this.formatDate).toISOString(),
-          unitTreeGroupId: this.RootInfoRouteDetail.unitTreeGroup?.id,
-          id: this.RootInfoRouteDetail.id,
-        });
-        console.log("Form Update", this.formInforRouteUpdate.value);
+          this.formInforRouteUpdate.patchValue({
+            // startedDate: new Date(this.formatDate).toISOString(),
+            // unitTreeGroupId: this.RootInfoRouteDetail?.unitTreeGroup?.id,
+            id: this.RootInfoRouteDetail?.id,
+          });
+          // console.log("Form Update", this.formInforRouteUpdate.value);
 
         if(this.typeRoute == "update"){
-          console.log('Update');
+          // console.log('Update');
           this._routeSer.UpdateRoute(this.formInforRouteUpdate.value).subscribe({
             next: data => {
-              console.log(data);
+              // console.log(data);
               this.getRouteDetail();
               this._snackBar.openSnackbar("Cập nhật thành công!", 3000, "", "right", "bottom", true)
             }
@@ -73,10 +72,10 @@ export class InforRouterComponent implements OnInit {
           // this.formInforRouteUpdate.setValue({
           //   unitTreeGroupId: this.unitTreeGroupIdTemp
           // })
-          console.log("Form Add", this.formInforRouteUpdate.value);
+          // console.log("Form Add", this.formInforRouteUpdate.value);
           this._routeSer.AddRoute(this.formInforRouteUpdate.value).subscribe({
             next: data => {
-              console.log(data);
+              // console.log(data);
               this.getRouteDetail();
               this._snackBar.openSnackbar("Tạo tuyến thành công!", 3000, "", "right", "bottom", true)
             }
@@ -90,16 +89,19 @@ export class InforRouterComponent implements OnInit {
   getRouteDetail(){
     this._routeSer.GetRouteById(this.idRoute).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.RootInfoRouteDetail = data;
         this.formatDate = data.startedDate.split("T")[0];
-        console.log(this.formatDate);
+        // console.log(this.formatDate);
         this.groupName = data.unitTreeGroup.name;
         this.SearchEmployeeInGroup(data.unitTreeGroup.id)
       }
     })
   };
+
+
   getIdName(event:any){
+    // console.log("Choose Tree", event);
     this.groupName = event.name;
     this.showGroup = !this.showGroup;
     this.unitTreeGroupIdTemp = event.id
@@ -116,10 +118,10 @@ export class InforRouterComponent implements OnInit {
       pagesize: 10000
 
     }
-    console.log(body);
+    // console.log("Get List Employee",body);
     this.customerGroupSer.SearchEmployeeInGroup(body).subscribe({
       next: data => {
-        console.log(data);
+        // console.log("List Employee",data);
         this.EmployeeInGroup = data.data;
       }
     })
