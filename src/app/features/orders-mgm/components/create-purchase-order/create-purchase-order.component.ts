@@ -39,6 +39,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     listWarehouse: any[] = [];
     listChoosenProduct2: any[] = [];
     listPromotionProductAdd: any = [];
+    listSearchedProduct: any[] = [];
 
     debtLimit: any;
     totalAmount: number = 0;
@@ -391,5 +392,21 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
 
     setProductPromotionAdd(e: any) {
         this.listPromotionProductAdd = e;
+    }
+
+    searchListProduct(e: any) {
+        const body = {
+            keyword: e.target.value,
+            sortBy: {
+                property: 'createdDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 5,
+        };
+        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+            console.log(data);
+            this.listSearchedProduct = data?.data;
+        });
     }
 }

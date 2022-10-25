@@ -3,6 +3,12 @@
     border-top-width: 2px;
 }
 
+:host ::ng-deep .mat-select-panel {
+    max-width: 400px !important;
+    overflow-y: scroll;
+    overflow-x: auto;
+}
+
 :host ::ng-deep .mat-form-field-wrapper {
     padding-bottom: 8px !important;
 }
