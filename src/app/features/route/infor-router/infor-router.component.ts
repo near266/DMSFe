@@ -6,6 +6,7 @@ import { DataService } from 'src/app/core/services/data.service';
 import { RouteService } from 'src/app/core/services/route.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { RootInfoRoute } from '../models/infor-router';
+import { RootSearchAllCusInRoute } from '../models/searchAllCusInRoute';
 
 @Component({
   selector: 'app-infor-router',
@@ -31,6 +32,7 @@ export class InforRouterComponent implements OnInit {
   showGroup:boolean = false;
   RootInfoRouteDetail :RootInfoRoute;
   groupName:any;
+  listAllCusInRouteData: RootSearchAllCusInRoute = new RootSearchAllCusInRoute;
 
 
   headerTable = [
@@ -54,11 +56,16 @@ export class InforRouterComponent implements OnInit {
     startedDate: [''],
     status: [''],
   });
-
   EmployeeInGroup:any;
+
+
   ngOnInit(): void {
-    // console.log(this.idRoute);
-    this.getRouteDetail();
+    this.dataService.changeEmployee('');
+    if(this.typeRoute == 'update'){
+      this.getRouteDetail();
+      this.searchAllCusInRoute(this.idRoute);
+    }else{
+    }
     this.dataService.employee.subscribe({
       next: data => {
         if(data !== ""){
@@ -67,8 +74,6 @@ export class InforRouterComponent implements OnInit {
             // unitTreeGroupId: this.RootInfoRouteDetail?.unitTreeGroup?.id,
             id: this.RootInfoRouteDetail?.id,
           });
-          // console.log("Form Update", this.formInforRouteUpdate.value);
-
         if(this.typeRoute == "update"){
           // console.log('Update');
           this._routeSer.UpdateRoute(this.formInforRouteUpdate.value).subscribe({
@@ -94,15 +99,22 @@ export class InforRouterComponent implements OnInit {
         }
         }
       }
-    })
-
+    });
   }
+
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+  }
+
+
+
   getRouteDetail(){
     this._routeSer.GetRouteById(this.idRoute).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         this.RootInfoRouteDetail = data;
-        this.formatDate = data.startedDate.split("T")[0];
+        this.formatDate = data.startedDate?.split("T")[0];
         // console.log(this.formatDate);
         this.groupName = data.unitTreeGroup.name;
         this.SearchEmployeeInGroup(data.unitTreeGroup.id)
@@ -134,6 +146,20 @@ export class InforRouterComponent implements OnInit {
       next: data => {
         // console.log("List Employee",data);
         this.EmployeeInGroup = data.data;
+      }
+    })
+  }
+
+  searchAllCusInRoute(id:any){
+    let body = {
+      routeId: id,
+      page: 1,
+      pageSize: 10000
+    }
+    this._routeSer.SearchAllCusInRoute(body).subscribe({
+      next: (data:RootSearchAllCusInRoute) => {
+        this.listAllCusInRouteData = data as RootSearchAllCusInRoute;
+        console.log(data);
       }
     })
   }

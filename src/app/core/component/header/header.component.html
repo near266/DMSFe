@@ -92,19 +92,18 @@
         <li class="mr-4  font-medium hover:opacity-70 cursor-pointer">Trợ giúp</li>
     </ul>
     <div class="flex items-center">
-        <div class="mr-6 cursor-pointer hover:opacity-70">
+        <div class="mr-6 cursor-pointer hover:opacity-70 text-blue-text">
             <i class="fa-solid fa-bell fa-xl"></i>
         </div>
-        <div class="mr-6 cursor-pointer hover:opacity-70">
+        <div class="mr-6 cursor-pointer hover:opacity-70 text-green-text">
             <i class="fa-solid fa-download fa-xl"></i>
         </div>
-        <div
-            [matMenuTriggerFor]="menu"
-            class="cursor-pointer overflow-hidden relative w-10 h-10 bg-gray-100 rounded-full dark:bg-gray-600">
+        <div [matMenuTriggerFor]="menu"
+            class="cursor-pointer overflow-hidden relative w-10 h-10 bg-gray-100 rounded-full dark:bg-gray-500">
             <img [src]="annonimousAvatar" alt="" />
         </div>
     </div>
-    <mat-menu #menu="matMenu">
+    <mat-menu #menu="matMenu" class="mt-2">
         <button mat-menu-item class="flex items-center">
             <i class="fa-solid fa-user text-lg mr-2"></i>
             <span>Tài khoản cá nhân</span>
