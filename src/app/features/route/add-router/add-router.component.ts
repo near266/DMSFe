@@ -21,8 +21,6 @@ export class AddRouterComponent implements OnInit {
     console.log(this.data);
   }
 
-
-
   add(e: any) {
     this.dataService.changeEmployee('add');
   }

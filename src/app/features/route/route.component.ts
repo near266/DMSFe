@@ -52,9 +52,9 @@ export class RouteComponent implements OnInit, AfterViewInit {
     this.init(this.page);
   }
 
-  init(page:any) {
-    this.routeService.SearchAllRoute(page, this.pageSize).subscribe( data => {
-      // console.log(data);
+  init(page:any, groupId?:any) {
+    this.routeService.SearchAllRoute(page, this.pageSize, groupId).subscribe( data => {
+      console.log(data);
       this.length = data.totalCount
       this.response = data;
     });
@@ -201,9 +201,12 @@ export class RouteComponent implements OnInit, AfterViewInit {
           ],
       },
   ];
+
+
   Select(e: any) {
       console.log(e);
-  }
+  };
+
   routes = [
       {
           id: 1,
@@ -225,7 +228,8 @@ export class RouteComponent implements OnInit, AfterViewInit {
   openAddRoute() {
     const dialogRef = this.dialog.open(AddRouterComponent, {
       height: '95vh',
-      minWidth: '900px',data: {
+      minWidth: '80%'
+      ,data: {
         "type": "add"
       }
     });
@@ -264,7 +268,10 @@ export class RouteComponent implements OnInit, AfterViewInit {
   }
 
   searchUser(request: any) {
-    // console.log(request);
+    console.log(request);
+
+    this.init(this.page, request);
+
     if (request != 'root') {
 
     } else {

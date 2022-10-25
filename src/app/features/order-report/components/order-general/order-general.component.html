@@ -22,13 +22,20 @@
     </div>
     <div class="flex h-full w-full pl-[26px] pb-9">
       <div class="flex w-full h-full relative flex-col">
-        <div class="z-0">
+        <div class="z-20">
           <!-- header -->
           <div class="p-3 flex justify-between items-center">
             <span class="text-xl font-medium">Báo cáo tổng hợp đơn hàng</span>
             <div class="space-x-3 flex items-center">
               <button class="rounded p-2 bg-blue-900 text-white">Tìm kiếm <i class="fa-solid fa-magnifying-glass ml-1"></i></button>
-              <button class="rounded p-2 bg-blue-900 text-white">Xuất Excel<i class="fa-solid fa-file-export ml-2"></i></button>
+              <button class="group rounded p-2 z-20 bg-blue-900 text-white relative whitespace-nowrap text-justify">
+                Xuất Excel
+                <i class="fa-solid fa-file-export ml-2"></i>
+                <div class="absolute hidden group-hover:block bg-gray-100 z-50 border border-solid border-gray-500 text-blue-text px-3 -bottom-18 -left-1 rounded">
+                  <div><i class="fa-solid fa-file-excel mr-2 py-3 "></i>Xuất gộp thông tin đơn hàng</div>
+                  <div><i class="fa-solid fa-file-invoice mr-2 py-3 "></i>Không xuất gộp thông tin đơn hàng</div>
+                </div>
+              </button>
               <mat-form-field appearance="outline" class="example-form-field">
                 <mat-label>Chọn ngày</mat-label>
                 <input matInput [matDatepicker]="datepicker">
