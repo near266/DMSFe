@@ -1,6 +1,7 @@
-<form [formGroup]="formInforRouteUpdate">
+<div class="w-full">
+  <form [formGroup]="formInforRouteUpdate" class="w-2/3">
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-bold">Mã tuyến</div>
+        <div class="font-medium">Mã tuyến</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
             <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'" [ngModel]="RootInfoRouteDetail?.routeCode" formControlName="routeCode">
@@ -8,7 +9,7 @@
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-bold">Tên tuyến</div>
+        <div class="font-medium">Tên tuyến</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
             <input formControlName="routeName" [ngModel]="RootInfoRouteDetail?.routeName"
@@ -17,7 +18,7 @@
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-bold">Nhóm</div>
+        <div class="font-medium">Nhóm</div>
         <div class="flex flex-row relative z-20">
           <div class="text-red-500 mr-4">*</div>
           <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" readonly [(ngModel)]="groupName" [ngModelOptions]="{standalone: true}" *ngIf="status != 'view'" (click)="showGroup = !showGroup">
@@ -28,7 +29,7 @@
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-bold">Nhân viên</div>
+        <div class="font-medium">Nhân viên</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
             <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
@@ -39,7 +40,7 @@
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-bold">Ngày đi tuyến</div>
+        <div class="font-medium">Ngày đi tuyến</div>
         <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'"
           formControlName="routeDate" [ngModel]="RootInfoRouteDetail?.routeDate">
           <option value="vn">Không giới hạn</option>
@@ -54,12 +55,12 @@
         <div class="w-96 text-xs" *ngIf="status == 'view'">.langKey}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-bold">Ngày bắt đầu</div>
+        <div class="font-medium">Ngày bắt đầu</div>
         <input type="date" formControlName="startedDate" [ngModel]="formatDate" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" >
         <!-- <div class="w-96 text-xs" *ngIf="status == 'view'">.phone}}</div> -->
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-bold">Trạng thái</div>
+        <div class="font-medium">Trạng thái</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
             <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
@@ -71,10 +72,58 @@
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-bold">Danh sách khách hàng</div>
+        <div class="font-medium">Danh sách khách hàng</div>
         <div class="relative z-0">
           <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7 pl-7" placeholder="Tìm kiếm khách hàng">
           <i class="fa-solid fa-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2"></i>
         </div>
     </div>
-</form>
+  </form>
+  <div class="mt-5">
+    <table class="w-full">
+      <thead class="h-10 w-full text-xs sticky top-0">
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">
+          <input type="checkbox">
+        </th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã khách hàng</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tên khách hàng</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Loại khách hàng</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Nhóm khách hàng</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Khu vực</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Địa chỉ</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Thứ tự VT</th>
+        <!-- <th class="border-x border-solid border-gray-300 px-2 bg-gray-100 text-center">
+          <thead class="w-full  block">Quang Duy</thead>
+          <thead class="w-full flex mt-3">
+            <th class="flex-1 flex items-center justify-center">W1 <input type="checkbox" class="h-4 w-4 ml-2"></th>
+            <th class="flex-1 flex items-center justify-center">W2 <input type="checkbox" class="h-4 w-4 ml-2"></th>
+            <th class="flex-1 flex items-center justify-center">W3 <input type="checkbox" class="h-4 w-4 ml-2"></th>
+          </thead>
+        </th> -->
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Xoá</th>
+      </thead>
+      <tbody>
+        <tr class="h-auto text-xs" *ngFor="let route of [1,3,4,5,6,7]; let o=odd; let e=even;"
+          [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
+          <td class="border-x border-solid align-middle px-2 py-3 flex justify-center items-center  ">
+            <input type="checkbox">
+          </td>
+          <td  class="border-x border-solid align-middle px-2 py-3">
+            <button *ngIf="route.status == true" class="text-xs bg-[#1891C9] text-white font-medium px-7 py-1 rounded-md">Hoạt động</button>
+            <button  *ngIf="route.status == false" class="text-xs bg-[#1891C9] text-white font-medium px-7 py-1 rounded-md">Không hoạt động</button>
+          </td>
+          <td class="border-x border-solid align-middle px-2 py-3 text-emerald-500 font-medium cursor-pointer"
+            (click)="openDetailRoute(route.id)">
+            {{route.routeCode}} </td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{route.routeName}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{route.employee?.employeeName}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{route.unitTreeGroup?.unitTreeGroup_Code}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3"></td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{datePipe.transform(route.createdDate,'dd-MM-YYYY')}}</td>
+          <!-- <td class="border-x border-solid align-middle px-2 py-3">{{datePipe.transform(route.lastModifiedDate,'dd-MM-YYYY')}}</td> -->
+          <td class="border-x border-solid align-middle px-2 py-3"> {{route.lastModifiedBy}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -33,6 +33,17 @@ export class InforRouterComponent implements OnInit {
   groupName:any;
 
 
+  headerTable = [
+    "Mã khách hàng",
+    "Tên khách hàng",
+    "Loại khách hàng",
+    "Nhóm khách hàng",
+    "Khu vực",
+    "Địa chỉ",
+    "Thứ tự VT",
+  ]
+
+
   formInforRouteUpdate =  this.fb.group({
     id: [''],
     routeCode: [''],
