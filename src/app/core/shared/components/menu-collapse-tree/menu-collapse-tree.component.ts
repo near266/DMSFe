@@ -91,7 +91,7 @@ export class MenuCollapseTreeComponent implements OnInit {
                 //   n.data.expand = false;
                 //   n.treeModel.update();
                 // }
-                this.newItemEvent.emit(node.data.id);
+                this.newItemEvent.emit(node.data.type + ',' + node.data.id);
                 // this.node_expand = node.data.id;
               }
             },

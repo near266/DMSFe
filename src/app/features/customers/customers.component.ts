@@ -35,7 +35,12 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   province = '';
   district = '';
   ward = '';
-  request: any;
+
+  request: any = {
+    keyword: '',
+    page: 1,
+    pageSize: 30
+  };
   current_page = 1;
 
   page = 1;
@@ -69,6 +74,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       }
     }
     this.request.status = event;
+    this.filter();
   }
 
   locationMenu: Config = {
@@ -110,7 +116,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   archiveMenu: Config = {
       icon: '<i class="fa-solid fa-briefcase"></i>',
       title: 'Lưu trữ',
-      menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
+      menuChildrens: ['Tất cả', 'Mở', 'Khóa'],
   };
 
   selectArchive(event: any) {
@@ -119,12 +125,12 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         event = null;
         break;
       }
-      case 'Hoạt động': {
-        event = true;
+      case 'Mở': {
+        event = false;
         break;
       }
-      case 'Không hoạt động': {
-        event = false;
+      case 'Khóa': {
+        event = true;
         break;
       }
       default: {
@@ -132,7 +138,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         break;
       }
     }
-    this.request.status = event;
+    this.request.archived = event;
+    this.filter();
   }
 
   customerMenu: Config = {
@@ -147,11 +154,11 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         event = null;
         break;
       }
-      case 'Hoạt động': {
+      case 'Khách hàng có mã': {
         event = true;
         break;
       }
-      case 'Không hoạt động': {
+      case 'Khách hàng không có mã': {
         event = false;
         break;
       }
@@ -160,7 +167,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         break;
       }
     }
-    this.request.status = event;
+    this.request.isCustomerCode = event;
+    this.filter();
   }
 
   categoryMenu: Config = {
@@ -284,6 +292,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       this.title.setTitle('Khách hàng');
       this.role = '' + localStorage.getItem('role');
       this.listRole = this.role.split(',');
+      this.request.page = 1;
+      this.request.pageSize = this.pageSize;
   }
 
   ngAfterViewInit(): void {
@@ -300,8 +310,9 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       page: page,
       pageSize: pageSize,
     };
+    this.request.page = page;
     this.current_page = page;
-    this.customerService.search(body).subscribe(
+    this.customerService.search(this.request).subscribe(
         (data) => {
             if(data) {
               this.response = data;
@@ -436,12 +447,9 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     } else {
       this.keywords = request;
     }
-    const body = {
-      keyword: this.keywords,
-      page: this.page,
-      pageSize: this.pageSize,
-    };
-    this.customerService.search(body).subscribe(
+    this.request.keyword = this.keywords;
+    this.request.page = this.page;
+    this.customerService.search(this.request).subscribe(
         (data) => {
             this.response = data;
             this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
@@ -489,12 +497,52 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
 
   searchUser(request: any) {
-    if (request != 'root') {
+    console.log(request);
 
+    const type = Number.parseInt(('' + request).split(',')[0]);
+    const id = ('' + request).split(',')[1];
+    console.log(id);
+
+    if(type == 0 || type == 1) {
+      this.request.groupId = id;
+      this.request.employeeId = null;
+    } else if(type == 2) {
+      this.request.groupId = null;
+      this.request.employeeId = id;
     } else {
-
+      this.request.groupId = null;
+      this.request.employeeId = null;
     }
+    this.filter();
+  }
 
+  filter() {
+    this.page = 1;
+    this.current_page = 1;
+    this.request.keyword = this.keywords;
+    this.request.page = this.page;
+    this.customerService.search(this.request).subscribe(
+        (data) => {
+            this.response = data;
+            this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
+            if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
+            this.pageList = [];
+            for(let i = 1; i <= this.totalPage; i++) {
+              this.pageList.push(i);
+            }
+            this.response.data.forEach((element) => {
+                if (element.status == true) element.status = 'Hoạt động';
+                else if (element.status == false) element.status = 'Không hoạt động';
+                else element.status = 'Không hoạt động';
+                if(element.dob) {
+                  element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
+                }
+            });
+        },
+        (error) => {
+            this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
+        },
+    );
   }
 
 }
