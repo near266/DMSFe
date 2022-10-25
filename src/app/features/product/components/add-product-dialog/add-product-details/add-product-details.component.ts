@@ -39,6 +39,7 @@ export class AddProductDetailsComponent implements OnInit {
         productName: null,
         retailPrice: 0,
         revenueAcc: null,
+        discountAcc: null,
         sectorId: null,
         sku: null,
         status: null,
@@ -221,6 +222,14 @@ export class AddProductDetailsComponent implements OnInit {
             },
         },
         {
+            key: 'discountAcc',
+            type: 'product-input',
+            templateOptions: {
+                label: 'Tài khoản chiết khấu',
+                placeholder: 'Nhập tài khoản',
+            },
+        },
+        {
             key: 'revenueAcc',
             type: 'product-input',
             templateOptions: {
@@ -259,15 +268,16 @@ export class AddProductDetailsComponent implements OnInit {
         if (!this.form.invalid) {
             if (!product.id) {
                 delete product.id;
-                this.productApiService.postProduct(product).subscribe({
-                    next: (res) => {
-                        this.dialogRef.closeAll();
-                        this.productService.getAllProducts();
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    },
-                });
+                console.log(product);
+                // this.productApiService.postProduct(product).subscribe({
+                //     next: (res) => {
+                //         this.dialogRef.closeAll();
+                //         this.productService.getAllProducts();
+                //     },
+                //     error: (err) => {
+                //         console.log(err);
+                //     },
+                // });
             } else {
                 this.productApiService.updateProduct(product).subscribe({
                     next: (res) => {
