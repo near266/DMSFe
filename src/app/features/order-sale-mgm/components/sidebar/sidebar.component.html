@@ -21,9 +21,9 @@
     <!-- Trạng thái in menu -->
     <app-menu-collapse (Selection)="selection2($event)" [Config]="statusPrintMenu"></app-menu-collapse>
     <!-- Viếng thăm menu -->
-    <app-menu-collapse (Selection)="selection3($event)" [Config]="visitionMenu"></app-menu-collapse>
+    <app-menu-collapse (Selection)="selection3($event)" [Config]="sourceMenu"></app-menu-collapse>
     <!-- Tuyến menu -->
-    <app-menu-collapse (Selection)="selection4($event)" [Config]="lineMenu"></app-menu-collapse>
+    <app-menu-collapse (Selection)="selection4($event)" [Config]="paymentMenu"></app-menu-collapse>
     <!-- Loại khách hàng menu -->
     <app-menu-collapse (Selection)="selection5($event)" [Config]="typeCustomerMenu"></app-menu-collapse>
     <!-- Nhóm khách hàng menu -->
@@ -33,18 +33,19 @@
         <i class="fa-solid fa-earth-americas mr-3 text-base"></i>
         <span class="text-sm">Khu vực</span>
     </div>
-    <!-- Lưu trữ menu -->
-    <app-menu-collapse (Selection)="selection8($event)" [Config]="storageMenu"></app-menu-collapse>
+    <!-- Người bán menu -->
+    <div class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+        <i class="fa-solid fa-thumbs-up mr-3"></i>
+        <span class="text-sm">Người bán</span>
+    </div>
     <!-- Ngày giao hàng menu -->
     <div class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
         <i class="fa-solid fa-truck-fast mr-3 text-base"></i>
         <span class="text-sm">Ngày giao hàng</span>
     </div>
-    <!-- Người duyệt menu -->
-    <div class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
-        <i class="fa-solid fa-check mr-3 text-base"></i>
-        <span class="text-sm">Người duyệt</span>
-    </div>
+    <!-- Lưu trữ menu -->
+    <app-menu-collapse (Selection)="selection8($event)" [Config]="storageMenu"></app-menu-collapse>
+
     <!-- Tìm kiếm theo sản phẩm -->
     <div
         (click)="isSearchByBill = !isSearchByBill"

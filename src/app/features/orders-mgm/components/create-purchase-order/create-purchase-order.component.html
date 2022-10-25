@@ -144,10 +144,7 @@
                                     required />
                             </div>
                         </div> -->
-                        <mat-form-field
-                            style="font-size: 8px; padding-bottom: 0px"
-                            appearance="outline"
-                            floatLabel="always">
+                        <mat-form-field style="font-size: 8px; padding-bottom: 0px" appearance="outline">
                             <mat-label style="font-size: 14px">Search</mat-label>
                             <mat-select style="font-size: 12px">
                                 <input
@@ -158,12 +155,13 @@
                                     class="h-10 rounded-sm" />
                                 <mat-option [value]="0">--Chọn sản phẩm--</mat-option>
                                 <mat-option
-                                    style="height: 52px"
-                                    class="flex"
+                                    (click)="addProductBySearch(product)"
+                                    style="height: 50px"
+                                    class="flex flex-col"
                                     *ngFor="let product of listSearchedProduct">
-                                    <div>
-                                        {{ product?.sku }} - {{ product.productName }} - Giá: {{ product?.price }} - Giá
-                                        lẻ: {{ product?.retailPrice }}
+                                    <div>{{ product?.sku }} - {{ product.productName }}</div>
+                                    <div class="mt-[-16px]">
+                                        Giá: {{ product?.price }} - Giá lẻ: {{ product?.retailPrice }}
                                     </div>
                                 </mat-option>
                             </mat-select>

@@ -102,7 +102,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
         this.purchaseOrder
             .getAllProduct({
                 sortBy: {
-                    property: 'createdDate',
+                    property: 'CreatedDate',
                     value: true,
                 },
                 page: 1,

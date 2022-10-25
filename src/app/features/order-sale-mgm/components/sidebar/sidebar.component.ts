@@ -23,15 +23,15 @@ export class SidebarComponent implements OnInit {
         title: 'Trạng thái in',
         menuChildrens: ['Tất cả', 'Đã in', 'Chưa in'],
     };
-    visitionMenu: Config = {
+    sourceMenu: Config = {
         icon: '<i class="fa-solid fa-house"></i>',
-        title: 'Viếng thăm',
-        menuChildrens: ['Tất cả', 'Có viếng thăm', 'Không viếng thăm'],
+        title: 'Nguồn',
+        menuChildrens: ['Tất cả', 'Từ phiếu đặt hàng', 'Thêm trực tiếp'],
     };
-    lineMenu: Config = {
-        icon: '<i class="fa-solid fa-shuffle"></i>',
-        title: 'Tuyến',
-        menuChildrens: ['Tất cả', 'Đúng tuyến', 'Không đúng tuyến'],
+    paymentMenu: Config = {
+        icon: '<i class="fa-solid fa-credit-card"></i>',
+        title: 'Thanh toán',
+        menuChildrens: ['Tất cả', 'Đã gạch nợ', 'Chưa gạch nợ'],
     };
     typeCustomerMenu: Config = {
         icon: '<i class="fa-solid fa-vest-patches"></i>',
