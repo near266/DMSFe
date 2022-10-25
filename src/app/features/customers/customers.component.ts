@@ -5,9 +5,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 
 import { customers } from 'src/app/core/data/Customers';
+import { Area } from 'src/app/core/model/Area';
+import { Channel } from 'src/app/core/model/Channel';
 import { Config } from 'src/app/core/model/Config';
+import { CustomerGroup } from 'src/app/core/model/CustomerGroup';
 import { Customers } from 'src/app/core/model/Customers';
+import { CustomerType } from 'src/app/core/model/CustomerType';
 import { Response } from 'src/app/core/model/Response';
+import { AreaService } from 'src/app/core/services/area.service';
+import { ChannelService } from 'src/app/core/services/channel.service';
+import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
+import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
 import { RolesService } from 'src/app/core/services/roles.service';
@@ -21,6 +29,11 @@ import { DetailCustomerComponent } from './detail-customer/detail-customer.compo
     styleUrls: ['./customers.component.scss'],
 })
 export class CustomersComponent implements OnInit, AfterViewInit {
+
+  customerGroup: CustomerGroup[] = [];
+  customerType: CustomerType[] = [];
+  channel: Channel[] = [];
+  area: Area[] = [];
   isProvince = false;
   hasEmployee = false;
   hasArea = false;
@@ -35,6 +48,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   province = '';
   district = '';
   ward = '';
+  areas = '';
 
   request: any = {
     keyword: '',
@@ -113,6 +127,19 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     this.request.status = event;
   }
 
+  selectArea(event: any) {
+    if(event == 'all') {
+      this.request.areaId = null;
+
+    } else if(event == 'none') {
+      this.request.areaId = '00000000-0000-0000-0000-000000000000';
+    } else {
+      this.request.areaId = event;
+    }
+    this.filter();
+    return;
+  }
+
   archiveMenu: Config = {
       icon: '<i class="fa-solid fa-briefcase"></i>',
       title: 'Lưu trữ',
@@ -176,101 +203,72 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       title: 'Loại khách hàng',
       menuChildrens: [
           'Tất cả',
-          'VIP 1',
-          'VIP 2',
-          'VIP 3',
-          'VIP 4',
-          'Tiềm năng',
-          'Thân thiết',
-          'Vãng lai',
-          'Không thuộc loại KH nào',
+          // 'VIP 1',
+          // 'VIP 2',
+          // 'VIP 3',
+          // 'VIP 4',
+          // 'Tiềm năng',
+          // 'Thân thiết',
+          // 'Vãng lai',
+          // 'Không thuộc loại KH nào',
       ],
   };
 
   selectCategory(event: any) {
-    switch(event) {
-      case 'Tất cả': {
-        event = null;
-        break;
-      }
-      case 'Hoạt động': {
-        event = true;
-        break;
-      }
-      case 'Không hoạt động': {
-        event = false;
-        break;
-      }
-      default: {
-        event = null;
-        break;
+    if(event == 'Tất cả' || event == '') {
+      this.request.customerTypeId = null;
+      this.filter();
+      return;
+    }
+    for(let i = 0; i < this.customerType.length; i++) {
+      if(event == this.customerType[i].customerTypeName) {
+        this.request.customerTypeId = this.customerType[i].id;
+        this.filter();
+        return;
       }
     }
-    this.request.status = event;
   }
 
   groupMenu: Config = {
       icon: '<i class="fa-solid fa-users"></i>',
       title: 'Nhóm khách hàng',
-      menuChildrens: ['Tất cả', 'Hợp đồng', 'KH lẻ', 'Không thuộc nhóm KH nào'],
+      menuChildrens: ['Tất cả'],
   };
 
   selectGroup(event: any) {
-    switch(event) {
-      case 'Tất cả': {
-        event = null;
-        break;
-      }
-      case 'Hợp đồng': {
-        event = true;
-        break;
-      }
-      case 'KH lẻ': {
-        event = false;
-        break;
-      }
-      case 'Không thuộc nhóm KH nào': {
-        event = false;
-        break;
-      }
-      default: {
-        event = null;
-        break;
+    if(event == 'Tất cả' || event == '') {
+      this.request.customerGroupId = null;
+      this.filter();
+      return;
+    }
+    for(let i = 0; i < this.customerGroup.length; i++) {
+      if(event == this.customerGroup[i].customerGroupName) {
+        this.request.customerGroupId = this.customerGroup[i].id;
+        this.filter();
+        return;
       }
     }
-    this.request.status = event;
   }
 
   channelMenu: Config = {
       icon: '<i class="fa-solid fa-retweet"></i>',
       title: 'Kênh',
-      menuChildrens: ['Tất cả', 'OTC', 'ETC', 'Không thuộc kênh nào'],
+      menuChildrens: ['Tất cả'],
   };
 
   selectChannel(event: any) {
-    switch(event) {
-      case 'Tất cả': {
-        event = null;
-        break;
-      }
-      case 'Hợp đồng': {
-        event = true;
-        break;
-      }
-      case 'KH lẻ': {
-        event = false;
-        break;
-      }
-      case 'Không thuộc nhóm KH nào': {
-        event = false;
-        break;
-      }
-      default: {
-        event = null;
-        break;
+    if(event == 'Tất cả' || event == '') {
+      this.request.channelId = null;
+      this.filter();
+      return;
+    }
+    for(let i = 0; i < this.channel.length; i++) {
+      if(event == this.channel[i].channelName) {
+        this.request.channelId = this.channel[i].id;
+        this.filter();
+        return;
       }
     }
-    this.request.status = event;
   }
 
   listProvinces: any[] = [];
@@ -285,7 +283,11 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       public datePipe: DatePipe,
       private provincesService: ProvincesService,
       private fb: FormBuilder,
-      private rolesService: RolesService
+      private rolesService: RolesService,
+      private customerGroupService: CustomerGroupService,
+      private customerTypeService: CustomerTypeService,
+      private channelService: ChannelService,
+      private areaService: AreaService,
   ) {}
 
   ngOnInit(): void {
@@ -301,6 +303,30 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     this.init(this.keywords, this.page, this.pageSize);
     this.provincesService.getListProvinces().subscribe(data => {
       this.listProvinces = data;
+    });
+    this.customerGroupService.get_all().subscribe(data => {
+      this.customerGroup = data as CustomerGroup[];
+      this.customerGroup.forEach(e => {
+        this.groupMenu.menuChildrens.push(e.customerGroupName);
+      });
+    });
+    this.customerTypeService.get_all().subscribe(data => {
+      this.customerType = data as CustomerType[];
+      this.customerType.forEach(e => {
+        this.categoryMenu.menuChildrens.push(e.customerTypeName);
+      });
+    });
+    this.channelService.get_all().subscribe( data => {
+      this.channel = data as Channel[];
+      this.channel.forEach(e => {
+        this.channelMenu.menuChildrens.push(e.channelName);
+      });
+    });
+    this.areaService.get_all().subscribe( data => {
+      this.area = data as Area[];
+      this.area.forEach(e => {
+        // this.locationMenu.menuChildrens.push(e.areaName);
+      });
     });
   }
 
@@ -476,6 +502,10 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   getDistrict(event: any) {
     this.district = '';
     this.ward = '';
+    this.request.province = event;
+    this.request.district = null;
+    this.request.ward = null;
+    this.filter();
     this.listProvinces.forEach(data => {
       if(data.name == event) {
         this.provincesService.getDistrictsListByID(data.code).subscribe(res => {
@@ -487,6 +517,9 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
   getWard(event: any) {
     this.ward = '';
+    this.request.district = event;
+    this.request.ward = null;
+    this.filter();
     this.listDistricts.forEach(data => {
       if(data.name == event) {
         this.provincesService.getWardsListByID(data.code).subscribe(res => {
@@ -496,12 +529,14 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     });
   }
 
-  searchUser(request: any) {
-    console.log(request);
+  getAddress(event: any) {
+    this.request.ward = event;
+    this.filter();
+  }
 
+  searchUser(request: any) {
     const type = Number.parseInt(('' + request).split(',')[0]);
     const id = ('' + request).split(',')[1];
-    console.log(id);
 
     if(type == 0 || type == 1) {
       this.request.groupId = id;
@@ -523,26 +558,34 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     this.request.page = this.page;
     this.customerService.search(this.request).subscribe(
         (data) => {
-            this.response = data;
-            this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
-            if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
-            this.pageList = [];
-            for(let i = 1; i <= this.totalPage; i++) {
-              this.pageList.push(i);
+            if(data) {
+              this.response = data;
+              this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
+              if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
+              this.pageList = [];
+              for(let i = 1; i <= this.totalPage; i++) {
+                this.pageList.push(i);
+              }
+              this.response.data.forEach((element) => {
+                  if (element.status == true) element.status = 'Hoạt động';
+                  else if (element.status == false) element.status = 'Không hoạt động';
+                  else element.status = 'Không hoạt động';
+                  if(element.dob) {
+                    element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
+                  }
+              });
+            } else {
+              this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
             }
-            this.response.data.forEach((element) => {
-                if (element.status == true) element.status = 'Hoạt động';
-                else if (element.status == false) element.status = 'Không hoạt động';
-                else element.status = 'Không hoạt động';
-                if(element.dob) {
-                  element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
-                }
-            });
         },
         (error) => {
             this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
         },
     );
+  }
+
+  reset() {
+    
   }
 
 }
