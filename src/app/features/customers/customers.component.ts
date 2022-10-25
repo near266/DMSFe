@@ -584,8 +584,4 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     );
   }
 
-  reset() {
-    
-  }
-
 }

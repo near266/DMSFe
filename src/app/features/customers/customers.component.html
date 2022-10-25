@@ -92,7 +92,7 @@
         </button>
           <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
           </app-menu-bar>
-          <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+          <button type="button" (click)="filter()" class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
             <i class="fa-sharp fa-solid fa-refresh text-emerald-500 font-bold mr-2"></i>
             Tải lại
         </button>
