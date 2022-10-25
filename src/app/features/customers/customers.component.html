@@ -26,7 +26,7 @@
           </div>
         </div>
         <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
-        <app-menu-collapse (Selection)="selectLocation($event)" [Config]="locationMenu"></app-menu-collapse>
+        <!-- <app-menu-collapse (Selection)="selectLocation($event)" [Config]="locationMenu"></app-menu-collapse> -->
         <app-menu-collapse (Selection)="selectArchive($event)" [Config]="archiveMenu"></app-menu-collapse>
         <app-menu-collapse (Selection)="selectCustomer($event)" [Config]="customerMenu"></app-menu-collapse>
         <app-menu-collapse-search (Selection)="selectCategory($event)" [Config]="categoryMenu"></app-menu-collapse-search>
@@ -67,7 +67,15 @@
             <span class="text-sm">Khu vực</span>
           </div>
           <div *ngIf="hasArea" class="text-xs">
-            <app-menu-collapse-tree></app-menu-collapse-tree>
+            <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
+              <select #a class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8" (change)="selectArea(a.value)">
+                <option disabled selected value=""> --- Chọn khu vực --- </option>
+                <option value="all">Tất cả khu vực</option>
+                <option value="none">Không thuộc khu vực</option>
+                <option *ngFor="let item of area" value="{{item.id}}">{{item.areaName}}</option>
+
+              </select>
+            </div>
           </div>
         </div>
       </div>

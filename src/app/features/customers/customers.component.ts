@@ -48,6 +48,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   province = '';
   district = '';
   ward = '';
+  areas = '';
 
   request: any = {
     keyword: '',
@@ -124,6 +125,19 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       }
     }
     this.request.status = event;
+  }
+
+  selectArea(event: any) {
+    if(event == 'all') {
+      this.request.areaId = null;
+
+    } else if(event == 'none') {
+      this.request.areaId = '00000000-0000-0000-0000-000000000000';
+    } else {
+      this.request.areaId = event;
+    }
+    this.filter();
+    return;
   }
 
   archiveMenu: Config = {
@@ -311,7 +325,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     this.areaService.get_all().subscribe( data => {
       this.area = data as Area[];
       this.area.forEach(e => {
-        this.locationMenu.menuChildrens.push(e.areaName);
+        // this.locationMenu.menuChildrens.push(e.areaName);
       });
     });
   }
@@ -568,6 +582,10 @@ export class CustomersComponent implements OnInit, AfterViewInit {
             this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
         },
     );
+  }
+
+  reset() {
+    
   }
 
 }
