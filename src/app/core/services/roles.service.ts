@@ -32,7 +32,6 @@ export class RolesService {
         return of(this.currentRoleList.includes(role.toUpperCase()));
     }
     onlyRole(role: string) {
-      console.log(this.currentRole === role.toUpperCase())
         return of(this.currentRole === role.toUpperCase());
     }
 }

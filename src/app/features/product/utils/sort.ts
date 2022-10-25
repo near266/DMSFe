@@ -9,12 +9,28 @@ export const sortList = [
         title: 'Sắp xếp',
         leftTitleIcon: 'fa-sort',
         listMenuPosition: [
-            { title: 'Mã sản phẩm', leftIcon: 'fa-down-long text-[#0eaf8f]', value: 'all' },
-            { title: 'Mã sản phẩm', leftIcon: 'fa-up-long text-[#0eaf8f]', value: 'emp' },
-            { title: 'Tên sản phẩm', leftIcon: 'fa-down-long text-[#0eaf8f]', value: 'emp-basic' },
-            { title: 'Tên sản phẩm', leftIcon: 'fa-up-long text-[#0eaf8f]', value: 'ketoan' },
-            { title: 'Số thứ tự', leftIcon: 'fa-down-long text-[#0eaf8f]', value: 'giamsat' },
-            { title: 'Số thứ tự', leftIcon: 'fa-up-long text-[#0eaf8f]', value: 'ketoan' },
+            {
+                title: 'Mã sản phẩm',
+                leftIcon: 'fa-down-long text-[#0eaf8f]',
+                value: { key: 'SKU', isAsc: true },
+            },
+            {
+                title: 'Mã sản phẩm',
+                leftIcon: 'fa-up-long text-[#0eaf8f]',
+                value: { key: 'SKU', isAsc: false },
+            },
+            {
+                title: 'Tên sản phẩm',
+                leftIcon: 'fa-down-long text-[#0eaf8f]',
+                value: { key: 'ProductName', isAsc: true },
+            },
+            {
+                title: 'Tên sản phẩm',
+                leftIcon: 'fa-up-long text-[#0eaf8f]',
+                value: { key: 'ProductName', isAsc: false },
+            },
+            { title: 'Số thứ tự', leftIcon: 'fa-down-long text-[#0eaf8f]', value: { key: 'STT', isAsc: true } },
+            { title: 'Số thứ tự', leftIcon: 'fa-up-long text-[#0eaf8f]', value: { key: 'STT', isAsc: false } },
         ],
     },
 ];
