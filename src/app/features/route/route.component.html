@@ -12,7 +12,7 @@
         <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm trên cây">
       </div>
       <div class="w-fit p-2 text-xs">
-        <app-user-tree-view></app-user-tree-view>
+        <app-menu-collapse-tree (newItemEvent)="searchUser($event)"></app-menu-collapse-tree>
       </div>
     </div>
 

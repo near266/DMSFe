@@ -31,6 +31,7 @@ export class MenuCollapseComponent implements OnInit, AfterViewInit {
 
     cancelSelect() {
         this.isSelect = false;
+        this.Selection.emit('');
     }
 
     stopPropagation(e: any) {

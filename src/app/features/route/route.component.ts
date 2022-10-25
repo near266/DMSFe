@@ -264,4 +264,15 @@ export class RouteComponent implements OnInit, AfterViewInit {
     }
     return;
   }
+
+  searchUser(request: any) {
+    console.log(request);
+
+    if (request != 'root') {
+
+    } else {
+
+    }
+
+  }
 }
