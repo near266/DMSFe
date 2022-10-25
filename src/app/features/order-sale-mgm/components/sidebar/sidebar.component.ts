@@ -1,22 +1,28 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Config } from 'src/app/core/model/Config';
+import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
+import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { DataService } from '../../services/data.service';
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, AfterViewInit {
     @Output() isShowSidebarOutput = new EventEmitter<boolean>();
     @Output() formFilterFromChild = new EventEmitter<any>();
+    @Output() bodyFilter = new EventEmitter<any>();
     isShowSidebar = true;
     isSearchByBill = false;
+    listTypeCustomer: any = [];
+    listGroupCustomer: any = [];
+
     searchText: string = '';
     statusMenu: Config = {
         icon: '<i class="fa-solid fa-flag-usa"></i>',
         title: 'Trạng thái',
-        menuChildrens: ['Tất cả', 'Đã bán hàng', 'Đã xuất hàng', 'Đã giao hàng', 'Hủy'],
+        menuChildrens: ['Tất cả', 'Đã bán hàng', 'Đã xuất hàng'],
     };
     statusPrintMenu: Config = {
         icon: '<i class="fa-solid fa-print"></i>',
@@ -36,7 +42,7 @@ export class SidebarComponent implements OnInit {
     typeCustomerMenu: Config = {
         icon: '<i class="fa-solid fa-vest-patches"></i>',
         title: 'Loại khách hàng',
-        menuChildrens: ['Tất cả', 'VIP 1', 'VIP 2', 'VIP 3', 'VIP 4', 'Tiềm năng', 'Thân thiết', 'Vãng lai'],
+        menuChildrens: this.listTypeCustomer,
     };
     groupCustomerMenu: Config = {
         icon: '<i class="fa-solid fa-users"></i>',
@@ -48,7 +54,21 @@ export class SidebarComponent implements OnInit {
         title: 'Lưu trữ',
         menuChildrens: ['Tất cả', 'Mở', 'Khóa'],
     };
-    constructor(private fb: FormBuilder, private dataService: DataService) {}
+
+    body: any = {
+        keyword: '',
+        sortField: 'CreatedDate',
+        isAscending: false,
+        page: 1,
+        pageSize: 30,
+    };
+
+    constructor(
+        private fb: FormBuilder,
+        private dataService: DataService,
+        private customerType: CustomerTypeService,
+        private customerGroup: CustomerGroupService,
+    ) {}
 
     formFilter = this.fb.group({
         keyword: null,
@@ -74,6 +94,25 @@ export class SidebarComponent implements OnInit {
         this.isShowSidebarOutput.emit(this.isShowSidebar);
     }
 
+    ngAfterViewInit(): void {
+        this.customerType.get_all().subscribe((data) => {
+            this.listTypeCustomer = data;
+            this.listTypeCustomer = this.listTypeCustomer.map((type: any) => {
+                return type.customerTypeName;
+            });
+            this.listTypeCustomer.push('Tất cả');
+            this.typeCustomerMenu.menuChildrens = this.listTypeCustomer;
+        });
+        this.customerGroup.get_all().subscribe((data) => {
+            this.listGroupCustomer = data;
+            this.listGroupCustomer = this.listGroupCustomer.map((group: any) => {
+                return group.customerGroupName;
+            });
+            this.listGroupCustomer.push('Tất cả');
+            this.groupCustomerMenu.menuChildrens = this.listGroupCustomer;
+        });
+    }
+
     searchKeyword() {
         this.dataService.searchKeyword(this.searchText);
     }
@@ -88,27 +127,51 @@ export class SidebarComponent implements OnInit {
         this.formFilterFromChild.emit(this.formFilter.value);
     }
 
-    selection1(e: any) {
+    emitBody() {
+        this.bodyFilter.emit(this.body);
+    }
+
+    selectStatus(e: any) {
+        console.log(e);
+        switch (e) {
+            case 'Tất cả': {
+                e = null;
+                break;
+            }
+            case 'Đã bán hàng': {
+                e = 3;
+                break;
+            }
+            case 'Đã xuất hàng': {
+                e = 4;
+                break;
+            }
+            default: {
+                e = null;
+                break;
+            }
+        }
+        this.body.status = e;
+        this.emitBody();
+    }
+
+    selectPrintStatus(e: any) {
         console.log(e);
     }
 
-    selection2(e: any) {
+    selectSource(e: any) {
         console.log(e);
     }
 
-    selection3(e: any) {
+    selectPayment(e: any) {
         console.log(e);
     }
 
-    selection4(e: any) {
+    selectTypeCustomer(e: any) {
         console.log(e);
     }
 
-    selection5(e: any) {
-        console.log(e);
-    }
-
-    selection6(e: any) {
+    selectGroupCustomer(e: any) {
         console.log(e);
     }
 

@@ -73,7 +73,6 @@ export class OrderSaleMgmComponent implements OnInit {
     search(body: any) {
         this.saleReceiptService.searchReceipt(body).subscribe((data) => {
             console.log(data);
-
             this.listReceiptOrder = data.data;
             this.total = data.totalCount;
             this.saleReceiptService.setTotal(this.total);
@@ -153,5 +152,9 @@ export class OrderSaleMgmComponent implements OnInit {
         });
         console.log('export');
         console.log(body);
+    }
+
+    filter(body: any) {
+        this.search(body);
     }
 }
