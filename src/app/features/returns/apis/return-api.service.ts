@@ -44,8 +44,8 @@ export class ReturnApiService {
         return this.http.put(this.returnUrl + '/update', form, { responseType: 'text' });
     }
 
-    deleteReturn(id: string) {
-        return this.http.delete(this.returnUrl + '/delete', { body: { returnsIds: [id] } });
+    archiveReturn(id: string) {
+        return this.http.put(this.returnUrl + '/arhivedOrUn', { returnsIds: [id] });
     }
 
     getAllReturns(settings: any) {

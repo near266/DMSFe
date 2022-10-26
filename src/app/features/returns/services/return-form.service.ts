@@ -98,6 +98,7 @@ export class ReturnFormService {
                 this.dialog.closeAll();
                 this.router.navigate(['/returns']);
                 this.returnOrderService.updatePurchaseOrderStatus(6);
+                this.returnsService.resetAllFilter();
             },
             error: (error) => {
                 this.snackBarService.openSnackbar('Tạo phiếu trả hàng thất bại', 2000, 'Đóng', 'center', 'top', false);
@@ -114,6 +115,7 @@ export class ReturnFormService {
                 this.dialog.closeAll();
                 this.returnDetailsService.currentMode$.next(0);
                 this.router.navigate(['/returns']);
+                this.returnsService.resetAllFilter();
             },
             error: (error) => {
                 this.snackBarService.openSnackbar('Tạo phiếu trả hàng thất bại', 2000, 'Đóng', 'center', 'top', false);
@@ -122,13 +124,14 @@ export class ReturnFormService {
     }
 
     deleteReturn(id: string) {
-        return this.returnApiService.deleteReturn(id).subscribe({
+        return this.returnApiService.archiveReturn(id).subscribe({
             next: (result) => {
                 this.snackBarService.openSnackbar('Xóa phiếu trả hàng thành công', 2000, 'Đóng', 'center', 'top', true);
                 this.totalPrice$.next(0);
                 this.discountAmount$.next(0);
                 this.dialog.closeAll();
                 this.router.navigate(['/returns']);
+                this.returnsService.resetAllFilter();
             },
             error: (error) => {
                 this.snackBarService.openSnackbar('Xóa phiếu trả hàng thất bại', 2000, 'Đóng', 'center', 'top', false);

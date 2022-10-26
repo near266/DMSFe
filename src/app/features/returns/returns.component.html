@@ -13,10 +13,28 @@
     </div>
     <div class="flex h-full w-full pl-[26px] pb-9">
       <div class="flex w-full h-full relative flex-col">
-        <div class="z-0 ">
+        <div class="z-0  ">
           <!-- header -->
           <div class="mt-2 px-2 flex justify-between items-center">
             <span class="text-xl font-medium">Danh sách trả hàng ({{totalReturns}}) </span>
+            <div style="font-size: 12px" class="flex items-center ">
+              <mat-form-field appearance="outline" class="mr-2 " [formGroup]="dateSearchForm">
+                <mat-label>Khoảng thời gian</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate placeholder="Start date" formControlName="fromDate" />
+                  <input matEndDate placeholder="End date" formControlName="toDate" />
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix>
+                  <mat-icon matDatepickerToggleIcon (click)="clearDatePicker()">clear</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+              <button mat-button class="ml-4 text-center  px-2 py-2 rounded-md bg-zinc-300 h-11  w-full font-bold "
+                (click)="filterDate()">
+                <i class=" fa-solid text-base icon fa-magnifying-glass"></i>
+              </button>
+            </div>
           </div>
           <!-- options select to edit -->
           <div class="flex mt-2 p-2 bg-[#f2f2f2] border-y border-solid border-slate-400">
@@ -34,8 +52,9 @@
             </mat-menu>
             <app-menu-bar [menuObj]="menuObj" (message)="select($event)" *ngFor="let menuObj of listMenu">
             </app-menu-bar>
+            <!-- <app-menu-bar [menuObj]="menuObj" (message)="sortTime($event)" *ngFor="let menuObj of timeSortList">
+            </app-menu-bar> -->
           </div>
-
         </div>
         <div class="w-full table-container overflow-scroll">
           <app-returns-table>

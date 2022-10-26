@@ -4,7 +4,7 @@
     .table-container {
         overflow-y: auto;
         overflow-x: auto;
-        height: calc(100vh - 198px);
+        height: calc(100vh - 221px);
     }
     .navbar-container {
         height: calc(100vh - 64px);
@@ -112,4 +112,7 @@
             font-size: 12px;
         }
     }
+}
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
 }

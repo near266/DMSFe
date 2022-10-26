@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import { BehaviorSubject, map, pipe, take } from 'rxjs';
 import { ReturnApiService } from '../apis/return-api.service';
 
@@ -51,14 +52,23 @@ export class ReturnsService {
                 : this.filterService.currentFiler$.getValue();
         const ascending = this.filterService.isAscending$.getValue();
         const keyword = this.filterService.keyword$.getValue();
+        const fromDate =
+            this.filterService.startDate$.getValue() === '' ? null : this.filterService.startDate$.getValue();
+        const toDate = this.filterService.endDate$.getValue() === '' ? null : this.filterService.endDate$.getValue();
+        const dateFilter = this.filterService.timeFilterType$.getValue();
         const settings = {
             pageSize: 30,
             page,
             keyword,
+            fromDate,
+            toDate,
             sortField: type,
             isAscending: ascending,
+            dateFilter,
         };
-        return this.returnApiService.getAllReturns(settings).pipe(
+        const result = _.omitBy(settings, _.isNil);
+
+        return this.returnApiService.getAllReturns(result).pipe(
             map((response: any) => {
                 this.totalReturns$.next(response.totalCount || 0);
                 return response.data;
@@ -72,6 +82,14 @@ export class ReturnsService {
             this.currentPage.next(currentPage);
             this.calculateStartAndEndPage();
         });
+    }
+    resetAllFilter() {
+        this.filterService.currentFiler$.next('');
+        this.filterService.isAscending$.next(false);
+        this.filterService.keyword$.next('');
+        this.filterService.startDate$.next('');
+        this.filterService.endDate$.next('');
+        this.filterService.timeFilterType$.next(1);
     }
 
     calculateStartAndEndPage() {

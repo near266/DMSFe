@@ -15,6 +15,7 @@ import { ComponentMode } from '../../models/componentMode';
 import { Status } from '../../models/return';
 import { ReturnFormService } from '../../services/return-form.service';
 import { RolesService } from 'src/app/core/services/roles.service';
+import { ReturnsService } from '../../services/returns.service';
 
 @Component({
     selector: 'app-view-edit-detail-return',
@@ -32,6 +33,7 @@ export class ViewEditDetailReturnComponent implements OnInit {
         public activatedRoute: ActivatedRoute,
         public router: Router,
         private snackbar: SnackbarService,
+        private returnsService: ReturnsService,
         private rolesService: RolesService,
         private dialog: MatDialog,
         private returnFormService: ReturnFormService,
@@ -78,6 +80,7 @@ export class ViewEditDetailReturnComponent implements OnInit {
         this.returnDetailsService.returnDetails$.next({});
         this.returnDetailsService.returnListProducts$.next([]);
         this.router.navigate(['/returns']);
+        this.returnsService.resetAllFilter();
     }
 
     ngDoCheck(): void {}
