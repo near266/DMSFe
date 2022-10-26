@@ -276,13 +276,13 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
   searchDistrict() {
     if(this.districtName != '') {
       this.districtTemp = [];
-      this.listProvinces.forEach((element) => {
+      this.listDistricts.forEach((element) => {
         if(this.removeVietnameseTones(element.name.toLowerCase()).includes(this.removeVietnameseTones(this.districtName.toLowerCase()))) {
           this.districtTemp.push(element);
         }
       });
     } else {
-      this.wardTemp = this.listWards;
+      this.districtTemp = this.listDistricts;
     }
   }
 
