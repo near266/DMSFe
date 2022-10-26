@@ -9,6 +9,8 @@ import companies from '../../../mocks/companies';
 import status from '../../../mocks/status';
 import { Product } from '../../../models/product';
 import { ProductDialogService } from '../../../services/product-dialog.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
     selector: 'app-add-product-details',
@@ -18,7 +20,6 @@ import { ProductDialogService } from '../../../services/product-dialog.service';
 export class AddProductDetailsComponent implements OnInit {
     @ViewChild('myForm') myForm: NgForm;
     @ViewChild('submitButton') submitButton: ElementRef;
-
     @Input() productModel: Product | null;
     @Input() status: string;
     @Input() dialogMode: 'create' | 'edit' | 'view' = 'create';
@@ -279,16 +280,16 @@ export class AddProductDetailsComponent implements OnInit {
         if (!this.form.invalid) {
             if (!product.id) {
                 delete product.id;
-                console.log(product);
-                // this.productApiService.postProduct(product).subscribe({
-                //     next: (res) => {
-                //         this.dialogRef.closeAll();
-                //         this.productService.getAllProducts();
-                //     },
-                //     error: (err) => {
-                //         console.log(err);
-                //     },
-                // });
+                this.productApiService.postProduct(product).subscribe({
+                    next: (res) => {
+                        this.snackbarService.openSnackbar('Thêm thành công', 2000, 'Đóng', 'center', 'top', true);
+                        this.dialogRef.closeAll();
+                        this.productService.getProductsByPage(1);
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
             } else {
                 this.productApiService.updateProduct(product).subscribe({
                     next: (res) => {
@@ -305,6 +306,7 @@ export class AddProductDetailsComponent implements OnInit {
     constructor(
         private productDialogService: ProductDialogService,
         private dialogRef: MatDialog,
+        private snackbarService: SnackbarService,
         private productApiService: ProductApiService,
         private productService: ProductService,
     ) {}

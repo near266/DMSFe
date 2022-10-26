@@ -3,6 +3,7 @@ import { BehaviorSubject, map, pipe, take } from 'rxjs';
 import { ReturnApiService } from '../apis/return-api.service';
 
 import { Return } from '../models/return';
+import { ReturnsFilterService } from './returns-filter.service';
 
 @Injectable({
     providedIn: 'root',
@@ -25,17 +26,39 @@ export class ReturnsService {
     public startAndEndIndex$ = this.startAndEndIndex.asObservable();
     public totalReturns$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-    constructor(private returnApiService: ReturnApiService) {}
+    constructor(private returnApiService: ReturnApiService, private filterService: ReturnsFilterService) {}
 
     getInititalReturns(page: number = 1) {
         this.getReturnsByPage(1)
             .pipe(take(1))
-            .subscribe((res) => {
-                this.returns.next(res);
+            .subscribe({
+                next: (res) => {
+                    if (res) {
+                        this.returns.next(res);
+                    } else {
+                        this.returns.next([]);
+                    }
+                },
+                error: (error) => {
+                    this.returns.next([]);
+                },
             });
     }
     getReturnsByPage(page: number) {
-        return this.returnApiService.getAllReturns(page).pipe(
+        const type =
+            this.filterService.currentFiler$.getValue() === ''
+                ? 'CreatedDate'
+                : this.filterService.currentFiler$.getValue();
+        const ascending = this.filterService.isAscending$.getValue();
+        const keyword = this.filterService.keyword$.getValue();
+        const settings = {
+            pageSize: 30,
+            page,
+            keyword,
+            sortField: type,
+            isAscending: ascending,
+        };
+        return this.returnApiService.getAllReturns(settings).pipe(
             map((response: any) => {
                 this.totalReturns$.next(response.totalCount || 0);
                 return response.data;

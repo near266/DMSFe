@@ -45,18 +45,11 @@ export class ReturnApiService {
     }
 
     deleteReturn(id: string) {
-        console.log(id);
         return this.http.delete(this.returnUrl + '/delete', { body: { returnsIds: [id] } });
     }
 
-    getAllReturns(page: number) {
-        return this.http.post<any>(this.returnUrl + '/search', {
-            pageSize: 30,
-            page,
-            keyword: '',
-            sortField: 'createdDate',
-            isAscending: false,
-        });
+    getAllReturns(settings: any) {
+        return this.http.post<any>(this.returnUrl + '/search', settings);
     }
 
     getReturnById(id: string | null): Observable<any> {
