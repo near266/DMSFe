@@ -47,14 +47,19 @@ const routes: Routes = [
                     import('../../../features/customers/customers.module').then((m) => m.CustomersModule),
             },
             {
-              path: 'route',
-              loadChildren: () =>
-                  import('../../../features/route/route.module').then((m) => m.RouteModule),
+                path: 'route',
+                loadChildren: () => import('../../../features/route/route.module').then((m) => m.RouteModule),
             },
             {
-              path: 'report',
-              loadChildren: () => import("./../../../features/order-report/order-report.module").then(m=> m.OrderReportModule)
-            }
+                path: 'report',
+                loadChildren: () =>
+                    import('./../../../features/order-report/order-report.module').then((m) => m.OrderReportModule),
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'orders',
+            },
         ],
     },
 ];
