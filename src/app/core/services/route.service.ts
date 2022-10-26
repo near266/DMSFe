@@ -13,7 +13,7 @@ export class RouteService {
 
   SearchAllRoute(page: any, pageSize: any, groupId:any): Observable<any> {
     if(groupId !== null){
-      return this.http.get(this.urlAPIRoute + '/getall??GroupId=' + groupId + '&page=' + page + '&pagesize=' + pageSize )
+      return this.http.get(this.urlAPIRoute + '/getall?GroupId=' + groupId + '&page=' + page + '&pagesize=' + pageSize )
       .pipe(map((response: any) => response));
     }
     return this.http.get(this.urlAPIRoute + '/getall?page=' + page + '&pagesize=' + pageSize)

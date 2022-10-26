@@ -39,8 +39,8 @@
       <button type="button" *ngIf="checkIsRole()" (click)="openAddRoute()" class="rounded w-fit px-3 py-2 flex flex-row items-center hover:bg-white"><i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>Thêm mới</button>
       <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
       </app-menu-bar>
-      <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white outline-none rounded">
-        <i class="fa-sharp fa-solid fa-arrows-rotate text-emerald-500 font-bold mr-2"></i>
+      <button class="group w-fit px-3 py-2 flex flex-row items-center hover:bg-white outline-none rounded" (click)="reload()">
+        <i class="fa-sharp fa-solid fa-arrows-rotate text-emerald-500 font-bold mr-2 group-hover:animate-spin"></i>
         Tải lại
       </button>
       <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white rounded">
