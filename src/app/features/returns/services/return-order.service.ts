@@ -13,6 +13,7 @@ export class ReturnOrderService {
     returnProductList$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     returnOrderId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
     returnPromotionList$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+    returnStatusInfo$: BehaviorSubject<any> = new BehaviorSubject<any>({});
     totalPrice$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     discountAmount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     submitFormInfo$: Subject<boolean> = new Subject<boolean>();
@@ -20,6 +21,40 @@ export class ReturnOrderService {
     submitFormPromotionList$: Subject<any> = new Subject<any>();
 
     constructor(private snackbar: SnackbarService, private purchaseOrder: PurchaseOrderService) {}
+    formatUpdateStatusOrder(info: any) {
+        const details = {
+            purchaseOrderId: info?.id || null,
+            orderDate: moment(info?.orderDate).format('YYYY-MM-DD') || null,
+            groupId: info.group?.id,
+            orderEmployeeId: info?.orderEmployee?.id || null,
+            warehouseId: info?.warehouse?.id || null,
+            customerId: info?.customer?.id || null,
+            routeId: info?.route?.id || null,
+            type: info?.type || 0,
+            status: 6,
+            paymentMethod: info?.paymentMethod || 0,
+            description: info?.description || null,
+            phone: info?.phone || null,
+            address: info?.address || null,
+            customerName: info?.customerName || null,
+            totalAmount: info?.totalAmount || 0,
+            totalOfVAT: info?.totalOfVAT || 0,
+            totalDiscountProduct: info?.totalDiscountProduct || 0,
+            tradeDiscount: info?.tradeDiscount || 0,
+            totalPayment: info?.totalPayment || 0,
+            archived: false,
+            deliveryDate: moment(info?.deliveryDate).format('YYYY-MM-DD') || null,
+            lastModifiedDate: moment(Date.now()).format('YYYY-MM-DD'),
+            prePayment: info?.prePayment || 0,
+            // orderCode: info?.orderCode || 0 ,
+        };
+        console.log(info);
+
+        console.log(details);
+
+        return details;
+    }
+
     updatePurchaseOrderStatus(status: number) {
         const id = this.returnOrderId$.getValue();
         if (id) {
@@ -65,6 +100,23 @@ export class ReturnOrderService {
                         this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', true);
                     },
                 });
+            });
+        } else {
+            const body = this.returnStatusInfo$.getValue();
+            body.orderCode = null;
+            this.purchaseOrder.update(body).subscribe({
+                next: (data) => {
+                    console.log('oke');
+                    this.returnInfo$.next({});
+                    this.returnProductList$.next([]);
+                    this.returnPromotionList$.next([]);
+                    this.totalPrice$.next(0);
+                    this.returnOrderId$.next('');
+                    this.discountAmount$.next(0);
+                },
+                error: (err) => {
+                    this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', true);
+                },
             });
         }
     }

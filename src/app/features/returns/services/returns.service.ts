@@ -64,7 +64,6 @@ export class ReturnsService {
             toDate,
             sortField: type,
             isAscending: ascending,
-            dateFilter,
         };
         const result = _.omitBy(settings, _.isNil);
 
