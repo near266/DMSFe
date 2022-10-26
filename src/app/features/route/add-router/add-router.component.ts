@@ -22,7 +22,13 @@ export class AddRouterComponent implements OnInit {
   }
 
   add(e: any) {
-    this.dataService.changeEmployee('add');
+    // this.dataService.changeEmployee('add');
+    if(this.data.type == 'add'){
+      this.dataService.changeEmployee('add');
+    }
+    if(this.data.type == 'update'){
+      this.dataService.changeEmployee('update');
+    }
   }
 
   tabList = [

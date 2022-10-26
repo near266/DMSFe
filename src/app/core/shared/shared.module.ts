@@ -54,6 +54,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import {NgPrintModule} from 'ng-print';
+
 @NgModule({
     declarations: [
         MenuCollapseComponent,
@@ -108,6 +110,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
         TreeModule,
         NgxPaginationModule,
         NgSelectModule,
+        NgPrintModule,
     ],
     exports: [
         CurrencyMaskModule,
@@ -122,7 +125,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
         MatSelectModule,
         MatSliderModule,
         CurrencyMaskModule,
-
+        NgPrintModule,
         MatSlideToggleModule,
         MatMenuModule,
         MatSidenavModule,

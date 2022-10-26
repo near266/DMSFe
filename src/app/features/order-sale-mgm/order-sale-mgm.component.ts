@@ -7,6 +7,9 @@ import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { DataService } from './services/data.service';
 import printJS from "print-js";
 import { DomSanitizer } from '@angular/platform-browser';
+import { jsPDF } from "jspdf";
+
+
 
 @Component({
     selector: 'app-order-sale-mgm',
@@ -25,7 +28,7 @@ export class OrderSaleMgmComponent implements OnInit {
     id: any = [];
     roleMain = 'member';
     formFilterReceive: any;
-
+    printThis:any;
     searchAllBody = {
         sortField: 'CreatedDate',
         isAscending: false,
@@ -176,17 +179,20 @@ export class OrderSaleMgmComponent implements OnInit {
         this.saleReceiptService.export(body).subscribe({
             next: (data) => {
               var blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-              const blobUrl = URL.createObjectURL(blob);
+              var blobPDF = new Blob([blob], {type: 'application/pdf'});
+              let file = new File([blob], 'qr.png', { type: 'image/png' });
+              const files = [file];
+              const blobUrl = URL.createObjectURL(blobPDF);
               const iframe = document.createElement('iframe');
-              iframe.style.display = 'none';
               iframe.src = blobUrl;
-              document.body.appendChild(iframe);
-              iframe.contentWindow?.print();
-
-
+              // document.body.appendChild(iframe);
+              // printJS(temp)
+              // this.printThis = iframe;
+              // iframe.contentWindow?.print();
+              document.body.removeChild(iframe);
             },
         });
-    }
+    };
     filter(body: any) {
         this.search(body);
     }
