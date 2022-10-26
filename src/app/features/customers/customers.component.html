@@ -105,7 +105,7 @@
 
               <table *ngIf="loading == false" class="w-max sticky left-0 bg-gray-100 z-10">
                   <thead class="h-10 w-full text-sm sticky top-0">
-                      <th class="w-10 border-x border-solid border-gray-300 px-2 bg-gray-100"><input type="checkbox">
+                      <th class="w-16 border-x border-solid border-gray-300 px-2 bg-gray-100"><input type="checkbox">
                       </th>
                       <!-- <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Ảnh</th> -->
                       <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Trạng thái</th>
@@ -114,7 +114,12 @@
                   <tbody>
                       <tr class="h-14 w-fit text-xs" *ngFor="let user of response.data; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                          <td class="w-10 border-x border-solid align-middle px-2"><input type="checkbox">
+                          <td class="w-16 border-x border-solid align-middle px-2">
+                            <span class="flex items-center text-[#1891C9]">
+                              <input type="checkbox">
+                              <i *ngIf="user.archived == true" class="fa-sharp fa-solid fa-lock mb-[1px] ml-2"></i>
+                              <i *ngIf="user.archived == false || user.archived == null" class="fa-sharp fa-solid fa-lock-open mb-[1px] ml-2"></i>
+                            </span>
                           </td>
                           <!-- <td class="border-x border-solid align-middle px-2">
                               <img class="w-20" [src]="user.img">
