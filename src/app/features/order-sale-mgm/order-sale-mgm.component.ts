@@ -206,17 +206,13 @@ export class OrderSaleMgmComponent implements OnInit {
             type: 2,
         };
         console.log('Print');
-        this.saleReceiptService.export(body).subscribe({
+        this.saleReceiptService.print(body).subscribe({
             next: (data) => {
                 var blob = new Blob([data], {
                     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 });
-                const blobUrl = URL.createObjectURL(blob);
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = blobUrl;
-                document.body.appendChild(iframe);
-                iframe.contentWindow?.print();
+                const blobUrl = window.URL.createObjectURL(blob);
+                window.open(blobUrl)
             },
         });
     }
