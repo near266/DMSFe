@@ -80,7 +80,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
         productKey: null,
         status: null,
         printStatus: true,
-        paymentMethod: null,
+        paymentMethod: 0,
         // page: 1,
         // pageSize: 100000,
         sortField: null,

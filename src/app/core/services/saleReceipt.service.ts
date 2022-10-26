@@ -150,4 +150,11 @@ export class SaleReceiptService {
         map(res => res)
       )
     }
+    print(body:any):Observable<any>{
+      let optionHeader = {responseType: 'text'}
+      return this.http.post(this.api_gateway_url + "/SaleReceipt/print", body, { responseType: 'blob'})
+      .pipe(
+        map(res => res)
+      )
+    }
 }

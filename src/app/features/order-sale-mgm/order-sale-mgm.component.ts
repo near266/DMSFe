@@ -5,6 +5,8 @@ import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
 import { SaleReceipt } from 'src/app/core/model/SaleReceipt';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { DataService } from './services/data.service';
+import printJS from "print-js";
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-order-sale-mgm',
@@ -37,6 +39,7 @@ export class OrderSaleMgmComponent implements OnInit {
         private saleReceiptService: SaleReceiptService,
         private router: Router,
         private dataService: DataService,
+        private sanitizer: DomSanitizer,
     ) {}
 
     ngOnInit(): void {
@@ -127,19 +130,12 @@ export class OrderSaleMgmComponent implements OnInit {
 
     export() {
         let body;
-        if (this.id.length == 0) {
-            body = {
-                filter: this.formFilterReceive,
-                listId: null,
-                type: 1,
-            };
-        } else {
-            body = {
-                filter: null,
-                listId: this.id,
-                type: 2,
-            };
-        }
+        body = {
+          filter: null,
+          listId: this.id,
+          type: 2,
+      };
+
         console.log(body);
         this.saleReceiptService.export(body).subscribe({
             next: (data) => {
@@ -150,10 +146,47 @@ export class OrderSaleMgmComponent implements OnInit {
                 window.open(url);
             },
         });
-        console.log('export');
-        console.log(body);
     }
+    exportWithFilter(){
+      let body = {
+        filter: this.formFilterReceive,
+        listId: null,
+        type: 1,
+      }
+      console.log("ExportWithFilter",body);
+        this.saleReceiptService.export(body).subscribe({
+            next: (data) => {
+                const blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url);
 
+            },
+      });
+    }
+    print(){
+      let body;
+        body = {
+          filter: null,
+          listId: this.id,
+          type: 2,
+      };
+        console.log("Print");
+        this.saleReceiptService.export(body).subscribe({
+            next: (data) => {
+              var blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+              const blobUrl = URL.createObjectURL(blob);
+              const iframe = document.createElement('iframe');
+              iframe.style.display = 'none';
+              iframe.src = blobUrl;
+              document.body.appendChild(iframe);
+              iframe.contentWindow?.print();
+
+
+            },
+        });
+    }
     filter(body: any) {
         this.search(body);
     }
