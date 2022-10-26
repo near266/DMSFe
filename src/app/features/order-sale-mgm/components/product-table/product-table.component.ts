@@ -12,6 +12,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/core/services/data.service';
+import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
@@ -35,6 +36,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
     listProductAdd: any = [];
     listChoosenProductIds: any = [];
     listProductRemove: any = [];
+    listSearchedProduct: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -48,6 +50,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
         private dialog: MatDialog,
         private formatService: FormatService,
         private saleReceipt: SaleReceiptService,
+        private purchaseOrder: PurchaseOrderService,
     ) {}
 
     ngOnInit(): void {
@@ -190,5 +193,26 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
             product.totalPrice = product.quantity * product.unitPrice;
         }
         this.discountRate(product);
+    }
+
+    searchListProduct(e: any) {
+        const body = {
+            keyword: e.target.value,
+            sortBy: {
+                property: 'CreatedDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 5,
+        };
+        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+            console.log(data);
+            this.listSearchedProduct = data?.data;
+        });
+    }
+
+    addProductBySearch(product: any) {
+        product = this.formatService.formatProductFromCloseDialogAdd([product], []);
+        this.listProductAdd.push(product[0]);
     }
 }

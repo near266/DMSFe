@@ -323,22 +323,29 @@ export class ViewEditDetailComponent implements OnInit {
     }
 
     removeProductAndProductPromotion() {
-        if (this.isRemovePromotion || this.isRemoveProduct) {
+        if (this.isRemoveProduct) {
             const removeProductList = {
                 listIdRemove: this.listProductRemove,
                 purchaseOrderId: this.id,
             };
-            const removePromotionList = {
-                listIdRemove: this.listProductPromotionRemove,
-                purchaseOrderId: this.id,
-            };
-            const removeProduct = this.saleReceipt.removeProduct(removeProductList);
-            const removePromotion = this.saleReceipt.removeProduct(removePromotionList);
-            forkJoin([removeProduct, removePromotion]).subscribe(
+            this.saleReceipt.removeProduct(removeProductList).subscribe(
                 (data) => {},
                 (err) => {},
                 () => {
                     this.saleReceipt.sendProductRemove({ isRemove: false, list: [] });
+                    this.saleReceipt.isSuccessUpdate('Done');
+                },
+            );
+        }
+        if (this.isRemovePromotion) {
+            const removePromotionList = {
+                listIdRemove: this.listProductPromotionRemove,
+                purchaseOrderId: this.id,
+            };
+            this.saleReceipt.removeProduct(removePromotionList).subscribe(
+                (data) => {},
+                (err) => {},
+                () => {
                     this.saleReceipt.sendProductPromotionRemove({ isRemove: false, list: [] });
                     this.saleReceipt.isSuccessUpdate('Done');
                 },

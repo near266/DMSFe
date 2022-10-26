@@ -128,10 +128,4 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
             }
         }
     }
-
-    // getDontChooseProduct() {
-    //     this.listDontChooseProduct = this.listProduct.filter((product: any) => {
-    //         return !this.productChoose.includes(product.id);
-    //     });
-    // }
 }
