@@ -10,7 +10,10 @@
     </div>
   </div>
   <hr class="my-2">
-  <div class="w-full flex">
+  <div *ngIf="loading == true" class="mt-10 text-center">
+    <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+  </div>
+  <div *ngIf="loading == false" class="w-full flex">
     <div class="w-2/12 justify-between menu-collapse ">
       <div class="w-full border-gray-400 hover:bg-zinc-200 py-2 px-1 font-medium text-base mb-1" (click)="tabs = 'Information'">
         <i class="fa-regular fa-file-lines mr-2"></i><span>Thông tin chung</span>
@@ -101,10 +104,14 @@
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Khu vực</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.area ? customer.area.areaName : ''}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.areaId">
+          <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
+            <input type="text" (focus)="showArea = !showArea" [(ngModel)]="areaName" (input)="searchArea()" [ngModelOptions]="{standalone: true}" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" placeholder="--- Chọn khu vực---"/>
+            <div *ngIf="showArea" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
+              <div *ngFor="let item of areaTemp" class="px-3 py-1 hover:bg-gray-100 cursor-pointer" (click)="selectArea(item)">{{item.areaName}}</div>
+            </div>
+            <!-- <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.areaId">
               <option *ngFor="let item of area" value="{{item.id}}">{{item.areaName}}</option>
-            </select>
+            </select> -->
           </div>
         </div>
       </div>
@@ -113,31 +120,43 @@
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Tỉnh/Thành phố</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.province}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <select disabled #province class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.province" (change)="getDistrict(province.value)">
+          <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
+            <input disabled type="text" [(ngModel)]="buf.province" (input)="searchProvince()" [ngModelOptions]="{standalone: true}" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" placeholder="--- Chọn tỉnh thành ---"/>
+            <div *ngIf="showProvince" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
+              <div *ngFor="let item of provinceTemp" class="px-3 py-1 hover:bg-gray-100 cursor-pointer" (click)="selectProvince(item)">{{item.name}}</div>
+            </div>
+            <!-- <select disabled #province class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.province" (change)="getDistrict(province.value)">
               <option disabled value=""> --- Chọn nhóm tỉnh/thành phố --- </option>
               <option *ngFor="let item of listProvinces" value="{{item.name}}">{{item.name}}</option>
-            </select>
+            </select> -->
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Quận/Huyện</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.district}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <select #district class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.district" (change)="getWard(district.value)">
+          <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
+            <input type="text" (click)="showDistrict = !showDistrict" [(ngModel)]="buf.district" (input)="searchDistrict()" [ngModelOptions]="{standalone: true}" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" placeholder="--- Chọn quận/huyện ---"/>
+            <div *ngIf="showDistrict" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
+              <div *ngFor="let item of districtTemp" class="px-3 py-1 hover:bg-gray-100 cursor-pointer" (click)="selectDistrict(item)">{{item.name}}</div>
+            </div>
+            <!-- <select #district class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.district" (change)="getWard(district.value)">
               <option disabled value=""> --- Chọn nhóm quận huyện --- </option>
               <option *ngFor="let item of listDistricts" value="{{item.name}}">{{item.name}}</option>
-            </select>
+            </select> -->
           </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Xã/Phường</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.ward}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.ward">
+          <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
+            <input type="text" (click)="showWard = !showWard" [(ngModel)]="buf.ward" (input)="searchWard()" [ngModelOptions]="{standalone: true}" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" placeholder="--- Chọn xã/phường ---"/>
+            <div *ngIf="showWard" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
+              <div *ngFor="let item of wardTemp" class="px-3 py-1 hover:bg-gray-100 cursor-pointer" (click)="selectWard(item)">{{item.name}}</div>
+            </div>
+            <!-- <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.ward">
               <option disabled value=""> --- Chọn nhóm xã phường --- </option>
               <option *ngFor="let item of listWards" value="{{item.name}}">{{item.name}}</option>
-            </select>
+            </select> -->
           </div>
         </div>
         <div class="w-full flex mb-6">
