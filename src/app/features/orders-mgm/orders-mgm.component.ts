@@ -19,7 +19,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     type!: string;
     listOrder: any = [];
     totalCount: number;
-
+    id:any = []
     page: number = 1;
     pageSize: number = 30;
     total: number = 0;
@@ -37,6 +37,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         private purchaseOrderService: PurchaseOrderService,
         private dataService: DataService,
         private fb: FormBuilder,
+        private purchaseSer: PurchaseOrderService,
     ) {}
 
     ngOnInit(): void {
@@ -116,6 +117,35 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         this.body.page = 1;
         this.search(this.body);
     }
+
+    chooseID(event: any, id: any) {
+      console.log(event.checked);
+      if (event.checked == true) {
+          this.id.push(id);
+      } else {
+          this.id.splice(this.id.indexOf(id), 1);
+      }
+      console.log(this.id);
+    }
+
+    print() {
+      let body;
+      body = {
+          filter: null,
+          listId: this.id,
+          type: 2,
+      };
+      console.log('Print');
+      this.purchaseSer.print(body).subscribe({
+          next: (data) => {
+              var blob = new Blob([data], {
+                  type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+              });
+              const blobUrl = window.URL.createObjectURL(blob);
+              window.open(blobUrl)
+          },
+      });
+  }
 
     clearDatePicker() {
         this.dateSearchForm.setValue({
