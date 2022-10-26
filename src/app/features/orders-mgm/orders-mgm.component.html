@@ -67,7 +67,17 @@
                 <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
             </button>
             <mat-menu #exportData="matMenu">
-                <button mat-menu-item>Xuất excel danh sách lưới (được chọn)</button>
+                <button mat-menu-item [matMenuTriggerFor]="exportMenu">Xuất file kế toán</button>
+                <mat-menu #exportMenu="matMenu">
+                  <button mat-menu-item>
+                      <i class="fa-regular fa-circle-check mr-2"></i>
+                      Được chọn
+                  </button>
+                  <button mat-menu-item>
+                      <i class="fa-brands fa-searchengin mr-2"></i>
+                      Điều kiện tìm
+                  </button>
+              </mat-menu>
             </mat-menu>
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="printMenu">
                 <i class="fa-solid fa-print text-green-700 text-sm font-bold mr-1"></i>
@@ -75,8 +85,11 @@
                 <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
             </button>
             <mat-menu #exportData="matMenu" #printMenu="matMenu">
-                <button mat-menu-item>In theo mẫu A4 (được chọn)</button>
-                <button mat-menu-item>In theo mẫu A5 (được chọn)</button>
+                <button mat-menu-item [matMenuTriggerFor]="printMenu1">In theo mẫu A4</button>
+                <mat-menu #printMenu1="matMenu">
+                  <button mat-menu-item (click)="print()"><i class="fa-regular fa-circle-check mr-2"></i>Được chọn</button>
+                  <button mat-menu-item><i class="fa-brands fa-searchengin mr-2"></i>Điều kiện tìm</button>
+              </mat-menu>
             </mat-menu>
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="filterByTime">
                 <i class="fa-solid fa-calendar text-green-700 text-sm font-bold mr-1"></i>
@@ -156,7 +169,7 @@
                         class="custom-row">
                         <td class="custom-td border-b">{{ i + 1 }}</td>
                         <td class="custom-td border-b">
-                            <mat-checkbox></mat-checkbox>
+                            <mat-checkbox (change)="chooseID($event, order.id)"></mat-checkbox>
                         </td>
                         <td class="custom-td border-b">{{ order.orderEmployee?.employeeName }}</td>
                         <td class="custom-td border-b">
