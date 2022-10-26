@@ -5,8 +5,10 @@ import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
 import { SaleReceipt } from 'src/app/core/model/SaleReceipt';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { DataService } from './services/data.service';
-import printJS from "print-js";
+import printJS from 'print-js';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import moment from 'moment';
 
 @Component({
     selector: 'app-order-sale-mgm',
@@ -25,44 +27,42 @@ export class OrderSaleMgmComponent implements OnInit {
     id: any = [];
     roleMain = 'member';
     formFilterReceive: any;
+    dateSearchForm: FormGroup;
 
-    searchAllBody = {
+    body: any = {
         sortField: 'CreatedDate',
         isAscending: false,
-        page: this.page,
-        pageSize: this.pageSize,
+        page: 1,
+        pageSize: 30,
     };
 
     constructor(
-        private activatedroute: ActivatedRoute,
         public datepipe: DatePipe,
         private saleReceiptService: SaleReceiptService,
         private router: Router,
         private dataService: DataService,
-        private sanitizer: DomSanitizer,
+        private fb: FormBuilder,
     ) {}
 
     ngOnInit(): void {
         this.roleMain = localStorage.getItem('roleMain')!;
         this.saleReceiptService.page.subscribe((data) => {
             this.page = data;
-            let body = {
-                sortField: 'CreatedDate',
-                isAscending: false,
-                page: this.page,
-                pageSize: this.pageSize,
-            };
-            this.search(body);
+            this.body.page = this.page;
+            this.search(this.body);
         });
         this.dataService.searchText.subscribe((data) => {
-            const body = {
-                keyword: data,
-                sortField: 'CreatedDate',
-                isAscending: false,
-                page: this.page,
-                pageSize: this.pageSize,
-            };
-            this.search(body);
+            // lấy text
+            this.body.keyword = data;
+            // set lại page
+            this.page = 1;
+            this.body.page = 1;
+            this.search(this.body);
+        });
+        // create dateSearchForm
+        this.dateSearchForm = this.fb.group({
+            fromDate: [null],
+            toDate: [null],
         });
     }
 
@@ -70,7 +70,7 @@ export class OrderSaleMgmComponent implements OnInit {
         // this.saleReceiptService.search().subscribe((data) => {
         //     this.listReceiptOreder = data.data;
         // });
-        this.search(this.searchAllBody);
+        this.search(this.body);
     }
 
     search(body: any) {
@@ -131,10 +131,10 @@ export class OrderSaleMgmComponent implements OnInit {
     export() {
         let body;
         body = {
-          filter: null,
-          listId: this.id,
-          type: 2,
-      };
+            filter: null,
+            listId: this.id,
+            type: 2,
+        };
 
         console.log(body);
         this.saleReceiptService.export(body).subscribe({
@@ -147,13 +147,13 @@ export class OrderSaleMgmComponent implements OnInit {
             },
         });
     }
-    exportWithFilter(){
-      let body = {
-        filter: this.formFilterReceive,
-        listId: null,
-        type: 1,
-      }
-      console.log("ExportWithFilter",body);
+    exportWithFilter() {
+        let body = {
+            filter: this.formFilterReceive,
+            listId: null,
+            type: 1,
+        };
+        console.log('ExportWithFilter', body);
         this.saleReceiptService.export(body).subscribe({
             next: (data) => {
                 const blob = new Blob([data], {
@@ -161,33 +161,54 @@ export class OrderSaleMgmComponent implements OnInit {
                 });
                 const url = window.URL.createObjectURL(blob);
                 window.open(url);
-
             },
-      });
+        });
     }
-    print(){
-      let body;
+    print() {
+        let body;
         body = {
-          filter: null,
-          listId: this.id,
-          type: 2,
-      };
-        console.log("Print");
+            filter: null,
+            listId: this.id,
+            type: 2,
+        };
+        console.log('Print');
         this.saleReceiptService.export(body).subscribe({
             next: (data) => {
-              var blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-              const blobUrl = URL.createObjectURL(blob);
-              const iframe = document.createElement('iframe');
-              iframe.style.display = 'none';
-              iframe.src = blobUrl;
-              document.body.appendChild(iframe);
-              iframe.contentWindow?.print();
-
-
+                var blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                const blobUrl = URL.createObjectURL(blob);
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = blobUrl;
+                document.body.appendChild(iframe);
+                iframe.contentWindow?.print();
             },
         });
     }
     filter(body: any) {
         this.search(body);
+    }
+
+    filterDate() {
+        if (this.dateSearchForm.get('fromDate')?.value) {
+            this.body.fromDate = moment(this.dateSearchForm.get('fromDate')?.value).format('YYYY-MM-DD');
+        }
+        if (this.dateSearchForm.get('toDate')?.value) {
+            this.body.toDate = moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD');
+        }
+        // set lại page
+        this.page = 1;
+        this.body.page = 1;
+        this.search(this.body);
+    }
+
+    clearDatePicker() {
+        this.dateSearchForm.setValue({
+            fromDate: null,
+            toDate: null,
+        });
+        this.body.fromDate = null;
+        this.body.toDate = null;
     }
 }
