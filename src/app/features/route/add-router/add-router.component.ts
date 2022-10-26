@@ -14,7 +14,7 @@ export class AddRouterComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _routeSer: RouteService,
   ) { }
-
+  typeButton:any = "";
   title = 'Thông tin chung'
 
   ngOnInit(): void {
@@ -22,13 +22,13 @@ export class AddRouterComponent implements OnInit {
   }
 
   add(e: any) {
-    this.dataService.changeEmployee('add');
-    // if(this.data.type == 'add'){
-    //   this.dataService.changeEmployee('add');
-    // }
-    // if(this.data.type == 'update'){
-    //   this.dataService.changeEmployee('update');
-    // }
+    // this.dataService.changeEmployee('add');
+    if(this.data.type == 'add'){
+      this.typeButton = "add"
+    }
+    if(this.data.type == 'update'){
+      this.typeButton = "update"
+    }
   }
 
   tabList = [
