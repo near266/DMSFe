@@ -62,10 +62,15 @@ export class OrderSaleMgmComponent implements OnInit {
             this.search(this.body);
         });
         // create dateSearchForm
+
+
+
         this.dateSearchForm = this.fb.group({
             fromDate: [null],
             toDate: [null],
         });
+
+
     }
 
     ngAfterViewInit(): void {
@@ -131,6 +136,8 @@ export class OrderSaleMgmComponent implements OnInit {
     }
 
     export() {
+      console.log(this.formFilterReceive);
+
         let body;
         body = {
             filter: null,
@@ -150,21 +157,46 @@ export class OrderSaleMgmComponent implements OnInit {
         });
     }
     exportWithFilter() {
-        let body = {
-            filter: this.formFilterReceive,
-            listId: null,
-            type: 1,
+      console.log(this.formFilterReceive);
+      let formFilter;
+      if(this.formFilterReceive == undefined){
+        formFilter = {
+          keyword: null,
+          deliveryDate: null,
+          orderEmployeeId: null,
+          customerTypeId: null,
+          customerGroupId: null,
+          areaId: null,
+          productKey: null,
+          status: null,
+          printStatus: true,
+          paymentMethod: 0,
+          // page: 1,
+          // pageSize: 100000,
+          sortField: null,
+          isAscending: true,
+          fromDate: moment(this.dateSearchForm.get('fromDate')?.value).format('YYYY-MM-DD'),
+          toDate: moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD'),
+          dateFilter: null,
         };
-        console.log('ExportWithFilter', body);
-        this.saleReceiptService.export(body).subscribe({
-            next: (data) => {
-                const blob = new Blob([data], {
-                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                });
-                const url = window.URL.createObjectURL(blob);
-                window.open(url);
-            },
-        });
+      }else{
+        formFilter = null;
+      }
+      let body = {
+          filter: formFilter,
+          listId: null,
+          type: 1,
+      };
+      console.log('ExportWithFilter', body);
+      this.saleReceiptService.export(body).subscribe({
+          next: (data) => {
+              const blob = new Blob([data], {
+                  type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+              });
+              const url = window.URL.createObjectURL(blob);
+              window.open(url);
+          },
+      });
     }
     print() {
         let body;
