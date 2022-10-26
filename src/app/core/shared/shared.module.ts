@@ -6,7 +6,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
-import {NgSelectModule} from '@ng-select/ng-select'
+import { NgSelectModule } from '@ng-select/ng-select';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
@@ -54,7 +54,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
-import {NgPrintModule} from 'ng-print';
+import { NgPrintModule } from 'ng-print';
 
 @NgModule({
     declarations: [

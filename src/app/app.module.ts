@@ -16,6 +16,7 @@ import { DataService } from './core/services/data.service';
 import { ForgotpasswordComponent } from './features/auth/forgotpassword/forgotpassword.component';
 import { OrderReportComponent } from './features/order-report/order-report.component';
 import localeVi from '@angular/common/locales/vi';
+import { NgPrintModule } from 'ng-print';
 registerLocaleData(localeVi);
 @NgModule({
     declarations: [AppComponent, ForgotpasswordComponent, OrderReportComponent],
@@ -27,7 +28,6 @@ registerLocaleData(localeVi);
         { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
         DataService,
         CurrencyPipe,
-
     ],
     bootstrap: [AppComponent],
 })
