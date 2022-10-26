@@ -9,6 +9,7 @@ import printJS from 'print-js';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import moment from 'moment';
+import { jsPDF } from 'jspdf';
 
 @Component({
     selector: 'app-order-sale-mgm',
@@ -27,6 +28,7 @@ export class OrderSaleMgmComponent implements OnInit {
     id: any = [];
     roleMain = 'member';
     formFilterReceive: any;
+    printThis: any;
     dateSearchForm: FormGroup;
 
     body: any = {

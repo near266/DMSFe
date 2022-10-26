@@ -88,15 +88,9 @@
             <mat-menu #exportData="matMenu" #printMenu="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="printMenu1">In theo mẫu A4</button>
                 <mat-menu #printMenu1="matMenu">
-                    <button mat-menu-item (click)="print()">
-                        <i class="fa-regular fa-circle-check mr-2"></i>
-                        Được chọn
-                    </button>
-                    <button mat-menu-item>
-                        <i class="fa-brands fa-searchengin mr-2"></i>
-                        Điều kiện tìm
-                    </button>
-                </mat-menu>
+                  <button mat-menu-item (click)="export()"><i class="fa-regular fa-circle-check mr-2"></i>Được chọn</button>
+                  <button mat-menu-item><i class="fa-brands fa-searchengin mr-2"></i>Điều kiện tìm</button>
+              </mat-menu>
                 <button mat-menu-item>In theo mẫu A5 (được chọn)</button>
             </mat-menu>
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="filterByTime">
