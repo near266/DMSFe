@@ -118,7 +118,7 @@ export class InforRouterComponent implements OnInit {
   getRouteDetail(){
     this._routeSer.GetRouteById(this.idRoute).subscribe({
       next: data => {
-        console.log("Data Detail",data);
+        // console.log("Data Detail",data);
         this.RootInfoRouteDetail = data;
         this.formatDate = data.startedDate?.split("T")[0];
         // console.log(this.formatDate);
