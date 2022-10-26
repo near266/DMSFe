@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { RouteService } from 'src/app/core/services/route.service';
@@ -15,6 +15,7 @@ import { RootSearchAllCusInRoute } from '../models/searchAllCusInRoute';
 })
 export class InforRouterComponent implements OnInit {
   unitTreeGroupIdTemp:any = "";
+  unitTreeGroupIdSearch: any;
 
   constructor(
     private dataService: DataService,
@@ -28,6 +29,8 @@ export class InforRouterComponent implements OnInit {
   @Input() status: any;
   @Input() idRoute: any;
   @Input() typeRoute:any;
+  @Input() typeButton:any;
+
   formatDate:any;
   showGroup:boolean = false;
   RootInfoRouteDetail :RootInfoRoute;
@@ -54,54 +57,55 @@ export class InforRouterComponent implements OnInit {
     unitTreeGroupId: [''],
     routeDate: [''],
     startedDate: [''],
-    status: [''],
+    status: [null],
   });
+
+
   EmployeeInGroup:any;
 
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
 
-  ngOnInit(): void {
-    console.log(this.typeRoute);
-
-    this.dataService.changeEmployee('');
     if(this.typeRoute == 'update'){
       this.getRouteDetail();
       this.searchAllCusInRoute(this.idRoute);
     }else{
     }
-    this.dataService.employee.subscribe({
-      next: data => {
-        if(data !== ""){
-          this.formInforRouteUpdate.patchValue({
-            // startedDate: new Date(this.formatDate).toISOString(),
-            // unitTreeGroupId: this.RootInfoRouteDetail?.unitTreeGroup?.id,
-            id: this.RootInfoRouteDetail?.id,
-          });
-        if(this.typeRoute == "update"){
-          console.log('Update',this.formInforRouteUpdate.value);
-          this._routeSer.UpdateRoute(this.formInforRouteUpdate.value).subscribe({
-            next: data => {
-              // console.log(data);
-              this.getRouteDetail();
-              this._snackBar.openSnackbar("Cập nhật thành công!", 3000, "", "right", "bottom", true)
-            }
-          })
-        }else{
-          // this.formInforRouteUpdate.removeControl('id');
-          // this.formInforRouteUpdate.setValue({
-          //   unitTreeGroupId: this.unitTreeGroupIdTemp
-          // })
-          // console.log("Form Add", this.formInforRouteUpdate.value);
-          this._routeSer.AddRoute(this.formInforRouteUpdate.value).subscribe({
-            next: data => {
-              // console.log(data);
-              this.getRouteDetail();
-              this._snackBar.openSnackbar("Tạo tuyến thành công!", 3000, "", "right", "bottom", true)
-            }
-          })
+
+    // console.log("onChanges", changes['typeButton'].currentValue);
+    let typeButtonChange = changes['typeButton'].currentValue;
+
+    if(typeButtonChange == "update"){
+      this.formInforRouteUpdate.patchValue({
+        id: this.RootInfoRouteDetail?.id,
+      });
+      // console.log('Form Update',this.formInforRouteUpdate.value);
+      this._routeSer.UpdateRoute(this.formInforRouteUpdate.value).subscribe({
+        next: data => {
+          this.getRouteDetail();
+          this._snackBar.openSnackbar("Cập nhật thành công!", 3000, "", "right", "bottom", true)
         }
+      })
+    }
+    if(typeButtonChange == "add"){
+      this.formInforRouteUpdate.removeControl('id');
+      // this.formInforRouteUpdate.setValue({
+      //   unitTreeGroupId: this.unitTreeGroupIdTemp
+      // })
+      // console.log("Form Add", this.formInforRouteUpdate.value);
+      this._routeSer.AddRoute(this.formInforRouteUpdate.value).subscribe({
+        next: data => {
+          // console.log(data);
+          this.getRouteDetail();
+          this._snackBar.openSnackbar("Tạo tuyến thành công!", 3000, "", "right", "bottom", true)
         }
-      }
-    });
+      })
+    }
+  }
+
+
+  ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
@@ -114,10 +118,11 @@ export class InforRouterComponent implements OnInit {
   getRouteDetail(){
     this._routeSer.GetRouteById(this.idRoute).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.RootInfoRouteDetail = data;
         this.formatDate = data.startedDate?.split("T")[0];
         // console.log(this.formatDate);
+        this.unitTreeGroupIdSearch = data.unitTreeGroup.id
         this.groupName = data.unitTreeGroup.name;
         this.formInforRouteUpdate.patchValue({
           unitTreeGroupId: data.unitTreeGroup.id
@@ -155,18 +160,38 @@ export class InforRouterComponent implements OnInit {
     })
   }
 
-  searchAllCusInRoute(id:any){
+  searchAllCusInRoute(id:any, keyword?:any){
     let body = {
+      keyword: keyword,
       routeId: id,
       page: 1,
       pageSize: 10000
     }
+    console.log(body);
+
     this._routeSer.SearchAllCusInRoute(body).subscribe({
       next: (data:RootSearchAllCusInRoute) => {
         this.listAllCusInRouteData = data as RootSearchAllCusInRoute;
-        console.log(data);
+        // console.log(data);
       }
     })
+  };
+
+  SerchCus(event:any){
+    // console.log(event.target.value);
+    this.searchAllCusInRoute(this.unitTreeGroupIdSearch, event.target.value);
+  }
+  changeStatus(event:any){
+    // console.log(event.target.value);
+    if(event.target.value == 'true'){
+      this.formInforRouteUpdate.patchValue({
+      status: true,
+      })
+    }else{
+      this.formInforRouteUpdate.patchValue({
+        status: false,
+        })
+    }
   }
 
 }
