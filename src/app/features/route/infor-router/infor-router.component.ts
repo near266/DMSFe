@@ -69,7 +69,7 @@ export class InforRouterComponent implements OnInit {
 
     if(this.typeRoute == 'update'){
       this.getRouteDetail();
-      this.searchAllCusInRoute(this.idRoute);
+      this.searchAllCusInRoute(this.idRoute, "");
     }else{
     }
 
@@ -118,7 +118,7 @@ export class InforRouterComponent implements OnInit {
   getRouteDetail(){
     this._routeSer.GetRouteById(this.idRoute).subscribe({
       next: data => {
-        // console.log(data);
+        console.log("Data Detail",data);
         this.RootInfoRouteDetail = data;
         this.formatDate = data.startedDate?.split("T")[0];
         // console.log(this.formatDate);
@@ -160,12 +160,12 @@ export class InforRouterComponent implements OnInit {
     })
   }
 
-  searchAllCusInRoute(id:any, keyword?:any){
+  searchAllCusInRoute(id:any, keyword:any){
     let body = {
       keyword: keyword,
       routeId: id,
       page: 1,
-      pageSize: 10000
+      pagesize: 3000
     }
     console.log(body);
 
@@ -179,7 +179,7 @@ export class InforRouterComponent implements OnInit {
 
   SerchCus(event:any){
     // console.log(event.target.value);
-    this.searchAllCusInRoute(this.unitTreeGroupIdSearch, event.target.value);
+    this.searchAllCusInRoute(this.RootInfoRouteDetail.id, event.target.value);
   }
   changeStatus(event:any){
     // console.log(event.target.value);
