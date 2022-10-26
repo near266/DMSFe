@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { DataService } from 'src/app/core/services/data.service';
@@ -30,6 +30,7 @@ export class InforRouterComponent implements OnInit {
   @Input() idRoute: any;
   @Input() typeRoute:any;
   @Input() typeButton:any;
+  @Output() successEdit = new EventEmitter()
 
   formatDate:any;
   showGroup:boolean = false;
@@ -84,7 +85,8 @@ export class InforRouterComponent implements OnInit {
       this._routeSer.UpdateRoute(this.formInforRouteUpdate.value).subscribe({
         next: data => {
           this.getRouteDetail();
-          this._snackBar.openSnackbar("Cập nhật thành công!", 3000, "", "right", "bottom", true)
+          this._snackBar.openSnackbar("Cập nhật thành công!", 3000, "", "right", "bottom", true);
+          this.successEdit.emit(true);
         }
       })
     }
@@ -98,7 +100,8 @@ export class InforRouterComponent implements OnInit {
         next: data => {
           // console.log(data);
           this.getRouteDetail();
-          this._snackBar.openSnackbar("Tạo tuyến thành công!", 3000, "", "right", "bottom", true)
+          this._snackBar.openSnackbar("Tạo tuyến thành công!", 3000, "", "right", "bottom", true);
+          this.successEdit.emit(true);
         }
       })
     }

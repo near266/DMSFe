@@ -1,13 +1,17 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { DataService } from 'src/app/core/services/data.service';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { RouteService } from 'src/app/core/services/route.service';
+import { outputAst } from '@angular/compiler';
 @Component({
   selector: 'app-add-router',
   templateUrl: './add-router.component.html',
   styleUrls: ['./add-router.component.scss']
 })
 export class AddRouterComponent implements OnInit {
+
+  @Output() alertSuccessEvent = new EventEmitter()
+
 
   constructor(
     private dataService: DataService,
@@ -35,6 +39,10 @@ export class AddRouterComponent implements OnInit {
     { title: 'Thông tin chung', leftIcon: 'fa-regular fa-file-lines' },
     { title: 'Bản đồ', leftIcon: 'fa-solid fa-gear' },
     { title: 'Lịch sử KH', leftIcon: 'fa-solid fa-gear' },
-  ]
+  ];
+
+  alertSuccess(event:any){
+    this.alertSuccessEvent.emit(true)
+  }
 
 }
