@@ -60,6 +60,8 @@ export class InforRouterComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log(this.typeRoute);
+
     this.dataService.changeEmployee('');
     if(this.typeRoute == 'update'){
       this.getRouteDetail();
@@ -75,7 +77,7 @@ export class InforRouterComponent implements OnInit {
             id: this.RootInfoRouteDetail?.id,
           });
         if(this.typeRoute == "update"){
-          // console.log('Update');
+          console.log('Update',this.formInforRouteUpdate.value);
           this._routeSer.UpdateRoute(this.formInforRouteUpdate.value).subscribe({
             next: data => {
               // console.log(data);
@@ -117,6 +119,9 @@ export class InforRouterComponent implements OnInit {
         this.formatDate = data.startedDate?.split("T")[0];
         // console.log(this.formatDate);
         this.groupName = data.unitTreeGroup.name;
+        this.formInforRouteUpdate.patchValue({
+          unitTreeGroupId: data.unitTreeGroup.id
+        })
         this.SearchEmployeeInGroup(data.unitTreeGroup.id)
       }
     })

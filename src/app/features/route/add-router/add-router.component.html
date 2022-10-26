@@ -4,7 +4,7 @@
         style="display: flex!important; margin: 0!important;">
         <div class="text-2xl text-gray-500 font-semibold capitalize tracking-wider flex">Tuyến mới</div>
         <div class="flex flex-row text-xs">
-            <div (click)="add($event)"
+            <div [mat-dialog-close]="true" (click)="add($event)"
                 class="flex flex-row bg-blue-900 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l cursor-pointer">
                 <i class="fa-solid fa-floppy-disk mx-2"></i>
                 <span *ngIf="data.type == 'add'" class="mr-2">Thêm</span>
