@@ -6,6 +6,7 @@ import { CustomerService } from 'src/app/core/services/customer.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ReturnApiService } from '../apis/return-api.service';
 import { ReturnDetailsService } from './return-details.service';
+import { ReturnOrderService } from './return-order.service';
 import { ReturnsService } from './returns.service';
 
 @Injectable({
@@ -16,6 +17,7 @@ export class ReturnFormService {
         private returnApiService: ReturnApiService,
         private customerService: CustomerService,
         private returnsService: ReturnsService,
+        private returnOrderService: ReturnOrderService,
         private returnDetailsService: ReturnDetailsService,
         private snackBarService: SnackbarService,
         private dialog: MatDialog,
@@ -95,6 +97,7 @@ export class ReturnFormService {
                 this.discountAmount$.next(0);
                 this.dialog.closeAll();
                 this.router.navigate(['/returns']);
+                this.returnOrderService.updatePurchaseOrderStatus(6);
             },
             error: (error) => {
                 this.snackBarService.openSnackbar('Tạo phiếu trả hàng thất bại', 2000, 'Đóng', 'center', 'top', false);

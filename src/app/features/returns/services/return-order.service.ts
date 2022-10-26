@@ -1,6 +1,9 @@
 import { OrderEmployee } from './../../../core/model/PurchaseOrder';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
+import * as moment from 'moment';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 
 @Injectable({
     providedIn: 'root',
@@ -8,15 +11,63 @@ import { BehaviorSubject, Subject } from 'rxjs';
 export class ReturnOrderService {
     returnInfo$: BehaviorSubject<any> = new BehaviorSubject<any>({});
     returnProductList$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+    returnOrderId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
     returnPromotionList$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     totalPrice$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     discountAmount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-
     submitFormInfo$: Subject<boolean> = new Subject<boolean>();
     submitFormProductList$: Subject<any[]> = new Subject<any[]>();
     submitFormPromotionList$: Subject<any> = new Subject<any>();
 
-    constructor() {}
+    constructor(private snackbar: SnackbarService, private purchaseOrder: PurchaseOrderService) {}
+    updatePurchaseOrderStatus(status: number) {
+        const id = this.returnOrderId$.getValue();
+        if (id) {
+            this.purchaseOrder.detail(id).subscribe((data) => {
+                const body = {
+                    purchaseOrderId: data.id,
+                    orderDate: data.orderDate,
+                    groupId: data.unit?.id,
+                    orderEmployeeId: data.orderEmployee?.id,
+                    warehouseId: data.warehouse?.id,
+                    customerId: data.customer?.id,
+                    routeId: data.route?.id,
+                    type: data.type,
+                    status,
+                    paymentMethod: 0,
+                    description: data.description,
+                    phone: data.phone,
+                    address: data.address,
+                    customerName: data.customerName,
+                    totalAmount: data.totalAmount,
+                    totalOfVAT: data.totalOfVAT,
+                    totalDiscountProduct: data.totalDiscountProduct,
+                    tradeDiscount: data.tradeDiscount,
+                    totalPayment: data.totalPayment,
+                    archived: false,
+                    // lastModifiedBy: 'string',
+                    lastModifiedDate: moment(Date.now()).format('YYYY-MM-DD'),
+                    orderCode: data.orderCode,
+                    deliveryDate: data.deliveryDate,
+                    prePayment: data.prePayment,
+                };
+                this.purchaseOrder.update(body).subscribe({
+                    next: (data) => {
+                        console.log('oke');
+                        this.returnInfo$.next({});
+                        this.returnProductList$.next([]);
+                        this.returnPromotionList$.next([]);
+                        this.totalPrice$.next(0);
+                        this.returnOrderId$.next('');
+                        this.discountAmount$.next(0);
+                    },
+                    error: (err) => {
+                        this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', true);
+                    },
+                });
+            });
+        }
+    }
     formatSubmitListProduct(list: any[]) {
         return list.map((item) => {
             return {

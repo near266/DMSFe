@@ -143,6 +143,7 @@ export class ViewEditDetailComponent implements OnInit {
         if (changeTo === 0) {
             const { listProduct, listPromotionProduct, ...orderInfo } = this.detailOrder;
             this.returnOrderService.returnInfo$.next(this.returnOrderService.formatInfo(orderInfo));
+            this.returnOrderService.returnOrderId$.next(this.detailOrder?.purchaseOrder?.id || null);
             this.returnOrderService.returnProductList$.next(this.returnOrderService.formatListProduct(listProduct));
             this.returnOrderService.returnPromotionList$.next(
                 this.returnOrderService.formatListProduct(listPromotionProduct),
