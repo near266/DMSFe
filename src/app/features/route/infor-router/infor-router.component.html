@@ -64,7 +64,7 @@
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
             <select class="border border-solid border-black p-1 rounded w-96 text-xs h-7"
-            formControlName="status" [ngModel]="RootInfoRouteDetail?.status">
+            formControlName="status" (change)="changeStatus($event)" [ngModel]="RootInfoRouteDetail?.status">
                 <option [value]="true">Hoạt động</option>
                 <option [value]="false">Khoá</option>
             </select>
@@ -74,7 +74,7 @@
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-medium">Danh sách khách hàng (<span class="font-bold">{{listAllCusInRouteData.totalCount}}</span>)</div>
         <div class="relative z-0">
-          <input class="border border-solid border-black p-1 rounded w-96 text-xs h-7 pl-7" placeholder="Tìm kiếm khách hàng">
+          <input class="border border-solid border-black p-1 rounded w-96 text-xs h-7 pl-7" (input)="SerchCus($event)" placeholder="Tìm kiếm khách hàng">
           <i class="fa-solid fa-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2"></i>
         </div>
     </div>
