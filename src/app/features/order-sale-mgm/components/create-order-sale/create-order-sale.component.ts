@@ -8,6 +8,7 @@ import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
+import { FormatService } from '../../services/format.service';
 
 @Component({
     selector: 'app-create-order-sale',
@@ -26,6 +27,8 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
     listChoosenProduct = new Array<any>();
     listWarehouse: any = [];
     listPromotionProductAdd: any = [];
+    listChoosenProductIds: any = [];
+    listSearchedProduct: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -47,6 +50,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         private router: Router,
         private purchaseOrder: PurchaseOrderService,
         private numberToText: NumberToTextService,
+        private formatService: FormatService,
     ) {}
 
     ngOnInit(): void {
@@ -149,7 +153,9 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             height: '100%',
             width: '100%',
             panelClass: 'full-screen-modal',
-            data: this.listChoosenProduct,
+            data: {
+                listId: this.listChoosenProductIds,
+            },
         });
         dialogRef.afterClosed().subscribe((data) => {
             if (!data.isCancel) {
@@ -159,6 +165,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
                     product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
                     product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
                 });
+                this.pushListProductToDialog();
             }
         });
     }
@@ -327,7 +334,40 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         }
     }
 
+    // hơi khác các màn 1 tí vì k format được
+    pushListProductToDialog() {
+        this.listChoosenProductIds = this.listChoosenProduct.map((product: any) => {
+            return {
+                id: product.id,
+            };
+        });
+    }
+
     setProductPromotionAdd(e: any) {
         this.listPromotionProductAdd = e;
+    }
+
+    searchListProduct(e: any) {
+        const body = {
+            keyword: e.target.value,
+            sortBy: {
+                property: 'CreatedDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 5,
+        };
+        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+            console.log(data);
+            this.listSearchedProduct = data?.data;
+        });
+    }
+
+    addProductBySearch(product: any) {
+        product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+        product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+        product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+        this.listChoosenProduct.push(product);
+        this.pushListProductToDialog();
     }
 }

@@ -6,6 +6,7 @@ import { Observable, map, of, delay, BehaviorSubject } from 'rxjs';
 })
 export class DataService {
     private searchTextSource = new BehaviorSubject<string>('');
+
     searchText = this.searchTextSource.asObservable();
     constructor() {}
     searchKeyword(keyword: string) {

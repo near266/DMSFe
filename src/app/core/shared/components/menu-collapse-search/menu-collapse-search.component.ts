@@ -38,7 +38,7 @@ export class MenuCollapseSearchComponent implements OnInit, AfterViewInit, OnCha
   search(keywords: string) {
     this.buffer_menu_item = [];
     this.Config.menuChildrens.forEach( (element) => {
-      if(element.toLowerCase().includes(keywords)) {
+      if(element.toLowerCase().includes(keywords.toLowerCase())) {
         this.buffer_menu_item.push(element);
       }
     });
@@ -49,6 +49,7 @@ export class MenuCollapseSearchComponent implements OnInit, AfterViewInit, OnCha
 
   cancelSelect() {
       this.isSelect = false;
+      this.Selection.emit('');
   }
 
   stopPropagation(e: any) {

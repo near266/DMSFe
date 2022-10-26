@@ -22,12 +22,14 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
     listProductPromotionAdd: any = [];
     listPromotionIds: any = [];
     listProductPromotionRemove: any = [];
+    listSearchedProduct: any = [];
 
     constructor(
         private dataservice: DataService,
         private saleReceipt: SaleReceiptService,
         private formatService: FormatService,
         private dialog: MatDialog,
+        private purchaseOrder: PurchaseOrderService,
     ) {}
 
     ngOnInit(): void {
@@ -166,5 +168,25 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
         this.listPromotionProduct = this.listPromotionProduct.filter((product: any) => {
             return productRemove.product.id != product?.product?.id;
         });
+    }
+
+    searchListProduct(e: any) {
+        const body = {
+            keyword: e.target.value,
+            sortBy: {
+                property: 'CreatedDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 5,
+        };
+        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+            this.listSearchedProduct = data?.data;
+        });
+    }
+
+    addProductPromotionBySearch(product: any) {
+        product = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
+        this.listProductPromotionAdd.push(product[0]);
     }
 }

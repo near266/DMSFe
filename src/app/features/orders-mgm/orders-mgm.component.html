@@ -11,20 +11,29 @@
                 Danh sách phiếu đặt hàng
                 <span *ngIf="total">({{ total }})</span>
             </span>
-            <div style="font-size: 12px">
-                <mat-form-field appearance="outline">
+            <div style="font-size: 12px" class="flex items-center">
+                <mat-form-field
+                    style="padding-bottom: 0px !important"
+                    appearance="outline"
+                    [formGroup]="dateSearchForm">
                     <mat-label>Khoảng thời gian</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
-                        <input matStartDate placeholder="Start date" />
-                        <input matEndDate placeholder="End date" />
+                        <input matStartDate placeholder="Start date" formControlName="fromDate" />
+                        <input matEndDate placeholder="End date" formControlName="toDate" />
                     </mat-date-range-input>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker-toggle matSuffix>
+                        <mat-icon matDatepickerToggleIcon (click)="clearDatePicker()">clear</mat-icon>
+                    </mat-datepicker-toggle>
                     <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
+                <i
+                    (click)="filterDate()"
+                    class="ml-1 text-center mr-1 px-2 py-2 rounded-md bg-zinc-300 h-full w-full hover:opacity-70 font-bold cursor-pointer fa-solid text-base icon fa-magnifying-glass"></i>
             </div>
         </div>
         <!-- options select to edit -->
-        <div class="flex mt-[-15px]">
+        <div class="flex mt-2">
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="addMenu">
                 <i class="fa-solid fa-plus text-green-700 text-sm font-bold mr-1"></i>
                 <span>Thêm mới</span>

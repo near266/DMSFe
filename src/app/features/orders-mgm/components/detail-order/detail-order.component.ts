@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { ConfirmDialogComponent } from 'src/app/core/shared/components/confirm-dialog/confirm-dialog.component';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
+import { FormatService } from '../../services/format.service';
 @Component({
     selector: 'app-detail-order',
     templateUrl: './detail-order.component.html',
@@ -46,6 +47,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     listProductAdd: any = [];
     listPromotionProductAdd: any = [];
     listChoosenProductPromotion: any = [];
+    listSearchedProduct: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -57,15 +59,12 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     defaultCustomer: any;
     defaultOrderEmployee: any;
     constructor(
-        private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
         private dataservice: DataService,
         private dialog: MatDialog,
-        private router: Router,
-        private dataService: DataService,
         private purchaseOrder: PurchaseOrderService,
-        private snackbar: SnackbarService,
         private numberToText: NumberToTextService,
+        private format: FormatService,
     ) {}
 
     ngOnInit(): void {
@@ -527,8 +526,9 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             if (!data.isCancel) {
                 if (this.formatFormProduct(data)) {
                     let listAdd = this.listAddProduct(this.formatFormProduct(data));
-                    this.listProductAdd = [];
-                    this.listProductAdd = listAdd;
+                    listAdd.forEach((product: any) => {
+                        this.listProductAdd.push(product);
+                    });
                 }
             }
         });
@@ -550,8 +550,11 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             if (!data.isCancel) {
                 if (this.formatFormProductPromotion(data)) {
                     let listAdd = this.listAddProductPromotion(this.formatFormProductPromotion(data));
-                    this.listPromotionProductAdd = [];
-                    this.listPromotionProductAdd = listAdd;
+                    // this.listPromotionProductAdd = [];
+                    // this.listPromotionProductAdd = listAdd;
+                    listAdd.forEach((product: any) => {
+                        this.listPromotionProductAdd.push(product);
+                    });
                 }
             }
         });
@@ -697,5 +700,34 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     test(customerIdDefault: any) {
         console.log(customerIdDefault);
+    }
+
+    searchListProduct(e: any) {
+        const body = {
+            keyword: e.target.value,
+            sortBy: {
+                property: 'CreatedDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 5,
+        };
+        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+            console.log(data);
+            this.listSearchedProduct = data?.data;
+        });
+    }
+
+    addProductBySearch(product: any) {
+        product = this.formatFormProduct([product]);
+        this.listProductAdd.push(product[0]);
+    }
+
+    addProductPromotionBySearch(product: any) {
+        // let productAfterFormat = this.format.formatProductPromotionFromCloseDialogAdd([product], []);
+        // this.listPromotionProduct.push(productAfterFormat[0]);
+        // this.pushListProductPromotionToDialog();
+        product = this.formatFormProductPromotion([product]);
+        this.listPromotionProductAdd.push(product[0]);
     }
 }

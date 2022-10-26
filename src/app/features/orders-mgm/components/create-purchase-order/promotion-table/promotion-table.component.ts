@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitte
 import { MatDialog } from '@angular/material/dialog';
 import { FormatService } from './../../../services/format.service';
 import { ProductListComponent } from '../../product-list/product-list.component';
+import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 
 @Component({
     selector: 'app-promotion-table',
@@ -13,7 +14,12 @@ export class PromotionTableComponent implements OnInit, OnChanges, DoCheck {
     @Output() listPromotionProductAdd$ = new EventEmitter<[]>();
     listChoosenProductPromotion: any = [];
     listPromotionProductAdd: any = [];
-    constructor(private dialog: MatDialog, private formatService: FormatService) {}
+    listSearchedProduct: any = [];
+    constructor(
+        private dialog: MatDialog,
+        private formatService: FormatService,
+        private purchaseOrder: PurchaseOrderService,
+    ) {}
 
     ngOnInit(): void {}
 
@@ -79,6 +85,22 @@ export class PromotionTableComponent implements OnInit, OnChanges, DoCheck {
         e.stopPropagation();
     }
 
+    searchListProduct(e: any) {
+        const body = {
+            keyword: e.target.value,
+            sortBy: {
+                property: 'CreatedDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 5,
+        };
+        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+            console.log(data);
+            this.listSearchedProduct = data?.data;
+        });
+    }
+
     unChoosePromotion(productRemove: any) {
         // remove to list product
         this.listPromotionProductAdd = this.listPromotionProductAdd.filter((product: any) => {
@@ -93,5 +115,11 @@ export class PromotionTableComponent implements OnInit, OnChanges, DoCheck {
                 id: product.product.id,
             };
         });
+    }
+
+    addProductPromotionBySearch(product: any) {
+        let productAfterFormat = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
+        this.listPromotionProductAdd.push(productAfterFormat[0]);
+        this.pushListProductPromotionToDialog();
     }
 }

@@ -1,4 +1,4 @@
-<button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" [matMenuTriggerFor]="menu"
+<button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white outline-none rounded" [matMenuTriggerFor]="menu"
   #menuTrigger="matMenuTrigger" (mouseenter)="mouseEnter(menuTrigger)" (mouseleave)="mouseLeave(menuTrigger)">
   <i class="fa-solid text-emerald-500 font-bold mr-2" [ngClass]="menuObj.leftTitleIcon"></i>
   {{menuObj.title}}

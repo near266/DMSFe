@@ -26,7 +26,7 @@
           </div>
         </div>
         <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
-        <app-menu-collapse (Selection)="selectLocation($event)" [Config]="locationMenu"></app-menu-collapse>
+        <!-- <app-menu-collapse (Selection)="selectLocation($event)" [Config]="locationMenu"></app-menu-collapse> -->
         <app-menu-collapse (Selection)="selectArchive($event)" [Config]="archiveMenu"></app-menu-collapse>
         <app-menu-collapse (Selection)="selectCustomer($event)" [Config]="customerMenu"></app-menu-collapse>
         <app-menu-collapse-search (Selection)="selectCategory($event)" [Config]="categoryMenu"></app-menu-collapse-search>
@@ -54,7 +54,7 @@
             </div>
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Xã phường</span>
-              <select [(ngModel)]="ward" class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8">
+              <select [(ngModel)]="ward" #wards class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8" (change)="getAddress(wards.value)">
                 <option disabled selected value=""> --- Chọn xã phường --- </option>
                 <option *ngFor="let item of listWards" value="{{item.name}}">{{item.name}}</option>
               </select>
@@ -67,7 +67,15 @@
             <span class="text-sm">Khu vực</span>
           </div>
           <div *ngIf="hasArea" class="text-xs">
-            <app-menu-collapse-tree></app-menu-collapse-tree>
+            <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
+              <select #a class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8" (change)="selectArea(a.value)">
+                <option disabled selected value=""> --- Chọn khu vực --- </option>
+                <option value="all">Tất cả khu vực</option>
+                <option value="none">Không thuộc khu vực</option>
+                <option *ngFor="let item of area" value="{{item.id}}">{{item.areaName}}</option>
+
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -84,7 +92,7 @@
         </button>
           <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
           </app-menu-bar>
-          <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+          <button type="button" (click)="filter()" class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
             <i class="fa-sharp fa-solid fa-refresh text-emerald-500 font-bold mr-2"></i>
             Tải lại
         </button>

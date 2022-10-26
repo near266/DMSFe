@@ -5,6 +5,11 @@ import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
 import { SaleReceipt } from 'src/app/core/model/SaleReceipt';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { DataService } from './services/data.service';
+import printJS from 'print-js';
+import { DomSanitizer } from '@angular/platform-browser';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import moment from 'moment';
+import { jsPDF } from 'jspdf';
 
 @Component({
     selector: 'app-order-sale-mgm',
@@ -22,52 +27,62 @@ export class OrderSaleMgmComponent implements OnInit {
     total: number = 0;
     id: any = [];
     roleMain = 'member';
-    formFilterReceive:any;
+    formFilterReceive: any;
+    printThis: any;
+    dateSearchForm: FormGroup;
 
-    searchAllBody = {
+    body: any = {
         sortField: 'CreatedDate',
         isAscending: false,
-        page: this.page,
-        pageSize: this.pageSize,
+        page: 1,
+        pageSize: 30,
     };
 
     constructor(
-        private activatedroute: ActivatedRoute,
         public datepipe: DatePipe,
         private saleReceiptService: SaleReceiptService,
         private router: Router,
         private dataService: DataService,
+        private fb: FormBuilder,
     ) {}
 
     ngOnInit(): void {
         this.roleMain = localStorage.getItem('roleMain')!;
         this.saleReceiptService.page.subscribe((data) => {
             this.page = data;
-            this.search(this.searchAllBody);
+            this.body.page = this.page;
+            this.search(this.body);
         });
         this.dataService.searchText.subscribe((data) => {
-            const body = {
-                keyword: data,
-                sortField: 'CreatedDate',
-                isAscending: false,
-                page: this.page,
-                pageSize: this.pageSize,
-            };
-            this.search(body);
+            // lấy text
+            this.body.keyword = data;
+            // set lại page
+            this.page = 1;
+            this.body.page = 1;
+            this.search(this.body);
         });
+        // create dateSearchForm
+
+
+
+        this.dateSearchForm = this.fb.group({
+            fromDate: [null],
+            toDate: [null],
+        });
+
+
     }
 
     ngAfterViewInit(): void {
         // this.saleReceiptService.search().subscribe((data) => {
         //     this.listReceiptOreder = data.data;
         // });
-        this.search(this.searchAllBody);
+        this.search(this.body);
     }
 
     search(body: any) {
         this.saleReceiptService.searchReceipt(body).subscribe((data) => {
             console.log(data);
-
             this.listReceiptOrder = data.data;
             this.total = data.totalCount;
             this.saleReceiptService.setTotal(this.total);
@@ -115,36 +130,119 @@ export class OrderSaleMgmComponent implements OnInit {
         console.log(this.id);
     }
 
-    receiveFilter(event:any){
-      console.log(event);
-      this.formFilterReceive = event;
-
+    receiveFilter(event: any) {
+        console.log(event);
+        this.formFilterReceive = event;
     }
 
     export() {
-      let body;
-      if(this.id.length == 0){
+      console.log(this.formFilterReceive);
+
+        let body;
         body = {
-          filter: this.formFilterReceive,
-          listId: null,
-          type: 1,
-        };
-      }else{
-        body = {
-          filter: null,
+            filter: null,
             listId: this.id,
             type: 2,
-        }
+        };
+
+        console.log(body);
+        this.saleReceiptService.export(body).subscribe({
+            next: (data) => {
+                const blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url);
+            },
+        });
+    }
+    exportWithFilter() {
+      console.log(this.formFilterReceive);
+      let formFilter;
+      if(this.formFilterReceive == undefined){
+        formFilter = {
+          keyword: null,
+          deliveryDate: null,
+          orderEmployeeId: null,
+          customerTypeId: null,
+          customerGroupId: null,
+          areaId: null,
+          productKey: null,
+          status: null,
+          printStatus: true,
+          paymentMethod: 0,
+          // page: 1,
+          // pageSize: 100000,
+          sortField: null,
+          isAscending: true,
+          fromDate: moment(this.dateSearchForm.get('fromDate')?.value).format('YYYY-MM-DD'),
+          toDate: moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD'),
+          dateFilter: null,
+        };
+      }else{
+        formFilter = null;
       }
-      console.log(body);
+      let body = {
+          filter: formFilter,
+          listId: null,
+          type: 1,
+      };
+      console.log('ExportWithFilter', body);
       this.saleReceiptService.export(body).subscribe({
           next: (data) => {
-            const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-            const url = window.URL.createObjectURL(blob);
-            window.open(url)
+              const blob = new Blob([data], {
+                  type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+              });
+              const url = window.URL.createObjectURL(blob);
+              window.open(url);
           },
       });
-      console.log('export');
-      console.log(body);
+    }
+    print() {
+        let body;
+        body = {
+            filter: null,
+            listId: this.id,
+            type: 2,
+        };
+        console.log('Print');
+        this.saleReceiptService.export(body).subscribe({
+            next: (data) => {
+                var blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                const blobUrl = URL.createObjectURL(blob);
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = blobUrl;
+                document.body.appendChild(iframe);
+                iframe.contentWindow?.print();
+            },
+        });
+    }
+    filter(body: any) {
+        this.search(body);
+    }
+
+    filterDate() {
+        if (this.dateSearchForm.get('fromDate')?.value) {
+            this.body.fromDate = moment(this.dateSearchForm.get('fromDate')?.value).format('YYYY-MM-DD');
+        }
+        if (this.dateSearchForm.get('toDate')?.value) {
+            this.body.toDate = moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD');
+        }
+        // set lại page
+        this.page = 1;
+        this.body.page = 1;
+        this.search(this.body);
+    }
+
+    clearDatePicker() {
+        this.dateSearchForm.setValue({
+            fromDate: null,
+            toDate: null,
+        });
+        this.body.fromDate = null;
+        this.body.toDate = null;
     }
 }

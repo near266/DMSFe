@@ -5,6 +5,8 @@ import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
 import { DatePipe } from '@angular/common';
 import { DataService } from './services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import moment from 'moment';
 
 @Component({
     selector: 'app-orders-mgm',
@@ -21,39 +23,46 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     page: number = 1;
     pageSize: number = 30;
     total: number = 0;
-    searchAllBody = {
+    body: any = {
         sortField: 'CreatedDate',
         isAscending: false,
-        page: this.page,
-        pageSize: this.pageSize,
+        page: 1,
+        pageSize: 30,
     };
+    dateSearchForm: FormGroup;
     constructor(
         private activatedroute: ActivatedRoute,
         public datepipe: DatePipe,
         public router: Router,
         private purchaseOrderService: PurchaseOrderService,
         private dataService: DataService,
+        private fb: FormBuilder,
     ) {}
 
     ngOnInit(): void {
         this.purchaseOrderService.page.subscribe((data) => {
             this.page = data;
-            this.search(this.searchAllBody);
+            this.page = data;
+            this.body.page = this.page;
+            this.search(this.body);
         });
         this.dataService.searchText.subscribe((data) => {
-            const body = {
-                keyword: data,
-                sortField: 'CreatedDate',
-                isAscending: false,
-                page: this.page,
-                pageSize: this.pageSize,
-            };
-            this.search(body);
+            // lấy text
+            this.body.keyword = data;
+            // set lại page
+            this.page = 1;
+            this.body.page = 1;
+            this.search(this.body);
+        });
+        // create dateSearchForm
+        this.dateSearchForm = this.fb.group({
+            fromDate: [null],
+            toDate: [null],
         });
     }
 
     ngAfterViewInit(): void {
-        this.search(this.searchAllBody);
+        this.search(this.body);
     }
 
     search(body: any) {
@@ -93,5 +102,27 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     navigateToDetail(order: any) {
         localStorage.setItem('purchaseOrderId', order.id);
         this.router.navigate(['/orders/detailOrder/viewEdit']);
+    }
+
+    filterDate() {
+        if (this.dateSearchForm.get('fromDate')?.value) {
+            this.body.fromDate = moment(this.dateSearchForm.get('fromDate')?.value).format('YYYY-MM-DD');
+        }
+        if (this.dateSearchForm.get('toDate')?.value) {
+            this.body.toDate = moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD');
+        }
+        // set lại page
+        this.page = 1;
+        this.body.page = 1;
+        this.search(this.body);
+    }
+
+    clearDatePicker() {
+        this.dateSearchForm.setValue({
+            fromDate: null,
+            toDate: null,
+        });
+        this.body.fromDate = null;
+        this.body.toDate = null;
     }
 }

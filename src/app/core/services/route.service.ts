@@ -9,31 +9,42 @@ import { api_gateway_url, route_api } from '../const/url';
 export class RouteService {
 
   constructor(private http: HttpClient) { }
-  urlAPI = api_gateway_url + "/Route"
+  urlAPIRoute = api_gateway_url + "/Route"
 
-  SearchAllRoute(page: any, pageSize: any): Observable<any> {
-    return this.http.get(this.urlAPI + '/getall?page=' + page + '&pagesize=' + pageSize)
+  SearchAllRoute(page: any, pageSize: any, groupId:any): Observable<any> {
+    if(groupId !== null){
+      return this.http.get(this.urlAPIRoute + '/getall??GroupId=' + groupId + '&page=' + page + '&pagesize=' + pageSize )
+      .pipe(map((response: any) => response));
+    }
+    return this.http.get(this.urlAPIRoute + '/getall?page=' + page + '&pagesize=' + pageSize)
     .pipe(map((response: any) => response));
   }
 
   GetRouteById(id: string): Observable<any> {
-    return this.http.get(this.urlAPI + '/id?Id=' + id)
+    return this.http.get(this.urlAPIRoute + '/id?Id=' + id)
       .pipe(
         map((response: any) => response)
       );
   }
 
   AddRoute(body: any): Observable<any> {
-    return this.http.post(this.urlAPI + '/add', body)
+    return this.http.post(this.urlAPIRoute + '/add', body)
     .pipe(
       map((response: any) => response)
       );
   }
 
   UpdateRoute(body: any): Observable<any> {
-    return this.http.put(this.urlAPI + '/update', body)
+    return this.http.put(this.urlAPIRoute + '/update', body)
     .pipe(
       map((response: any) => response)
       );
+  }
+
+  SearchAllCusInRoute(body:any):Observable<any>{
+    return this.http.post(this.urlAPIRoute + "/searchAllCusInRoute", body)
+    .pipe(
+      map(response => response)
+    )
   }
 }

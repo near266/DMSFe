@@ -93,7 +93,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
       customerName: new FormControl(''),
       customerGroupId: new FormControl(''),
       customerTypeId: new FormControl(''),
-      status: new FormControl(false),
+      status: new FormControl(true),
       channelId: new FormControl(''),
       // isUpdateAddress: new FormControl(false),
       address: new FormControl(''),

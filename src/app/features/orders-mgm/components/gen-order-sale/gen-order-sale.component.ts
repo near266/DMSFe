@@ -8,6 +8,7 @@ import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.servic
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
+import { FormatService } from '../../services/format.service';
 import { ProductListComponent } from '../product-list/product-list.component';
 
 @Component({
@@ -30,7 +31,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     groupIdSearched: any;
     listAllRoute: any = [];
     listGroup: any = [];
-    listPromotionProductAdd: any = [];
 
     listProductToSentAPI: any = [];
     genOrderForm: FormGroup;
@@ -40,6 +40,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     listWarehouse: any = [];
     listProductPromotionRemove: any = [];
     listProductAdd: any = [];
+    listSearchedProduct: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -64,6 +65,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         private snackbar: SnackbarService,
         private router: Router,
         private numberToText: NumberToTextService,
+        private format: FormatService,
     ) {}
 
     ngOnInit(): void {
@@ -89,7 +91,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             debtRecord: [false],
             paymentTerm: [moment(Date.now()).format('YYYY-MM-DD')],
         });
-        this.listProduct = this.relatedOrder.listProduct;
         // get all info payment
         this.totalAmount = this.relatedOrder.totalAmount;
         this.totalDiscountProduct = this.relatedOrder.totalDiscountProduct;
@@ -172,9 +173,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             this.listProduct.forEach((product: any) => {
                 product.warehouseId = value;
             });
-            this.listProductAdd.forEach((product: any) => {
-                product.warehouseId = value;
-            });
         }
     }
 
@@ -201,39 +199,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             this.listAllRoute = data.data;
         });
     }
-
-    // getRouteByCustomerId(customerId: any) {
-    //     this.genOrderForm.patchValue({
-    //         routeId: null,
-    //     });
-    //     // get route ID
-    //     if (customerId) {
-    //         this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
-    //             if (data) {
-    //                 this.genOrderForm.patchValue({
-    //                     routeId: data?.route?.id,
-    //                 });
-    //                 // get employee in route
-    //                 this.genOrderForm.patchValue({
-    //                     orderEmployeeId: data?.route?.employee?.id,
-    //                 });
-    //                 // get group by customerID
-    //                 this.groupIdSearched = data?.route?.unitTreeGroup?.id;
-    //                 this.genOrderForm.patchValue({
-    //                     groupId: this.groupIdSearched,
-    //                 });
-    //             }
-    //         });
-    //         // get customer ID and patch Value
-    //         this.purchaseOrder.getCustomerById(customerId).subscribe((data) => {
-    //             this.genOrderForm.patchValue({
-    //                 customerName: data.customerCode,
-    //                 phone: data.phone,
-    //                 address: data.address,
-    //             });
-    //         });
-    //     }
-    // }
 
     setRouteGroupAndEmployee(customerId: any) {
         this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
@@ -340,9 +305,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     setWareHouseToAllProductPromotion(value: any) {
         if (value != 0) {
             this.listPromotionProduct.forEach((product: any) => {
-                product.warehouseId = value;
-            });
-            this.listPromotionProductAdd.forEach((product: any) => {
                 product.warehouseId = value;
             });
         }
@@ -582,15 +544,25 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
         dialogRef.afterClosed().subscribe((data) => {
             if (!data.isCancel) {
-                if (this.formatFormProduct(data)) {
-                    let listAdd = this.listAddProduct(this.formatFormProduct(data));
-                    listAdd.forEach((product: any) => {
-                        this.listProduct.push(product);
-                    });
-                    this.pushListProductToDialog();
-                }
+                let listAdd = this.format.formatProductFromCloseDialogAdd(data, this.listProduct);
+                listAdd.forEach((product: any) => {
+                    this.listProduct.push(product);
+                });
+                this.pushListProductToDialog();
             }
         });
+    }
+
+    addProductBySearch(product: any) {
+        product = this.format.formatProductFromCloseDialogAdd([product], []);
+        this.listProduct.push(product[0]);
+        this.pushListProductToDialog();
+    }
+
+    addProductPromotionBySearch(product: any) {
+        let productAfterFormat = this.format.formatProductPromotionFromCloseDialogAdd([product], []);
+        this.listPromotionProduct.push(productAfterFormat[0]);
+        this.pushListProductPromotionToDialog();
     }
 
     openDialogProductPromotion() {
@@ -607,14 +579,28 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
         dialogRef.afterClosed().subscribe((data) => {
             if (!data.isCancel) {
-                if (this.formatFormProductPromotion(data)) {
-                    let listAdd = this.listAddProductPromotion(this.formatFormProductPromotion(data));
-                    listAdd.forEach((product: any) => {
-                        this.listPromotionProduct.push(product);
-                    });
-                    this.pushListProductPromotionToDialog();
-                }
+                let listAdd = this.format.formatProductPromotionFromCloseDialogAdd(data, this.listPromotionProduct);
+                listAdd.forEach((product: any) => {
+                    this.listPromotionProduct.push(product);
+                });
+                this.pushListProductPromotionToDialog();
             }
+        });
+    }
+
+    searchListProduct(e: any) {
+        const body = {
+            keyword: e.target.value,
+            sortBy: {
+                property: 'CreatedDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 5,
+        };
+        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+            console.log(data);
+            this.listSearchedProduct = data?.data;
         });
     }
 
