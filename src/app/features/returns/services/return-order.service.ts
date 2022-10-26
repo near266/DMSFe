@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import * as moment from 'moment';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 
 @Injectable({
     providedIn: 'root',
@@ -11,7 +12,6 @@ import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.servic
 export class ReturnOrderService {
     returnInfo$: BehaviorSubject<any> = new BehaviorSubject<any>({});
     returnProductList$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-    returnOrderId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
     returnPromotionList$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     returnStatusInfo$: BehaviorSubject<any> = new BehaviorSubject<any>({});
     totalPrice$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -20,20 +20,26 @@ export class ReturnOrderService {
     submitFormProductList$: Subject<any[]> = new Subject<any[]>();
     submitFormPromotionList$: Subject<any> = new Subject<any>();
 
-    constructor(private snackbar: SnackbarService, private purchaseOrder: PurchaseOrderService) {}
+    constructor(private snackbar: SnackbarService, private saleReceiptService: SaleReceiptService) {}
     formatUpdateStatusOrder(info: any) {
         const details = {
-            purchaseOrderId: info?.id || null,
+            id: info?.id || null,
+            purchaseOrderId: info?.purchaseOrder?.id || null,
             orderDate: moment(info?.orderDate).format('YYYY-MM-DD') || null,
             groupId: info.group?.id,
             orderEmployeeId: info?.orderEmployee?.id || null,
+            saleEmployeeId: info?.saleEmployee?.id || null,
             warehouseId: info?.warehouse?.id || null,
             customerId: info?.customer?.id || null,
             routeId: info?.route?.id || null,
             type: info?.type || 0,
             status: 6,
             paymentMethod: info?.paymentMethod || 0,
+            saleDate: moment(info?.saleDate).format('YYYY-MM-DD') || null,
             description: info?.description || null,
+            paymentTerm: moment(info?.paymentTerm).format('YYYY-MM-DD') || null,
+            debtRecord: info?.debtRecord || false,
+            saleCode: info?.saleCode || null,
             phone: info?.phone || null,
             address: info?.address || null,
             customerName: info?.customerName || null,
@@ -48,77 +54,25 @@ export class ReturnOrderService {
             prePayment: info?.prePayment || 0,
             // orderCode: info?.orderCode || 0 ,
         };
-        console.log(info);
-
-        console.log(details);
 
         return details;
     }
 
     updatePurchaseOrderStatus(status: number) {
-        const id = this.returnOrderId$.getValue();
-        if (id) {
-            this.purchaseOrder.detail(id).subscribe((data) => {
-                const body = {
-                    purchaseOrderId: data.id,
-                    orderDate: data.orderDate,
-                    groupId: data.unit?.id,
-                    orderEmployeeId: data.orderEmployee?.id,
-                    warehouseId: data.warehouse?.id,
-                    customerId: data.customer?.id,
-                    routeId: data.route?.id,
-                    type: data.type,
-                    status,
-                    paymentMethod: 0,
-                    description: data.description,
-                    phone: data.phone,
-                    address: data.address,
-                    customerName: data.customerName,
-                    totalAmount: data.totalAmount,
-                    totalOfVAT: data.totalOfVAT,
-                    totalDiscountProduct: data.totalDiscountProduct,
-                    tradeDiscount: data.tradeDiscount,
-                    totalPayment: data.totalPayment,
-                    archived: false,
-                    // lastModifiedBy: 'string',
-                    lastModifiedDate: moment(Date.now()).format('YYYY-MM-DD'),
-                    orderCode: data.orderCode,
-                    deliveryDate: data.deliveryDate,
-                    prePayment: data.prePayment,
-                };
-                this.purchaseOrder.update(body).subscribe({
-                    next: (data) => {
-                        console.log('oke');
-                        this.returnInfo$.next({});
-                        this.returnProductList$.next([]);
-                        this.returnPromotionList$.next([]);
-                        this.totalPrice$.next(0);
-                        this.returnOrderId$.next('');
-                        this.discountAmount$.next(0);
-                    },
-                    error: (err) => {
-                        this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', true);
-                    },
-                });
-            });
-        } else {
-            const body = this.returnStatusInfo$.getValue();
-            body.orderCode = null;
-            this.purchaseOrder.update(body).subscribe({
-                next: (data) => {
-                    console.log('oke');
-                    this.returnInfo$.next({});
-                    this.returnProductList$.next([]);
-                    this.returnPromotionList$.next([]);
-                    this.totalPrice$.next(0);
-                    this.returnOrderId$.next('');
-                    this.discountAmount$.next(0);
-                },
-                error: (err) => {
-                    this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', true);
-                },
-            });
-        }
+        const body = this.returnStatusInfo$.getValue();
+        this.saleReceiptService.update(body).subscribe({
+            next: (data) => {
+                console.log('oke');
+                this.returnInfo$.next({});
+                this.returnProductList$.next([]);
+                this.returnPromotionList$.next([]);
+                this.totalPrice$.next(0);
+                this.discountAmount$.next(0);
+            },
+            error: (err) => {
+                this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+        });
     }
     formatSubmitListProduct(list: any[]) {
         return list.map((item) => {
