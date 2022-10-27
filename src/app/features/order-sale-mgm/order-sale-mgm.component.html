@@ -246,7 +246,7 @@
                         <td class="custom-td border-b">
                             {{ datepipe.transform(order.saleDate, 'dd/MM/yyyy') || 'No-data' }}
                         </td>
-                        <td class="custom-td border-b">{{ order.totalPayment }}</td>
+                        <td class="custom-td border-b">{{ order.totalPayment | currency: 'VND' }}</td>
                         <td class="custom-td border-b">
                             {{ datepipe.transform(order.createdDate, 'dd/MM/yyyy') || 'No-data' }}
                         </td>

@@ -361,4 +361,22 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
             }
         });
     }
+
+    exportExcel() {
+        let body;
+        body = {
+            filter: null,
+            listId: [this.id],
+            type: 2,
+        };
+        this.purchaseOrder.print(body).subscribe({
+            next: (data) => {
+                const blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url);
+            },
+        });
+    }
 }
