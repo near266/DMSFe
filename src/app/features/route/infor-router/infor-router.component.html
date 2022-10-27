@@ -1,47 +1,47 @@
 <div class="w-full">
   <form [formGroup]="formInforRouteUpdate" class="w-2/3">
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-medium">Mã tuyến</div>
+        <div class="font-semibold">Mã tuyến</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
-            <input class="border border-solid border-black p-1 rounded w-96 text-xs h-7" *ngIf="status != 'view'" [ngModel]="RootInfoRouteDetail?.routeCode" formControlName="routeCode">
-            <div class="w-96 text-xs" *ngIf="status == 'view'">.email}}</div>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text- h-7" *ngIf="status != 'view'" [ngModel]="RootInfoRouteDetail?.routeCode" formControlName="routeCode">
+            <div class="w-96 text-" *ngIf="status == 'view'">.email}}</div>
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-medium">Tên tuyến</div>
+        <div class="font-semibold">Tên tuyến</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
             <input formControlName="routeName" [ngModel]="RootInfoRouteDetail?.routeName"
-                class="border border-solid border-black p-1 rounded w-96 text-xs h-7" *ngIf="status != 'view'">
-            <div class="w-96 text-xs" *ngIf="status == 'view'">.employeeCode}}</div>
+                class="border border-solid border-black p-1 rounded-sm w-96 text- h-7" *ngIf="status != 'view'">
+            <div class="w-96 text-" *ngIf="status == 'view'">.employeeCode}}</div>
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-medium">Nhóm</div>
+        <div class="font-semibold">Nhóm</div>
         <div class="flex flex-row relative z-20">
           <div class="text-red-500 mr-4">*</div>
-          <input class="border border-solid border-black p-1 rounded w-96 text-xs h-7" readonly [(ngModel)]="groupName" [ngModelOptions]="{standalone: true}" *ngIf="status != 'view'" (click)="showGroup = !showGroup">
-          <div *ngIf="showGroup" class="border border-solid border-black p-1 rounded absolute z-20 top-full mt-1 bg-gray-50 w-full">
+          <input class="border border-solid border-black p-1 rounded-sm w-96 text- h-7" readonly [(ngModel)]="groupName" [ngModelOptions]="{standalone: true}" *ngIf="status != 'view'" (click)="showGroup = !showGroup">
+          <div *ngIf="showGroup" class="border border-solid border-black p-1 rounded-sm absolute z-20 top-full mt-1 bg-gray-50 w-full">
             <app-tree-group (getIdName)="getIdName($event)"></app-tree-group>
           </div>
-          <!-- <div class="w-96 text-xs" *ngIf="status == 'view'">.employeeName}}</div> -->
+          <!-- <div class="w-96 text-" *ngIf="status == 'view'">.employeeName}}</div> -->
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-medium">Nhân viên</div>
+        <div class="font-semibold">Nhân viên</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
-            <select class="border border-solid border-black p-1 rounded w-96 text-xs h-7"
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text- h-7"
                 *ngIf="status != 'view'" formControlName="employeeId" [ngModel]="RootInfoRouteDetail?.employee.id">
                 <option *ngFor="let item of EmployeeInGroup" [value]="item.employee.id">{{item.employee.employeeName}}</option>
             </select>
-            <div class="w-96 text-xs" *ngIf="status == 'view'">.employeeTitle}}</div>
+            <div class="w-96 text-" *ngIf="status == 'view'">.employeeTitle}}</div>
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-medium">Ngày đi tuyến</div>
-        <select class="border border-solid border-black p-1 rounded w-96 text-xs h-7" *ngIf="status != 'view'"
+        <div class="font-semibold">Ngày đi tuyến</div>
+        <select class="border border-solid border-black p-1 rounded-sm w-96 text- h-7" *ngIf="status != 'view'"
           formControlName="routeDate" [ngModel]="RootInfoRouteDetail?.routeDate">
           <option value="vn">Không giới hạn</option>
           <option value="2">Thứ 2</option>
@@ -52,41 +52,55 @@
           <option value="7">Thứ 7</option>
           <option value="cn">Chủ nhật</option>
         </select>
-        <div class="w-96 text-xs" *ngIf="status == 'view'">.langKey}}</div>
+        <div class="w-96 text-" *ngIf="status == 'view'">.langKey}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-medium">Ngày bắt đầu</div>
-        <input type="date" formControlName="startedDate" [ngModel]="formatDate" class="border border-solid border-black p-1 rounded w-96 text-xs h-7" >
-        <!-- <div class="w-96 text-xs" *ngIf="status == 'view'">.phone}}</div> -->
+        <div class="font-semibold">Ngày bắt đầu</div>
+        <input type="date" formControlName="startedDate" [ngModel]="formatDate" class="border border-solid border-black p-1 rounded-sm w-96 text- h-7" >
+        <!-- <div class="w-96 text-" *ngIf="status == 'view'">.phone}}</div> -->
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-medium">Trạng thái</div>
+        <div class="font-semibold">Trạng thái</div>
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
-            <select class="border border-solid border-black p-1 rounded w-96 text-xs h-7"
+            <select class="border border-solid border-black p-1 rounded-sm w-96 text- h-7"
             formControlName="status" (change)="changeStatus($event)" [ngModel]="RootInfoRouteDetail?.status">
                 <option [value]="true">Hoạt động</option>
                 <option [value]="false">Khoá</option>
             </select>
-            <div class="w-96 text-xs" *ngIf="status == 'view'">.employeeTitle}}</div>
+            <div class="w-96 text-" *ngIf="status == 'view'">.employeeTitle}}</div>
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
-        <div class="font-medium">Danh sách khách hàng (<span class="font-bold">{{listAllCusInRouteData.totalCount}}</span>)</div>
+        <div class="font-semibold">Danh sách khách hàng (<span class="font-bold">{{listAllCusInRouteData.totalCount}}</span>)</div>
         <div class="relative z-0">
-          <input class="border border-solid border-black p-1 rounded w-96 text-xs h-7 pl-7" (input)="SerchCus($event)" placeholder="Tìm kiếm khách hàng">
+          <input class="border border-solid border-black p-1 rounded-sm w-96 text- h-7 pl-7" (input)="SerchCus($event)" placeholder="Tìm kiếm khách hàng">
           <i class="fa-solid fa-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2"></i>
         </div>
     </div>
   </form>
-
+  <div *ngIf="typeRoute == 'add'" class="flex items-center space-x-5 relative">
+    <div class="group cursor-pointer p-2 hover:bg-gray-100 rounded-r">
+      <i class="fa-solid fa-plus text-green-600 group-hover:rotate-180 duration-300"></i>
+      Thêm mới
+      <i class="fa-solid fa-caret-down ml-2"></i>
+      <div class="border border-solid rounded absolute top-full w-fit hidden group-hover:block bg-gray-50">
+        <div class=" p-3 hover:bg-gray-200" (click)="openAddCusDialog()"><i class="fa-solid fa-list mr-3 text-sky-600"></i>Thêm khách hàng từ danh sách khách hàng</div>
+        <div class=" p-3 hover:bg-gray-200" (click)="openAddCusExcelDialog()"><i class="fa-regular fa-file-excel mr-3 text-sky-600"></i>Thêm khách hàng từ danh sách khách hàng</div>
+      </div>
+    </div>
+    <div class="cursor-pointer p-2 hover:bg-gray-100 rounded">
+      <i class="fa-solid fa-circle-xmark text-red-600 mr-2"></i>
+      Xoá khách hàng
+    </div>
+  </div>
   <!-- ?? Table -->
   <div class="mt-5 w-full aspect-4/1 overflow-y-scroll">
     <div *ngIf="!listAllCusInRouteData.data && listAllCusInRouteData.totalCount !== 0 && typeRoute == 'update'" class="mt-10 text-center">
       <i class="fa-solid fa-cloud-arrow-down fa-xl text-sky-600 animate-ping"></i>
     </div>
     <table *ngIf="listAllCusInRouteData.data" class="w-full">
-      <thead class="h-10 w-full text-xs sticky top-0">
+      <thead class="h-10 w-full text- sticky top-0">
         <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">
           <input type="checkbox">
         </th>

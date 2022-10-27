@@ -44,5 +44,6 @@ export class AddRouterComponent implements OnInit {
   alertSuccess(event:any){
     this.alertSuccessEvent.emit(true)
   }
+  
 
 }

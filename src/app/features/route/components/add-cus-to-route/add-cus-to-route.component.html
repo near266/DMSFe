@@ -1,0 +1,85 @@
+<div class="p-3">
+  <!-- ? header -->
+  <div class="flex items-center justify-between pb-3 border-b-2 border-solid border-gray-500">
+    <span class="text-2xl font-semibold capitalize text-gray-600">Thêm khách hàng vào tuyến</span>
+    <div class="">
+      <button class="rounded-l bg-sky-700 text-white p-2"><i class="fa-solid fa-circle-plus mr-2 "></i>Thêm</button>
+      <button class="rounded-r bg-gray-300 p-2" mat-dialog-close><i class="fa-solid fa-rotate-left mr-2"></i>Quay lại</button>
+    </div>
+  </div>
+  <!-- end header -->
+  <form action="" class="mt-5">
+    <div class="flex items-center">
+      <label for="" class="w-1/4 font-bold">Tìm kiếm khách hàng</label>
+      <input type="text" class="flex-1 p-1 rounded-sm border border-solid border-gray-500" placeholder="Nhâp tên, địa chỉ, số điện thoại, ...">
+    </div>
+    <div class="flex items-center mt-3">
+      <label for="" class="w-1/4 font-bold">Khu vực</label>
+      <select name="" id="" class=" p-1 rounded-sm border border-solid border-gray-500">
+        <option value="">Hà Nội</option>
+        <option value="">Thành phố Hồ Chí Minh</option>
+      </select>
+    </div>
+    <div class="flex items-center mt-3">
+      <label for="" class="w-1/4 font-bold">Loại khách hàng</label>
+      <select name="" id="" class="flex-1 p-1 rounded-sm border border-solid border-gray-500">
+        <option value="">Option1</option>
+        <option value="">Option2</option>
+      </select>
+    </div>
+    <div class="flex items-center mt-3">
+      <label for="" class="w-1/4 font-bold">Nhóm khách hàng</label>
+      <select name="" id="" class="flex-1 p-1 rounded-sm border border-solid border-gray-500">
+        <option value="">Option1</option>
+        <option value="">Option2</option>
+      </select>
+    </div>
+    <div class="flex items-center mt-3">
+      <label for="" class="w-1/4 font-bold">Tuyến khách hàng</label>
+      <select name="" id="" class="flex-1 p-1 rounded-sm border border-solid border-gray-500">
+        <option value="">Option1</option>
+        <option value="">Option2</option>
+      </select>
+    </div>
+    <div class="flex items-center mt-3">
+      <label for="" class="w-1/4 font-bold">Vị trí</label>
+      <select name="" id="" class="flex-1 p-1 rounded-sm border border-solid border-gray-500">
+        <option value="">Option1</option>
+        <option value="">Option2</option>
+      </select>
+    </div>
+  </form>
+  <div class="space-x-3 flex justify-end mt-3">
+    <button class="bg-sky-700 text-white rounded-sm py-1 px-2 hover:opacity-80"><i class="fa-regular fa-square-check mr-2 "></i>Chọn tất cả khách hàng</button>
+    <button class="bg-sky-700 text-white rounded-sm py-1 px-2 hover:opacity-80"><i class="fa-solid fa-magnifying-glass mr-2 "></i>Tìm kiếm</button>
+  </div>
+
+  <!-- ?? table -->
+  <table class="w-full mt-3 border-y border-solid border-gray-300">
+    <thead class="h-10 w-full text-xs sticky top-0">
+      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">
+        <input type="checkbox">
+      </th>
+      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">STT</th>
+      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã khách hàng</th>
+      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tên</th>
+      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">SĐT</th>
+      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Địa chỉ</th>
+    </thead>
+    <tbody>
+      <tr class="h-auto text-xs" *ngFor="let route of [1,2,3,4,5]; let o=odd; let e=even; let i = index"
+        [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
+        <td class="border-x border-solid align-middle px-2 py-3 text-center">
+          <input class="align-middle" type="checkbox">
+          <i class="fa-solid fa-unlock fa-lg ml-3 text-sky-700"></i>
+        </td>
+        <td class="border-x border-solid align-middle px-2 py-3 text-center">{{i}}</td>
+        <td class="border-x border-solid align-middle px-2 py-3"></td>
+        <td class="border-x border-solid align-middle px-2 py-3"></td>
+        <td class="border-x border-solid align-middle px-2 py-3"></td>
+        <td class="border-x border-solid align-middle px-2 py-3"></td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- end table -->
+</div>

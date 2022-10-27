@@ -1,10 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { RouteService } from 'src/app/core/services/route.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { AddCusFromExcelComponent } from '../components/add-cus-from-excel/add-cus-from-excel.component';
+import { AddCusToRouteComponent } from '../components/add-cus-to-route/add-cus-to-route.component';
 import { RootInfoRoute } from '../models/infor-router';
 import { RootSearchAllCusInRoute } from '../models/searchAllCusInRoute';
 
@@ -23,14 +26,17 @@ export class InforRouterComponent implements OnInit {
     private _routeSer: RouteService,
     private fb: FormBuilder,
     private customerGroupSer: CustomerGroupService,
-    private _snackBar: SnackbarService
+    private _snackBar: SnackbarService,
+    public dialog: MatDialog
   ) { }
 
   @Input() status: any;
   @Input() idRoute: any;
   @Input() typeRoute:any;
   @Input() typeButton:any;
-  @Output() successEdit = new EventEmitter()
+  @Output() successEdit = new EventEmitter();
+  @Output() closeDialogAddRoute = new EventEmitter();
+
 
   formatDate:any;
   showGroup:boolean = false;
@@ -111,9 +117,26 @@ export class InforRouterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
+
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
+  }
+
+  openAddCusDialog(): void {
+    this.closeDialogAddRoute.emit('close')
+    this.dialog.open(AddCusToRouteComponent, {
+      width: '50vw',
+      height: '70vh'
+    });
+  }
+
+  openAddCusExcelDialog(): void {
+    this.closeDialogAddRoute.emit('close')
+    this.dialog.open(AddCusFromExcelComponent, {
+      width: '30vw',
+    });
   }
 
 

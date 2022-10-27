@@ -11,6 +11,8 @@ import { LocationRouterComponent } from './location-router/location-router.compo
 import { HistoryComponent } from './history/history.component';
 import { UserManageModule } from '../user-manage/categories.module';
 import { TreeGroupComponent } from './tree-group/tree-group.component';
+import { AddCusToRouteComponent } from './components/add-cus-to-route/add-cus-to-route.component';
+import { AddCusFromExcelComponent } from './components/add-cus-from-excel/add-cus-from-excel.component';
 
 const routes: Routes = [
     {
@@ -29,6 +31,8 @@ const routes: Routes = [
     LocationRouterComponent,
     HistoryComponent,
     TreeGroupComponent,
+    AddCusToRouteComponent,
+    AddCusFromExcelComponent,
   ],
   imports: [
     CommonModule,
