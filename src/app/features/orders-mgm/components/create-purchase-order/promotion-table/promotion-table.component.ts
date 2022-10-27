@@ -85,7 +85,7 @@ export class PromotionTableComponent implements OnInit, OnChanges, DoCheck {
         e.stopPropagation();
     }
 
-    searchListProduct(e: any) {
+    searchListProductActived(e: any) {
         const body = {
             keyword: e.target.value,
             sortBy: {
@@ -95,7 +95,7 @@ export class PromotionTableComponent implements OnInit, OnChanges, DoCheck {
             page: 1,
             pageSize: 5,
         };
-        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+        this.purchaseOrder.getListProductActived(body).subscribe((data) => {
             console.log(data);
             this.listSearchedProduct = data?.data;
         });

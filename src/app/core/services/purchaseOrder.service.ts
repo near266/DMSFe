@@ -171,6 +171,12 @@ export class PurchaseOrderService {
         return this.http.post(this.api_gateway_url + '/Catalog/search', body).pipe(map((reponse: any) => reponse));
     }
 
+    getListProductActived(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/Catalog/getListActive', body)
+            .pipe(map((reponse: any) => reponse));
+    }
+
     // employee
     getAllEmployees(keyword: any, page: number, pageSize: number): Observable<any> {
         return this.http.get(
@@ -182,6 +188,12 @@ export class PurchaseOrderService {
                 '&pageSize=' +
                 pageSize,
         );
+    }
+
+    getEmployeeById(id: string): Observable<any> {
+        return this.http
+            .get(this.id_url_gw + '/Employee/GetEmployeeById?Id=' + id)
+            .pipe(map((reponse: any) => reponse));
     }
 
     // warehouse
@@ -198,6 +210,12 @@ export class PurchaseOrderService {
 
     getRouteByCustomerId(id: string): Observable<any> {
         return this.http.get(this.api_gateway_url + '/Route/by_cusId?Id=' + id).pipe(map((reponse: any) => reponse));
+    }
+
+    getRouteAndGroupIdByEmployeeId(id: string, page: number, pageSize: number): Observable<any> {
+        return this.http
+            .get(this.api_gateway_url + '/Route/getall?EmployeeId=' + id + '&page=' + page + '&pageSize=' + pageSize)
+            .pipe(map((reponse: any) => reponse));
     }
 
     // group

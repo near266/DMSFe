@@ -702,7 +702,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         console.log(customerIdDefault);
     }
 
-    searchListProduct(e: any) {
+    searchListProductActive(e: any) {
         const body = {
             keyword: e.target.value,
             sortBy: {
@@ -712,7 +712,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             page: 1,
             pageSize: 5,
         };
-        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+        this.purchaseOrder.getListProductActived(body).subscribe((data) => {
             console.log(data);
             this.listSearchedProduct = data?.data;
         });

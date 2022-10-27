@@ -588,7 +588,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
     }
 
-    searchListProduct(e: any) {
+    searchListProductActive(e: any) {
         const body = {
             keyword: e.target.value,
             sortBy: {
@@ -598,7 +598,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             page: 1,
             pageSize: 5,
         };
-        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+        this.purchaseOrder.getListProductActived(body).subscribe((data) => {
             console.log(data);
             this.listSearchedProduct = data?.data;
         });

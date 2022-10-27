@@ -195,7 +195,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
         this.discountRate(product);
     }
 
-    searchListProduct(e: any) {
+    searchListProductActive(e: any) {
         const body = {
             keyword: e.target.value,
             sortBy: {
@@ -205,7 +205,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
             page: 1,
             pageSize: 5,
         };
-        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+        this.purchaseOrder.getListProductActived(body).subscribe((data) => {
             console.log(data);
             this.listSearchedProduct = data?.data;
         });

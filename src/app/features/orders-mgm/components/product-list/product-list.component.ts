@@ -43,7 +43,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
         );
         this.productChoose = this.data?.listId || [];
 
-        this.getAllProducts();
+        this.getAllProductActived();
     }
 
     ngDoCheck(): void {}
@@ -101,6 +101,25 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, D
     getAllProducts() {
         this.purchaseOrder
             .getAllProduct({
+                sortBy: {
+                    property: 'CreatedDate',
+                    value: true,
+                },
+                page: 1,
+                pageSize: 1000,
+            })
+            .subscribe((data) => {
+                if (data) {
+                    this.listProduct = data.data;
+                }
+                this.total = data?.totalCount;
+                this.getChoosedProduct();
+            });
+    }
+
+    getAllProductActived() {
+        this.purchaseOrder
+            .getListProductActived({
                 sortBy: {
                     property: 'CreatedDate',
                     value: true,

@@ -170,7 +170,7 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
         });
     }
 
-    searchListProduct(e: any) {
+    searchListProductActive(e: any) {
         const body = {
             keyword: e.target.value,
             sortBy: {
@@ -180,7 +180,7 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
             page: 1,
             pageSize: 5,
         };
-        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+        this.purchaseOrder.getListProductActived(body).subscribe((data) => {
             this.listSearchedProduct = data?.data;
         });
     }

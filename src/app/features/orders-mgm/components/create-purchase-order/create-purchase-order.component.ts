@@ -52,6 +52,8 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     formattedAmount: any = '0';
     defaultUnit = "{ unit: product.retailUnit, type: 'retail' }";
     orderDefaultId: string;
+    roleMain: any = 'member';
+
     constructor(
         private dataService: DataService,
         private dialog: MatDialog,
@@ -63,8 +65,11 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     ) {}
 
     ngOnInit(): void {
+        // get role
+        this.roleMain = localStorage.getItem('roleMain');
         // parse token to get id login
         this.orderDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
+        console.log(this.orderDefaultId);
         this.createForm = this.fb.group({
             purchaseOrderId: [null],
             orderDate: [moment(Date.now()).format('YYYY-MM-DD')],
@@ -110,17 +115,18 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             this.listCustomer = data.data;
         });
         // get list employee
-        this.purchaseOrder.getAllEmployees('', 1, 10000).subscribe((data) => {
-            this.listEmployee = data.data;
-        });
+        setTimeout(() => {
+            this.getListEmployee();
+        }, 0);
         // get list warehouse
         this.purchaseOrder.getAllWarehouses().subscribe((data) => {
             this.listWarehouse = data;
         });
         // get list route
-        this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => {
-            this.listRoute = data.data;
-        });
+        setTimeout(() => {
+            this.getListRoute();
+        }, 0);
+
         // get list group
         this.purchaseOrder.getAllGroup(1).subscribe((data) => (this.listGroup = data));
     }
@@ -134,7 +140,6 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         this.countTotalPayment();
         // number to text
         this.textMoney = this.numberToText.doc(this.totalPayment);
-
         // tính cho từng sản phẩm
         // this.countDiscount();
         // this.countTotalPrice();
@@ -212,6 +217,32 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
                 id: product.id,
             };
         });
+    }
+
+    getListEmployee() {
+        if (this.roleMain != 'member') {
+            this.purchaseOrder.getAllEmployees('', 1, 10000).subscribe((data) => {
+                this.listEmployee = data.data;
+            });
+        } else if (this.roleMain === 'member') {
+            this.purchaseOrder.getEmployeeById(this.orderDefaultId).subscribe((data) => {
+                if (data) {
+                    this.listEmployee.push(data);
+                }
+            });
+        }
+    }
+
+    getListRoute() {
+        if (this.roleMain != 'member') {
+            this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => {
+                this.listRoute = data.data;
+            });
+        } else if (this.roleMain === 'member') {
+            this.purchaseOrder
+                .getRouteAndGroupIdByEmployeeId(this.orderDefaultId, 1, 100)
+                .subscribe((data) => console.log(data));
+        }
     }
 
     openDialogProduct() {
@@ -362,7 +393,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             let body = {
                 keyword: e.target.value,
                 page: 1,
-                pageSize: 100,
+                pageSize: 50,
             };
             this.purchaseOrder.searchCustomer(body).subscribe((data) => {
                 this.listCustomer = data.data;
@@ -394,7 +425,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         this.listPromotionProductAdd = e;
     }
 
-    searchListProduct(e: any) {
+    searchListProductActived(e: any) {
         const body = {
             keyword: e.target.value,
             sortBy: {
@@ -404,7 +435,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             page: 1,
             pageSize: 5,
         };
-        this.purchaseOrder.getAllProduct(body).subscribe((data) => {
+        this.purchaseOrder.getListProductActived(body).subscribe((data) => {
             console.log(data);
             this.listSearchedProduct = data?.data;
         });
@@ -425,6 +456,4 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         this.listChoosenProduct.push(product);
         this.pushListProductToDialog();
     }
-
-    
 }
