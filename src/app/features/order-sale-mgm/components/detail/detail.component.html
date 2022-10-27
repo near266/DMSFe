@@ -120,8 +120,7 @@
                 (listProduct$)="listProduct = $event"
                 (listProductAdd$)="listProductAdd = $event"></app-product-table>
         </mat-tab>
-    </mat-tab-group>
-    <mat-tab-group class="mt-2">
+        <!-- Sản phẩm khuyến mại -->
         <mat-tab label="Sản phẩm khuyến mại">
             <app-product-promotion-table
                 [listPromotionProduct]="listPromotionProduct"
@@ -129,6 +128,7 @@
                 [saleReceiptId]="id"></app-product-promotion-table>
         </mat-tab>
     </mat-tab-group>
+    <mat-tab-group class="mt-2"></mat-tab-group>
     <div class="grid grid-cols-3 w-full gap-y-5 mt-6">
         <div class="grid grid-cols-4 col-span-2">
             <span class="font-medium text-red-600">Bằng chữ:</span>
