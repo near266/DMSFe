@@ -14,6 +14,7 @@ import { AddRouterComponent } from './add-router/add-router.component';
     styleUrls: ['./route.component.scss'],
 })
 export class RouteComponent implements OnInit, AfterViewInit {
+  constructor(private title: Title, private dialog: MatDialog, private routeService: RouteService, public datePipe: DatePipe) {}
 
   page = 1;
   totalCount = 0;
@@ -22,8 +23,13 @@ export class RouteComponent implements OnInit, AfterViewInit {
     totalCount: 0
   };
   isRole:any = localStorage.getItem('role')
-
-  constructor(private title: Title, private dialog: MatDialog, private routeService: RouteService, public datePipe: DatePipe) {}
+  keywordString:any;
+  filterObj = {
+    keyword: '',
+    groupID: '',
+    cusID: ''
+  }
+  listIdRoute:any[] = [];
 
 
   // MatPaginator Inputs
@@ -49,14 +55,15 @@ export class RouteComponent implements OnInit, AfterViewInit {
     this.checkIsRole();
   }
   ngAfterViewInit(): void {
-    this.init(this.page, "");
+    this.init(this.page);
   }
 
-  init(page:any, groupId?:any) {
-    this.routeService.SearchAllRoute(page, this.pageSize, groupId).subscribe( data => {
-      console.log(data);
+  init(page:any, groupId?:any, employeeId?:any, keyword?:any) {
+    this.routeService.SearchAllRoute(page, this.pageSize, groupId, employeeId, keyword).subscribe( data => {
       this.length = data.totalCount
       this.response = data;
+      console.log(data);
+
     });
   }
 
@@ -273,19 +280,60 @@ export class RouteComponent implements OnInit, AfterViewInit {
     }
     return;
   };
+
   reload(){
     this.init(this.page);
-  }
+  };
 
   searchUser(request: any) {
-    console.log(request.split(',')[1]);
-    this.init(this.page, request.split(',')[1]);
-
-    if (request != 'root') {
-
-    } else {
-
+    let GrID;
+    let EmpID;
+    let levelTree = request.split(',')[0];
+    switch(levelTree){
+      case "1":
+        GrID = request.split(',')[1]
+        this.filterObj.groupID = request.split(',')[1]
+        break;
+      case "2":
+        EmpID = request.split(',')[1]
+        this.filterObj.cusID = request.split(',')[0]
+        break
     }
+    this.init(this.page, GrID, EmpID);
+  };
 
+
+  filterRoute(event:any){
+    this.keywordString = event.target.value;
+    this.init(this.page, this.filterObj.groupID, this.filterObj.cusID, this.keywordString)
+  }
+
+
+  getCount(routerId:any){
+    this.routeService.CountCustomerInRoute(routerId).subscribe({
+      next: data => {
+        console.log(data);
+      }
+    })
+  }
+
+  checkIdRoute(event:any, idRoute:any){
+    console.log(event.target.id, idRoute);
+    if(event.target.id == 'all'){
+     if(event.target.checked){
+      this.listIdRoute = [];
+      this.response.data.forEach((currentValue:any)=>{
+        this.listIdRoute.push(currentValue.id);
+      });
+     }else{
+      this.listIdRoute = [];
+     }
+    }else{
+      if(event.target.checked){
+        this.listIdRoute.push(idRoute);
+      }else{
+        this.listIdRoute = this.listIdRoute.filter((id:any)=> id != idRoute);
+      }
+    }
   }
 }

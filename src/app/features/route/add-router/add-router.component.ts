@@ -3,6 +3,7 @@ import { DataService } from 'src/app/core/services/data.service';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { RouteService } from 'src/app/core/services/route.service';
 import { outputAst } from '@angular/compiler';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 @Component({
   selector: 'app-add-router',
   templateUrl: './add-router.component.html',
@@ -17,6 +18,7 @@ export class AddRouterComponent implements OnInit {
     private dataService: DataService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _routeSer: RouteService,
+    private _snackSer: SnackbarService
   ) { }
   typeButton:any = "";
   title = 'Thông tin chung'
@@ -44,6 +46,10 @@ export class AddRouterComponent implements OnInit {
   alertSuccess(event:any){
     this.alertSuccessEvent.emit(true)
   }
-  
+
+  deleteRoute(){
+    this._snackSer.openSnackbar('Sắp ra mắt', 3000, '', 'end', 'bottom', true)
+  }
+
 
 }

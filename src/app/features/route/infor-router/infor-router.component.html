@@ -74,25 +74,25 @@
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-semibold">Danh sách khách hàng (<span class="font-bold">{{listAllCusInRouteData.totalCount}}</span>)</div>
         <div class="relative z-0">
-          <input class="border border-solid border-black p-1 rounded-sm w-96 text- h-7 pl-7" (input)="SerchCus($event)" placeholder="Tìm kiếm khách hàng">
+          <input class="border border-solid border-black p-1 rounded-sm w-96 text- h-7 pl-7" [(ngModel)]="keywordSearch" [ngModelOptions]="{standalone: true}" (input)="SerchCus($event)" placeholder="Tìm kiếm khách hàng">
           <i class="fa-solid fa-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2"></i>
         </div>
     </div>
   </form>
-  <div *ngIf="typeRoute == 'add'" class="flex items-center space-x-5 relative">
-    <div class="group cursor-pointer p-2 hover:bg-gray-100 rounded-r">
+  <div class="flex items-center space-x-5 relative">
+    <button class="group cursor-pointer p-2 hover:bg-gray-100 rounded-r">
       <i class="fa-solid fa-plus text-green-600 group-hover:rotate-180 duration-300"></i>
       Thêm mới
       <i class="fa-solid fa-caret-down ml-2"></i>
-      <div class="border border-solid rounded absolute top-full w-fit hidden group-hover:block bg-gray-50">
+      <div class="border border-solid rounded absolute top-full w-fit hidden z-20 group-hover:block bg-gray-50">
         <div class=" p-3 hover:bg-gray-200" (click)="openAddCusDialog()"><i class="fa-solid fa-list mr-3 text-sky-600"></i>Thêm khách hàng từ danh sách khách hàng</div>
         <div class=" p-3 hover:bg-gray-200" (click)="openAddCusExcelDialog()"><i class="fa-regular fa-file-excel mr-3 text-sky-600"></i>Thêm khách hàng từ danh sách khách hàng</div>
       </div>
-    </div>
-    <div class="cursor-pointer p-2 hover:bg-gray-100 rounded">
-      <i class="fa-solid fa-circle-xmark text-red-600 mr-2"></i>
+    </button>
+    <button class="group p-2 hover:bg-gray-100 rounded" (click)="deleteCusInRoute()">
+      <i class="fa-solid fa-circle-xmark text-red-600 mr-2 group-hover:rotate-180 duration-300 origin-center"></i>
       Xoá khách hàng
-    </div>
+    </button>
   </div>
   <!-- ?? Table -->
   <div class="mt-5 w-full aspect-4/1 overflow-y-scroll">
@@ -102,7 +102,7 @@
     <table *ngIf="listAllCusInRouteData.data" class="w-full">
       <thead class="h-10 w-full text- sticky top-0">
         <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">
-          <input type="checkbox">
+          <input type="checkbox" (change)="checkAll($event)">
         </th>
         <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã khách hàng</th>
         <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tên khách hàng</th>
@@ -119,13 +119,13 @@
             <th class="flex-1 flex items-center justify-center">W3 <input type="checkbox" class="h-4 w-4 ml-2"></th>
           </thead>
         </th> -->
-        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Xoá</th>
+        <th class="border-x border-solid border-gray-200 px-2 bg-gray-100">Xoá</th>
       </thead>
-      <tbody>
-        <tr class="h-auto text-xs" *ngFor="let route of listAllCusInRouteData.data; let o=odd; let e=even;"
+      <tbody class="box-border">
+        <tr class="h-auto text-xs hover:bg-gray-200" *ngFor="let route of listAllCusInRouteData.data; let o=odd; let e=even;"
           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-          <td class="border-x border-solid align-middle px-2 py-3 flex justify-center items-center  ">
-            <input type="checkbox">
+          <td class="border-x border-solid align-middle px-2 py-3 text-center">
+            <input type="checkbox" (change)="checkedCusInRoute($event,route.customer.id)" [checked]="arrayIdCusInRoute.includes(route.customer.id)">
           </td>
           <td class="border-x border-solid align-middle px-2 py-3">{{route.customer.customerCode}}</td>
           <td class="border-x border-solid align-middle px-2 py-3">{{route.customer.customerName}}</td>
