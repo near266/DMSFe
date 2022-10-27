@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { api_gateway_url, route_api } from '../const/url';
@@ -11,12 +11,26 @@ export class RouteService {
   constructor(private http: HttpClient) { }
   urlAPIRoute = api_gateway_url + "/Route"
 
-  SearchAllRoute(page: any, pageSize: any, groupId:any): Observable<any> {
-    if(groupId !== null && groupId !== undefined){
-      return this.http.get(this.urlAPIRoute + '/getall?GroupId=' + groupId + '&page=' + page + '&pagesize=' + pageSize )
-      .pipe(map((response: any) => response));
+  SearchAllRoute(page: any, pageSize: any, groupId:any, employeeId:any, keyword:any): Observable<any> {
+    let params = new HttpParams()
+    if(groupId !== null && groupId !== undefined && groupId !== 'undefined' && groupId !== ''){
+      params = params.append('GroupId', groupId)
     }
-    return this.http.get(this.urlAPIRoute + '/getall?page=' + page + '&pagesize=' + pageSize)
+    if(employeeId !== null && employeeId !== undefined && groupId !== 'undefined' && groupId !== ''){
+      params = params.append("EmployeeId", employeeId)
+    }
+    if(keyword !== null && keyword !== undefined && keyword !== 'undefined' && keyword !== ''){
+      params = params.append("keyword", keyword)
+    }
+    params = params.set('page', page)
+    params = params.set('pagesize', pageSize)
+    // if(groupId !== null && groupId !== undefined){
+    //   return this.http.get(this.urlAPIRoute + '/getall?GroupId=' + groupId + '&page=' + page + '&pagesize=' + pageSize )
+    //   .pipe(map((response: any) => response));
+    // }
+    // return this.http.get(this.urlAPIRoute + '/getall?page=' + page + '&pagesize=' + pageSize)
+    // .pipe(map((response: any) => response));
+    return this.http.get(this.urlAPIRoute + '/getall?'+ params)
     .pipe(map((response: any) => response));
   }
 
@@ -47,4 +61,21 @@ export class RouteService {
       map(response => response)
     )
   }
+
+  CountCustomerInRoute(routeId:any){
+    let params = new HttpParams()
+    .set('RouteId=', routeId)
+    return this.http.get(this.urlAPIRoute + "/CountCustomerInRoute?" , {params})
+    .pipe(
+      map(res => res)
+    )
+  };
+
+  DeleteCusFromRoute(body:any):Observable<any>{
+    return this.http.delete(this.urlAPIRoute + "/deleteCusFromRoute?" , {body})
+    .pipe(
+      map(res => res)
+    )
+  }
+
 }

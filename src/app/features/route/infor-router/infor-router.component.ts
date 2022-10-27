@@ -43,6 +43,10 @@ export class InforRouterComponent implements OnInit {
   RootInfoRouteDetail :RootInfoRoute;
   groupName:any;
   listAllCusInRouteData: RootSearchAllCusInRoute = new RootSearchAllCusInRoute;
+  arrayIdCusInRoute:any[] = [];
+  keywordSearch:any;
+  arrayAllId:any[] = [];
+
 
 
   headerTable = [
@@ -193,12 +197,9 @@ export class InforRouterComponent implements OnInit {
       page: 1,
       pagesize: 3000
     }
-    console.log(body);
-
     this._routeSer.SearchAllCusInRoute(body).subscribe({
       next: (data:RootSearchAllCusInRoute) => {
         this.listAllCusInRouteData = data as RootSearchAllCusInRoute;
-        // console.log(data);
       }
     })
   };
@@ -218,6 +219,43 @@ export class InforRouterComponent implements OnInit {
         status: false,
         })
     }
+  };
+
+  checkAll(event:any){
+    let statusCheck = event.target.checked;
+    if(statusCheck){
+      this.arrayIdCusInRoute = [];
+      this.listAllCusInRouteData.data.forEach((currentValue:any) => {
+        this.arrayIdCusInRoute.push(currentValue.customer.id)
+      });
+    }else{
+      this.arrayIdCusInRoute = [];
+    }
+
+  }
+
+
+  checkedCusInRoute(event:any, cusId:any){
+    let statusCheck = event.target.checked;
+    if(statusCheck){
+      this.arrayIdCusInRoute.push(cusId);
+
+    }else{
+      this.arrayIdCusInRoute = this.arrayIdCusInRoute.filter((item)=>item != cusId);
+    }
+  }
+
+  deleteCusInRoute(){
+    let body = {
+      routeId: this.idRoute,
+      customerId: this.arrayIdCusInRoute
+    }
+    this._routeSer.DeleteCusFromRoute(body).subscribe({
+      next: (data) => {
+        this.searchAllCusInRoute(this.RootInfoRouteDetail.id, this.keywordSearch);
+        this._snackBar.openSnackbar("Xoá khách hàng thành công !", 3000, '', 'right', 'bottom', true)
+      }
+    })
   }
 
 }
