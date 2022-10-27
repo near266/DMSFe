@@ -11,6 +11,16 @@ import { AddCusToRouteComponent } from '../components/add-cus-to-route/add-cus-t
 import { RootInfoRoute } from '../models/infor-router';
 import { RootSearchAllCusInRoute } from '../models/searchAllCusInRoute';
 
+interface BodyAddCusToRouteFromListCus {
+  list: List[];
+  routeId: string;
+}
+
+interface List {
+  customerCode: string;
+}
+
+
 @Component({
   selector: 'app-infor-router',
   templateUrl: './infor-router.component.html',
@@ -46,7 +56,7 @@ export class InforRouterComponent implements OnInit {
   arrayIdCusInRoute:any[] = [];
   keywordSearch:any;
   arrayAllId:any[] = [];
-
+  bodyAddCusToRouteFromListCus:BodyAddCusToRouteFromListCus;
 
 
   headerTable = [
@@ -109,9 +119,15 @@ export class InforRouterComponent implements OnInit {
       this._routeSer.AddRoute(this.formInforRouteUpdate.value).subscribe({
         next: data => {
           // console.log(data);
-          this.getRouteDetail();
           this._snackBar.openSnackbar("Tạo tuyến thành công!", 3000, "", "right", "bottom", true);
           this.successEdit.emit(true);
+          this.bodyAddCusToRouteFromListCus.routeId = data.id;
+          this._routeSer.Import(this.bodyAddCusToRouteFromListCus).subscribe({
+            next: data => {
+              // console.log(data);
+            }
+          })
+
         }
       })
     }
@@ -121,8 +137,6 @@ export class InforRouterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-
-
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
@@ -130,16 +144,28 @@ export class InforRouterComponent implements OnInit {
 
   openAddCusDialog(): void {
     this.closeDialogAddRoute.emit('close')
-    this.dialog.open(AddCusToRouteComponent, {
+    const dialogRef = this.dialog.open(AddCusToRouteComponent, {
       width: '50vw',
-      height: '80vh'
+      height: '80vh',
+      data: {
+        "idRoute": this.idRoute,
+        "typeRoute": this.typeRoute
+      }
     });
+    dialogRef.afterClosed().subscribe(result => {
+      this.searchAllCusInRoute(this.idRoute, "");
+      this.bodyAddCusToRouteFromListCus = result
+
+    })
   }
 
   openAddCusExcelDialog(): void {
     this.closeDialogAddRoute.emit('close')
     this.dialog.open(AddCusFromExcelComponent, {
       width: '30vw',
+      data: {
+        idRoute: this.idRoute
+      }
     });
   }
 

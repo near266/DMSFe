@@ -73,8 +73,8 @@
               <input type="checkbox" id="itemRoute" (change)="checkIdRoute($event, route.id)" [checked]="listIdRoute.includes(route.id)">
             </td>
             <td  class="border-x border-solid align-middle px-2 py-3">
-              <button *ngIf="route.status == true" class="text-xs bg-[#1891C9] text-white font-medium px-5 py-1 rounded">Hoạt động</button>
-              <button  *ngIf="route.status == false" class="text-xs bgs-[#1891C9] bg-red-500 text-white font-medium px-5 py-1 rounded">Khoá</button>
+              <button *ngIf="route.status == true" class="text-xs bg-[#1891C9] text-white font-medium py-1 rounded-sm w-full">Hoạt động</button>
+              <button  *ngIf="route.status == false" class="text-xs bgs-[#1891C9] bg-red-500 text-white font-medium py-1 rounded-sm w-full">Khoá</button>
             </td>
             <td class="border-x border-solid align-middle px-2 py-3 text-emerald-500 font-medium cursor-pointer"
               (click)="openDetailRoute(route.id)">

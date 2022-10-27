@@ -3,7 +3,7 @@
   <div class="flex items-center justify-between pb-3 border-b-2 border-solid border-gray-500">
     <span class="text-2xl font-semibold capitalize text-gray-600">Thêm khách hàng vào tuyến</span>
     <div class="">
-      <button class="rounded-l bg-sky-700 text-white p-2"><i class="fa-solid fa-circle-plus mr-2 "></i>Thêm</button>
+      <button class="rounded-l bg-sky-700 text-white p-2" mat-dialog-close="successAdd"(click)="submitAddCus()"><i class="fa-solid fa-circle-plus mr-2 " ></i>Thêm</button>
       <button class="rounded-r bg-gray-300 p-2" mat-dialog-close><i class="fa-solid fa-rotate-left mr-2"></i>Quay lại</button>
     </div>
   </div>
@@ -69,13 +69,13 @@
       <th class="border-l border-solid border-gray-300 px-2 bg-gray-100">Địa chỉ</th>
     </thead>
     <tbody>
-      <tr class="h-auto text-xs" *ngFor="let cus of dataCus?.data; let o=odd; let e=even; let i = index"
+      <tr class="h-auto text-xs border-y border-solid border-gray-300" *ngFor="let cus of dataCus?.data; let o=odd; let e=even; let i = index"
         [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
         <td class="border-r border-solid align-middle px-2 py-3 text-center">
-          <input class="align-middle" type="checkbox">
+          <input class="align-middle" type="checkbox" (change)="addCusToRoute($event, cus.customerCode)">
           <i class="fa-solid fa-unlock fa-lg text-sky-700 mt-3 w-full text-center"></i>
         </td>
-        <td class="border-x border-solid align-middle px-2 py-3 text-center">{{i}}</td>
+        <td class="border-x border-solid align-middle px-2 py-3 text-center">{{i+1}}</td>
         <td class="border-x border-solid align-middle px-2 py-3">{{cus.customerCode}}</td>
         <td class="border-x border-solid align-middle px-2 py-3">{{cus.customerName}}</td>
         <td class="border-x border-solid align-middle px-2 py-3">{{cus.phone}}</td>
