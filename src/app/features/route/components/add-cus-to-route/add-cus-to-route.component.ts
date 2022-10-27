@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CustomerService } from 'src/app/core/services/customer.service';
 
 @Component({
   selector: 'app-add-cus-to-route',
@@ -7,9 +8,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddCusToRouteComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private customerSer: CustomerService
+  ) { }
 
   ngOnInit(): void {
+    this.init()
+  }
+  dataCus:any;
+
+  init(){
+    let body = {
+      keyword: "",
+      listRouteId: null,
+      page: 1,
+      pageSize: 30,
+    }
+    this.customerSer.search(body).subscribe({
+      next: data => {
+        console.log(data);
+        this.dataCus = data;
+      }
+    })
   }
 
 }

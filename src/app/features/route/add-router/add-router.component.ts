@@ -38,9 +38,9 @@ export class AddRouterComponent implements OnInit {
   }
 
   tabList = [
-    { title: 'Thông tin chung', leftIcon: 'fa-regular fa-file-lines' },
-    { title: 'Bản đồ', leftIcon: 'fa-solid fa-gear' },
-    { title: 'Lịch sử KH', leftIcon: 'fa-solid fa-gear' },
+    { title: 'Thông tin chung', leftIcon: 'fa-solid fa-file-invoice' },
+    { title: 'Bản đồ', leftIcon: 'fa-solid fa-map-location-dot' },
+    { title: 'Lịch sử KH', leftIcon: 'fa-regular fa-hourglass-half' },
   ];
 
   alertSuccess(event:any){
