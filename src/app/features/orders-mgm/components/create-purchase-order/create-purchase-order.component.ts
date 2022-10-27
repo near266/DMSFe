@@ -111,7 +111,11 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
 
     ngAfterViewInit(): void {
         // get list customer
-        this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
+        // setTimeout(() => {
+        //     this.getListCustomer(false);
+        // }, 0);
+
+        this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 100 }).subscribe((data) => {
             this.listCustomer = data.data;
         });
         // get list employee
@@ -239,9 +243,41 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
                 this.listRoute = data.data;
             });
         } else if (this.roleMain === 'member') {
-            this.purchaseOrder
-                .getRouteAndGroupIdByEmployeeId(this.orderDefaultId, 1, 100)
-                .subscribe((data) => console.log(data));
+            this.purchaseOrder.getRouteAndGroupIdByEmployeeId(this.orderDefaultId, 1, 100).subscribe((data) => {
+                data?.data?.forEach((route: any) => {
+                    this.listRoute.push(route);
+                });
+                // set nhóm và tuyến
+                this.createForm.patchValue({
+                    groupId: data?.data[0]?.unitTreeGroup?.id,
+                    routeId: this.listRoute[0]?.id,
+                });
+                // lấy ra customer thuộc tuyến của nv đó
+                this.getListCustomer(this.listRoute[0]?.id);
+            });
+        }
+    }
+
+    getListCustomer(haveRouteId: any) {
+        if (this.roleMain != 'member') {
+            this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
+                this.listCustomer = data.data;
+            });
+        } else if (this.roleMain === 'member') {
+            this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
+                this.listCustomer = data.data;
+                console.log(this.listCustomer);
+            });
+            if (haveRouteId) {
+                let body = {
+                    keyword: '',
+                    routeId: haveRouteId,
+                    page: 1,
+                    pagesize: 100,
+                };
+                this.purchaseOrder.searchCustomerByRouteId(body).subscribe((data) => console.log(data));
+            } else {
+            }
         }
     }
 

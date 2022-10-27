@@ -264,14 +264,18 @@
                                 <td class="custom-th">
                                     <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
                                         <input
-                                            min="0"
-                                            type="number"
-                                            (input)="
-                                                countTotal(product);
-                                                product.totalPrice = product.quantity * product.unitPrice
-                                            "
+                                            currencyMask
+                                            [options]="{
+                                                suffix: '',
+                                                thousands: '.',
+                                                prefix: '',
+                                                decimal: ',',
+                                                precision: 0,
+                                                allowNegative: false
+                                            }"
                                             matInput
-                                            [(ngModel)]="product.quantity"
+                                            [ngModel]="product.quantity"
+                                            (ngModelChange)="product.quantity = $event; updateTotalPrice(product)"
                                             [ngModelOptions]="{ standalone: true }" />
                                     </mat-form-field>
                                 </td>
@@ -289,23 +293,51 @@
                                 <td class="custom-th">
                                     <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
                                         <input
+                                            currencyMask
+                                            [options]="{
+                                                suffix: 'đ',
+                                                thousands: '.',
+                                                prefix: '',
+                                                decimal: ',',
+                                                precision: 0,
+                                                allowNegative: false
+                                            }"
+                                            matInput
+                                            [ngModel]="product.discount"
+                                            (ngModelChange)="product.discount = $event; discountRate(product)"
+                                            [ngModelOptions]="{ standalone: true }" />
+                                        <!-- <input
                                             min="0"
                                             type="number"
                                             matInput
                                             (input)="discountRate(product)"
                                             [(ngModel)]="product.discount"
-                                            [ngModelOptions]="{ standalone: true }" />
+                                            [ngModelOptions]="{ standalone: true }" /> -->
                                     </mat-form-field>
                                 </td>
                                 <td class="custom-th">
                                     <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
                                         <input
+                                            currencyMask
+                                            [options]="{
+                                                suffix: '%',
+                                                thousands: '.',
+                                                prefix: '',
+                                                decimal: ',',
+                                                precision: 0,
+                                                allowNegative: false
+                                            }"
+                                            matInput
+                                            [ngModel]="product.discountRate"
+                                            (ngModelChange)="product.discountRate = $event; countDiscount(product)"
+                                            [ngModelOptions]="{ standalone: true }" />
+                                        <!-- <input
                                             min="0"
                                             type="number"
                                             matInput
                                             (input)="countDiscount(product)"
                                             [(ngModel)]="product.discountRate"
-                                            [ngModelOptions]="{ standalone: true }" />
+                                            [ngModelOptions]="{ standalone: true }" /> -->
                                     </mat-form-field>
                                 </td>
                                 <td class="custom-th">
@@ -344,7 +376,7 @@
             </div>
             <div class="grid grid-cols-2">
                 <span class="font-medium">Tổng tiền hàng:</span>
-                <span class="font-normal">{{ totalAmount | currency: 'VND' }}</span>
+                <span class="font-normal text-right">{{ totalAmount | currency: 'VND' }}</span>
             </div>
             <div class="grid grid-cols-4 col-span-2 text-green-600">
                 <span class="font-medium">Hạn mức dư nợ:</span>
@@ -352,7 +384,7 @@
             </div>
             <div class="grid grid-cols-2">
                 <span class="font-medium">Chiết khấu sản phẩm:</span>
-                <span class="font-normal">
+                <span class="font-normal text-right">
                     {{ totalDiscountProduct | currency: 'VND' }}
                 </span>
             </div>
@@ -364,9 +396,18 @@
                 <span class="font-medium">Chiết khấu đơn hàng:</span>
                 <span class="font-normal">
                     <input
-                        class="border-b border-gray-700"
-                        type="number"
-                        [(ngModel)]="tradeDiscount"
+                        currencyMask
+                        [options]="{
+                            suffix: 'đ',
+                            thousands: '.',
+                            prefix: '',
+                            decimal: ',',
+                            precision: 0,
+                            allowNegative: false
+                        }"
+                        matInput
+                        [ngModel]="tradeDiscount"
+                        (ngModelChange)="tradeDiscount = $event"
                         [ngModelOptions]="{ standalone: true }" />
                 </span>
             </div>
@@ -376,7 +417,7 @@
             </div>
             <div class="grid grid-cols-2">
                 <span class="font-medium">Phải thanh toán:</span>
-                <span class="font-normal">
+                <span class="font-normal text-right">
                     {{ totalPayment | currency: 'VND' }}
                 </span>
             </div>
@@ -394,9 +435,18 @@
                 <span class="font-medium text-green-600">Thanh toán trước:</span>
                 <span class="font-normal">
                     <input
-                        class="border-b border-gray-700"
-                        type="number"
-                        [(ngModel)]="prePayment"
+                        currencyMask
+                        [options]="{
+                            suffix: 'đ',
+                            thousands: '.',
+                            prefix: '',
+                            decimal: ',',
+                            precision: 0,
+                            allowNegative: false
+                        }"
+                        matInput
+                        [ngModel]="prePayment"
+                        (ngModelChange)="prePayment = $event"
                         [ngModelOptions]="{ standalone: true }" />
                 </span>
             </span>

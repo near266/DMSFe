@@ -14,12 +14,13 @@ import moment from 'moment';
     styleUrls: ['./orders-mgm.component.scss'],
 })
 export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterViewInit {
+    isLoading = true;
     isShowSidebarToMargin = true;
     sideBarWidth!: string;
     type!: string;
     listOrder: any = [];
     totalCount: number;
-    id:any = []
+    id: any = [];
     page: number = 1;
     pageSize: number = 30;
     total: number = 0;
@@ -67,10 +68,12 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     }
 
     search(body: any) {
+        this.isLoading = true;
         this.purchaseOrderService.search(body).subscribe((data) => {
             this.listOrder = data.data;
             this.total = data.totalCount;
             this.purchaseOrderService.setTotal(this.total);
+            this.isLoading = false;
         });
     }
 
@@ -119,33 +122,33 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     }
 
     chooseID(event: any, id: any) {
-      console.log(event.checked);
-      if (event.checked == true) {
-          this.id.push(id);
-      } else {
-          this.id.splice(this.id.indexOf(id), 1);
-      }
-      console.log(this.id);
+        console.log(event.checked);
+        if (event.checked == true) {
+            this.id.push(id);
+        } else {
+            this.id.splice(this.id.indexOf(id), 1);
+        }
+        console.log(this.id);
     }
 
     print() {
-      let body;
-      body = {
-          filter: null,
-          listId: this.id,
-          type: 2,
-      };
-      console.log('Print');
-      this.purchaseSer.print(body).subscribe({
-          next: (data) => {
-              var blob = new Blob([data], {
-                  type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-              });
-              const blobUrl = window.URL.createObjectURL(blob);
-              window.open(blobUrl)
-          },
-      });
-  }
+        let body;
+        body = {
+            filter: null,
+            listId: this.id,
+            type: 2,
+        };
+        console.log('Print');
+        this.purchaseSer.print(body).subscribe({
+            next: (data) => {
+                var blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                const blobUrl = window.URL.createObjectURL(blob);
+                window.open(blobUrl);
+            },
+        });
+    }
 
     clearDatePicker() {
         this.dateSearchForm.setValue({

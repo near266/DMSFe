@@ -17,6 +17,7 @@ import { jsPDF } from 'jspdf';
     styleUrls: ['./order-sale-mgm.component.scss'],
 })
 export class OrderSaleMgmComponent implements OnInit {
+    isLoading = true;
     isShowSidebarToMargin = true;
     sideBarWidth!: string;
     type!: string;
@@ -63,14 +64,10 @@ export class OrderSaleMgmComponent implements OnInit {
         });
         // create dateSearchForm
 
-
-
         this.dateSearchForm = this.fb.group({
             fromDate: [null],
             toDate: [null],
         });
-
-
     }
 
     ngAfterViewInit(): void {
@@ -81,8 +78,10 @@ export class OrderSaleMgmComponent implements OnInit {
     }
 
     search(body: any) {
+        this.isLoading = true;
         this.saleReceiptService.searchReceipt(body).subscribe((data) => {
             console.log(data);
+            this.isLoading = false;
             this.listReceiptOrder = data.data;
             this.total = data.totalCount;
             this.saleReceiptService.setTotal(this.total);
@@ -136,7 +135,7 @@ export class OrderSaleMgmComponent implements OnInit {
     }
 
     export() {
-      console.log(this.formFilterReceive);
+        console.log(this.formFilterReceive);
 
         let body;
         body = {
@@ -157,46 +156,46 @@ export class OrderSaleMgmComponent implements OnInit {
         });
     }
     exportWithFilter() {
-      console.log(this.formFilterReceive);
-      let formFilter;
-      if(this.formFilterReceive == undefined){
-        formFilter = {
-          keyword: null,
-          deliveryDate: null,
-          orderEmployeeId: null,
-          customerTypeId: null,
-          customerGroupId: null,
-          areaId: null,
-          productKey: null,
-          status: null,
-          printStatus: true,
-          paymentMethod: 0,
-          // page: 1,
-          // pageSize: 100000,
-          sortField: null,
-          isAscending: true,
-          fromDate: moment(this.dateSearchForm.get('fromDate')?.value).format('YYYY-MM-DD'),
-          toDate: moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD'),
-          dateFilter: null,
+        console.log(this.formFilterReceive);
+        let formFilter;
+        if (this.formFilterReceive == undefined) {
+            formFilter = {
+                keyword: null,
+                deliveryDate: null,
+                orderEmployeeId: null,
+                customerTypeId: null,
+                customerGroupId: null,
+                areaId: null,
+                productKey: null,
+                status: null,
+                printStatus: true,
+                paymentMethod: 0,
+                // page: 1,
+                // pageSize: 100000,
+                sortField: null,
+                isAscending: true,
+                fromDate: moment(this.dateSearchForm.get('fromDate')?.value).format('YYYY-MM-DD'),
+                toDate: moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD'),
+                dateFilter: null,
+            };
+        } else {
+            formFilter = null;
+        }
+        let body = {
+            filter: formFilter,
+            listId: null,
+            type: 1,
         };
-      }else{
-        formFilter = null;
-      }
-      let body = {
-          filter: formFilter,
-          listId: null,
-          type: 1,
-      };
-      console.log('ExportWithFilter', body);
-      this.saleReceiptService.export(body).subscribe({
-          next: (data) => {
-              const blob = new Blob([data], {
-                  type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-              });
-              const url = window.URL.createObjectURL(blob);
-              window.open(url);
-          },
-      });
+        console.log('ExportWithFilter', body);
+        this.saleReceiptService.export(body).subscribe({
+            next: (data) => {
+                const blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url);
+            },
+        });
     }
     print() {
         let body;
@@ -212,7 +211,7 @@ export class OrderSaleMgmComponent implements OnInit {
                     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 });
                 const blobUrl = window.URL.createObjectURL(blob);
-                window.open(blobUrl)
+                window.open(blobUrl);
             },
         });
     }

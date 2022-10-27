@@ -166,6 +166,12 @@ export class PurchaseOrderService {
         return this.http.get(this.api_gateway_url + '/Customer/id?Id=' + id).pipe(map((reponse: any) => reponse));
     }
 
+    searchCustomerByRouteId(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/Route/searchAllCusInRoute', body)
+            .pipe(map((reponse: any) => reponse));
+    }
+
     // product
     getAllProduct(body: any): Observable<any> {
         return this.http.post(this.api_gateway_url + '/Catalog/search', body).pipe(map((reponse: any) => reponse));
@@ -223,11 +229,10 @@ export class PurchaseOrderService {
         return this.http.get(this.id_url_gw + '/GetAllGroupByType?type=' + type).pipe(map((reponse: any) => reponse));
     }
 
-    print(body:any):Observable<any>{
-      let optionHeader = {responseType: 'text'}
-      return this.http.post(this.api_gateway_url + "/PurchaseOrder/print", body, { responseType: 'blob'})
-      .pipe(
-        map(res => res)
-      )
+    print(body: any): Observable<any> {
+        let optionHeader = { responseType: 'text' };
+        return this.http
+            .post(this.api_gateway_url + '/PurchaseOrder/print', body, { responseType: 'blob' })
+            .pipe(map((res) => res));
     }
 }

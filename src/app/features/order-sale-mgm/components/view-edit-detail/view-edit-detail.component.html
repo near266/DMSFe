@@ -33,6 +33,14 @@
                 <i class="fa-solid fa-pen-to-square text-white mr-2"></i>
                 <span class="text-white">Sửa</span>
             </button>
+            <button *ngIf="type === 'View'" class="button-primary-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-print text-white mr-2"></i>
+                <span class="text-white">In</span>
+            </button>
+            <button *ngIf="type === 'View'" class="button-primary-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-download text-white mr-2"></i>
+                <span class="text-white">Excel</span>
+            </button>
             <button
                 (click)="archive()"
                 *ngIf="
@@ -45,6 +53,7 @@
                 <i class="fa-solid fa-trash text-white mr-2"></i>
                 <span class="text-white">Xóa</span>
             </button>
+
             <button
                 *ngIf="type === 'Edit'"
                 (click)="changeType('View'); update(); updateProductList()"

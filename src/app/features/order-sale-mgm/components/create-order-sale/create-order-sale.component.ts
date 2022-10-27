@@ -363,6 +363,11 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         });
     }
 
+    updateTotalPrice(product: any) {
+        this.countTotal(product);
+        product.totalPrice = product.quantity * product.unitPrice;
+    }
+
     addProductBySearch(product: any) {
         product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
         product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ

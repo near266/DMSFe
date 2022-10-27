@@ -49,7 +49,7 @@
                     </button>
                 </div>
             </mat-menu>
-            <button class="p-2 button-option mr-2">
+            <button class="p-2 button-option mr-2" (click)="search(body)">
                 <i class="fa-solid fa-arrows-rotate text-green-700 text-sm font-bold mr-1"></i>
                 <span>Tải lại</span>
             </button>
@@ -69,15 +69,15 @@
             <mat-menu #exportData="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="exportMenu">Xuất file kế toán</button>
                 <mat-menu #exportMenu="matMenu">
-                  <button mat-menu-item>
-                      <i class="fa-regular fa-circle-check mr-2"></i>
-                      Được chọn
-                  </button>
-                  <button mat-menu-item>
-                      <i class="fa-brands fa-searchengin mr-2"></i>
-                      Điều kiện tìm
-                  </button>
-              </mat-menu>
+                    <button mat-menu-item>
+                        <i class="fa-regular fa-circle-check mr-2"></i>
+                        Được chọn
+                    </button>
+                    <button mat-menu-item>
+                        <i class="fa-brands fa-searchengin mr-2"></i>
+                        Điều kiện tìm
+                    </button>
+                </mat-menu>
             </mat-menu>
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="printMenu">
                 <i class="fa-solid fa-print text-green-700 text-sm font-bold mr-1"></i>
@@ -87,9 +87,15 @@
             <mat-menu #exportData="matMenu" #printMenu="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="printMenu1">In theo mẫu A4</button>
                 <mat-menu #printMenu1="matMenu">
-                  <button mat-menu-item (click)="print()"><i class="fa-regular fa-circle-check mr-2"></i>Được chọn</button>
-                  <button mat-menu-item><i class="fa-brands fa-searchengin mr-2"></i>Điều kiện tìm</button>
-              </mat-menu>
+                    <button mat-menu-item (click)="print()">
+                        <i class="fa-regular fa-circle-check mr-2"></i>
+                        Được chọn
+                    </button>
+                    <button mat-menu-item>
+                        <i class="fa-brands fa-searchengin mr-2"></i>
+                        Điều kiện tìm
+                    </button>
+                </mat-menu>
             </mat-menu>
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="filterByTime">
                 <i class="fa-solid fa-calendar text-green-700 text-sm font-bold mr-1"></i>
@@ -130,8 +136,11 @@
         </div>
         <router-outlet></router-outlet>
         <!-- table -->
+        <div *ngIf="isLoading" class="mt-10 text-center">
+            <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+        </div>
         <div id="table" class="table-wrapper">
-            <table class="block custom-table text-gray-500 dark:text-gray-400">
+            <table *ngIf="!isLoading" class="block custom-table text-gray-500 dark:text-gray-400">
                 <thead class="custom-thead">
                     <th class="custom-th">TT</th>
                     <th class="custom-th">
@@ -198,11 +207,38 @@
                                 *ngIf="order.status === 5">
                                 <span style="font-size: 12px">Từ chối</span>
                             </button>
+                            <button
+                                class="button-cancel-xs font-normal cursor-default min-w-[90px]"
+                                *ngIf="order.status === 6">
+                                <span style="font-size: 12px">Đã nhập trả</span>
+                            </button>
                         </td>
-                        <td
-                            class="cursor-pointer hover:text-blue-500 custom-td border-b"
-                            (click)="navigateToDetail(order)">
-                            {{ order.orderCode || 'No Data' }}
+                        <td style="max-width: 300px" class="cursor-pointer custom-td border-b">
+                            <div class="flex items-center">
+                                <div class="hover:text-blue-500" (click)="navigateToDetail(order)">
+                                    {{ order.orderCode || 'No Data' }}
+                                </div>
+                                <div class="ml-2 flex items-center gap-x-1">
+                                    <i
+                                        title="Tổng số lần bán hàng"
+                                        class="fa-solid fa-calculator px-1 py-0.5 border rounded-sm text-sm"></i>
+                                    <i
+                                        title="Tổng số lần xuất hàng"
+                                        class="fa-solid fa-gears px-1 py-0.5 border rounded-sm text-sm"></i>
+                                    <i
+                                        title="Tổng số lần chuyển kho"
+                                        class="fa-solid fa-truck-fast px-1 py-0.5 border rounded-sm text-sm"></i>
+                                    <i
+                                        title="Tổng số lần trả hàng"
+                                        class="fa-solid fa-repeat px-1 py-0.5 border rounded-sm text-sm"></i>
+                                    <i
+                                        title="Trao đổi (Ghi chú)"
+                                        class="fa-solid fa-comment px-1 py-0.5 border rounded-sm text-sm"></i>
+                                    <i
+                                        title="Số lần in"
+                                        class="fa-solid fa-print px-1 py-0.5 border rounded-sm text-sm"></i>
+                                </div>
+                            </div>
                         </td>
                         <td class="custom-td border-b">
                             {{ order.customer?.customerCode || 'No Data' }}
@@ -244,7 +280,7 @@
             </table>
         </div>
         <!-- Pagagation -->
-        <div class="mt-2">
+        <div *ngIf="!isLoading" class="mt-2">
             <app-panagation></app-panagation>
         </div>
     </div>

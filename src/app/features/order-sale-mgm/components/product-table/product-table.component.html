@@ -186,12 +186,26 @@
                         style="width: 80px"
                         floatLabel="always">
                         <input
+                            currencyMask
+                            [options]="{
+                                suffix: '%',
+                                thousands: '.',
+                                prefix: '',
+                                decimal: ',',
+                                precision: 0,
+                                allowNegative: false
+                            }"
+                            matInput
+                            [ngModel]="product.discountRate"
+                            (ngModelChange)="product.discountRate = $event; countDiscount(product)"
+                            [ngModelOptions]="{ standalone: true }" />
+                        <!-- <input
                             min="0"
                             type="number"
                             matInput
                             (input)="countDiscount(product)"
                             [(ngModel)]="product.discountRate"
-                            [ngModelOptions]="{ standalone: true }" />
+                            [ngModelOptions]="{ standalone: true }" /> -->
                     </mat-form-field>
                 </td>
                 <td class="custom-th">
@@ -314,12 +328,26 @@
                         style="width: 80px"
                         floatLabel="always">
                         <input
+                            currencyMask
+                            [options]="{
+                                suffix: '%',
+                                thousands: '.',
+                                prefix: '',
+                                decimal: ',',
+                                precision: 0,
+                                allowNegative: false
+                            }"
+                            matInput
+                            [ngModel]="product.discountRate"
+                            (ngModelChange)="product.discountRate = $event; countDiscount(product)"
+                            [ngModelOptions]="{ standalone: true }" />
+                        <!-- <input
                             min="0"
                             type="number"
                             matInput
                             (input)="countDiscount(product)"
                             [(ngModel)]="product.discountRate"
-                            [ngModelOptions]="{ standalone: true }" />
+                            [ngModelOptions]="{ standalone: true }" /> -->
                     </mat-form-field>
                 </td>
                 <td class="custom-th">

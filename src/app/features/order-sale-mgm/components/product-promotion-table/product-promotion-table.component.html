@@ -4,7 +4,7 @@
             <mat-label style="font-size: 14px">Search</mat-label>
             <mat-select style="font-size: 12px">
                 <input
-                    (input)="getListProductActived($event)"
+                    (input)="searchListProductActive($event)"
                     placeholder="Tìm kiếm..."
                     style="padding-left: 12px"
                     matInput
@@ -141,11 +141,22 @@
                         style="width: 80px"
                         floatLabel="always">
                         <input
-                            min="0"
-                            type="number"
+                            currencyMask
+                            [options]="{
+                                suffix: '',
+                                thousands: '.',
+                                prefix: '',
+                                decimal: ',',
+                                precision: 0,
+                                allowNegative: false
+                            }"
                             matInput
-                            [(ngModel)]="product.quantity"
-                            (input)="product.totalPrice = product.quantity * product.unitPrice; discountRate(product)"
+                            [ngModel]="product.quantity"
+                            (ngModelChange)="
+                                product.quantity = $event;
+                                product.totalPrice = product.quantity * product.unitPrice;
+                                discountRate(product)
+                            "
                             [ngModelOptions]="{ standalone: true }" />
                     </mat-form-field>
                 </td>
