@@ -132,7 +132,7 @@ export class InforRouterComponent implements OnInit {
     this.closeDialogAddRoute.emit('close')
     this.dialog.open(AddCusToRouteComponent, {
       width: '50vw',
-      height: '70vh'
+      height: '80vh'
     });
   }
 
