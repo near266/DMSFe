@@ -2,8 +2,8 @@
   <div class="p-3 w-full flex justify-between items-center">
     <div>
       <div class="flex" *ngIf="requiredRoles('accountant') | async">
-        <button *ngIf="status!==StatusList.PENDING" (click)="updateStatus(StatusList.IMPORTED)"
-          class="button-danger-sm flex items-center justify-between mr-2">
+        <button *ngIf="status!==StatusList.PENDING && status!==StatusList.IMPORTED"
+          (click)="updateStatus(StatusList.IMPORTED)" class="button-danger-sm flex items-center justify-between mr-2">
           <i class="fa-solid fa-file-export text-white mr-2"></i>
           <span class="text-white">Nhập trả</span>
         </button>

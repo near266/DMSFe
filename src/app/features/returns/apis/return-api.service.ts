@@ -44,19 +44,12 @@ export class ReturnApiService {
         return this.http.put(this.returnUrl + '/update', form, { responseType: 'text' });
     }
 
-    deleteReturn(id: string) {
-        console.log(id);
-        return this.http.delete(this.returnUrl + '/delete', { body: { returnsIds: [id] } });
+    archiveReturn(id: string) {
+        return this.http.put(this.returnUrl + '/arhivedOrUn', { returnsIds: [id] });
     }
 
-    getAllReturns(page: number) {
-        return this.http.post<any>(this.returnUrl + '/search', {
-            pageSize: 30,
-            page,
-            keyword: '',
-            sortField: 'createdDate',
-            isAscending: false,
-        });
+    getAllReturns(settings: any) {
+        return this.http.post<any>(this.returnUrl + '/search', settings);
     }
 
     getReturnById(id: string | null): Observable<any> {

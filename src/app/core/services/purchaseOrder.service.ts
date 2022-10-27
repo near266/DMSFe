@@ -222,4 +222,12 @@ export class PurchaseOrderService {
     getAllGroup(type: number): Observable<any> {
         return this.http.get(this.id_url_gw + '/GetAllGroupByType?type=' + type).pipe(map((reponse: any) => reponse));
     }
+
+    print(body:any):Observable<any>{
+      let optionHeader = {responseType: 'text'}
+      return this.http.post(this.api_gateway_url + "/PurchaseOrder/print", body, { responseType: 'blob'})
+      .pipe(
+        map(res => res)
+      )
+    }
 }

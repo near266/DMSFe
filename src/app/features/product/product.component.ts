@@ -43,10 +43,9 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit {
     }
     ngDoCheck(): void {}
     select(event: any) {
-        console.log(event);
         this.filterService.currentFiler$.next(event.key);
         this.filterService.isAscending$.next(event.isAsc);
-        this.productService.getProductsByPage(1);
+        this.productService.getInititalProducts(1);
     }
     addUser() {
         this.dialogService.openProductDialog();

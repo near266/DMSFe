@@ -62,10 +62,10 @@ export class ProductApiService {
     updateProduct(product: Product): Observable<HttpResponse<any>> {
         return this.http.put<HttpResponse<any>>(this.endPoint + '/update', product);
     }
-    deleteProduct(productId: string): any {
+    archiveProduct(productId: string): any {
         const payload = {
             id: productId,
         };
-        return this.http.delete<HttpResponse<any>>(this.endPoint + '/delete', { body: payload });
+        return this.http.put<HttpResponse<any>>(this.endPoint + '/arhived', payload);
     }
 }

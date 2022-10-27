@@ -22,6 +22,7 @@ import {
     ProductFieldSelect,
     ProductFieldTextarea,
 } from './components/add-product-dialog/add-product-details/product-field-type/product-field-type.component';
+import { ProductSidenavMenuComponent } from './components/product-sidenav-menu/product-sidenav-menu.component';
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import {
         ProductFieldInput,
         ProductFieldSelect,
         ProductFieldTextarea,
+        ProductSidenavMenuComponent,
     ],
     imports: [
         CommonModule,

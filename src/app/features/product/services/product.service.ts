@@ -42,6 +42,7 @@ export class ProductService {
             .subscribe((res: any) => {
                 this.products.next(res.data);
                 this.totalProducts.next(res.totalCount || 0);
+                this.calculateStartAndEndPage();
             });
     }
     getProductsByPage(page: number) {
@@ -50,7 +51,9 @@ export class ProductService {
                 ? 'CreatedDate'
                 : this.filterService.currentFiler$.getValue();
         const ascending = this.filterService.isAscending$.getValue();
+        const keyword = this.filterService.keyword$.getValue();
         const settings = {
+            keyword,
             sortBy: {
                 property: type,
                 value: ascending,

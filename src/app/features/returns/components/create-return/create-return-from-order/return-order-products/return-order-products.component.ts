@@ -110,10 +110,10 @@ export class ReturnOrderProductsComponent implements OnInit, DoCheck {
             );
             item.discount = 0;
         }
-        if (item.discount && item.totalPrice) {
-            item.discountRate = item.discount / item.totalPrice;
+        if (item.discountRate && item.totalPrice) {
+            item.discount = item.discountRate * item.totalPrice;
         } else {
-            item.discountRate = 0;
+            item.discount = 0;
         }
     }
     getSumOfTotalPrice() {

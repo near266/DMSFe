@@ -85,8 +85,8 @@ export class SidebarComponent implements OnInit, AfterViewInit {
         // pageSize: 100000,
         sortField: null,
         isAscending: true,
-        fromDate: null,
-        toDate: null,
+        fromDate: [null],
+        toDate: [null],
         dateFilter: null,
     });
 

@@ -81,7 +81,7 @@ export class ProductDialogService {
 
     deleteProduct(id: string | undefined) {
         if (id) {
-            return this.productApiService.deleteProduct(id).subscribe({
+            return this.productApiService.archiveProduct(id).subscribe({
                 next: () => {
                     this.dialogService.closeAll();
                     this.productService.getInititalProducts(1);

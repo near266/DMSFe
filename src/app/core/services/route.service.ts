@@ -12,8 +12,8 @@ export class RouteService {
   urlAPIRoute = api_gateway_url + "/Route"
 
   SearchAllRoute(page: any, pageSize: any, groupId:any): Observable<any> {
-    if(groupId !== null){
-      return this.http.get(this.urlAPIRoute + '/getall??GroupId=' + groupId + '&page=' + page + '&pagesize=' + pageSize )
+    if(groupId !== null && groupId !== undefined){
+      return this.http.get(this.urlAPIRoute + '/getall?GroupId=' + groupId + '&page=' + page + '&pagesize=' + pageSize )
       .pipe(map((response: any) => response));
     }
     return this.http.get(this.urlAPIRoute + '/getall?page=' + page + '&pagesize=' + pageSize)

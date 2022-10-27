@@ -30,6 +30,7 @@ import { DetailCustomerComponent } from './detail-customer/detail-customer.compo
 })
 export class CustomersComponent implements OnInit, AfterViewInit {
 
+  loading = true;
   customerGroup: CustomerGroup[] = [];
   customerType: CustomerType[] = [];
   channel: Channel[] = [];
@@ -44,6 +45,24 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       data: [],
       totalCount: 0,
   };
+
+  listProvinces: any[] = [];
+  listDistricts: any[] = [];
+  listWards: any[] = [];
+  showArea = false;
+  showProvince = false;
+  showDistrict = false;
+  showWard = false;
+  isChoseUpdated = false;
+  areaName = '';
+  provinceName = '';
+  districtName = '';
+  wardName = '';
+  areaTemp: Area[] = [];
+  provinceTemp: any[]= [];
+  districtTemp: any[]= [];
+  wardTemp: any[]= [];
+
   keywords = '';
   province = '';
   district = '';
@@ -271,10 +290,6 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     }
   }
 
-  listProvinces: any[] = [];
-  listDistricts: any[] = [];
-  listWards: any[] = [];
-
   constructor(
       private title: Title,
       private dialog: MatDialog,
@@ -340,6 +355,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     this.current_page = page;
     this.customerService.search(this.request).subscribe(
         (data) => {
+          this.loading = false;
             if(data) {
               this.response = data;
               this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
@@ -359,6 +375,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
             }
         },
         (error) => {
+          this.loading = false;
             this.snackbar.openSnackbar('Không thể tải danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
         },
     );
@@ -463,6 +480,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
 
   search(request: any) {
+    this.loading = true;
     this.page = 1;
     this.current_page = 1;
     if(request) {
@@ -477,6 +495,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     this.request.page = this.page;
     this.customerService.search(this.request).subscribe(
         (data) => {
+          this.loading = false;
+          if(data) {
             this.response = data;
             this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
             if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
@@ -492,9 +512,11 @@ export class CustomersComponent implements OnInit, AfterViewInit {
                   element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
                 }
             });
+          }
         },
         (error) => {
-            this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
+          this.loading = false;
+          this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
         },
     );
   }
@@ -552,34 +574,37 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
 
   filter() {
+    this.loading = true;
     this.page = 1;
     this.current_page = 1;
     this.request.keyword = this.keywords;
     this.request.page = this.page;
     this.customerService.search(this.request).subscribe(
         (data) => {
-            if(data) {
-              this.response = data;
-              this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
-              if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
-              this.pageList = [];
-              for(let i = 1; i <= this.totalPage; i++) {
-                this.pageList.push(i);
-              }
-              this.response.data.forEach((element) => {
-                  if (element.status == true) element.status = 'Hoạt động';
-                  else if (element.status == false) element.status = 'Không hoạt động';
-                  else element.status = 'Không hoạt động';
-                  if(element.dob) {
-                    element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
-                  }
-              });
-            } else {
-              this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
+          this.loading = false;
+          if(data) {
+            this.response = data;
+            this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
+            if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
+            this.pageList = [];
+            for(let i = 1; i <= this.totalPage; i++) {
+              this.pageList.push(i);
             }
+            this.response.data.forEach((element) => {
+                if (element.status == true) element.status = 'Hoạt động';
+                else if (element.status == false) element.status = 'Không hoạt động';
+                else element.status = 'Không hoạt động';
+                if(element.dob) {
+                  element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
+                }
+            });
+          } else {
+            this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
+          }
         },
         (error) => {
-            this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
+          this.loading = false;
+          this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
         },
     );
   }

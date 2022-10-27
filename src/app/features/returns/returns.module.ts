@@ -23,6 +23,7 @@ import { ReturnOrderInfoComponent } from './components/create-return/create-retu
 import { ReturnOrderProductsComponent } from './components/create-return/create-return-from-order/return-order-products/return-order-products.component';
 import { ReturnOrderPromotionComponent } from './components/create-return/create-return-from-order/return-order-promotion/return-order-promotion.component';
 import { NgSelectFormlyComponent } from './types/ng-select.type';
+import { ReturnsSidenavComponent } from './components/returns-sidenav/returns-sidenav.component';
 
 @NgModule({
     declarations: [
@@ -39,6 +40,7 @@ import { NgSelectFormlyComponent } from './types/ng-select.type';
         ReturnOrderInfoComponent,
         ReturnOrderProductsComponent,
         ReturnOrderPromotionComponent,
+        ReturnsSidenavComponent,
     ],
     imports: [
         CommonModule,

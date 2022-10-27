@@ -25,6 +25,8 @@ export class ReturnsTableComponent implements OnInit {
             this.totalItems = total;
         });
         this.returnsService.returns$.subscribe((data) => {
+            console.log(data);
+
             this.returns = data;
         });
     }

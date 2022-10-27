@@ -96,6 +96,8 @@ export class ViewEditDetailComponent implements OnInit {
     getDetail() {
         this.saleReceipt.searchReceiptById(this.id).subscribe((data) => {
             this.statusNow = data.status;
+            console.log(data);
+
             this.detailOrder = data;
             localStorage.setItem('customerId', data.customer?.id);
         });
@@ -143,6 +145,7 @@ export class ViewEditDetailComponent implements OnInit {
         if (changeTo === 0) {
             const { listProduct, listPromotionProduct, ...orderInfo } = this.detailOrder;
             this.returnOrderService.returnInfo$.next(this.returnOrderService.formatInfo(orderInfo));
+            this.returnOrderService.returnStatusInfo$.next(this.returnOrderService.formatUpdateStatusOrder(orderInfo));
             this.returnOrderService.returnProductList$.next(this.returnOrderService.formatListProduct(listProduct));
             this.returnOrderService.returnPromotionList$.next(
                 this.returnOrderService.formatListProduct(listPromotionProduct),

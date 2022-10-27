@@ -49,7 +49,7 @@ export class RouteComponent implements OnInit, AfterViewInit {
     this.checkIsRole();
   }
   ngAfterViewInit(): void {
-    this.init(this.page);
+    this.init(this.page, "");
   }
 
   init(page:any, groupId?:any) {
@@ -233,6 +233,9 @@ export class RouteComponent implements OnInit, AfterViewInit {
         "type": "add"
       }
     });
+    dialogRef.afterClosed().subscribe(result => {
+      this.init(this.page);
+    });
   }
 
 
@@ -244,6 +247,9 @@ export class RouteComponent implements OnInit, AfterViewInit {
         "id": id,
         "type": "update"
       }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.init(this.page);
     });
   }
 
@@ -258,6 +264,7 @@ export class RouteComponent implements OnInit, AfterViewInit {
     //  this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
     }
   };
+
   checkIsRole(){
     if(this.isRole.includes('MANAGER') || this.isRole.includes('SALE_ADMIN')){
       return true;
@@ -265,12 +272,14 @@ export class RouteComponent implements OnInit, AfterViewInit {
       return false;
     }
     return;
+  };
+  reload(){
+    this.init(this.page);
   }
 
   searchUser(request: any) {
-    console.log(request);
-
-    this.init(this.page, request);
+    console.log(request.split(',')[1]);
+    this.init(this.page, request.split(',')[1]);
 
     if (request != 'root') {
 
