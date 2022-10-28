@@ -141,7 +141,6 @@ export class DetailCustomerComponent implements OnInit {
         debtLimit: this.customer.debtLimit ? this.customer.debtLimit : null,
         cashAcc: this.customer.cashAcc? this.customer.cashAcc : null,
       };
-      console.log(this.buf.customerName.replace(this.buf.customerPrefix, ''));
 
       this.buf.customerCode = this.buf.customerCode.replace(this.buf.customerPrefix, '');
       if (this.customer.status == true) this.customer.status = 'Hoạt động';
