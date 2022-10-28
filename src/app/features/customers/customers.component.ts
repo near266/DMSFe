@@ -20,6 +20,7 @@ import { CustomerService } from 'src/app/core/services/customer.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { environment } from 'src/environments/environment';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { DetailCustomerComponent } from './detail-customer/detail-customer.component';
 
@@ -306,6 +307,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(environment.test);
+
       this.title.setTitle('Khách hàng');
       this.role = '' + localStorage.getItem('role');
       this.listRole = this.role.split(',');
