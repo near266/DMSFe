@@ -23,6 +23,7 @@ export interface InData{
 
 export interface IBody{
   id?: any,
+  customerPrefix?: any,
   customerCode?: any,
   customerName?: any,
   customerGroupId?: any,
@@ -119,7 +120,8 @@ export class DetailCustomerComponent implements OnInit {
       this.buf = {
         id: '' + this.customer.id,
         customerCode: '' + this.customer.customerCode,
-        customerName: '' + this.customer.customerName,
+        customerPrefix: this.customer.customerPrefix ? '' + this.customer.customerPrefix : '',
+        customerName: this.customer.customerName ? this.customer.customerName : '',
         customerGroupId: this.customer.customerGroup ? this.customer.customerGroup.id : null,
         customerTypeId: this.customer.customerType ? this.customer.customerType.id : null,
         channelId: this.customer.channel ? this.customer.channel.id : null,
@@ -139,6 +141,9 @@ export class DetailCustomerComponent implements OnInit {
         debtLimit: this.customer.debtLimit ? this.customer.debtLimit : null,
         cashAcc: this.customer.cashAcc? this.customer.cashAcc : null,
       };
+      console.log(this.buf.customerName.replace(this.buf.customerPrefix, ''));
+
+      this.buf.customerCode = this.buf.customerCode.replace(this.buf.customerPrefix, '');
       if (this.customer.status == true) this.customer.status = 'Hoạt động';
       else if (this.customer.status == false) this.customer.status = 'Không hoạt động';
       else this.customer.status = 'Không hoạt động';
@@ -232,7 +237,6 @@ export class DetailCustomerComponent implements OnInit {
 
   submit() {
     this.loading = true;
-    this.buf.customerCode += this.textCode;
     try {
       this.buf.dob = new Date(this.buf.dob).toISOString();
     } catch (error) {

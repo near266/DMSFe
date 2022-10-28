@@ -2,6 +2,7 @@ export class Customers {
   id?: string;
   customerId?: string;
   status?: any;
+  customerPrefix?: string;
   customerCode?: string;
   customerName?: string;
   customerGroupName?: string;

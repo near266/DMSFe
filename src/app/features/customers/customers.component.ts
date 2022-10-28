@@ -347,6 +347,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
 
   init(keyword: any, page: number, pageSize: number) {
+    this.loading = true;
     const body = {
       keyword: keyword,
       page: page,
