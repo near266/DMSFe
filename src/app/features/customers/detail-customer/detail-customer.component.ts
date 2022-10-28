@@ -52,6 +52,7 @@ export interface IBody{
 export class DetailCustomerComponent implements OnInit {
 
   loading = false;
+  textCode = '';
 
   customer: Customers = {
     id: '',
@@ -231,6 +232,7 @@ export class DetailCustomerComponent implements OnInit {
 
   submit() {
     this.loading = true;
+    this.buf.customerCode += this.textCode;
     try {
       this.buf.dob = new Date(this.buf.dob).toISOString();
     } catch (error) {

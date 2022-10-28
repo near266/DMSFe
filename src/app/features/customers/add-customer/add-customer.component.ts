@@ -331,12 +331,14 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
     return str;
   }
 
-  unfocus() {
-    if(this.showArea == true || this.showProvince == true || this.showDistrict == true || this.showWard == true) {
-      this.showArea = false;
-      this.showProvince = false;
-      this.showDistrict = false;
-      this.showWard = false;
+  unfocus(event:any) {
+    let type = event.type;
+    if(type == 'blur'){
+      setTimeout(() => {
+        this.showArea = false;
+      }, 200);
+    }else{
+      this.showArea = true;
     }
   }
 
