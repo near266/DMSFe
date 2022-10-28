@@ -188,7 +188,7 @@
           <i *ngIf="current_page > 1" class="fa-solid fa-backward mx-1" (click)="init(keywords, current_page-1, pageSize)"></i>
           <div class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer">{{current_page}}</div>
           <i *ngIf="current_page < totalPage" class="fa-solid fa-forward mx-1" (click)="init(keywords, current_page+1, pageSize)"></i>
-          <span>Hiển thị 1 - {{totalPage}} trên tổng số {{totalPage}} bản ghi</span>
+          <span>Hiển thị {{response != null ? (current_page-1)*pageSize + 1 : 0}} - {{response != null ? (current_page-1)*pageSize + response.data.length: 0}} trên tổng số {{response != null ? response.totalCount: 0}} bản ghi</span>
       </div>
   </div>
 </div>
