@@ -81,12 +81,12 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             deliveryDate: [null],
             groupId: [this.relatedOrder?.group?.id],
             orderEmployeeId: [this.relatedOrder?.orderEmployee?.id],
-            routeId: [null],
+            routeId: [this.relatedOrder?.route?.id],
             saleEmployeeId: [this.saleDefaultId],
             customerId: [null],
             customerName: [null],
-            phone: [null],
-            address: [null],
+            phone: [this.relatedOrder?.phone],
+            address: [this.relatedOrder?.address],
             description: [null],
             debtRecord: [false],
             paymentTerm: [moment(Date.now()).format('YYYY-MM-DD')],
@@ -220,19 +220,16 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.purchaseOrder.getCustomerById(id).subscribe((data) => {
             if (data) {
                 customer = data;
+                console.log(customer);
                 this.genOrderForm.patchValue({
-                    customer: {
-                        name: [null],
-                        phone: [null],
-                        address: [null],
-                    },
+                    customerName: null,
+                    phone: null,
+                    address: null,
                 });
                 this.genOrderForm.patchValue({
-                    customer: {
-                        name: customer?.customerName,
-                        phone: customer?.phone,
-                        address: customer?.address,
-                    },
+                    customerName: customer.customerName,
+                    phone: customer.phone,
+                    address: customer.address,
                 });
                 // set hạn mức dư nợ
                 this.purchaseOrder.getCustomerById(id).subscribe((data) => {
@@ -288,9 +285,9 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             product.unitId = product.unit?.id;
         });
         // set route and group if have customerId
-        if (this.relatedOrder?.customer?.id) {
-            this.setRouteGroupAndEmployee(this.relatedOrder?.customer?.id);
-        }
+        // if (this.relatedOrder?.customer?.id) {
+        //     this.setRouteGroupAndEmployee(this.relatedOrder?.customer?.id);
+        // }
 
         this.pushListProductToDialog();
         this.pushListProductPromotionToDialog();
