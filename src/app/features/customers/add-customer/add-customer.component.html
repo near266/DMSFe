@@ -97,8 +97,10 @@
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold flex flex-col justify-center">Khu vực</div>
-          <div class="w-8/12 relative ">
+          <div class="w-8/12 relative" (mouseleave)="showArea = false">
             <input type="text" (click)="showArea = !showArea" [(ngModel)]="areaName" (input)="searchArea()" [ngModelOptions]="{standalone: true}" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" placeholder="--- Chọn khu vực---"/>
+            <!-- <input type="text" (focus)="unfocus($event)" (blur)="unfocus($event)" [(ngModel)]="areaName" (input)="searchArea()" [ngModelOptions]="{standalone: true}" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" placeholder="--- Chọn khu vực---"/> -->
+
             <div *ngIf="showArea" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
               <div *ngFor="let item of areaTemp" class="px-3 py-1 hover:bg-gray-100 cursor-pointer" (click)="selectArea(item)">{{item.areaName}}</div>
             </div>
