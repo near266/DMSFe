@@ -307,8 +307,6 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(environment.test);
-
       this.title.setTitle('Khách hàng');
       this.role = '' + localStorage.getItem('role');
       this.listRole = this.role.split(',');
