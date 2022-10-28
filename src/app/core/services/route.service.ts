@@ -62,7 +62,7 @@ export class RouteService {
     )
   }
 
-  CountCustomerInRoute(routeId:any){
+  CountCustomerInRoute(routeId:any):Observable<any>{
     let params = new HttpParams()
     .set('RouteId=', routeId)
     return this.http.get(this.urlAPIRoute + "/CountCustomerInRoute?" , {params})
@@ -73,6 +73,12 @@ export class RouteService {
 
   DeleteCusFromRoute(body:any):Observable<any>{
     return this.http.delete(this.urlAPIRoute + "/deleteCusFromRoute?" , {body})
+    .pipe(
+      map(res => res)
+    )
+  }
+  Import(body:any):Observable<any>{
+    return this.http.post(this.urlAPIRoute + '/Import', body)
     .pipe(
       map(res => res)
     )

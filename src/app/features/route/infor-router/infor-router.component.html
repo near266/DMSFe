@@ -99,7 +99,7 @@
     <div *ngIf="!listAllCusInRouteData.data && listAllCusInRouteData.totalCount !== 0 && typeRoute == 'update'" class="mt-10 text-center">
       <i class="fa-solid fa-cloud-arrow-down fa-xl text-sky-600 animate-ping"></i>
     </div>
-    <table *ngIf="listAllCusInRouteData.data" class="w-full">
+    <table *ngIf="listAllCusInRouteData.data" class="w-full ">
       <thead class="h-10 w-full text- sticky top-0">
         <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">
           <input type="checkbox" (change)="checkAll($event)">
@@ -122,7 +122,7 @@
         <!-- <th class="border-x border-solid border-gray-200 px-2 bg-gray-100">Xoá</th> -->
       </thead>
       <tbody class="box-border">
-        <tr class="h-auto text-xs hover:bg-gray-200" *ngFor="let route of listAllCusInRouteData.data; let o=odd; let e=even;"
+        <tr class="h-auto text-xs hover:bg-gray-200 border-y border-solid border-gray-300" *ngFor="let route of listAllCusInRouteData.data; let o=odd; let e=even;"
           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
           <td class="border-x border-solid align-middle px-2 py-3 text-center">
             <input type="checkbox" (change)="checkedCusInRoute($event,route.customer.id)" [checked]="arrayIdCusInRoute.includes(route.customer.id)">
