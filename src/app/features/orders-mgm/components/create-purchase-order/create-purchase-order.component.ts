@@ -115,9 +115,9 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         //     this.getListCustomer(false);
         // }, 0);
 
-        this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 100 }).subscribe((data) => {
-            this.listCustomer = data.data;
-        });
+        // this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 100 }).subscribe((data) => {
+        //     this.listCustomer = data.data;
+        // });
         // get list employee
         setTimeout(() => {
             this.getListEmployee();
