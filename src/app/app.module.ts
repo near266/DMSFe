@@ -19,7 +19,7 @@ import localeVi from '@angular/common/locales/vi';
 import { NgPrintModule } from 'ng-print';
 registerLocaleData(localeVi);
 @NgModule({
-    declarations: [AppComponent, ForgotpasswordComponent, OrderReportComponent],
+    declarations: [AppComponent, ForgotpasswordComponent],
     imports: [SharedModule, RouterModule, BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule],
     providers: [
         DatePipe,
