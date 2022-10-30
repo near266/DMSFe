@@ -6,6 +6,7 @@ import { Title } from '@angular/platform-browser';
 import { Response } from 'src/app/core/model/Response';
 import { Route } from 'src/app/core/model/Route';
 import { RouteService } from 'src/app/core/services/route.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AddRouterComponent } from './add-router/add-router.component';
 
 @Component({
@@ -14,7 +15,13 @@ import { AddRouterComponent } from './add-router/add-router.component';
     styleUrls: ['./route.component.scss'],
 })
 export class RouteComponent implements OnInit, AfterViewInit {
-  constructor(private title: Title, private dialog: MatDialog, private routeService: RouteService, public datePipe: DatePipe) {}
+  constructor(
+    private title: Title,
+    private dialog: MatDialog,
+    private routeService: RouteService,
+    public datePipe: DatePipe,
+    private _snackBar: SnackbarService
+    ) {}
 
   page = 1;
   totalCount = 0;
@@ -62,8 +69,6 @@ export class RouteComponent implements OnInit, AfterViewInit {
     this.routeService.SearchAllRoute(page, this.pageSize, groupId, employeeId, keyword).subscribe( data => {
       this.length = data.totalCount
       this.response = data;
-      console.log(data);
-
     });
   }
 
@@ -203,7 +208,7 @@ export class RouteComponent implements OnInit, AfterViewInit {
           listMenuPosition: [
               { title: 'Khóa nhiều', leftIcon: 'fa-lock text-emerald-500', value: 'all' },
               { title: 'Mở khóa nhiều', leftIcon: 'fa-unlock text-emerald-500', value: 'all' },
-              { title: 'Xóa nhiều', leftIcon: 'fa-trash text-emerald-500', value: 'all' },
+              { title: 'Xóa nhiều', leftIcon: 'fa-trash text-emerald-500', value: 'delete' },
               { title: 'Nhật ký nhập dữ liệu', leftIcon: 'fa-clock-rotate-left text-emerald-500', value: 'all' },
           ],
       },
@@ -211,7 +216,22 @@ export class RouteComponent implements OnInit, AfterViewInit {
 
 
   Select(e: any) {
-      console.log(e);
+    switch(e){
+      case 'delete':
+        let body = {
+          listId: this.listIdRoute
+        }
+        this.routeService.Delete(body).subscribe({
+          next: data => {
+            this._snackBar.openSnackbar("Xoá tuyến thành công!", 3000, '', 'right', 'bottom', true);
+            this.init(this.page, this.filterObj.groupID, this.filterObj.cusID, this.keywordString);
+          },
+          error: err => {
+            this._snackBar.openSnackbar("Lỗi xoá tuyến!", 3000, '', 'right', 'bottom', true);
+          }
+        })
+
+    }
   };
 
   routes = [
@@ -318,7 +338,7 @@ export class RouteComponent implements OnInit, AfterViewInit {
   }
 
   checkIdRoute(event:any, idRoute:any){
-    console.log(event.target.id, idRoute);
+    // console.log(event.target.id, idRoute);
     if(event.target.id == 'all'){
      if(event.target.checked){
       this.listIdRoute = [];
