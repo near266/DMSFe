@@ -51,7 +51,7 @@ const routes: Routes = [
                 loadChildren: () => import('../../../features/route/route.module').then((m) => m.RouteModule),
             },
             {
-                path: 'report',
+                path: 'order-report',
                 loadChildren: () =>
                     import('./../../../features/order-report/order-report.module').then((m) => m.OrderReportModule),
             },

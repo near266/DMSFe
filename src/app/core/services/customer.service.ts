@@ -65,4 +65,11 @@ export class CustomerService {
         map((response: any) => response)
       )
   }
+
+  archivedCustomer(body: any): Observable<any> {
+    return this.http.put(customer_url + '/arhived', body)
+      .pipe(
+        map((response: any) => response)
+      )
+  }
 }

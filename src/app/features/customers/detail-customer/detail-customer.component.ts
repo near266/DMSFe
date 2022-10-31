@@ -13,16 +13,19 @@ import { CustomerGroupService } from 'src/app/core/services/customer-group.servi
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
+import { RolesService } from 'src/app/core/services/roles.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AddRouteComponent } from '../add-route/add-route.component';
 
 
 export interface InData{
   id: string;
+  archived: boolean;
 }
 
 export interface IBody{
   id?: any,
+  customerPrefix?: any,
   customerCode?: any,
   customerName?: any,
   customerGroupId?: any,
@@ -52,7 +55,7 @@ export interface IBody{
 export class DetailCustomerComponent implements OnInit {
 
   loading = false;
-  textCode = '';
+  title = '';
 
   customer: Customers = {
     id: '',
@@ -97,6 +100,7 @@ export class DetailCustomerComponent implements OnInit {
     private areaService: AreaService,
     private provincesService: ProvincesService,
     private snackbar: SnackbarService,
+    private rolesService: RolesService,
     private dialog: MatDialog
     ) { }
 
@@ -116,10 +120,13 @@ export class DetailCustomerComponent implements OnInit {
     this.customerService.get_by_id(this.data.id).subscribe(data => {
       this.loading = false;
       this.customer = data as Customers;
+      this.title = '' + this.customer.customerName + ' - '+ this.customer.customerCode;
+      if(this.title.length > 80) this.title = this.title.substring(0,80) + '...';
       this.buf = {
         id: '' + this.customer.id,
         customerCode: '' + this.customer.customerCode,
-        customerName: '' + this.customer.customerName,
+        customerPrefix: this.customer.customerPrefix ? '' + this.customer.customerPrefix : '',
+        customerName: this.customer.customerName ? this.customer.customerName : '',
         customerGroupId: this.customer.customerGroup ? this.customer.customerGroup.id : null,
         customerTypeId: this.customer.customerType ? this.customer.customerType.id : null,
         channelId: this.customer.channel ? this.customer.channel.id : null,
@@ -139,6 +146,8 @@ export class DetailCustomerComponent implements OnInit {
         debtLimit: this.customer.debtLimit ? this.customer.debtLimit : null,
         cashAcc: this.customer.cashAcc? this.customer.cashAcc : null,
       };
+
+      this.buf.customerCode = this.buf.customerCode.replace(this.buf.customerPrefix, '');
       if (this.customer.status == true) this.customer.status = 'Hoạt động';
       else if (this.customer.status == false) this.customer.status = 'Không hoạt động';
       else this.customer.status = 'Không hoạt động';
@@ -228,11 +237,32 @@ export class DetailCustomerComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  archived() {
+    this.loading = true;
+    const body = {
+      id: this.data.id,
+      archived: true
+    };
+    this.customerService.archivedCustomer(body).subscribe(data => {
+      if(data.message == true) {
+        this.snackbar.openSnackbar('Xóa khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+        this.dialogRef.close({event: true});
+      } else {
+        this.loading = false;
+        this.snackbar.openSnackbar('Xóa khách hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+      }
+    }, (error) => {
+      this.loading = false;
+      this.snackbar.openSnackbar('Xóa khách hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+    });
+  }
 
+  requiredRoles(role: string){
+    return this.rolesService.requiredRoles(role)
+  }
 
   submit() {
     this.loading = true;
-    this.buf.customerCode += this.textCode;
     try {
       this.buf.dob = new Date(this.buf.dob).toISOString();
     } catch (error) {

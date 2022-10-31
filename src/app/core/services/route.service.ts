@@ -83,5 +83,11 @@ export class RouteService {
       map(res => res)
     )
   }
+  Delete(body:any):Observable<any>{
+    return this.http.post(this.urlAPIRoute + '/Delete', body)
+    .pipe(
+      map(res => res)
+    )
+  }
 
 }

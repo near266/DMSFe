@@ -347,6 +347,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
 
   init(keyword: any, page: number, pageSize: number) {
+    this.loading = true;
     const body = {
       keyword: keyword,
       page: page,
@@ -399,11 +400,11 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     });
   }
 
-  DetailCustomer(id: any) {
+  DetailCustomer(user: any) {
     const dialogRef = this.dialog.open(DetailCustomerComponent, {
       height: '100vh',
       minWidth: '1100px',
-      data: {id: id}
+      data: {id: user.id, archived: user.archived}
     })
     dialogRef.afterClosed().subscribe(data => {
       if(data) {

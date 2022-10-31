@@ -154,19 +154,26 @@ export class InforRouterComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       this.searchAllCusInRoute(this.idRoute, "");
-      this.bodyAddCusToRouteFromListCus = result
-
+      this.bodyAddCusToRouteFromListCus = result;
+      console.log(result);
     })
   }
 
   openAddCusExcelDialog(): void {
     this.closeDialogAddRoute.emit('close')
-    this.dialog.open(AddCusFromExcelComponent, {
+    const dialogExelRef = this.dialog.open(AddCusFromExcelComponent, {
       width: '30vw',
       data: {
-        idRoute: this.idRoute
+        "idRoute": this.idRoute,
+        "typeRoute": this.typeRoute
       }
     });
+    dialogExelRef.afterClosed().subscribe(result => {
+      this.searchAllCusInRoute(this.idRoute, "");
+      this.bodyAddCusToRouteFromListCus = result;
+      console.log(result);
+
+    })
   }
 
 

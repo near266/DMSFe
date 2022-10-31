@@ -2,6 +2,7 @@ export class Customers {
   id?: string;
   customerId?: string;
   status?: any;
+  customerPrefix?: string;
   customerCode?: string;
   customerName?: string;
   customerGroupName?: string;
@@ -16,6 +17,7 @@ export class Customers {
   address?: string;
   areaId?: string;
   area?: any;
+  archived?: boolean;
   province?: string;
   district?: string;
   ward?: string;
