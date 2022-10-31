@@ -392,7 +392,7 @@ export class ViewEditDetailComponent implements OnInit {
             listId: [this.id],
             type: 2,
         };
-        this.saleReceipt.print(body).subscribe({
+        this.saleReceipt.export(body).subscribe({
             next: (data) => {
                 const blob = new Blob([data], {
                     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -404,6 +404,27 @@ export class ViewEditDetailComponent implements OnInit {
     }
 
     print() {
-        
+        let body;
+        body = {
+            filter: null,
+            listId: [this.id],
+            type: 0,
+        };
+        this.saleReceipt.print(body).subscribe({
+            next: (data) => {
+                const blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url);
+            },
+        });
     }
+    // print(form: any) {
+    //     var printData = document.getElementById(form);
+    //     let newwin = window.open('print');
+    //     newwin?.document.write(printData!.outerHTML);
+    //     newwin?.print();
+    //     newwin?.close();
+    // }
 }
