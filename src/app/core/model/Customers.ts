@@ -17,6 +17,7 @@ export class Customers {
   address?: string;
   areaId?: string;
   area?: any;
+  archived?: boolean;
   province?: string;
   district?: string;
   ward?: string;

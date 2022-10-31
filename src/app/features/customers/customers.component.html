@@ -157,7 +157,7 @@
                   <tbody *ngIf="response != null">
                       <tr class="h-14 w-fit text-xs" *ngFor="let user of response.data; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] cursor-pointer" (click)="DetailCustomer(user.id)">{{user.customerName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] cursor-pointer" (click)="DetailCustomer(user)">{{user.customerName}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2">
                               {{user.customerGroup? user.customerGroup.customerGroupName: ''}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.customerType ? user.customerType.customerTypeName : ''}} </td>

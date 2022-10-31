@@ -13,12 +13,14 @@ import { CustomerGroupService } from 'src/app/core/services/customer-group.servi
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
+import { RolesService } from 'src/app/core/services/roles.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AddRouteComponent } from '../add-route/add-route.component';
 
 
 export interface InData{
   id: string;
+  archived: boolean;
 }
 
 export interface IBody{
@@ -53,7 +55,7 @@ export interface IBody{
 export class DetailCustomerComponent implements OnInit {
 
   loading = false;
-  textCode = '';
+  title = '';
 
   customer: Customers = {
     id: '',
@@ -98,6 +100,7 @@ export class DetailCustomerComponent implements OnInit {
     private areaService: AreaService,
     private provincesService: ProvincesService,
     private snackbar: SnackbarService,
+    private rolesService: RolesService,
     private dialog: MatDialog
     ) { }
 
@@ -117,6 +120,8 @@ export class DetailCustomerComponent implements OnInit {
     this.customerService.get_by_id(this.data.id).subscribe(data => {
       this.loading = false;
       this.customer = data as Customers;
+      this.title = '' + this.customer.customerName + ' - '+ this.customer.customerCode;
+      if(this.title.length > 80) this.title = this.title.substring(0,80) + '...';
       this.buf = {
         id: '' + this.customer.id,
         customerCode: '' + this.customer.customerCode,
@@ -232,7 +237,29 @@ export class DetailCustomerComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  archived() {
+    this.loading = true;
+    const body = {
+      id: this.data.id,
+      archived: true
+    };
+    this.customerService.archivedCustomer(body).subscribe(data => {
+      if(data.message == true) {
+        this.snackbar.openSnackbar('Xóa khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+        this.dialogRef.close({event: true});
+      } else {
+        this.loading = false;
+        this.snackbar.openSnackbar('Xóa khách hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+      }
+    }, (error) => {
+      this.loading = false;
+      this.snackbar.openSnackbar('Xóa khách hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+    });
+  }
 
+  requiredRoles(role: string){
+    return this.rolesService.requiredRoles(role)
+  }
 
   submit() {
     this.loading = true;
