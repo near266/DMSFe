@@ -21,6 +21,7 @@ import { AddAccountantComponent } from './user-tree/add-accountant/add-accountan
 import { AddSalesTeamComponent } from './user-tree/add-sales-team/add-sales-team.component';
 import { AddEmployeeComponent } from './user-tree/add-employee/add-employee.component';
 import { AddUnitComponent } from './user-tree/add-unit/add-unit.component';
+import { MoveUserComponent } from './user-tree/move-user/move-user.component';
 
 const routes: Routes = [
     {
@@ -52,6 +53,7 @@ const routes: Routes = [
         AddSalesTeamComponent,
         AddEmployeeComponent,
         AddUnitComponent,
+        MoveUserComponent,
     ],
     imports: [CommonModule, RouterModule.forChild(routes), SharedModule, NgxPaginationModule],
     exports: [UserTreeViewComponent]

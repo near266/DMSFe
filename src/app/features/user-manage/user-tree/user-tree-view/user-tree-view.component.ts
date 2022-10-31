@@ -4,6 +4,8 @@ import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { IActionMapping, ITreeOptions, TreeComponent, TreeNode, TreeNodeComponent, TREE_ACTIONS} from '@circlon/angular-tree-component';
 import { Response } from 'src/app/core/model/Response';
 import { EmployeeService } from 'src/app/core/services/employee.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
 import { AddAccountantComponent } from '../add-accountant/add-accountant.component';
 import { AddEmployeeComponent } from '../add-employee/add-employee.component';
 import { AddManagerComponent } from '../add-manager/add-manager.component';
@@ -28,20 +30,29 @@ export class UserTreeViewComponent implements OnInit {
       'Thêm quản lý',
       'Thêm kế toán',
       'Thêm nhóm bán hàng',
-      'Thêm đơn vị con'
+      'Thêm đơn vị con',
+      'Sửa nhóm',
+      'Xóa nhóm'
     ];
 
     menubar_group = [
       'Thêm quản lý',
       'Thêm kế toán',
-      'Thêm nhân viên'
+      'Thêm nhân viên',
+      'Sửa nhóm',
+      'Xóa nhóm'
     ];
 
     array_index: any[] = [];
     node_expand = '';
     settings: any = {};
     total: number;
-    constructor(private employeeService: EmployeeService, private dialog: MatDialog) {}
+    constructor(
+      private employeeService: EmployeeService,
+      private dialog: MatDialog,
+      private modal: ConfirmDialogService,
+      private snackbar: SnackbarService
+      ) {}
 
     ngOnInit(): void {
       this.init();
@@ -60,6 +71,7 @@ export class UserTreeViewComponent implements OnInit {
               level: element.level,
               name: element.name,
               code: element.code,
+              parentId: element.parentId,
               expand: element.expand,
               type: element.type,
               menubar: element.menubar,
@@ -107,57 +119,86 @@ export class UserTreeViewComponent implements OnInit {
     }
 
     getChildren(node: any) {
-      let newNodes: any;
-      this.array_index.forEach(e => {
-        if(node.data.id == e.id) {
-          // console.log(e.children);
-          this.employeeService.SearchEmployeeInGroup(node.data.id, 1, 1000).subscribe((response: Response<any>) => {
-            let res = response;
-            res.data.forEach((element: any) => {
-              e.children.push({
-                id: element.employee.id,
-                name: element.employee.employeeName,
-                code: 'Nhân viên',
-                expand: false,
-                type: 2,
-                menubar: [],
-                hasChildren: false
-              });
-            });
-            newNodes = e.children.map((c: any) => Object.assign({}, c));
+      let newNode: any;
+      let children: any[] = [];
+      this.employeeService.GetChildrenByParentId(node.data.id).subscribe((data: any[]) => {
+        if(data) {
+          data.forEach( element => {
+            let nodes = {
+              id: element.id,
+              level: node.data.levelOfNode + 1,
+              name: element.name,
+              code: element.unitTreeGroup_Code,
+              parentId: node.data.id,
+              expand: false,
+              type: element.type,
+              menubar: this.menubar_group,
+              hasChildren: true
+            };
+            if(nodes.type == 0) node.menubar = this.menubar_unit;
+            children.push(nodes);
           });
-
         }
+        this.employeeService.SearchEmployeeInGroup(node.data.id, 1, 1000).subscribe((response: Response<any>) => {
+          let res = response;
+          res.data.forEach((element: any) => {
+            children.push({
+              id: element.employee.id,
+              name: element.employee.employeeName,
+              code: 'Nhân viên',
+              expand: false,
+              type: 2,
+              menubar: ['Di chuyển'],
+              hasChildren: false
+            });
+          });
+          newNode = children.map((c: any) => Object.assign({}, c));
+        });
       });
+
       // newNodes = this.asyncChildren.map((c) => Object.assign({}, c));
       return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(newNodes), 1000);
+        setTimeout(() => resolve(newNode), 1000);
       });
     }
 
     updateNode(node: any) {
       let newNode = this.tree.treeModel.getNodeById(node.data.id);
-      this.array_index.forEach(e => {
-        if(node.data.id == e.id) {
-          e.children = [];
-          this.employeeService.SearchEmployeeInGroup(node.data.id, 1, 1000).subscribe((response: Response<any>) => {
-            let res = response;
-            res.data.forEach((element: any) => {
-              e.children.push({
-                id: element.employee.id,
-                name: element.employee.employeeName,
-                code: 'Nhân viên',
-                expand: false,
-                type: 2,
-                menubar: [],
-                hasChildren: false
-              });
-            });
-            newNode.data.children = e.children;
-            newNode.treeModel.update();
+      let children: any[] = [];
+      this.employeeService.GetChildrenByParentId(node.data.id).subscribe((data: any[]) => {
+        if(data) {
+          data.forEach( element => {
+            let nodes = {
+              id: element.id,
+              level: node.data.levelOfNode + 1,
+              name: element.name,
+              code: element.unitTreeGroup_Code,
+              parentId: node.data.id,
+              expand: false,
+              type: element.type,
+              menubar: this.menubar_group,
+              hasChildren: true
+            };
+            if(nodes.type == 0) node.menubar = this.menubar_unit;
+            children.push(nodes);
           });
-
         }
+        this.employeeService.SearchEmployeeInGroup(node.data.id, 1, 1000).subscribe((response: Response<any>) => {
+          let res = response;
+          res.data.forEach((element: any) => {
+            children.push({
+              id: element.employee.id,
+              name: element.employee.employeeName,
+              code: 'Nhân viên',
+              expand: false,
+              type: 2,
+              menubar: ['Di chuyển'],
+              hasChildren: false
+            });
+          });
+          newNode.data.children = children;
+          newNode.treeModel.update();
+        });
       });
     }
 
@@ -171,6 +212,7 @@ export class UserTreeViewComponent implements OnInit {
               code: element.item.unitTreeGroup_Code,
               expand: false,
               type: element.item.type,
+              parentId: parent,
               menubar: this.menubar_group,
               hasChildren: true
           };
@@ -182,47 +224,10 @@ export class UserTreeViewComponent implements OnInit {
         id: parent,
         children: nodes
       });
-      tree.forEach((element: any) => {
-        this.addNodeToArray(element.children, element.item.id);
-      });
     }
 
-    convertTree(tree: any[]) {
-        let nodes: any[] = [];
-        tree.forEach((element: any) => {
-            let node = {
-                id: element.item.id,
-                level: element.item.levelOfNode,
-                name: element.item.name,
-                code: element.item.unitTreeGroup_Code,
-                children: this.convertTree(element.children),
-                expand: false,
-                type: element.item.type,
-                menubar: this.menubar_group,
-                hasChildren: true
-            };
-            if(node.children.length == 0) node.hasChildren = false;
-            if(node.type == 0) node.menubar = this.menubar_unit;
-            nodes.push(node);
-        });
-        return nodes;
-    }
-
-    //getTotalItemInTreeWithNoChildren
-    getTotalItemInTreeWithNoChildren(tree: any[]) {
-        let total = 0;
-        tree.forEach((element: any) => {
-            if (element.children.length == 0) {
-                total++;
-            } else {
-                total += this.getTotalItemInTreeWithNoChildren(element.children);
-            }
-        });
-        return total;
-    }
     Config(e: any) {
       e.preventDefault();
-
     }
 
     open_add_sales_team(id: string, node: any) {
@@ -300,7 +305,22 @@ export class UserTreeViewComponent implements OnInit {
       });
     }
 
+    deleteGroup(node: any) {
+      this.employeeService.deleteGroup(node.data.id).subscribe(data => {
+        if(data) {
+          this.snackbar.openSnackbar('Xóa nhóm thành công', 2000, 'Đóng', 'center', 'bottom', true);
+          this.updateNode(this.tree.treeModel.getNodeById(node.data.parentId));
+        } else {
+          this.snackbar.openSnackbar('Xoá nhóm thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        }
+      }, (error) => {
+        this.snackbar.openSnackbar('Xoá nhóm thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+      });
+    }
+
     menuBar(keyword: string, node: any) {
+      console.log(node);
+
       switch(keyword) {
         case 'Thêm quản lý': {
           this.open_add_manager(node.data.id, node);
@@ -324,6 +344,15 @@ export class UserTreeViewComponent implements OnInit {
         }
         case 'Thêm đơn vị': {
           this.open_add_unit(node.data.id, node);
+          return;
+        }
+        case 'Xóa nhóm': {
+          let ref = this.modal.openDialog({message: 'Bạn có chắc chắn muốn xóa nhóm này?', confirm: 'Đồng ý', cancel: 'Hủy'});
+          ref.subscribe(data => {
+            if(data) {
+              this.deleteGroup(node);
+            }
+          });
           return;
         }
       }
