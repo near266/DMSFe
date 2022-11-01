@@ -95,4 +95,23 @@ export class FormatService {
         });
         return listAdd;
     }
+
+    formatProductAddToSentApi(listAdd: any) {
+        listAdd = listAdd.map((product: any) => {
+            return {
+                productId: product?.product?.id,
+                productName: product?.product?.productName,
+                unitId: product.unitId, // chưa xét trường hợp k có đvt lẻ
+                warehouseId: product.warehouseId, // chưa xét trường hợp k có kho mặc định
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount,
+                discountRate: product.discountRate,
+                note: product.note,
+                type: 1, // hoặc product.type vì đã formatProductFromCloseDialogAdd trước
+            };
+        });
+        return listAdd;
+    }
 }

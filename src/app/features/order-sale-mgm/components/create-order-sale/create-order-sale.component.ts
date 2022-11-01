@@ -37,10 +37,10 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
     prePayment: number = 0;
     textMoney: any;
 
-    unitPrices: any = [];
-    quantities: any = [];
-    discount: any = [];
-    quantity: any = 0;
+    // unitPrices: any = [];
+    // quantities: any = [];
+    // discount: any = [];
+    // quantity: any = 0;
     debtLimit: any;
 
     productFilterCtrl: FormControl = new FormControl();
@@ -146,50 +146,50 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         });
     }
 
-    stopPropagation(e: any) {
-        e.stopPropagation();
-    }
+    // stopPropagation(e: any) {
+    //     e.stopPropagation();
+    // }
 
-    openDialogProduct() {
-        const dialogRef = this.dialog.open(ProductListComponent, {
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            height: '100%',
-            width: '100%',
-            panelClass: 'full-screen-modal',
-            data: {
-                listId: this.listChoosenProductIds,
-            },
-        });
-        dialogRef.afterClosed().subscribe((data) => {
-            if (!data.isCancel) {
-                this.listChoosenProduct = data;
-                this.listChoosenProduct.forEach((product: any) => {
-                    product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
-                    product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
-                    product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
-                });
-                this.pushListProductToDialog();
-            }
-        });
-    }
+    // openDialogProduct() {
+    //     const dialogRef = this.dialog.open(ProductListComponent, {
+    //         maxWidth: '100vw',
+    //         maxHeight: '100vh',
+    //         height: '100%',
+    //         width: '100%',
+    //         panelClass: 'full-screen-modal',
+    //         data: {
+    //             listId: this.listChoosenProductIds,
+    //         },
+    //     });
+    //     dialogRef.afterClosed().subscribe((data) => {
+    //         if (!data.isCancel) {
+    //             this.listChoosenProduct = data;
+    //             this.listChoosenProduct.forEach((product: any) => {
+    //                 product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+    //                 product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+    //                 product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+    //             });
+    //             this.pushListProductToDialog();
+    //         }
+    //     });
+    // }
 
     createSaleReceipt() {
-        let lastListChoosen = this.listChoosenProduct.map((product: any) => {
-            return {
-                productId: product.id,
-                productName: product.productName,
-                unitId: product.unitId,
-                warehouseId: product.warehouseId,
-                unitPrice: product.unitPrice,
-                quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount | 0,
-                discountRate: product.discountRate | 0,
-                note: product.note,
-                type: 0,
-            };
-        });
+        // let lastListChoosen = this.listChoosenProduct.map((product: any) => {
+        //     return {
+        //         productId: product.id,
+        //         productName: product.productName,
+        //         unitId: product.unitId,
+        //         warehouseId: product.warehouseId,
+        //         unitPrice: product.unitPrice,
+        //         quantity: product.quantity,
+        //         totalPrice: product.totalPrice,
+        //         discount: product.discount | 0,
+        //         discountRate: product.discountRate | 0,
+        //         note: product.note,
+        //         type: 0,
+        //     };
+        // });
         const body = {
             orderDate: moment(this.createSale.get('orderDate')?.value).format('YYYY-MM-DD'),
             groupId: this.createSale.get('groupId')?.value,
@@ -218,7 +218,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             paymentTerm: moment(this.createSale.get('paymentTerm')?.value).format('YYYY-MM-DD'),
             prePayment: this.prePayment,
             debtRecord: this.createSale.get('debtRecord')?.value,
-            listProduct: lastListChoosen,
+            listProduct: this.listChoosenProduct,
             listPromotionProduct: this.listPromotionProductAdd,
             source: 'Web',
         };
@@ -234,12 +234,12 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         );
     }
 
-    unChoose(productRemove: any) {
-        this.listChoosenProduct = this.listChoosenProduct.filter((product: any) => {
-            return product != productRemove;
-        });
-        this.quantity -= productRemove.quantity;
-    }
+    // unChoose(productRemove: any) {
+    //     this.listChoosenProduct = this.listChoosenProduct.filter((product: any) => {
+    //         return product != productRemove;
+    //     });
+    //     // this.quantity -= productRemove.quantity;
+    // }
 
     close() {
         this.router.navigate(['/ordersale']);
@@ -261,29 +261,29 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         }
     }
 
-    selectUnit(product: any, type: any) {
-        if (type === 'retail') {
-            product.unitId = product?.retailUnit?.id;
-            product.unitPrice = product.retailPrice;
-        } else if (type == 'whosale') {
-            product.unitId = product?.wholeSaleUnit?.id;
-            product.unitPrice = product.price;
-        }
-        product.totalPrice = product.quantity * product.unitPrice;
-        this.discountRate(product);
-    }
+    // selectUnit(product: any, type: any) {
+    //     if (type === 'retail') {
+    //         product.unitId = product?.retailUnit?.id;
+    //         product.unitPrice = product.retailPrice;
+    //     } else if (type == 'whosale') {
+    //         product.unitId = product?.wholeSaleUnit?.id;
+    //         product.unitPrice = product.price;
+    //     }
+    //     product.totalPrice = product.quantity * product.unitPrice;
+    //     this.discountRate(product);
+    // }
 
-    selectWareHouse(value: any, product: any) {
-        product.warehouseId = value;
-    }
+    // selectWareHouse(value: any, product: any) {
+    //     product.warehouseId = value;
+    // }
 
-    setWareHouseToAllProduct(id: any) {
-        if (id != 0) {
-            this.listChoosenProduct.forEach((product: any) => {
-                product.warehouseId = id;
-            });
-        }
-    }
+    // setWareHouseToAllProduct(id: any) {
+    //     if (id != 0) {
+    //         this.listChoosenProduct.forEach((product: any) => {
+    //             product.warehouseId = id;
+    //         });
+    //     }
+    // }
 
     searchListEmployeeSale(e: any) {
         this.purchaseOrder
@@ -297,15 +297,15 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             .subscribe((data) => (this.listEmployeeOrder = data?.data));
     }
 
-    countTotal(product: any) {
-        this.quantity += product.quantity;
-    }
+    // countTotal(product: any) {
+    //     this.quantity += product.quantity;
+    // }
 
-    discountRate(product: any) {
-        if (product.totalPrice) {
-            product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
-        }
-    }
+    // discountRate(product: any) {
+    //     if (product.totalPrice) {
+    //         product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
+    //     }
+    // }
 
     countTotalAmount() {
         this.totalAmount = 0;
@@ -332,23 +332,27 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         }
     }
 
-    countDiscount(product: any) {
-        if (product.totalPrice) {
-            product.discount = (product.discountRate / 100) * product.totalPrice;
-        }
-    }
+    // countDiscount(product: any) {
+    //     if (product.totalPrice) {
+    //         product.discount = (product.discountRate / 100) * product.totalPrice;
+    //     }
+    // }
 
     // hơi khác các màn 1 tí vì k format được
-    pushListProductToDialog() {
-        this.listChoosenProductIds = this.listChoosenProduct.map((product: any) => {
-            return {
-                id: product.id,
-            };
-        });
-    }
+    // pushListProductToDialog() {
+    //     this.listChoosenProductIds = this.listChoosenProduct.map((product: any) => {
+    //         return {
+    //             id: product.id,
+    //         };
+    //     });
+    // }
 
     setProductPromotionAdd(e: any) {
         this.listPromotionProductAdd = e;
+    }
+
+    setProductAdd(e: any) {
+        this.listChoosenProduct = e;
     }
 
     searchListProductActive(value: any) {
@@ -366,18 +370,18 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         });
     }
 
-    updateTotalPrice(product: any) {
-        this.countTotal(product);
-        product.totalPrice = product.quantity * product.unitPrice;
-    }
+    // updateTotalPrice(product: any) {
+    //     // this.countTotal(product);
+    //     product.totalPrice = product.quantity * product.unitPrice;
+    // }
 
-    addProductBySearch(product: any, e: any) {
-        if (e.source.selected) {
-            product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
-            product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
-            product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
-            this.listChoosenProduct.push(product);
-            this.pushListProductToDialog();
-        }
-    }
+    // addProductBySearch(product: any, e: any) {
+    //     if (e.source.selected) {
+    //         product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+    //         product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+    //         product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+    //         this.listChoosenProduct.push(product);
+    //         this.pushListProductToDialog();
+    //     }
+    // }
 }

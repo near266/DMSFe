@@ -10,8 +10,7 @@
             <span class="text-xl font-medium">
                 Danh sách phiếu đặt hàng
                 <span *ngIf="total">({{ total }})</span>
-                &ensp;
-                <span *ngIf="id.length > 0">(Đã chọn - {{ id.length }})</span>
+                <span *ngIf="id.length > 0">&nbsp;(Đã chọn - {{ id.length }})</span>
             </span>
             <div style="font-size: 12px" class="flex items-center">
                 <mat-form-field
