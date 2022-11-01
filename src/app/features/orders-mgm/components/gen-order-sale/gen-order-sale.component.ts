@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, AfterViewInit, DoCheck } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Route, Router } from '@angular/router';
 import { info } from 'console';
@@ -55,6 +55,8 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     saleDefaultId: string;
     debtLimit: any;
     defaultCustomer: any;
+    productFilterCtrl: FormControl = new FormControl();
+    productPromotionFilterCtrl: FormControl = new FormControl();
     constructor(
         private dialog: MatDialog,
         public dialogRef: MatDialogRef<GenOrderSaleComponent>,
@@ -71,7 +73,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     ngOnInit(): void {
         // parse token to get id login
         this.relatedOrder = this.data.detailOrder;
-        console.log(this.relatedOrder);
         // lấy ra default customer (trước khi patch value)
         this.defaultCustomer = this.relatedOrder?.customer;
         this.saleDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
@@ -103,6 +104,10 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         // this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 1000 }).subscribe((data) => {
         //     this.listCustomer = data?.data;
         // });
+        // create search product form
+        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
+        // create search product promotion form
+        this.productPromotionFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
     }
 
     ngAfterViewInit(): void {
@@ -249,9 +254,9 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     patchValue() {
         let description;
         if (this.relatedOrder.description) {
-            description = `Bán hàng theo phiếu đặt hàng số [${this.relatedOrder.orderCode}]`;
-        } else {
             description = `${this.relatedOrder.description} - Bán hàng theo phiếu đặt hàng số [${this.relatedOrder.orderCode}]`;
+        } else {
+            description = `Bán hàng theo phiếu đặt hàng số [${this.relatedOrder.orderCode}]`;
         }
         this.genOrderForm.patchValue({
             orderDate: this.relatedOrder.orderDate,
@@ -550,16 +555,20 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
     }
 
-    addProductBySearch(product: any) {
-        product = this.format.formatProductFromCloseDialogAdd([product], []);
-        this.listProduct.push(product[0]);
-        this.pushListProductToDialog();
+    addProductBySearch(product: any, e: any) {
+        if (e.source.selected) {
+            product = this.format.formatProductFromCloseDialogAdd([product], []);
+            this.listProduct.push(product[0]);
+            this.pushListProductToDialog();
+        }
     }
 
-    addProductPromotionBySearch(product: any) {
-        let productAfterFormat = this.format.formatProductPromotionFromCloseDialogAdd([product], []);
-        this.listPromotionProduct.push(productAfterFormat[0]);
-        this.pushListProductPromotionToDialog();
+    addProductPromotionBySearch(product: any, e: any) {
+        if (e.source.selected) {
+            let productAfterFormat = this.format.formatProductPromotionFromCloseDialogAdd([product], []);
+            this.listPromotionProduct.push(productAfterFormat[0]);
+            this.pushListProductPromotionToDialog();
+        }
     }
 
     openDialogProductPromotion() {
@@ -585,15 +594,15 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
     }
 
-    searchListProductActive(e: any) {
+    searchListProductActive(value: any) {
         const body = {
-            keyword: e.target.value,
+            keyword: value,
             sortBy: {
                 property: 'CreatedDate',
                 value: true,
             },
             page: 1,
-            pageSize: 5,
+            pageSize: 3,
         };
         this.purchaseOrder.getListProductActived(body).subscribe((data) => {
             console.log(data);

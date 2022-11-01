@@ -10,6 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import moment from 'moment';
 import { jsPDF } from 'jspdf';
+import { AnyAaaaRecord } from 'dns';
 
 @Component({
     selector: 'app-order-sale-mgm',
@@ -80,11 +81,21 @@ export class OrderSaleMgmComponent implements OnInit {
     search(body: any) {
         this.isLoading = true;
         this.saleReceiptService.searchReceipt(body).subscribe((data) => {
-            console.log(data);
             this.isLoading = false;
             this.listReceiptOrder = data.data;
             this.total = data.totalCount;
             this.saleReceiptService.setTotal(this.total);
+            this.loopToGetOrderChoosed();
+        });
+    }
+
+    loopToGetOrderChoosed() {
+        console.log(this.listReceiptOrder);
+        console.log(this.id);
+        this.listReceiptOrder.forEach((order: any) => {
+            if (this.id.includes(order.id)) {
+                order.checked = true;
+            }
         });
     }
 
@@ -119,10 +130,11 @@ export class OrderSaleMgmComponent implements OnInit {
         this.router.navigate(['/ordersale/detail/viewEdit']);
     }
 
-    chooseID(event: any, id: any) {
+    chooseID(event: any, id: AnyAaaaRecord, order: any) {
         console.log(event.checked);
         if (event.checked == true) {
             this.id.push(id);
+            order.checked = true;
         } else {
             this.id.splice(this.id.indexOf(id), 1);
         }
@@ -239,5 +251,22 @@ export class OrderSaleMgmComponent implements OnInit {
         });
         this.body.fromDate = null;
         this.body.toDate = null;
+    }
+
+    chooseAll(e: any) {
+        if (e.checked) {
+            this.listReceiptOrder.forEach((order: any) => {
+                // push vào id array khi chưa được chọn trước đó
+                if (!order.checked) {
+                    this.id.push(order.id);
+                }
+                order.checked = true;
+            });
+        } else {
+            this.listReceiptOrder.forEach((order: any) => {
+                order.checked = false;
+                this.id.splice(this.id.indexOf(order.id), 1);
+            });
+        }
     }
 }

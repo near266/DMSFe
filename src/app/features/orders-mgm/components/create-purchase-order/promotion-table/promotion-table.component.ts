@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormatService } from './../../../services/format.service';
 import { ProductListComponent } from '../../product-list/product-list.component';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-promotion-table',
@@ -15,13 +16,17 @@ export class PromotionTableComponent implements OnInit, OnChanges, DoCheck {
     listChoosenProductPromotion: any = [];
     listPromotionProductAdd: any = [];
     listSearchedProduct: any = [];
+    productFilterCtrl: FormControl = new FormControl();
     constructor(
         private dialog: MatDialog,
         private formatService: FormatService,
         private purchaseOrder: PurchaseOrderService,
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        // create search product promotion form
+        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActived(data));
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         // console.log(changes);
@@ -85,15 +90,15 @@ export class PromotionTableComponent implements OnInit, OnChanges, DoCheck {
         e.stopPropagation();
     }
 
-    searchListProductActived(e: any) {
+    searchListProductActived(value: any) {
         const body = {
-            keyword: e.target.value,
+            keyword: value,
             sortBy: {
                 property: 'CreatedDate',
                 value: true,
             },
             page: 1,
-            pageSize: 5,
+            pageSize: 3,
         };
         this.purchaseOrder.getListProductActived(body).subscribe((data) => {
             console.log(data);
@@ -117,9 +122,11 @@ export class PromotionTableComponent implements OnInit, OnChanges, DoCheck {
         });
     }
 
-    addProductPromotionBySearch(product: any) {
-        let productAfterFormat = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
-        this.listPromotionProductAdd.push(productAfterFormat[0]);
-        this.pushListProductPromotionToDialog();
+    addProductPromotionBySearch(product: any, e: any) {
+        if (e.source.selected) {
+            let productAfterFormat = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
+            this.listPromotionProductAdd.push(productAfterFormat[0]);
+            this.pushListProductPromotionToDialog();
+        }
     }
 }

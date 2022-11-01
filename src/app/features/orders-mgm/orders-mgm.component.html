@@ -10,6 +10,8 @@
             <span class="text-xl font-medium">
                 Danh sách phiếu đặt hàng
                 <span *ngIf="total">({{ total }})</span>
+                &ensp;
+                <span *ngIf="id.length > 0">(Đã chọn - {{ id.length }})</span>
             </span>
             <div style="font-size: 12px" class="flex items-center">
                 <mat-form-field
@@ -144,7 +146,7 @@
                 <thead class="custom-thead">
                     <th class="custom-th">TT</th>
                     <th class="custom-th">
-                        <mat-checkbox></mat-checkbox>
+                        <mat-checkbox (change)="chooseAll($event)"></mat-checkbox>
                     </th>
                     <th class="custom-th">Người đặt</th>
                     <th class="custom-th">Trạng thái</th>
@@ -178,7 +180,9 @@
                         class="custom-row">
                         <td class="custom-td border-b">{{ i + 1 }}</td>
                         <td class="custom-td border-b">
-                            <mat-checkbox (change)="chooseID($event, order.id)"></mat-checkbox>
+                            <mat-checkbox
+                                (change)="chooseID($event, order.id, order)"
+                                [checked]="order.checked"></mat-checkbox>
                         </td>
                         <td class="custom-td border-b">{{ order.orderEmployee?.employeeName }}</td>
                         <td class="custom-td border-b">
