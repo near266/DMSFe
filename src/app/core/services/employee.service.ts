@@ -71,7 +71,7 @@ export class EmployeeService {
   }
 
   GetAllGroupByType(type: any): Observable<any> {
-    return this.http.get(gateway_url + '/GetChildrenByParentId?ParentNodeId=' + type).pipe(map((response: any) => response));
+    return this.http.get(gateway_url + '/GetAllGroupByType?type=' + type).pipe(map((response: any) => response));
   }
 
   GetAllEmployeeByManager(page: number, pageSize: number): Observable<any> {
@@ -84,6 +84,9 @@ export class EmployeeService {
 
   AddEmployeeUnitTree(body: any): Observable<any> {
     return this.http.post(gateway_url + '/AddEmployeeUnitTree', body).pipe(map((response: any) => response));
+  }
+  DeleteEmployeeUnitTree(EmployeeId: any, UnitTreeGroupId: any): Observable<any> {
+    return this.http.delete(gateway_url + '/DeleteEmployeeUnitTree?EmployeeId=' + EmployeeId + '&UnitTreeGroupId=' + UnitTreeGroupId).pipe(map((response: any) => response));
   }
 
   SearchEmployeeInGroup(GroupId: string, page: number, pageSize: number): Observable<any> {

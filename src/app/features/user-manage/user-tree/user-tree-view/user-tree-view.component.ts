@@ -147,6 +147,7 @@ export class UserTreeViewComponent implements OnInit {
               id: element.employee.id,
               name: element.employee.employeeName,
               code: 'Nhân viên',
+              parentId: node.data.id,
               expand: false,
               type: 2,
               menubar: ['Di chuyển'],
@@ -191,6 +192,7 @@ export class UserTreeViewComponent implements OnInit {
               id: element.employee.id,
               name: element.employee.employeeName,
               code: 'Nhân viên',
+              parentId: node.data.id,
               expand: false,
               type: 2,
               menubar: ['Di chuyển'],
@@ -234,8 +236,9 @@ export class UserTreeViewComponent implements OnInit {
     open_add_sales_team(id: string, node: any) {
       let dialogRef = this.dialog.open(AddSalesTeamComponent, {
         // height: '30vh',
-        minWidth: '800px',
-        data: id
+        minWidth: '650px',
+        data: id,
+        panelClass: 'custom-mat-dialog-container'
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
@@ -249,8 +252,9 @@ export class UserTreeViewComponent implements OnInit {
     open_add_unit(id: string, node: any) {
       let dialogRef = this.dialog.open(AddUnitComponent, {
         // height: '30vh',
-        minWidth: '800px',
-        data: id
+        minWidth: '650px',
+        data: id,
+        panelClass: 'custom-mat-dialog-container'
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
@@ -322,21 +326,27 @@ export class UserTreeViewComponent implements OnInit {
     open_move_user(node: any) {
       let dialogRef = this.dialog.open(MoveUserComponent, {
         // height: '30vh',
-        minWidth: '800px',
-        data: node.data.id
+        minWidth: '650px',
+        data: node.data,
+        panelClass: 'custom-mat-dialog-container',
+        autoFocus: false
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          if(node.data.children) {
-            this.updateNode(node);
+          let parentNode = this.tree.treeModel.getNodeById(node.data.parentId)
+          if(parentNode.data.children) {
+            this.updateNode(parentNode);
+          }
+          let nodes = this.tree.treeModel.getNodeById(data.event);
+
+          if(nodes.data.children) {
+            this.updateNode(nodes);
           }
         }
       });
     }
 
     menuBar(keyword: string, node: any) {
-      console.log(node);
-
       switch(keyword) {
         case 'Thêm quản lý': {
           this.open_add_manager(node.data.id, node);
