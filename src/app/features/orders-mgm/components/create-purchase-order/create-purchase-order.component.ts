@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, DoCheck } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
@@ -53,6 +53,8 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     defaultUnit = "{ unit: product.retailUnit, type: 'retail' }";
     orderDefaultId: string;
     roleMain: any = 'member';
+    selectTed: any = '';
+    productFilterCtrl: FormControl = new FormControl();
 
     constructor(
         private dataService: DataService,
@@ -103,6 +105,8 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             deliveryDate: [moment(Date.now()).format('YYYY-MM-DD')],
             prePayment: [null],
         });
+        // create search product form
+        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActived(data));
     }
 
     format(event: any) {
@@ -461,35 +465,52 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         this.listPromotionProductAdd = e;
     }
 
-    searchListProductActived(e: any) {
+    // searchListProductActived(e: any) {
+    //     const body = {
+    //         keyword: e.target.value,
+    //         sortBy: {
+    //             property: 'CreatedDate',
+    //             value: true,
+    //         },
+    //         page: 1,
+    //         pageSize: 5,
+    //     };
+    //     this.purchaseOrder.getListProductActived(body).subscribe((data) => {
+    //         console.log(data);
+    //         this.listSearchedProduct = data?.data;
+    //     });
+    // }
+
+    searchListProductActived(value: any) {
         const body = {
-            keyword: e.target.value,
+            keyword: value,
             sortBy: {
                 property: 'CreatedDate',
                 value: true,
             },
             page: 1,
-            pageSize: 5,
+            pageSize: 3,
         };
         this.purchaseOrder.getListProductActived(body).subscribe((data) => {
-            console.log(data);
             this.listSearchedProduct = data?.data;
         });
     }
 
-    addProductBySearch(product: any) {
-        product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
-        product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
-        product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
-        this.listChoosenProduct.push(product);
-        this.pushListProductToDialog();
+    addProductBySearch(product: any, e: any) {
+        if (e.source.selected) {
+            product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+            product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+            product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+            this.listChoosenProduct.push(product);
+            this.pushListProductToDialog();
+        }
     }
 
-    addProductPromotionBySearch(product: any) {
-        product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
-        product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
-        product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
-        this.listChoosenProduct.push(product);
-        this.pushListProductToDialog();
-    }
+    // addProductPromotionBySearch(product: any) {
+    //     product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+    //     product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+    //     product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+    //     this.listChoosenProduct.push(product);
+    //     this.pushListProductToDialog();
+    // }
 }

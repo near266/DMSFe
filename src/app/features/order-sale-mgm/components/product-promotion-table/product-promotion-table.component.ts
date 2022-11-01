@@ -6,6 +6,7 @@ import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.servic
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { FormatService } from '../../services/format.service';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-product-promotion-table',
@@ -23,6 +24,7 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
     listPromotionIds: any = [];
     listProductPromotionRemove: any = [];
     listSearchedProduct: any = [];
+    productFilterCtrl: FormControl = new FormControl();
 
     constructor(
         private dataservice: DataService,
@@ -46,6 +48,8 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
                 this.listProductPromotionAdd = [];
             }
         });
+        // create search product form
+        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
     }
 
     ngAfterViewInit(): void {}
@@ -170,9 +174,9 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
         });
     }
 
-    searchListProductActive(e: any) {
+    searchListProductActive(value: any) {
         const body = {
-            keyword: e.target.value,
+            keyword: value,
             sortBy: {
                 property: 'CreatedDate',
                 value: true,
@@ -185,8 +189,10 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
         });
     }
 
-    addProductPromotionBySearch(product: any) {
-        product = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
-        this.listProductPromotionAdd.push(product[0]);
+    addProductPromotionBySearch(product: any, e: any) {
+        if (e.source.selected) {
+            product = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
+            this.listProductPromotionAdd.push(product[0]);
+        }
     }
 }

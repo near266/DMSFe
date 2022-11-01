@@ -1,7 +1,6 @@
-<!-- <router-outlet></router-outlet> -->
 <mat-sidenav-container [hasBackdrop]="false">
   <mat-sidenav [mode]="'side'" class="fixed" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" #sidenav
-    [position]="'start'" class=" overflow-hidden relative z-50 navbar-container">
+    [position]="'start'" [opened]="true" class=" overflow-hidden relative z-50 navbar-container">
     <div class="w-60 p-3">
       <div class="w-full relative">
         <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
@@ -11,22 +10,27 @@
         <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
         <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm sản phẩm">
       </div>
+
+      <!-- todo loại KH -->
+      <app-menu-collapse (Selection)="selectType($event)" [Config]="statusMenu"></app-menu-collapse>
     </div>
   </mat-sidenav>
   <mat-sidenav-content class="">
     <div class=" bg-[#f2f2f2] fixed bottom-0 top-16 z-10 border-r border-gray-300 border-solid">
       <button (click)="sidenav.toggle()"
         class=" h-5 flex items-center justify-center border-solid border-2 border-slate-400 py-4 px-2">
-        <i *ngIf="sidenav?.opened" class="fa-solid fa-caret-right"></i>
-        <i *ngIf="!sidenav?.opened" class="fa-solid fa-caret-left"></i>
+        <i class="fa-solid fa-caret-right" [ngClass]="{'rotate-180':!sidenav?.opened}"></i>
+        <!-- <i *ngIf="sidenav?.opened" class="fa-solid fa-caret-right"></i> -->
+        <!-- <i *ngIf="!sidenav?.opened" class="fa-solid fa-caret-left"></i> -->
       </button>
     </div>
+
     <div class="flex h-full w-full pl-[26px] pb-9">
       <div class="flex w-full h-full relative flex-col">
         <div class="z-20">
           <!-- header -->
           <div class="p-3 flex justify-between items-center">
-            <span class="text-xl font-medium">Báo cáo tổng hợp đơn hàng</span>
+            <span class="text-xl font-bold">Báo cáo tổng hợp đơn hàng ( {{dataOrderReport.total}} )</span>
             <div class="space-x-3 flex items-center">
               <button class="rounded p-2 bg-blue-900 text-white">Tìm kiếm <i class="fa-solid fa-magnifying-glass ml-1"></i></button>
               <button class="group rounded p-2 z-20 bg-blue-900 text-white relative whitespace-nowrap text-justify">
@@ -48,8 +52,8 @@
           </div>
         </div>
         <hr>
-        <div class="w-full table-container overflow-x-scroll min-w-full box-border p-3">
-          <app-order-report-table></app-order-report-table>
+        <div class="w-full table-container min-w-full box-border h-full px-3">
+          <app-order-report-table [dataOrderReport]="dataOrderReport"></app-order-report-table>
         </div>
       </div>
     </div>

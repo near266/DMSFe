@@ -58,6 +58,22 @@ export class EmployeeService {
     return this.http.post(gateway_url + '/AddGroup', body).pipe(map((response: any) => response));
   }
 
+  updateGroup(body: any): Observable<any> {
+    return this.http.put(gateway_url + '/UpdateGroup', body).pipe(map((response: any) => response));
+  }
+
+  deleteGroup(id: any): Observable<any> {
+    return this.http.delete(gateway_url + '/DeleteGroup?Id=' + id).pipe(map((response: any) => response));
+  }
+
+  GetChildrenByParentId(parentNodeId: any): Observable<any> {
+    return this.http.get(gateway_url + '/GetChildrenByParentId?ParentNodeId=' + parentNodeId).pipe(map((response: any) => response));
+  }
+
+  GetAllGroupByType(type: any): Observable<any> {
+    return this.http.get(gateway_url + '/GetAllGroupByType?type=' + type).pipe(map((response: any) => response));
+  }
+
   GetAllEmployeeByManager(page: number, pageSize: number): Observable<any> {
     return this.http.get(gateway_url + '/Employee/GetAllEmployeeByManagaer?page=' + page + '&pagesize=' + pageSize).pipe(map((response: any) => response));
   }
@@ -68,6 +84,9 @@ export class EmployeeService {
 
   AddEmployeeUnitTree(body: any): Observable<any> {
     return this.http.post(gateway_url + '/AddEmployeeUnitTree', body).pipe(map((response: any) => response));
+  }
+  DeleteEmployeeUnitTree(EmployeeId: any, UnitTreeGroupId: any): Observable<any> {
+    return this.http.delete(gateway_url + '/DeleteEmployeeUnitTree?EmployeeId=' + EmployeeId + '&UnitTreeGroupId=' + UnitTreeGroupId).pipe(map((response: any) => response));
   }
 
   SearchEmployeeInGroup(GroupId: string, page: number, pageSize: number): Observable<any> {

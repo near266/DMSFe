@@ -9,6 +9,7 @@ import {
     EventEmitter,
     Output,
 } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/core/services/data.service';
@@ -37,6 +38,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
     listChoosenProductIds: any = [];
     listProductRemove: any = [];
     listSearchedProduct: any = [];
+    productFilterCtrl: FormControl = new FormControl();
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -67,6 +69,8 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
                 this.listProductAdd = [];
             }
         });
+        // create search product form
+        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
     }
 
     ngAfterViewInit(): void {}
@@ -195,24 +199,25 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
         this.discountRate(product);
     }
 
-    searchListProductActive(e: any) {
+    searchListProductActive(value: any) {
         const body = {
-            keyword: e.target.value,
+            keyword: value,
             sortBy: {
                 property: 'CreatedDate',
                 value: true,
             },
             page: 1,
-            pageSize: 5,
+            pageSize: 3,
         };
         this.purchaseOrder.getListProductActived(body).subscribe((data) => {
-            console.log(data);
             this.listSearchedProduct = data?.data;
         });
     }
 
-    addProductBySearch(product: any) {
-        product = this.formatService.formatProductFromCloseDialogAdd([product], []);
-        this.listProductAdd.push(product[0]);
+    addProductBySearch(product: any, e: any) {
+        if (e.source.selected) {
+            product = this.formatService.formatProductFromCloseDialogAdd([product], []);
+            this.listProductAdd.push(product[0]);
+        }
     }
 }

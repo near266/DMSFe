@@ -34,8 +34,8 @@
                 <span class="text-white">Sửa</span>
             </button>
             <button
-                *ngIf="type === 'View'"
                 (click)="print()"
+                *ngIf="type === 'View'"
                 class="button-primary-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-print text-white mr-2"></i>
                 <span class="text-white">In</span>
@@ -101,7 +101,7 @@
         </div>
     </div>
     <!-- main -->
-    <div class="overflow-x-auto w-full ml-48 mt-16">
+    <form value="print" method="POST" id="main" class="overflow-x-auto w-full ml-48 mt-16">
         <router-outlet></router-outlet>
-    </div>
+    </form>
 </div>

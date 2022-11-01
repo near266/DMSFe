@@ -145,15 +145,21 @@
                         <mat-form-field style="font-size: 8px; padding-bottom: 0px" appearance="outline">
                             <mat-label style="font-size: 14px">Search</mat-label>
                             <mat-select style="font-size: 12px">
-                                <input
+                                <!-- <input
                                     (input)="searchListProductActive($event)"
                                     placeholder="Tìm kiếm..."
                                     style="padding-left: 12px"
                                     matInput
-                                    class="h-10 rounded-sm" />
+                                    class="h-10 rounded-sm" /> -->
+                                <mat-option>
+                                    <ngx-mat-select-search
+                                        [formControl]="productFilterCtrl"
+                                        noEntriesFoundLabel="Không tìm thấy sản phẩm nào"
+                                        placeholderLabel="Tìm kiếm sản phẩm"></ngx-mat-select-search>
+                                </mat-option>
                                 <mat-option [value]="0">--Chọn sản phẩm--</mat-option>
                                 <mat-option
-                                    (click)="addProductBySearch(product)"
+                                    (onSelectionChange)="addProductBySearch(product, $event)"
                                     style="height: 50px"
                                     class="flex flex-col"
                                     *ngFor="let product of listSearchedProduct">
@@ -360,6 +366,8 @@
                     </table>
                 </div>
             </mat-tab>
+        </mat-tab-group>
+        <mat-tab-group class="mt-3">
             <!-- Sản phẩm khuyến mại -->
             <mat-tab label="Sản phẩm khuyến mại">
                 <sale-create-promotion-table

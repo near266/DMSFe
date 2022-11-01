@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, Input, DoCheck, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import {
     ListProduct,
     ListPromotionProduct,
@@ -58,6 +58,9 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     debtLimit: any;
     defaultCustomer: any;
     defaultOrderEmployee: any;
+
+    productFilterCtrl: FormControl = new FormControl();
+    productPromotionFilterCtrl: FormControl = new FormControl();
     constructor(
         private fb: FormBuilder,
         private dataservice: DataService,
@@ -111,6 +114,10 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 }
             }),
         );
+        // create search product form
+        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
+        // create search product promotion form
+        this.productPromotionFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
     }
 
     ngDoCheck(): void {
@@ -702,32 +709,32 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         console.log(customerIdDefault);
     }
 
-    searchListProductActive(e: any) {
+    searchListProductActive(value: any) {
         const body = {
-            keyword: e.target.value,
+            keyword: value,
             sortBy: {
                 property: 'CreatedDate',
                 value: true,
             },
             page: 1,
-            pageSize: 5,
+            pageSize: 3,
         };
         this.purchaseOrder.getListProductActived(body).subscribe((data) => {
-            console.log(data);
             this.listSearchedProduct = data?.data;
         });
     }
 
-    addProductBySearch(product: any) {
-        product = this.formatFormProduct([product]);
-        this.listProductAdd.push(product[0]);
+    addProductBySearch(product: any, e: any) {
+        if (e.source.selected) {
+            product = this.formatFormProduct([product]);
+            this.listProductAdd.push(product[0]);
+        }
     }
 
-    addProductPromotionBySearch(product: any) {
-        // let productAfterFormat = this.format.formatProductPromotionFromCloseDialogAdd([product], []);
-        // this.listPromotionProduct.push(productAfterFormat[0]);
-        // this.pushListProductPromotionToDialog();
-        product = this.formatFormProductPromotion([product]);
-        this.listPromotionProductAdd.push(product[0]);
+    addProductPromotionBySearch(product: any, e: any) {
+        if (e.source.selected) {
+            product = this.formatFormProductPromotion([product]);
+            this.listPromotionProductAdd.push(product[0]);
+        }
     }
 }
