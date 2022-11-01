@@ -26,14 +26,16 @@ export class MoveUserComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngAfterViewInit(): void {
-    this.employeeService.GetAllGroupByType(0).subscribe((data: any[]) => {
-      if(data) {
-        data.forEach(element => {
-          this.listAllGroup.push(element);
-          this.bufferGroup.push(element);
-        });
-      }
-    });
+    if(!this.user.position.includes('Nhân viên')) {
+      this.employeeService.GetAllGroupByType(0).subscribe((data: any[]) => {
+        if(data) {
+          data.forEach(element => {
+            this.listAllGroup.push(element);
+            this.bufferGroup.push(element);
+          });
+        }
+      });
+    }
     this.employeeService.GetAllGroupByType(1).subscribe((data: any[]) => {
       if(data) {
         data.forEach(element => {

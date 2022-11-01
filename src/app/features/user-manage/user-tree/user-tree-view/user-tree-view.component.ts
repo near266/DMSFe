@@ -146,6 +146,7 @@ export class UserTreeViewComponent implements OnInit {
             children.push({
               id: element.employee.id,
               name: element.employee.employeeName,
+              position: element.employee.employeeTitle,
               code: 'Nhân viên',
               parentId: node.data.id,
               expand: false,
@@ -194,6 +195,7 @@ export class UserTreeViewComponent implements OnInit {
               code: 'Nhân viên',
               parentId: node.data.id,
               expand: false,
+              position: element.employee.employeeTitle,
               type: 2,
               menubar: ['Di chuyển'],
               hasChildren: false

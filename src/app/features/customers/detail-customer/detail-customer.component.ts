@@ -15,6 +15,7 @@ import { CustomerService } from 'src/app/core/services/customer.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
 import { AddRouteComponent } from '../add-route/add-route.component';
 
 
@@ -101,7 +102,8 @@ export class DetailCustomerComponent implements OnInit {
     private provincesService: ProvincesService,
     private snackbar: SnackbarService,
     private rolesService: RolesService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private confirm: ConfirmDialogService
     ) { }
 
   ngOnInit(): void {
@@ -238,23 +240,30 @@ export class DetailCustomerComponent implements OnInit {
   }
 
   archived() {
-    this.loading = true;
-    const body = {
-      id: this.data.id,
-      archived: true
-    };
-    this.customerService.archivedCustomer(body).subscribe(data => {
-      if(data.message == true) {
-        this.snackbar.openSnackbar('Xóa khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
-        this.dialogRef.close({event: true});
-      } else {
-        this.loading = false;
-        this.snackbar.openSnackbar('Xóa khách hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+    let ref = this.confirm.openDialog({message: 'Bạn có chắc chắn muốn xóa khách hàng này?', confirm: 'Đồng ý', cancel: 'Hủy'});
+    ref.subscribe(data => {
+      if(data) {
+        this.loading = true;
+        const body = {
+          id: this.data.id,
+          archived: true
+        };
+        this.customerService.archivedCustomer(body).subscribe(data => {
+          if(data.message == true) {
+            this.loading = false;
+            this.snackbar.openSnackbar('Xóa khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+            this.dialogRef.close({event: true});
+          } else {
+            this.loading = false;
+            this.snackbar.openSnackbar('Xóa khách hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+          }
+        }, (error) => {
+          this.loading = false;
+          this.snackbar.openSnackbar('Xóa khách hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        });
       }
-    }, (error) => {
-      this.loading = false;
-      this.snackbar.openSnackbar('Xóa khách hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
     });
+
   }
 
   requiredRoles(role: string){
