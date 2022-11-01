@@ -114,7 +114,7 @@ export class ProductCreateTableComponent implements OnInit, AfterViewInit, DoChe
             product.unitId = product?.product?.retailUnit?.id;
             product.unitPrice = product.product.retailPrice;
             product.totalPrice = product.quantity * product.unitPrice;
-        } else if ((type = 'whosale')) {
+        } else if (type === 'whosale') {
             product.unitId = product?.product?.wholeSaleUnit?.id;
             product.unitPrice = product.product.price;
             product.totalPrice = product.quantity * product.unitPrice;

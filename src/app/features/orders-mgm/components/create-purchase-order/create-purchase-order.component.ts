@@ -459,7 +459,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     }
 
     setProductPromotionAdd(e: any) {
-        this.listChoosenProduct = e;
+        this.listPromotionProductAdd = e;
     }
 
     setProductAdd(e: any) {
