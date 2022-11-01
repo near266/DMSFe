@@ -449,17 +449,17 @@ export class CustomersComponent implements OnInit, AfterViewInit {
           title: 'Sắp xếp',
           leftTitleIcon: 'fa-sort-alpha-asc',
           listMenuPosition: [
-              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
-              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-up', value: 'emp' },
+              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-down', value: 'CustomerName-up' },
+              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-up', value: 'CustomerName-down' },
 
-              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
-              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-up', value: 'emp' },
+              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-down', value: 'CustomerCode-up' },
+              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-up', value: 'CustomerCode-down' },
 
-              // { title: 'Ngày tạo', leftIcon: 'fa-arrow-down', value: 'all' },
-              // { title: 'Ngày tạo', leftIcon: 'fa-arrow-up', value: 'all' },
+              { title: 'Ngày tạo', leftIcon: 'fa-arrow-down', value: 'CreatedDate-up' },
+              { title: 'Ngày tạo', leftIcon: 'fa-arrow-up', value: 'CreatedDate-down' },
 
-              // { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-down', value: 'all' },
-              // { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-up', value: 'all' },
+              { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-down', value: 'LastModifiedDate-up' },
+              { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-up', value: 'LastModifiedDate-down' },
 
               // { title: 'Số lần viếng thăm', leftIcon: 'fa-arrow-down', value: 'all' },
               // { title: 'Số lần viếng thăm', leftIcon: 'fa-arrow-up', value: 'all' },

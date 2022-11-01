@@ -124,7 +124,9 @@
                           <!-- <td class="border-x border-solid align-middle px-2">
                               <img class="w-20" [src]="user.img">
                           </td> -->
-                          <td class="border-x w-fit border-solid align-middle px-2"><button class="text-xs bg-[#1891C9] text-white font-medium px-7 py-1 rounded-md">{{user.status}}</button>
+                          <td class="border-x border-solid align-middle px-2 max-w-sm min-w-[150px]">
+                            <button *ngIf="user.status == 'Hoạt động'" class="text-xs bg-[#1891C9] text-white font-medium px-7 py-1 rounded-md w-full">{{user.status}}</button>
+                            <button *ngIf="user.status != 'Hoạt động'" class="text-xs bg-[#CB0D0C] text-white font-medium px-7 py-1 rounded-md w-full">{{user.status}}</button>
                           </td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.customerCode}}
                           </td>
@@ -157,25 +159,25 @@
                   <tbody *ngIf="response != null">
                       <tr class="h-14 w-fit text-xs" *ngFor="let user of response.data; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] cursor-pointer" (click)="DetailCustomer(user)">{{user.customerName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] text-emerald-500 font-medium cursor-pointer" (click)="DetailCustomer(user)">{{user.customerName}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2">
                               {{user.customerGroup? user.customerGroup.customerGroupName: ''}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.customerType ? user.customerType.customerTypeName : ''}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{this.datePipe.transform(user.lastModifiedDate, 'dd/MM/yyyy')}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] text-center">{{this.datePipe.transform(user.lastModifiedDate, 'dd/MM/yyyy')}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.channel ? user.channel.channelName : ''}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.address}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.deliveryAddress}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.province}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.district}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]"> {{user.dob}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] text-center"> {{user.dob}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.contactName}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.position}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.phone}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.email}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.debtLimit}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.cashAcc}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.createdBy}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.lastModifiedBy}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] text-center">{{user.createdBy}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] text-center">{{user.lastModifiedBy}} </td>
                       </tr>
                   </tbody>
               </table>

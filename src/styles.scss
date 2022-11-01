@@ -179,6 +179,18 @@ tree-node-expander .toggle-children-wrapper {
     dark:focus:ring-red-600;
 }
 
+.custom-mat-dialog-container {
+  .mat-dialog-container {
+    padding: 0;
+    overflow: visible;
+  }
+  .mat-card-actions {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+  }
+}
+
 .tree-children::after {
     border-left: 1px dotted black;
     height: 100%;

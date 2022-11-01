@@ -151,7 +151,7 @@ export class ReturnFormService {
                     const customers = result.data;
                     return customers.map((customer: any) => {
                         const { id: value, customerCode, customerName, address, phone } = customer;
-                        const label = customerCode;
+                        const label = customerCode + ' - ' + customerName;
                         return { value, label, customerName, address, phone };
                     });
                 }),

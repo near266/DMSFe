@@ -1,0 +1,99 @@
+<div class="h-[calc(100vh-250px)] overflow-y-scroll mt-3 border-y border-solid border-gray-300">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="h-10 w-full text-xs sticky top-0">
+            <th *ngFor="let item of arrayHeader" class="border-x border-solid border-gray-300 px-2 bg-gray-100 text-center">{{item}}</th>
+        </thead>
+        <tbody>
+            <tr class="h-10 w-full text-xs sticky outline outline-1 top-[82px] outline-gray-300 bg-gray-100">
+              <td class=" px-2  text-right text-sm text-red-600 font-bold" colspan="24">Tổng:</td>
+              <td class=" px-2  text-center text-sm text-red-600 font-medium">{{dataOrderReport.sumOfOrderProduct}}</td>
+              <td class=" px-2  text-center text-sm text-red-600 font-medium">{{dataOrderReport.sumOfDiscount}}</td>
+              <td class=" px-2  text-center text-sm text-red-600 font-medium">{{dataOrderReport.sumOfOrderProduct}}</td>
+              <td class=" px-2  text-center text-sm text-red-600 font-medium">{{dataOrderReport.sumOfOrderProduct}}</td>
+              <td class=" px-2  text-center text-sm text-red-600 font-medium">{{dataOrderReport.sumOfOrderProduct}}</td>
+
+            </tr>
+            <tr
+                class="h-auto text-xs"
+                *ngFor="let report of dataOrderReport.data; let o = odd; let e = even; let i = index"
+                [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
+                <td class="border-x border-solid align-middle px-2 py-3 text-center">{{i}}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ report.orderEmployee?.employeeCode}}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ report.orderEmployee?.employeeName}}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ report.group }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ report.source }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 cursor-pointer"><span class="text-green-text hover:underline underline-offset-4">{{ report.orderCode }}</span></td>
+                <td class="border-x border-solid align-middle px-2 py-3 min-w-[100px]">{{ report.orderDate | date }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ report.customer.customerCode }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 min-w-[200px]">{{ report.customer.customerName }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ null }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ null }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ null }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ report.customer.area }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ report.customer?.channel?.channelName }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 min-w-[200px]">{{ report.customer.customerGroup?.customerName }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 min-w-[100px]">{{ report.customer.customerType?.customerTypeName }}</td>
+                <td class="border-x border-solid align-middle h-full">
+                  <tr *ngFor="let prod of report.listProducts" class="min-h-fit text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.productCode}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.productName}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">MÃ KHO</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">TÊN KHO</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.note}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.major}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.brand}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.quantity}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.promotionName}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.promotionQuantity}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.unit}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.unitPrice | number}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.discountRate}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.totalPrice | number}}</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">Chưa rõ Field</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">Chưa rõ Field</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle">
+                  <tr *ngFor="let prod of report.listProducts" class="h-auto text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">Chưa rõ Field</td></tr>
+                </td>
+                <td class="border-x border-solid align-middle px-2 py-3 font-bold">{{report.totalMoney | number}}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 ">{{report.totalOfVAT | number}}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 ">{{report.tradeDiscountRate}}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 ">{{report.tradeDiscount | number}}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 ">Chưa rõ Field</td>
+                <td class="border-x border-solid align-middle px-2 py-3 ">Chưa rõ Field</td>
+                <td class="border-x border-solid align-middle px-2 py-3 ">{{report.description}}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 ">Chưa rõ Field</td>
+                <td class="border-x border-solid align-middle px-2 py-3 ">Chưa rõ Field</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

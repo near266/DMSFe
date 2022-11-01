@@ -33,7 +33,7 @@
         <div class="flex flex-row">
             <div class="text-red-500 mr-4">*</div>
             <select class="border border-solid border-black p-1 rounded-sm w-96 text- h-7"
-                *ngIf="status != 'view'" formControlName="employeeId" [ngModel]="RootInfoRouteDetail?.employee.id">
+                *ngIf="status != 'view'" formControlName="employeeId" [ngModel]="RootInfoRouteDetail?.employee?.id">
                 <option *ngFor="let item of EmployeeInGroup" [value]="item.employee.id">{{item.employee.employeeName}}</option>
             </select>
             <div class="w-96 text-" *ngIf="status == 'view'">.employeeTitle}}</div>

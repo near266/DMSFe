@@ -57,6 +57,7 @@ export class UserManageComponent implements OnInit {
         this.dia = this.dialog.open(AddUserComponent, {
             height: '100vh',
             minWidth: '900px',
+            panelClass: 'custom-mat-dialog-container'
         });
     }
     DetailUser(id: any) {
@@ -67,6 +68,7 @@ export class UserManageComponent implements OnInit {
                 id: id,
                 status: 'view',
             },
+            panelClass: 'custom-mat-dialog-container'
         });
     }
 
@@ -75,7 +77,6 @@ export class UserManageComponent implements OnInit {
             this.employeeService.SearchEmployeeInGroup(event, 1, 1000).subscribe(data => {
                 if (data) {
                     this.page = 1;
-                    console.log(data);
                     this.totalCount = data.totalCount;
                     if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
                         this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
