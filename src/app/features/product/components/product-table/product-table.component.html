@@ -1,4 +1,5 @@
-<table id="product" class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
+<table *ngIf="!(_tableLoading$ | async)" id="product"
+  class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
   <thead class="h-10  border-gray-300 ">
     <tr>
       <th scope="col"
@@ -37,3 +38,6 @@
     </tr>
   </tbody>
 </table>
+<div *ngIf="_tableLoading$ | async" class="mt-10 text-center">
+  <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+</div>
