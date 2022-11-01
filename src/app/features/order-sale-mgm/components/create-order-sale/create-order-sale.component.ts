@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, DoCheck } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
@@ -42,6 +42,8 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
     discount: any = [];
     quantity: any = 0;
     debtLimit: any;
+
+    productFilterCtrl: FormControl = new FormControl();
     constructor(
         private dialog: MatDialog,
         private fb: FormBuilder,
@@ -74,6 +76,8 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             address: [null],
             description: [null],
         });
+        // create search product form
+        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
     }
 
     ngAfterViewInit(): void {
@@ -347,18 +351,17 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         this.listPromotionProductAdd = e;
     }
 
-    searchListProductActive(e: any) {
+    searchListProductActive(value: any) {
         const body = {
-            keyword: e.target.value,
+            keyword: value,
             sortBy: {
                 property: 'CreatedDate',
                 value: true,
             },
             page: 1,
-            pageSize: 5,
+            pageSize: 3,
         };
         this.purchaseOrder.getListProductActived(body).subscribe((data) => {
-            console.log(data);
             this.listSearchedProduct = data?.data;
         });
     }
@@ -368,11 +371,13 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         product.totalPrice = product.quantity * product.unitPrice;
     }
 
-    addProductBySearch(product: any) {
-        product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
-        product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
-        product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
-        this.listChoosenProduct.push(product);
-        this.pushListProductToDialog();
+    addProductBySearch(product: any, e: any) {
+        if (e.source.selected) {
+            product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+            product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+            product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+            this.listChoosenProduct.push(product);
+            this.pushListProductToDialog();
+        }
     }
 }

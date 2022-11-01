@@ -3,9 +3,9 @@
     border-top-width: 2px;
 }
 
-// :host ::ng-deep .mat-tab-header {
-//     border-bottom: none;
-// }
+:host ::ng-deep .mat-tab-header {
+    border-bottom: none;
+}
 
 :host ::ng-deep .mat-select-disabled .mat-select-value {
     color: black;

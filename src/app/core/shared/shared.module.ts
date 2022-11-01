@@ -55,7 +55,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { NgPrintModule } from 'ng-print';
-
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 @NgModule({
     declarations: [
         MenuCollapseComponent,
@@ -100,6 +100,7 @@ import { NgPrintModule } from 'ng-print';
         MatBottomSheetModule,
         MatDialogModule,
         MatSnackBarModule,
+        NgxMatSelectSearchModule,
         MatTooltipModule,
         MatPaginatorModule,
         MatSortModule,
@@ -145,6 +146,7 @@ import { NgPrintModule } from 'ng-print';
         MatBadgeModule,
         MatChipsModule,
         MatIconModule,
+        NgxMatSelectSearchModule,
         MenuCollapseSearchComponent,
         MenuCollapseTreeComponent,
         EzPaginationComponent,

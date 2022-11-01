@@ -74,6 +74,15 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
             this.total = data.totalCount;
             this.purchaseOrderService.setTotal(this.total);
             this.isLoading = false;
+            this.loopToGetOrderChoosed();
+        });
+    }
+
+    loopToGetOrderChoosed() {
+        this.listOrder.forEach((order: any) => {
+            if (this.id.includes(order.id)) {
+                order.checked = true;
+            }
         });
     }
 
@@ -121,10 +130,10 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         this.search(this.body);
     }
 
-    chooseID(event: any, id: any) {
-        console.log(event.checked);
+    chooseID(event: any, id: any, order: any) {
         if (event.checked == true) {
             this.id.push(id);
+            order.checked = true;
         } else {
             this.id.splice(this.id.indexOf(id), 1);
         }
@@ -157,5 +166,22 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         });
         this.body.fromDate = null;
         this.body.toDate = null;
+    }
+
+    chooseAll(e: any) {
+        if (e.checked) {
+            this.listOrder.forEach((order: any) => {
+                // push vào id array khi chưa được chọn trước đó
+                if (!order.checked) {
+                    this.id.push(order.id);
+                }
+                order.checked = true;
+            });
+        } else {
+            this.listOrder.forEach((order: any) => {
+                order.checked = false;
+                this.id.splice(this.id.indexOf(order.id), 1);
+            });
+        }
     }
 }
