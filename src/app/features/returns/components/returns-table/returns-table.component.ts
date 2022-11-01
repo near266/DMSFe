@@ -3,6 +3,7 @@ import { Return } from '../../models/return';
 import { tableHeader } from '../../models/table.header';
 import { ReturnsService } from '../../services/returns.service';
 import { Status } from '../../models/return';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-returns-table',
@@ -15,8 +16,10 @@ export class ReturnsTableComponent implements OnInit {
     Status = Status;
     totalItems: number;
     headers = tableHeader;
+    _tableLoading$: Observable<boolean>;
     constructor(private returnsService: ReturnsService) {}
     ngOnInit(): void {
+        this._tableLoading$ = this.returnsService.tableLoading$;
         this.returnsService.getInititalReturns();
         this.returnsService.currentPage$.subscribe((page) => {
             this.currentPage = page;
