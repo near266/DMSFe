@@ -449,17 +449,17 @@ export class CustomersComponent implements OnInit, AfterViewInit {
           title: 'Sắp xếp',
           leftTitleIcon: 'fa-sort-alpha-asc',
           listMenuPosition: [
-              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-down', value: 'CustomerName-up' },
-              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-up', value: 'CustomerName-down' },
+              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-down', value: 'CustomerName-down' },
+              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-up', value: 'CustomerName-up' },
 
-              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-down', value: 'CustomerCode-up' },
-              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-up', value: 'CustomerCode-down' },
+              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-down', value: 'CustomerCode-down' },
+              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-up', value: 'CustomerCode-up' },
 
-              { title: 'Ngày tạo', leftIcon: 'fa-arrow-down', value: 'CreatedDate-up' },
-              { title: 'Ngày tạo', leftIcon: 'fa-arrow-up', value: 'CreatedDate-down' },
+              { title: 'Ngày tạo', leftIcon: 'fa-arrow-down', value: 'CreatedDate-down' },
+              { title: 'Ngày tạo', leftIcon: 'fa-arrow-up', value: 'CreatedDate-up' },
 
-              { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-down', value: 'LastModifiedDate-up' },
-              { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-up', value: 'LastModifiedDate-down' },
+              { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-down', value: 'LastModifiedDate-down' },
+              { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-up', value: 'LastModifiedDate-up' },
 
               // { title: 'Số lần viếng thăm', leftIcon: 'fa-arrow-down', value: 'all' },
               // { title: 'Số lần viếng thăm', leftIcon: 'fa-arrow-up', value: 'all' },
@@ -473,8 +473,22 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       },
   ];
 
-  Select(e: any) {
-      console.log(e);
+  Select(e: string) {
+      let sort = e.split('-');
+      let sortFeild: any;
+      let sortValue: any;
+      if(sort.length > 0) {
+        sortFeild = sort[0];
+        sortValue = sort[1];
+        if (sortValue == 'up') sortValue = true;
+        if (sortValue == 'down') sortValue = false;
+      } else {
+        sortFeild = null;
+        sortValue = null;
+      }
+      this.request.sortFeild = sortFeild;
+      this.request.sortValue = sortValue;
+      this.filter();
   }
 
   selection(e: any) {
