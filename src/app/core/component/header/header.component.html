@@ -69,6 +69,29 @@
                     <span>Chỉ tiêu KPI</span>
                 </button>
             </mat-menu>
+            <mat-divider></mat-divider>
+            <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren2">
+                <i class="fa-solid fa-cart-shopping  mr-2"></i>
+                <span>Sản phẩm</span>
+            </button>
+            <mat-menu #matMenuChildren2="matMenu">
+                <button mat-menu-item class="flex items-center" [routerLink]="'/categories/units'">
+                    <i class="fa-solid fa-cubes  mr-2"></i>
+                    <span>Đơn vị tính</span>
+                </button>
+                <button mat-menu-item class="flex items-center">
+                    <i class="fa-solid fa-tags  mr-2"></i>
+                    <span>Nhãn hiệu</span>
+                </button>
+                <button mat-menu-item class="flex items-center">
+                    <i class="fa-solid fa-industry mr-2"></i>
+                    <span>Nhà cung cấp</span>
+                </button>
+                <button mat-menu-item class="flex items-center">
+                    <i class="fa-solid fa-pie-chart  mr-2"></i>
+                    <span>Ngành hàng</span>
+                </button>
+            </mat-menu>
         </mat-menu>
         <!-- Menu Báo cáo -->
         <li class="mr-4  font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="report">Báo cáo <i class="fa-solid fa-caret-down ml-1"></i></li>

@@ -43,7 +43,7 @@ export class ProductApiService {
                         warehouseId: data.warehouse?.id || null,
                     };
                 });
-                console.log(data);
+                // console.log(data);
                 return { ...res, data };
             }),
         );
