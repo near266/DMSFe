@@ -640,7 +640,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                         unitCode: product?.retailUnit?.unitCode,
                         unitName: product?.retailUnit?.unitName,
                     },
-                    warehouseId: product?.warehouse?.id,
+                    warehouseId: product?.warehouse?.id || 'fcb4a590-4f5c-11ed-bdc3-0242ac120002', // auto là kho chính nếu sản phẩm chưa có kho mặc định
                     unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
                     quantity: 0,
                     totalPrice: 0,
@@ -675,7 +675,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                         unitCode: product?.retailUnit?.unitCode,
                         unitName: product?.retailUnit?.unitName,
                     },
-                    warehouseId: product?.warehouse?.id,
+                    warehouseId: product?.warehouse?.id || '04cb0fee-4f5d-11ed-bdc3-0242ac120002', // auto là khuyến mại nếu chưa có kho mặc địch của sp
                     unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
                     quantity: 0,
                     totalPrice: 0,
