@@ -107,6 +107,9 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
                 id: product.product.id,
             };
         });
+        this.listProductAdd.forEach((product: any) => {
+            this.listChoosenProductIds.push({ id: product.product.id });
+        });
     }
 
     openDialogProduct() {
@@ -125,6 +128,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
         dialogRef.afterClosed().subscribe((data) => {
             if (!data.isCancel) {
                 this.listProductAdd = this.formatService.formatProductFromCloseDialogAdd(data, this.listProduct);
+                this.pushListProductToDialog();
             }
         });
     }

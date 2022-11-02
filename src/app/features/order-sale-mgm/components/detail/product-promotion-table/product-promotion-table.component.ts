@@ -103,11 +103,12 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
         });
         dialogRef.afterClosed().subscribe((data) => {
             if (!data.isCancel) {
-                this.listProductPromotionAdd = this.formatService.formatProductFromCloseDialogAdd(
+                this.listProductPromotionAdd = this.formatService.formatProductPromotionFromCloseDialogAdd(
                     data,
                     this.listPromotionProduct,
                 );
                 console.log(this.listProductPromotionAdd);
+                this.pushListProductPromotionToDialog();
                 // if (this.formatFormProductPromotion(data)) {
                 //     let listAdd = this.listAddProductPromotion(this.formatFormProductPromotion(data));
                 //     this.listPromotionProductAdd = [];
@@ -122,6 +123,9 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
             return {
                 id: product.product.id,
             };
+        });
+        this.listProductPromotionAdd.forEach((product: any) => {
+            this.listPromotionIds.push({ id: product.product.id });
         });
     }
 
