@@ -72,7 +72,7 @@ export class ProductService {
         const currentPageSize = this.currentPageSize.getValue();
         const start = (currentPage - 1) * currentPageSize + 1;
         //end is the length of defaultReturns if it is bigger than length of defaultReturns
-        console.log(currentPageSize, currentPage, start);
+        // console.log(currentPageSize, currentPage, start);
 
         const end = Math.min(currentPage * currentPageSize + 1, this.totalProducts?.getValue() || 0);
 

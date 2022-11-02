@@ -57,6 +57,7 @@ export class InforRouterComponent implements OnInit {
   keywordSearch:any;
   arrayAllId:any[] = [];
   bodyAddCusToRouteFromListCus:BodyAddCusToRouteFromListCus;
+  listCusAfterAddPreview:any[] = [];
 
 
   headerTable = [
@@ -153,9 +154,10 @@ export class InforRouterComponent implements OnInit {
       }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.searchAllCusInRoute(this.idRoute, "");
-      this.bodyAddCusToRouteFromListCus = result;
       console.log(result);
+      this.searchAllCusInRoute(this.idRoute, "");
+      this.bodyAddCusToRouteFromListCus = result.body;
+      this.listCusAfterAddPreview = result.listCusPreview;
     })
   }
 
@@ -171,7 +173,6 @@ export class InforRouterComponent implements OnInit {
     dialogExelRef.afterClosed().subscribe(result => {
       this.searchAllCusInRoute(this.idRoute, "");
       this.bodyAddCusToRouteFromListCus = result;
-      console.log(result);
 
     })
   }
@@ -264,7 +265,6 @@ export class InforRouterComponent implements OnInit {
     }else{
       this.arrayIdCusInRoute = [];
     }
-
   }
 
 

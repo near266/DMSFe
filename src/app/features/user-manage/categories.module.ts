@@ -22,6 +22,7 @@ import { AddSalesTeamComponent } from './user-tree/add-sales-team/add-sales-team
 import { AddEmployeeComponent } from './user-tree/add-employee/add-employee.component';
 import { AddUnitComponent } from './user-tree/add-unit/add-unit.component';
 import { MoveUserComponent } from './user-tree/move-user/move-user.component';
+import { UnitsComponent } from './units/units.component';
 
 const routes: Routes = [
     {
@@ -29,9 +30,13 @@ const routes: Routes = [
         component: UserManageComponent,
     },
     {
-      path: 'warehouses',
-      component: WarehousesComponent,
+        path: 'warehouses',
+        component: WarehousesComponent,
     },
+    {
+        path: 'units',
+        component: UnitsComponent,
+    }
 ];
 
 @NgModule({
@@ -54,6 +59,7 @@ const routes: Routes = [
         AddEmployeeComponent,
         AddUnitComponent,
         MoveUserComponent,
+        UnitsComponent,
     ],
     imports: [CommonModule, RouterModule.forChild(routes), SharedModule, NgxPaginationModule],
     exports: [UserTreeViewComponent]

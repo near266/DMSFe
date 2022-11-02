@@ -11,3 +11,11 @@ input:focus {
   overflow: hidden;
 }
 
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 10px 0 10px 0;
+}
+
+:host ::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
