@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PurchaseOrder } from 'src/app/core/model/PurchaseOrder';
 import { Unit } from '../../product/models/product';
+import { AddUnitComponent } from './add-unit/add-unit.component';
 import { UnitService } from './apis/unit.service';
 
 @Component({
@@ -16,11 +18,15 @@ export class UnitsComponent implements OnInit {
   unit: Unit[] = [];
   totalCount: number;
 
+  dia?: any;
   page: number = 1;
   pageSize: number = 30;
   total: number = 0;
 
-  constructor(private unitService: UnitService) { }
+  constructor(
+    private dialog: MatDialog,
+    private unitService: UnitService
+  ) { }
 
   ngOnInit(): void {
     this.unitService.getAllUnits().subscribe(data => {
@@ -28,6 +34,14 @@ export class UnitsComponent implements OnInit {
       // console.log(this.unit);
     })
   }
+
+  AddUnit() {
+    this.dia = this.dialog.open(AddUnitComponent, {
+        height: '100vh',
+        minWidth: '900px',
+        panelClass: 'custom-mat-dialog-container'
+    });
+}
 
   listMenuObj = [
     {
