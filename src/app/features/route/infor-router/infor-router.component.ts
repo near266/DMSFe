@@ -155,7 +155,6 @@ export class InforRouterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.searchAllCusInRoute(this.idRoute, "");
       this.bodyAddCusToRouteFromListCus = result;
-      console.log(result);
     })
   }
 
@@ -171,7 +170,6 @@ export class InforRouterComponent implements OnInit {
     dialogExelRef.afterClosed().subscribe(result => {
       this.searchAllCusInRoute(this.idRoute, "");
       this.bodyAddCusToRouteFromListCus = result;
-      console.log(result);
 
     })
   }

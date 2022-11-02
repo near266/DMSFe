@@ -31,7 +31,7 @@ export class AddCusToRouteComponent implements OnInit {
       keyword: "",
       listRouteId: null,
       page: 1,
-      pageSize: 30,
+      pageSize: 100,
     }
     this.customerSer.search(body).subscribe({
       next: data => {
@@ -70,6 +70,14 @@ export class AddCusToRouteComponent implements OnInit {
         "list": this.arrayIdCus,
         "routeId": ""
       }
+      let listCusTemp:any[] = []
+      this.arrayIdCus.forEach((idCus:any) => {
+        this.dataCus.data.forEach((item:any) => {
+          if(item.customerCode == idCus){
+            listCusTemp.push(item)
+          }
+        })
+      })
       this.materialDialog.close(body);
     }
   }
