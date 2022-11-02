@@ -705,10 +705,6 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         }
     }
 
-    test(customerIdDefault: any) {
-        console.log(customerIdDefault);
-    }
-
     searchListProductActive(value: any) {
         const body = {
             keyword: value,

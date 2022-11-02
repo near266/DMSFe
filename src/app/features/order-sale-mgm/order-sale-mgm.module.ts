@@ -12,9 +12,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CustomerComponent } from './components/customer/customer.component';
 import { ProductsComponent } from './components/products/products.component';
 import { GenReturnOrderComponent } from './components/gen-return-order/gen-return-order.component';
-import { ProductPromotionTableComponent } from './components/product-promotion-table/product-promotion-table.component';
-import { ProductTableComponent } from './components/product-table/product-table.component';
+import { ProductPromotionTableComponent } from './components/detail/product-promotion-table/product-promotion-table.component';
+import { ProductTableComponent } from './components/detail/product-table/product-table.component';
 import { PromotionTableComponent } from './components/create-order-sale/promotion-table/promotion-table.component';
+import { ProductCreateTableComponent } from './components/create-order-sale/product-create-table/product-create-table.component';
 
 const routes: Routes = [
     {
@@ -46,6 +47,7 @@ const routes: Routes = [
         ProductPromotionTableComponent,
         ProductTableComponent,
         PromotionTableComponent,
+        ProductCreateTableComponent,
     ],
     imports: [CommonModule, SharedModule, RouterModule.forChild(routes), NgxPaginationModule],
 })

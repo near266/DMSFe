@@ -5,7 +5,7 @@ import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
-import { FormatService } from '../../services/format.service';
+import { FormatService } from '../../../services/format.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 @Component({

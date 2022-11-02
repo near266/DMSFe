@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { table } from 'console';
 import * as _ from 'lodash';
 import { BehaviorSubject, map, pipe, take } from 'rxjs';
 import { ReturnApiService } from '../apis/return-api.service';
@@ -20,7 +21,8 @@ export class ReturnsService {
         start: number;
         end: number;
     }>({ start: 1, end: this.defaultPageSize + 1 });
-
+    private tableLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public tableLoading$ = this.tableLoading.asObservable();
     public returns$ = this.returns.asObservable();
     public currentPage$ = this.currentPage.asObservable();
     public currentPageSize$ = this.currentPageSize.asObservable();
@@ -30,18 +32,25 @@ export class ReturnsService {
     constructor(private returnApiService: ReturnApiService, private filterService: ReturnsFilterService) {}
 
     getInititalReturns(page: number = 1) {
+        this.tableLoading.next(true);
         this.getReturnsByPage(1)
             .pipe(take(1))
             .subscribe({
                 next: (res) => {
+                    if (this.currentPage.getValue() !== 1) {
+                        this.setCurrentPage(1);
+                    }
+                    this.calculateStartAndEndPage();
                     if (res) {
                         this.returns.next(res);
                     } else {
                         this.returns.next([]);
                     }
+                    this.tableLoading.next(false);
                 },
                 error: (error) => {
                     this.returns.next([]);
+                    this.tableLoading.next(false);
                 },
             });
     }

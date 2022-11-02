@@ -80,9 +80,28 @@
         </div>
       </div>
   </div>
-  <div class="h-full bg-gray-100 my-1 mr-1 flex flex-col" [ngClass]="class.right">
-      <div class="w-full px-2 bg-white h-9 flex items-center text-lg font-medium">
-          Danh sách khách hàng ({{response != null ? response.totalCount: 0}})
+  <div class="h-full bg-gray-100 mr-1 flex flex-col" [ngClass]="class.right">
+      <div class="w-full px-2 bg-white h-fit flex justify-between text-lg font-medium">
+          <div class="flex flex-col justify-center">
+            <span>Danh sách khách hàng ({{response != null ? response.totalCount: 0}})</span>
+          </div>
+          <mat-form-field appearance="outline" class="text-[12px] items-center align-middle">
+            <mat-label>Khoảng thời gian</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate [(ngModel)]="startDate" placeholder="Ngày bắt đầu">
+              <input matEndDate [(ngModel)]="endDate" placeholder="Ngày kết thúc">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix *ngIf="startDate != '' && endDate != ''">
+              <mat-icon matDatepickerToggleIcon (click)="clearDate()">clear</mat-icon>
+          </mat-datepicker-toggle>
+            <mat-date-range-picker #picker>
+              <mat-date-range-picker-actions>
+                <button mat-raised-button color="primary" matDateRangePickerApply (click)="selectedDate()">Áp dụng</button>
+                <button mat-button matDateRangePickerCancel>Hủy</button>
+              </mat-date-range-picker-actions>
+            </mat-date-range-picker>
+          </mat-form-field>
       </div>
       <div
           class="w-full px-2 py-1 bg-gray-100 border-gray-300 border-y border-solid h-10 flex flex-wrap items-center text-xs font-medium">
@@ -124,7 +143,9 @@
                           <!-- <td class="border-x border-solid align-middle px-2">
                               <img class="w-20" [src]="user.img">
                           </td> -->
-                          <td class="border-x w-fit border-solid align-middle px-2"><button class="text-xs bg-[#1891C9] text-white font-medium px-7 py-1 rounded-md">{{user.status}}</button>
+                          <td class="border-x border-solid align-middle px-2 max-w-sm min-w-[150px]">
+                            <button *ngIf="user.status == 'Hoạt động'" class="text-xs bg-[#1891C9] text-white font-medium px-7 py-1 rounded-md w-full">{{user.status}}</button>
+                            <button *ngIf="user.status != 'Hoạt động'" class="text-xs bg-[#CB0D0C] text-white font-medium px-7 py-1 rounded-md w-full">{{user.status}}</button>
                           </td>
                           <td class="border-x w-fit border-solid align-middle px-2">{{user.customerCode}}
                           </td>
@@ -157,25 +178,25 @@
                   <tbody *ngIf="response != null">
                       <tr class="h-14 w-fit text-xs" *ngFor="let user of response.data; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] cursor-pointer" (click)="DetailCustomer(user)">{{user.customerName}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] text-emerald-500 font-medium cursor-pointer" (click)="DetailCustomer(user)">{{user.customerName}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2">
                               {{user.customerGroup? user.customerGroup.customerGroupName: ''}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.customerType ? user.customerType.customerTypeName : ''}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{this.datePipe.transform(user.lastModifiedDate, 'dd/MM/yyyy')}}</td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] text-center">{{this.datePipe.transform(user.lastModifiedDate, 'dd/MM/yyyy')}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.channel ? user.channel.channelName : ''}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.address}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.deliveryAddress}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.province}}</td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.district}}</td>
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]"> {{user.dob}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] text-center"> {{user.dob}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.contactName}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.position}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.phone}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.email}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.debtLimit}} </td>
                           <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.cashAcc}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.createdBy}} </td>
-                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px]">{{user.lastModifiedBy}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] text-center">{{user.createdBy}} </td>
+                          <td class="border-x w-fit border-solid align-middle px-2 max-w-md min-w-[120px] text-center">{{user.lastModifiedBy}} </td>
                       </tr>
                   </tbody>
               </table>
@@ -188,7 +209,7 @@
           <i *ngIf="current_page > 1" class="fa-solid fa-backward mx-1" (click)="init(keywords, current_page-1, pageSize)"></i>
           <div class="flex w-6 h-6 mx-1 justify-center items-center text-white bg-green-600 cursor-pointer">{{current_page}}</div>
           <i *ngIf="current_page < totalPage" class="fa-solid fa-forward mx-1" (click)="init(keywords, current_page+1, pageSize)"></i>
-          <span>Hiển thị {{response != null ? (current_page-1)*pageSize + 1 : 0}} - {{response != null ? (current_page-1)*pageSize + response.data.length: 0}} trên tổng số {{response != null ? response.totalCount: 0}} bản ghi</span>
+          <span>Hiển thị {{response != null ? (current_page-1)*pageSize + 1 : 0}} - {{response.data != null ? (current_page-1)*pageSize + response.data.length: 0}} trên tổng số {{response != null ? response.totalCount: 0}} bản ghi</span>
       </div>
   </div>
 </div>

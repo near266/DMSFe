@@ -19,7 +19,8 @@ export class ProductService {
         end: number;
     }>({ start: 1, end: this.defaultPageSize + 1 });
     private totalProducts: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-
+    private tableLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public tableLoading$ = this.tableLoading.asObservable();
     public products$ = this.products.asObservable();
     public currentPage$ = this.currentPage.asObservable();
     public currentPageSize$ = this.currentPageSize.asObservable();
@@ -29,8 +30,10 @@ export class ProductService {
     constructor(private productApiService: ProductApiService, private filterService: FilterService) {}
 
     setCurrentPage(currentPage: number) {
+        this.tableLoading.next(true);
         this.getProductsByPage(currentPage).subscribe((data: any) => {
             this.products.next(data.data);
+            this.tableLoading.next(false);
             this.totalProducts.next(data.totalCount);
             this.currentPage.next(currentPage);
             this.calculateStartAndEndPage();

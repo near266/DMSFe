@@ -88,6 +88,9 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       menuChildrens: ['Tất cả', 'Hoạt động', 'Không hoạt động'],
   };
 
+  startDate = '';
+  endDate = '';
+
   selectStatus(event: any) {
     switch(event) {
       case 'Tất cả': {
@@ -440,26 +443,26 @@ export class CustomersComponent implements OnInit, AfterViewInit {
           title: 'Lọc thời gian',
           leftTitleIcon: 'fa-calendar-days',
           listMenuPosition: [
-              { title: 'Ngày tạo', leftIcon: '', value: 'all' },
-              { title: 'Ngày cập nhật', leftIcon: '', value: 'emp' },
-              { title: 'Sinh nhật', leftIcon: '', value: 'emp' },
+              { title: 'Ngày tạo', leftIcon: '', value: 'Ngày tạo' },
+              { title: 'Ngày cập nhật', leftIcon: '', value: 'Ngày cập nhật' },
+              { title: 'Sinh nhật', leftIcon: '', value: 'Sinh nhật' },
           ],
       },
       {
           title: 'Sắp xếp',
           leftTitleIcon: 'fa-sort-alpha-asc',
           listMenuPosition: [
-              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
-              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-up', value: 'emp' },
+              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-down', value: 'CustomerName-down' },
+              { title: 'Tên khách hàng', leftIcon: 'fa-arrow-up', value: 'CustomerName-up' },
 
-              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-down', value: 'all' },
-              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-up', value: 'emp' },
+              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-down', value: 'CustomerCode-down' },
+              { title: 'Mã khách hàng', leftIcon: 'fa-arrow-up', value: 'CustomerCode-up' },
 
-              // { title: 'Ngày tạo', leftIcon: 'fa-arrow-down', value: 'all' },
-              // { title: 'Ngày tạo', leftIcon: 'fa-arrow-up', value: 'all' },
+              { title: 'Ngày tạo', leftIcon: 'fa-arrow-down', value: 'CreatedDate-down' },
+              { title: 'Ngày tạo', leftIcon: 'fa-arrow-up', value: 'CreatedDate-up' },
 
-              // { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-down', value: 'all' },
-              // { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-up', value: 'all' },
+              { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-down', value: 'LastModifiedDate-down' },
+              { title: 'Ngày cập nhật', leftIcon: 'fa-arrow-up', value: 'LastModifiedDate-up' },
 
               // { title: 'Số lần viếng thăm', leftIcon: 'fa-arrow-down', value: 'all' },
               // { title: 'Số lần viếng thăm', leftIcon: 'fa-arrow-up', value: 'all' },
@@ -473,12 +476,56 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       },
   ];
 
-  Select(e: any) {
-      console.log(e);
+  Select(e: string) {
+    if(e.includes('Sinh nhật') || e.includes('Ngày cập nhật') || e.includes('Ngày tạo')) {
+      this.sortByType(e);
+      return;
+    } else {
+      this.sortByField(e);
+      return;
+    }
+  }
+  sortByType(key: string) {
+    this.request.type = key;
+    if(this.request.startedDate && this.request.endDate) {
+      this.filter();
+    }
+  }
+
+  sortByField(key: string) {
+    let sort = key.split('-');
+    this.request.sortFeild = sort[0];
+    this.request.sortValue = sort[1];
+    if (this.request.sortValue == 'up') this.request.sortValue = true;
+    if (this.request.sortValue == 'down') this.request.sortValue = false;
+    this.filter();
   }
 
   selection(e: any) {
       console.log(e);
+  }
+
+  selectedDate() {
+    let startDate = new Date(this.startDate);
+    startDate.setDate(startDate.getDate() + 1);
+    let endDate = new Date(this.endDate);
+    endDate.setDate(endDate.getDate() + 1);
+    this.request.startedDate = startDate.toISOString();
+    this.request.endDate = endDate.toISOString();
+    if(this.request.type) {
+      this.filter();
+    }
+  }
+
+  clearDate() {
+    this.startDate = '';
+    this.endDate = '';
+    if(this.request.type) {
+      this.request.startedDate = null;
+      this.request.endDate = null;
+      this.request.type = null;
+      this.filter();
+    }
   }
 
   search(request: any) {
@@ -506,7 +553,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
             for(let i = 1; i <= this.totalPage; i++) {
               this.pageList.push(i);
             }
-            this.response.data.forEach((element) => {
+            if(this.response.data) {
+              this.response.data.forEach((element) => {
                 if (element.status == true) element.status = 'Hoạt động';
                 else if (element.status == false) element.status = 'Không hoạt động';
                 else element.status = 'Không hoạt động';
@@ -514,6 +562,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
                   element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
                 }
             });
+            }
           }
         },
         (error) => {
@@ -592,7 +641,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
             for(let i = 1; i <= this.totalPage; i++) {
               this.pageList.push(i);
             }
-            this.response.data.forEach((element) => {
+            if(this.response.data) {
+              this.response.data.forEach((element) => {
                 if (element.status == true) element.status = 'Hoạt động';
                 else if (element.status == false) element.status = 'Không hoạt động';
                 else element.status = 'Không hoạt động';
@@ -600,13 +650,14 @@ export class CustomersComponent implements OnInit, AfterViewInit {
                   element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
                 }
             });
+            }
           } else {
             this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
           }
         },
         (error) => {
           this.loading = false;
-          this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
+          this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
         },
     );
   }

@@ -9,6 +9,7 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ProductListComponent } from '../product-list/product-list.component';
 import { CurrencyPipe } from '@angular/common';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
+import { FormatService } from '../../services/format.service';
 @Component({
     selector: 'app-create-purchase-order',
     templateUrl: './create-purchase-order.component.html',
@@ -34,11 +35,12 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     quantity: any = 0;
 
     listCustomer: any[] = [];
-    listChoosenProduct: any[] = [];
     listEmployee: any[] = [];
     listWarehouse: any[] = [];
-    listChoosenProduct2: any[] = [];
+    // listChoosenProduct2: any[] = [];
     listPromotionProductAdd: any = [];
+    listChoosenProduct: any[] = [];
+
     listSearchedProduct: any[] = [];
 
     debtLimit: any;
@@ -50,7 +52,6 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     textMoney: any;
     value: any;
     formattedAmount: any = '0';
-    defaultUnit = "{ unit: product.retailUnit, type: 'retail' }";
     orderDefaultId: string;
     roleMain: any = 'member';
     selectTed: any = '';
@@ -64,6 +65,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         private snackbar: SnackbarService,
         private router: Router,
         private numberToText: NumberToTextService,
+        private formatService: FormatService,
     ) {}
 
     ngOnInit(): void {
@@ -106,11 +108,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             prePayment: [null],
         });
         // create search product form
-        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActived(data));
-    }
-
-    format(event: any) {
-        event.target.value = Number(event.target.value).toLocaleString('en');
+        // this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActived(data));
     }
 
     ngAfterViewInit(): void {
@@ -169,15 +167,15 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         return JSON.parse(jsonPayload);
     }
 
-    countDiscount(product: any) {
-        if (product.totalPrice) {
-            product.discount = (product.discountRate / 100) * product.totalPrice;
-        }
-    }
+    // countDiscount(product: any) {
+    //     if (product.totalPrice) {
+    //         product.discount = (product.discountRate / 100) * product.totalPrice;
+    //     }
+    // }
     // Tính cho đơn hàng
-    countTotal(product: any) {
-        this.quantity += product.quantity;
-    }
+    // countTotal(product: any) {
+    //     this.quantity += product.quantity;
+    // }
 
     countTotalAmount() {
         this.totalAmount = 0;
@@ -205,27 +203,23 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
     }
 
     // tính cho từng sản phẩm
-    discountRate(product: any) {
-        if (product.totalPrice) {
-            product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
-        }
-    }
+    // discountRate(product: any) {
+    //     if (product.totalPrice) {
+    //         product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
+    //     }
+    // }
 
-    stopPropagation(e: any) {
-        e.stopPropagation();
-    }
+    // stopPropagation(e: any) {
+    //     e.stopPropagation();
+    // }
 
-    passingDataFrom() {
-        this.dataService.openProductList('create', 'Đây là tạo sản phẩm');
-    }
-
-    pushListProductToDialog() {
-        this.listChoosenProduct2 = this.listChoosenProduct.map((product: any) => {
-            return {
-                id: product.id,
-            };
-        });
-    }
+    // pushListProductToDialog() {
+    //     this.listChoosenProduct2 = this.listChoosenProduct.map((product: any) => {
+    //         return {
+    //             id: product.product.id,
+    //         };
+    //     });
+    // }
 
     getListEmployee() {
         if (this.roleMain != 'member') {
@@ -285,48 +279,49 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         }
     }
 
-    openDialogProduct() {
-        const dialogRef = this.dialog.open(ProductListComponent, {
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            height: '100%',
-            width: '100%',
-            panelClass: 'full-screen-modal',
-            // data: this.listChoosenProduct,
-            data: {
-                listId: this.listChoosenProduct2,
-                listProd: this.listChoosenProduct,
-            },
-        });
-        dialogRef.afterClosed().subscribe((data) => {
-            if (!data.isCancel) {
-                this.listChoosenProduct = data;
-                this.listChoosenProduct.forEach((product: any) => {
-                    product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
-                    product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
-                    product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
-                });
-                this.pushListProductToDialog();
-            }
-        });
-    }
+    // openDialogProduct() {
+    //     const dialogRef = this.dialog.open(ProductListComponent, {
+    //         maxWidth: '100vw',
+    //         maxHeight: '100vh',
+    //         height: '100%',
+    //         width: '100%',
+    //         panelClass: 'full-screen-modal',
+    //         // data: this.listChoosenProduct,
+    //         data: {
+    //             listId: this.listChoosenProduct2,
+    //             listProd: this.listChoosenProduct,
+    //         },
+    //     });
+    //     dialogRef.afterClosed().subscribe((data) => {
+    //         if (!data.isCancel) {
+    //             // this.listChoosenProduct = data;
+    //             // this.listChoosenProduct.forEach((product: any) => {
+    //             //     product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+    //             //     product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+    //             //     product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+    //             // });
+    //             this.listChoosenProduct = this.formatService.formatProductFromCloseDialogAdd(data, []);
+    //             this.pushListProductToDialog();
+    //         }
+    //     });
+    // }
 
     create() {
-        let lastListChoosen = this.listChoosenProduct.map((product: any) => {
-            return {
-                productId: product.id,
-                productName: product.productName,
-                unitId: product.unitId,
-                warehouseId: product.warehouseId,
-                unitPrice: product.unitPrice,
-                quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount | 0,
-                discountRate: product.discountRate | 0,
-                note: product.note,
-                type: 0,
-            };
-        });
+        // let lastListChoosen = this.listChoosenProduct.map((product: any) => {
+        //     return {
+        //         productId: product.id,
+        //         productName: product.productName,
+        //         unitId: product.unitId,
+        //         warehouseId: product.warehouseId,
+        //         unitPrice: product.unitPrice,
+        //         quantity: product.quantity,
+        //         totalPrice: product.totalPrice,
+        //         discount: product.discount | 0,
+        //         discountRate: product.discountRate | 0,
+        //         note: product.note,
+        //         type: 0,
+        //     };
+        // });
         const body = {
             orderDate: moment(this.createForm.get('orderDate')?.value).format('YYYY-MM-DDTHH:mm:ss'),
             groupId: this.createForm.get('groupId')?.value, // Chưa có api get
@@ -343,7 +338,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             archived: false,
             createdDate: moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss'),
             deliveryDate: moment(this.createForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
-            listProduct: lastListChoosen,
+            listProduct: this.listChoosenProduct,
             listPromotionProduct: this.listPromotionProductAdd,
             paymentMethod: 0, // có 1 loại payment
             prePayment: this.prePayment,
@@ -366,10 +361,11 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         );
     }
 
-    updateTotalPrice(product: any) {
-        this.countTotal(product);
-        product.totalPrice = product.quantity * product.unitPrice;
-    }
+    // updateTotalPrice(product: any) {
+    //     this.countTotal(product);
+    //     product.totalPrice = product.quantity * product.unitPrice;
+    //     this.discountRate(product);
+    // }
 
     setInfoCustomer(id: string) {
         let customer = this.listCustomer.filter((customer: any) => {
@@ -397,36 +393,37 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         });
     }
 
-    unChoose(productRemove: any) {
-        this.listChoosenProduct = this.listChoosenProduct.filter((product: any) => {
-            return product != productRemove;
-        });
-        this.quantity -= productRemove.quantity;
-    }
+    // unChoose(productRemove: any) {
+    //     this.listChoosenProduct = this.listChoosenProduct.filter((product: any) => {
+    //         return product != productRemove;
+    //     });
+    //     this.quantity -= productRemove.quantity;
+    // }
 
-    selectUnit(product: any, type: any) {
-        if (type === 'retail') {
-            product.unitId = product?.retailUnit?.id;
-            product.unitPrice = product?.retailPrice;
-        } else if (type == 'whosale') {
-            product.unitId = product?.wholeSaleUnit?.id;
-            product.unitPrice = product.price;
-        }
-        product.totalPrice = product.quantity * product.unitPrice;
-        this.discountRate(product);
-    }
+    // selectUnit(product: any, type: any) {
+    //     if (type === 'retail') {
+    //         product.unitId = product?.product?.retailUnit?.id;
+    //         product.unitPrice = product.product.retailPrice;
+    //         product.totalPrice = product.quantity * product.unitPrice;
+    //     } else if ((type = 'whosale')) {
+    //         product.unitId = product?.product?.wholeSaleUnit?.id;
+    //         product.unitPrice = product.product.price;
+    //         product.totalPrice = product.quantity * product.unitPrice;
+    //     }
+    //     this.discountRate(product);
+    // }
 
-    selectWareHouse(value: any, product: any) {
-        product.warehouseId = value;
-    }
+    // selectWareHouse(value: any, product: any) {
+    //     product.warehouseId = value;
+    // }
 
-    setWareHouseToAllProduct(id: any) {
-        if (id != 0) {
-            this.listChoosenProduct.forEach((product: any) => {
-                product.warehouseId = id;
-            });
-        }
-    }
+    // setWareHouseToAllProduct(id: any) {
+    //     if (id != 0) {
+    //         this.listChoosenProduct.forEach((product: any) => {
+    //             product.warehouseId = id;
+    //         });
+    //     }
+    // }
 
     searchListCustomer(e: any) {
         if (e != 0) {
@@ -465,52 +462,34 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
         this.listPromotionProductAdd = e;
     }
 
-    // searchListProductActived(e: any) {
+    setProductAdd(e: any) {
+        this.listChoosenProduct = e;
+    }
+
+    // searchListProductActived(value: any) {
     //     const body = {
-    //         keyword: e.target.value,
+    //         keyword: value,
     //         sortBy: {
     //             property: 'CreatedDate',
     //             value: true,
     //         },
     //         page: 1,
-    //         pageSize: 5,
+    //         pageSize: 3,
     //     };
     //     this.purchaseOrder.getListProductActived(body).subscribe((data) => {
-    //         console.log(data);
     //         this.listSearchedProduct = data?.data;
     //     });
     // }
 
-    searchListProductActived(value: any) {
-        const body = {
-            keyword: value,
-            sortBy: {
-                property: 'CreatedDate',
-                value: true,
-            },
-            page: 1,
-            pageSize: 3,
-        };
-        this.purchaseOrder.getListProductActived(body).subscribe((data) => {
-            this.listSearchedProduct = data?.data;
-        });
-    }
-
-    addProductBySearch(product: any, e: any) {
-        if (e.source.selected) {
-            product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
-            product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
-            product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
-            this.listChoosenProduct.push(product);
-            this.pushListProductToDialog();
-        }
-    }
-
-    // addProductPromotionBySearch(product: any) {
-    //     product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
-    //     product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
-    //     product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
-    //     this.listChoosenProduct.push(product);
-    //     this.pushListProductToDialog();
+    // addProductBySearch(product: any, e: any) {
+    //     if (e.source.selected) {
+    //         let productFormat = this.formatService.formatProductFromCloseDialogAdd([product], []);
+    //         // product.quantity = 0;
+    //         // product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+    //         // product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+    //         // product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+    //         this.listChoosenProduct.push(productFormat[0]);
+    //         this.pushListProductToDialog();
+    //     }
     // }
 }

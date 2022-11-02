@@ -1,67 +1,20 @@
 <form class="p-3 w-full">
   <app-detail-return-info></app-detail-return-info>
-  <mat-tab-group>
-    <!-- Sản phẩm đặt hàng -->
-    <mat-tab label="Sản phẩm đặt hàng">
-      <!-- <div class="flex items-center">
-        <div class="flex items-center">
-          <label for="simple-search" class="sr-only">Search</label>
-          <div class="relative w-full">
-            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-              <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </div>
-            <input type="text" id="simple-search" class="search-input" placeholder="Search" required />
-          </div>
-        </div>
-        <button (click)="openDialogProduct()"
-          class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
-          <i class="fa-solid fa-filter mr-2 px-2"></i>
-          <span class="px-2">Tìm kiếm nâng cao</span>
-        </button>
-        <button
-          class="text-white flex items-center ml-3 px-1 py-1.5 bg-rose-500 hover:bg-rose-600 rounded-lg hover:font-medium">
-          <i class="h-full fa-solid fa-bookmark mr-2 px-2"></i>
-          <span class="px-2">Khuyến mại</span>
-        </button>
-      </div> -->
-      <app-detail-return-table-edit *ngIf="currentMode === ComponentModeList.EDIT"></app-detail-return-table-edit>
-      <app-detail-return-table *ngIf="currentMode === ComponentModeList.VIEW"></app-detail-return-table>
-    </mat-tab>
-    <!-- Sản phẩm khuyến mại -->
-    <mat-tab label="Sản phẩm khuyến mại">
-      <!-- <div class="flex items-center mt-2 justify-between">
-        <div class="flex items-center">
-          <div class="flex items-center">
-            <label for="simple-search" class="sr-only">Search</label>
-            <div class="relative w-full">
-              <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clip-rule="evenodd"></path>
-                </svg>
-              </div>
-              <input type="text" id="simple-search" class="search-input" placeholder="Search" required />
-            </div>
-          </div>
-          <button (click)="openDialogProduct()"
-            class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
-            <i class="fa-solid fa-filter mr-2 px-2"></i>
-            <span class="px-2">Tìm kiếm nâng cao</span>
-          </button>
-        </div>
-      </div> -->
-      <app-detail-return-table-promotion-edit *ngIf="currentMode === ComponentModeList.EDIT">
-      </app-detail-return-table-promotion-edit>
-      <app-detail-return-promotion *ngIf="currentMode === ComponentModeList.VIEW"></app-detail-return-promotion>
-    </mat-tab>
-  </mat-tab-group>
+  <!-- Sản phẩm đặt hàng -->
+  <div>
+    <button class=" py-2"><span class="text-base text-gray-800 underline-offset-2 underline">Sản phẩm đặt
+        hàng</span></button>
+    <app-detail-return-table-edit *ngIf="currentMode === ComponentModeList.EDIT"></app-detail-return-table-edit>
+    <app-detail-return-table *ngIf="currentMode === ComponentModeList.VIEW"></app-detail-return-table>
+  </div>
+  <!-- Sản phẩm khuyến mại -->
+  <div class="mt-12">
+    <button class=" py-2"><span class="text-base text-gray-800 underline-offset-2 underline">Sản phẩm khuyến
+        mãi</span></button>
+    <app-detail-return-table-promotion-edit *ngIf="currentMode === ComponentModeList.EDIT">
+    </app-detail-return-table-promotion-edit>
+    <app-detail-return-promotion *ngIf="currentMode === ComponentModeList.VIEW"></app-detail-return-promotion>
+  </div>
   <div>
 
     <div>

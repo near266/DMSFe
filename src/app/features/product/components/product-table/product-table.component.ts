@@ -3,6 +3,7 @@ import { ProductService } from '../../services/product.service';
 import { tableHeader } from '../../models/table.header';
 import { Product } from '../../models/product';
 import { ProductDialogService } from '../../services/product-dialog.service';
+import { Observable } from 'rxjs';
 declare let $: any;
 
 @Component({
@@ -13,10 +14,12 @@ declare let $: any;
 export class ProductTableComponent implements OnInit {
     currentPage: number;
     products: Product[] = [];
+    _tableLoading$: Observable<boolean>;
     headers = tableHeader;
     totalItems: number;
     constructor(private productService: ProductService, private productDialogService: ProductDialogService) {}
     ngOnInit(): void {
+        this._tableLoading$ = this.productService.tableLoading$;
         this.productService.getInititalProducts();
         this.productService.products$.subscribe((data: Product[]) => {
             this.products = data;
