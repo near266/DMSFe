@@ -18,6 +18,7 @@ import { ConfirmDialogComponent } from 'src/app/core/shared/components/confirm-d
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { FormatService } from '../../services/format.service';
+import { ProductFieldTextarea } from 'src/app/features/product/components/add-product-dialog/add-product-details/product-field-type/product-field-type.component';
 @Component({
     selector: 'app-detail-order',
     templateUrl: './detail-order.component.html',
@@ -48,6 +49,8 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     listPromotionProductAdd: any = [];
     listChoosenProductPromotion: any = [];
     listSearchedProduct: any = [];
+    listProductIdsArray: any = [];
+    listProductPromotionIdsArray: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -68,6 +71,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         private purchaseOrder: PurchaseOrderService,
         private numberToText: NumberToTextService,
         private format: FormatService,
+        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -507,6 +511,12 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 id: product.product.id,
             };
         });
+        this.listProductAdd.forEach((product: any) => {
+            this.listChoosenProduct.push({ id: product.product.id });
+        });
+        this.listChoosenProduct.forEach((product: any) => {
+            this.listProductIdsArray.push(product.id);
+        });
     }
 
     pushListProductPromotionToDialog() {
@@ -514,6 +524,12 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             return {
                 id: product.product.id,
             };
+        });
+        this.listPromotionProductAdd.forEach((product: any) => {
+            this.listChoosenProductPromotion.push({ id: product.product.id });
+        });
+        this.listChoosenProductPromotion.forEach((product: any) => {
+            this.listProductPromotionIdsArray.push(product.id);
         });
     }
 
@@ -526,7 +542,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
             panelClass: 'full-screen-modal',
             data: {
                 listId: this.listChoosenProduct,
-                listProd: this.detailOrder.listProduct,
+                listProd: this.listChoosenProduct, // để tạm
             },
         });
         dialogRef.afterClosed().subscribe((data) => {
@@ -537,6 +553,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                         this.listProductAdd.push(product);
                     });
                 }
+                this.pushListProductToDialog();
             }
         });
     }
@@ -562,6 +579,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                     listAdd.forEach((product: any) => {
                         this.listPromotionProductAdd.push(product);
                     });
+                    this.pushListProductPromotionToDialog();
                 }
             }
         });
@@ -674,12 +692,21 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     // loop to reduce available product
     listAddProduct(list: any) {
         let listAddProduct = [];
-        if (list && this.listProduct) {
-            let listAvailbleIds = this.listProduct.map((product: any) => {
-                return product?.product?.id;
-            });
+        console.log(this.listChoosenProduct);
+        // if (list && this.listProduct) {
+        //     let listAvailbleIds = this.listProduct.map((product: any) => {
+        //         return product?.product?.id;
+        //     });
+        //     listAddProduct = list.filter((product: any) => {
+        //         return !listAvailbleIds.includes(product.product.id);
+        //     });
+        // }
+        if (list && this.listProductIdsArray) {
+            // let listAvailbleIds = this.listProduct.map((product: any) => {
+            //     return product?.product?.id;
+            // });
             listAddProduct = list.filter((product: any) => {
-                return !listAvailbleIds.includes(product.product.id);
+                return !this.listProductIdsArray.includes(product.product.id);
             });
         }
         return listAddProduct;
@@ -689,11 +716,11 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     listAddProductPromotion(list: any) {
         let listAddProduct = [];
         if (list && this.listPromotionProduct) {
-            let listAvailbleIds = this.listPromotionProduct.map((product: any) => {
-                return product?.product?.id;
-            });
+            // let listAvailbleIds = this.listPromotionProduct.map((product: any) => {
+            //     return product?.product?.id;
+            // });
             listAddProduct = list.filter((product: any) => {
-                return !listAvailbleIds.includes(product.product.id);
+                return !this.listProductPromotionIdsArray.includes(product.product.id);
             });
         }
         return listAddProduct;
@@ -722,15 +749,37 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     addProductBySearch(product: any, e: any) {
         if (e.source.selected) {
-            product = this.formatFormProduct([product]);
-            this.listProductAdd.push(product[0]);
+            let isSelected = false;
+            if (this.listProductIdsArray.includes(product.id)) {
+                isSelected = true;
+            } else {
+                isSelected = false;
+            }
+            if (!isSelected) {
+                product = this.formatFormProduct([product]);
+                this.listProductAdd.push(product[0]);
+                this.pushListProductToDialog();
+            } else {
+                this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+            }
         }
     }
 
     addProductPromotionBySearch(product: any, e: any) {
         if (e.source.selected) {
-            product = this.formatFormProductPromotion([product]);
-            this.listPromotionProductAdd.push(product[0]);
+            let isSelected = false;
+            if (this.listProductPromotionIdsArray.includes(product.id)) {
+                isSelected = true;
+            } else {
+                isSelected = false;
+            }
+            if (!isSelected) {
+                product = this.formatFormProductPromotion([product]);
+                this.listPromotionProductAdd.push(product[0]);
+                this.pushListProductPromotionToDialog();
+            } else {
+                this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+            }
         }
     }
 }

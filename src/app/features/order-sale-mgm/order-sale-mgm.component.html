@@ -109,9 +109,10 @@
             </button>
             <mat-menu #filterByTime="matMenu" #printMenu="matMenu">
                 <button mat-menu-item>Ngày tạo</button>
+                <button mat-menu-item>Ngày sửa</button>
+                <button mat-menu-item>Ngày bán hàng</button>
                 <button mat-menu-item>Ngày đặt hàng</button>
                 <button mat-menu-item>Ngày giao hàng</button>
-                <button mat-menu-item>Ngày sửa</button>
             </mat-menu>
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="sortMenu">
                 <i class="fa-solid fa-sort text-green-700 text-sm font-bold mr-1"></i>
@@ -119,8 +120,17 @@
                 <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
             </button>
             <mat-menu #sortMenu="matMenu" #printMenu="matMenu">
-                <button mat-menu-item>Ngày đặt hàng</button>
-                <button mat-menu-item>Ngày đặt hàng</button>
+                <button [ngClass]="{ 'bg-zinc-100': createdDateUp }" mat-menu-item (click)="sortByCreatedDate('up')">
+                    <i class="fa-solid fa-arrow-up mr-1"></i>
+                    <span>Ngày tạo</span>
+                </button>
+                <button
+                    [ngClass]="{ 'bg-zinc-100': createdDateDown }"
+                    mat-menu-item
+                    (click)="sortByCreatedDate('down')">
+                    <i class="fa-solid fa-arrow-down mr-1"></i>
+                    <span>Ngày tạo</span>
+                </button>
             </mat-menu>
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="manageMenu">
                 <i class="fa-solid fa-lock text-green-700 text-sm font-bold mr-1"></i>
@@ -232,7 +242,11 @@
                                         class="fa-solid fa-comment px-1 py-0.5 border rounded-sm text-sm"></i>
                                     <i
                                         title="Số lần in"
-                                        class="fa-solid fa-print px-1 py-0.5 border rounded-sm text-sm"></i>
+                                        class="fa-solid fa-print px-1 py-0.5 border rounded-sm text-sm flex items-center">
+                                        <span class="text-[10px] ml-1" *ngIf="order.printStatus">
+                                            ({{ order.printStatus }})
+                                        </span>
+                                    </i>
                                 </div>
                             </div>
                         </td>

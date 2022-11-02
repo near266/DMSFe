@@ -124,6 +124,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         if (this.dateSearchForm.get('toDate')?.value) {
             this.body.toDate = moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD');
         }
+        this.body.dateFilter = 1;
         // set lại page
         this.page = 1;
         this.body.page = 1;

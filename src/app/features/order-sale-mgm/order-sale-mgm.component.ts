@@ -40,6 +40,9 @@ export class OrderSaleMgmComponent implements OnInit {
         pageSize: 30,
     };
 
+    createdDateDown = false;
+    createdDateUp = false;
+
     constructor(
         public datepipe: DatePipe,
         private saleReceiptService: SaleReceiptService,
@@ -228,7 +231,8 @@ export class OrderSaleMgmComponent implements OnInit {
         });
     }
     filter(body: any) {
-        this.search(body);
+        this.body = body;
+        this.search(this.body);
     }
 
     filterDate() {
@@ -238,6 +242,7 @@ export class OrderSaleMgmComponent implements OnInit {
         if (this.dateSearchForm.get('toDate')?.value) {
             this.body.toDate = moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD');
         }
+        this.body.dateFilter = 1;
         // set lại page
         this.page = 1;
         this.body.page = 1;
@@ -268,5 +273,18 @@ export class OrderSaleMgmComponent implements OnInit {
                 this.id.splice(this.id.indexOf(order.id), 1);
             });
         }
+    }
+
+    sortByCreatedDate(type: any) {
+        if (type === 'up') {
+            this.createdDateUp = true;
+            this.createdDateDown = false;
+            this.body.isAscending = true;
+        } else if (type === 'down') {
+            this.createdDateDown = true;
+            this.createdDateUp = false;
+            this.body.isAscending = false;
+        }
+        this.search(this.body);
     }
 }

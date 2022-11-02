@@ -271,7 +271,7 @@
                                             (ngModelChange)="
                                                 product.quantity = $event;
                                                 product.totalPrice = product.quantity * product.unitPrice;
-                                                discountRate(product)
+                                                countDiscount(product)
                                             "
                                             [ngModelOptions]="{ standalone: true }" />
                                         <!-- <input
@@ -492,7 +492,7 @@
                                             [ngModel]="product.quantity"
                                             (ngModelChange)="
                                                 product.quantity = $event;
-                                                discountRate(product);
+                                                countDiscount(product);
                                                 product.totalPrice = product.quantity * product.unitPrice
                                             "
                                             [ngModelOptions]="{ standalone: true }" />

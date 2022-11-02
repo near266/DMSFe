@@ -154,7 +154,8 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
 
     updateTotalPrice(product: any) {
         product.totalPrice = product.quantity * product.unitPrice;
-        this.discountRate(product);
+        // this.discountRate(product);
+        this.countDiscount(product);
     }
 
     stopPropagation(e: any) {

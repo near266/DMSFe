@@ -41,6 +41,8 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     listProductPromotionRemove: any = [];
     listProductAdd: any = [];
     listSearchedProduct: any = [];
+    listProductIds: any = [];
+    listPromotionIds: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -522,6 +524,9 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
                 id: product.product.id,
             };
         });
+        this.listProductIds = this.listProduct.map((product: any) => {
+            return product.product.id;
+        });
     }
 
     pushListProductPromotionToDialog() {
@@ -529,6 +534,9 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             return {
                 id: product.product.id,
             };
+        });
+        this.listPromotionIds = this.listPromotionProduct.map((product: any) => {
+            return product.product.id;
         });
     }
 
@@ -557,17 +565,37 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
 
     addProductBySearch(product: any, e: any) {
         if (e.source.selected) {
-            product = this.format.formatProductFromCloseDialogAdd([product], []);
-            this.listProduct.push(product[0]);
-            this.pushListProductToDialog();
+            let isSelected = false;
+            if (this.listProductIds.includes(product.id)) {
+                isSelected = true;
+            } else {
+                isSelected = false;
+            }
+            if (!isSelected) {
+                product = this.format.formatProductFromCloseDialogAdd([product], []);
+                this.listProduct.push(product[0]);
+                this.pushListProductToDialog();
+            } else {
+                this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+            }
         }
     }
 
     addProductPromotionBySearch(product: any, e: any) {
         if (e.source.selected) {
-            let productAfterFormat = this.format.formatProductPromotionFromCloseDialogAdd([product], []);
-            this.listPromotionProduct.push(productAfterFormat[0]);
-            this.pushListProductPromotionToDialog();
+            let isSelected = false;
+            if (this.listPromotionIds.includes(product.id)) {
+                isSelected = true;
+            } else {
+                isSelected = false;
+            }
+            if (!isSelected) {
+                let productAfterFormat = this.format.formatProductPromotionFromCloseDialogAdd([product], []);
+                this.listPromotionProduct.push(productAfterFormat[0]);
+                this.pushListProductPromotionToDialog();
+            } else {
+                this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+            }
         }
     }
 

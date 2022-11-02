@@ -134,7 +134,8 @@ export class ProductCreateTableComponent implements OnInit, AfterViewInit, DoChe
 
     updateTotalPrice(product: any) {
         product.totalPrice = product.quantity * product.unitPrice;
-        this.discountRate(product);
+        // this.discountRate(product);
+        this.countDiscount(product);
     }
 
     countDiscount(product: any) {
