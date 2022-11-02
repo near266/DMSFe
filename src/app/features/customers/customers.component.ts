@@ -567,7 +567,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         },
         (error) => {
           this.loading = false;
-          this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
+          this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', false);
         },
     );
   }
@@ -652,12 +652,12 @@ export class CustomersComponent implements OnInit, AfterViewInit {
             });
             }
           } else {
-            this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
+            this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', false);
           }
         },
         (error) => {
           this.loading = false;
-          this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
+          this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', false);
         },
     );
   }

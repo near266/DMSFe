@@ -223,6 +223,15 @@ export class UserTreeViewComponent implements OnInit {
           };
           // if(element.children.length == 0) node.hasChildren = false;
           if(node.type == 0) node.menubar = this.menubar_unit;
+          if(node.name === 'Chưa thuộc phòng/nhóm') {
+            let temp: any[] = [];
+            for(let i = 0; i < node.menubar.length; i++) {
+              if(node.menubar[i] != 'Xóa nhóm') {
+                temp.push(node.menubar[i]);
+              }
+            }
+            node.menubar = temp;
+          }
           nodes.push(node);
       });
       this.array_index.push({
