@@ -81,11 +81,19 @@ export class AddCusFromExcelComponent implements OnInit {
         }
       })
     }else{
-      body = {
-        "list": this.dataAfterConvert,
-        "routeId": ""
+      let listCusTemp:any[] = []
+      // body = {
+      //   "list": this.arrayIdCus,
+      //   "routeId": ""
+      // }
+      let res = {
+        body: {
+          "list": 1,
+          "routeId": ""
+        },
+        listCusPreview: listCusTemp
       }
-      this.materialDialog.close(body);
+      this.materialDialog.close(res);
     }
 
   }
