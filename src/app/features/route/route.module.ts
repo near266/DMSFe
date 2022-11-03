@@ -13,6 +13,7 @@ import { UserManageModule } from '../user-manage/categories.module';
 import { TreeGroupComponent } from './tree-group/tree-group.component';
 import { AddCusToRouteComponent } from './components/add-cus-to-route/add-cus-to-route.component';
 import { AddCusFromExcelComponent } from './components/add-cus-from-excel/add-cus-from-excel.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 const routes: Routes = [
     {
@@ -38,7 +39,8 @@ const routes: Routes = [
     CommonModule,
     SharedModule,
     // UserManageModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    NgxPaginationModule,
   ]
 })
 export class RouteModule {}

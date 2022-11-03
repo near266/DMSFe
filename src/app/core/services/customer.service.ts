@@ -72,4 +72,10 @@ export class CustomerService {
         map((response: any) => response)
       )
   }
+  SearchAllCustomerByCode(body: any): Observable<any> {
+    return this.http.post(customer_url + '/SearchAllCustomerByCode', body)
+      .pipe(
+        map((response: any) => response)
+      )
+  }
 }

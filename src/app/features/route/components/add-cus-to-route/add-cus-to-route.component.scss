@@ -1,3 +1,7 @@
 input, select, textarea {
   outline: none;
 }
+
+:host ::ng-deep pagination-controls pagination-template .ngx-pagination .current{
+  background-color: #0284c7;
+}
