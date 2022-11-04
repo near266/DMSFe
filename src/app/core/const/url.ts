@@ -5,6 +5,8 @@ export const api_url = base_url + '/api';
 export const gateway_url = base_url + '/gw';
 export const route_api = gateway_url + '/Route';
 
+export const admin_url = api_url + '/admin';
+export const admin_user_url = admin_url + '/Users';
 export const api_gateway_url = environment.API_URL + '/gw';
 export const customer_url = api_gateway_url + '/Customer';
 export const route_customer_url = api_gateway_url + '/Route';

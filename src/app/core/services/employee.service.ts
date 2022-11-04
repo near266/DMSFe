@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { map, Observable, pipe } from 'rxjs';
-import { api_gateway_url, api_url, gateway_url } from '../const/url';
+import { admin_user_url, api_gateway_url, api_url, gateway_url } from '../const/url';
 
 @Injectable({
   providedIn: 'root',
@@ -96,5 +96,9 @@ export class EmployeeService {
       pageSize: pageSize
     }
     return this.http.post(gateway_url + '/SearchEmployeeInGroupPost', body).pipe(map((response: any) => response));
+  }
+
+  ResetPasswordEmployee(body: any): Observable<any> {
+    return this.http.post(admin_user_url + '/reset-password', body).pipe(map((response: any) => response));
   }
 }
