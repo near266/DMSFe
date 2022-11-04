@@ -33,4 +33,5 @@ export class Customers {
   createdDate?: string;
   lastModifiedBy?: string;
   avatar?: string;
+  checked?: boolean;
 }
