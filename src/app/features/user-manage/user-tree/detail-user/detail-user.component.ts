@@ -46,7 +46,7 @@ export class DetailUserComponent implements OnInit {
   DeleteUser() {
     this.confirmService.openDialog({message: 'Bạn có chắc chắn muốn xóa nhân viên này?',confirm: 'Xác nhận',cancel: 'Hủy'}).subscribe(data => {
       if(data) {
-        this.employeeService.DeleteEmployee(this.dataDialog.id).subscribe( response => {
+        this.employeeService.ArchiveEmployee({listId: [this.dataDialog.id]}).subscribe( response => {
           if(response) {
             this.snackbar.openSnackbar('Xóa nhân viên thành công', 2000, 'Đóng', 'center', 'bottom', true);
             this.dataService.changeEmployee('success');

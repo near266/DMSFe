@@ -23,6 +23,7 @@ import { AddEmployeeComponent } from './user-tree/add-employee/add-employee.comp
 import { AddUnitComponent } from './user-tree/add-unit/add-unit.component';
 import { MoveUserComponent } from './user-tree/move-user/move-user.component';
 import { UnitsComponent } from './units/units.component';
+import { EditGroupComponent } from './user-tree/edit-group/edit-group.component';
 
 const routes: Routes = [
     {
@@ -60,6 +61,7 @@ const routes: Routes = [
         AddUnitComponent,
         MoveUserComponent,
         UnitsComponent,
+        EditGroupComponent,
     ],
     imports: [CommonModule, RouterModule.forChild(routes), SharedModule, NgxPaginationModule],
     exports: [UserTreeViewComponent]
