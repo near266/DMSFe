@@ -39,7 +39,7 @@ export class DetailUserComponent implements OnInit {
 
   ResetPw() {
     this.dialog.open(ResetPasswordComponent, {
-      data: {},
+      data: {login: this.dataDialog.login},
     })
   }
 

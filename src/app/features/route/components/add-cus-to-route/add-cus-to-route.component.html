@@ -55,34 +55,43 @@
   </div>
 
   <!-- ?? table -->
+  <div class="justify-center px-2 text-sm flex items-center mt-5">
+    <pagination-controls
+        previousLabel="Trước"
+        nextLabel="Sau"
+        [responsive]="true"
+        (pageChange)="onTableDataChange($event)"
+        [directionLinks]="true"></pagination-controls>
+    <!-- <span>Hiển thị {{ startIndex }} - {{ endIndex }} trên tổng số {{ total }} bản ghi</span> -->
+  </div>
   <div class="max-h-80 overflow-y-scroll mt-3 border border-solid border-gray-300">
-
-  <table class="w-full aspect-4/1 border- border-solid border-gray-300">
-    <thead class="h-10 w-full text-xs sticky top-0">
-      <th class="border-r border-solid border-gray-300 px-2 bg-gray-100">
-        <input type="checkbox">
-      </th>
-      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">STT</th>
-      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã khách hàng</th>
-      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tên</th>
-      <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">SĐT</th>
-      <th class="border-l border-solid border-gray-300 px-2 bg-gray-100">Địa chỉ</th>
-    </thead>
-    <tbody>
-      <tr class="h-auto text-xs border-y border-solid border-gray-300" *ngFor="let cus of dataCus?.data; let o=odd; let e=even; let i = index"
-        [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-        <td class="border-r border-solid align-middle px-2 py-3 text-center">
-          <input class="align-middle" type="checkbox" (change)="addCusToRoute($event, cus.customerCode)">
-          <i class="fa-solid fa-unlock fa-lg text-sky-700 mt-3 w-full text-center"></i>
-        </td>
-        <td class="border-x border-solid align-middle px-2 py-3 text-center">{{i+1}}</td>
-        <td class="border-x border-solid align-middle px-2 py-3">{{cus.customerCode}}</td>
-        <td class="border-x border-solid align-middle px-2 py-3">{{cus.customerName}}</td>
-        <td class="border-x border-solid align-middle px-2 py-3">{{cus.phone}}</td>
-        <td class="border-l border-solid align-middle px-2 py-3">{{cus.address}}</td>
-      </tr>
-    </tbody>
-  </table>
+    <!-- <pagination-controls (pageChange)="pageChange($event)" class="my-pagination"></pagination-controls> -->
+    <table class="w-full aspect-4/1 border- border-solid border-gray-300">
+      <thead class="h-10 w-full text-xs sticky top-0">
+        <th class="border-r border-solid border-gray-300 px-2 bg-gray-100">
+          <input type="checkbox">
+        </th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">STT</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã khách hàng</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tên</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">SĐT</th>
+        <th class="border-l border-solid border-gray-300 px-2 bg-gray-100">Địa chỉ</th>
+      </thead>
+      <tbody>
+        <tr class="h-auto text-xs border-y border-solid border-gray-300" *ngFor="let cus of dataCus?.data | paginate : { itemsPerPage: pageSize, currentPage: page, totalItems: total }; let o=odd; let e=even; let i = index"
+          [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
+          <td class="border-r border-solid align-middle px-2 py-3 text-center">
+            <input class="align-middle" type="checkbox" (change)="addCusToRoute($event, cus.customerCode)">
+            <i class="fa-solid fa-unlock fa-lg text-sky-700 mt-3 w-full text-center"></i>
+          </td>
+          <td class="border-x border-solid align-middle px-2 py-3 text-center">{{i+1}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{cus.customerCode}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{cus.customerName}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{cus.phone}}</td>
+          <td class="border-l border-solid align-middle px-2 py-3">{{cus.address}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <!-- end table -->
 </div>

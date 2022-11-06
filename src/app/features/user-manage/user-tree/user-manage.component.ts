@@ -60,13 +60,14 @@ export class UserManageComponent implements OnInit {
             panelClass: 'custom-mat-dialog-container'
         });
     }
-    DetailUser(id: any) {
+    DetailUser(id: any, email: any) {
         this.dia = this.dialog.open(DetailUserComponent, {
             height: '100vh',
             minWidth: '900px',
             data: {
                 id: id,
                 status: 'view',
+                login: email
             },
             panelClass: 'custom-mat-dialog-container'
         });
