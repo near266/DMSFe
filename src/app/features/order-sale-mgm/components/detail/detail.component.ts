@@ -250,9 +250,11 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
             this.prePayment = this.detailOrder.prePayment;
             this.textMoney = this.numberToText.doc(this.totalPayment);
             // set hạn mức dư nợ
-            this.purchaseOrder.getCustomerById(this.detailOrder?.customer?.id).subscribe((data) => {
-                this.debtLimit = data?.debtLimit;
-            });
+            if (this.detailOrder?.customer?.id) {
+                this.purchaseOrder.getCustomerById(this.detailOrder?.customer?.id).subscribe((data) => {
+                    this.debtLimit = data?.debtLimit;
+                });
+            }
         });
     }
 

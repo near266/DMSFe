@@ -130,22 +130,22 @@ export class PromotionTableComponent implements OnInit, OnChanges, DoCheck {
 
     addProductPromotionBySearch(product: any, e: any) {
         if (e.source.selected) {
-            let isSelected = false;
-            if (this.listProductIdsArray.includes(product.id)) {
-                isSelected = true;
-            } else {
-                isSelected = false;
-            }
-            if (!isSelected) {
-                let productFormat = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
-                this.listPromotionProductAdd.push(productFormat[0]);
-                this.pushListProductPromotionToDialog();
-            } else {
-                this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
-            }
-            // let productAfterFormat = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
-            // this.listPromotionProductAdd.push(productAfterFormat[0]);
-            // this.pushListProductPromotionToDialog();
+            // let isSelected = false;
+            // if (this.listProductIdsArray.includes(product.id)) {
+            //     isSelected = true;
+            // } else {
+            //     isSelected = false;
+            // }
+            // if (!isSelected) {
+            //     let productFormat = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
+            //     this.listPromotionProductAdd.push(productFormat[0]);
+            //     this.pushListProductPromotionToDialog();
+            // } else {
+            //     this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+            // }
+            let productFormat = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
+            this.listPromotionProductAdd.push(productFormat[0]);
+            this.pushListProductPromotionToDialog();
         }
     }
 }

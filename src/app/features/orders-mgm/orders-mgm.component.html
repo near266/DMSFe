@@ -1,6 +1,6 @@
 <div class="flex w-full">
     <div class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
-        <app-sidebar (isShowSidebarOutput)="isShowSidebar($event)"></app-sidebar>
+        <app-sidebar (isShowSidebarOutput)="isShowSidebar($event)" (bodyFilter)="filter($event)"></app-sidebar>
     </div>
     <div
         [ngClass]="{ 'ml-60': isShowSidebarToMargin, 'ml-10': !isShowSidebarToMargin }"
@@ -104,10 +104,10 @@
                 <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
             </button>
             <mat-menu #filterByTime="matMenu" #printMenu="matMenu">
-                <button mat-menu-item>Ngày tạo</button>
-                <button mat-menu-item>Ngày đặt hàng</button>
-                <button mat-menu-item>Ngày giao hàng</button>
-                <button mat-menu-item>Ngày sửa</button>
+                <button mat-menu-item (click)="filterDateWithTime(1)">Ngày tạo</button>
+                <button mat-menu-item (click)="filterDateWithTime(2)">Ngày đặt hàng</button>
+                <button mat-menu-item (click)="filterDateWithTime(3)">Ngày giao hàng</button>
+                <button mat-menu-item (click)="filterDateWithTime(4)">Ngày sửa</button>
             </mat-menu>
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="sortMenu">
                 <i class="fa-solid fa-sort text-green-700 text-sm font-bold mr-1"></i>
@@ -115,8 +115,22 @@
                 <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
             </button>
             <mat-menu #sortMenu="matMenu" #printMenu="matMenu">
-                <button mat-menu-item>Ngày đặt hàng</button>
-                <button mat-menu-item>Ngày đặt hàng</button>
+                <button
+                    mat-menu-item
+                    [ngClass]="{ 'bg-zinc-100': OrderDateDown }"
+                    mat-menu-item
+                    (click)="sortByOrderDate('down')">
+                    <i class="fa-solid fa-arrow-down mr-1"></i>
+                    <span>Ngày đặt hàng</span>
+                </button>
+                <button
+                    mat-menu-item
+                    [ngClass]="{ 'bg-zinc-100': OrderDateUp }"
+                    mat-menu-item
+                    (click)="sortByOrderDate('up')">
+                    <i class="fa-solid fa-arrow-up mr-1"></i>
+                    <span>Ngày đặt hàng</span>
+                </button>
             </mat-menu>
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="manageMenu">
                 <i class="fa-solid fa-lock text-green-700 text-sm font-bold mr-1"></i>
@@ -239,7 +253,11 @@
                                         class="fa-solid fa-comment px-1 py-0.5 border rounded-sm text-sm"></i>
                                     <i
                                         title="Số lần in"
-                                        class="fa-solid fa-print px-1 py-0.5 border rounded-sm text-sm"></i>
+                                        class="fa-solid fa-print px-1 py-0.5 border rounded-sm text-sm flex items-center">
+                                        <span class="text-[10px] ml-1" *ngIf="order.printStatus">
+                                            ({{ order.printStatus }})
+                                        </span>
+                                    </i>
                                 </div>
                             </div>
                         </td>

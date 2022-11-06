@@ -354,6 +354,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 discountRate: product.discountRate || 0,
                 note: product.note,
                 type: product.type,
+                index: product.index, // thêm index để phân biệt sản phẩm trùng
             };
         });
         return listProductToSent;
@@ -374,6 +375,7 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 discountRate: product.discountRate || 0,
                 note: product.note,
                 type: product.type,
+                index: product.index, // đánh index
             };
         });
         return listProductToSent;
@@ -422,10 +424,11 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     unChoose(productRemove: any) {
         // send to service
         this.listProductRemove.push({
-            productId: productRemove.product.id,
-            type: productRemove.type,
-            unitId: productRemove.unit?.id,
-            warehouseId: productRemove.warehouseId,
+            // productId: productRemove.product.id,
+            // type: productRemove.type,
+            // unitId: productRemove.unit?.id,
+            // warehouseId: productRemove.warehouseId,
+            index: productRemove.index,
         });
         this.isRemove = true;
         this.purchaseOrder.sendProductRemove({
@@ -434,17 +437,19 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         });
         // remove to list product
         this.listProduct = this.listProduct.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
+            return productRemove.index != product.index;
         });
+        this.pushListProductToDialog();
     }
 
     unChoosePromotion(productRemove: any) {
         // send to service
         this.listProductPromotionRemove.push({
-            productId: productRemove.product.id,
-            type: productRemove.type,
-            unitId: productRemove.unit?.id,
-            warehouseId: productRemove.warehouseId,
+            // productId: productRemove.product.id,
+            // type: productRemove.type,
+            // unitId: productRemove.unit?.id,
+            // warehouseId: productRemove.warehouseId,
+            index: productRemove.index,
         });
         this.isRemove = true;
         this.purchaseOrder.sendProductPromotionRemove({
@@ -453,22 +458,29 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         });
         // remove to list product
         this.listPromotionProduct = this.listPromotionProduct.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
+            return productRemove.index != product.index;
         });
+        this.pushListProductPromotionToDialog();
     }
 
     unChooseFromListAdd(productRemove: any) {
+        let indexOf = this.listProductAdd.indexOf(productRemove);
         // remove from list add
-        this.listProductAdd = this.listProductAdd.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
+        // this.listProductAdd = this.listProductAdd.filter((product: any) => {
+        //     return productRemove.product.id != product?.product?.id;
+        // });
+        this.listProductAdd.splice(indexOf, 1);
+        this.pushListProductToDialog();
     }
 
     unChooseFromListAddPromotion(productRemove: any) {
+        let indexOf = this.listPromotionProductAdd.indexOf(productRemove);
         // remove from list add
-        this.listPromotionProductAdd = this.listPromotionProductAdd.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
+        // this.listPromotionProductAdd = this.listPromotionProductAdd.filter((product: any) => {
+        //     return productRemove.product.id != product?.product?.id;
+        // });
+        this.listPromotionProductAdd.splice(indexOf, 1);
+        this.pushListProductPromotionToDialog();
     }
 
     setInfoCustomer(id: string) {
@@ -513,9 +525,6 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         });
         this.listProductAdd.forEach((product: any) => {
             this.listChoosenProduct.push({ id: product.product.id });
-        });
-        this.listChoosenProduct.forEach((product: any) => {
-            this.listProductIdsArray.push(product.id);
         });
     }
 
@@ -749,37 +758,62 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
 
     addProductBySearch(product: any, e: any) {
         if (e.source.selected) {
-            let isSelected = false;
-            if (this.listProductIdsArray.includes(product.id)) {
-                isSelected = true;
-            } else {
-                isSelected = false;
-            }
-            if (!isSelected) {
-                product = this.formatFormProduct([product]);
-                this.listProductAdd.push(product[0]);
-                this.pushListProductToDialog();
-            } else {
-                this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
-            }
+            // let isSelected = false;
+            // if (this.listProductIdsArray.includes(product.id)) {
+            //     isSelected = true;
+            // } else {
+            //     isSelected = false;
+            // }
+            // if (!isSelected) {
+            //     product = this.formatFormProduct([product]);
+            //     this.listProductAdd.push(product[0]);
+            //     this.pushListProductToDialog();
+            // } else {
+            //     this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+            // }
+            product = this.formatFormProduct([product]);
+            this.listProductAdd.push(product[0]);
+            this.pushListProductToDialog();
         }
     }
 
     addProductPromotionBySearch(product: any, e: any) {
         if (e.source.selected) {
-            let isSelected = false;
-            if (this.listProductPromotionIdsArray.includes(product.id)) {
-                isSelected = true;
-            } else {
-                isSelected = false;
-            }
-            if (!isSelected) {
-                product = this.formatFormProductPromotion([product]);
-                this.listPromotionProductAdd.push(product[0]);
-                this.pushListProductPromotionToDialog();
-            } else {
-                this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
-            }
+            // let isSelected = false;
+            // if (this.listProductPromotionIdsArray.includes(product.id)) {
+            //     isSelected = true;
+            // } else {
+            //     isSelected = false;
+            // }
+            // if (!isSelected) {
+            //     product = this.formatFormProductPromotion([product]);
+            //     this.listPromotionProductAdd.push(product[0]);
+            //     this.pushListProductPromotionToDialog();
+            // } else {
+            //     this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+            // }
+            product = this.formatFormProductPromotion([product]);
+            this.listPromotionProductAdd.push(product[0]);
+            this.pushListProductPromotionToDialog();
         }
+    }
+
+    coppy(value: any, e: any) {
+        this.stopPropagation(e);
+        navigator.clipboard.writeText(value);
+        this.snackbar.openSnackbar('Coppy thành công', 1000, 'Đóng', 'center', 'bottom', true);
+    }
+
+    selectUnit(product: any, type: any) {
+        if (type === 'retail') {
+            product.unitId = product?.product?.retailUnit?.id;
+            product.unitPrice = product.product.retailPrice;
+            product.totalPrice = product.quantity * product.unitPrice;
+        } else if ((type = 'whosale')) {
+            product.unitId = product?.product?.wholeSaleUnit?.id;
+            product.unitPrice = product.product.price;
+            product.totalPrice = product.quantity * product.unitPrice;
+        }
+        this.discountRate(product);
     }
 }

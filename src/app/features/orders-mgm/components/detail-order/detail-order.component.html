@@ -29,6 +29,11 @@
         <div class="flex gap-x-6 justify-between">
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                 <mat-label>Nhóm</mat-label>
+                <!-- <i
+                    style="cursor: copy"
+                    matPrefix
+                    (click)="coppy(1, $event)"
+                    class="fa-regular fa-copy translate-y-[-45%] mr-1"></i> -->
                 <mat-select formControlName="groupId" [disabled]="type === 'View'">
                     <!-- <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" /> -->
                     <mat-option *ngFor="let group of listGroup" [value]="group.id">
@@ -108,6 +113,7 @@
     </div>
     <mat-tab-group>
         <!-- Sản phẩm đặt hàng -->
+        <!-- <app-detail-product-table></app-detail-product-table> -->
         <mat-tab label="Sản phẩm đặt hàng">
             <div class="flex items-center mt-2 justify-between">
                 <div class="flex items-center">
@@ -210,45 +216,37 @@
                             <td class="custom-th">{{ product.product.sku }}</td>
                             <td class="custom-th">{{ product.product.productName }}</td>
                             <td class="custom-th">
-                                <!-- <span *ngIf="type === 'View'">
-                                    {{ product.unit.unitName }}
-                                </span> -->
-                                <span>
+                                <span *ngIf="type === 'View'">
                                     {{ product.unit.unitName }}
                                 </span>
-                                <!-- <mat-form-field
+                                <!-- <span>
+                                    {{ product.unit.unitName }}
+                                </span> -->
+                                <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
                                     floatLabel="always"
                                     style="width: 100px">
                                     <mat-select [value]="product.unit.id">
                                         <mat-option
-                                            (click)="
-                                                product.unitId = product?.product?.retailUnit?.id;
-                                                product.unitPrice = product.product.retailPrice;
-                                                product.totalPrice = product.quantity * product.unitPrice;
-                                                discountRate(product)
-                                            "
+                                            *ngIf="product?.product?.retailUnit"
+                                            (click)="selectUnit(product, 'retail')"
                                             [value]="product?.product?.retailUnit?.id">
                                             Lẻ - {{ product?.product?.retailUnit?.unitName || 'No Data' }}
                                         </mat-option>
                                         <mat-option
-                                            (click)="
-                                                product.unitId = product?.product?.wholeSaleUnit?.id;
-                                                product.unitPrice = product.product.price;
-                                                product.totalPrice = product.quantity * product.unitPrice;
-                                                discountRate(product)
-                                            "
+                                            *ngIf="product?.product?.wholeSaleUnit"
+                                            (click)="selectUnit(product, 'whosale')"
                                             [value]="product?.product?.wholeSaleUnit?.id">
                                             Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
                                         </mat-option>
                                     </mat-select>
-                                </mat-form-field> -->
+                                </mat-form-field>
                             </td>
                             <td class="custom-th">
-                                <!-- <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div> -->
-                                <div>{{ product.warehouse?.warehouseName }}</div>
-                                <!-- <mat-form-field
+                                <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div>
+                                <!-- <div>{{ product.warehouse?.warehouseName }}</div> -->
+                                <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
                                     floatLabel="always"
@@ -260,7 +258,7 @@
                                             {{ warehouse.warehouseName }}
                                         </mat-option>
                                     </mat-select>
-                                </mat-form-field> -->
+                                </mat-form-field>
                             </td>
                             <td class="custom-th">
                                 <div *ngIf="type === 'View'">{{ product.quantity }}</div>
@@ -378,22 +376,14 @@
                                     style="width: 100px">
                                     <mat-select [value]="product.unit.id">
                                         <mat-option
-                                            (click)="
-                                                product.unitId = product?.product?.retailUnit?.id;
-                                                product.unitPrice = product.product.retailPrice;
-                                                product.totalPrice = product.quantity * product.unitPrice;
-                                                discountRate(product)
-                                            "
+                                            *ngIf="product?.product?.retailUnit"
+                                            (click)="selectUnit(product, 'retail')"
                                             [value]="product?.product?.retailUnit?.id">
                                             Lẻ - {{ product?.product?.retailUnit?.unitName || 'No Data' }}
                                         </mat-option>
                                         <mat-option
-                                            (click)="
-                                                product.unitId = product?.product?.wholeSaleUnit?.id;
-                                                product.unitPrice = product.product.price;
-                                                product.totalPrice = product.quantity * product.unitPrice;
-                                                discountRate(product)
-                                            "
+                                            *ngIf="product?.product?.wholeSaleUnit"
+                                            (click)="selectUnit(product, 'whosale')"
                                             [value]="product?.product?.wholeSaleUnit?.id">
                                             Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
                                         </mat-option>
@@ -619,45 +609,37 @@
                             <td class="custom-th">{{ product.product.sku }}</td>
                             <td class="custom-th">{{ product.product.productName }}</td>
                             <td class="custom-th">
-                                <!-- <span *ngIf="type === 'View'">
-                                    {{ product.unit.unitName }}
-                                </span> -->
-                                <span>
+                                <span *ngIf="type === 'View'">
                                     {{ product.unit.unitName }}
                                 </span>
-                                <!-- <mat-form-field
+                                <!-- <span>
+                                    {{ product.unit.unitName }}
+                                </span> -->
+                                <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
                                     floatLabel="always"
                                     style="width: 100px">
                                     <mat-select [value]="product.unit.id">
                                         <mat-option
-                                            (click)="
-                                                product.unitId = product?.product?.retailUnit?.id;
-                                                product.unitPrice = product.product.retailPrice;
-                                                product.totalPrice = product.quantity * product.unitPrice;
-                                                discountRate(product)
-                                            "
+                                            *ngIf="product?.product?.retailUnit"
+                                            (click)="selectUnit(product, 'retail')"
                                             [value]="product?.product?.retailUnit?.id">
                                             Lẻ - {{ product?.product?.retailUnit?.unitName || 'No Data' }}
                                         </mat-option>
                                         <mat-option
-                                            (click)="
-                                                product.unitId = product?.product?.wholeSaleUnit?.id;
-                                                product.unitPrice = product.product.price;
-                                                product.totalPrice = product.quantity * product.unitPrice;
-                                                discountRate(product)
-                                            "
+                                            *ngIf="product?.product?.wholeSaleUnit"
+                                            (click)="selectUnit(product, 'whosale')"
                                             [value]="product?.product?.wholeSaleUnit?.id">
                                             Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
                                         </mat-option>
                                     </mat-select>
-                                </mat-form-field> -->
+                                </mat-form-field>
                             </td>
                             <td class="custom-th">
-                                <!-- <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div> -->
-                                <div>{{ product.warehouse?.warehouseName }}</div>
-                                <!-- <mat-form-field
+                                <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div>
+                                <!-- <div>{{ product.warehouse?.warehouseName }}</div> -->
+                                <mat-form-field
                                     *ngIf="type === 'Edit'"
                                     appearance="outline"
                                     floatLabel="always"
@@ -669,7 +651,7 @@
                                             {{ warehouse.warehouseName }}
                                         </mat-option>
                                     </mat-select>
-                                </mat-form-field> -->
+                                </mat-form-field>
                             </td>
                             <td class="custom-th">
                                 <div *ngIf="type === 'View'">{{ product.quantity }}</div>
@@ -737,22 +719,14 @@
                                     style="width: 100px">
                                     <mat-select [value]="product.unit.id">
                                         <mat-option
-                                            (click)="
-                                                product.unitId = product?.product?.retailUnit?.id;
-                                                product.unitPrice = product.product.retailPrice;
-                                                product.totalPrice = product.quantity * product.unitPrice;
-                                                discountRate(product)
-                                            "
+                                            *ngIf="product?.product?.retailUnit"
+                                            (click)="selectUnit(product, 'retail')"
                                             [value]="product?.product?.retailUnit?.id">
                                             Lẻ - {{ product?.product?.retailUnit?.unitName || 'No Data' }}
                                         </mat-option>
                                         <mat-option
-                                            (click)="
-                                                product.unitId = product?.product?.wholeSaleUnit?.id;
-                                                product.unitPrice = product.product.price;
-                                                product.totalPrice = product.quantity * product.unitPrice;
-                                                discountRate(product)
-                                            "
+                                            *ngIf="product?.product?.wholeSaleUnit"
+                                            (click)="selectUnit(product, 'whosale')"
                                             [value]="product?.product?.wholeSaleUnit?.id">
                                             Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
                                         </mat-option>

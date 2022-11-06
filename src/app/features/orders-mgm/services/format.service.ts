@@ -76,6 +76,33 @@ export class FormatService {
         return listProdAdd;
     }
 
+    formatUnitIdAndWareHouseId(list: any) {
+        list.forEach((product: any) => {
+            product.warehouseId = product.warehouse?.id;
+            product.unitId = product.unit?.id;
+        });
+        return list;
+    }
+
+    // màn tạo (dùng cho cả product và promotion)
+    formatProductToSentAPI(listProd: any) {
+        let listProductToSentAPI = listProd.map((product: any) => {
+            return {
+                productId: product.product?.id,
+                unitId: product.unitId,
+                warehouseId: product.warehouseId,
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount,
+                discountRate: product.discountRate,
+                note: product.note,
+                type: product.type,
+            };
+        });
+        return listProductToSentAPI;
+    }
+
     // after formatProductPromotionFromCloseDialogAdd
     formatProductPromotionAddToSentApi(listAdd: any) {
         listAdd = listAdd.map((product: any) => {

@@ -31,6 +31,8 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         pageSize: 30,
     };
     dateSearchForm: FormGroup;
+    OrderDateUp: boolean = false;
+    OrderDateDown: boolean = false;
     constructor(
         private activatedroute: ActivatedRoute,
         public datepipe: DatePipe,
@@ -50,7 +52,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         });
         this.dataService.searchText.subscribe((data) => {
             // lấy text
-            this.body.keyword = data;
+            this.body.keyword = data.trim();
             // set lại page
             this.page = 1;
             this.body.page = 1;
@@ -124,7 +126,11 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         if (this.dateSearchForm.get('toDate')?.value) {
             this.body.toDate = moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD');
         }
-        this.body.dateFilter = 1;
+        if (this.body.fromDate === null || this.body.toDate === null) {
+            this.body.dateFilter = null;
+        } else {
+            this.body.dateFilter = 1;
+        }
         // set lại page
         this.page = 1;
         this.body.page = 1;
@@ -139,6 +145,13 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
             this.id.splice(this.id.indexOf(id), 1);
         }
         console.log(this.id);
+    }
+
+    filter(body: any) {
+        // set lại page
+        this.page = 1;
+        this.body = body;
+        this.search(this.body);
     }
 
     print() {
@@ -184,5 +197,23 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
                 this.id.splice(this.id.indexOf(order.id), 1);
             });
         }
+    }
+
+    filterDateWithTime(type: number) {
+        this.body.dateFilter = type;
+        this.search(this.body);
+    }
+
+    sortByOrderDate(type: any) {
+        if (type === 'up') {
+            this.OrderDateUp = true;
+            this.OrderDateDown = false;
+            this.body.isAscending = true;
+        } else if (type === 'down') {
+            this.OrderDateDown = true;
+            this.OrderDateUp = false;
+            this.body.isAscending = false;
+        }
+        this.search(this.body);
     }
 }

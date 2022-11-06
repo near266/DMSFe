@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, DoCheck 
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { FormatService } from '../../../services/format.service';
 
@@ -18,11 +19,13 @@ export class ProductCreateTableComponent implements OnInit, AfterViewInit, DoChe
     listSearchedProduct: any[] = [];
     listChoosenProduct: any[] = [];
     listProductIds: any[] = [];
+    listProductIdsArray: any[] = [];
 
     constructor(
         private dialog: MatDialog,
         private formatService: FormatService,
         private purchaseOrder: PurchaseOrderService,
+        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -87,6 +90,9 @@ export class ProductCreateTableComponent implements OnInit, AfterViewInit, DoChe
                 id: product.product.id,
             };
         });
+        this.listProductIdsArray = this.listProductIds.map((product: any) => {
+            return product.id;
+        });
     }
 
     setWareHouseToAllProduct(id: any) {
@@ -99,11 +105,28 @@ export class ProductCreateTableComponent implements OnInit, AfterViewInit, DoChe
 
     addProductBySearch(product: any, e: any) {
         if (e.source.selected) {
-            let productFormat = this.formatService.formatProductFromCloseDialogAdd([product], []);
+            // let isSelected = false;
+            // if (this.listProductIdsArray.includes(product.id)) {
+            //     isSelected = true;
+            // } else {
+            //     isSelected = false;
+            // }
+            // if (!isSelected) {
+            //     let productFormat = this.formatService.formatProductFromCloseDialogAdd([product], []);
+            //     // product.quantity = 0;
+            //     // product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
+            //     // product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
+            //     // product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+            //     this.listChoosenProduct.push(productFormat[0]);
+            //     this.pushListProductToDialog();
+            // } else {
+            //     this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+            // }
             // product.quantity = 0;
             // product.warehouseId = product.warehouse?.id; // auto chọn kho mặc định
             // product.unitId = product?.retailUnit?.id; // auto chọn đơn vị lẻ
             // product.unitPrice = product?.retailPrice; // auto chọn giá lẻ
+            let productFormat = this.formatService.formatProductFromCloseDialogAdd([product], []);
             this.listChoosenProduct.push(productFormat[0]);
             this.pushListProductToDialog();
         }
@@ -149,8 +172,11 @@ export class ProductCreateTableComponent implements OnInit, AfterViewInit, DoChe
     }
 
     unChoose(productRemove: any) {
-        this.listChoosenProduct = this.listChoosenProduct.filter((product: any) => {
-            return product != productRemove;
-        });
+        let indexOf = this.listChoosenProduct.indexOf(productRemove);
+        // this.listChoosenProduct = this.listChoosenProduct.filter((product: any) => {
+        //     return product != productRemove;
+        // });
+        this.listChoosenProduct.splice(indexOf, 1);
+        this.pushListProductToDialog();
     }
 }
