@@ -70,7 +70,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     storageMenu: Config = {
         icon: '<i class="fa-solid fa-warehouse"></i>',
         title: 'Lưu trữ',
-        menuChildrens: ['Tất cả', 'Mở', 'Khóa'],
+        menuChildrens: ['Tất cả', 'Lưu trữ', 'Không lưu trữ'],
     };
     sourceOrderMenu: Config = {
         icon: '<i class="fa-solid fa-pen-to-square"></i>',
@@ -321,16 +321,16 @@ export class SidebarComponent implements OnInit, AfterViewInit {
                 e = null;
                 break;
             }
-            case 'Mở': {
+            case 'Lưu trữ': {
                 e = true;
                 break;
             }
-            case 'Khóa': {
+            case 'Không lưu trữ': {
                 e = false;
                 break;
             }
             default: {
-                e = null;
+                e = false;
                 break;
             }
         }

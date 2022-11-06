@@ -41,6 +41,7 @@ export class OrderSaleMgmComponent implements OnInit {
         isAscending: false,
         page: 1,
         pageSize: 30,
+        archived: false, // mặc định lấy những đơn k lưu trữ
     };
 
     body: any = {
@@ -48,6 +49,7 @@ export class OrderSaleMgmComponent implements OnInit {
         isAscending: false,
         page: 1,
         pageSize: 30,
+        archived: false, // mặc định lấy những đơn k lưu trữ
     };
 
     createdDateDown = false;

@@ -138,7 +138,7 @@
                 <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
             </button>
             <mat-menu #sortMenu="matMenu" #manageMenu="matMenu">
-                <button mat-menu-item class="flex items-center justify-between">
+                <button (click)="archiveOrders()" mat-menu-item class="flex items-center justify-between">
                     <i class="fa-solid fa-trash mr-2"></i>
                     <span>Xóa nhiều</span>
                 </button>

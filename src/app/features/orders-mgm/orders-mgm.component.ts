@@ -7,6 +7,8 @@ import { DataService } from './services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import moment from 'moment';
+import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
     selector: 'app-orders-mgm',
@@ -14,33 +16,45 @@ import moment from 'moment';
     styleUrls: ['./orders-mgm.component.scss'],
 })
 export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterViewInit {
-    isLoading = true;
-    isShowSidebarToMargin = true;
-    sideBarWidth!: string;
     type!: string;
     listOrder: any = [];
-    totalCount: number;
     id: any = [];
+
+    isLoading = true;
+    isShowSidebarToMargin = true;
+    OrderDateUp: boolean = false;
+    OrderDateDown: boolean = false;
+    sideBarWidth!: string;
+    totalCount: number;
     page: number = 1;
     pageSize: number = 30;
     total: number = 0;
+
+    dateSearchForm: FormGroup;
+
+    defaultBody: any = {
+        sortField: 'CreatedDate',
+        isAscending: false,
+        page: 1,
+        pageSize: 30,
+        archived: false, // mặc định lấy những đơn k lưu trữ
+    };
     body: any = {
         sortField: 'CreatedDate',
         isAscending: false,
         page: 1,
         pageSize: 30,
+        archived: false,
     };
-    dateSearchForm: FormGroup;
-    OrderDateUp: boolean = false;
-    OrderDateDown: boolean = false;
     constructor(
-        private activatedroute: ActivatedRoute,
         public datepipe: DatePipe,
         public router: Router,
         private purchaseOrderService: PurchaseOrderService,
         private dataService: DataService,
         private fb: FormBuilder,
         private purchaseSer: PurchaseOrderService,
+        private confirmService: ConfirmDialogService,
+        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -215,5 +229,47 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
             this.body.isAscending = false;
         }
         this.search(this.body);
+    }
+
+    archiveOrders() {
+        // console.log(this.id);
+        if (this.id.length > 0) {
+            this.confirmService
+                .open(`Bạn có muốn xóa ${this.id.length} bản ghi hay không ?`, ['Xóa', 'Hủy'])
+                .subscribe((data) => {
+                    if (data === 'Xóa') {
+                        this.purchaseOrderService
+                            .archive({
+                                purchaseOrderIds: this.id,
+                                lastModifiedBy: null,
+                            })
+                            .subscribe(
+                                (data) => {},
+                                (err) => {
+                                    this.snackbar.openSnackbar(
+                                        'Có lỗi xảy ra',
+                                        2000,
+                                        'Đóng',
+                                        'center',
+                                        'bottom',
+                                        false,
+                                    );
+                                },
+                                () => {
+                                    this.snackbar.openSnackbar(
+                                        'Xóa thành công',
+                                        2000,
+                                        'Đóng',
+                                        'center',
+                                        'bottom',
+                                        true,
+                                    );
+                                    this.id = [];
+                                    this.search(this.defaultBody);
+                                },
+                            );
+                    }
+                });
+        }
     }
 }

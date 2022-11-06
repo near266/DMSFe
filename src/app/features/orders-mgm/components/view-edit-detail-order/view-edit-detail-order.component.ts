@@ -343,7 +343,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         dialogRef.afterClosed().subscribe((data) => {
             if (data === 'Lưu trữ') {
                 let body = {
-                    id: this.id,
+                    purchaseOrderIds: [this.id],
                 };
                 this.purchaseOrder.archive(body).subscribe(
                     (data) => {},
