@@ -22,17 +22,17 @@
                 <td class="border-x border-solid align-middle px-2 py-3">{{ report.orderEmployee?.employeeName}}</td>
                 <td class="border-x border-solid align-middle px-2 py-3">{{ report.group }}</td>
                 <td class="border-x border-solid align-middle px-2 py-3">{{ report.source }}</td>
-                <td class="border-x border-solid align-middle px-2 py-3 cursor-pointer"><span class="text-green-text hover:underline underline-offset-4">{{ report.orderCode }}</span></td>
+                <td class="border-x border-solid align-middle px-2 py-3 cursor-pointer" (click)="navigateToDetail(report)"><span class="text-green-text hover:underline underline-offset-4">{{ report.orderCode }}</span></td>
                 <td class="border-x border-solid align-middle px-2 py-3 min-w-[100px]">{{ report.orderDate | date }}</td>
-                <td class="border-x border-solid align-middle px-2 py-3">{{ report.customer.customerCode }}</td>
-                <td class="border-x border-solid align-middle px-2 py-3 min-w-[200px]">{{ report.customer.customerName }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ report.customer?.customerCode }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 min-w-[200px]">{{ report.customer?.customerName }}</td>
                 <td class="border-x border-solid align-middle px-2 py-3">{{ null }}</td>
                 <td class="border-x border-solid align-middle px-2 py-3">{{ null }}</td>
                 <td class="border-x border-solid align-middle px-2 py-3">{{ null }}</td>
-                <td class="border-x border-solid align-middle px-2 py-3">{{ report.customer.area }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3">{{ report.customer?.area }}</td>
                 <td class="border-x border-solid align-middle px-2 py-3">{{ report.customer?.channel?.channelName }}</td>
-                <td class="border-x border-solid align-middle px-2 py-3 min-w-[200px]">{{ report.customer.customerGroup?.customerName }}</td>
-                <td class="border-x border-solid align-middle px-2 py-3 min-w-[100px]">{{ report.customer.customerType?.customerTypeName }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 min-w-[200px]">{{ report.customer?.customerGroup?.customerName }}</td>
+                <td class="border-x border-solid align-middle px-2 py-3 min-w-[100px]">{{ report.customer?.customerType?.customerTypeName }}</td>
                 <td class="border-x border-solid align-middle h-full">
                   <tr *ngFor="let prod of report.listProducts" class="min-h-fit text-xs h-20 w-fit"><td class=" border-solid align-middle px-2 py-3">{{prod.productCode}}</td></tr>
                 </td>

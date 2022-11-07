@@ -48,10 +48,14 @@ export class EmployeeService {
       .pipe(map((response: any) => response));
   }
 
-  ArchiveEmployee(id: any, LastModifiedBy: any, LastModifiedDate: any): Observable<any> {
+  ArchiveEmployee(body: any): Observable<any> {
     return this.http
-      .post(gateway_url + '/Employee/ArchivedEmployee?Id=' + id + '&Archived=' + true, {})
+      .post(gateway_url + '/Employee/ArchivedEmployee', body)
       .pipe(map((response: any) => response));
+  }
+
+  GetGroupById(id: any): Observable<any> {
+    return this.http.get(gateway_url + '/GetGroupById?Id=' + id).pipe(map((response: any) => response));
   }
 
   addGroup(body: any): Observable<any> {
