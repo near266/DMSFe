@@ -286,9 +286,11 @@ export class UserTreeViewComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe( data => {
         if(data) {
-          if(node.data.children) {
-            this.updateNode(node);
-          }
+          node.data.name = data.event;
+          node.treeModel.update();
+          // if(node.data.children) {
+          //   this.updateNode(node);
+          // }
         }
       });
     }

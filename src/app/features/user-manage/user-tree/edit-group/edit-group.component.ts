@@ -77,28 +77,24 @@ export class EditGroupComponent implements OnInit, AfterViewInit {
   }
 
   submit() {
-    let body: any;
-    if(this.id == 'root') {
-      body = {
-        unitTreeGroup_Code: this.addForm.controls['unitTreeGroup_Code'].value,
-        name: this.addForm.controls['name'].value,
-        supervise: this.addForm.controls['supervise'].value,
-        type: 0
-      }
-    } else {
-      body = {
-        parentNodeId: this.id,
-        unitTreeGroup_Code: this.addForm.controls['unitTreeGroup_Code'].value,
-        name: this.addForm.controls['name'].value,
-        supervise: this.addForm.controls['supervise'].value,
-        type: 0
-      }
+    if(!this.addForm.controls['unitTreeGroup_Code'].value || !this.addForm.controls['name'].value) {
+      this.snackbar.openSnackbar('Vui lòng không để trống mã nhóm và tên nhóm', 2000, 'Đóng', 'center', 'bottom', false);
+      return;
     }
-    this.employeeService.addGroup(body).subscribe( data => {
-      this.snackbar.openSnackbar('Thêm đơn vị thành công', 2000, 'Đóng', 'center', 'bottom', true);
-      this.dialogRef.close({event: true});
+    let body: any = {
+      id: this.id,
+      unitTreeGroup_Code: ('' + this.addForm.controls['unitTreeGroup_Code'].value).trim(),
+      name: ('' + this.addForm.controls['name'].value).trim(),
+      supervise: this.addForm.controls['supervise'].value,
+      type: 0
+    };
+    this.employeeService.updateGroup(body).subscribe( data => {
+      if(data) {
+        this.snackbar.openSnackbar('Sửa nhóm thành công', 2000, 'Đóng', 'center', 'bottom', true);
+        this.dialogRef.close({event: body.name});
+      }
     }, (error) => {
-      this.snackbar.openSnackbar('Thêm đơn vị thất bại', 2000, 'Đóng', 'center', 'bottom', true);
+      this.snackbar.openSnackbar('Sửa nhóm thất bại', 2000, 'Đóng', 'center', 'bottom', false);
     });
   }
 
