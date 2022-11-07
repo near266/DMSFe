@@ -169,22 +169,60 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     }
 
     print() {
-        let body;
+        let body: any;
         body = {
             filter: null,
             listId: this.id,
             type: 2,
         };
-        console.log('Print');
-        this.purchaseSer.print(body).subscribe({
-            next: (data) => {
-                var blob = new Blob([data], {
-                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                });
-                const blobUrl = window.URL.createObjectURL(blob);
-                window.open(blobUrl);
-            },
-        });
+        this.confirmService
+            .open(`Bạn có muốn in ${this.id.length} bản ghi đã chọn không?`, ['In', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'In') {
+                    this.purchaseSer.print(body).subscribe(
+                        (data) => {
+                            var blob = new Blob([data], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            });
+                            const blobUrl = window.URL.createObjectURL(blob);
+                            window.open(blobUrl);
+                        },
+                        (err) => {
+                            this.snackbar.failureSnackBar();
+                        },
+                    );
+                } else {
+                }
+            });
+    }
+
+    printFilter() {
+        let bodySent: any;
+        bodySent = {
+            filter: this.body,
+            type: 2,
+        };
+        bodySent.filter.pageSize = this.total;
+        bodySent.filter.page = 1;
+        this.confirmService
+            .open(`Bạn có muốn in ${this.total} bản ghi đã chọn không?`, ['In', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'In') {
+                    this.purchaseSer.print(bodySent).subscribe(
+                        (data) => {
+                            var blob = new Blob([data], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            });
+                            const blobUrl = window.URL.createObjectURL(blob);
+                            window.open(blobUrl);
+                        },
+                        (err) => {
+                            this.snackbar.failureSnackBar();
+                        },
+                    );
+                } else {
+                }
+            });
     }
 
     clearDatePicker() {

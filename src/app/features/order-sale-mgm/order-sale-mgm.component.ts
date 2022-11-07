@@ -164,68 +164,104 @@ export class OrderSaleMgmComponent implements OnInit {
     }
 
     export() {
-        console.log(this.formFilterReceive);
-
-        let body;
+        let body: any;
         body = {
             filter: null,
             listId: this.id,
             type: 2,
         };
+        this.confirmService
+            .open(`Bạn có muốn xuất ${this.id.length} bản ghi đã chọn hay không?`, ['Xuất', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'Xuất') {
+                    this.saleReceiptService.export(body).subscribe(
+                        (data) => {
+                            const blob = new Blob([data], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            });
+                            const url = window.URL.createObjectURL(blob);
+                            window.open(url);
+                        },
+                        (err) => {
+                            this.snackbar.failureSnackBar();
+                        },
+                    );
+                } else {
+                }
+            });
+    }
+    // exportWithFilter() {
+    //     console.log(this.formFilterReceive);
+    //     let formFilter;
+    //     if (this.formFilterReceive == undefined) {
+    //         formFilter = {
+    //             keyword: null,
+    //             deliveryDate: null,
+    //             orderEmployeeId: null,
+    //             customerTypeId: null,
+    //             customerGroupId: null,
+    //             areaId: null,
+    //             productKey: null,
+    //             status: null,
+    //             printStatus: true,
+    //             paymentMethod: 0,
+    //             // page: 1,
+    //             // pageSize: 100000,
+    //             sortField: null,
+    //             isAscending: true,
+    //             fromDate: moment(this.dateSearchForm.get('fromDate')?.value).format('YYYY-MM-DD'),
+    //             toDate: moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD'),
+    //             dateFilter: null,
+    //         };
+    //     } else {
+    //         formFilter = null;
+    //     }
+    //     let body = {
+    //         filter: formFilter,
+    //         listId: null,
+    //         type: 1,
+    //     };
+    //     console.log('ExportWithFilter', body);
+    //     this.saleReceiptService.export(body).subscribe({
+    //         next: (data) => {
+    //             const blob = new Blob([data], {
+    //                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    //             });
+    //             const url = window.URL.createObjectURL(blob);
+    //             window.open(url);
+    //         },
+    //     });
+    // }
 
-        console.log(body);
-        this.saleReceiptService.export(body).subscribe({
-            next: (data) => {
-                const blob = new Blob([data], {
-                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                });
-                const url = window.URL.createObjectURL(blob);
-                window.open(url);
-            },
-        });
-    }
     exportWithFilter() {
-        console.log(this.formFilterReceive);
-        let formFilter;
-        if (this.formFilterReceive == undefined) {
-            formFilter = {
-                keyword: null,
-                deliveryDate: null,
-                orderEmployeeId: null,
-                customerTypeId: null,
-                customerGroupId: null,
-                areaId: null,
-                productKey: null,
-                status: null,
-                printStatus: true,
-                paymentMethod: 0,
-                // page: 1,
-                // pageSize: 100000,
-                sortField: null,
-                isAscending: true,
-                fromDate: moment(this.dateSearchForm.get('fromDate')?.value).format('YYYY-MM-DD'),
-                toDate: moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD'),
-                dateFilter: null,
-            };
-        } else {
-            formFilter = null;
-        }
-        let body = {
-            filter: formFilter,
-            listId: null,
-            type: 1,
+        let bodySent: any;
+        bodySent = {
+            filter: this.body,
+            type: 2,
         };
-        console.log('ExportWithFilter', body);
-        this.saleReceiptService.export(body).subscribe({
-            next: (data) => {
-                const blob = new Blob([data], {
-                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                });
-                const url = window.URL.createObjectURL(blob);
-                window.open(url);
-            },
-        });
+        bodySent.filter.pageSize = this.total;
+        bodySent.filter.page = 1;
+        this.confirmService
+            .open(`Bạn có muốn xuất ${this.total} bản ghi đã chọn không?`, ['Xuất', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'Xuất') {
+                    this.saleReceiptService.print(bodySent).subscribe(
+                        (data) => {
+                            var blob = new Blob([data], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            });
+                            const blobUrl = window.URL.createObjectURL(blob);
+                            window.open(blobUrl);
+                        },
+                        (err) => {
+                            this.snackbar.failureSnackBar();
+                        },
+                    );
+                } else {
+                }
+            });
     }
+
     print() {
         let body;
         body = {
@@ -243,6 +279,35 @@ export class OrderSaleMgmComponent implements OnInit {
                 window.open(blobUrl);
             },
         });
+    }
+
+    printFilter() {
+        let bodySent: any;
+        bodySent = {
+            filter: this.body,
+            type: 2,
+        };
+        bodySent.filter.pageSize = this.total;
+        bodySent.filter.page = 1;
+        this.confirmService
+            .open(`Bạn có muốn in ${this.total} bản ghi đã chọn không?`, ['In', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'In') {
+                    this.saleReceiptService.print(bodySent).subscribe(
+                        (data) => {
+                            var blob = new Blob([data], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            });
+                            const blobUrl = window.URL.createObjectURL(blob);
+                            window.open(blobUrl);
+                        },
+                        (err) => {
+                            this.snackbar.failureSnackBar();
+                        },
+                    );
+                } else {
+                }
+            });
     }
     filter(body: any) {
         // set lại trang
