@@ -62,6 +62,12 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
     defaultCustomer: any;
     defaultOrderEmployee: any;
 
+    // coppy
+    groupCoppy: any = '';
+    orderCoppy: any = '';
+    routeCoppy: any = '';
+    customerCoppy: any = '';
+
     productFilterCtrl: FormControl = new FormControl();
     productPromotionFilterCtrl: FormControl = new FormControl();
     constructor(
@@ -241,6 +247,10 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         });
     }
 
+    test(e: any) {
+        console.log(e);
+    }
+
     getListWareHouse() {
         this.subscription.push(
             this.purchaseOrder.getAllWarehouses().subscribe((data) => {
@@ -370,9 +380,9 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 warehouseId: product.warehouseId,
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount || 0,
-                discountRate: product.discountRate || 0,
+                totalPrice: 0,
+                discount: 0,
+                discountRate: 0,
                 note: product.note,
                 type: product.type,
                 index: product.index, // đánh index
@@ -411,9 +421,9 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
                 warehouseId: product.warehouseId,
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount || 0,
-                discountRate: product.discountRate || 0,
+                totalPrice: 0,
+                discount: 0,
+                discountRate: 0,
                 note: product.note,
                 type: product.type,
             };

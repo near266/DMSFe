@@ -78,7 +78,7 @@ export class PromotionTableComponent implements OnInit, OnChanges {
             product.unitId = product?.product?.wholeSaleUnit?.id;
             product.unitPrice = product.product.price;
         }
-        product.totalPrice = product.quantity * product.unitPrice;
+        product.totalPrice = 0;
         this.discountRate(product);
     }
 

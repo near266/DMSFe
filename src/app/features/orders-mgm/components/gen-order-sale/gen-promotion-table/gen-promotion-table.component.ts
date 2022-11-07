@@ -107,7 +107,7 @@ export class GenPromotionTableComponent implements OnInit, OnChanges, DoCheck {
             product.unitId = product?.product?.wholeSaleUnit?.id;
             product.unitPrice = product.product.price;
         }
-        product.totalPrice = product.quantity * product.unitPrice;
+        product.totalPrice = 0;
         this.discountRate(product);
     }
 

@@ -113,9 +113,9 @@ export class FormatService {
                 warehouseId: product.warehouseId, // chưa xét trường hợp k có kho mặc định
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount,
-                discountRate: product.discountRate,
+                totalPrice: 0,
+                discount: 0,
+                discountRate: 0,
                 note: product.note,
                 type: 2, // hoặc product.type vì đã formatProductPromotionFromCloseDialogAdd trước
             };

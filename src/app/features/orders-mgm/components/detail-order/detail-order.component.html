@@ -29,14 +29,14 @@
         <div class="flex gap-x-6 justify-between">
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                 <mat-label>Nhóm</mat-label>
-                <!-- <i
+                <i
                     style="cursor: copy"
                     matPrefix
-                    (click)="coppy(1, $event)"
-                    class="fa-regular fa-copy translate-y-[-45%] mr-1"></i> -->
+                    (click)="coppy(groupCoppy, $event)"
+                    class="fa-regular fa-copy translate-y-[-45%] mr-1"></i>
                 <mat-select formControlName="groupId" [disabled]="type === 'View'">
                     <!-- <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" /> -->
-                    <mat-option *ngFor="let group of listGroup" [value]="group.id">
+                    <mat-option (click)="test(group)" *ngFor="let group of listGroup" [value]="group.id">
                         {{ group.name }}
                     </mat-option>
                 </mat-select>
@@ -162,11 +162,11 @@
                     </button>
                 </div>
                 <div class="flex items-center">
-                    <button
+                    <!-- <button
                         class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium mr-3">
                         <i class="fa-solid fa-file-import mr-2 px-2"></i>
                         <span class="px-2">Nhập excel</span>
-                    </button>
+                    </button> -->
                     <div>
                         <mat-select
                             style="width: fit-content"
@@ -559,11 +559,11 @@
                     </button>
                 </div>
                 <div class="flex items-center">
-                    <button
+                    <!-- <button
                         class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium mr-3">
                         <i class="fa-solid fa-file-import mr-2 px-2"></i>
                         <span class="px-2">Nhập excel</span>
-                    </button>
+                    </button> -->
                     <div>
                         <mat-select
                             style="width: fit-content"

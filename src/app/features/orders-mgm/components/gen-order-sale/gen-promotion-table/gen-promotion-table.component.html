@@ -125,11 +125,7 @@
                             }"
                             matInput
                             [ngModel]="product.quantity"
-                            (ngModelChange)="
-                                product.quantity = $event;
-                                countDiscount(product);
-                                product.totalPrice = product.quantity * product.unitPrice
-                            "
+                            (ngModelChange)="product.quantity = $event; countDiscount(product); product.totalPrice = 0"
                             [ngModelOptions]="{ standalone: true }" />
                         <!-- <input
                             min="0"
