@@ -6,7 +6,7 @@
                 <div class="text-red-500 mr-4">*</div>
                 <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
                     placeholder="example@gmail.com" [ngClass]="{'border-red-600':this.employee.get('email')?.errors}"
-                    *ngIf="status != 'view'" formControlName="email" required>
+                    disabled="{{status != 'view}}" *ngIf="status != 'view'" formControlName="email" required>
                 <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.email}}</div>
             </div>
         </div>
