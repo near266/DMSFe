@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
+import { DetailProductTableComponent } from './features/orders-mgm/components/detail-order/detail-product-table/detail-product-table.component';
 
 const routes: Routes = [
     {

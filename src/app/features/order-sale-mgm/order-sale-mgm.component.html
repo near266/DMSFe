@@ -2,7 +2,6 @@
     <div class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
         <app-sidebar
             (isShowSidebarOutput)="isShowSidebar($event)"
-            (formFilterFromChild)="receiveFilter($event)"
             (bodyFilter)="filter($event)"></app-sidebar>
     </div>
     <div
@@ -108,11 +107,11 @@
                 <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
             </button>
             <mat-menu #filterByTime="matMenu" #printMenu="matMenu">
-                <button mat-menu-item>Ngày tạo</button>
-                <button mat-menu-item>Ngày sửa</button>
-                <button mat-menu-item>Ngày bán hàng</button>
-                <button mat-menu-item>Ngày đặt hàng</button>
-                <button mat-menu-item>Ngày giao hàng</button>
+                <button mat-menu-item (click)="filterDateWithTime(1)">Ngày tạo</button>
+                <button mat-menu-item (click)="filterDateWithTime(2)">Ngày sửa</button>
+                <button mat-menu-item (click)="filterDateWithTime(3)">Ngày bán hàng</button>
+                <button mat-menu-item (click)="filterDateWithTime(4)">Ngày đặt hàng</button>
+                <button mat-menu-item (click)="filterDateWithTime(5)">Ngày giao hàng</button>
             </mat-menu>
             <button class="p-2 button-option mr-2" [matMenuTriggerFor]="sortMenu">
                 <i class="fa-solid fa-sort text-green-700 text-sm font-bold mr-1"></i>
@@ -138,7 +137,7 @@
                 <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
             </button>
             <mat-menu #sortMenu="matMenu" #manageMenu="matMenu">
-                <button mat-menu-item class="flex items-center justify-between">
+                <button mat-menu-item class="flex items-center justify-between" (click)="archiveOrders()">
                     <i class="fa-solid fa-trash mr-2"></i>
                     <span>Xóa nhiều</span>
                 </button>

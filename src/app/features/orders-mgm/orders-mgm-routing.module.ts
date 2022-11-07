@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CreatePurchaseOrderComponent } from './components/create-purchase-order/create-purchase-order.component';
 import { OrdersMgmComponent } from './orders-mgm.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
+import { DetailProductTableComponent } from './components/detail-order/detail-product-table/detail-product-table.component';
 
 const routes: Routes = [
     {

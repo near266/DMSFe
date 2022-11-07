@@ -1,6 +1,6 @@
 <div class="flex items-center mt-2 justify-between">
     <div class="flex items-center">
-        <mat-form-field *ngIf="type === 'Edit'" style="font-size: 8px; padding-bottom: 0px" appearance="outline">
+        <mat-form-field style="font-size: 8px; padding-bottom: 0px" appearance="outline">
             <mat-label style="font-size: 14px">Search</mat-label>
             <mat-select style="font-size: 12px">
                 <!-- <input
@@ -17,7 +17,7 @@
                 </mat-option>
                 <mat-option [value]="0">--Chọn sản phẩm--</mat-option>
                 <mat-option
-                    (onSelectionChange)="addProductPromotionBySearch(product, $event)"
+                    (onSelectionChange)="addProductBySearch(product, $event)"
                     style="height: 50px"
                     class="flex flex-col"
                     *ngFor="let product of listSearchedProduct">
@@ -27,8 +27,7 @@
             </mat-select>
         </mat-form-field>
         <button
-            *ngIf="type === 'Edit'"
-            (click)="openDialogProductPromotion()"
+            (click)="openDialogProduct()"
             class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
             <i class="fa-solid fa-filter mr-2 px-2"></i>
             <span class="px-2">Tìm kiếm nâng cao</span>
@@ -47,9 +46,8 @@
         </button>
         <div>
             <mat-select
-                (selectionChange)="setWareHouseToAllProduct($event.value)"
                 style="width: fit-content"
-                [disabled]="type === 'View'"
+                (selectionChange)="setWareHouseToAllProduct($event.value)"
                 class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium cursor-pointer"
                 [value]="0">
                 <mat-option [value]="0" class="bg-white hover:bg-zinc-300">--Chọn kho mặc định--</mat-option>
@@ -59,7 +57,6 @@
                     class="bg-white hover:bg-zinc-300">
                     {{ warehouse.warehouseName }}
                 </mat-option>
-                <option value="3" class="bg-white hover:bg-zinc-300">Hàng NanoFrance</option>
             </mat-select>
         </div>
     </div>
@@ -77,37 +74,30 @@
                     Số lượng
                     <!-- <span class="text-red-500">(Tổng: 0)</span> -->
                 </th>
+                <th scope="col" class="custom-th">Đơn giá</th>
+                <th scope="col" class="custom-th">Thành tiền</th>
+                <th scope="col" class="custom-th">Chiết khấu</th>
+                <th scope="col" class="custom-th">Tỷ lệ CK</th>
                 <th scope="col" class="custom-th">Ghi chú</th>
-                <th *ngIf="type === 'Edit'" scope="col" class="custom-th">Xóa</th>
+                <th scope="col" class="custom-th">Xóa</th>
             </tr>
         </thead>
         <tbody>
-            <!-- list available product promotion -->
-            <tr *ngFor="let product of listPromotionProduct; index as i" class="custom-tr">
+            <tr *ngFor="let product of listProduct; index as i" class="custom-tr">
                 <td class="custom-th">{{ i + 1 }}</td>
                 <td class="custom-th">{{ product.product.sku }}</td>
                 <td class="custom-th">{{ product.product.productName }}</td>
                 <td class="custom-th">
-                    <span *ngIf="type === 'View'">
-                        {{ product.unit.unitName }}
-                    </span>
-                    <!-- <span>
-                        {{ product.unit.unitName }}
-                    </span> -->
-                    <mat-form-field
-                        *ngIf="type === 'Edit'"
-                        appearance="outline"
-                        floatLabel="always"
-                        style="width: 100px">
-                        <mat-select [value]="product.unit.id">
+                    <mat-form-field appearance="outline" floatLabel="always" style="width: 100px">
+                        <mat-select [value]="product.unitId">
                             <mat-option
-                                *ngIf="product?.product?.retailUnit"
+                                *ngIf="product.product?.retailUnit"
                                 (click)="selectUnit(product, 'retail')"
                                 [value]="product?.product?.retailUnit?.id">
                                 Lẻ - {{ product?.product?.retailUnit?.unitName || 'No Data' }}
                             </mat-option>
                             <mat-option
-                                *ngIf="product?.product?.wholeSaleUnit"
+                                *ngIf="product.product?.wholeSaleUnit"
                                 (click)="selectUnit(product, 'whosale')"
                                 [value]="product?.product?.wholeSaleUnit?.id">
                                 Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
@@ -116,13 +106,7 @@
                     </mat-form-field>
                 </td>
                 <td class="custom-th">
-                    <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div>
-                    <!-- <div>{{ product.warehouse?.warehouseName }}</div> -->
-                    <mat-form-field
-                        *ngIf="type === 'Edit'"
-                        appearance="outline"
-                        floatLabel="always"
-                        style="width: 100px">
+                    <mat-form-field appearance="outline" floatLabel="always" style="width: 100px">
                         <mat-select
                             [value]="product.warehouseId"
                             (selectionChange)="product.warehouseId = $event.value">
@@ -133,12 +117,7 @@
                     </mat-form-field>
                 </td>
                 <td class="custom-th">
-                    <div *ngIf="type === 'View'">{{ product.quantity }}</div>
-                    <mat-form-field
-                        *ngIf="type === 'Edit'"
-                        appearance="outline"
-                        style="width: 80px"
-                        floatLabel="always">
+                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
                         <input
                             currencyMask
                             [options]="{
@@ -154,88 +133,29 @@
                             (ngModelChange)="
                                 product.quantity = $event;
                                 product.totalPrice = product.quantity * product.unitPrice;
-                                discountRate(product)
+                                countDiscount(product)
                             "
                             [ngModelOptions]="{ standalone: true }" />
-                    </mat-form-field>
-                </td>
-                <td class="custom-th">
-                    <div *ngIf="type === 'View'">
-                        {{ product.note }}
-                    </div>
-                    <mat-form-field
-                        *ngIf="type === 'Edit'"
-                        appearance="outline"
-                        style="width: 80px"
-                        floatLabel="always">
-                        <input
-                            type="text"
+                        <!-- <input
+                            min="0"
+                            type="number"
                             matInput
-                            [(ngModel)]="product.note"
-                            [ngModelOptions]="{ standalone: true }" />
+                            [(ngModel)]="product.quantity"
+                            (input)="
+                                product.totalPrice = product.quantity * product.unitPrice;
+                                discountRate(product)
+                            "
+                            [ngModelOptions]="{ standalone: true }" /> -->
                     </mat-form-field>
                 </td>
-                <td *ngIf="type === 'Edit'" class="custom-th" (click)="stopPropagation($event); unChoose(product)">
-                    <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
-                </td>
-            </tr>
-            <!-- list add product promotion -->
-            <tr *ngFor="let product of listProductPromotionAdd; index as i" class="custom-tr">
-                <td class="custom-th">{{ i + 1 }}</td>
-                <td class="custom-th">{{ product.product.sku }}</td>
-                <td class="custom-th">{{ product.product.productName }}</td>
+                <td class="custom-th">{{ product.unitPrice | currency: 'VND':'symbol' }}</td>
+                <td class="custom-th">{{ product.totalPrice | currency: 'VND':'symbol' }}</td>
                 <td class="custom-th">
-                    <span *ngIf="type === 'View'">
-                        {{ product.unit?.unitName }}
-                    </span>
-                    <mat-form-field
-                        *ngIf="type === 'Edit'"
-                        appearance="outline"
-                        floatLabel="always"
-                        style="width: 100px">
-                        <mat-select [value]="product.unitId">
-                            <mat-option
-                                *ngIf="product?.product?.retailUnit"
-                                (click)="selectUnit(product, 'retail')"
-                                [value]="product?.product?.retailUnit?.id">
-                                Lẻ - {{ product?.product?.retailUnit?.unitName || 'No Data' }}
-                            </mat-option>
-                            <mat-option
-                                *ngIf="product?.product?.wholeSaleUnit"
-                                (click)="selectUnit(product, 'whosale')"
-                                [value]="product?.product?.wholeSaleUnit?.id">
-                                Chẵn - {{ product?.product?.wholeSaleUnit?.unitName || 'No Data' }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </td>
-                <td class="custom-th">
-                    <div *ngIf="type === 'View'">{{ product.warehouse?.warehouseName }}</div>
-                    <mat-form-field
-                        *ngIf="type === 'Edit'"
-                        appearance="outline"
-                        floatLabel="always"
-                        style="width: 100px">
-                        <mat-select
-                            [value]="product.warehouseId"
-                            (selectionChange)="product.warehouseId = $event.value">
-                            <mat-option *ngFor="let warehouse of listWarehouse" [value]="warehouse.id">
-                                {{ warehouse.warehouseName }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </td>
-                <td class="custom-th">
-                    <div *ngIf="type === 'View'">{{ product.quantity }}</div>
-                    <mat-form-field
-                        *ngIf="type === 'Edit'"
-                        appearance="outline"
-                        style="width: 80px"
-                        floatLabel="always">
+                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
                         <input
                             currencyMask
                             [options]="{
-                                suffix: '',
+                                suffix: 'đ',
                                 thousands: '.',
                                 prefix: '',
                                 decimal: ',',
@@ -243,20 +163,45 @@
                                 allowNegative: false
                             }"
                             matInput
-                            [ngModel]="product.quantity"
-                            (ngModelChange)="product.quantity = $event; updateTotalPrice(product)"
+                            [ngModel]="product.discount"
+                            (ngModelChange)="product.discount = $event; discountRate(product)"
                             [ngModelOptions]="{ standalone: true }" />
+                        <!-- <input
+                            min="0"
+                            type="number"
+                            matInput
+                            [(ngModel)]="product.discount"
+                            (input)="discountRate(product)"
+                            [ngModelOptions]="{ standalone: true }" /> -->
                     </mat-form-field>
                 </td>
                 <td class="custom-th">
-                    <div *ngIf="type === 'View'">
-                        {{ product.note }}
-                    </div>
-                    <mat-form-field
-                        *ngIf="type === 'Edit'"
-                        appearance="outline"
-                        style="width: 80px"
-                        floatLabel="always">
+                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                        <input
+                            currencyMask
+                            [options]="{
+                                suffix: '%',
+                                thousands: '.',
+                                prefix: '',
+                                decimal: ',',
+                                precision: 0,
+                                allowNegative: false
+                            }"
+                            matInput
+                            [ngModel]="product.discountRate"
+                            (ngModelChange)="product.discountRate = $event; countDiscount(product)"
+                            [ngModelOptions]="{ standalone: true }" />
+                        <!-- <input
+                            min="0"
+                            type="number"
+                            matInput
+                            (input)="countDiscount(product)"
+                            [(ngModel)]="product.discountRate"
+                            [ngModelOptions]="{ standalone: true }" /> -->
+                    </mat-form-field>
+                </td>
+                <td class="custom-th">
+                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
                         <input
                             type="text"
                             matInput
@@ -264,10 +209,7 @@
                             [ngModelOptions]="{ standalone: true }" />
                     </mat-form-field>
                 </td>
-                <td
-                    *ngIf="type === 'Edit'"
-                    class="custom-th"
-                    (click)="stopPropagation($event); unChooseFromListAdd(product)">
+                <td class="custom-th" (click)="stopPropagation($event); unChoose(product)">
                     <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
                 </td>
             </tr>

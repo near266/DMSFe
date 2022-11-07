@@ -28,6 +28,7 @@ export class FormatService {
                 discountRate: product.discountRate,
                 note: product.note,
                 type: product.type, // update thì k được thay đổi type product
+                index: product.index, // đánh index để phân biệt sản phẩm trùng
             };
         });
         return list;

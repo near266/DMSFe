@@ -5,7 +5,12 @@
         </div>
         <mat-form-field class="w-8/12 ml-1 text-[12px]" appearance="outline">
             <mat-label>Tìm kiếm phiếu bán hàng</mat-label>
-            <input matInput class="bg-white" [(ngModel)]="searchText" formControlName="keyword" (input)="filter()" />
+            <input
+                matInput
+                class="bg-white"
+                [(ngModel)]="searchText"
+                formControlName="keyword"
+                (keyup.enter)="searchKeyword()" />
         </mat-form-field>
         <i
             (click)="searchKeyword()"
@@ -28,21 +33,33 @@
     <!-- Nguồn menu -->
     <app-menu-collapse (Selection)="selectSourceBill($event)" [Config]="sourceMenu"></app-menu-collapse>
     <!-- Thanh toán menu -->
-    <app-menu-collapse (Selection)="selectPayment($event)" [Config]="paymentMenu"></app-menu-collapse>
+    <!-- <app-menu-collapse (Selection)="selectPayment($event)" [Config]="paymentMenu"></app-menu-collapse> -->
     <!-- Loại khách hàng menu -->
     <app-menu-collapse (Selection)="selectTypeCustomer($event)" [Config]="typeCustomerMenu"></app-menu-collapse>
     <!-- Nhóm khách hàng menu -->
     <app-menu-collapse (Selection)="selectGroupCustomer($event)" [Config]="groupCustomerMenu"></app-menu-collapse>
     <!-- Khu vực menu -->
-    <div class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+    <div
+        (click)="isSelectMenu = !isSelectMenu"
+        class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
         <i class="fa-solid fa-earth-americas mr-3 text-base"></i>
         <span class="text-sm">Khu vực</span>
     </div>
+    <div *ngIf="isSelectMenu" class="mt-1 w-full">
+        <mat-form-field style="font-size: 8px" class="px-2 w-full" appearance="outline">
+            <mat-label style="font-size: 14px">--Chọn khu vực--</mat-label>
+            <mat-select style="font-size: 12px">
+                <mat-option (onSelectionChange)="selectArea(area.id)" [value]="area.id" *ngFor="let area of areaList">
+                    <div>{{ area?.areaName }}</div>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
     <!-- Người bán menu -->
-    <div class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+    <!-- <div class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
         <i class="fa-solid fa-thumbs-up mr-3"></i>
         <span class="text-sm">Người bán</span>
-    </div>
+    </div> -->
     <!-- Ngày giao hàng menu -->
     <div
         class="w-full items-center justify-between hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">

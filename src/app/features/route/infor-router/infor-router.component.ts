@@ -156,10 +156,25 @@ export class InforRouterComponent implements OnInit {
       }
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       this.searchAllCusInRoute(this.idRoute, "");
       this.bodyAddCusToRouteFromListCus = result.body;
-      this.listCusAfterAddPreview = result.listCusPreview;
+
+      let arrayCusIdExcel:any[] = [];
+      result.body.list.forEach((value:any) => {
+        arrayCusIdExcel.push(value.customerCode);
+      })
+      let body = {
+        "listCode": arrayCusIdExcel,
+        "page": 1,
+        "pageSize": 30
+      }
+      this._cusSer.GetCustomerByCode(body).subscribe({
+        next: data => {
+          this.listCusAfterAddPreview = data.data
+        }
+      })
+
+
     })
   }
 
@@ -176,21 +191,19 @@ export class InforRouterComponent implements OnInit {
       this.searchAllCusInRoute(this.idRoute, "");
 
       this.bodyAddCusToRouteFromListCus = result;
-      console.log(result);
       let arrayCusIdExcel:any[] = [];
       result.list.forEach((value:any) => {
         arrayCusIdExcel.push(value.customerCode);
       })
       let body = {
-        "customerCode": arrayCusIdExcel,
+        "listCode": arrayCusIdExcel,
         "page": 1,
         "pageSize": 30
       }
-      console.log(body);
-
-      this._cusSer.SearchAllCustomerByCode(body).subscribe({
+      this._cusSer.GetCustomerByCode(body).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
+          this.listCusAfterAddPreview = data.data
         }
       })
 

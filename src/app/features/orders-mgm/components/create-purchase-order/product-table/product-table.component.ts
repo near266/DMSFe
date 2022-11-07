@@ -63,19 +63,22 @@ export class ProductTableComponent implements OnInit, AfterViewInit, DoCheck {
 
     addProductBySearch(product: any, e: any) {
         if (e.source.selected) {
-            let isSelected = false;
-            if (this.listProductIdsArray.includes(product.id)) {
-                isSelected = true;
-            } else {
-                isSelected = false;
-            }
-            if (!isSelected) {
-                let productFormat = this.formatService.formatProductFromCloseDialogAdd([product], []);
-                this.listChoosenProduct.push(productFormat[0]);
-                this.pushListProductToDialog();
-            } else {
-                this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
-            }
+            // let isSelected = false;
+            // if (this.listProductIdsArray.includes(product.id)) {
+            //     isSelected = true;
+            // } else {
+            //     isSelected = false;
+            // }
+            // if (!isSelected) {
+            //     let productFormat = this.formatService.formatProductFromCloseDialogAdd([product], []);
+            //     this.listChoosenProduct.push(productFormat[0]);
+            //     this.pushListProductToDialog();
+            // } else {
+            //     this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+            // }
+            let productFormat = this.formatService.formatProductFromCloseDialogAdd([product], []);
+            this.listChoosenProduct.push(productFormat[0]);
+            this.pushListProductToDialog();
         }
     }
 

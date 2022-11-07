@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { FormatService } from '../../../services/format.service';
@@ -36,6 +37,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
     subscription: Subscription[] = [];
     listProductAdd: any = [];
     listChoosenProductIds: any = [];
+    listProductIdsArray: any = [];
     listProductRemove: any = [];
     listSearchedProduct: any = [];
     productFilterCtrl: FormControl = new FormControl();
@@ -53,6 +55,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
         private formatService: FormatService,
         private saleReceipt: SaleReceiptService,
         private purchaseOrder: PurchaseOrderService,
+        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -87,6 +90,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
 
     ngOnChanges(changes: SimpleChanges): void {
         this.listProduct = this.formatService.formatUnitIdAndWareHouseId(this.listProduct);
+        this.pushListProductToDialog();
     }
 
     sendBodyUpdateProduct() {
@@ -167,28 +171,25 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
     }
 
     unChoose(productRemove: any) {
+        let indexOf = this.listProduct.indexOf(productRemove);
         // send to service
         this.listProductRemove.push({
-            productId: productRemove?.product?.id,
-            type: productRemove.type,
-            unitId: productRemove.unitId,
-            warehouseId: productRemove.warehouseId,
+            index: productRemove.index,
         });
         this.saleReceipt.sendProductRemove({
             isRemove: true,
             list: this.listProductRemove,
         });
-        // remove to list product
-        this.listProduct = this.listProduct.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
+        this.listProduct.splice(indexOf, 1);
     }
 
     unChooseFromListAdd(productRemove: any) {
+        let indexOf = this.listProductAdd.indexOf(productRemove);
         // remove from list add
-        this.listProductAdd = this.listProductAdd.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
+        // this.listProductAdd = this.listProductAdd.filter((product: any) => {
+        //     return productRemove.product.id != product?.product?.id;
+        // });
+        this.listProductAdd.splice(indexOf, 1);
     }
 
     selectUnit(product: any, type: any) {
@@ -223,6 +224,7 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
         if (e.source.selected) {
             product = this.formatService.formatProductFromCloseDialogAdd([product], []);
             this.listProductAdd.push(product[0]);
+            this.pushListProductToDialog();
         }
     }
 }
