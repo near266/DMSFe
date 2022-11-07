@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RootOrderReport } from '../../models/order-report';
 
 @Component({
@@ -10,7 +11,9 @@ export class OrderReportTableComponent implements OnInit {
 
   @Input() dataOrderReport:RootOrderReport = new RootOrderReport;
 
-  constructor() { }
+  constructor(
+    private router: Router,
+  ) { }
   arrayHeader = [
     'STT',
     'Mã nhân viên',
@@ -56,7 +59,12 @@ export class OrderReportTableComponent implements OnInit {
     'Hạn sử dụng'
   ]
   ngOnInit(): void {
+    console.log(this.dataOrderReport);
   }
-  
+  navigateToDetail(order: any) {
+    localStorage.setItem('purchaseOrderId', order.orderCode);
+    // this.router.navigate(['/orders/detailOrder/viewEdit']);
+    this.router.navigate(['/orders/detailOrder/view?edit'], { queryParams: { id: order.purchaseOrderId }, queryParamsHandling: null });
+}
 
 }

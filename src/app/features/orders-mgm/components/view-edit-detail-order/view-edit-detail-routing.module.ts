@@ -19,6 +19,10 @@ const routes: Routes = [
                 component: DetailOrderComponent,
             },
             {
+              path: 'view?edit',
+              component: DetailOrderComponent,
+          },
+            {
                 path: 'customer',
                 component: CustomerComponent,
             },

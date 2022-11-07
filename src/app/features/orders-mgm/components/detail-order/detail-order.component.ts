@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, DoCheck, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import {
@@ -24,7 +24,7 @@ import { ProductFieldTextarea } from 'src/app/features/product/components/add-pr
     templateUrl: './detail-order.component.html',
     styleUrls: ['./detail-order.component.scss'],
 })
-export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
+export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, DoCheck, OnDestroy {
     statusList = statusList;
     detailOrderForm!: FormGroup;
     subscription: Subscription[] = [];
@@ -73,7 +73,9 @@ export class DetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnD
         private format: FormatService,
         private snackbar: SnackbarService,
     ) {}
+    ngOnChanges(changes: SimpleChanges): void {
 
+    }
     ngOnInit(): void {
         this.id = localStorage.getItem('purchaseOrderId')!;
         // create Form
