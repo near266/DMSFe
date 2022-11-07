@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { TimekeepingRoutingModule } from './timekeeping-routing.module';
 import { TimekeepingComponent } from './timekeeping.component';
+import { SharedModule } from 'src/app/core/shared/shared.module';
 
 
 @NgModule({
@@ -11,6 +12,7 @@ import { TimekeepingComponent } from './timekeeping.component';
   ],
   imports: [
     CommonModule,
+    SharedModule,
     TimekeepingRoutingModule
   ]
 })
