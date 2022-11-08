@@ -169,7 +169,7 @@ export class OrderSaleMgmComponent implements OnInit {
         body = {
             filter: null,
             listId: this.id,
-            type: 1,
+            type: 2,
         };
         this.confirmService
             .open(`Bạn có muốn xuất ${this.id.length} bản ghi đã chọn hay không?`, ['Xuất', 'Hủy'])
@@ -239,7 +239,7 @@ export class OrderSaleMgmComponent implements OnInit {
         let bodySent: any;
         bodySent = {
             filter: this.body,
-            type: 2,
+            type: 1,
         };
         bodySent.filter.pageSize = this.total;
         bodySent.filter.page = 1;
@@ -270,7 +270,7 @@ export class OrderSaleMgmComponent implements OnInit {
         body = {
             filter: null,
             listId: this.id,
-            type: 1,
+            type: 2,
         };
         this.confirmService
             .open(`Bạn có muốn in ${this.id.length} bản ghi đã chọn không?`, ['In', 'Hủy'])
@@ -297,7 +297,7 @@ export class OrderSaleMgmComponent implements OnInit {
         let bodySent: any;
         bodySent = {
             filter: this.body,
-            type: 2,
+            type: 1,
         };
         bodySent.filter.pageSize = this.total;
         bodySent.filter.page = 1;
@@ -322,6 +322,8 @@ export class OrderSaleMgmComponent implements OnInit {
             });
     }
     filter(body: any) {
+        // set lại list choosen ID
+        this.id = [];
         // set lại trang
         this.page = 1;
         this.body = body;

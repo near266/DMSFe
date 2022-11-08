@@ -161,6 +161,8 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
     }
 
     filter(body: any) {
+        // set lại list choosen ID
+        this.id = [];
         // set lại page
         this.page = 1;
         this.body = body;
@@ -172,7 +174,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         body = {
             filter: null,
             listId: this.id,
-            type: 1,
+            type: 2,
         };
         this.confirmService
             .open(`Bạn có muốn in ${this.id.length} bản ghi đã chọn không?`, ['In', 'Hủy'])
@@ -199,7 +201,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         let bodySent: any;
         bodySent = {
             filter: this.body,
-            type: 2,
+            type: 1,
         };
         bodySent.filter.pageSize = this.total;
         bodySent.filter.page = 1;
