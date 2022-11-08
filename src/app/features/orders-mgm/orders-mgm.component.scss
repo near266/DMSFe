@@ -49,11 +49,11 @@ tbody {
 }
 
 .custom-table {
-    @apply table-fixed text-gray-500 dark:text-gray-400;
+    @apply table-fixed;
 }
 
 .custom-thead {
-    @apply text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-xs;
+    @apply uppercase bg-gray-50 dark:bg-gray-700 text-xs;
 }
 
 .custom-row {
