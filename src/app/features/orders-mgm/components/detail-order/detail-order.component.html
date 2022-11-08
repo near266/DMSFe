@@ -29,20 +29,25 @@
         <div class="flex gap-x-6 justify-between">
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                 <mat-label>Nhóm</mat-label>
-                <!-- <i
+                <i
                     style="cursor: copy"
                     matPrefix
-                    (click)="coppy(1, $event)"
-                    class="fa-regular fa-copy translate-y-[-45%] mr-1"></i> -->
+                    (click)="coppy(groupCoppy, $event)"
+                    class="fa-regular fa-copy translate-y-[-45%] mr-1"></i>
                 <mat-select formControlName="groupId" [disabled]="type === 'View'">
                     <!-- <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" /> -->
-                    <mat-option *ngFor="let group of listGroup" [value]="group.id">
+                    <mat-option (click)="groupCoppy = group.name" *ngFor="let group of listGroup" [value]="group.id">
                         {{ group.name }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                 <mat-label>Nhân viên đặt</mat-label>
+                <i
+                    style="cursor: copy"
+                    matPrefix
+                    (click)="coppy(orderCoppy, $event)"
+                    class="fa-regular fa-copy translate-y-[-45%] mr-1"></i>
                 <mat-select [disabled]="type === 'View'" formControlName="orderEmployee">
                     <input
                         (input)="searchListEmployee($event)"
@@ -53,15 +58,26 @@
                     <mat-option *ngIf="defaultOrderEmployee" [value]="defaultOrderEmployee.id">
                         {{ defaultOrderEmployee.employeeCode }} - {{ defaultOrderEmployee.employeeName }}
                     </mat-option>
-                    <mat-option *ngFor="let employee of listEmployee" [value]="employee.id">
-                        {{ employee.employeeName }}
+                    <mat-option
+                        (click)="orderCoppy = employee.employeeCode + ' - ' + employee.employeeName"
+                        *ngFor="let employee of listEmployee"
+                        [value]="employee.id">
+                        {{ employee.employeeCode }} - {{ employee.employeeName }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                 <mat-label>Tuyến</mat-label>
+                <i
+                    style="cursor: copy"
+                    matPrefix
+                    (click)="coppy(routeCoppy, $event)"
+                    class="fa-regular fa-copy translate-y-[-45%] mr-1"></i>
                 <mat-select formControlName="routeId" [disabled]="type === 'View'">
-                    <mat-option *ngFor="let route of listRoute" [value]="route.id">
+                    <mat-option
+                        (click)="routeCoppy = route.routeName"
+                        *ngFor="let route of listRoute"
+                        [value]="route.id">
                         {{ route.routeName }}
                     </mat-option>
                 </mat-select>
@@ -70,6 +86,11 @@
         <div class="flex gap-x-6 justify-between" formGroupName="customer">
             <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                 <mat-label>Mã khách hàng</mat-label>
+                <i
+                    style="cursor: copy"
+                    matPrefix
+                    (click)="coppy(customerCoppy, $event)"
+                    class="fa-regular fa-copy translate-y-[-45%] mr-1"></i>
                 <mat-select
                     [disabled]="type === 'View'"
                     formControlName="code"
@@ -86,7 +107,10 @@
                         [value]="defaultCustomer?.id">
                         {{ defaultCustomer?.customerCode }} - {{ defaultCustomer?.customerName }}
                     </mat-option>
-                    <mat-option *ngFor="let customer of listCustomer" [value]="customer.id">
+                    <mat-option
+                        (click)="customerCoppy = customer.customerCode + ' - ' + customer.customerName"
+                        *ngFor="let customer of listCustomer"
+                        [value]="customer.id">
                         {{ customer.customerCode }} - {{ customer.customerName }}
                     </mat-option>
                 </mat-select>
@@ -98,11 +122,11 @@
             <div class="flex gap-x-6 justify-between">
                 <mat-form-field class="w-1/3" appearance="outline" floatLabel="always">
                     <mat-label>SĐT</mat-label>
-                    <input [readonly]="type === 'View'" matInput formControlName="phone" />
+                    <input [readonly]="true" matInput formControlName="phone" />
                 </mat-form-field>
                 <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Địa chỉ</mat-label>
-                    <input [readonly]="type === 'View'" matInput formControlName="address" />
+                    <input [readonly]="true" matInput formControlName="address" />
                 </mat-form-field>
             </div>
         </div>
@@ -162,11 +186,11 @@
                     </button>
                 </div>
                 <div class="flex items-center">
-                    <button
+                    <!-- <button
                         class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium mr-3">
                         <i class="fa-solid fa-file-import mr-2 px-2"></i>
                         <span class="px-2">Nhập excel</span>
-                    </button>
+                    </button> -->
                     <div>
                         <mat-select
                             style="width: fit-content"
@@ -217,7 +241,7 @@
                             <td class="custom-th">{{ product.product.productName }}</td>
                             <td class="custom-th">
                                 <span *ngIf="type === 'View'">
-                                    {{ product.unit.unitName }}
+                                    {{ product.unit?.unitName }}
                                 </span>
                                 <!-- <span>
                                     {{ product.unit.unitName }}
@@ -559,11 +583,11 @@
                     </button>
                 </div>
                 <div class="flex items-center">
-                    <button
+                    <!-- <button
                         class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium mr-3">
                         <i class="fa-solid fa-file-import mr-2 px-2"></i>
                         <span class="px-2">Nhập excel</span>
-                    </button>
+                    </button> -->
                     <div>
                         <mat-select
                             style="width: fit-content"

@@ -62,6 +62,12 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
     defaultCustomer: any;
     defaultOrderEmployee: any;
 
+    // coppy
+    groupCoppy: any = '';
+    orderCoppy: any = '';
+    routeCoppy: any = '';
+    customerCoppy: any = '';
+
     productFilterCtrl: FormControl = new FormControl();
     productPromotionFilterCtrl: FormControl = new FormControl();
     constructor(
@@ -73,9 +79,7 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
         private format: FormatService,
         private snackbar: SnackbarService,
     ) {}
-    ngOnChanges(changes: SimpleChanges): void {
-
-    }
+    ngOnChanges(changes: SimpleChanges): void {}
     ngOnInit(): void {
         this.id = localStorage.getItem('purchaseOrderId')!;
         // create Form
@@ -187,6 +191,15 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
         this.getListGroup();
     }
 
+    getCoppyText() {
+        this.groupCoppy = this.detailOrder?.group?.name;
+        this.orderCoppy =
+            this.detailOrder?.orderEmployee?.employeeCode + ' - ' + this.detailOrder?.orderEmployee?.employeeName;
+        this.routeCoppy = this.detailOrder?.route?.routeName;
+        this.customerCoppy =
+            this.detailOrder?.customer?.customerCode + ' - ' + this.detailOrder?.customer?.customerName;
+    }
+
     getDetail() {
         this.subscription.push(
             this.purchaseOrder.detail(this.id).subscribe((data) => {
@@ -209,6 +222,8 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
                 this.purchaseOrder.getCustomerById(this.detailOrder?.customer?.id).subscribe((data) => {
                     this.debtLimit = data?.debtLimit;
                 });
+                // get coppy text
+                this.getCoppyText();
             }),
         );
     }
@@ -241,6 +256,10 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
         this.listPromotionProduct.forEach((product: any) => {
             product.warehouseId = product.warehouse?.id;
         });
+    }
+
+    test(e: any) {
+        console.log(e);
     }
 
     getListWareHouse() {
@@ -347,7 +366,7 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
                 purchaseOrderId: this.id,
                 productId: product?.product?.id,
                 // productName: product.product.productName,
-                unitId: product.unit.id,
+                unitId: product.unit?.id,
                 warehouseId: product.warehouseId,
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
@@ -368,13 +387,13 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
                 purchaseOrderId: this.id,
                 productId: product?.product?.id,
                 // productName: product.product.productName,
-                unitId: product.unit.id,
+                unitId: product.unit?.id,
                 warehouseId: product.warehouseId,
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount || 0,
-                discountRate: product.discountRate || 0,
+                totalPrice: 0,
+                discount: 0,
+                discountRate: 0,
                 note: product.note,
                 type: product.type,
                 index: product.index, // đánh index
@@ -413,9 +432,9 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
                 warehouseId: product.warehouseId,
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount || 0,
-                discountRate: product.discountRate || 0,
+                totalPrice: 0,
+                discount: 0,
+                discountRate: 0,
                 note: product.note,
                 type: product.type,
             };
@@ -801,9 +820,11 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
     }
 
     coppy(value: any, e: any) {
-        this.stopPropagation(e);
-        navigator.clipboard.writeText(value);
-        this.snackbar.openSnackbar('Coppy thành công', 1000, 'Đóng', 'center', 'bottom', true);
+        if (value) {
+            this.stopPropagation(e);
+            navigator.clipboard.writeText(value);
+            this.snackbar.openSnackbar('Sao chép thành công', 1000, 'Đóng', 'center', 'bottom', true);
+        }
     }
 
     selectUnit(product: any, type: any) {

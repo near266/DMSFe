@@ -45,14 +45,12 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
 
     productFilterCtrl: FormControl = new FormControl();
     constructor(
-        private dialog: MatDialog,
         private fb: FormBuilder,
         private saleReceipt: SaleReceiptService,
         private snackbar: SnackbarService,
         private router: Router,
         private purchaseOrder: PurchaseOrderService,
         private numberToText: NumberToTextService,
-        private formatService: FormatService,
     ) {}
 
     ngOnInit(): void {
@@ -77,7 +75,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             description: [null],
         });
         // create search product form
-        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
+        // this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
     }
 
     ngAfterViewInit(): void {
@@ -355,20 +353,20 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
         this.listChoosenProduct = e;
     }
 
-    searchListProductActive(value: any) {
-        const body = {
-            keyword: value,
-            sortBy: {
-                property: 'CreatedDate',
-                value: true,
-            },
-            page: 1,
-            pageSize: 3,
-        };
-        this.purchaseOrder.getListProductActived(body).subscribe((data) => {
-            this.listSearchedProduct = data?.data;
-        });
-    }
+    // searchListProductActive(value: any) {
+    //     const body = {
+    //         keyword: value,
+    //         sortBy: {
+    //             property: 'CreatedDate',
+    //             value: true,
+    //         },
+    //         page: 1,
+    //         pageSize: 3,
+    //     };
+    //     this.purchaseOrder.getListProductActived(body).subscribe((data) => {
+    //         this.listSearchedProduct = data?.data;
+    //     });
+    // }
 
     // updateTotalPrice(product: any) {
     //     // this.countTotal(product);

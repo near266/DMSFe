@@ -55,7 +55,6 @@ export class ProductTableComponent implements OnInit, DoCheck, AfterViewInit, On
         private formatService: FormatService,
         private saleReceipt: SaleReceiptService,
         private purchaseOrder: PurchaseOrderService,
-        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
