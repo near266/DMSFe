@@ -55,8 +55,8 @@ export class UnitService {
     return this.http.put<Unit[]>(this.Point + '/update', body);
   }
 
-  searchUnit(a: any): Observable<Unit[]> {
-    return this.http.post<Unit[]>(this.Point + '/search', a);
+  searchUnit(keyword: any): Observable<Unit[]> {
+    return this.http.post<Unit[]>(this.Point + '/search', keyword);
   }
 
   del(body: any): Observable<any> {
