@@ -1,0 +1,87 @@
+<div class="h-full flex flex-row w-full overflow-hidden">
+  <div class="h-full max-w-sm bg-gray-100 my-1 flex flex-col relative" [ngClass]="class.left">
+    <button class="absolute w-5 h-8 top-0 right-0 bg-gray-50 border border-solid border-gray-300"
+        (click)="closeSideBar()" *ngIf="class.statusbar == true">
+        <i class="fa-solid fa-caret-left"></i>
+    </button>
+    <button class="absolute w-5 h-8 top-0 right-0 bg-gray-50 border border-solid border-gray-300"
+        (click)="openSideBar()" *ngIf="class.statusbar == false">
+        <i class="fa-solid fa-caret-right"></i>
+    </button>
+    <div class="overflow-y-scroll h-full">
+      <div>
+        <div (click)="hasEmployee = !hasEmployee" class="w-full items-center hover:font-medium mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+          <i class="text-base mr-3 fa-solid fa-user"></i>
+          <span class="text-sm">Phòng ban / Nhân viên</span>
+        </div>
+        <div *ngIf="hasEmployee" class="text-xs">
+          <app-menu-collapse-tree (newItemEvent)="searchUser($event)"></app-menu-collapse-tree>
+        </div>
+      </div>
+      <div>
+        <div class="w-full items-center hover:font-medium mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+          <i class="text-base mr-3 fa-regular fa-calendar-xmark"></i>
+          <span class="text-sm">Đến ngày: </span><input type="date" [(ngModel)]="now" class="border border-solid border-black mx-1 p-1 rounded-sm text-xs font-medium h-7">
+        </div>
+      </div>
+      <app-menu-collapse (Selection)="selectPosition($event)" [Config]="positionMenu"></app-menu-collapse>
+      <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
+      <app-menu-collapse (Selection)="selectTimekeeping($event)" [Config]="timekeepingMenu"></app-menu-collapse>
+      <div>
+        <div class="w-full items-center hover:font-medium mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+          <i class="text-base mr-3 fa-solid fa-gear"></i>
+          <span class="text-sm">Đặt lịch xuất báo cáo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="h-full bg-white my-1 mx-1 flex flex-col relative" [ngClass]="class.right">
+    <div class="w-full p-2 bg-white h-fit flex justify-between text-lg font-medium">
+      <div class="flex flex-col justify-center">
+        <span>Báo cáo chấm công</span>
+      </div>
+      <div class="h-fit">
+        <button mat-flat-button class="bg-[#1891C9] h-full text-white font-medium mx-1">Tìm kiếm</button>
+        <button mat-flat-button class="bg-[#0EAF8F] h-full text-white font-medium">Lưu Excel</button>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div *ngIf="loading == true" class="absolute text-center top-1/2 left-1/2">
+      <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+    </div>
+    <div *ngIf="loading == false">
+      <div id="table" class="table-wrapper">
+        <table *ngIf="!isLoading" class="block custom-table text-gray-500 dark:text-gray-400">
+            <thead class="custom-thead">
+                <th class="custom-th">STT</th>
+                <th class="custom-th">Người đặt</th>
+                <th class="custom-th">Trạng thái</th>
+                <th class="custom-th">Mã phiếu</th>
+                <th class="custom-th">Mã KH</th>
+                <th class="custom-th">Tên KH</th>
+                <th class="custom-th">Địa chỉ</th>
+                <th class="custom-th">Ngày đặt</th>
+                <th class="custom-th">Tổng tiền</th>
+                <th class="custom-th">Người duyệt</th>
+                <th class="custom-th">Ngày duyệt</th>
+                <th class="custom-th">Nguồn</th>
+                <th class="custom-th">Ngày tạo</th>
+                <th class="custom-th">Người tạo</th>
+                <th class="custom-th">Ngày sửa</th>
+                <th class="custom-th">Người sửa</th>
+                <th class="custom-th">Diễn giải</th>
+            </thead>
+            <tbody>
+                <tr class="custom-row">
+                    <td class="custom-td border-b">1</td>
+
+                </tr>
+            </tbody>
+        </table>
+      </div>
+      <div class="mt-2">
+        <app-pagination></app-pagination>
+      </div>
+    </div>
+  </div>
+</div>

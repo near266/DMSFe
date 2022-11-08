@@ -101,9 +101,13 @@
               <span>Báo cáo giám sát</span>
           </button>
           <mat-menu #monitoringReport="matMenu">
-            <button mat-menu-item class="flex items-center" [routerLink]="['timekeeping']" routerLinkActive="text-green-500">
+            <button mat-menu-item class="flex items-center" [routerLink]="['reports/timekeeping']" routerLinkActive="text-green-500">
               <i class="fa-solid fa-calendar-days mr-1"></i>
                 <span>Báo cáo chấm công tháng</span>
+            </button>
+            <button mat-menu-item class="flex items-center" [routerLink]="['reports/timesheet']" routerLinkActive="text-green-500">
+              <i class="fa-regular fa-calendar-check mr-1"></i>
+                <span>Chấm công</span>
             </button>
           </mat-menu>
           <mat-divider></mat-divider>
