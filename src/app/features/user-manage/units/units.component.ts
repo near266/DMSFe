@@ -44,16 +44,15 @@ export class UnitsComponent implements OnInit {
 
   ngOnInit(): void {
     this.view();
-    this.unitService.totalUnits$.subscribe((total) => (
-      this.totalunits = total
-    ));
-    console.log(this.totalunits)
   }
 
   view(){
     this.unitService.getAllUnits().subscribe(data => {
-      this.unit = data;
-      // console.log(this.unit);
+      console.log(this.unit);
+      if(data){
+        this.unit = data;
+        this.totalunits = data.length
+      }
     })
   }
 
