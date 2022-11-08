@@ -21,7 +21,7 @@ export class FormatService {
                     wholeSaleUnit: product.wholeSaleUnit,
                 },
                 unitId: product.retailUnit?.id, // mặc định chọn đvt lẻ
-                warehouseId: product?.warehouse?.id,
+                warehouseId: product?.warehouse?.id || '04cb0fee-4f5d-11ed-bdc3-0242ac120002', // auto là khuyến mại nếu chưa có kho mặc địch của sp
                 unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
                 quantity: 0,
                 totalPrice: 0,
@@ -56,7 +56,7 @@ export class FormatService {
                     wholeSaleUnit: product.wholeSaleUnit,
                 },
                 unitId: product.retailUnit?.id, // mặc định chọn đvt lẻ
-                warehouseId: product?.warehouse?.id,
+                warehouseId: product?.warehouse?.id || 'fcb4a590-4f5c-11ed-bdc3-0242ac120002', // auto là kho chính nếu chưa có kho mặc địch của sp
                 unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
                 quantity: 0,
                 totalPrice: 0,
@@ -76,6 +76,33 @@ export class FormatService {
         return listProdAdd;
     }
 
+    formatUnitIdAndWareHouseId(list: any) {
+        list.forEach((product: any) => {
+            product.warehouseId = product.warehouse?.id;
+            product.unitId = product.unit?.id;
+        });
+        return list;
+    }
+
+    // màn tạo (dùng cho cả product và promotion)
+    formatProductToSentAPI(listProd: any) {
+        let listProductToSentAPI = listProd.map((product: any) => {
+            return {
+                productId: product.product?.id,
+                unitId: product.unitId,
+                warehouseId: product.warehouseId,
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount,
+                discountRate: product.discountRate,
+                note: product.note,
+                type: product.type,
+            };
+        });
+        return listProductToSentAPI;
+    }
+
     // after formatProductPromotionFromCloseDialogAdd
     formatProductPromotionAddToSentApi(listAdd: any) {
         listAdd = listAdd.map((product: any) => {
@@ -86,9 +113,9 @@ export class FormatService {
                 warehouseId: product.warehouseId, // chưa xét trường hợp k có kho mặc định
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount,
-                discountRate: product.discountRate,
+                totalPrice: 0,
+                discount: 0,
+                discountRate: 0,
                 note: product.note,
                 type: 2, // hoặc product.type vì đã formatProductPromotionFromCloseDialogAdd trước
             };

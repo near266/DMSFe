@@ -56,6 +56,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { NgPrintModule } from 'ng-print';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
+import { ClipboardModule } from '@angular/cdk/clipboard';
 @NgModule({
     declarations: [
         MenuCollapseComponent,
@@ -112,6 +114,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         NgxPaginationModule,
         NgSelectModule,
         NgPrintModule,
+        ClipboardModule
     ],
     exports: [
         CurrencyMaskModule,
@@ -165,6 +168,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         ReactiveFormsModule,
         TreeModule,
         NgxPaginationModule,
+        ClipboardModule
     ],
 })
 export class SharedModule {}

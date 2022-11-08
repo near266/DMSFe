@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
+import { CustomerService } from 'src/app/core/services/customer.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { RouteService } from 'src/app/core/services/route.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -36,6 +37,7 @@ export class InforRouterComponent implements OnInit {
     private _routeSer: RouteService,
     private fb: FormBuilder,
     private customerGroupSer: CustomerGroupService,
+    private _cusSer: CustomerService,
     private _snackBar: SnackbarService,
     public dialog: MatDialog
   ) { }
@@ -57,6 +59,7 @@ export class InforRouterComponent implements OnInit {
   keywordSearch:any;
   arrayAllId:any[] = [];
   bodyAddCusToRouteFromListCus:BodyAddCusToRouteFromListCus;
+  listCusAfterAddPreview:any= [];
 
 
   headerTable = [
@@ -154,7 +157,24 @@ export class InforRouterComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       this.searchAllCusInRoute(this.idRoute, "");
-      this.bodyAddCusToRouteFromListCus = result;
+      this.bodyAddCusToRouteFromListCus = result.body;
+
+      let arrayCusIdExcel:any[] = [];
+      result.body.list.forEach((value:any) => {
+        arrayCusIdExcel.push(value.customerCode);
+      })
+      let body = {
+        "listCode": arrayCusIdExcel,
+        "page": 1,
+        "pageSize": 30
+      }
+      this._cusSer.GetCustomerByCode(body).subscribe({
+        next: data => {
+          this.listCusAfterAddPreview = data.data
+        }
+      })
+
+
     })
   }
 
@@ -169,7 +189,23 @@ export class InforRouterComponent implements OnInit {
     });
     dialogExelRef.afterClosed().subscribe(result => {
       this.searchAllCusInRoute(this.idRoute, "");
+
       this.bodyAddCusToRouteFromListCus = result;
+      let arrayCusIdExcel:any[] = [];
+      result.list.forEach((value:any) => {
+        arrayCusIdExcel.push(value.customerCode);
+      })
+      let body = {
+        "listCode": arrayCusIdExcel,
+        "page": 1,
+        "pageSize": 30
+      }
+      this._cusSer.GetCustomerByCode(body).subscribe({
+        next: data => {
+          // console.log(data);
+          this.listCusAfterAddPreview = data.data
+        }
+      })
 
     })
   }
@@ -262,7 +298,6 @@ export class InforRouterComponent implements OnInit {
     }else{
       this.arrayIdCusInRoute = [];
     }
-
   }
 
 

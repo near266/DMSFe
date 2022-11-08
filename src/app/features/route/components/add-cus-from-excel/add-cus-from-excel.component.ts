@@ -80,11 +80,19 @@ export class AddCusFromExcelComponent implements OnInit {
           this.snackbar.openSnackbar("Thêm khách hàng thành công !", 3000, "", "right", "bottom", true);
         }
       })
-    }else{
+    }else{                                // add case
+      let listCusTemp:any[] = []
       body = {
         "list": this.dataAfterConvert,
         "routeId": ""
       }
+      // let res = {
+      //   body: {
+      //     "list": 1,
+      //     "routeId": ""
+      //   },
+      //   listCusPreview: listCusTemp
+      // }
       this.materialDialog.close(body);
     }
 

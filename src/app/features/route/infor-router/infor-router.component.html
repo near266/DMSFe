@@ -94,8 +94,10 @@
       Xoá khách hàng
     </button>
   </div>
+
+
   <!-- ?? Table -->
-  <div class="mt-5 w-full aspect-4/1 overflow-y-scroll">
+  <div *ngIf="typeRoute == 'update'" class="mt-5 w-full aspect-4/1 overflow-y-scroll">
     <div *ngIf="!listAllCusInRouteData.data && listAllCusInRouteData.totalCount !== 0 && typeRoute == 'update'" class="mt-10 text-center">
       <i class="fa-solid fa-cloud-arrow-down fa-xl text-sky-600 animate-ping"></i>
     </div>
@@ -144,17 +146,46 @@
 
 
   <!-- ?? table preview -->
-  <!-- <div *ngIf="bodyAddCusToRouteFromListCus"  class="mt-5 w-full aspect-4/1 overflow-y-scroll">
+  <div *ngIf="listCusAfterAddPreview?.length > 0" class="mt-5 w-full aspect-4/1 overflow-y-scroll">
     <table class="w-full ">
       <thead class="h-10 w-full text- sticky top-0">
-        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã khách hàng (Xem trước)</th>
+        <!-- <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">
+          <input type="checkbox" (change)="checkAll($event)">
+        </th> -->
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Mã khách hàng</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Tên khách hàng</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Loại khách hàng</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Nhóm khách hàng</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Khu vực</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Địa chỉ</th>
+        <th class="border-x border-solid border-gray-300 px-2 bg-gray-100">Thứ tự VT</th>
+        <!-- <th class="border-x border-solid border-gray-300 px-2 bg-gray-100 text-center">
+          <thead class="w-full  block">Quang Duy</thead>
+          <thead class="w-full flex mt-3">
+            <th class="flex-1 flex items-center justify-center">W1 <input type="checkbox" class="h-4 w-4 ml-2"></th>
+            <th class="flex-1 flex items-center justify-center">W2 <input type="checkbox" class="h-4 w-4 ml-2"></th>
+            <th class="flex-1 flex items-center justify-center">W3 <input type="checkbox" class="h-4 w-4 ml-2"></th>
+          </thead>
+        </th> -->
+        <!-- <th class="border-x border-solid border-gray-200 px-2 bg-gray-100">Xoá</th> -->
       </thead>
       <tbody class="box-border">
-        <tr class="h-auto text-xs hover:bg-gray-200 border-y border-solid border-gray-300" *ngFor="let route of bodyAddCusToRouteFromListCus.list; let o=odd; let e=even;"
+        <tr class="h-auto text-xs hover:bg-gray-200 border-y border-solid border-gray-300" *ngFor="let cus of listCusAfterAddPreview; let o=odd; let e=even;"
           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-          <td class="border-x border-solid align-middle px-2 py-3">{{route.customer.customerCode}}</td>
+          <!-- <td class="border-x border-solid align-middle px-2 py-3 text-center">
+            <input type="checkbox" (change)="checkedCusInRoute($event,route.customer.id)" [checked]="arrayIdCusInRoute.includes(route.customer.id)">
+          </td> -->
+          <td class="border-x border-solid align-middle px-2 py-3">{{cus.customerCode}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{cus.customerName}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{cus.customerType}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{cus.customerGroup}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{cus.area}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3">{{cus.address}}</td>
+          <td class="border-x border-solid align-middle px-2 py-3"></td>
+          <!-- <td class="border-x border-solid align-middle px-2 py-3"></td> -->
+        </tr>
       </tbody>
     </table>
-  </div> -->
+  </div>
   <!-- !! end preview -->
 </div>

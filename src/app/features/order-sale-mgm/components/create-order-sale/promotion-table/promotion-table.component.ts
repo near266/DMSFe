@@ -4,6 +4,7 @@ import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.servic
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { FormatService } from '../../../services/format.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
     selector: 'sale-create-promotion-table',
@@ -21,6 +22,7 @@ export class PromotionTableComponent implements OnInit, OnChanges {
         private dialog: MatDialog,
         private formatService: FormatService,
         private purchaseOrder: PurchaseOrderService,
+        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -76,7 +78,7 @@ export class PromotionTableComponent implements OnInit, OnChanges {
             product.unitId = product?.product?.wholeSaleUnit?.id;
             product.unitPrice = product.product.price;
         }
-        product.totalPrice = product.quantity * product.unitPrice;
+        product.totalPrice = 0;
         this.discountRate(product);
     }
 
@@ -92,9 +94,11 @@ export class PromotionTableComponent implements OnInit, OnChanges {
 
     unChoosePromotion(productRemove: any) {
         // remove to list product
-        this.listPromotionProductAdd = this.listPromotionProductAdd.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
+        // this.listPromotionProductAdd = this.listPromotionProductAdd.filter((product: any) => {
+        //     return productRemove.product.id != product?.product?.id;
+        // });
+        let indexOf = this.listPromotionProductAdd.indexOf(productRemove);
+        this.listPromotionProductAdd.splice(indexOf, 1);
         this.pushListProductPromotionToDialog();
     }
 
@@ -123,6 +127,19 @@ export class PromotionTableComponent implements OnInit, OnChanges {
 
     addProductPromotionBySearch(product: any, e: any) {
         if (e.source.selected) {
+            // let isSelected = false;
+            // if (this.listPromotionIds.includes(product.id)) {
+            //     isSelected = true;
+            // } else {
+            //     isSelected = false;
+            // }
+            // if (!isSelected) {
+            //     let productAfterFormat = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
+            //     this.listPromotionProductAdd.push(productAfterFormat[0]);
+            //     this.pushListProductPromotionToDialog();
+            // } else {
+            //     this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+            // }
             let productAfterFormat = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
             this.listPromotionProductAdd.push(productAfterFormat[0]);
             this.pushListProductPromotionToDialog();

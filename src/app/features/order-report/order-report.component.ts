@@ -24,7 +24,7 @@ export class OrderReportComponent implements OnInit {
   init(page:any){
     let body = {
       page: page,
-      pageSize: 10
+      pageSize: 30
     }
     this._reportSer.OrderReport(body).subscribe({
       next: (data:any) => {

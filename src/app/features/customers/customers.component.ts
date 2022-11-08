@@ -46,6 +46,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       data: [],
       totalCount: 0,
   };
+  selectedList: string[] = [];
 
   listProvinces: any[] = [];
   listDistricts: any[] = [];
@@ -349,6 +350,24 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     });
   }
 
+  checked() {
+    this.response.data.forEach( element => {
+      if(this.selectedList.indexOf('' + element.id) > -1) {
+        element.checked = true;
+      } else {
+        element.checked = false;
+      }
+    });
+  }
+
+  checkSelectedList(id: any) {
+    if(this.selectedList.indexOf(id) > -1) {
+      this.selectedList.splice(this.selectedList.indexOf(id), 1);
+    } else {
+      this.selectedList.push(id);
+    }
+  }
+
   init(keyword: any, page: number, pageSize: number) {
     this.loading = true;
     const body = {
@@ -363,6 +382,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
           this.loading = false;
             if(data) {
               this.response = data;
+              this.checked();
               this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
               if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
               this.pageList = [];
@@ -547,6 +567,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
           this.loading = false;
           if(data) {
             this.response = data;
+            this.checked();
             this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
             if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
             this.pageList = [];
@@ -567,7 +588,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         },
         (error) => {
           this.loading = false;
-          this.snackbar.openSnackbar(error, 2000, 'Đóng', 'center', 'bottom', true);
+          this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', false);
         },
     );
   }
@@ -635,6 +656,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
           this.loading = false;
           if(data) {
             this.response = data;
+            this.checked();
             this.totalPage = Number.parseInt((this.response.totalCount/this.pageSize).toString());
             if(this.response.totalCount % this.pageSize > 0) this.totalPage++;
             this.pageList = [];
@@ -652,12 +674,12 @@ export class CustomersComponent implements OnInit, AfterViewInit {
             });
             }
           } else {
-            this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
+            this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', false);
           }
         },
         (error) => {
           this.loading = false;
-          this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
+          this.snackbar.openSnackbar('Không tìm thấy danh sách khách hàng', 2000, 'Đóng', 'center', 'bottom', false);
         },
     );
   }

@@ -20,7 +20,7 @@ import { GenOrderSaleComponent } from '../gen-order-sale/gen-order-sale.componen
 export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
     type!: string;
     statusNow!: number;
-    id!: string;
+    id!: any;
     subscription: Subscription[] = [];
     detailOrder: any;
     roleMain = 'member';
@@ -48,7 +48,25 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         this.roleMain = localStorage.getItem('roleMain')!;
         this.type = 'View';
         this.changeType('View');
-        this.id = localStorage.getItem('purchaseOrderId')!;
+
+        this.activatedRoute.queryParamMap.subscribe(param => {
+          console.log(param.get('id'));
+          if(param.get('id')){
+            console.log('Có');
+            this.id = param.get('id');
+            console.log(param.get('id'));
+
+          }else{
+            console.log('Không');
+            this.id = localStorage.getItem('purchaseOrderId')!;
+            console.log(this.id);
+
+          }
+        })
+
+
+
+
         // get body Update
         this.purchaseOrder.updateOrder.subscribe((data) => {
             this.bodyUpdate = data;
@@ -343,7 +361,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         dialogRef.afterClosed().subscribe((data) => {
             if (data === 'Lưu trữ') {
                 let body = {
-                    id: this.id,
+                    purchaseOrderIds: [this.id],
                 };
                 this.purchaseOrder.archive(body).subscribe(
                     (data) => {},

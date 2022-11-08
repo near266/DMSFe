@@ -7,6 +7,9 @@ import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { FormatService } from '../../../services/format.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { ifStmt } from '@angular/compiler/src/output/output_ast';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { AreaService } from 'src/app/core/services/area.service';
 
 @Component({
     selector: 'app-product-promotion-table',
@@ -32,6 +35,8 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
         private formatService: FormatService,
         private dialog: MatDialog,
         private purchaseOrder: PurchaseOrderService,
+        private snackbar: SnackbarService,
+        private areaService: AreaService,
     ) {}
 
     ngOnInit(): void {
@@ -64,6 +69,7 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
     ngOnChanges(changes: SimpleChanges): void {
         this.listPromotionProduct = this.formatService.formatUnitIdAndWareHouseId(this.listPromotionProduct);
         console.log(this.listPromotionProduct);
+        this.pushListProductPromotionToDialog();
     }
 
     sendListProductPromotionAdd() {
@@ -79,9 +85,8 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
     }
 
     discountRate(product: any) {
-        if (product.totalPrice) {
-            product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
-        }
+        // vì là promotion nên sẽ set discountRate = 0;
+        product.discountRate = 0;
     }
 
     stopPropagation(e: any) {
@@ -103,11 +108,12 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
         });
         dialogRef.afterClosed().subscribe((data) => {
             if (!data.isCancel) {
-                this.listProductPromotionAdd = this.formatService.formatProductFromCloseDialogAdd(
+                this.listProductPromotionAdd = this.formatService.formatProductPromotionFromCloseDialogAdd(
                     data,
                     this.listPromotionProduct,
                 );
                 console.log(this.listProductPromotionAdd);
+                this.pushListProductPromotionToDialog();
                 // if (this.formatFormProductPromotion(data)) {
                 //     let listAdd = this.listAddProductPromotion(this.formatFormProductPromotion(data));
                 //     this.listPromotionProductAdd = [];
@@ -123,55 +129,49 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
                 id: product.product.id,
             };
         });
+        this.listProductPromotionAdd.forEach((product: any) => {
+            this.listPromotionIds.push({ id: product.product.id });
+        });
     }
 
     selectUnit(product: any, type: any) {
         if (type === 'retail') {
             product.unitId = product?.product?.retailUnit?.id;
             product.unitPrice = product.product.retailPrice;
-            product.totalPrice = product.quantity * product.unitPrice;
+            product.totalPrice = 0;
         } else if ((type = 'whosale')) {
             product.unitId = product?.product?.wholeSaleUnit?.id;
             product.unitPrice = product.product.price;
-            product.totalPrice = product.quantity * product.unitPrice;
+            product.totalPrice = 0;
         }
         this.discountRate(product);
     }
 
     updateTotalPrice(product: any) {
-        product.totalPrice = product.quantity * product.unitPrice;
+        product.totalPrice = 0;
         this.discountRate(product);
     }
 
-    countDiscount(product: any) {
-        if (product.totalPrice) {
-            product.discount = (product.discountRate / 100) * product.totalPrice;
-        }
-    }
-
     unChooseFromListAdd(productRemove: any) {
+        let indexOf = this.listProductPromotionAdd.indexOf(productRemove);
         // remove from list add
-        this.listProductPromotionAdd = this.listProductPromotionAdd.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
+        // this.listProductPromotionAdd = this.listProductPromotionAdd.filter((product: any) => {
+        //     return productRemove.product.id != product?.product?.id;
+        // });
+        this.listProductPromotionAdd.splice(indexOf, 1);
     }
 
     unChoose(productRemove: any) {
         // send to service
+        let indexOf = this.listPromotionProduct.indexOf(productRemove);
         this.listProductPromotionRemove.push({
-            productId: productRemove?.product?.id,
-            type: productRemove.type,
-            unitId: productRemove.unitId,
-            warehouseId: productRemove.warehouseId,
+            index: productRemove.index,
         });
         this.saleReceipt.sendProductPromotionRemove({
             isRemove: true,
             list: this.listProductPromotionRemove,
         });
-        // remove to list product
-        this.listPromotionProduct = this.listPromotionProduct.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
+        this.listPromotionProduct.splice(indexOf, 1);
     }
 
     searchListProductActive(value: any) {
@@ -193,6 +193,18 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
         if (e.source.selected) {
             product = this.formatService.formatProductPromotionFromCloseDialogAdd([product], []);
             this.listProductPromotionAdd.push(product[0]);
+            this.pushListProductPromotionToDialog();
+        }
+    }
+
+    setWareHouseToAllProduct(value: any) {
+        if (value != 0) {
+            this.listPromotionProduct.forEach((product: any) => {
+                product.warehouseId = value;
+            });
+            this.listProductPromotionAdd.forEach((product: any) => {
+                product.warehouseId = value;
+            });
         }
     }
 }

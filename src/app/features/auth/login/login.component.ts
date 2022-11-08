@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { api_gateway_url } from 'src/app/core/const/url';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { RolesService } from 'src/app/core/services/roles.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
     selector: 'app-login',
@@ -18,7 +19,14 @@ export class LoginComponent implements OnInit {
     downloadForIOS =
         'itms-services://?action=download-manifest&amp;url=' + api_gateway_url + '/InstallLink/fitolabs_manifest.plist';
 
-    constructor(private fb: FormBuilder, private router: Router, private auth: AuthService,private rolesService:  RolesService, private sanitizer: DomSanitizer) {}
+    constructor(
+      private fb: FormBuilder,
+      private router: Router,
+      private auth: AuthService,
+      private rolesService:  RolesService,
+      private sanitizer: DomSanitizer,
+      private snackbar: SnackbarService
+    ) {}
 
     ngOnInit(): void {
         this.loginForm = this.fb.group({
@@ -38,11 +46,13 @@ export class LoginComponent implements OnInit {
             this.auth.setToken(data.id_token);
             this.auth.setRoles(data.role);
             this.router.navigate(['/orders']);
-        this.rolesService.fetchRoles()
-
+            this.rolesService.fetchRoles();
+        }, (error) => {
+          this.snackbar.openSnackbar('Email hoặc mật khẩu không đúng, vui lòng nhập lại', 2000, 'Đóng', 'center', 'bottom', false);
+      return;
         });
     }
-    
+
     getSafe() {
       return this.sanitizer.bypassSecurityTrustUrl(this.downloadForIOS);
     }

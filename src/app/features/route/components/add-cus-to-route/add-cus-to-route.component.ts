@@ -19,25 +19,36 @@ export class AddCusToRouteComponent implements OnInit {
     public materialDialog: MatDialogRef<AddCusToRouteComponent>
   ) { }
 
-  ngOnInit(): void {
-    this.init();
-  }
+
+
+  startIndex: number;
+  endIndex: number;
+  page: number = 1;
+  pageSize: number = 30;
+  total: number = 0;
+
   dataCus:any;
   arrayIdCus:any[] = [];
   successAdd:boolean = false;
+
+  ngOnInit(): void {
+    this.init();
+  }
 
   init(){
     let body = {
       keyword: "",
       listRouteId: null,
-      page: 1,
-      pageSize: 100,
+      page: this.page,
+      pageSize: this.pageSize
     }
     this.customerSer.search(body).subscribe({
       next: data => {
         this.dataCus = data;
+        this.total = data.totalCount;
       }
-    })
+    });
+    this.setIndexToFirstPage();
   }
 
   addCusToRoute(event:any, customerCode:any){
@@ -54,7 +65,7 @@ export class AddCusToRouteComponent implements OnInit {
 
   submitAddCus(){
     let body;
-    if(this.dataDialog.typeRoute == 'update'){
+    if(this.dataDialog.typeRoute == 'update'){          // update case
       body = {
         "list": this.arrayIdCus,
         "routeId": this.dataDialog.idRoute
@@ -65,21 +76,53 @@ export class AddCusToRouteComponent implements OnInit {
           this.successAdd = true;
         }
       })
-    }else{
-      body = {
-        "list": this.arrayIdCus,
-        "routeId": ""
-      }
+    }else{                              // add case
       let listCusTemp:any[] = []
+      // body = {
+      //   "list": this.arrayIdCus,
+      //   "routeId": ""
+      // }
       this.arrayIdCus.forEach((idCus:any) => {
         this.dataCus.data.forEach((item:any) => {
-          if(item.customerCode == idCus){
+          if(item.customerCode == idCus.customerCode){
             listCusTemp.push(item)
           }
         })
       })
-      this.materialDialog.close(body);
+      let res = {
+        body: {
+          "list": this.arrayIdCus,
+          "routeId": ""
+        },
+        listCusPreview: listCusTemp
+      }
+      this.materialDialog.close(res);
     }
+  };
+
+  setIndexToFirstPage() {
+    this.startIndex = 1;
+    this.endIndex = Math.min(this.startIndex + this.pageSize, this.total);
+  }
+
+  setIndexToSecondPageToDiffrentFirstPage(event: any) {
+    this.startIndex = (event - 1) * this.pageSize + event;
+    this.endIndex = Math.min(this.startIndex + this.pageSize, this.total);
+  }
+
+  onTableDataChange(event: any) {
+    if (event === 1) {
+        this.setIndexToFirstPage();
+    } else {
+        this.setIndexToSecondPageToDiffrentFirstPage(event);
+    }
+    this.page = event;
+    this.init();
+  }
+  onTableSizeChange(event: any): void {
+    this.pageSize = event.target.value;
+    this.page = 1;
+    // this.fetchPosts();
   }
 
 }

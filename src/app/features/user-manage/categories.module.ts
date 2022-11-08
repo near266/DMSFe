@@ -31,6 +31,7 @@ import { FormlySelectModule } from '@ngx-formly/core/select';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { ProductFieldWrapper } from '../product/components/add-product-dialog/add-product-details/product-field-wrapper/product-field-wrapper.component';
 import { ProductFieldInput, ProductFieldSelect } from '../product/components/add-product-dialog/add-product-details/product-field-type/product-field-type.component';
+import { EditGroupComponent } from './user-tree/edit-group/edit-group.component';
 
 const routes: Routes = [
     {
@@ -68,6 +69,7 @@ const routes: Routes = [
         AddUnitComponent,
         MoveUserComponent,
         UnitsComponent,
+        EditGroupComponent,
         AddnitComponent,
         DetailUnitComponent,
         DetailComponent,

@@ -135,7 +135,7 @@
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
                           <td class="w-16 border-x border-solid align-middle px-2">
                             <span class="flex items-center text-[#1891C9]">
-                              <input type="checkbox">
+                              <input type="checkbox" [(ngModel)]="user.checked" (change)="checkSelectedList(user.id)">
                               <i *ngIf="user.archived == true" class="fa-sharp fa-solid fa-lock mb-[1px] ml-2"></i>
                               <i *ngIf="user.archived == false || user.archived == null" class="fa-sharp fa-solid fa-lock-open mb-[1px] ml-2"></i>
                             </span>

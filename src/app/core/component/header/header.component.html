@@ -96,6 +96,17 @@
         <!-- Menu Báo cáo -->
         <li class="mr-4  font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="report">Báo cáo <i class="fa-solid fa-caret-down ml-1"></i></li>
         <mat-menu #report="matMenu" class="mt-1">
+          <button mat-menu-item [matMenuTriggerFor]="monitoringReport">
+            <i class="fa-solid fa-user-secret mr-2"></i>
+              <span>Báo cáo giám sát</span>
+          </button>
+          <mat-menu #monitoringReport="matMenu">
+            <button mat-menu-item class="flex items-center" routerLinkActive="text-green-500">
+              <i class="fa-solid fa-calendar-days mr-1"></i>
+                <span>Báo cáo chấm công tháng</span>
+            </button>
+          </mat-menu>
+          <mat-divider></mat-divider>
           <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="orderReport" >
             <i class="fa-regular fa-file-excel mr-2"></i>
             <span>Báo cáo đặt hàng</span>

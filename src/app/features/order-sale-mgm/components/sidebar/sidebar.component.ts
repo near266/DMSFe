@@ -1,8 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
+import moment from 'moment';
 import { Config } from 'src/app/core/model/Config';
+import { AreaService } from 'src/app/core/services/area.service';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
+import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { DataService } from '../../services/data.service';
 @Component({
     selector: 'app-sidebar',
@@ -11,12 +14,23 @@ import { DataService } from '../../services/data.service';
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
     @Output() isShowSidebarOutput = new EventEmitter<boolean>();
-    @Output() formFilterFromChild = new EventEmitter<any>();
     @Output() bodyFilter = new EventEmitter<any>();
+
     isShowSidebar = true;
+    isShowEmployeeTree = false;
     isSearchByBill = false;
+    isSelectMenu = false;
+
+    listTypeCustomerNameAndIds: any = [];
     listTypeCustomer: any = [];
     listGroupCustomer: any = [];
+    listGroupCustomerAndIds: any = [];
+    listSearchedProduct: any = [];
+    areaList: any = [];
+
+    productFilterCtrl: FormControl = new FormControl();
+    isChoose = false;
+    selected: any;
 
     searchText: string = '';
     statusMenu: Config = {
@@ -52,7 +66,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     storageMenu: Config = {
         icon: '<i class="fa-solid fa-warehouse"></i>',
         title: 'Lưu trữ',
-        menuChildrens: ['Tất cả', 'Mở', 'Khóa'],
+        menuChildrens: ['Tất cả', 'Lưu trữ', 'Không lưu trữ'],
     };
 
     body: any = {
@@ -68,6 +82,8 @@ export class SidebarComponent implements OnInit, AfterViewInit {
         private dataService: DataService,
         private customerType: CustomerTypeService,
         private customerGroup: CustomerGroupService,
+        private purchaseOrder: PurchaseOrderService,
+        private areaService: AreaService,
     ) {}
 
     formFilter = this.fb.group({
@@ -92,24 +108,49 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.isShowSidebarOutput.emit(this.isShowSidebar);
+        // create search product form
+        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActived(data));
     }
 
     ngAfterViewInit(): void {
         this.customerType.get_all().subscribe((data) => {
-            this.listTypeCustomer = data;
-            this.listTypeCustomer = this.listTypeCustomer.map((type: any) => {
+            this.listTypeCustomerNameAndIds = data;
+            this.listTypeCustomer = data?.map((type: any) => {
                 return type.customerTypeName;
             });
             this.listTypeCustomer.push('Tất cả');
             this.typeCustomerMenu.menuChildrens = this.listTypeCustomer;
         });
         this.customerGroup.get_all().subscribe((data) => {
-            this.listGroupCustomer = data;
-            this.listGroupCustomer = this.listGroupCustomer.map((group: any) => {
+            this.listGroupCustomerAndIds = data;
+            this.listGroupCustomer = data?.map((group: any) => {
                 return group.customerGroupName;
             });
             this.listGroupCustomer.push('Tất cả');
             this.groupCustomerMenu.menuChildrens = this.listGroupCustomer;
+        });
+        this.getAllArea();
+    }
+
+    getAllArea() {
+        this.areaService.get_all().subscribe((data) => {
+            this.areaList = data;
+            console.log(this.areaList);
+        });
+    }
+
+    searchListProductActived(value: any) {
+        const body = {
+            keyword: value,
+            sortBy: {
+                property: 'CreatedDate',
+                value: true,
+            },
+            page: 1,
+            pageSize: 3,
+        };
+        this.purchaseOrder.getListProductActived(body).subscribe((data) => {
+            this.listSearchedProduct = data?.data;
         });
     }
 
@@ -122,17 +163,22 @@ export class SidebarComponent implements OnInit, AfterViewInit {
         this.isShowSidebarOutput.emit(this.isShowSidebar);
     }
 
-    filter() {
-        // console.log(this.formFilter.value);
-        this.formFilterFromChild.emit(this.formFilter.value);
-    }
-
     emitBody() {
         this.bodyFilter.emit(this.body);
     }
 
+    toggleShowEmployeeTree() {
+        this.isShowEmployeeTree = !this.isShowEmployeeTree;
+    }
+
+    selectOrderEmployee(e: any) {
+        const id = ('' + e).split(',')[1];
+        this.body.orderEmployeeId = id;
+        this.body.page = 1;
+        this.emitBody();
+    }
+
     selectStatus(e: any) {
-        console.log(e);
         switch (e) {
             case 'Tất cả': {
                 e = null;
@@ -152,15 +198,56 @@ export class SidebarComponent implements OnInit, AfterViewInit {
             }
         }
         this.body.status = e;
+        this.body.page = 1;
         this.emitBody();
     }
 
     selectPrintStatus(e: any) {
-        console.log(e);
+        switch (e) {
+            case 'Tất cả': {
+                e = null;
+                break;
+            }
+            case 'Đã in': {
+                e = true;
+                break;
+            }
+            case 'Chưa in': {
+                e = false;
+                break;
+            }
+            default: {
+                e = null;
+                break;
+            }
+        }
+        this.body.printStatus = e;
+        this.body.page = 1;
+        this.emitBody();
     }
 
-    selectSource(e: any) {
-        console.log(e);
+    selectSourceBill(e: any) {
+        switch (e) {
+            case 'Tất cả': {
+                e = null;
+                break;
+            }
+            case 'Từ phiếu đặt hàng': {
+                e = true;
+                break;
+            }
+            case 'Thêm trực tiếp': {
+                e = false;
+                break;
+            }
+            default: {
+                e = null;
+                break;
+            }
+        }
+        this.body.sourceBill = e;
+        this.body.page = 1;
+        this.emitBody();
     }
 
     selectPayment(e: any) {
@@ -168,26 +255,71 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     }
 
     selectTypeCustomer(e: any) {
-        console.log(e);
+        let id = null;
+        this.listTypeCustomerNameAndIds.forEach((type: any) => {
+            if (type.customerTypeName === e) {
+                id = type.id;
+            }
+        });
+        console.log(id);
+        this.body.customerTypeId = id;
+        this.body.page = 1;
+        this.emitBody();
+    }
+
+    selectArea(e: any) {
+        this.body.areaId = e;
+        this.body.page = 1;
+        this.emitBody();
     }
 
     selectGroupCustomer(e: any) {
-        console.log(e);
+        let id = null;
+        this.listGroupCustomerAndIds.forEach((type: any) => {
+            if (type.customerGroupName === e) {
+                id = type.id;
+            }
+        });
+        console.log(id);
+        this.body.customerGroupId = id;
+        this.body.page = 1;
+        this.emitBody();
     }
 
-    selection7(e: any) {
-        console.log(e);
+    selectArchivedStatus(e: any) {
+        switch (e) {
+            case 'Tất cả': {
+                e = null;
+                break;
+            }
+            case 'Lưu trữ': {
+                e = true;
+                break;
+            }
+            case 'Không lưu trữ': {
+                e = false;
+                break;
+            }
+            default: {
+                e = false;
+                break;
+            }
+        }
+        this.body.archived = e;
+        this.body.page = 1;
+        this.emitBody();
     }
 
-    selection8(e: any) {
-        console.log(e);
+    selectDeliveryDate(e: any) {
+        this.isChoose = true;
+        this.body.deliveryDate = moment(e.value).format('YYYY-MM-DD');
+        this.body.page = 1;
+        this.emitBody();
     }
 
-    selection9(e: any) {
-        console.log(e);
-    }
-
-    selection10(e: any) {
-        console.log(e);
+    selectProductFilter(e: any) {
+        this.body.productId = e;
+        this.body.page = 1;
+        this.emitBody();
     }
 }

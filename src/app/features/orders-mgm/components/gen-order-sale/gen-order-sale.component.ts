@@ -8,6 +8,7 @@ import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.servic
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
+import { DataService } from '../../services/data.service';
 import { FormatService } from '../../services/format.service';
 import { ProductListComponent } from '../product-list/product-list.component';
 
@@ -41,6 +42,8 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     listProductPromotionRemove: any = [];
     listProductAdd: any = [];
     listSearchedProduct: any = [];
+    listProductIds: any = [];
+    listPromotionIds: any = [];
 
     totalAmount: number = 0;
     totalDiscountProduct: number = 0;
@@ -57,6 +60,13 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     defaultCustomer: any;
     productFilterCtrl: FormControl = new FormControl();
     productPromotionFilterCtrl: FormControl = new FormControl();
+
+    // coppy
+    groupCoppy: any = '';
+    orderCoppy: any = '';
+    routeCoppy: any = '';
+    customerCoppy: any = '';
+    saleCoppy: any = '';
     constructor(
         private dialog: MatDialog,
         public dialogRef: MatDialogRef<GenOrderSaleComponent>,
@@ -68,14 +78,18 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         private router: Router,
         private numberToText: NumberToTextService,
         private format: FormatService,
+        private dataService: DataService,
     ) {}
 
     ngOnInit(): void {
         // parse token to get id login
         this.relatedOrder = this.data.detailOrder;
+        // coppy
+        this.getCoppyText();
         // lấy ra default customer (trước khi patch value)
         this.defaultCustomer = this.relatedOrder?.customer;
-        this.saleDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
+        // this.saleDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
+        this.saleDefaultId = this.dataService.parseJwt(localStorage.getItem('access_token')).sid;
         this.genOrderForm = this.fb.group({
             orderDate: [null],
             saleDate: [moment(Date.now()).format('YYYY-MM-DD')],
@@ -105,9 +119,9 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         //     this.listCustomer = data?.data;
         // });
         // create search product form
-        this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
+        // this.productFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
         // create search product promotion form
-        this.productPromotionFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
+        // this.productPromotionFilterCtrl.valueChanges.subscribe((data) => this.searchListProductActive(data));
     }
 
     ngAfterViewInit(): void {
@@ -142,7 +156,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.countTotalPayment();
         // number to text
         this.textMoney = this.numberToText.doc(this.totalPayment);
-
         // this.getRouteByCustomerId(this.genOrderForm.get('customerId')?.value);
     }
 
@@ -150,21 +163,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.purchaseOrder.getAllWarehouses().subscribe((data) => {
             this.listWarehouse = data;
         });
-    }
-
-    parseJwt(token: any) {
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        var jsonPayload = decodeURIComponent(
-            window
-                .atob(base64)
-                .split('')
-                .map(function (c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                })
-                .join(''),
-        );
-        return JSON.parse(jsonPayload);
     }
 
     discountRate(product: any) {
@@ -203,6 +201,27 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         this.purchaseOrder.getAllRoute(1, 1000, '').subscribe((data) => {
             this.listAllRoute = data.data;
         });
+    }
+
+    coppy(value: any, e: any) {
+        this.stopPropagation(e);
+        navigator.clipboard.writeText(value);
+        this.snackbar.openSnackbar('Sao chép thành công', 1000, 'Đóng', 'center', 'bottom', true);
+    }
+
+    stopPropagation(e: any) {
+        e.stopPropagation();
+    }
+
+    getCoppyText() {
+        this.groupCoppy = this.relatedOrder?.group?.name;
+        this.orderCoppy =
+            this.relatedOrder?.orderEmployee?.employeeCode + ' - ' + this.relatedOrder?.orderEmployee?.employeeName;
+        this.routeCoppy = this.relatedOrder?.route?.routeName;
+        this.customerCoppy =
+            this.relatedOrder?.customer?.customerCode + ' - ' + this.relatedOrder?.customer?.customerName;
+        this.saleCoppy =
+            this.relatedOrder?.saleEmployee?.employeeCode + ' - ' + this.relatedOrder?.saleEmployee?.employeeName;
     }
 
     setRouteGroupAndEmployee(customerId: any) {
@@ -276,94 +295,32 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         // get list promotion product
         this.listPromotionProduct = this.relatedOrder.listPromotionProduct;
         // loop to map warehouseId
-        this.listProduct.forEach((product: any) => {
-            product.warehouseId = product.warehouse?.id;
-        });
-        this.listPromotionProduct.forEach((product: any) => {
-            product.warehouseId = product.warehouse?.id;
-        });
+        // this.listProduct.forEach((product: any) => {
+        //     product.warehouseId = product.warehouse?.id;
+        // });
+        // this.listPromotionProduct.forEach((product: any) => {
+        //     product.warehouseId = product.warehouse?.id;
+        // });
         // loop to get unitId
-        this.listProduct.forEach((product: any) => {
-            product.unitId = product.unit?.id;
-        });
-        this.listPromotionProduct.forEach((product: any) => {
-            product.unitId = product.unit?.id;
-        });
+        // this.listProduct.forEach((product: any) => {
+        //     product.unitId = product.unit?.id;
+        // });
+        // this.listPromotionProduct.forEach((product: any) => {
+        //     product.unitId = product.unit?.id;
+        // });
         // set route and group if have customerId
         // if (this.relatedOrder?.customer?.id) {
         //     this.setRouteGroupAndEmployee(this.relatedOrder?.customer?.id);
         // }
 
-        this.pushListProductToDialog();
-        this.pushListProductPromotionToDialog();
+        // this.pushListProductToDialog();
+        // this.pushListProductPromotionToDialog();
     }
 
     countDiscount(product: any) {
         if (product.totalPrice) {
             product.discount = (product.discountRate / 100) * product.totalPrice;
         }
-    }
-
-    setWareHouseToAllProductPromotion(value: any) {
-        if (value != 0) {
-            this.listPromotionProduct.forEach((product: any) => {
-                product.warehouseId = value;
-            });
-        }
-    }
-
-    stopPropagation(e: any) {
-        e.stopPropagation();
-    }
-
-    // format form add product to view Detail
-    formatFormProduct(data: any) {
-        if (data.length > 0) {
-            let List = data.map((product: any) => {
-                return {
-                    product: {
-                        id: product.id,
-                        sku: product.sku,
-                        productName: product.productName,
-                        retailPrice: product.retailPrice,
-                        price: product.price,
-                        vat: product.vat,
-                        warehouseId: product?.warehouse?.id,
-                        retailUnit: product.retailUnit,
-                        wholeSaleUnit: product.wholeSaleUnit,
-                    },
-                    unit: {
-                        id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
-                        unitCode: product?.retailUnit?.unitCode,
-                        unitName: product?.retailUnit?.unitName,
-                    },
-                    warehouseId: product?.warehouse?.id,
-                    unitId: product?.retailUnit?.id, // mặc định là đvt lẻ
-                    unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
-                    quantity: 0,
-                    totalPrice: 0,
-                    discount: 0,
-                    discountRate: 0,
-                    note: null,
-                    type: 1,
-                };
-            });
-            return List;
-        }
-    }
-
-    // loop to reduce available product
-    listAddProduct(list: any) {
-        let listAddProduct = [];
-        if (list && this.listProduct) {
-            let listAvailbleIds = this.listProduct.map((product: any) => {
-                return product?.product?.id;
-            });
-            listAddProduct = list.filter((product: any) => {
-                return !listAvailbleIds.includes(product.product.id);
-            });
-        }
-        return listAddProduct;
     }
 
     searchListCustomer(e: any) {
@@ -392,23 +349,85 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
     }
 
-    formatProductToSentAPI(list: any) {
-        let listProductToSentAPI = list.map((product: any) => {
-            return {
-                productId: product.product?.id,
-                unitId: product.unitId,
-                warehouseId: product.warehouseId,
-                unitPrice: product.unitPrice,
-                quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount,
-                discountRate: product.discountRate,
-                note: product.note,
-                type: product.type,
-            };
-        });
-        return listProductToSentAPI;
-    }
+    // setWareHouseToAllProductPromotion(value: any) {
+    //     if (value != 0) {
+    //         this.listPromotionProduct.forEach((product: any) => {
+    //             product.warehouseId = value;
+    //         });
+    //     }
+    // }
+
+    // stopPropagation(e: any) {
+    //     e.stopPropagation();
+    // }
+
+    // format form add product to view Detail
+    // formatFormProduct(data: any) {
+    //     if (data.length > 0) {
+    //         let List = data.map((product: any) => {
+    //             return {
+    //                 product: {
+    //                     id: product.id,
+    //                     sku: product.sku,
+    //                     productName: product.productName,
+    //                     retailPrice: product.retailPrice,
+    //                     price: product.price,
+    //                     vat: product.vat,
+    //                     warehouseId: product?.warehouse?.id,
+    //                     retailUnit: product.retailUnit,
+    //                     wholeSaleUnit: product.wholeSaleUnit,
+    //                 },
+    //                 unit: {
+    //                     id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
+    //                     unitCode: product?.retailUnit?.unitCode,
+    //                     unitName: product?.retailUnit?.unitName,
+    //                 },
+    //                 warehouseId: product?.warehouse?.id,
+    //                 unitId: product?.retailUnit?.id, // mặc định là đvt lẻ
+    //                 unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
+    //                 quantity: 0,
+    //                 totalPrice: 0,
+    //                 discount: 0,
+    //                 discountRate: 0,
+    //                 note: null,
+    //                 type: 1,
+    //             };
+    //         });
+    //         return List;
+    //     }
+    // }
+
+    // loop to reduce available product
+    // listAddProduct(list: any) {
+    //     let listAddProduct = [];
+    //     if (list && this.listProduct) {
+    //         let listAvailbleIds = this.listProduct.map((product: any) => {
+    //             return product?.product?.id;
+    //         });
+    //         listAddProduct = list.filter((product: any) => {
+    //             return !listAvailbleIds.includes(product.product.id);
+    //         });
+    //     }
+    //     return listAddProduct;
+    // }
+
+    // formatProductToSentAPI(list: any) {
+    //     let listProductToSentAPI = list.map((product: any) => {
+    //         return {
+    //             productId: product.product?.id,
+    //             unitId: product.unitId,
+    //             warehouseId: product.warehouseId,
+    //             unitPrice: product.unitPrice,
+    //             quantity: product.quantity,
+    //             totalPrice: product.totalPrice,
+    //             discount: product.discount,
+    //             discountRate: product.discountRate,
+    //             note: product.note,
+    //             type: product.type,
+    //         };
+    //     });
+    //     return listProductToSentAPI;
+    // }
 
     createSaleReceipt() {
         const body = {
@@ -432,16 +451,14 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             tradeDiscount: this.tradeDiscount,
             totalPayment: this.totalPayment,
             archived: false,
-            // createdBy: 'string',
             createdDate: moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss'),
-            // saleReceiptCode: this.genOrderForm.get('saleEmployee')?.value.employeeCode,
             purchaseOrderId: this.relatedOrder.id,
             deliveryDate: moment(this.genOrderForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
             saleDate: moment(this.genOrderForm.get('saleDate')?.value).format('YYYY-MM-DD'),
             paymentTerm: moment(this.genOrderForm.get('paymentTerm')?.value).format('YYYY-MM-DD'),
             prePayment: this.prePayment,
-            listProduct: this.formatProductToSentAPI(this.listProduct),
-            listPromotionProduct: this.formatProductToSentAPI(this.listPromotionProduct),
+            listProduct: this.format.formatProductToSentAPI(this.listProduct),
+            listPromotionProduct: this.format.formatProductToSentAPI(this.listPromotionProduct),
             debtRecord: this.genOrderForm.get('debtRecord')?.value,
         };
         this.saleReceipt.create(body).subscribe(
@@ -458,17 +475,17 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         );
     }
 
-    selectUnit(product: any, type: any) {
-        if (type === 'retail') {
-            product.unitId = product?.product?.retailUnit?.id;
-            product.unitPrice = product.product.retailPrice;
-        } else if (type == 'whosale') {
-            product.unitId = product?.product?.wholeSaleUnit?.id;
-            product.unitPrice = product.product.price;
-        }
-        product.totalPrice = product.quantity * product.unitPrice;
-        this.discountRate(product);
-    }
+    // selectUnit(product: any, type: any) {
+    //     if (type === 'retail') {
+    //         product.unitId = product?.product?.retailUnit?.id;
+    //         product.unitPrice = product.product.retailPrice;
+    //     } else if (type == 'whosale') {
+    //         product.unitId = product?.product?.wholeSaleUnit?.id;
+    //         product.unitPrice = product.product.price;
+    //     }
+    //     product.totalPrice = product.quantity * product.unitPrice;
+    //     this.discountRate(product);
+    // }
 
     updateStatus() {
         const body = {
@@ -492,7 +509,6 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             tradeDiscount: this.relatedOrder.tradeDiscount,
             totalPayment: this.relatedOrder.totalPayment,
             archived: false,
-            // lastModifiedBy: 'string',
             lastModifiedDate: moment(Date.now()).format('YYYY-MM-DD'),
             orderCode: this.relatedOrder.orderCode,
             deliveryDate: this.relatedOrder.deliveryDate,
@@ -516,162 +532,188 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         );
     }
 
-    pushListProductToDialog() {
-        this.listChoosenProduct = this.listProduct.map((product: any) => {
-            return {
-                id: product.product.id,
-            };
-        });
-    }
+    // pushListProductToDialog() {
+    //     this.listChoosenProduct = this.listProduct.map((product: any) => {
+    //         return {
+    //             id: product.product.id,
+    //         };
+    //     });
+    //     this.listProductIds = this.listProduct.map((product: any) => {
+    //         return product.product.id;
+    //     });
+    // }
 
-    pushListProductPromotionToDialog() {
-        this.listChoosenProductPromotion = this.listPromotionProduct.map((product: any) => {
-            return {
-                id: product.product.id,
-            };
-        });
-    }
+    // pushListProductPromotionToDialog() {
+    //     this.listChoosenProductPromotion = this.listPromotionProduct.map((product: any) => {
+    //         return {
+    //             id: product.product.id,
+    //         };
+    //     });
+    //     this.listPromotionIds = this.listPromotionProduct.map((product: any) => {
+    //         return product.product.id;
+    //     });
+    // }
 
-    openDialogProduct() {
-        const dialogRef = this.dialog.open(ProductListComponent, {
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            height: '100%',
-            width: '100%',
-            panelClass: 'full-screen-modal',
-            data: {
-                listId: this.listChoosenProduct,
-                listProd: this.relatedOrder.listProduct,
-            },
-        });
-        dialogRef.afterClosed().subscribe((data) => {
-            if (!data.isCancel) {
-                let listAdd = this.format.formatProductFromCloseDialogAdd(data, this.listProduct);
-                listAdd.forEach((product: any) => {
-                    this.listProduct.push(product);
-                });
-                this.pushListProductToDialog();
-            }
-        });
-    }
+    // openDialogProduct() {
+    //     const dialogRef = this.dialog.open(ProductListComponent, {
+    //         maxWidth: '100vw',
+    //         maxHeight: '100vh',
+    //         height: '100%',
+    //         width: '100%',
+    //         panelClass: 'full-screen-modal',
+    //         data: {
+    //             listId: this.listChoosenProduct,
+    //             listProd: this.relatedOrder.listProduct,
+    //         },
+    //     });
+    //     dialogRef.afterClosed().subscribe((data) => {
+    //         if (!data.isCancel) {
+    //             let listAdd = this.format.formatProductFromCloseDialogAdd(data, this.listProduct);
+    //             listAdd.forEach((product: any) => {
+    //                 this.listProduct.push(product);
+    //             });
+    //             this.pushListProductToDialog();
+    //         }
+    //     });
+    // }
 
-    addProductBySearch(product: any, e: any) {
-        if (e.source.selected) {
-            product = this.format.formatProductFromCloseDialogAdd([product], []);
-            this.listProduct.push(product[0]);
-            this.pushListProductToDialog();
-        }
-    }
+    // addProductBySearch(product: any, e: any) {
+    //     if (e.source.selected) {
+    //         let isSelected = false;
+    //         if (this.listProductIds.includes(product.id)) {
+    //             isSelected = true;
+    //         } else {
+    //             isSelected = false;
+    //         }
+    //         if (!isSelected) {
+    //             product = this.format.formatProductFromCloseDialogAdd([product], []);
+    //             this.listProduct.push(product[0]);
+    //             this.pushListProductToDialog();
+    //         } else {
+    //             this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+    //         }
+    //     }
+    // }
 
-    addProductPromotionBySearch(product: any, e: any) {
-        if (e.source.selected) {
-            let productAfterFormat = this.format.formatProductPromotionFromCloseDialogAdd([product], []);
-            this.listPromotionProduct.push(productAfterFormat[0]);
-            this.pushListProductPromotionToDialog();
-        }
-    }
+    // addProductPromotionBySearch(product: any, e: any) {
+    //     if (e.source.selected) {
+    //         let isSelected = false;
+    //         if (this.listPromotionIds.includes(product.id)) {
+    //             isSelected = true;
+    //         } else {
+    //             isSelected = false;
+    //         }
+    //         if (!isSelected) {
+    //             let productAfterFormat = this.format.formatProductPromotionFromCloseDialogAdd([product], []);
+    //             this.listPromotionProduct.push(productAfterFormat[0]);
+    //             this.pushListProductPromotionToDialog();
+    //         } else {
+    //             this.snackbar.openSnackbar('Sản phẩm đã có trong đơn', 2000, 'Đóng', 'center', 'bottom', false);
+    //         }
+    //     }
+    // }
 
-    openDialogProductPromotion() {
-        const dialogRef = this.dialog.open(ProductListComponent, {
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            height: '100%',
-            width: '100%',
-            panelClass: 'full-screen-modal',
-            data: {
-                listId: this.listChoosenProductPromotion,
-                listProd: this.relatedOrder.listPromotionProduct,
-            },
-        });
-        dialogRef.afterClosed().subscribe((data) => {
-            if (!data.isCancel) {
-                let listAdd = this.format.formatProductPromotionFromCloseDialogAdd(data, this.listPromotionProduct);
-                listAdd.forEach((product: any) => {
-                    this.listPromotionProduct.push(product);
-                });
-                this.pushListProductPromotionToDialog();
-            }
-        });
-    }
+    // openDialogProductPromotion() {
+    //     const dialogRef = this.dialog.open(ProductListComponent, {
+    //         maxWidth: '100vw',
+    //         maxHeight: '100vh',
+    //         height: '100%',
+    //         width: '100%',
+    //         panelClass: 'full-screen-modal',
+    //         data: {
+    //             listId: this.listChoosenProductPromotion,
+    //             listProd: this.relatedOrder.listPromotionProduct,
+    //         },
+    //     });
+    //     dialogRef.afterClosed().subscribe((data) => {
+    //         if (!data.isCancel) {
+    //             let listAdd = this.format.formatProductPromotionFromCloseDialogAdd(data, this.listPromotionProduct);
+    //             listAdd.forEach((product: any) => {
+    //                 this.listPromotionProduct.push(product);
+    //             });
+    //             this.pushListProductPromotionToDialog();
+    //         }
+    //     });
+    // }
 
-    searchListProductActive(value: any) {
-        const body = {
-            keyword: value,
-            sortBy: {
-                property: 'CreatedDate',
-                value: true,
-            },
-            page: 1,
-            pageSize: 3,
-        };
-        this.purchaseOrder.getListProductActived(body).subscribe((data) => {
-            console.log(data);
-            this.listSearchedProduct = data?.data;
-        });
-    }
+    // searchListProductActive(value: any) {
+    //     const body = {
+    //         keyword: value,
+    //         sortBy: {
+    //             property: 'CreatedDate',
+    //             value: true,
+    //         },
+    //         page: 1,
+    //         pageSize: 3,
+    //     };
+    //     this.purchaseOrder.getListProductActived(body).subscribe((data) => {
+    //         console.log(data);
+    //         this.listSearchedProduct = data?.data;
+    //     });
+    // }
 
     // format form add product Promotion to view Detail
-    formatFormProductPromotion(data: any) {
-        if (data.length > 0) {
-            let List = data.map((product: any) => {
-                return {
-                    product: {
-                        id: product.id,
-                        sku: product.sku,
-                        productName: product.productName,
-                        retailPrice: product.retailPrice,
-                        price: product.price,
-                        vat: product.vat,
-                        warehouseId: product?.warehouse?.id,
-                        retailUnit: product.retailUnit,
-                        wholeSaleUnit: product.wholeSaleUnit,
-                    },
-                    unit: {
-                        id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
-                        unitCode: product?.retailUnit?.unitCode,
-                        unitName: product?.retailUnit?.unitName,
-                    },
-                    warehouseId: product?.warehouse?.id,
-                    unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
-                    quantity: 0,
-                    totalPrice: 0,
-                    discount: 0,
-                    discountRate: 0,
-                    note: null,
-                    type: 2,
-                };
-            });
-            return List;
-        }
-    }
+    // formatFormProductPromotion(data: any) {
+    //     if (data.length > 0) {
+    //         let List = data.map((product: any) => {
+    //             return {
+    //                 product: {
+    //                     id: product.id,
+    //                     sku: product.sku,
+    //                     productName: product.productName,
+    //                     retailPrice: product.retailPrice,
+    //                     price: product.price,
+    //                     vat: product.vat,
+    //                     warehouseId: product?.warehouse?.id,
+    //                     retailUnit: product.retailUnit,
+    //                     wholeSaleUnit: product.wholeSaleUnit,
+    //                 },
+    //                 unit: {
+    //                     id: product?.retailUnit?.id, // mặc định chọn đvt lẻ
+    //                     unitCode: product?.retailUnit?.unitCode,
+    //                     unitName: product?.retailUnit?.unitName,
+    //                 },
+    //                 warehouseId: product?.warehouse?.id,
+    //                 unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
+    //                 quantity: 0,
+    //                 totalPrice: 0,
+    //                 discount: 0,
+    //                 discountRate: 0,
+    //                 note: null,
+    //                 type: 2,
+    //             };
+    //         });
+    //         return List;
+    //     }
+    // }
 
     // loop to reduce available product promotion
-    listAddProductPromotion(list: any) {
-        let listAddProduct = [];
-        if (list && this.listPromotionProduct) {
-            let listAvailbleIds = this.listPromotionProduct.map((product: any) => {
-                return product?.product?.id;
-            });
-            listAddProduct = list.filter((product: any) => {
-                return !listAvailbleIds.includes(product.product.id);
-            });
-        }
-        return listAddProduct;
-    }
+    // listAddProductPromotion(list: any) {
+    //     let listAddProduct = [];
+    //     if (list && this.listPromotionProduct) {
+    //         let listAvailbleIds = this.listPromotionProduct.map((product: any) => {
+    //             return product?.product?.id;
+    //         });
+    //         listAddProduct = list.filter((product: any) => {
+    //             return !listAvailbleIds.includes(product.product.id);
+    //         });
+    //     }
+    //     return listAddProduct;
+    // }
 
-    unChoosePromotion(productRemove: any) {
-        // remove to list product
-        this.listPromotionProduct = this.listPromotionProduct.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
-        this.pushListProductPromotionToDialog();
-    }
+    // unChoosePromotion(productRemove: any) {
+    //     // remove to list product
+    //     this.listPromotionProduct = this.listPromotionProduct.filter((product: any) => {
+    //         return productRemove.product.id != product?.product?.id;
+    //     });
+    //     this.pushListProductPromotionToDialog();
+    // }
 
-    unChoose(productRemove: any) {
-        // remove to list product
-        this.listProduct = this.listProduct.filter((product: any) => {
-            return productRemove.product.id != product?.product?.id;
-        });
-        this.pushListProductToDialog();
-    }
+    // unChoose(productRemove: any) {
+    //     // remove to list product
+    //     this.listProduct = this.listProduct.filter((product: any) => {
+    //         return productRemove.product.id != product?.product?.id;
+    //     });
+    //     this.pushListProductToDialog();
+    // }
 }

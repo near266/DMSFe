@@ -11,6 +11,7 @@ import { AddEmployeeComponent } from '../add-employee/add-employee.component';
 import { AddManagerComponent } from '../add-manager/add-manager.component';
 import { AddSalesTeamComponent } from '../add-sales-team/add-sales-team.component';
 import { AddUnitComponent } from '../add-unit/add-unit.component';
+import { EditGroupComponent } from '../edit-group/edit-group.component';
 import { MoveUserComponent } from '../move-user/move-user.component';
 
 @Component({
@@ -32,7 +33,7 @@ export class UserTreeViewComponent implements OnInit {
       'Thêm kế toán',
       'Thêm nhóm bán hàng',
       'Thêm đơn vị con',
-      // 'Sửa nhóm',
+      'Sửa nhóm',
       'Xóa nhóm'
     ];
 
@@ -40,7 +41,7 @@ export class UserTreeViewComponent implements OnInit {
       'Thêm quản lý',
       'Thêm kế toán',
       'Thêm nhân viên',
-      // 'Sửa nhóm',
+      'Sửa nhóm',
       'Xóa nhóm'
     ];
 
@@ -223,6 +224,15 @@ export class UserTreeViewComponent implements OnInit {
           };
           // if(element.children.length == 0) node.hasChildren = false;
           if(node.type == 0) node.menubar = this.menubar_unit;
+          if(node.name === 'Chưa thuộc phòng/nhóm') {
+            let temp: any[] = [];
+            for(let i = 0; i < node.menubar.length; i++) {
+              if(node.menubar[i] != 'Xóa nhóm') {
+                temp.push(node.menubar[i]);
+              }
+            }
+            node.menubar = temp;
+          }
           nodes.push(node);
       });
       this.array_index.push({
@@ -263,6 +273,24 @@ export class UserTreeViewComponent implements OnInit {
           if(node.data.children) {
             this.updateNode(node);
           }
+        }
+      });
+    }
+
+    edit_group(id: string, node: any) {
+      let dialogRef = this.dialog.open(EditGroupComponent, {
+        // height: '30vh',
+        minWidth: '650px',
+        data: id,
+        panelClass: 'custom-mat-dialog-container'
+      });
+      dialogRef.afterClosed().subscribe( data => {
+        if(data) {
+          node.data.name = data.event;
+          node.treeModel.update();
+          // if(node.data.children) {
+          //   this.updateNode(node);
+          // }
         }
       });
     }
@@ -376,6 +404,10 @@ export class UserTreeViewComponent implements OnInit {
         }
         case 'Di chuyển': {
           this.open_move_user(node);
+          return;
+        }
+        case 'Sửa nhóm': {
+          this.edit_group(node.data.id, node);
           return;
         }
         case 'Xóa nhóm': {

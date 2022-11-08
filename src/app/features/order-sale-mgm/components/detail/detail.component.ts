@@ -11,6 +11,7 @@ import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { statusList } from 'src/app/core/data/PurchaseOrderList';
 import * as moment from 'moment';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
     selector: 'app-detail',
@@ -51,6 +52,13 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     listRoute: any = [];
     listGroup: any = [];
 
+    // coppy
+    groupCoppy: any = '';
+    orderCoppy: any = '';
+    routeCoppy: any = '';
+    customerCoppy: any = '';
+    saleCoppy: any = '';
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
@@ -59,6 +67,7 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
         private saleReceipt: SaleReceiptService,
         private purchaseOrder: PurchaseOrderService,
         private numberToText: NumberToTextService,
+        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -176,6 +185,17 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
         this.textMoney = this.numberToText.doc(this.totalPayment);
     }
 
+    getCoppyText() {
+        this.groupCoppy = this.detailOrder?.group?.name;
+        this.orderCoppy =
+            this.detailOrder?.orderEmployee?.employeeCode + ' - ' + this.detailOrder?.orderEmployee?.employeeName;
+        this.routeCoppy = this.detailOrder?.route?.routeName;
+        this.customerCoppy =
+            this.detailOrder?.customer?.customerCode + ' - ' + this.detailOrder?.customer?.customerName;
+        this.saleCoppy =
+            this.detailOrder?.saleEmployee?.employeeCode + ' - ' + this.detailOrder?.saleEmployee?.employeeName;
+    }
+
     countTotalAmount() {
         this.totalAmount = 0;
         let tt1 = 0;
@@ -250,9 +270,13 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
             this.prePayment = this.detailOrder.prePayment;
             this.textMoney = this.numberToText.doc(this.totalPayment);
             // set hạn mức dư nợ
-            this.purchaseOrder.getCustomerById(this.detailOrder?.customer?.id).subscribe((data) => {
-                this.debtLimit = data?.debtLimit;
-            });
+            if (this.detailOrder?.customer?.id) {
+                this.purchaseOrder.getCustomerById(this.detailOrder?.customer?.id).subscribe((data) => {
+                    this.debtLimit = data?.debtLimit;
+                });
+            }
+            // copy
+            this.getCoppyText();
         });
     }
 
@@ -423,6 +447,12 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
                 id: product.product.id,
             };
         });
+    }
+
+    coppy(value: any, e: any) {
+        this.stopPropagation(e);
+        navigator.clipboard.writeText(value);
+        this.snackbar.openSnackbar('Sao chép thành công', 1000, 'Đóng', 'center', 'bottom', true);
     }
 
     // openDialogProduct() {

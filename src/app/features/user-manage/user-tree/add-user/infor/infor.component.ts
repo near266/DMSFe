@@ -199,18 +199,18 @@ export class InforComponent implements OnInit, OnDestroy {
         }
       }
       if (data == 'delete') {
-        let sub4 = this.employeeService.ArchiveEmployee(this.employee.value.id, this.employee.value.lastModifiedBy, this.employee.value.lastModifiedDate).subscribe(data => {
-          this.snackbar.openSnackbar('Đã xóa', 5000, 'Đóng', 'center', 'bottom', true);
-          this.event.emit('delete')
-          this.dataService.changeEmployee('success')
-          sub4.unsubscribe()
-        },
-          () => {
-            this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
-            this.event.emit('delete')
-            this.dataService.changeEmployee('failed')
-            sub4.unsubscribe()
-          })
+        // let sub4 = this.employeeService.ArchiveEmployee(this.employee.value.id, this.employee.value.lastModifiedBy, this.employee.value.lastModifiedDate).subscribe(data => {
+        //   this.snackbar.openSnackbar('Đã xóa', 5000, 'Đóng', 'center', 'bottom', true);
+        //   this.event.emit('delete')
+        //   this.dataService.changeEmployee('success')
+        //   sub4.unsubscribe()
+        // },
+        //   () => {
+        //     this.snackbar.openSnackbar('Có lỗi xảy ra', 3000, 'Đóng', 'center', 'bottom', false);
+        //     this.event.emit('delete')
+        //     this.dataService.changeEmployee('failed')
+        //     sub4.unsubscribe()
+        //   })
       }
     })
   }
