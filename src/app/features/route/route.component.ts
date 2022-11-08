@@ -69,6 +69,8 @@ export class RouteComponent implements OnInit, AfterViewInit {
     this.routeService.SearchAllRoute(page, this.pageSize, groupId, employeeId, keyword).subscribe( data => {
       this.length = data.totalCount
       this.response = data;
+      console.log(data);
+
     });
   }
 
