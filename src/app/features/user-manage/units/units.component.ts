@@ -7,6 +7,7 @@ import { DetailUnitComponent } from './detail-unit/detail-unit.component';
 import { UnitService } from './services/unit.service';
 import { Response } from 'src/app/core/model/Response';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-units',
@@ -35,6 +36,7 @@ export class UnitsComponent implements OnInit {
   totalunits: number;
 
   constructor(
+    public datepipe: DatePipe,
     private dialog: MatDialog,
     private unitService: UnitService,
     private snackbar: SnackbarService,

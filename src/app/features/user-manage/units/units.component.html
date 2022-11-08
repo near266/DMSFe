@@ -45,13 +45,6 @@
                 <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Trạng thái</th>
                 <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Người cập nhật</th>
                 <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ngày cập nhật</th>
-                <!-- <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Địa chỉ</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ngày đặt</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Tổng tiền</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Người duyệt</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ngày duyệt</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Nguồn</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ngày tạo</th> -->
               </tr>
             </thead>
             <tbody>
@@ -90,24 +83,9 @@
                         {{ order?.createdBy }}
                     </td>
                     <td class="custom-td border">
-                        {{ order?.createdDate }}
+                        <!-- {{ order?.createdDate }} -->
+                        {{ datepipe.transform(order.createdDate, 'dd/MM/yyyy') || 'No Data' }}
                     </td>
-                    <!-- <td class="custom-td border-b">
-                        {{ datepipe.transform(order.orderDate, 'dd/MM/yyyy') || 'No-data' }}
-                    </td>
-                    <td class="custom-td border-b">{{ order.totalPayment | currency:"VND":"symbol" }}</td>
-                    <td class="custom-td border-b">
-                        {{ order.approveBy }}
-                    </td>
-                    <td class="custom-td border-b">
-                        {{ datepipe.transform(order.approveDate, 'dd/MM/yyyy') || 'No-data' }}
-                    </td>
-                    <td class="custom-td border-b">
-                        {{ order.source }}
-                    </td>
-                    <td class="custom-td border-b">
-                        {{ datepipe.transform(order.createdDate, 'dd/MM/yyyy') || 'No-data' }}
-                    </td> -->
                 </tr>
             </tbody>
   
