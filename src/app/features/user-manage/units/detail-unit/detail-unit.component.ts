@@ -27,6 +27,7 @@ export class DetailUnitComponent implements OnInit {
     private rolesService: RolesService,
     private snackbar: SnackbarService,
     public dialog: MatDialog,
+    public dialogRef: MatDialogRef<DetailUnitComponent>,
     @Inject(MAT_DIALOG_DATA) public unit: Unit | null,
   ) {
     if (unit) {
@@ -73,13 +74,12 @@ export class DetailUnitComponent implements OnInit {
         },
     });
     let body = {id: [this.unit?.id]}
-    // console.log(this.unit?.id);
-    console.log(body)
     dialogRef.afterClosed().subscribe((data: any) => {
-        if (data === 'Xóa') {
-            this.unitService.del(body);
-            this.snackbar.openSnackbar('Xóa đơn vị thành công', 2000, 'Đóng', 'center', 'bottom', true);
-            this.dialog.closeAll();
+        if (data.includes('Xóa')) {
+            this.unitService.del(body).subscribe(data => {
+              this.dialogRef.close({event: true});
+              this.snackbar.openSnackbar('Xóa đơn vị thành công', 2000, 'Đóng', 'center', 'bottom', true);
+            });            
         }else {
         }
     });

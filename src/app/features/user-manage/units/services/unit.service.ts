@@ -63,7 +63,7 @@ export class UnitService {
     // const body = {
     //     id: unitId,
     // };
-    return this.http.delete(this.Point + '/delete', {body});
+    return this.http.delete(this.Point + '/delete', {body}).pipe(map((response: any) => response));
   }
   
 

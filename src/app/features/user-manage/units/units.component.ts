@@ -63,7 +63,7 @@ export class UnitsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result?.event === true){
-        this.ngOnInit();
+        this.view();
       }
     });
   }
@@ -76,7 +76,7 @@ export class UnitsComponent implements OnInit {
     });
       dialogRef.afterClosed().subscribe(result => {
         if(result?.event === true){
-          this.ngOnInit();
+          this.view();
         }
       });
   }
