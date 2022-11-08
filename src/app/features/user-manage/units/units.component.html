@@ -64,8 +64,8 @@
                     <td class="w-16 border align-middle px-2">
                         <span class="flex items-center text-[#1891C9]">
                           <input type="checkbox">
-                          <i *ngIf="order?.status == true" class="fa-sharp fa-solid fa-lock mb-[1px] ml-2"></i>
-                          <i *ngIf="order?.status == false || order?.status == null" class="fa-sharp fa-solid fa-lock-open mb-[1px] ml-2"></i>
+                          <i *ngIf="order?.status == false" class="fa-sharp fa-solid fa-lock mb-[1px] ml-2"></i>
+                          <i *ngIf="order?.status == true || order?.status == null" class="fa-sharp fa-solid fa-lock-open mb-[1px] ml-2"></i>
                         </span>
                     </td>
                     <td class="custom-td border">
@@ -76,8 +76,8 @@
                         {{ order?.unitName }}
                     </td>
                     <td class="custom-td border">
-                        <button *ngIf="order.status != true" class="text-xs bg-[#10B981] text-white font-medium px-7 py-1 rounded-md w-full">Hoạt động</button>
-                        <button *ngIf="order.status == true" class="text-xs bg-[#CB0D0C] text-white font-medium px-7 py-1 rounded-md w-full">Khóa</button>
+                        <button *ngIf="order.status == true" class="text-xs bg-[#10B981] text-white font-medium px-7 py-1 rounded-md w-full">Hoạt động</button>
+                        <button *ngIf="order.status != true" class="text-xs bg-[#CB0D0C] text-white font-medium px-7 py-1 rounded-md w-full">Khóa</button>
                     </td>
                     <td class="custom-td border">
                         {{ order?.createdBy }}

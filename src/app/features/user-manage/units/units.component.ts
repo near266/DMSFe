@@ -48,7 +48,7 @@ export class UnitsComponent implements OnInit {
 
   view(){
     this.unitService.getAllUnits().subscribe(data => {
-      console.log(this.unit);
+      // console.log(this.unit);
       if(data){
         this.unit = data;
         this.totalunits = data.length
@@ -93,7 +93,6 @@ export class UnitsComponent implements OnInit {
       this.keywords = request;
     }
     this.request.keyword = this.keywords;
-    this.request.page = this.page;
     this.unitService.searchUnit(this.request).subscribe(
         (data) => {
           this.loading = false;
@@ -108,6 +107,31 @@ export class UnitsComponent implements OnInit {
     );
   }
 
+  Select(e: string) {
+    if(e.includes('Tất cả') || e.includes('Hoạt động') || e.includes('Khóa')) {
+      this.sortByType(e);
+      return;
+    } else {
+      this.sortByField(e);
+      return;
+    }
+  }
+  sortByType(key: string) {
+    this.request.type = key;
+    if(this.request.startedDate && this.request.endDate) {
+      this.search('');
+    }
+  }
+
+  sortByField(key: string) {
+    let sort = key.split('-');
+    this.request.sortFeild = sort[0];
+    this.request.sortValue = sort[1];
+    if (this.request.sortValue == 'up') this.request.sortValue = true;
+    if (this.request.sortValue == 'down') this.request.sortValue = false;
+    this.search(key);
+  }
+
   listMenuObj = [
     {
       title: 'Trạng thái',
@@ -115,7 +139,7 @@ export class UnitsComponent implements OnInit {
       listMenuPosition: [
         { title: 'Tất cả', leftIcon: '', value: 'all' },
         { title: 'Hoạt động', leftIcon: '', value: 'emp' },
-        { title: 'Không hoạt động', leftIcon: '', value: 'emp' },
+        { title: 'Khóa', leftIcon: '', value: 'emp' },
       ]
     }
   ]
