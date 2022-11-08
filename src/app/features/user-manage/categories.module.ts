@@ -23,6 +23,14 @@ import { AddEmployeeComponent } from './user-tree/add-employee/add-employee.comp
 import { AddUnitComponent } from './user-tree/add-unit/add-unit.component';
 import { MoveUserComponent } from './user-tree/move-user/move-user.component';
 import { UnitsComponent } from './units/units.component';
+import { AddnitComponent } from './units/addnit/addnit.component';
+import { DetailUnitComponent } from './units/detail-unit/detail-unit.component';
+import { DetailComponent } from './units/detail-unit/detail/detail.component';
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlySelectModule } from '@ngx-formly/core/select';
+import { FormlyMaterialModule } from '@ngx-formly/material';
+import { ProductFieldWrapper } from '../product/components/add-product-dialog/add-product-details/product-field-wrapper/product-field-wrapper.component';
+import { ProductFieldInput, ProductFieldSelect } from '../product/components/add-product-dialog/add-product-details/product-field-type/product-field-type.component';
 import { EditGroupComponent } from './user-tree/edit-group/edit-group.component';
 
 const routes: Routes = [
@@ -62,8 +70,25 @@ const routes: Routes = [
         MoveUserComponent,
         UnitsComponent,
         EditGroupComponent,
+        AddnitComponent,
+        DetailUnitComponent,
+        DetailComponent,
     ],
-    imports: [CommonModule, RouterModule.forChild(routes), SharedModule, NgxPaginationModule],
+    imports: [
+        CommonModule, RouterModule.forChild(routes), 
+        SharedModule, 
+        NgxPaginationModule,
+        FormlyModule.forChild({
+            wrappers: [{ name: 'unit', component: ProductFieldWrapper }],
+            types: [
+                { name: 'unit-input', component: ProductFieldInput, wrappers: ['unit'] },
+                { name: 'unit-select', component: ProductFieldSelect, wrappers: ['unit'] },
+            ],
+            validationMessages: [{ name: 'required', message: 'Trường này là bắt buộc' }],
+        }),
+        FormlySelectModule,
+        FormlyMaterialModule,
+    ],
     exports: [UserTreeViewComponent]
 })
 export class UserManageModule {}

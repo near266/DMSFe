@@ -1,0 +1,86 @@
+<div class="relative h-full overflow-hidden">
+    <div class="flex-row justify-between h-fit p-2 sticky top-0 border-b border-green-600 bg-white"
+      style="display: flex!important; margin: 0!important;">
+      <div class="text-2xl text-gray-500 italic font-semibold tracking-wider flex"><span
+          *ngIf="Unit===''">{{header}}</span><span *ngIf="Unit!==''">{{Unit}}</span></div>
+      <div class="flex flex-row text-xs" *ngIf="mode==='create'">
+        <button (click)="submitForm()"
+          class="flex flex-row bg-blue-900 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
+          <i class="fa-solid fa-circle-check mx-2"></i>
+          <span class="mr-2">Lưu</span>
+        </button>
+        <button
+          class="flex flex-row bg-gray-300 text-black justify-center items-center px-2 py-3 rounded-r-sm cursor-pointer"
+          mat-dialog-close>
+          <i class="fa-solid fa-right-from-bracket mx-2"></i>
+          <span class="mr-2">Đóng</span>
+        </button>
+      </div>
+      <div class="flex flex-row text-xs" *ngIf="mode==='edit'">
+        <button (click)="submitChange()"
+          class="flex flex-row bg-blue-900 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
+          <i class="fa-solid fa-circle-check mx-2"></i>
+          <span class="mr-2">Lưu thay đổi</span>
+        </button>
+        <button
+          class="flex flex-row bg-gray-300 text-black justify-center items-center px-2 py-3 rounded-r-sm cursor-pointer"
+          mat-dialog-close>
+          <i class="fa-solid fa-right-from-bracket mx-2"></i>
+          <span class="mr-2">Đóng</span>
+        </button>
+      </div>
+      <div class="flex flex-row text-xs" *ngIf="mode==='view'">
+        <button (click)="toggleEditMode()" *ngIf="requiredRoles('accountant') | async"
+          class="flex flex-row bg-gray-800 mr-2 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
+          <i class="fa-solid fa-file mx-2"></i>
+          <span class="mr-2">Sửa</span>
+        </button>
+        <button (click)="deleteProduct()" *ngIf="requiredRoles('accountant') | async"
+          class="flex flex-row bg-gray-300 text-black opacity-80  justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
+          <i class="fa-solid fa-trash mx-2"></i>
+          <span class="mr-2">Xoá</span>
+        </button>
+        <button
+          class="flex flex-row bg-gray-300 text-black justify-center items-center px-2 py-3 rounded-r-sm cursor-pointer"
+          mat-dialog-close>
+          <i class="fa-solid fa-right-from-bracket mx-2"></i>
+          <span class="mr-2">Đóng</span>
+        </button>
+      </div>
+    </div>
+    <!-- <div class="min-w-max h-full" style="background-color: #f5f5f5;">
+        <div>
+            <div class="w-full flex px-8 py-2">
+                <div class="w-2/12">STT</div>
+                <div class="w-10/12">
+                    <select class="border border-solid border-black rounded-sm w-96 text-xs h-7">
+                        <option disabled selected value=""> --- Auto --- </option>
+                    </select>
+                </div>
+            </div>
+            <div class="w-full flex px-8 py-2">
+                <div class="w-2/12">Mã đơn vị tính</div>
+                <div class="w-10/12">
+                    <input formControlName="unitCode" class="border border-solid border-black rounded-sm w-96 text-xs h-7">
+                </div>
+            </div>
+            <div class="w-full flex px-8 py-2">
+                <div class="w-2/12">Đơn vị tính</div>
+                <div class="w-10/12">
+                    <input formControlName="unitName" class="border border-solid border-black rounded-sm w-96 text-xs h-7">
+                </div>
+            </div>
+            <div class="w-full flex px-8 py-2">
+                <div class="w-2/12">Trạng thái</div>
+                <select formControlName="status" class="border border-solid border-black rounded-sm w-96 text-xs h-7">
+                    <option disabled selected value=""> --- Chọn trạng thái --- </option>
+                    <option value="true">Hoạt động</option>
+                    <option value="false">Khóa</option>
+                </select>
+            </div>
+        </div>
+    </div> -->
+    <div class="bg-white h-full overflow-y-scroll w-full pb-4">
+        <app-detail [unitModel]="unit" [dialogMode]="mode"></app-detail>
+    </div>
+</div>
