@@ -163,12 +163,13 @@ export class OrderSaleMgmComponent implements OnInit {
         this.formFilterReceive = event;
     }
 
+    // theo select
     export() {
         let body: any;
         body = {
             filter: null,
             listId: this.id,
-            type: 2,
+            type: 1,
         };
         this.confirmService
             .open(`Bạn có muốn xuất ${this.id.length} bản ghi đã chọn hay không?`, ['Xuất', 'Hủy'])
@@ -233,6 +234,7 @@ export class OrderSaleMgmComponent implements OnInit {
     //     });
     // }
 
+    // theo filter
     exportWithFilter() {
         let bodySent: any;
         bodySent = {
@@ -245,7 +247,7 @@ export class OrderSaleMgmComponent implements OnInit {
             .open(`Bạn có muốn xuất ${this.total} bản ghi đã chọn không?`, ['Xuất', 'Hủy'])
             .subscribe((data) => {
                 if (data === 'Xuất') {
-                    this.saleReceiptService.print(bodySent).subscribe(
+                    this.saleReceiptService.export(bodySent).subscribe(
                         (data) => {
                             var blob = new Blob([data], {
                                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -262,25 +264,35 @@ export class OrderSaleMgmComponent implements OnInit {
             });
     }
 
+    // theo select
     print() {
-        let body;
+        let body: any;
         body = {
             filter: null,
             listId: this.id,
-            type: 2,
+            type: 1,
         };
-        console.log('Print');
-        this.saleReceiptService.print(body).subscribe({
-            next: (data) => {
-                var blob = new Blob([data], {
-                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                });
-                const blobUrl = window.URL.createObjectURL(blob);
-                window.open(blobUrl);
-            },
-        });
+        this.confirmService
+            .open(`Bạn có muốn in ${this.id.length} bản ghi đã chọn không?`, ['In', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'In') {
+                    this.saleReceiptService.print(body).subscribe(
+                        (data) => {
+                            var blob = new Blob([data], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            });
+                            const blobUrl = window.URL.createObjectURL(blob);
+                            window.open(blobUrl);
+                        },
+                        (err) => {
+                            this.snackbar.failureSnackBar();
+                        },
+                    );
+                }
+            });
     }
 
+    // theo filter
     printFilter() {
         let bodySent: any;
         bodySent = {

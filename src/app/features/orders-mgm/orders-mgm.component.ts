@@ -52,7 +52,6 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         private purchaseOrderService: PurchaseOrderService,
         private dataService: DataService,
         private fb: FormBuilder,
-        private purchaseSer: PurchaseOrderService,
         private confirmService: ConfirmDialogService,
         private snackbar: SnackbarService,
     ) {}
@@ -173,13 +172,13 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
         body = {
             filter: null,
             listId: this.id,
-            type: 2,
+            type: 1,
         };
         this.confirmService
             .open(`Bạn có muốn in ${this.id.length} bản ghi đã chọn không?`, ['In', 'Hủy'])
             .subscribe((data) => {
                 if (data === 'In') {
-                    this.purchaseSer.print(body).subscribe(
+                    this.purchaseOrderService.print(body).subscribe(
                         (data) => {
                             var blob = new Blob([data], {
                                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -208,7 +207,7 @@ export class OrdersMgmComponent implements OnInit, DoCheck, OnDestroy, AfterView
             .open(`Bạn có muốn in ${this.total} bản ghi đã chọn không?`, ['In', 'Hủy'])
             .subscribe((data) => {
                 if (data === 'In') {
-                    this.purchaseSer.print(bodySent).subscribe(
+                    this.purchaseOrderService.print(bodySent).subscribe(
                         (data) => {
                             var blob = new Blob([data], {
                                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

@@ -3,10 +3,6 @@
         <div class="p-3 w-full flex justify-between items-center">
             <span style="font-size: 20px !important" class="font-medium">Thêm mới phiếu đặt hàng</span>
             <div class="flex items-center">
-                <!-- <button (click)="create()" class="button-primary-sm flex items-center justify-between mr-2">
-                    <i class="fa-solid fa-check text-white mr-2"></i>
-                    <span class="text-white">Lưu</span>
-                </button> -->
                 <button (click)="create()" class="button-success-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-circle-check text-white mr-2"></i>
                     <span class="text-white">Lưu & Đóng</span>
@@ -102,11 +98,11 @@
                 </mat-form-field>
                 <mat-form-field class="w-1/3" appearance="outline" floatLabel="always">
                     <mat-label>SĐT</mat-label>
-                    <input matInput formControlName="phone" />
+                    <input [readonly]="true" matInput formControlName="phone" />
                 </mat-form-field>
                 <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Địa chỉ</mat-label>
-                    <input matInput formControlName="address" />
+                    <input [readonly]="true" matInput formControlName="address" />
                 </mat-form-field>
             </div>
             <mat-form-field class="w-full" appearance="outline" floatLabel="always">

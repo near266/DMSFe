@@ -60,10 +60,8 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     saleCoppy: any = '';
 
     constructor(
-        private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
         private dataservice: DataService,
-        private dialog: MatDialog,
         private saleReceipt: SaleReceiptService,
         private purchaseOrder: PurchaseOrderService,
         private numberToText: NumberToTextService,
