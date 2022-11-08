@@ -56,6 +56,10 @@ const routes: Routes = [
                     import('./../../../features/order-report/order-report.module').then((m) => m.OrderReportModule),
             },
             {
+              path: 'timekeeping',
+              loadChildren: () => import('./../../../features/timekeeping/timekeeping.module').then(m => m.TimekeepingModule)
+            },
+            {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'orders',
