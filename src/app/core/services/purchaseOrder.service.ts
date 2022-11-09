@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, map, of, delay, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import purchaseOrdersList from 'src/app/features/orders-mgm/mocks/PurchaseOrders';
 import { api_gateway_url, api_url, base_url, gateway_url } from '../const/url';
 @Injectable({
     providedIn: 'root',

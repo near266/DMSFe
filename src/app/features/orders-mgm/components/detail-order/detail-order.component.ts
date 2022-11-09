@@ -240,8 +240,8 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
             customer: {
                 code: this.detailOrder.customer?.id,
                 name: this.detailOrder.customer?.customerName,
-                phone: this.detailOrder.phone,
-                address: this.detailOrder.address,
+                phone: this.detailOrder.customer?.phone,
+                address: this.detailOrder.customer?.address,
             },
             description: this.detailOrder.description,
         });
