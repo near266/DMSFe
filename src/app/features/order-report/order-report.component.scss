@@ -1,4 +1,13 @@
-input, textarea {
-  outline: none;
-  border: none;
+input,
+textarea {
+    outline: none;
+    border: none;
+}
+
+:host ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+}
+
+:host ::ng-deep .mat-drawer-content {
+    overflow-y: hidden;
 }
