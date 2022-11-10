@@ -30,9 +30,14 @@
                             {{ item.content }}
                         </ng-container>
                     </td>
-                    <td *ngIf="item.hasChildren" class="custom-td border-b">
-                        <tr *ngFor="let content of item.content">
-                            {{ content }}
+                    <td *ngIf="item.hasChildren" style="padding: 0px !important" class="custom-td border-b">
+                        <tr
+                            style="height: calc(100% / + '{{ item.content.length }}')"
+                            class="nested-row"
+                            *ngFor="let content of item.content; index as index1; last as isLast">
+                            <div class="px-2">
+                                {{ content }}
+                            </div>
                         </tr>
                     </td>
                 </ng-container>

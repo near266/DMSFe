@@ -30,7 +30,6 @@ export class FormatService {
             let vatArray = productInfo.vatArray;
             let discountRateArray = productInfo.discountRateArray;
             let discountArray = productInfo.discountArray;
-
             return [
                 // Số thứ tự
                 {
@@ -194,21 +193,25 @@ export class FormatService {
                 },
                 // thành tiền
                 {
-                    content: this.currency.transform(data.totalOfVAT, 'VND', 'symbol', '1.0-0'),
+                    content: this.currency.transform(data.totalMoney, 'VND', 'symbol', '1.0-0'),
                     hasChildren: false,
                 },
+                // Chiết khấu tổng bill
                 {
                     content: this.percent.transform(data.tradeDiscountRate / 100, '1.0-0'),
                     hasChildren: false,
                 },
+                // tiền chiết khấu
                 {
                     content: this.currency.transform(data.tradeDiscount, 'VND', 'symbol', '1.0-0'),
                     hasChildren: false,
                 },
+                // thanh toán trước
                 {
                     content: 'Chưa trả về',
                     hasChildren: false,
                 },
+                // Diễn giải
                 {
                     content: data.description,
                     hasChildren: false,

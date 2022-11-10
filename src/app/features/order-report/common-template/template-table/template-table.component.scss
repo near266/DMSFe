@@ -59,15 +59,21 @@ tbody {
     @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x;
 }
 
-.custom-td {
-    max-width: 180px;
-    @apply space-x-2 border-x border-solid pl-2;
+.custom-row:hover .nested-row {
+    @apply bg-gray-50;
 }
 
-.customer-row-nested {
-    &:before {
-        border-bottom-width: 0.5px;
-        margin: 0px -8px;
-        background-color: #e5e7eb;
-    }
+.nested-row {
+    display: block;
+    padding: 8px 0px;
 }
+
+.custom-td {
+    max-width: 180px;
+    @apply border-x border-solid pl-2;
+}
+
+// .custom-nested-tr {
+//     margin: 0px -8px;
+//     border-bottom: 1px solid gray;
+// }

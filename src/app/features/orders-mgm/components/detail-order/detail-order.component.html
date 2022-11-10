@@ -50,7 +50,7 @@
                     class="fa-regular fa-copy translate-y-[-45%] mr-1"></i>
                 <mat-select [disabled]="type === 'View'" formControlName="orderEmployee">
                     <input
-                        (input)="searchListEmployee($event)"
+                        (input)="searchListEmployee($event, 'search on html')"
                         placeholder="Tìm kiếm..."
                         style="padding-left: 12px"
                         matInput
@@ -102,7 +102,7 @@
                         matInput
                         class="h-10 rounded-sm" />
                     <mat-option
-                        (click)="setRouteGroupAndEmployee(defaultCustomer?.id)"
+                        (click)="setRouteGroupAndEmployee(defaultCustomer?.id); setInfoCustomer(defaultCustomer?.id)"
                         *ngIf="defaultCustomer"
                         [value]="defaultCustomer?.id">
                         {{ defaultCustomer?.customerCode }} - {{ defaultCustomer?.customerName }}
