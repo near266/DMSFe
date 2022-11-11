@@ -1,0 +1,32 @@
+@tailwind components;
+
+@layer components {
+
+    table th {
+        position: sticky;
+        top: 0px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 14px;
+        z-index: 1;
+        @apply text-gray-700 bg-zinc-200;
+    }
+
+    table th,
+    table td {
+        padding: 5px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    table td {
+        text-align: center;
+        // font-size: 15px;
+        // padding-left: 15px;
+    }
+
+
+    // tbody {
+    //     font-size: 12px;
+    // }
+}

@@ -1,25 +1,23 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Unit } from '../../product/models/product';
-import { AddnitComponent } from './addnit/addnit.component';
-import { DetailUnitComponent } from './detail-unit/detail-unit.component';
-import { UnitService } from './services/unit.service';
-import { Response } from 'src/app/core/model/Response';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { DatePipe } from '@angular/common';
+import { Brand } from '../../product/models/product';
+import { AddBrandComponent } from './add-brand/add-brand.component';
+import { BrandComponent } from './brand/brand.component';
+import { BranchService } from './services/branch.service';
 
 @Component({
-  selector: 'app-units',
-  templateUrl: './units.component.html',
-  styleUrls: ['./units.component.scss']
+  selector: 'app-branchs',
+  templateUrl: './branchs.component.html',
+  styleUrls: ['./branchs.component.scss']
 })
-export class UnitsComponent implements OnInit {
+export class BranchsComponent implements OnInit {
 
   loading = true;
   sideBarWidth!: string;
   type!: string;
-  // listOrder: PurchaseOrder[] = [];
-  unit: Unit[] = [];
+  brand: Brand[] = [];
   totalCount: number;
   keywords: '';
   request: any = {
@@ -32,34 +30,35 @@ export class UnitsComponent implements OnInit {
   page: number = 1;
   pageSize: number = 30;
   total: number = 0;
-  totalunits: number;
+  totalbranchs: number;
 
   constructor(
     public datepipe: DatePipe,
     private dialog: MatDialog,
-    private unitService: UnitService,
+    private brandService: BranchService,
     private snackbar: SnackbarService,
   ) { }
 
   ngOnInit(): void {
+
     this.view();
   }
 
   view(){
-    this.unitService.getAllUnits().subscribe(data => {
-      // console.log(this.unit);
+    this.brandService.getAllBrand().subscribe(data => {
       if(data){
-        this.unit = data;
-        this.totalunits = data.length
+        this.brand = data;
+        this.totalbranchs = data.length
+        // console.log(data);
       }
     })
   }
-
-  AddUnit() {
-    const dialogRef = this.dialog.open(AddnitComponent, {
-        height: '100vh',
-        minWidth: '900px',
-        panelClass: 'custom-mat-dialog-container'
+  
+  AddBranch(){
+    const dialogRef = this.dialog.open(AddBrandComponent, {
+      height: '100vh',
+      minWidth: '900px',
+      panelClass: 'custom-mat-dialog-container'
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result?.event === true){
@@ -68,8 +67,8 @@ export class UnitsComponent implements OnInit {
     });
   }
 
-  open(data: Unit | null = null) {
-    const dialogRef = this.dialog.open(DetailUnitComponent, {
+  open(data: Brand | null = null) {
+    const dialogRef = this.dialog.open(BrandComponent, {
         width: '730px',
         height: '90vh',
         data,
@@ -81,7 +80,7 @@ export class UnitsComponent implements OnInit {
       });
   }
 
-  search(request: any) {
+  search(request: any){
     this.loading = true;
     if(request) {
       request = ('' + request).trim();
@@ -92,11 +91,11 @@ export class UnitsComponent implements OnInit {
       this.keywords = request;
     }
     this.request.keyword = this.keywords;
-    this.unitService.searchUnit(this.request).subscribe(
+    this.brandService.searchBrand(this.request).subscribe(
         (data) => {
           this.loading = false;
           if(data) {
-            this.unit = data;
+            this.brand = data;
           }
         },
         (error) => {

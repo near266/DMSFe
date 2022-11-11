@@ -1,10 +1,10 @@
 <div class="h-full w-full px-4 py-2 overflow-hidden">
     <div class="w-full bg-white h-9 flex items-center text-lg font-medium">
-      Danh mục đơn vị tính ({{totalunits}})
+      Danh mục đơn vị tính ({{totalbranchs}})
     </div>
     <div
         class="w-full px-2 py-1 bg-gray-100 border-gray-300 border-y border-solid h-10 flex flex-wrap items-center text-xs font-medium">
-        <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="AddUnit()">
+        <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="AddBranch()">
           <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
           Thêm mới
         </button>
@@ -40,8 +40,8 @@
                 <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">
                     <input type="checkbox">
                 </th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Mã ĐVT</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Đơn vị tính</th>
+                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Mã nhãn hiệu</th>
+                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Tên nhãn hiệu</th>
                 <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Trạng thái</th>
                 <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Người cập nhật</th>
                 <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ngày cập nhật</th>
@@ -50,7 +50,7 @@
             <tbody>
                 <tr
                     *ngFor="
-                        let order of unit
+                        let order of brand
                             | paginate
                                 : {
                                       itemsPerPage: pageSize,
@@ -69,11 +69,11 @@
                         </span>
                     </td>
                     <td class="custom-td border">
-                        {{ order?.unitCode }}
+                        {{ order?.brandCode }}
                     </td>
                     <td
                         class="cursor-pointer hover:text-blue-500 custom-td border" (click)="open(order)">
-                        {{ order?.unitName }}
+                        {{ order?.brandName }}
                     </td>
                     <td class="custom-td border">
                         <button *ngIf="order.status == true" class="text-xs bg-[#10B981] text-white font-medium px-7 py-1 rounded-md w-full">Mở</button>
@@ -96,5 +96,4 @@
         <app-ez-pagination></app-ez-pagination>
     </div>
     </div>
-  </div>
-  
+</div>

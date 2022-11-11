@@ -1,22 +1,22 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, NgForm } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { Unit } from 'src/app/features/product/models/product';
-import { UnitService } from '../../services/unit.service';
+import { Brand } from 'src/app/features/product/models/product';
+import { BranchService } from '../../services/branch.service';
 
 @Component({
-  selector: 'app-detail',
-  templateUrl: './detail.component.html',
-  styleUrls: ['./detail.component.scss']
+  selector: 'app-detail-brand',
+  templateUrl: './detail-brand.component.html',
+  styleUrls: ['./detail-brand.component.scss']
 })
-export class DetailComponent implements OnInit {
+export class DetailBrandComponent implements OnInit {
 
   @ViewChild('myForm') myForm: NgForm;
   @ViewChild('submitButton') submitButton: ElementRef;
-  @Input() unitModel: Unit | null;
+  @Input() brandModel: Brand | null;
   @Input() status: string;
   @Input() dialogMode: 'create' | 'edit' | 'view' = 'create';
   form = new FormGroup({});
@@ -25,8 +25,8 @@ export class DetailComponent implements OnInit {
 
   model = {
     id: null,
-    unitName: null,
-    unitCode: 0,
+    brandName: null,
+    brandCode: 0,
     status: null,
   };
 
@@ -36,7 +36,7 @@ export class DetailComponent implements OnInit {
     },
     {
         key: 'status',
-        type: 'unit-select',
+        type: 'brand-select',
         defaultValue: null,
         templateOptions: {
             label: 'Trạng thái',
@@ -48,32 +48,32 @@ export class DetailComponent implements OnInit {
         },
     },
     {
-        key: 'unitName',
-        type: 'unit-input',
+        key: 'brandName',
+        type: 'brand-input',
         templateOptions: {
-            label: 'Tên đơn vị tính',
-            placeholder: 'Nhập tên đơn vị tính',
+            label: 'Tên nhãn hiệu',
+            placeholder: 'Nhập tên nhãn hiệu',
             required: true,
         },
     },
     {
-        key: 'unitCode',
-        type: 'unit-input',
+        key: 'brandCode',
+        type: 'brand-input',
         defaultValue: null,
         templateOptions: {
-            label: 'ĐVT lẻ',
-            placeholder: 'Nhập code đơn vị tính',
+            label: 'Mã nhãn hiệu',
+            placeholder: 'Nhập code nhãn hiệu',
             required: true,
         },
     },
   ];
 
-  onSubmit(unit: Unit) {
-    console.log(unit);
+  onSubmit(brand: Brand) {
+    console.log(brand);
     if (!this.form.invalid) {
-        if (!unit.id) {
-            delete unit.id;
-            this.unitService.addUnit(unit).subscribe({
+        if (!brand.id) {
+            delete brand.id;
+            this.branchService.addBrand(brand).subscribe({
                 next: (res) => {
                     this.snackbar.openSnackbar('Thêm thành công', 2000, 'Đóng', 'center', 'top', true);
                     this.dialogRef.close({event: true});
@@ -83,7 +83,7 @@ export class DetailComponent implements OnInit {
                 },
             });
         } else {
-            this.unitService.updateUnit(unit).subscribe({
+            this.branchService.updateBrand(brand).subscribe({
                 next: (res) => {
                     this.snackbar.openSnackbar('Sửa đơn vị thành công', 2000, 'Đóng', 'center', 'bottom', true);
                     this.dialogRef.close({event: true});
@@ -98,25 +98,25 @@ export class DetailComponent implements OnInit {
   }
 
   constructor(
-      public dialogRef: MatDialogRef<DetailComponent>,
-      private snackbar: SnackbarService,
-      private unitService: UnitService,
-  ) {}
+    public dialogRef: MatDialogRef<DetailBrandComponent>,
+    private snackbar: SnackbarService,
+    private branchService: BranchService,
+  ) { }
 
   ngOnInit(): void {
-    this.unitService.changeHeader('');
+    this.branchService.changeHeader('');
     setTimeout(() => {
-        if (this.unitModel) {
-            console.log(this.unitModel);
-            this.form.patchValue(this.unitModel || {});
-            this.unitService.changeHeader(this.unitModel.unitName || '');
+        if (this.brandModel) {
+            console.log(this.brandModel);
+            this.form.patchValue(this.brandModel || {});
+            this.branchService.changeHeader(this.brandModel.brandName || '');
             this.form.disable();
         }
     }, 0);
-    this.subscription = this.unitService.submitForm$.subscribe(() => {
+    this.subscription = this.branchService.submitForm$.subscribe(() => {
         this.submitButton.nativeElement.click();
     });
-    this.subscription2 = this.unitService.toggleEdit$.subscribe((value: boolean) => {
+    this.subscription2 = this.branchService.toggleEdit$.subscribe((value: boolean) => {
         if (value) {
             this.form.enable();
         }
@@ -124,8 +124,8 @@ export class DetailComponent implements OnInit {
   }
 
   ngOnDestroy() {
-      this.subscription.unsubscribe();
-      this.subscription2.unsubscribe();
+    this.subscription.unsubscribe();
+    this.subscription2.unsubscribe();
   }
 
   close() {

@@ -32,6 +32,10 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 import { ProductFieldWrapper } from '../product/components/add-product-dialog/add-product-details/product-field-wrapper/product-field-wrapper.component';
 import { ProductFieldInput, ProductFieldSelect } from '../product/components/add-product-dialog/add-product-details/product-field-type/product-field-type.component';
 import { EditGroupComponent } from './user-tree/edit-group/edit-group.component';
+import { BranchsComponent } from './branchs/branchs.component';
+import { AddBrandComponent } from './branchs/add-brand/add-brand.component';
+import { BrandComponent } from './branchs/brand/brand.component';
+import { DetailBrandComponent } from './branchs/brand/detail-brand/detail-brand.component';
 
 const routes: Routes = [
     {
@@ -45,6 +49,10 @@ const routes: Routes = [
     {
         path: 'units',
         component: UnitsComponent,
+    },
+    {
+        path: 'brand',
+        component: BranchsComponent,
     }
 ];
 
@@ -73,6 +81,10 @@ const routes: Routes = [
         AddnitComponent,
         DetailUnitComponent,
         DetailComponent,
+        BranchsComponent,
+        AddBrandComponent,
+        BrandComponent,
+        DetailBrandComponent,
     ],
     imports: [
         CommonModule, RouterModule.forChild(routes), 

@@ -1,0 +1,6 @@
+<div class="w-full flex flex-col">
+    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" #myForm="ngForm">
+      <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+      <button #submitButton type="submit" class="hidden"></button>
+    </form>
+</div>
