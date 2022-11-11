@@ -1,0 +1,19 @@
+:host::ng-deep.mat-form-field-disabled {
+    .mat-form-field-outline {
+        color: rgba(0, 0, 0, 0.2) !important;
+    }
+    .mat-form-field-label-wrapper {
+        label {
+            color: rgba(0, 0, 0, 0.8) !important;
+        }
+    }
+    input.mat-input-element {
+        color: black;
+    }
+    textarea.mat-input-element {
+        color: black;
+    }
+    .mat-select-value {
+        color: black;
+    }
+}

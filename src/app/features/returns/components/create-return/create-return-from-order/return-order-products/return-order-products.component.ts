@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, DoCheck, OnInit } from '@angular/core';
-import { take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ProductDialogService } from 'src/app/features/product/services/product-dialog.service';
 import { ReturnOrderService } from 'src/app/features/returns/services/return-order.service';
@@ -13,6 +13,7 @@ export class ReturnOrderProductsComponent implements OnInit, DoCheck {
     productsInput: any[] = [];
     productQuantitySum: number;
     unitOptions: any[];
+    subscription: Subscription[] = [];
     warehouseOptions: any[];
     constructor(
         private returnDetailsService: ReturnOrderService,
@@ -21,25 +22,27 @@ export class ReturnOrderProductsComponent implements OnInit, DoCheck {
     ) {}
 
     ngOnInit(): void {
-        this.productDialogService.getAllWarehouses().subscribe((data) => {
-            this.warehouseOptions = data;
-        });
-        this.productDialogService.getAllUnits().subscribe((data) => {
-            this.unitOptions = data;
-        });
-        this.returnDetailsService.submitFormInfo$.pipe().subscribe((_) => {
-            if (this.checkAndSubmit()) {
-                this.returnDetailsService.submitFormProductList$.next(
-                    this.returnDetailsService.formatSubmitListProduct(this.productsInput),
-                );
-            }
-        });
-        this.returnDetailsService.returnProductList$.subscribe((_) => {
-            this.productsInput = _;
-            this.returnDetailsService.totalPrice$.next(this.getSumOfTotalPrice());
-            this.returnDetailsService.discountAmount$.next(this.getSumOfDiscount());
-            this.productQuantitySum = this.productsInput.reduce((a, b) => +a + +b.returnsQuantity, 0);
-        });
+        this.subscription.push(
+            this.productDialogService.getAllWarehouses().subscribe((data) => {
+                this.warehouseOptions = data;
+            }),
+            this.productDialogService.getAllUnits().subscribe((data) => {
+                this.unitOptions = data;
+            }),
+            this.returnDetailsService.submitFormInfo$.pipe().subscribe((_) => {
+                if (this.checkAndSubmit()) {
+                    this.returnDetailsService.submitFormProductList$.next(
+                        this.returnDetailsService.formatSubmitListProduct(this.productsInput),
+                    );
+                }
+            }),
+            this.returnDetailsService.returnProductList$.subscribe((_) => {
+                this.productsInput = _;
+                this.returnDetailsService.totalPrice$.next(this.getSumOfTotalPrice());
+                this.returnDetailsService.discountAmount$.next(this.getSumOfDiscount());
+                this.productQuantitySum = this.productsInput.reduce((a, b) => +a + +b.returnsQuantity, 0);
+            }),
+        );
     }
     ngDoCheck(): void {
         if (this.productsInput?.length) {
@@ -126,5 +129,9 @@ export class ReturnOrderProductsComponent implements OnInit, DoCheck {
         //find id in listProduct.product and remove
         this.productsInput = this.productsInput.filter((item) => item.product.id !== id);
         this.returnDetailsService.returnProductList$.next(this.productsInput);
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.forEach((item) => item.unsubscribe());
     }
 }

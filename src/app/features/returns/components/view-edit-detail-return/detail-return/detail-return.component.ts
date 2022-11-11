@@ -32,20 +32,26 @@ export class DetailReturnComponent implements OnInit {
     constructor(private returnDetailsService: ReturnDetailsService) {}
 
     ngOnInit(): void {
-        this.returnDetailsService.currentMode$.subscribe((mode) => {
-            this.currentMode = mode;
-        });
+        this.subscription.push(
+            this.returnDetailsService.currentMode$.subscribe((mode) => {
+                this.currentMode = mode;
+            }),
+        );
         // pass id to service
-        this.returnDetailsService.totalPrice$.subscribe((data) => {
-            this.totalPrice = data;
-            const ins = new readMoney(data);
-            this.textMoney = ins.doc(data - this.discountAmount);
-        });
-        this.returnDetailsService.discountAmount$.subscribe((data) => {
-            this.discountAmount = data;
-            const ins = new readMoney(data);
-            this.textMoney = ins.doc(this.totalPrice - data);
-        });
+        this.subscription.push(
+            this.returnDetailsService.totalPrice$.subscribe((data) => {
+                this.totalPrice = data;
+                const ins = new readMoney(data);
+                this.textMoney = ins.doc(data - this.discountAmount);
+            }),
+        );
+        this.subscription.push(
+            this.returnDetailsService.discountAmount$.subscribe((data) => {
+                this.discountAmount = data;
+                const ins = new readMoney(data);
+                this.textMoney = ins.doc(this.totalPrice - data);
+            }),
+        );
     }
 
     ngOnDestroy(): void {
@@ -53,10 +59,6 @@ export class DetailReturnComponent implements OnInit {
             service.unsubscribe();
         });
     }
-
-    ngAfterViewInit(): void {}
-
-    ngDoCheck(): void {}
 
     stopPropagation(e: any) {
         e.stopPropagation();

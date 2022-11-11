@@ -34,9 +34,11 @@ export class CreateReturnTableComponent implements OnInit {
     ngOnInit(): void {
         // calculate sum of product quantity
         this.returnFormService.products$.subscribe((data) => {
+            console.log(data);
             const res = data.map((item: any) => {
                 return {
                     vat: item?.vat,
+                    index: item?.index,
                     sku: item.sku,
                     productName: item.productName,
                     productId: item.id,

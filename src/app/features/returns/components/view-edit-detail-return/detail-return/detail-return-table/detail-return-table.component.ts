@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ReturnDetailsService } from 'src/app/features/returns/services/return-details.service';
 
 @Component({
@@ -9,14 +10,22 @@ import { ReturnDetailsService } from 'src/app/features/returns/services/return-d
 export class DetailReturnTableComponent implements OnInit {
     productsInput: any[] = [];
     productQuantitySum: number;
+    subscriptions: Subscription[] = [];
     constructor(private returnDetailsService: ReturnDetailsService) {}
 
     ngOnInit(): void {
-        this.returnDetailsService.returnListProducts$.subscribe((_) => {
-            this.productsInput = _;
-            this.returnDetailsService.totalPrice$.next(this.getSumOfTotalPrice());
-            this.returnDetailsService.discountAmount$.next(this.getSumOfDiscount());
-            this.productQuantitySum = this.productsInput.reduce((a, b) => +a + +b.returnsQuantity, 0);
+        this.subscriptions.push(
+            this.returnDetailsService.returnListProducts$.subscribe((_) => {
+                this.productsInput = _;
+                this.returnDetailsService.totalPrice$.next(this.getSumOfTotalPrice());
+                this.returnDetailsService.discountAmount$.next(this.getSumOfDiscount());
+                this.productQuantitySum = this.productsInput.reduce((a, b) => +a + +b.returnsQuantity, 0);
+            }),
+        );
+    }
+    ngOnDestroy() {
+        this.subscriptions.forEach((item) => {
+            item.unsubscribe();
         });
     }
     getSumOfTotalPrice() {
