@@ -59,6 +59,10 @@ tbody {
     @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x;
 }
 
+.custom-sticky {
+    @apply sticky top-[33px] z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x text-center;
+}
+
 .custom-row:hover .nested-row {
     @apply bg-gray-50;
 }

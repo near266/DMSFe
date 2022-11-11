@@ -16,6 +16,7 @@ export class OrderReportTableComponent implements OnInit, AfterViewInit {
     tableHeader: string[] = headerOrderReportTable;
     listData$: Observable<any> = this.logicService.reportOrders$;
     total$: Observable<any> = this.logicService.total$;
+
     body = {
         page: 1,
         pageSize: 30,

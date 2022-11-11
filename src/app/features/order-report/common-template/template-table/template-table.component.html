@@ -8,6 +8,11 @@
             <th scope="col" class="custom-th" *ngFor="let header of headers">{{ header }}</th>
         </thead>
         <tbody>
+            <tr class="custom-sticky">
+                <td *ngFor="let stickyContent of stickyRowsAfterProcessing" class="custom-td border-b">
+                    {{ stickyContent }}
+                </td>
+            </tr>
             <tr
                 *ngFor="
                     let data of listData.dataReturn
@@ -30,12 +35,9 @@
                             {{ item.content }}
                         </ng-container>
                     </td>
-                    <td *ngIf="item.hasChildren" style="padding: 0px !important" class="custom-td border-b">
-                        <tr
-                            style="height: calc(100% / + '{{ item.content.length }}')"
-                            class="nested-row"
-                            *ngFor="let content of item.content; index as index1; last as isLast">
-                            <div class="px-2">
+                    <td *ngIf="item.hasChildren" class="custom-td border-b">
+                        <tr class="nested-row" *ngFor="let content of item.content; index as index1; last as isLast">
+                            <div>
                                 {{ content }}
                             </div>
                         </tr>

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ReportService } from 'src/app/core/services/report.service';
 import { RootOrderReport } from '../models/order-report';
+import { stickyRows } from '../models/stickyRow';
 import { FormatService } from './format.service';
 @Injectable({
     providedIn: 'root',
@@ -20,9 +21,10 @@ export class LogicService {
 
     getAllReportOrders(body: any) {
         this.isLoadingSource.next(true);
-        this.reportService.OrderReport(body).subscribe((data: RootOrderReport) => {
-            this.totalSource.next(data.total);
-            this.reportOrdersSource.next(this.format.formatDataOrders(data.data));
+        this.reportService.OrderReport(body).subscribe((data) => {
+            let dataReturn: RootOrderReport = data;
+            this.totalSource.next(dataReturn.total);
+            this.reportOrdersSource.next(this.format.formatDataOrders(dataReturn.data));
             this.isLoadingSource.next(false);
         });
     }
