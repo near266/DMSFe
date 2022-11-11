@@ -1,19 +1,22 @@
-import { CurrencyPipe, PercentPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, PercentPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import products from '../../product/mocks/product';
 import { Config } from '../models/config';
+import { stickyRows } from '../models/stickyRow';
 
 @Injectable({
     providedIn: 'root',
 })
 export class FormatService {
-    constructor(private currency: CurrencyPipe, private percent: PercentPipe) {}
+    constructor(private currency: CurrencyPipe, private percent: PercentPipe, private datePipe: DatePipe) {}
     formatDataOrders(dataList: any) {
         let dataReturn: any = [];
         let listIds: string[] = [];
+        let stickyRows: stickyRows[] = [];
+
         dataReturn = dataList.map((data: any, index: number) => {
             listIds.push(data.purchaseOrderId);
-            let productInfo = this.getProductInfo(data.listProducts);
+            let productInfo = this.getProductOrdersInfo(data.listProducts);
             let productCodeArray = productInfo.productCodeArray;
             let productNameArray = productInfo.productNameArray;
             let warehouseCodeArray = productInfo.warehouseCodeArray;
@@ -63,7 +66,7 @@ export class FormatService {
                 },
                 // Ngày đơn đặt hàng
                 {
-                    content: data.orderDate,
+                    content: this.datePipe.transform(data.orderDate, 'dd/MM/yyyy'),
                     hasChildren: false,
                 },
                 // Mã khách hàng
@@ -208,7 +211,7 @@ export class FormatService {
                 },
                 // thanh toán trước
                 {
-                    content: 'Chưa trả về',
+                    content: this.currency.transform(data.preMoney, 'VND', 'symbol', '1.0-0'),
                     hasChildren: false,
                 },
                 // Diễn giải
@@ -224,11 +227,12 @@ export class FormatService {
             emitTdOrder: 5,
             dataReturn: dataReturn,
             listIds: listIds,
+            stickyRows: [],
         };
         return returnInfo;
     }
 
-    getProductInfo(productList: any) {
+    getProductOrdersInfo(productList: any) {
         let productCodeArray: any = [];
         let productNameArray: any = [];
         let warehouseCodeArray: any = [];
@@ -260,7 +264,7 @@ export class FormatService {
             unitArray.push(product.unit?.unitName);
             unitPriceArray.push(this.currency.transform(product.unitPrice, 'VND', 'symbol', '1.0-0'));
             totalPriceArray.push(this.currency.transform(product.totalPrice, 'VND', 'symbol', '1.0-0'));
-            vatArray.push(product.vat || 0);
+            vatArray.push(product.vaTofPro || 0);
             discountRateArray.push(this.percent.transform((product.discountRate / 100) | 0, '1.0-0'));
             discountArray.push(this.currency.transform(product.discount, 'VND', 'symbol', '1.0-0'));
         });
