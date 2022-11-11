@@ -36,7 +36,8 @@
       </td>
       <!-- mã phiếu -->
       <td class="border-x min-w-[200px] border-solid align-middle px-0.5 text-emerald-500 font-medium cursor-pointer">
-        <a [routerLink]="['/returns/details',return.id]" class="flex items-center space-x-2">
+        <a [routerLink]="['/returns/details',return.id]" (click)="returnCodeEmit(return.id)"
+          class="flex items-center space-x-2">
           {{return.returnCode}}
         </a>
       </td>

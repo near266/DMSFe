@@ -11,6 +11,7 @@ export class CreateReturnFromOrderComponent implements OnInit {
     orderInfo: any;
     productList: any[];
     promotionList: any[];
+    tradeDiscount: number;
     totalPrice: number;
     textMoney: string;
     discountAmount: number;

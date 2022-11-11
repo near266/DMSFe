@@ -3,6 +3,7 @@ import { ProductDialogService } from 'src/app/features/product/services/product-
 import { ReturnDetailsService } from 'src/app/features/returns/services/return-details.service';
 import * as _ from 'lodash';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { SelectOption } from 'src/app/core/model/Select';
 
 @Component({
     selector: 'app-detail-return-table-edit',
@@ -12,8 +13,8 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
 export class DetailReturnTableEditComponent implements OnInit, DoCheck {
     productsInput: any[] = [];
     productQuantitySum: number;
-    warehouseOptions: { value: string | undefined; label: string | undefined }[];
-    unitOptions: { value: string | undefined; label: string | undefined }[];
+    warehouseOptions: SelectOption[];
+    unitOptions: SelectOption[];
     constructor(
         private returnDetailsService: ReturnDetailsService,
         private productDialogService: ProductDialogService,

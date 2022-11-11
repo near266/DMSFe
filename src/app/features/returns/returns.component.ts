@@ -22,7 +22,7 @@ export class ReturnsComponent implements OnInit {
     timeSortList = timeSortList;
     sideBarWidth!: string;
     dateSearchForm: FormGroup;
-    totalReturns: number;
+    totalReturns$: Observable<number>;
 
     constructor(
         private sidenavService: SidenavService,
@@ -42,9 +42,7 @@ export class ReturnsComponent implements OnInit {
             fromDate: [null],
             toDate: [null],
         });
-        this.returnsService.totalReturns$.subscribe((res) => {
-            this.totalReturns = res;
-        });
+        this.totalReturns$ = this.returnsService.totalReturns$;
     }
     select(event: any) {
         this.filterService.currentFiler$.next(event.key);
@@ -52,7 +50,6 @@ export class ReturnsComponent implements OnInit {
         this.returnsService.getInititalReturns(1);
     }
     sortTime(event: any) {
-        console.log(event);
         this.filterService.timeFilterType$.next(event.value);
         if (this.filterService.startDate$.getValue() || this.filterService.endDate$.getValue()) {
             this.returnsService.getInititalReturns(1);

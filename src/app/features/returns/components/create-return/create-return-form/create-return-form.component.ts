@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { FormlyField, FormlyFieldConfig } from '@ngx-formly/core';
 import { of, switchMap, tap } from 'rxjs';
 import { Status } from '../../../models/return';
 import * as moment from 'moment';
@@ -55,7 +55,8 @@ export class CreateReturnFormComponent implements OnInit {
                         valueProp: (option: any) => option,
                         compareWith: (o1: any, o2: any) => o1.value === o2.value,
                         options: this.returnFormService.getAllCustomers(),
-                        change: (field, $event) => {
+                        change: (field: FormlyFieldConfig, $event: any) => {
+                            console.log($event);
                             field.form!.get('customerName')?.setValue(field!.formControl!.value.customerName);
                             field.form!.get('address')?.setValue(field!.formControl!.value.address);
                             field.form!.get('phone')?.setValue(field!.formControl!.value.phone);
