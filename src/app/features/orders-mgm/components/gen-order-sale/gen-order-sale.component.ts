@@ -60,6 +60,13 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     defaultCustomer: any;
     productFilterCtrl: FormControl = new FormControl();
     productPromotionFilterCtrl: FormControl = new FormControl();
+
+    // coppy
+    groupCoppy: any = '';
+    orderCoppy: any = '';
+    routeCoppy: any = '';
+    customerCoppy: any = '';
+    saleCoppy: any = '';
     constructor(
         private dialog: MatDialog,
         public dialogRef: MatDialogRef<GenOrderSaleComponent>,
@@ -77,6 +84,8 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
     ngOnInit(): void {
         // parse token to get id login
         this.relatedOrder = this.data.detailOrder;
+        // coppy
+        this.getCoppyText();
         // lấy ra default customer (trước khi patch value)
         this.defaultCustomer = this.relatedOrder?.customer;
         // this.saleDefaultId = this.parseJwt(localStorage.getItem('access_token')).sid;
@@ -194,6 +203,27 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
         });
     }
 
+    coppy(value: any, e: any) {
+        this.stopPropagation(e);
+        navigator.clipboard.writeText(value);
+        this.snackbar.openSnackbar('Sao chép thành công', 1000, 'Đóng', 'center', 'bottom', true);
+    }
+
+    stopPropagation(e: any) {
+        e.stopPropagation();
+    }
+
+    getCoppyText() {
+        this.groupCoppy = this.relatedOrder?.group?.name;
+        this.orderCoppy =
+            this.relatedOrder?.orderEmployee?.employeeCode + ' - ' + this.relatedOrder?.orderEmployee?.employeeName;
+        this.routeCoppy = this.relatedOrder?.route?.routeName;
+        this.customerCoppy =
+            this.relatedOrder?.customer?.customerCode + ' - ' + this.relatedOrder?.customer?.customerName;
+        this.saleCoppy =
+            this.relatedOrder?.saleEmployee?.employeeCode + ' - ' + this.relatedOrder?.saleEmployee?.employeeName;
+    }
+
     setRouteGroupAndEmployee(customerId: any) {
         this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
             if (data) {
@@ -254,9 +284,9 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             // groupId: [null],
             // routeId: [null],
             customerId: this.relatedOrder.customer?.id,
-            customerName: this.relatedOrder.customerName,
-            phone: this.relatedOrder.phone,
-            address: this.relatedOrder.address,
+            customerName: this.relatedOrder.customer?.customerName,
+            phone: this.relatedOrder.customer?.phone,
+            address: this.relatedOrder.customer?.address,
             description: description,
         });
 

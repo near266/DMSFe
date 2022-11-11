@@ -62,6 +62,12 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
     defaultCustomer: any;
     defaultOrderEmployee: any;
 
+    // coppy
+    groupCoppy: any = '';
+    orderCoppy: any = '';
+    routeCoppy: any = '';
+    customerCoppy: any = '';
+
     productFilterCtrl: FormControl = new FormControl();
     productPromotionFilterCtrl: FormControl = new FormControl();
     constructor(
@@ -73,9 +79,7 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
         private format: FormatService,
         private snackbar: SnackbarService,
     ) {}
-    ngOnChanges(changes: SimpleChanges): void {
-
-    }
+    ngOnChanges(changes: SimpleChanges): void {}
     ngOnInit(): void {
         this.id = localStorage.getItem('purchaseOrderId')!;
         // create Form
@@ -187,6 +191,15 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
         this.getListGroup();
     }
 
+    getCoppyText() {
+        this.groupCoppy = this.detailOrder?.group?.name;
+        this.orderCoppy =
+            this.detailOrder?.orderEmployee?.employeeCode + ' - ' + this.detailOrder?.orderEmployee?.employeeName;
+        this.routeCoppy = this.detailOrder?.route?.routeName;
+        this.customerCoppy =
+            this.detailOrder?.customer?.customerCode + ' - ' + this.detailOrder?.customer?.customerName;
+    }
+
     getDetail() {
         this.subscription.push(
             this.purchaseOrder.detail(this.id).subscribe((data) => {
@@ -209,6 +222,8 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
                 this.purchaseOrder.getCustomerById(this.detailOrder?.customer?.id).subscribe((data) => {
                     this.debtLimit = data?.debtLimit;
                 });
+                // get coppy text
+                this.getCoppyText();
             }),
         );
     }
@@ -225,8 +240,8 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
             customer: {
                 code: this.detailOrder.customer?.id,
                 name: this.detailOrder.customer?.customerName,
-                phone: this.detailOrder.phone,
-                address: this.detailOrder.address,
+                phone: this.detailOrder.customer?.phone,
+                address: this.detailOrder.customer?.address,
             },
             description: this.detailOrder.description,
         });
@@ -241,6 +256,10 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
         this.listPromotionProduct.forEach((product: any) => {
             product.warehouseId = product.warehouse?.id;
         });
+    }
+
+    test(e: any) {
+        console.log(e);
     }
 
     getListWareHouse() {
@@ -265,8 +284,14 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
         });
     }
 
-    searchListEmployee(e: any) {
-        this.purchaseOrder.getAllEmployees(e.target.value, 1, 30).subscribe((data) => {
+    searchListEmployee(e: any, type: string) {
+        let value = '';
+        if (type === 'search on html') {
+            value = e.target.value;
+        } else if (value === 'search in ts') {
+            value = e;
+        }
+        this.purchaseOrder.getAllEmployees(value, 1, 30).subscribe((data) => {
             this.listEmployee = data.data;
         });
     }
@@ -347,7 +372,7 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
                 purchaseOrderId: this.id,
                 productId: product?.product?.id,
                 // productName: product.product.productName,
-                unitId: product.unit.id,
+                unitId: product.unit?.id,
                 warehouseId: product.warehouseId,
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
@@ -368,13 +393,13 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
                 purchaseOrderId: this.id,
                 productId: product?.product?.id,
                 // productName: product.product.productName,
-                unitId: product.unit.id,
+                unitId: product.unit?.id,
                 warehouseId: product.warehouseId,
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount || 0,
-                discountRate: product.discountRate || 0,
+                totalPrice: 0,
+                discount: 0,
+                discountRate: 0,
                 note: product.note,
                 type: product.type,
                 index: product.index, // đánh index
@@ -413,9 +438,9 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
                 warehouseId: product.warehouseId,
                 unitPrice: product.unitPrice,
                 quantity: product.quantity,
-                totalPrice: product.totalPrice,
-                discount: product.discount || 0,
-                discountRate: product.discountRate || 0,
+                totalPrice: 0,
+                discount: 0,
+                discountRate: 0,
                 note: product.note,
                 type: product.type,
             };
@@ -486,26 +511,18 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
     }
 
     setInfoCustomer(id: string) {
-        let customer = this.listCustomer.filter((customer: any) => {
-            return customer.id === id;
-        })[0];
-        this.detailOrderForm.patchValue({
-            customer: {
-                name: [null],
-                phone: [null],
-                address: [null],
-            },
-        });
-        this.detailOrderForm.patchValue({
-            customer: {
-                name: customer.customerName,
-                phone: customer.phone,
-                address: customer.address,
-            },
-        });
+        let customer: any;
         // set hạn mức dư nợ
         this.purchaseOrder.getCustomerById(id).subscribe((data) => {
             this.debtLimit = data?.debtLimit;
+            customer = data;
+            this.detailOrderForm.patchValue({
+                customer: {
+                    name: customer.customerName,
+                    phone: customer.phone,
+                    address: customer.address,
+                },
+            });
         });
     }
 
@@ -619,6 +636,7 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
     }
 
     setRouteGroupAndEmployee(customerId: any) {
+        this.searchListEmployee('', 'search in ts');
         this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
             if (data) {
                 this.detailOrderForm.patchValue({
@@ -801,9 +819,11 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
     }
 
     coppy(value: any, e: any) {
-        this.stopPropagation(e);
-        navigator.clipboard.writeText(value);
-        this.snackbar.openSnackbar('Coppy thành công', 1000, 'Đóng', 'center', 'bottom', true);
+        if (value) {
+            this.stopPropagation(e);
+            navigator.clipboard.writeText(value);
+            this.snackbar.openSnackbar('Sao chép thành công', 1000, 'Đóng', 'center', 'bottom', true);
+        }
     }
 
     selectUnit(product: any, type: any) {

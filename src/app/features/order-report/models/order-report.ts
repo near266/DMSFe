@@ -6,7 +6,7 @@ export class RootOrderReport {
   sumOfDiscount?: number;
   sumOfTotalPayment?: number;
   sumOfVAT?: number;
-  total?: number;
+  total!: number;
   page?: number;
   pageSize?: number;
 }

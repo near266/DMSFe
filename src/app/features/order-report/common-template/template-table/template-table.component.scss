@@ -1,0 +1,79 @@
+.table-wrapper {
+    // overflow-y: auto;
+    overflow-x: auto;
+    margin-top: 8px;
+    padding-bottom: 20px;
+    height: calc(100vh - 170px);
+}
+
+.width-vw-60 {
+    width: calc(100vw - 70px);
+}
+
+.width-vw-260 {
+    width: calc(100vw - 270px);
+}
+
+table {
+    min-width: max-content;
+    border-collapse: separate;
+    border-spacing: 0px;
+}
+
+table th {
+    position: sticky;
+    top: 0px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    z-index: 1;
+    @apply bg-zinc-200;
+}
+
+table th,
+table td {
+    padding: 8px;
+}
+
+table td {
+    text-align: left;
+}
+
+tbody {
+    font-size: 12px;
+}
+
+.custom-table {
+    @apply table-fixed dark:text-gray-400;
+}
+
+.custom-thead {
+    @apply uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-xs;
+}
+
+.custom-row {
+    @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
+}
+
+.custom-th {
+    @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x;
+}
+
+.custom-row:hover .nested-row {
+    @apply bg-gray-50;
+}
+
+.nested-row {
+    display: block;
+    padding: 8px 0px;
+}
+
+.custom-td {
+    max-width: 180px;
+    @apply border-x border-solid pl-2;
+}
+
+// .custom-nested-tr {
+//     margin: 0px -8px;
+//     border-bottom: 1px solid gray;
+// }

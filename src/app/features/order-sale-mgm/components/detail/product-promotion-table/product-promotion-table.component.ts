@@ -85,9 +85,8 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
     }
 
     discountRate(product: any) {
-        if (product.totalPrice) {
-            product.discountRate = ((product.discount * 100) / product.totalPrice).toFixed(1);
-        }
+        // vì là promotion nên sẽ set discountRate = 0;
+        product.discountRate = 0;
     }
 
     stopPropagation(e: any) {
@@ -139,24 +138,18 @@ export class ProductPromotionTableComponent implements OnInit, AfterViewInit, Do
         if (type === 'retail') {
             product.unitId = product?.product?.retailUnit?.id;
             product.unitPrice = product.product.retailPrice;
-            product.totalPrice = product.quantity * product.unitPrice;
+            product.totalPrice = 0;
         } else if ((type = 'whosale')) {
             product.unitId = product?.product?.wholeSaleUnit?.id;
             product.unitPrice = product.product.price;
-            product.totalPrice = product.quantity * product.unitPrice;
+            product.totalPrice = 0;
         }
         this.discountRate(product);
     }
 
     updateTotalPrice(product: any) {
-        product.totalPrice = product.quantity * product.unitPrice;
+        product.totalPrice = 0;
         this.discountRate(product);
-    }
-
-    countDiscount(product: any) {
-        if (product.totalPrice) {
-            product.discount = (product.discountRate / 100) * product.totalPrice;
-        }
     }
 
     unChooseFromListAdd(productRemove: any) {

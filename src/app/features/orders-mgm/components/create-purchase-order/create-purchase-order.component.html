@@ -3,10 +3,6 @@
         <div class="p-3 w-full flex justify-between items-center">
             <span style="font-size: 20px !important" class="font-medium">Thêm mới phiếu đặt hàng</span>
             <div class="flex items-center">
-                <!-- <button (click)="create()" class="button-primary-sm flex items-center justify-between mr-2">
-                    <i class="fa-solid fa-check text-white mr-2"></i>
-                    <span class="text-white">Lưu</span>
-                </button> -->
                 <button (click)="create()" class="button-success-sm flex items-center justify-between mr-2">
                     <i class="fa-solid fa-circle-check text-white mr-2"></i>
                     <span class="text-white">Lưu & Đóng</span>
@@ -22,7 +18,7 @@
     <div class="p-3 mt-16">
         <div style="font-size: 12px">
             <div class="flex gap-x-6 justify-between">
-                <mat-form-field class="w-full" appearance="outline">
+                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Trạng thái</mat-label>
                     <mat-select formControlName="status">
                         <mat-option *ngFor="let status of statusList" [value]="status.value">
@@ -30,13 +26,13 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="w-full" appearance="outline">
+                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Ngày đặt</mat-label>
                     <input matInput [matDatepicker]="picker" formControlName="orderDate" />
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
-                <mat-form-field class="w-full" appearance="outline">
+                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Ngày giao</mat-label>
                     <input matInput [matDatepicker]="picker2" formControlName="deliveryDate" />
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
@@ -44,13 +40,13 @@
                 </mat-form-field>
             </div>
             <div class="flex gap-x-6 justify-between">
-                <mat-form-field appearance="outline" class="w-full">
+                <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                     <mat-label>Nhóm</mat-label>
                     <mat-select formControlName="groupId">
                         <mat-option *ngFor="let group of listGroup" [value]="group.id">{{ group.name }}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="w-full">
+                <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                     <mat-label>Nhân viên đặt</mat-label>
                     <mat-select formControlName="orderEmployeeId">
                         <input placeholder="Tìm kiếm..." style="padding-left: 12px" matInput class="h-10 rounded-sm" />
@@ -59,7 +55,7 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="w-full">
+                <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                     <mat-label>Tuyến</mat-label>
                     <mat-select formControlName="routeId">
                         <input
@@ -75,11 +71,11 @@
                 </mat-form-field>
             </div>
             <div class="flex gap-x-6 justify-between" formGroupName="customer">
-                <!-- <mat-form-field class="w-1/3" appearance="outline">
+                <!-- <mat-form-field class="w-1/3" appearance="outline" floatLabel="always">
                     <mat-label>Mã Khách hàng</mat-label>
                     <input matInput />
                 </mat-form-field> -->
-                <mat-form-field appearance="outline" class="w-full">
+                <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                     <mat-label>Mã khách hàng</mat-label>
                     <mat-select
                         formControlName="customerId"
@@ -96,20 +92,20 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="w-full" appearance="outline">
+                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Khách hàng</mat-label>
                     <input matInput formControlName="customerName" [readonly]="true" />
                 </mat-form-field>
-                <mat-form-field class="w-1/3" appearance="outline">
+                <mat-form-field class="w-1/3" appearance="outline" floatLabel="always">
                     <mat-label>SĐT</mat-label>
-                    <input matInput formControlName="phone" />
+                    <input [readonly]="true" matInput formControlName="phone" />
                 </mat-form-field>
-                <mat-form-field class="w-full" appearance="outline">
+                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Địa chỉ</mat-label>
-                    <input matInput formControlName="address" />
+                    <input [readonly]="true" matInput formControlName="address" />
                 </mat-form-field>
             </div>
-            <mat-form-field class="w-full" appearance="outline">
+            <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                 <mat-label>Diễn giải</mat-label>
                 <textarea matInput formControlName="description"></textarea>
             </mat-form-field>

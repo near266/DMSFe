@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TemplateTableComponent } from 'src/app/features/order-report/common-template/template-table/template-table.component';
 import { MainComponent } from './main.component';
 
 const routes: Routes = [
@@ -54,6 +55,15 @@ const routes: Routes = [
                 path: 'order-report',
                 loadChildren: () =>
                     import('./../../../features/order-report/order-report.module').then((m) => m.OrderReportModule),
+            },
+            {
+                path: 'reports',
+                loadChildren: () =>
+                    import('./../../../features/timekeeping/timekeeping.module').then((m) => m.TimekeepingModule),
+            },
+            {
+                path: 'template-table',
+                component: TemplateTableComponent,
             },
             {
                 path: '',

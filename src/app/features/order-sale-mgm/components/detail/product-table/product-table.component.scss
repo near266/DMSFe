@@ -21,10 +21,10 @@
 
 .custom {
     &-table {
-        @apply w-full text-left text-gray-500 dark:text-gray-400;
+        @apply w-full text-left  text-black;
     }
     &-thead {
-        @apply text-gray-700 uppercase bg-gray-100 border-x dark:bg-gray-700 dark:text-gray-400;
+        @apply uppercase bg-gray-100 border-x  text-black;
     }
     &-th {
         @apply py-1 text-center border-x max-w-2xl px-1;

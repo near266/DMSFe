@@ -48,7 +48,18 @@ export class AddRouterComponent implements OnInit {
   }
 
   deleteRoute(){
-    this._snackSer.openSnackbar('Sắp ra mắt', 3000, '', 'end', 'bottom', true)
+    let body = {
+      listId: [
+        this.data.id
+      ]
+    }
+    // console.log(body);
+    this._routeSer.Delete(body).subscribe({
+      next: data => {
+        this._snackSer.openSnackbar('Xoá thành công !', 3000, '', 'end', 'bottom', true)
+      }
+    })
+
   }
 
 

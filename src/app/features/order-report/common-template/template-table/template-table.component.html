@@ -1,0 +1,51 @@
+<div *ngIf="isLoading$ | async" class="mt-10 text-center">
+    <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+</div>
+<!-- Bảng phiếu bán hàng -->
+<div *ngIf="!(isLoading$ | async)" id="table" class="table-wrapper">
+    <table class="block custom-table text-black dark:text-gray-400">
+        <thead class="custom-thead">
+            <th scope="col" class="custom-th" *ngFor="let header of headers">{{ header }}</th>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="
+                    let data of listData.dataReturn
+                        | paginate
+                            : {
+                                  itemsPerPage: pageSize,
+                                  currentPage: page,
+                                  totalItems: total
+                              };
+                    index as i
+                "
+                class="custom-row">
+                <ng-container *ngFor="let item of data; index as k">
+                    <td
+                        *ngIf="!item.hasChildren"
+                        class="custom-td border-b"
+                        (click)="emitTouch(k, i)"
+                        [ngClass]="{ 'hover:text-blue-700 cursor-pointer': k === listData.emitTdOrder }">
+                        <ng-container>
+                            {{ item.content }}
+                        </ng-container>
+                    </td>
+                    <td *ngIf="item.hasChildren" style="padding: 0px !important" class="custom-td border-b">
+                        <tr
+                            style="height: calc(100% / + '{{ item.content.length }}')"
+                            class="nested-row"
+                            *ngFor="let content of item.content; index as index1; last as isLast">
+                            <div class="px-2">
+                                {{ content }}
+                            </div>
+                        </tr>
+                    </td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- Pagination -->
+<div class="fixed bottom-2 right-0">
+    <app-template-pagination (pageCurent$)="handlePageChange($event)"></app-template-pagination>
+</div>

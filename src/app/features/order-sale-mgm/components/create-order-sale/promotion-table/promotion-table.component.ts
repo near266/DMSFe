@@ -22,7 +22,6 @@ export class PromotionTableComponent implements OnInit, OnChanges {
         private dialog: MatDialog,
         private formatService: FormatService,
         private purchaseOrder: PurchaseOrderService,
-        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -78,7 +77,7 @@ export class PromotionTableComponent implements OnInit, OnChanges {
             product.unitId = product?.product?.wholeSaleUnit?.id;
             product.unitPrice = product.product.price;
         }
-        product.totalPrice = product.quantity * product.unitPrice;
+        product.totalPrice = 0;
         this.discountRate(product);
     }
 

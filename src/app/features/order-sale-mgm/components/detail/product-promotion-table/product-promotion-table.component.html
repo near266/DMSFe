@@ -40,11 +40,11 @@
         </button>
     </div>
     <div class="flex items-center">
-        <button
+        <!-- <button
             class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium mr-3">
             <i class="fa-solid fa-file-import mr-2 px-2"></i>
             <span class="px-2">Nhập excel</span>
-        </button>
+        </button> -->
         <div>
             <mat-select
                 (selectionChange)="setWareHouseToAllProduct($event.value)"
@@ -152,9 +152,7 @@
                             matInput
                             [ngModel]="product.quantity"
                             (ngModelChange)="
-                                product.quantity = $event;
-                                product.totalPrice = product.quantity * product.unitPrice;
-                                discountRate(product)
+                                product.quantity = $event; product.totalPrice = 0; product.discountRate = 0
                             "
                             [ngModelOptions]="{ standalone: true }" />
                     </mat-form-field>
@@ -244,7 +242,9 @@
                             }"
                             matInput
                             [ngModel]="product.quantity"
-                            (ngModelChange)="product.quantity = $event; updateTotalPrice(product)"
+                            (ngModelChange)="
+                                product.quantity = $event; product.totalPrice = 0; product.discountRate = 0
+                            "
                             [ngModelOptions]="{ standalone: true }" />
                     </mat-form-field>
                 </td>

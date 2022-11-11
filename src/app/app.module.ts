@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecretInterceptor } from './core/interceptor/secret.interceptor';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { CurrencyPipe, DatePipe, registerLocaleData } from '@angular/common';
+import { CurrencyPipe, DatePipe, PercentPipe, registerLocaleData } from '@angular/common';
 import { DataService } from './core/services/data.service';
 import { ForgotpasswordComponent } from './features/auth/forgotpassword/forgotpassword.component';
 import { OrderReportComponent } from './features/order-report/order-report.component';
@@ -28,6 +28,7 @@ registerLocaleData(localeVi);
         { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
         DataService,
         CurrencyPipe,
+        PercentPipe,
     ],
     bootstrap: [AppComponent],
 })
