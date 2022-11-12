@@ -240,8 +240,8 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
             customer: {
                 code: this.detailOrder.customer?.id,
                 name: this.detailOrder.customer?.customerName,
-                phone: this.detailOrder.phone,
-                address: this.detailOrder.address,
+                phone: this.detailOrder.customer?.phone,
+                address: this.detailOrder.customer?.address,
             },
             description: this.detailOrder.description,
         });
@@ -284,8 +284,14 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
         });
     }
 
-    searchListEmployee(e: any) {
-        this.purchaseOrder.getAllEmployees(e.target.value, 1, 30).subscribe((data) => {
+    searchListEmployee(e: any, type: string) {
+        let value = '';
+        if (type === 'search on html') {
+            value = e.target.value;
+        } else if (value === 'search in ts') {
+            value = e;
+        }
+        this.purchaseOrder.getAllEmployees(value, 1, 30).subscribe((data) => {
             this.listEmployee = data.data;
         });
     }
@@ -505,26 +511,18 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
     }
 
     setInfoCustomer(id: string) {
-        let customer = this.listCustomer.filter((customer: any) => {
-            return customer.id === id;
-        })[0];
-        this.detailOrderForm.patchValue({
-            customer: {
-                name: [null],
-                phone: [null],
-                address: [null],
-            },
-        });
-        this.detailOrderForm.patchValue({
-            customer: {
-                name: customer.customerName,
-                phone: customer.phone,
-                address: customer.address,
-            },
-        });
+        let customer: any;
         // set hạn mức dư nợ
         this.purchaseOrder.getCustomerById(id).subscribe((data) => {
             this.debtLimit = data?.debtLimit;
+            customer = data;
+            this.detailOrderForm.patchValue({
+                customer: {
+                    name: customer.customerName,
+                    phone: customer.phone,
+                    address: customer.address,
+                },
+            });
         });
     }
 
@@ -638,6 +636,7 @@ export class DetailOrderComponent implements OnChanges, OnInit, AfterViewInit, D
     }
 
     setRouteGroupAndEmployee(customerId: any) {
+        this.searchListEmployee('', 'search in ts');
         this.purchaseOrder.getRouteByCustomerId(customerId).subscribe((data) => {
             if (data) {
                 this.detailOrderForm.patchValue({

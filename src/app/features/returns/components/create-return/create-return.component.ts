@@ -33,6 +33,16 @@ export class CreateReturnComponent implements OnInit {
     totalPrice: number;
     textMoney: string;
     discountAmount: number;
+
+    // TODO : add search product, add product to products$, both
+    selectedCar: number;
+
+    cars = [
+        { id: 1, name: 'Volvo' },
+        { id: 2, name: 'Saab' },
+        { id: 3, name: 'Opel' },
+        { id: 4, name: 'Audi' },
+    ];
     constructor(
         private dataService: DataService,
         private dialog: MatDialog,
@@ -80,69 +90,6 @@ export class CreateReturnComponent implements OnInit {
                 }
             });
     }
-
-    // create() {
-    //     const body = {
-    //         // purchaseOrderId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //         orderDate: moment(this.createForm.get('orderDate')?.value).format('YYYY-MM-DD'),
-    //         groupId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //         orderEmployeeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //         warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //         customerId: this.createForm.get('customer.customerId')?.value,
-    //         routeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //         type: 0,
-    //         status: this.createForm.get('status')?.value,
-    //         paymentMethod: 0,
-    //         description: this.createForm.get('description')?.value,
-    //         phone: this.createForm.get('customer.phone')?.value,
-    //         address: this.createForm.get('customer.address')?.value,
-    //         customerName: this.createForm.get('customer.customerName')?.value,
-    //         totalAmount: 0,
-    //         totalOfVAT: 0,
-    //         totalDiscountProduct: 0,
-    //         tradeDiscount: 0,
-    //         totalPayment: 0,
-    //         archived: true,
-    //         createdBy: 'string',
-    //         createdDate: '2022-10-14T05:43:01.598Z',
-    //         orderCode: 'string',
-    //         deliveryDate: moment(this.createForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
-    //         prePayment: 0,
-    //         listProduct: [
-    //             {
-    //                 purchaseOrderId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //                 productId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //                 productName: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //                 unitId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //                 warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //                 unitPrice: 0,
-    //                 quantity: 0,
-    //                 totalPrice: 0,
-    //                 discount: 0,
-    //                 discountRate: 0,
-    //                 note: 'string',
-    //                 type: 0,
-    //             },
-    //         ],
-    //         listPromotionProduct: [
-    //             {
-    //                 purchaseOrderId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //                 productId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //                 productName: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //                 unitId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //                 warehouseId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    //                 unitPrice: 0,
-    //                 quantity: 0,
-    //                 totalPrice: 0,
-    //                 discount: 0,
-    //                 discountRate: 0,
-    //                 note: 'string',
-    //                 type: 0,
-    //             },
-    //         ],
-    //     };
-    //     console.log(body);
-    // }
 
     setInfoCustomer(id: string) {
         let customer = this.listCustomer.filter((customer: any) => {

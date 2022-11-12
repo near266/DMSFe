@@ -4,7 +4,6 @@
     margin-top: 8px;
     padding-bottom: 20px;
     height: calc(100vh - 210px);
-    @apply rounded-lg;
 }
 
 .width-vw-60 {
@@ -28,7 +27,7 @@ table th {
     font-weight: 600;
     font-size: 14px;
     z-index: 1;
-    @apply text-gray-700 bg-zinc-200;
+    @apply bg-zinc-200;
 }
 
 table th,
@@ -49,11 +48,11 @@ tbody {
 }
 
 .custom-table {
-    @apply table-fixed text-gray-500 dark:text-gray-400;
+    @apply table-fixed  dark:text-gray-400;
 }
 
 .custom-thead {
-    @apply text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-xs;
+    @apply uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-xs;
 }
 
 .custom-row {

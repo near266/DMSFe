@@ -31,6 +31,7 @@ export class ReturnFormService {
     formValues$: Subject<any> = new Subject<any>();
     products$: Subject<any> = new Subject<any>();
     promotionProducts$: Subject<any> = new Subject<any>();
+
     getOrderDetailsById(id: string) {
         // <--- this method is not used in real cases
         return this.returnApiService.getOrderDetailsById(id).pipe(

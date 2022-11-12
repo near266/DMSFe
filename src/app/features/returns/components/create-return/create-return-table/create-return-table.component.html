@@ -55,7 +55,7 @@
           <div class="flex">
             <mat-form-field appearance="outline">
               <mat-select [(ngModel)]="item.unitId">
-                <mat-option *ngFor="let option of unitOptions" value="{{option.value}}">{{option.label}}</mat-option>
+                <mat-option *ngFor="let option of unitOptions" [value]="option.value">{{option.label}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -64,7 +64,7 @@
           <div class="flex">
             <mat-form-field appearance="outline">
               <mat-select [(ngModel)]="item.warehouseId">
-                <mat-option *ngFor="let option of warehouseOptions" value="{{option.value}}">{{option.label}}
+                <mat-option *ngFor="let option of warehouseOptions" [value]="option.value">{{option.label}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -100,7 +100,6 @@
           {{item.totalPrice | currency: 'VND'}}
         </td>
         <td class="border-x max-w-[120px]  border-solid align-middle px-2  text-center">
-
           <div class="flex">
             <mat-form-field appearance="outline">
               <input matInput currencyMask

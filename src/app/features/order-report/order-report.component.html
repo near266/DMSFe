@@ -1,65 +1,79 @@
 <mat-sidenav-container [hasBackdrop]="false">
-  <mat-sidenav [mode]="'side'" class="fixed" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" #sidenav
-    [position]="'start'" [opened]="true" class=" overflow-hidden relative z-50 navbar-container">
-    <div class="w-60 p-3">
-      <div class="w-full relative">
-        <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
-        <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm khách hàng">
-      </div>
-      <div class="w-full relative mt-3">
-        <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
-        <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm sản phẩm">
-      </div>
-
-      <!-- todo loại KH -->
-      <app-menu-collapse (Selection)="selectType($event)" [Config]="statusMenu"></app-menu-collapse>
-    </div>
-  </mat-sidenav>
-  <mat-sidenav-content class="">
-    <div class=" bg-[#f2f2f2] fixed bottom-0 top-16 z-10 border-r border-gray-300 border-solid">
-      <button (click)="sidenav.toggle()"
-        class=" h-5 flex items-center justify-center border-solid border-2 border-slate-400 py-4 px-2">
-        <i class="fa-solid fa-caret-right" [ngClass]="{'rotate-180':!sidenav?.opened}"></i>
-        <!-- <i *ngIf="sidenav?.opened" class="fa-solid fa-caret-right"></i> -->
-        <!-- <i *ngIf="!sidenav?.opened" class="fa-solid fa-caret-left"></i> -->
-      </button>
-    </div>
-
-    <div class="flex h-full w-full pl-[26px] pb-9">
-      <div class="flex w-full h-full relative flex-col">
-        <div class="z-20">
-          <!-- header -->
-          <div class="p-3 flex justify-between items-center">
-            <span class="text-xl font-bold">Báo cáo tổng hợp đơn hàng ( {{dataOrderReport.total}} )</span>
-            <div class="space-x-3 flex items-center">
-              <button class="rounded p-2 bg-blue-900 text-white">Tìm kiếm <i class="fa-solid fa-magnifying-glass ml-1"></i></button>
-              <button class="group rounded p-2 z-20 bg-blue-900 text-white relative whitespace-nowrap text-justify">
-                Xuất Excel
-                <i class="fa-solid fa-file-export ml-2"></i>
-                <div class="absolute hidden group-hover:block bg-gray-100 z-50 border border-solid border-gray-500 text-blue-text px-3 -bottom-18 -left-1 rounded">
-                  <div><i class="fa-solid fa-file-excel mr-2 py-3 "></i>Xuất gộp thông tin đơn hàng</div>
-                  <div><i class="fa-solid fa-file-invoice mr-2 py-3 "></i>Không xuất gộp thông tin đơn hàng</div>
-                </div>
-              </button>
-              <mat-form-field appearance="outline" class="example-form-field">
-                <mat-label>Chọn ngày</mat-label>
-                <input matInput [matDatepicker]="datepicker">
-                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-                <mat-datepicker #datepicker>
-                </mat-datepicker>
-              </mat-form-field>
+    <mat-sidenav
+        [mode]="'side'"
+        class="fixed"
+        [fixedInViewport]="true"
+        [fixedTopGap]="0"
+        [fixedBottomGap]="0"
+        #sidenav
+        [position]="'start'"
+        [opened]="true"
+        class="overflow-hidden relative z-50 navbar-container">
+        <div class="w-60 p-3">
+            <div class="w-full relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
+                <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm khách hàng" />
             </div>
-          </div>
+            <div class="w-full relative mt-3">
+                <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
+                <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm sản phẩm" />
+            </div>
+
+            <!-- todo loại KH -->
+            <app-menu-collapse (Selection)="selectType($event)" [Config]="statusMenu"></app-menu-collapse>
         </div>
-        <hr>
-        <div class="w-full table-container min-w-full box-border h-full px-3">
-          <app-order-report-table [dataOrderReport]="dataOrderReport"></app-order-report-table>
+    </mat-sidenav>
+    <mat-sidenav-content class="overflow-y-auto">
+        <div class="bg-[#f2f2f2] fixed bottom-0 top-16 z-10 border-r border-gray-300 border-solid">
+            <button
+                (click)="sidenav.toggle()"
+                class="h-5 flex items-center justify-center border-solid border-2 border-slate-400 py-4 px-2">
+                <i class="fa-solid fa-caret-right" [ngClass]="{ 'rotate-180': !sidenav?.opened }"></i>
+                <!-- <i *ngIf="sidenav?.opened" class="fa-solid fa-caret-right"></i> -->
+                <!-- <i *ngIf="!sidenav?.opened" class="fa-solid fa-caret-left"></i> -->
+            </button>
         </div>
-      </div>
-    </div>
-    <div
-    class="fixed bottom-0 right-0 ml-[26px] left-0 h-9 px-2 flex items-center justify-end bg-[#f2f2f2] border-t border-solid border-slate-400">
-      <!-- <app-product-pagination></app-product-pagination> -->
-    </div>
-  </mat-sidenav-content>
+
+        <div class="flex h-full w-full pl-[26px]">
+            <div class="flex w-full h-full relative flex-col">
+                <div class="z-20">
+                    <!-- header -->
+                    <div class="px-3 mt-2 flex justify-between items-center">
+                        <span class="text-xl font-bold">Báo cáo tổng hợp đặt hàng ( {{ total$ | async }} )</span>
+                        <div class="space-x-3 flex items-center">
+                            <button class="button-primary-sm text-white">
+                                Tìm kiếm
+                                <i class="fa-solid fa-magnifying-glass ml-1"></i>
+                            </button>
+                            <button class="button-primary-sm text-white relative whitespace-nowrap text-justify">
+                                Xuất Excel
+                                <i class="fa-solid fa-file-export ml-2"></i>
+                                <div
+                                    class="absolute hidden group-hover:block bg-gray-100 z-50 border border-solid border-gray-500 text-blue-text px-3 -bottom-18 -left-1 rounded">
+                                    <div>
+                                        <i class="fa-solid fa-file-excel mr-2 py-3"></i>
+                                        Xuất gộp thông tin đơn hàng
+                                    </div>
+                                    <div>
+                                        <i class="fa-solid fa-file-invoice mr-2 py-3"></i>
+                                        Không xuất gộp thông tin đơn hàng
+                                    </div>
+                                </div>
+                            </button>
+                            <mat-form-field style="font-size: 12px" appearance="outline" class="example-form-field">
+                                <mat-label>Chọn ngày</mat-label>
+                                <input matInput [matDatepicker]="datepicker" />
+                                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #datepicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="w-full table-container min-w-full box-border h-full px-3 bg-white">
+                    <app-order-report-table></app-order-report-table>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav-content>
 </mat-sidenav-container>

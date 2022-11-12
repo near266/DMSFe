@@ -15,6 +15,7 @@ export class ReturnOrderService {
     returnPromotionList$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     returnStatusInfo$: BehaviorSubject<any> = new BehaviorSubject<any>({});
     totalPrice$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    tradeDiscount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     discountAmount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     submitFormInfo$: Subject<boolean> = new Subject<boolean>();
     submitFormProductList$: Subject<any[]> = new Subject<any[]>();
@@ -77,6 +78,7 @@ export class ReturnOrderService {
     formatSubmitListProduct(list: any[]) {
         return list.map((item) => {
             return {
+                index: item?.index || 0,
                 productId: item?.productId || null,
                 unitId: item?.unitId || null,
                 warehouseId: item?.warehouseId || null,
@@ -94,7 +96,6 @@ export class ReturnOrderService {
         });
     }
     formatListProduct(listProduct: any[]) {
-        console.log(listProduct);
         return listProduct.map((item) => {
             return {
                 product: item.product,
@@ -111,6 +112,7 @@ export class ReturnOrderService {
                 returnsQuantity: item?.quantity || 0,
                 salesQuantity: item?.quantity || 0,
                 exportQuantity: 0,
+                index: item?.index || 0,
                 vat: item?.product?.vat || 0,
                 type: item?.type || 1,
                 note: item?.note || null,

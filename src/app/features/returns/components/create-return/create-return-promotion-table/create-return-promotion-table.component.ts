@@ -24,7 +24,12 @@ export class CreateReturnPromotionTableComponent implements OnInit {
         }
         let isValid = true;
         this.productsInput.forEach((item: any) => {
-            if (item.salesQuantity <= 0 || item.warehouseId === null || item.unitId === null) {
+            if (
+                item.exportQuantity <= 0 ||
+                item.returnsQuantity <= 0 ||
+                item.warehouseId === null ||
+                item.unitId === null
+            ) {
                 isValid = false;
             }
         });
@@ -102,6 +107,4 @@ export class CreateReturnPromotionTableComponent implements OnInit {
             this.productsInput = res;
         });
     }
-    updateItemTotalPrice(item: any): void {}
-    updateDiscountRate(item: any): void {}
 }

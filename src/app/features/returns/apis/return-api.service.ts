@@ -14,10 +14,11 @@ export class ReturnApiService {
     private idUrl = environment.ID_URL + '/gw';
 
     constructor(private http: HttpClient) {}
-    //GET
+
     getOrderDetailsById(id: string): Observable<Return> {
         return this.http.get<Return>(this.endPoint + '/id?Id=' + id);
     }
+
     getEmployees(): Observable<any> {
         const pageSize = 100;
         const page = 1;
@@ -56,6 +57,7 @@ export class ReturnApiService {
         return this.http.get<any>(this.returnUrl + '/id?Id=' + id);
     }
     deleteProductFromReturn({ listIdRemove, returnsId }: any) {
+        console.log(listIdRemove);
         return this.http.delete(this.returnUrl + '/removeProduct', {
             body: {
                 listIdRemove,

@@ -284,9 +284,9 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
             // groupId: [null],
             // routeId: [null],
             customerId: this.relatedOrder.customer?.id,
-            customerName: this.relatedOrder.customerName,
-            phone: this.relatedOrder.phone,
-            address: this.relatedOrder.address,
+            customerName: this.relatedOrder.customer?.customerName,
+            phone: this.relatedOrder.customer?.phone,
+            address: this.relatedOrder.customer?.address,
             description: description,
         });
 

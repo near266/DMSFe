@@ -60,10 +60,8 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
     saleCoppy: any = '';
 
     constructor(
-        private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
         private dataservice: DataService,
-        private dialog: MatDialog,
         private saleReceipt: SaleReceiptService,
         private purchaseOrder: PurchaseOrderService,
         private numberToText: NumberToTextService,
@@ -312,9 +310,9 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
             routeId: this.detailOrder.route?.id,
             customer: {
                 code: this.detailOrder.customer?.id,
-                phone: this.detailOrder.phone,
-                address: this.detailOrder.address,
-                name: this.detailOrder.customerName,
+                phone: this.detailOrder.customer?.phone,
+                address: this.detailOrder.customer?.address,
+                name: this.detailOrder.customer?.customerName,
             },
             description: this.detailOrder.description,
             status: this.detailOrder.status,

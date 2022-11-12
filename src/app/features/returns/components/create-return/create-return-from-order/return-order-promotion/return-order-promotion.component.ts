@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ReturnOrderService } from 'src/app/features/returns/services/return-order.service';
 
@@ -10,27 +10,30 @@ import { ReturnOrderService } from 'src/app/features/returns/services/return-ord
 })
 export class ReturnOrderPromotionComponent implements OnInit {
     productsInput: any[] = [];
+    subscription: Subscription[] = [];
     warehouseOptions: { label?: string; value?: string }[] = [];
     unitOptions: { label?: string; value?: string }[] = [];
     constructor(private returnDetailsService: ReturnOrderService, private snackBarService: SnackbarService) {}
 
     ngOnInit(): void {
-        this.returnDetailsService.returnPromotionList$.subscribe((_) => {
-            this.productsInput = _;
-        });
-        this.returnDetailsService.submitFormProductList$.subscribe((_) => {
-            if (this.checkAndSubmit()) {
-                this.returnDetailsService.submitFormPromotionList$.next({
-                    listProduct: _,
-                    listPromotionProduct: this.returnDetailsService.formatSubmitListProduct(this.productsInput),
-                });
-            } else {
-                this.returnDetailsService.submitFormPromotionList$.next({
-                    listProduct: _,
-                    listPromotionProduct: [],
-                });
-            }
-        });
+        this.subscription.push(
+            this.returnDetailsService.returnPromotionList$.subscribe((_) => {
+                this.productsInput = _;
+            }),
+            this.returnDetailsService.submitFormProductList$.subscribe((_) => {
+                if (this.checkAndSubmit()) {
+                    this.returnDetailsService.submitFormPromotionList$.next({
+                        listProduct: _,
+                        listPromotionProduct: this.returnDetailsService.formatSubmitListProduct(this.productsInput),
+                    });
+                } else {
+                    this.returnDetailsService.submitFormPromotionList$.next({
+                        listProduct: _,
+                        listPromotionProduct: [],
+                    });
+                }
+            }),
+        );
     }
     removeProductFromReturn(id: string) {
         //find id in listProduct.product and remove
@@ -63,5 +66,8 @@ export class ReturnOrderPromotionComponent implements OnInit {
             }
         });
         return check;
+    }
+    ngOnDestroy(): void {
+        this.subscription.forEach((item) => item.unsubscribe());
     }
 }

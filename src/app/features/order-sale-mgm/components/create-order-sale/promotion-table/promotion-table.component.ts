@@ -22,7 +22,6 @@ export class PromotionTableComponent implements OnInit, OnChanges {
         private dialog: MatDialog,
         private formatService: FormatService,
         private purchaseOrder: PurchaseOrderService,
-        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Return } from '../../models/return';
+import { Observable } from 'rxjs';
+import { Return, Status } from '../../models/return';
 import { tableHeader } from '../../models/table.header';
 import { ReturnsService } from '../../services/returns.service';
-import { Status } from '../../models/return';
-import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-returns-table',

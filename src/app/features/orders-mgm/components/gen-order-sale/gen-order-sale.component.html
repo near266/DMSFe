@@ -157,11 +157,11 @@
             <div class="flex gap-x-6 justify-between">
                 <mat-form-field class="w-1/3" appearance="outline" floatLabel="always">
                     <mat-label>SĐT</mat-label>
-                    <input formControlName="phone" matInput />
+                    <input [readonly]="true" formControlName="phone" matInput />
                 </mat-form-field>
                 <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Địa chỉ</mat-label>
-                    <input matInput formControlName="address" />
+                    <input [readonly]="true" matInput formControlName="address" />
                 </mat-form-field>
             </div>
             <mat-form-field class="w-full" appearance="outline" floatLabel="always">

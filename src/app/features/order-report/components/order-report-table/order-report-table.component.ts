@@ -1,70 +1,50 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ReportService } from 'src/app/core/services/report.service';
+import { headerOrderReportTable } from '../../models/header';
 import { RootOrderReport } from '../../models/order-report';
+import { FormatService } from '../../services/format.service';
+import { LogicService } from '../../services/logic.service';
 
 @Component({
-  selector: 'app-order-report-table',
-  templateUrl: './order-report-table.component.html',
-  styleUrls: ['./order-report-table.component.scss']
+    selector: 'app-order-report-table',
+    templateUrl: './order-report-table.component.html',
+    styleUrls: ['./order-report-table.component.scss'],
 })
-export class OrderReportTableComponent implements OnInit {
+export class OrderReportTableComponent implements OnInit, AfterViewInit {
+    tableHeader: string[] = headerOrderReportTable;
+    listData$: Observable<any> = this.logicService.reportOrders$;
+    total$: Observable<any> = this.logicService.total$;
 
-  @Input() dataOrderReport:RootOrderReport = new RootOrderReport;
+    body = {
+        page: 1,
+        pageSize: 30,
+    };
 
-  constructor(
-    private router: Router,
-  ) { }
-  arrayHeader = [
-    'STT',
-    'Mã nhân viên',
-    'Tên nhân viên',
-    'Phòng nhóm',
-    'Nguồn',
-    'Mã đơn đặt',
-    'Ngày đơn đặt hàng',
-    'Mã khách',
-    'Tên khách',
-    'Số lần bán',
-    'Số lần trả',
-    'Địa chỉ',
-    'Khu vực',
-    'Kênh',
-    'Nhóm khách',
-    'Loại khách',
-    'Mã sản phẩm',
-    'Tên sản phẩm',
-    'Mã kho',
-    'Tên kho',
-    'Ghi chú sp',
-    'Ngành hàng',
-    'Nhãn hiệu',
-    'Số lượng đặt',
-    'Tên CTKM',
-    'Số lượng KM',
-    'ĐVT',
-    'Đơn giá',
-    'VAT',
-    'Thành tiền (SL đặt x giá)',
-    'Tiền VAT (từng SP)',
-    'Chiết khấu(%) (từng SP)',
-    'Tiền chiết khấu (từng SP)',
-    'Thành tiền (tổng bill)',
-    'Tiền VAT (tổng bill)',
-    'Chiết khấu(%) (tổng bill)',
-    'Tiền chiết khấu (tổng bill)',
-    'Thanh toán',
-    'Doanh thu (-VAT)',
-    'Diễn giải',
-    'Lô',
-    'Hạn sử dụng'
-  ]
-  ngOnInit(): void {
-    console.log(this.dataOrderReport);
-  }
-  navigateToDetail(order: any) {
-    localStorage.setItem('purchaseOrderId', order.orderCode);
-    // this.router.navigate(['/orders/detailOrder/viewEdit']);
-    this.router.navigate(['/orders/detailOrder/view?edit'], { queryParams: { id: order.purchaseOrderId }, queryParamsHandling: null });
-}
+    constructor(private router: Router, private logicService: LogicService) {}
 
+    ngOnInit(): void {}
+
+    ngAfterViewInit(): void {
+        this.getData();
+    }
+
+    getData() {
+        this.logicService.getAllReportOrders(this.body);
+    }
+
+    handlePageChange(e: any) {
+        this.body.page = e;
+        this.getData();
+    }
+
+    handleEmitId(id: any) {
+        this.navigateToDetail(id);
+    }
+
+    navigateToDetail(id: any) {
+        localStorage.setItem('purchaseOrderId', id);
+        window.open('/orders/detailOrder/viewEdit');
+    }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { readMoney } from 'src/app/core/shared/utils/readMoney';
 import { ReturnOrderService } from '../../../services/return-order.service';
 
@@ -9,35 +10,38 @@ import { ReturnOrderService } from '../../../services/return-order.service';
 })
 export class CreateReturnFromOrderComponent implements OnInit {
     orderInfo: any;
-    productList: any[];
-    promotionList: any[];
+    tradeDiscount: number = 0;
     totalPrice: number;
     textMoney: string;
     discountAmount: number;
+    subscription: Subscription[] = [];
     constructor(private returnOrderService: ReturnOrderService) {}
-
     ngOnInit(): void {
-        this.returnOrderService.returnInfo$.subscribe((data) => {
-            this.orderInfo = data;
-        });
-        this.returnOrderService.returnProductList$.subscribe((data) => {
-            this.productList = data;
-        });
-        this.returnOrderService.returnPromotionList$.subscribe((data) => {
-            this.promotionList = data;
-        });
-        this.returnOrderService.totalPrice$.subscribe((data) => {
-            this.totalPrice = data;
-            const ins = new readMoney(data);
-            this.textMoney = ins.doc(data - this.discountAmount);
-        });
-        this.returnOrderService.discountAmount$.subscribe((data) => {
-            this.discountAmount = data;
-            const ins = new readMoney(data);
-            this.textMoney = ins.doc(this.totalPrice - data);
-        });
+        this.subscription.push(
+            this.returnOrderService.totalPrice$.subscribe((data) => {
+                this.totalPrice = data;
+                const ins = new readMoney(data);
+                this.textMoney = ins.doc(data - this.discountAmount);
+            }),
+        );
+        this.subscription.push(
+            this.returnOrderService.discountAmount$.subscribe((data) => {
+                this.discountAmount = data;
+                this.calculateTotalPay();
+            }),
+        );
     }
+    calculateTotalPay() {
+        const ins = new readMoney(this.discountAmount);
+        this.textMoney = ins.doc(this.totalPrice - this.discountAmount - this.tradeDiscount);
+    }
+
     submitAddReturnForm() {
         this.returnOrderService.submitFormInfo$.next(true);
+    }
+    ngOnDestroy(): void {
+        this.subscription.forEach((item) => {
+            item.unsubscribe();
+        });
     }
 }
