@@ -2,15 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Config } from 'src/app/core/model/Config';
 import { ReportService } from 'src/app/core/services/report.service';
-import { RootOrderReport } from './models/order-report';
-import { LogicService } from './services/logic.service';
-
+import { RootOrderReport } from '../../models/order-report';
+import { LogicService } from '../../services/logic.service';
 @Component({
-    selector: 'app-order-report',
-    templateUrl: './order-report.component.html',
-    styleUrls: ['./order-report.component.scss'],
+    selector: 'app-purchase-report',
+    templateUrl: './purchase-report.component.html',
+    styleUrls: ['./purchase-report.component.scss'],
 })
-export class OrderReportComponent implements OnInit {
+export class PurchaseReportComponent implements OnInit {
     // todo menu
     statusMenu: Config = {
         icon: '<i class="fa-solid fa-user"></i>',

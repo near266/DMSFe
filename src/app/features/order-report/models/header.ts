@@ -1,4 +1,4 @@
-export const headerOrderReportTable = [
+export const headerOrderReportTable: string[] = [
     'STT',
     'Mã nhân viên',
     'Tên nhân viên',
@@ -36,4 +36,28 @@ export const headerOrderReportTable = [
     'Tiền chiết khấu (tổng bill)',
     'Thanh toán',
     'Diễn giải',
+];
+
+export const headerSaleReceiptTable: string[] = [
+    'STT',
+    'Ngày chứng từ',
+    'Số chứng từ',
+    'Mã khách hàng',
+    'Tên khách hàng',
+    'Địa chỉ',
+    'Quận huyện',
+    'Tỉnh thành',
+    'Mã phòng nhóm',
+    'Tên nhân viên đặt hàng',
+    'Mã hàng',
+    'Tên hàng',
+    'ĐVT',
+    'Số lượng bán',
+    'Đơn giá',
+    'Doanh số bán',
+    'Chiết khấu',
+    'Số lượng trả lại',
+    'Giá trị trả lại',
+    'Doanh số thuần',
+    'Diễn giải chung',
 ];

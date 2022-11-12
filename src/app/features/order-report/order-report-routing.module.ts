@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TemplateTableComponent } from './common-template/template-table/template-table.component';
+import { PurchaseReportComponent } from './components/purchase-report/purchase-report.component';
+import { SaleReceiptReportComponent } from './components/sale-receipt-report/sale-receipt-report.component';
 import { OrderReportComponent } from './order-report.component';
 
 const routes: Routes = [
@@ -9,8 +10,12 @@ const routes: Routes = [
         component: OrderReportComponent,
         children: [
             {
-                path: 'template',
-                component: TemplateTableComponent,
+                path: 'purchase',
+                component: PurchaseReportComponent,
+            },
+            {
+                path: 'saleReceipt',
+                component: SaleReceiptReportComponent,
             },
         ],
     },

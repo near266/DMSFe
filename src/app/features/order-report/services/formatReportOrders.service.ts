@@ -2,19 +2,49 @@ import { CurrencyPipe, DatePipe, PercentPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import products from '../../product/mocks/product';
 import { Config } from '../models/config';
+import { RootOrderReport } from '../models/order-report';
 import { stickyRows } from '../models/stickyRow';
 
 @Injectable({
     providedIn: 'root',
 })
-export class FormatService {
+export class FormatReportOrderService {
     constructor(private currency: CurrencyPipe, private percent: PercentPipe, private datePipe: DatePipe) {}
-    formatDataOrders(dataList: any) {
+    // format data của report đơn đặt
+    formatReportOrders(dataList: RootOrderReport) {
         let dataReturn: any = [];
         let listIds: string[] = [];
-        let stickyRows: stickyRows[] = [];
-
-        dataReturn = dataList.map((data: any, index: number) => {
+        let stickyRows: stickyRows[] = [
+            {
+                header: 'Nhãn hiệu',
+                content: 'Tổng: ',
+            },
+            {
+                header: 'Số lượng đặt',
+                content: dataList.sumOfOrderProduct,
+            },
+            {
+                header: 'Số lượng KM',
+                content: dataList.sumOfPromotionProduct,
+            },
+            {
+                header: 'Thành tiền (SL đặt x giá)',
+                content: this.currency.transform(dataList.sumOfTotalPrice, 'VND', 'symbol', '1.0-0')!,
+            },
+            {
+                header: 'Tiền chiết khấu (từng SP)',
+                content: this.currency.transform(dataList.sumOfDiscount, 'VND', 'symbol', '1.0-0')!,
+            },
+            {
+                header: 'Thanh toán',
+                content: this.currency.transform(dataList.sumOfTotalPayment, 'VND', 'symbol', '1.0-0')!,
+            },
+            {
+                header: 'Tiền chiết khấu (tổng bill)',
+                content: 'Chưa trả',
+            },
+        ];
+        dataReturn = dataList.data!.map((data: any, index: number) => {
             listIds.push(data.purchaseOrderId);
             let productInfo = this.getProductOrdersInfo(data.listProducts);
             let productCodeArray = productInfo.productCodeArray;
@@ -101,17 +131,17 @@ export class FormatService {
                 },
                 // Kênh
                 {
-                    content: data.customer?.channel,
+                    content: data.customer?.channel?.channelName,
                     hasChildren: false,
                 },
                 // Nhóm khách
                 {
-                    content: 'Chưa thấy chi tiết',
+                    content: data.customer?.customerGroup?.customerGroupName,
                     hasChildren: false,
                 },
                 // Loại khách
                 {
-                    content: 'Chưa thấy chi tiết',
+                    content: data.customer?.customerType?.customerTypeName,
                     hasChildren: false,
                 },
                 // Mã sản phẩm
@@ -223,11 +253,10 @@ export class FormatService {
         });
         // để phân biệt ấn vào cột nào sẽ emit gì, biết ấn vào từ màn nào
         let returnInfo: Config = {
-            from: 'ReportOrders',
             emitTdOrder: 5,
             dataReturn: dataReturn,
             listIds: listIds,
-            stickyRows: [],
+            stickyRows: stickyRows,
         };
         return returnInfo;
     }

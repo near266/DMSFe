@@ -253,7 +253,7 @@
                             {{ order.customerName }}
                         </td>
                         <td class="custom-td border-b">
-                            {{ order.address }}
+                            {{ order.customer?.address }}
                         </td>
                         <td class="custom-td border-b">
                             {{ datepipe.transform(order.orderDate, 'dd/MM/yyyy') || 'No-data' }}

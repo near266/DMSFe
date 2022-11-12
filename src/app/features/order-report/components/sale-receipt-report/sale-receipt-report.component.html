@@ -1,4 +1,4 @@
-<!-- <mat-sidenav-container [hasBackdrop]="false">
+<mat-sidenav-container [hasBackdrop]="false">
     <mat-sidenav
         [mode]="'side'"
         class="fixed"
@@ -17,10 +17,7 @@
             <div class="w-full relative mt-3">
                 <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
                 <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm sản phẩm" />
-            </div> -->
-
-<!-- todo loại KH -->
-<!-- <app-menu-collapse (Selection)="selectType($event)" [Config]="statusMenu"></app-menu-collapse>
+            </div>
         </div>
     </mat-sidenav>
     <mat-sidenav-content class="overflow-y-auto">
@@ -34,10 +31,10 @@
 
         <div class="flex h-full w-full pl-[26px]">
             <div class="flex w-full h-full relative flex-col">
-                <div class="z-20"> -->
-<!-- header -->
-<!-- <div class="px-3 mt-2 flex justify-between items-center">
-                        <span class="text-xl font-bold">Báo cáo tổng hợp đặt hàng ( {{ total$ | async }} )</span>
+                <div class="z-20">
+                    <!-- header -->
+                    <div class="px-3 mt-2 flex justify-between items-center">
+                        <span class="text-xl font-bold">Báo cáo tổng hợp bán hàng ({{ total$ | async }})</span>
                         <div class="space-x-3 flex items-center">
                             <button class="button-primary-sm text-white">
                                 Tìm kiếm
@@ -69,10 +66,9 @@
                 </div>
                 <hr />
                 <div class="w-full table-container min-w-full box-border h-full px-3 bg-white">
-                    <app-order-report-table></app-order-report-table>
+                    <app-sale-receipt-report-table></app-sale-receipt-report-table>
                 </div>
             </div>
         </div>
     </mat-sidenav-content>
-</mat-sidenav-container> -->
-<router-outlet></router-outlet>
+</mat-sidenav-container>

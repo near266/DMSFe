@@ -2,85 +2,90 @@
     class="w-full z-20 header-shadow bg-zinc-100 h-16 flex items-center justify-between px-3 fixed top-0 right-0 left-0">
     <img src="./../../../../assets/images/Logo-Fitolab-logo.png" class="h-5/6" alt="" />
     <ul class="flex md:space-x-10 lg:space-x-20 text-sm">
-        <li class="mr-4  font-medium hover:opacity-70 cursor-pointer">Công việc</li>
+        <li class="mr-4 font-medium hover:opacity-70 cursor-pointer">Công việc</li>
         <!-- Menu Bán hàng -->
-        <li
-            class="mr-4  font-medium hover:opacity-70 cursor-pointer flex items-center"
-            [matMenuTriggerFor]="menu1">
+        <li class="mr-4 font-medium hover:opacity-70 cursor-pointer flex items-center" [matMenuTriggerFor]="menu1">
             <span class="mr-1">Bán hàng</span>
             <i class="fa-solid fa-caret-down"></i>
         </li>
         <mat-menu #menu1="matMenu" class="mt-1">
             <button mat-menu-item class="flex items-center" [routerLink]="['customers']">
-                <i class="fa-solid fa-users  mr-2"></i>
+                <i class="fa-solid fa-users mr-2"></i>
                 <span>Khách hàng</span>
             </button>
             <button mat-menu-item [routerLink]="['product']">
-                <i class="fa-solid fa-cart-shopping  mr-2"></i>
+                <i class="fa-solid fa-cart-shopping mr-2"></i>
                 <span>Sản phẩm</span>
             </button>
             <button mat-menu-item [routerLink]="['warehouses']">
-                <i class="fa-solid fa-shop  mr-2"></i>
+                <i class="fa-solid fa-shop mr-2"></i>
                 <span>Kho hàng</span>
             </button>
             <mat-divider></mat-divider>
             <button mat-menu-item [routerLink]="['orders']">
-                <i class="fa-solid fa-file-invoice  mr-2"></i>
+                <i class="fa-solid fa-file-invoice mr-2"></i>
                 <span>Phiếu đặt hàng</span>
             </button>
             <button mat-menu-item [routerLink]="['ordersale']">
-                <i class="fa-solid fa-calculator  mr-2"></i>
+                <i class="fa-solid fa-calculator mr-2"></i>
                 <span>Phiếu bán hàng</span>
             </button>
             <button mat-menu-item [routerLink]="['returns']">
-                <i class="fa-solid fa-clock-rotate-left  mr-2"></i>
+                <i class="fa-solid fa-clock-rotate-left mr-2"></i>
                 <span>Phiếu trả hàng</span>
             </button>
         </mat-menu>
         <!-- Menu Danh mục -->
-        <li *ngIf="!(onlyRole('accountant') | async)" class="mr-4  font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="menu2">
+        <li
+            *ngIf="!(onlyRole('accountant') | async)"
+            class="mr-4 font-medium hover:opacity-70 cursor-pointer"
+            [matMenuTriggerFor]="menu2">
             <span class="mr-1">Danh mục</span>
             <i class="fa-solid fa-caret-down"></i>
         </li>
         <mat-menu #menu2="matMenu">
-            <button *ngIf="requiredRoles('sale_admin') | async" mat-menu-item class="flex items-center" (click)="openTree()">
-                <i class="fa-solid fa-sitemap  mr-2"></i>
+            <button
+                *ngIf="requiredRoles('sale_admin') | async"
+                mat-menu-item
+                class="flex items-center"
+                (click)="openTree()">
+                <i class="fa-solid fa-sitemap mr-2"></i>
                 <span>Cây đơn vị</span>
             </button>
             <button mat-menu-item [routerLink]="['/categories/warehouses']">
-                <i class="fa-solid fa-box-archive  mr-2"></i>
+                <i class="fa-solid fa-box-archive mr-2"></i>
                 <span>Kho hàng</span>
             </button>
             <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren1">
-                <i class="fa-solid fa-user-tag  mr-2"></i>
+                <i class="fa-solid fa-user-tag mr-2"></i>
                 <span>Phân quyền, chỉ tiêu</span>
             </button>
             <mat-menu #matMenuChildren1="matMenu">
                 <button mat-menu-item class="flex items-center" [routerLink]="'/route'">
-                    <i class="fa-solid fa-shuffle  mr-2"></i>
+                    <i class="fa-solid fa-shuffle mr-2"></i>
                     <span>Quản lý tuyến</span>
                 </button>
                 <button mat-menu-item class="flex items-center">
-                    <i class="fa-solid fa-lock-open  mr-2"></i>
+                    <i class="fa-solid fa-lock-open mr-2"></i>
                     <span>Quyền bán sản phẩm</span>
                 </button>
                 <button mat-menu-item class="flex items-center">
-                    <i class="fa-regular fa-thumbs-up  mr-2"></i>
+                    <i class="fa-regular fa-thumbs-up mr-2"></i>
                     <span>Chỉ tiêu KPI</span>
                 </button>
             </mat-menu>
             <mat-divider></mat-divider>
             <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren2">
-                <i class="fa-solid fa-cart-shopping  mr-2"></i>
+                <i class="fa-solid fa-cart-shopping mr-2"></i>
                 <span>Sản phẩm</span>
             </button>
             <mat-menu #matMenuChildren2="matMenu">
                 <button mat-menu-item class="flex items-center" [routerLink]="'/categories/units'">
-                    <i class="fa-solid fa-cubes  mr-2"></i>
+                    <i class="fa-solid fa-cubes mr-2"></i>
                     <span>Đơn vị tính</span>
                 </button>
                 <button mat-menu-item class="flex items-center">
-                    <i class="fa-solid fa-tags  mr-2"></i>
+                    <i class="fa-solid fa-tags mr-2"></i>
                     <span>Nhãn hiệu</span>
                 </button>
                 <button mat-menu-item class="flex items-center">
@@ -88,46 +93,71 @@
                     <span>Nhà cung cấp</span>
                 </button>
                 <button mat-menu-item class="flex items-center">
-                    <i class="fa-solid fa-pie-chart  mr-2"></i>
+                    <i class="fa-solid fa-pie-chart mr-2"></i>
                     <span>Ngành hàng</span>
                 </button>
             </mat-menu>
         </mat-menu>
         <!-- Menu Báo cáo -->
-        <li class="mr-4  font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="report">Báo cáo <i class="fa-solid fa-caret-down ml-1"></i></li>
+        <li class="mr-4 font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="report">
+            Báo cáo
+            <i class="fa-solid fa-caret-down ml-1"></i>
+        </li>
         <mat-menu #report="matMenu" class="mt-1">
-          <button mat-menu-item [matMenuTriggerFor]="monitoringReport">
-            <i class="fa-solid fa-user-secret mr-2"></i>
-              <span>Báo cáo giám sát</span>
-          </button>
-          <mat-menu #monitoringReport="matMenu">
-            <button mat-menu-item class="flex items-center" [routerLink]="['reports/timekeeping']" routerLinkActive="text-green-500">
-              <i class="fa-solid fa-calendar-days mr-1"></i>
-                <span>Báo cáo chấm công tháng</span>
+            <button mat-menu-item [matMenuTriggerFor]="monitoringReport">
+                <i class="fa-solid fa-user-secret mr-2"></i>
+                <span>Báo cáo giám sát</span>
             </button>
-            <button mat-menu-item class="flex items-center" [routerLink]="['reports/timesheet']" routerLinkActive="text-green-500">
-              <i class="fa-regular fa-calendar-check mr-1"></i>
-                <span>Chấm công</span>
+            <mat-menu #monitoringReport="matMenu">
+                <button
+                    mat-menu-item
+                    class="flex items-center"
+                    [routerLink]="['reports/timekeeping']"
+                    routerLinkActive="text-green-500">
+                    <i class="fa-solid fa-calendar-days mr-1"></i>
+                    <span>Báo cáo chấm công tháng</span>
+                </button>
+                <button
+                    mat-menu-item
+                    class="flex items-center"
+                    [routerLink]="['reports/timesheet']"
+                    routerLinkActive="text-green-500">
+                    <i class="fa-regular fa-calendar-check mr-1"></i>
+                    <span>Chấm công</span>
+                </button>
+            </mat-menu>
+            <mat-divider></mat-divider>
+            <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="orderReport">
+                <i class="fa-regular fa-file-excel mr-2"></i>
+                <span>Báo cáo đặt hàng</span>
             </button>
-          </mat-menu>
-          <mat-divider></mat-divider>
-          <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="orderReport" >
-            <i class="fa-regular fa-file-excel mr-2"></i>
-            <span>Báo cáo đặt hàng</span>
-          </button>
-          <mat-menu #orderReport="matMenu">
-            <button mat-menu-item class="flex items-center" [routerLink]="['order-report']" routerLinkActive="text-green-500">
-              <i class="fa-solid fa-list mr-1"></i>
-                <span>Tổng hợp đặt hàng</span>
+            <mat-menu #orderReport="matMenu">
+                <button
+                    mat-menu-item
+                    class="flex items-center"
+                    [routerLink]="['order-report/purchase']"
+                    routerLinkActive="text-green-500">
+                    <i class="fa-solid fa-list mr-1"></i>
+                    <span>Tổng hợp đặt hàng</span>
+                </button>
+            </mat-menu>
+            <button mat-menu-item [routerLink]="['product']" [matMenuTriggerFor]="saleReceipt">
+                <i class="fa-solid fa-chart-line mr-2"></i>
+                <span>Báo cáo bán hàng</span>
             </button>
+            <mat-menu #saleReceipt="matMenu">
+                <button
+                    mat-menu-item
+                    class="flex items-center"
+                    [routerLink]="['order-report/saleReceipt']"
+                    routerLinkActive="text-green-500">
+                    <i class="fa-solid fa-list mr-1"></i>
+                    <span>Tổng hợp bán hàng</span>
+                </button>
+            </mat-menu>
         </mat-menu>
-          <button mat-menu-item [routerLink]="['product']">
-            <i class="fa-solid fa-chart-line mr-2"></i>
-              <span>Báo cáo bán hàng</span>
-          </button>
-      </mat-menu>
         <!-- Menu trợ giúp -->
-        <li class="mr-4  font-medium hover:opacity-70 cursor-pointer">Trợ giúp</li>
+        <li class="mr-4 font-medium hover:opacity-70 cursor-pointer">Trợ giúp</li>
     </ul>
     <div class="flex items-center">
         <div class="mr-6 cursor-pointer hover:opacity-70 text-blue-text">
@@ -136,7 +166,8 @@
         <div class="mr-6 cursor-pointer hover:opacity-70 text-green-text">
             <i class="fa-solid fa-download fa-xl"></i>
         </div>
-        <div [matMenuTriggerFor]="menu"
+        <div
+            [matMenuTriggerFor]="menu"
             class="cursor-pointer overflow-hidden relative w-10 h-10 bg-gray-100 rounded-full dark:bg-gray-500">
             <img [src]="annonimousAvatar" alt="" />
         </div>
