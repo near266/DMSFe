@@ -26,7 +26,7 @@ export class BranchService {
     });
       dialogRef.afterClosed().subscribe(result => {
         if(result?.event === true){
-          this.getAllBrand();
+          // this.getAllBrand();
         }
       });
   }
@@ -39,8 +39,8 @@ export class BranchService {
 
   constructor(private http: HttpClient, private dialogService: MatDialog) { }
 
-  getAllBrand(): Observable<Brand[]> {
-    return this.http.post<Brand[]>(this.Point + '/search', '');
+  getAllBrand(body: any): Observable<any> {
+    return this.http.post(this.endPoint + '/BrandSearch', body);
   }
 
   getdetailBrand(body: any): Observable<Brand[]> {
@@ -56,7 +56,7 @@ export class BranchService {
   }
 
   searchBrand(body: any): Observable<Brand[]> {
-    return this.http.post<Brand[]>(this.Point + '/search', body);
+    return this.http.post<Brand[]>(this.endPoint + '/search', body);
   }
 
   del(body: any): Observable<any> {

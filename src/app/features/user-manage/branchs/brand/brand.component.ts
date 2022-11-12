@@ -72,7 +72,7 @@ export class BrandComponent implements OnInit {
             action: ['Xóa', 'Hủy'],
         },
     });
-    let body = {id: [this.brand?.id]}
+    let body = {id: this.brand?.id}
     dialogRef.afterClosed().subscribe((data: any) => {
         if (data.includes('Xóa')) {
             this.brandService.del(body).subscribe(data => {

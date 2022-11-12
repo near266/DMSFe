@@ -35,19 +35,6 @@ export class DetailBrandComponent implements OnInit {
         key: 'id',
     },
     {
-        key: 'status',
-        type: 'brand-select',
-        defaultValue: null,
-        templateOptions: {
-            label: 'Trạng thái',
-            required: true,
-            options: [
-                { value: true, label: 'Mở' },
-                { value: false, label: 'Khóa' },
-            ],
-        },
-    },
-    {
         key: 'brandName',
         type: 'brand-input',
         templateOptions: {
@@ -66,10 +53,36 @@ export class DetailBrandComponent implements OnInit {
             required: true,
         },
     },
+    {
+        key: 'debtLimit',
+        type: 'brand-select',
+        defaultValue: null,
+        templateOptions: {
+            label: 'Giới hạn phòng ban',
+            required: true,
+            options: [
+                { value: true, label: 'Giới hạn' },
+                { value: false, label: 'Không giới hạn' },
+            ],
+        },
+    },
+    {
+        key: 'status',
+        type: 'brand-select',
+        defaultValue: null,
+        templateOptions: {
+            label: 'Trạng thái',
+            required: true,
+            options: [
+                { value: true, label: 'Mở' },
+                { value: false, label: 'Khóa' },
+            ],
+        },
+    },
   ];
 
   onSubmit(brand: Brand) {
-    console.log(brand);
+    // console.log(brand);
     if (!this.form.invalid) {
         if (!brand.id) {
             delete brand.id;
@@ -85,11 +98,11 @@ export class DetailBrandComponent implements OnInit {
         } else {
             this.branchService.updateBrand(brand).subscribe({
                 next: (res) => {
-                    this.snackbar.openSnackbar('Sửa đơn vị thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                    this.snackbar.openSnackbar('Sửa nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
                     this.dialogRef.close({event: true});
                 },
                 error: (err) => {
-                    this.snackbar.openSnackbar('Sửa đơn vị thất bại', 2000, 'Đóng', 'center', 'bottom', true);
+                    this.snackbar.openSnackbar('Sửa nhãn hiệu thất bại', 2000, 'Đóng', 'center', 'bottom', true);
                     console.log(err);
                 },
             });

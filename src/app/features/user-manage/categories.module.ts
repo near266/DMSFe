@@ -91,10 +91,15 @@ const routes: Routes = [
         SharedModule, 
         NgxPaginationModule,
         FormlyModule.forChild({
-            wrappers: [{ name: 'unit', component: ProductFieldWrapper }],
+            wrappers: [
+                { name: 'unit', component: ProductFieldWrapper },
+                { name: 'brand', component: ProductFieldWrapper }
+            ],
             types: [
                 { name: 'unit-input', component: ProductFieldInput, wrappers: ['unit'] },
                 { name: 'unit-select', component: ProductFieldSelect, wrappers: ['unit'] },
+                { name: 'brand-input', component: ProductFieldInput, wrappers: ['brand'] },
+                { name: 'brand-select', component: ProductFieldSelect, wrappers: ['brand'] },
             ],
             validationMessages: [{ name: 'required', message: 'Trường này là bắt buộc' }],
         }),

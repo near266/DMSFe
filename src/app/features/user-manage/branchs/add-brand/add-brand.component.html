@@ -1,1 +1,61 @@
-<p>add-brand works!</p>
+<form [formGroup]="form" (ngSubmit)="add()">
+    <div class="relative h-full overflow-hidden">
+        <div class="flex-row justify-between h-fit p-2 sticky top-0 border-b border-green-600 bg-white"
+        style="display: flex!important; margin: 0!important;">
+        <div class="text-2xl text-gray-500 italic font-semibold tracking-wider flex"><span>Thêm đơn vị tính</span></div>
+            <div class="flex flex-row text-xs">
+                <button
+                class="flex flex-row bg-blue-900 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
+                <i class="fa-solid fa-circle-check mx-2"></i>
+                <span class="mr-2">Lưu</span>
+                </button>
+                <button
+                class="flex flex-row bg-gray-300 text-black justify-center items-center px-2 py-3 rounded-r-sm cursor-pointer"
+                mat-dialog-close (click)="close()">
+                <i class="fa-solid fa-right-from-bracket mx-2"></i>
+                <span class="mr-2">Đóng</span>
+                </button>
+            </div>
+        </div>
+        <div class="min-w-max h-full" style="background-color: #f5f5f5;">
+            <div>
+                <!-- <div class="w-full flex px-8 py-2">
+                    <div class="w-2/12">STT</div>
+                    <div class="w-10/12">
+                        <select class="border border-solid border-black rounded-sm w-96 text-xs h-7">
+                            <option disabled selected value=""> --- Auto --- </option>
+                        </select>
+                    </div>
+                </div> -->
+                <div class="w-full flex px-8 py-2">
+                    <div class="w-2/12">Mã đơn vị tính</div>
+                    <div class="w-10/12">
+                        <input formControlName="brandCode" class="border border-solid border-black rounded-sm w-96 text-xs h-7" >
+                    </div>
+                </div>
+                <div class="w-full flex px-8 py-2">
+                    <div class="w-2/12">Đơn vị tính</div>
+                    <div class="w-10/12">
+                        <input formControlName="brandName" class="border border-solid border-black rounded-sm w-96 text-xs h-7">
+                    </div>
+                </div>
+                <div class="w-full flex px-8 py-2">
+                    <div class="w-2/12">Giới hạn phòng ban</div>
+                    <select formControlName="status" class="border border-solid border-black rounded-sm w-96 text-xs h-7">
+                        <option disabled selected value=""> --- Chọn trạng thái --- </option>
+                        <option value="true">Giới hạn</option>
+                        <option value="false">Không giới hạn</option>
+                    </select>
+                </div>
+                <div class="w-full flex px-8 py-2">
+                    <div class="w-2/12">Trạng thái</div>
+                    <select formControlName="status" class="border border-solid border-black rounded-sm w-96 text-xs h-7">
+                        <option disabled selected value=""> --- Chọn trạng thái --- </option>
+                        <option value="true">Mở</option>
+                        <option value="false">Khóa</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

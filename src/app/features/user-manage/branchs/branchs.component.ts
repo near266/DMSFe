@@ -45,7 +45,7 @@ export class BranchsComponent implements OnInit {
   }
 
   view(){
-    this.brandService.getAllBrand().subscribe(data => {
+    this.brandService.getAllBrand(this.request).subscribe(data => {
       if(data){
         this.brand = data;
         this.totalbranchs = data.length
@@ -106,7 +106,7 @@ export class BranchsComponent implements OnInit {
   }
 
   Select(e: string) {
-    if(e.includes('Tất cả') || e.includes('Hoạt động') || e.includes('Khóa')) {
+    if(e.includes('Tất cả') || e.includes('Mở') || e.includes('Khóa')) {
       this.sortByType(e);
       return;
     } else {
@@ -136,7 +136,7 @@ export class BranchsComponent implements OnInit {
       leftTitleIcon: 'fa-filter',
       listMenuPosition: [
         { title: 'Tất cả', leftIcon: '', value: 'all' },
-        { title: 'Hoạt động', leftIcon: '', value: 'emp' },
+        { title: 'Mở', leftIcon: '', value: 'emp' },
         { title: 'Khóa', leftIcon: '', value: 'emp' },
       ]
     }
