@@ -16,7 +16,7 @@
         <div class="z-0  ">
           <!-- header -->
           <div class="mt-2 px-2 flex justify-between items-center">
-            <span class="text-xl font-medium">Danh sách trả hàng ({{totalReturns}}) </span>
+            <span class="text-xl font-medium">Danh sách trả hàng ({{totalReturns$ |async}}) </span>
             <div style="font-size: 12px" class="flex items-center ">
               <mat-form-field appearance="outline" class="mr-2 " [formGroup]="dateSearchForm">
                 <mat-label>Khoảng thời gian</mat-label>

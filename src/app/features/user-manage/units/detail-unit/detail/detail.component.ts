@@ -42,7 +42,7 @@ export class DetailComponent implements OnInit {
             label: 'Trạng thái',
             required: true,
             options: [
-                { value: true, label: 'Hoạt động' },
+                { value: true, label: 'Mở' },
                 { value: false, label: 'Khóa' },
             ],
         },
@@ -51,7 +51,7 @@ export class DetailComponent implements OnInit {
         key: 'unitName',
         type: 'unit-input',
         templateOptions: {
-            label: 'Tên sản phẩm',
+            label: 'Tên đơn vị tính',
             placeholder: 'Nhập tên đơn vị tính',
             required: true,
         },

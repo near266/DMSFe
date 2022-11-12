@@ -112,6 +112,7 @@ export class ReturnDetailsService {
                 returnsId: this.returnDetails$.getValue().id,
                 productId: product.product.id,
                 quantity: product.quantity,
+                index: product.index || 0,
                 salesQuantity: product.salesQuantity,
                 exportQuantity: product.exportQuantity,
                 returnsQuantity: product.returnsQuantity,
@@ -127,13 +128,9 @@ export class ReturnDetailsService {
         });
     }
     formatDeleteProductList(productList: any[]) {
-        console.log(productList);
         const res = productList.map((product) => {
             return {
-                productId: product.product.id,
-                type: product.type,
-                unitId: product.unit?.id || null,
-                warehouseId: product.warehouse?.id || null,
+                index: product.index || 0,
             };
         });
         return productList.map((product) => {

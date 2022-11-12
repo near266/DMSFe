@@ -44,12 +44,18 @@ export interface Unit {
     id?: string;
     unitName?: string;
     unitCode?: string;
+    status?: boolean;
+    createdBy?: string;
+    createdDate?: Date;
 }
 
 export interface Brand {
     id?: string;
     brandName?: string;
     brandCode?: string;
+    status?: boolean;
+    createdBy?: string;
+    createdDate?: Date;
 }
 
 export interface Major {

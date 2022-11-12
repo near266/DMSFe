@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { SelectOption } from 'src/app/core/model/Select';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Unit } from 'src/app/features/product/models/product';
 import { ProductDialogService } from 'src/app/features/product/services/product-dialog.service';
@@ -13,8 +14,8 @@ import { ReturnsService } from '../../../services/returns.service';
 })
 export class CreateReturnTableComponent implements OnInit {
     productsInput: any;
-    unitOptions: { value: string | undefined; label: string | undefined }[];
-    warehouseOptions: { value: string | undefined; label: string | undefined }[];
+    unitOptions: SelectOption[];
+    warehouseOptions: SelectOption[];
     selectedWarehouse: any;
     quantity: number;
     products: any[];
@@ -24,20 +25,20 @@ export class CreateReturnTableComponent implements OnInit {
     productQuantitySum: number;
     constructor(
         private returnFormService: ReturnFormService,
-        private formBuilder: FormBuilder,
         private snackbarService: SnackbarService,
         private productDialogService: ProductDialogService,
     ) {}
     stopPropagation(e: any) {
         e.stopPropagation();
     }
-
     ngOnInit(): void {
         // calculate sum of product quantity
         this.returnFormService.products$.subscribe((data) => {
+            console.log(data);
             const res = data.map((item: any) => {
                 return {
                     vat: item?.vat,
+                    index: item?.index,
                     sku: item.sku,
                     productName: item.productName,
                     productId: item.id,
@@ -136,8 +137,8 @@ export class CreateReturnTableComponent implements OnInit {
     }
     updateItemTotalPrice(item: any) {
         item.totalPrice = item.returnsQuantity * item.unitPrice;
-        item.salesQuantity = item.returnsQuantity;
-        item.quantity = item.returnsQuantity;
+        // item.salesQuantity = item.returnsQuantity;
+        // item.quantity = item.returnsQuantity;
         this.updateDiscountRate(item);
     }
     updateDiscountRate(item: any) {
@@ -150,7 +151,7 @@ export class CreateReturnTableComponent implements OnInit {
     checkValidListProducts(): boolean {
         let isValid = true;
         this.productsInput.forEach((item: any) => {
-            if (item.salesQuantity <= 0 || item.warehouseId === null || item.unitId === null) {
+            if (item.salesQuantity <= 0) {
                 isValid = false;
             }
         });

@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subject, tap } from 'rxjs';
+import { SelectOption } from 'src/app/core/model/Select';
 import { ProductApiService } from '../apis/product.api.service';
 import { AddProductDialogComponent } from '../components/add-product-dialog/add-product-dialog.component';
 import { Product, Supplier } from '../models/product';
@@ -41,22 +42,24 @@ export class ProductDialogService {
             }),
         );
     }
-    getAllBrands(): Observable<{ value: string | undefined; label: string | undefined }[]> {
+    getAllBrands(): Observable<SelectOption[]> {
         return this.productApiService.getAllBrands().pipe(
             map((res) => {
                 return res.map((supplier) => {
-                    return { value: supplier.id, label: supplier.brandName };
+                    return { value: supplier.id || null, label: supplier.brandName };
                 });
             }),
+            tap((res) => res.unshift({ value: null, label: 'Không có' })),
         );
     }
-    getAllUnits(): Observable<{ value: string | undefined; label: string | undefined }[]> {
+    getAllUnits(): Observable<SelectOption[]> {
         return this.productApiService.getAllUnits().pipe(
             map((res) => {
                 return res.map((supplier) => {
-                    return { value: supplier.id, label: supplier.unitName };
+                    return { value: supplier.id || null, label: supplier.unitName };
                 });
             }),
+            tap((res) => res.unshift({ value: null, label: 'Không có' })),
         );
     }
     getAllMajors(): Observable<{ value: string | undefined; label: string | undefined }[]> {

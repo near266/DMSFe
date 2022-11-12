@@ -278,8 +278,6 @@ export class ReturnOrderInfoComponent implements OnInit {
                             delete form.groupName;
                             delete form.orderEmployeeName;
                             delete form.saleCode;
-                            // console.log(form);
-                            // this.returnFormService.updateReturn(form);
                             this.returnFormService.addNewReturn(form);
                         }
                         // console.log(this.form.getRawValue());
