@@ -85,7 +85,7 @@
                     <span>Đơn vị tính</span>
                 </button>
                 <button mat-menu-item class="flex items-center" [routerLink]="'/categories/brand'">
-                    <i class="fa-solid fa-tags  mr-2"></i>
+                    <i class="fa-solid fa-tags mr-2"></i>
                     <span>Nhãn hiệu</span>
                 </button>
                 <button mat-menu-item class="flex items-center">
@@ -172,6 +172,9 @@
             <img [src]="annonimousAvatar" alt="" />
         </div>
     </div>
+    <button class="button-primary" [routerLink]="['optimalOrder']" routerLinkActive="router-link-active">
+        OptimalCode
+    </button>
     <mat-menu #menu="matMenu" class="mt-2">
         <button mat-menu-item class="flex items-center">
             <i class="fa-solid fa-user text-lg mr-2"></i>

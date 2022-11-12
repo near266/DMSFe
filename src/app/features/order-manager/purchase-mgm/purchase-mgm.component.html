@@ -1,0 +1,128 @@
+<mat-drawer-container [hasBackdrop]="false" class="fixed top-0 left-0 right-0 bottom-0">
+    <mat-drawer #sidenav mode="side" class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
+        <app-template-sidebar (showSidebar$)="sidenav.toggle()"></app-template-sidebar>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div [ngClass]="{ 'ml-10': !sidenav?.opened }" class="ml-10 px-5">
+            <div *ngIf="!sidenav?.opened" class="fixed top-16 left-0 bottom-0 bg-white min-h-screen p-2 border-r">
+                <div class="py-1 px-1.5 bg-zinc-300 rounded cursor-pointer" (click)="sidenav.toggle()">
+                    <i class="w-1/12 fa-solid fa-bars text-sm cursor-pointer hover:opacity-70"></i>
+                </div>
+            </div>
+            <app-template-header
+                [total]="total$ | async"
+                [titleHeader]="'Danh sách đơn bán hàng'"
+                [quantitySelected]="100"
+                (dateFilter$)="handleEmitDateFilter($event)">
+                <div class="flex mt-2">
+                    <button class="p-2 button-option mr-2" [matMenuTriggerFor]="addMenu">
+                        <i class="fa-solid fa-plus text-green-700 text-sm font-bold mr-1"></i>
+                        <span>Thêm mới</span>
+                        <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+                    </button>
+                    <!-- menu thêm mới của Phiếu đặt hàng | Phiếu bán hàng | Phiếu trả hàng -->
+                    <mat-menu #addMenu="matMenu">
+                        <!-- phiếu đặt hàng -->
+                        <div>
+                            <button mat-menu-item class="flex text-sm" [routerLink]="['/orders/createPerchaseOrder']">
+                                <i class="fa-solid fa-hockey-puck mr-2 text-green-700"></i>
+                                <span class="text-sm">Thêm mới đơn hàng</span>
+                            </button>
+                        </div>
+                    </mat-menu>
+                    <button class="p-2 button-option mr-2">
+                        <i class="fa-solid fa-arrows-rotate text-green-700 text-sm font-bold mr-1"></i>
+                        <span>Tải lại</span>
+                    </button>
+                    <button class="p-2 button-option mr-2" [matMenuTriggerFor]="importData">
+                        <i class="fa-solid fa-file-import text-green-700 text-sm font-bold mr-1"></i>
+                        <span>Nhập dữ liệu</span>
+                        <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+                    </button>
+                    <mat-menu #importData="matMenu">
+                        <button mat-menu-item>Nhập theo mẫu excel</button>
+                    </mat-menu>
+                    <!-- <button class="p-2 button-option mr-2" [matMenuTriggerFor]="exportData">
+                <i class="fa-solid fa-file-export text-green-700 text-sm font-bold mr-1"></i>
+                <span>Xuất dữ liệu</span>
+                <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+            </button>
+            <mat-menu #exportData="matMenu">
+                <button mat-menu-item [matMenuTriggerFor]="exportMenu">Xuất file kế toán</button>
+                <mat-menu #exportMenu="matMenu">
+                    <button mat-menu-item>
+                        <i class="fa-regular fa-circle-check mr-2"></i>
+                        Được chọn
+                    </button>
+                    <button mat-menu-item>
+                        <i class="fa-brands fa-searchengin mr-2"></i>
+                        Điều kiện tìm
+                    </button>
+                </mat-menu>
+            </mat-menu> -->
+                    <button class="p-2 button-option mr-2" [matMenuTriggerFor]="printMenu">
+                        <i class="fa-solid fa-print text-green-700 text-sm font-bold mr-1"></i>
+                        <span>In</span>
+                        <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+                    </button>
+                    <mat-menu #exportData="matMenu" #printMenu="matMenu">
+                        <button mat-menu-item [matMenuTriggerFor]="printMenu1">In theo mẫu A4</button>
+                        <mat-menu #printMenu1="matMenu">
+                            <button mat-menu-item>
+                                <i class="fa-regular fa-circle-check mr-2"></i>
+                                Được chọn
+                            </button>
+                            <button mat-menu-item>
+                                <i class="fa-brands fa-searchengin mr-2"></i>
+                                Điều kiện tìm
+                            </button>
+                        </mat-menu>
+                    </mat-menu>
+                    <button class="p-2 button-option mr-2" [matMenuTriggerFor]="filterByTime">
+                        <i class="fa-solid fa-calendar text-green-700 text-sm font-bold mr-1"></i>
+                        <span>Lọc thời gian</span>
+                        <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+                    </button>
+                    <mat-menu #filterByTime="matMenu" #printMenu="matMenu">
+                        <button mat-menu-item>Ngày tạo</button>
+                        <button mat-menu-item>Ngày đặt hàng</button>
+                        <button mat-menu-item>Ngày giao hàng</button>
+                        <button mat-menu-item>Ngày sửa</button>
+                    </mat-menu>
+                    <button class="p-2 button-option mr-2" [matMenuTriggerFor]="sortMenu">
+                        <i class="fa-solid fa-sort text-green-700 text-sm font-bold mr-1"></i>
+                        <span>Sắp xếp</span>
+                        <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+                    </button>
+                    <mat-menu #sortMenu="matMenu" #printMenu="matMenu">
+                        <button mat-menu-item mat-menu-item>
+                            <i class="fa-solid fa-arrow-down mr-1"></i>
+                            <span>Ngày đặt hàng</span>
+                        </button>
+                        <button mat-menu-item mat-menu-item>
+                            <i class="fa-solid fa-arrow-up mr-1"></i>
+                            <span>Ngày đặt hàng</span>
+                        </button>
+                    </mat-menu>
+                    <button class="p-2 button-option mr-2" [matMenuTriggerFor]="manageMenu">
+                        <i class="fa-solid fa-lock text-green-700 text-sm font-bold mr-1"></i>
+                        <span>Quản trị</span>
+                        <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+                    </button>
+                    <mat-menu #sortMenu="matMenu" #manageMenu="matMenu">
+                        <button mat-menu-item class="flex items-center justify-between">
+                            <i class="fa-solid fa-trash mr-2"></i>
+                            <span>Xóa nhiều</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </app-template-header>
+            <app-template-table
+                [headers]="purchaseOrder"
+                [listData]="listData$ | async"
+                [isLoading]="isLoading$ | async"
+                [total]="total$ | async"
+                (emitValue$)="handleEmitValue($event)"></app-template-table>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

@@ -1,0 +1,82 @@
+<div *ngIf="isLoading" class="mt-10 text-center">
+    <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+</div>
+<div id="table" class="table-wrapper">
+    <table *ngIf="!isLoading" class="block custom-table text-black; dark:text-gray-400">
+        <thead class="custom-thead">
+            <th class="custom-th">TT</th>
+            <th class="custom-th">
+                <mat-checkbox (change)="chooseAll($event)"></mat-checkbox>
+            </th>
+            <th class="custom-th" *ngFor="let header of headers">{{ header }}</th>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="
+                    let order of listData
+                        | paginate
+                            : {
+                                  itemsPerPage: pageSize,
+                                  currentPage: page,
+                                  totalItems: total
+                              };
+                    index as i
+                "
+                class="custom-row">
+                <td class="custom-td border-b">{{ i + 1 }}</td>
+                <td class="custom-td border-b">
+                    <mat-checkbox (change)="chooseID($event, order.id, order)" [checked]="order.checked"></mat-checkbox>
+                </td>
+                <ng-container *ngFor="let detail of order">
+                    <td class="custom-td border-b" *ngIf="!detail.isEmit && !detail.isStatusCol">
+                        {{ detail.content }}
+                    </td>
+                    <td class="custom-td border-b" *ngIf="detail.isStatusCol">
+                        <button
+                            class="button-orange-xs font-normal cursor-default min-w-[90px]"
+                            *ngIf="detail.content == 1">
+                            <span style="font-size: 12px">Chờ duyệt</span>
+                        </button>
+                        <button
+                            class="button-primary-xs font-normal cursor-default min-w-[90px]"
+                            *ngIf="detail.content == 2">
+                            <span style="font-size: 12px">Đã duyệt</span>
+                        </button>
+                        <button
+                            class="button-success-xs font-normal cursor-default min-w-[90px]"
+                            *ngIf="detail.content == 3">
+                            <span style="font-size: 12px">Đã bán hàng</span>
+                        </button>
+                        <button
+                            class="button-success-700-xs font-normal cursor-default min-w-[90px]"
+                            *ngIf="detail.content == 4">
+                            <span style="font-size: 12px">Đã xuất hàng</span>
+                        </button>
+                        <button
+                            class="button-danger-xs font-normal cursor-default min-w-[90px]"
+                            *ngIf="detail.content == 5">
+                            <span style="font-size: 12px">Từ chối</span>
+                        </button>
+                        <button
+                            class="button-cancel-xs font-normal cursor-default min-w-[90px]"
+                            *ngIf="detail.content == 6">
+                            <span style="font-size: 12px">Đã nhập trả</span>
+                        </button>
+                    </td>
+                    <td style="max-width: 320px" class="custom-td border-b" *ngIf="detail.isEmit">
+                        <div class="flex items-center">
+                            <div class="hover:text-blue-500 cursor-pointer" (click)="emit(detail.emitValue)">
+                                {{ detail.content }}
+                            </div>
+                            <div class="ml-2 flex items-center gap-x-1" *ngFor="let children of detail.children">
+                                <i [title]="children.title" class="{{ children.class }}">
+                                    <span *ngIf="children.total" class="text-[10px] ml-1">({{ children.total }})</span>
+                                </i>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PurchaseMgmComponent } from 'src/app/features/order-manager/purchase-mgm/purchase-mgm.component';
+import { TemplateOrderTableContainerComponent } from 'src/app/features/order-manager/template-component/template-order-table-container/template-order-table-container.component';
 import { TemplateTableComponent } from 'src/app/features/order-report/common-template/template-table/template-table.component';
 import { MainComponent } from './main.component';
 
@@ -62,13 +64,13 @@ const routes: Routes = [
                     import('./../../../features/timekeeping/timekeeping.module').then((m) => m.TimekeepingModule),
             },
             {
-                path: 'template-table',
-                component: TemplateTableComponent,
-            },
-            {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'orders',
+            },
+            {
+                path: 'optimalOrder',
+                component: PurchaseMgmComponent,
             },
         ],
     },

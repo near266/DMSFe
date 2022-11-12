@@ -1,0 +1,84 @@
+.table-wrapper {
+    overflow-y: auto;
+    overflow-x: auto;
+    margin-top: 8px;
+    padding-bottom: 20px;
+    height: calc(100vh - 210px);
+}
+
+
+table {
+    min-width: max-content;
+    border-collapse: separate;
+    border-spacing: 0px;
+}
+
+table th {
+    position: sticky;
+    top: 0px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    z-index: 1;
+    @apply text-gray-700 bg-zinc-200;
+}
+
+table th,
+table td {
+    padding: 8px;
+    // padding-top: 10px;
+    // padding-bottom: 10px;
+    overflow-wrap: break-word;
+}
+
+table td {
+    text-align: left;
+    // font-size: 15px;
+    // padding-left: 20px;
+}
+
+tbody {
+    font-size: 12px;
+}
+
+.custom-table {
+    @apply table-fixed;
+}
+
+.custom-thead {
+    @apply uppercase bg-gray-50 dark:bg-gray-700 text-xs;
+}
+
+.custom-row {
+    @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
+}
+
+.custom-th {
+    @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x;
+}
+
+.custom-td {
+    max-width: 180px;
+    @apply space-x-2 border-x border-solid pl-2;
+}
+
+:host ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+}
+
+:host ::ng-deep .mat-menu-item {
+    padding: 0px 4px !important;
+    height: 30px !important;
+}
+
+:host ::ng-deep {
+    .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+        opacity: 0.03 !important;
+        background-color: rgb(22 163 74) !important;
+    }
+
+    .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+    .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+        background-color: rgb(22 163 74);
+    }
+}

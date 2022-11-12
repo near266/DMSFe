@@ -1,0 +1,18 @@
+export const PurchaseHeader = [
+    'Người đặt',
+    'Trạng thái',
+    'Mã phiếu',
+    'Mã KH',
+    'Tên KH',
+    'Địa chỉ',
+    'Ngày đặt',
+    'Tổng tiền',
+    'Người duyệt',
+    'Ngày duyệt',
+    'Nguồn',
+    'Ngày tạo',
+    'Người tạo',
+    'Ngày sửa',
+    'Người sửa',
+    'Diễn giải',
+];
