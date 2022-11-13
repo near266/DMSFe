@@ -281,12 +281,17 @@ export class DetailCustomerComponent implements OnInit {
       this.buf.status = false;
     }
     this.customerService.update(this.buf).subscribe(data => {
-      this.loading = false;
-      this.snackbar.openSnackbar('Chỉnh sửa thông tin khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
-      this.dialogRef.close({event: true});
+      if(data) {
+        this.loading = false;
+        this.snackbar.openSnackbar('Chỉnh sửa thông tin khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+        this.dialogRef.close({event: true});
+      } else {
+        this.loading = false;
+        this.snackbar.openSnackbar('Chỉnh sửa thông tin khách hàng không thành công, vui lòng kiểm tra lại thông tin chỉnh sửa', 2000, 'Đóng', 'center', 'bottom', false);
+      }
     }, (error) => {
       this.loading = false;
-      this.snackbar.openSnackbar('Chỉnh sửa thông tin khách hàng không thành công, vui lòng kiểm tra lại thông tin chỉnh sửa', 2000, 'Đóng', 'center', 'bottom', true);
+      this.snackbar.openSnackbar('Chỉnh sửa thông tin khách hàng không thành công, vui lòng kiểm tra lại thông tin chỉnh sửa', 2000, 'Đóng', 'center', 'bottom', false);
     });
   }
 
