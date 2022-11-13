@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ReportTimekeepingComponent } from './report-timekeeping/report-timekeeping.component';
+import { ReportTimekeepingComponent } from './component/report-timekeeping/report-timekeeping.component';
 import { TimekeepingComponent } from './timekeeping.component';
-import { TimesheetComponent } from './timesheet/timesheet.component';
+import { TimesheetComponent } from './component/timesheet/timesheet.component';
 
 const routes: Routes = [
   {
