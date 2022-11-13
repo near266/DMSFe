@@ -23,6 +23,7 @@ export class DetailReturnComponent implements OnInit {
     statusNow!: number;
     ComponentModeList = ComponentMode;
     detailOrderForm!: FormGroup;
+    tradeDiscount: number;
     currentMode: ComponentMode;
     totalPrice: number;
     textMoney: string;
@@ -49,7 +50,12 @@ export class DetailReturnComponent implements OnInit {
             this.returnDetailsService.discountAmount$.subscribe((data) => {
                 this.discountAmount = data;
                 const ins = new readMoney(data);
-                this.textMoney = ins.doc(this.totalPrice - data);
+                this.textMoney = ins.doc(this.totalPrice - this.discountAmount - this.tradeDiscount);
+            }),
+        );
+        this.subscription.push(
+            this.returnDetailsService.tradeDiscount$.subscribe((data) => {
+                this.tradeDiscount = data;
             }),
         );
     }

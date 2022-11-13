@@ -39,7 +39,8 @@
           </div>
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.customerCode}}</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <span class="w-96 rounded-sm flex"><input disabled="true" class="border border-solid border-r-0 disabled:bg-gray-300 border-black p-1 w-1/4 text-xs h-7" [(ngModel)]="buf.customerCode"><input [(ngModel)]="buf.customerPrefix" class="border border-solid border-l-0 border-black p-1 w-3/4 text-xs h-7"></span>
+            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.customerCode">
+            <!-- <span class="w-96 rounded-sm flex"><input disabled="true" class="border border-solid border-r-0 disabled:bg-gray-300 border-black p-1 w-1/4 text-xs h-7" [(ngModel)]="buf.customerCode"><input [(ngModel)]="buf.customerPrefix" class="border border-solid border-l-0 border-black p-1 w-3/4 text-xs h-7"></span> -->
           </div>
         </div>
 

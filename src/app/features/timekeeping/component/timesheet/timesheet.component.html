@@ -41,7 +41,7 @@
         <span>Báo cáo chấm công</span>
       </div>
       <div class="h-fit">
-        <button mat-flat-button class="bg-[#1891C9] h-full text-white font-medium mx-1">Tìm kiếm</button>
+        <button (click)="init()" mat-flat-button class="bg-[#1891C9] h-full text-white font-medium mx-1">Tìm kiếm</button>
         <button mat-flat-button class="bg-[#0EAF8F] h-full text-white font-medium">Lưu Excel</button>
       </div>
     </div>
@@ -49,32 +49,55 @@
     <div *ngIf="loading == true" class="absolute text-center top-1/2 left-1/2">
       <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
     </div>
-    <div *ngIf="loading == false">
+    <div *ngIf="loading == false && search == true">
       <div id="table" class="table-wrapper">
         <table *ngIf="!isLoading" class="block custom-table text-gray-500 dark:text-gray-400">
             <thead class="custom-thead">
-                <th class="custom-th">STT</th>
-                <th class="custom-th">Người đặt</th>
-                <th class="custom-th">Trạng thái</th>
-                <th class="custom-th">Mã phiếu</th>
-                <th class="custom-th">Mã KH</th>
-                <th class="custom-th">Tên KH</th>
-                <th class="custom-th">Địa chỉ</th>
-                <th class="custom-th">Ngày đặt</th>
-                <th class="custom-th">Tổng tiền</th>
-                <th class="custom-th">Người duyệt</th>
-                <th class="custom-th">Ngày duyệt</th>
-                <th class="custom-th">Nguồn</th>
-                <th class="custom-th">Ngày tạo</th>
-                <th class="custom-th">Người tạo</th>
-                <th class="custom-th">Ngày sửa</th>
-                <th class="custom-th">Người sửa</th>
-                <th class="custom-th">Diễn giải</th>
+              <tr>
+                <th class="custom-th" rowspan="2">STT</th>
+                <th class="custom-th" rowspan="2">Mã nhân viên</th>
+                <th class="custom-th" rowspan="2">Nhân viên</th>
+                <th class="custom-th">Ngày</th>
+                <th class="custom-th" *ngFor="let i of days">{{i.date}}</th>
+                <th class="custom-th" rowspan="2">Ngày đi làm</th>
+                <th class="custom-th" rowspan="2">Trễ</th>
+                <th class="custom-th" rowspan="2">Sớm</th>
+                <th class="custom-th" rowspan="2">T.Giờ</th>
+                <th class="custom-th" rowspan="2">Ngày công</th>
+              </tr>
+              <tr>
+                <th class="custome-th">Thứ</th>
+                <th class="custom-th" *ngFor="let i of days">{{i.day}}</th>
+              </tr>
             </thead>
             <tbody>
                 <tr class="custom-row">
-                    <td class="custom-td border-b">1</td>
-
+                  <td *ngIf="days.length + 8 == 38" class="custom-td border-b" colspan="38">Nhóm Hà Nội</td>
+                  <td *ngIf="days.length + 8 == 39" class="custom-td border-b" colspan="39">Nhóm Hà Nội</td>
+                  <td *ngIf="days.length + 8 == 37" class="custom-td border-b" colspan="37">Nhóm Hà Nội</td>
+                  <td *ngIf="days.length + 8 == 36" class="custom-td border-b" colspan="36">Nhóm Hà Nội</td>
+                  <td class="custom-td border-b" rowspan="7">0</td>
+                </tr>
+                <tr>
+                  <td class="custom-td border-b" rowspan="6">1</td>
+                  <td class="custom-td border-b" rowspan="6">NV_01</td>
+                  <td class="custom-td border-b" rowspan="6">BH_Lê Tuấn Anh</td>
+                  <td class="custom-td border-b">Vào đầu</td>
+                </tr>
+                <tr>
+                  <td class="custom-td border-b">Ra cuối</td>
+                </tr>
+                <tr>
+                  <td class="custom-td border-b">Trễ</td>
+                </tr>
+                <tr>
+                  <td class="custom-td border-b">Sớm</td>
+                </tr>
+                <tr>
+                  <td class="custom-td border-b">T.Giờ</td>
+                </tr>
+                <tr>
+                  <td class="custom-td border-b">Công</td>
                 </tr>
             </tbody>
         </table>
