@@ -21,12 +21,11 @@ import { OrderManagerComponent } from './features/order-manager/order-manager.co
 import { TemplateTableComponent } from './features/order-manager/template-component/template-table/template-table.component';
 import { TemplatePaginationComponent } from './features/order-manager/template-component/template-pagination/template-pagination.component';
 import { TemplateSidebarComponent } from './features/order-manager/template-component/template-sidebar/template-sidebar.component';
-import { TemplateOrderTableContainerComponent } from './features/order-manager/template-component/template-order-table-container/template-order-table-container.component';
 import { TemplateHeaderComponent } from './features/order-manager/template-component/template-header/template-header.component';
 import { PurchaseMgmComponent } from './features/order-manager/purchase-mgm/purchase-mgm.component';
 registerLocaleData(localeVi);
 @NgModule({
-    declarations: [AppComponent, ForgotpasswordComponent, OrderManagerComponent, TemplateTableComponent, TemplatePaginationComponent, TemplateSidebarComponent, TemplateOrderTableContainerComponent, TemplateHeaderComponent, PurchaseMgmComponent],
+    declarations: [AppComponent, ForgotpasswordComponent],
     imports: [SharedModule, RouterModule, BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule],
     providers: [
         DatePipe,

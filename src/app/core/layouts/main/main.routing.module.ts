@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PurchaseMgmComponent } from 'src/app/features/order-manager/purchase-mgm/purchase-mgm.component';
-import { TemplateOrderTableContainerComponent } from 'src/app/features/order-manager/template-component/template-order-table-container/template-order-table-container.component';
-import { TemplateTableComponent } from 'src/app/features/order-report/common-template/template-table/template-table.component';
+import { OrderManagerModule } from 'src/app/features/order-manager/order-manager.module';
 import { MainComponent } from './main.component';
 
 const routes: Routes = [
@@ -70,7 +68,8 @@ const routes: Routes = [
             },
             {
                 path: 'optimalOrder',
-                component: PurchaseMgmComponent,
+                loadChildren: () =>
+                    import('./../../../features/order-manager/order-manager.module').then((m) => m.OrderManagerModule),
             },
         ],
     },

@@ -58,6 +58,10 @@ import { NgPrintModule } from 'ng-print';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { TemplateTableComponent } from 'src/app/features/order-manager/template-component/template-table/template-table.component';
+import { TemplatePaginationComponent } from 'src/app/features/order-manager/template-component/template-pagination/template-pagination.component';
+import { TemplateSidebarComponent } from 'src/app/features/order-manager/template-component/template-sidebar/template-sidebar.component';
+import { TemplateHeaderComponent } from 'src/app/features/order-manager/template-component/template-header/template-header.component';
 @NgModule({
     declarations: [
         MenuCollapseComponent,
@@ -67,6 +71,10 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
         EzPaginationComponent,
         ConfirmDialogComponent,
         ConfirmationDialogComponent,
+        TemplateTableComponent,
+        TemplatePaginationComponent,
+        TemplateSidebarComponent,
+        TemplateHeaderComponent,
     ],
     imports: [
         CommonModule,
@@ -114,7 +122,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
         NgxPaginationModule,
         NgSelectModule,
         NgPrintModule,
-        ClipboardModule
+        ClipboardModule,
     ],
     exports: [
         CurrencyMaskModule,
@@ -168,7 +176,11 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
         ReactiveFormsModule,
         TreeModule,
         NgxPaginationModule,
-        ClipboardModule
+        ClipboardModule,
+        TemplateTableComponent,
+        TemplatePaginationComponent,
+        TemplateSidebarComponent,
+        TemplateHeaderComponent,
     ],
 })
 export class SharedModule {}

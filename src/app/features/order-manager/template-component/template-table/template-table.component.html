@@ -23,13 +23,16 @@
                     index as i
                 "
                 class="custom-row">
-                <td class="custom-td border-b">{{ i + 1 }}</td>
-                <td class="custom-td border-b">
-                    <mat-checkbox (change)="chooseID($event, order.id, order)" [checked]="order.checked"></mat-checkbox>
-                </td>
-                <ng-container *ngFor="let detail of order">
-                    <td class="custom-td border-b" *ngIf="!detail.isEmit && !detail.isStatusCol">
+                <ng-container *ngFor="let detail of order.array">
+                    <td
+                        class="custom-td border-b"
+                        *ngIf="!detail.isEmit && !detail.isStatusCol && !detail.isCheckbox && !detail.isSkipRender">
                         {{ detail.content }}
+                    </td>
+                    <td class="custom-td border-b" *ngIf="detail.isCheckbox && !detail.isSkipRender">
+                        <mat-checkbox
+                            (change)="chooseID($event, detail.checkboxValue, order)"
+                            [checked]="order.checked"></mat-checkbox>
                     </td>
                     <td class="custom-td border-b" *ngIf="detail.isStatusCol">
                         <button

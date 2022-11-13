@@ -1,7 +1,97 @@
-<div class="min-h-screen bg-white p-3 w-60">
+<div class="min-h-screen bg-white p-3 w-60 border-r">
     <div class="w-full flex items-center justify-between">
-        <div class="py-1 px-1.5 bg-zinc-300 rounded cursor-pointer" (click)="showSidebar()">
+        <div class="py-1 px-1.5 bg-zinc-300 rounded cursor-pointer">
             <i class="w-1/12 fa-solid fa-bars text-lg cursor-pointer hover:opacity-70"></i>
         </div>
+        <mat-form-field class="w-8/12 ml-1 text-[12px]" appearance="outline">
+            <mat-label>Tìm kiếm phiếu đặt hàng</mat-label>
+            <input matInput class="bg-white" [(ngModel)]="searchText" (keyup.enter)="searchKeyword()" />
+        </mat-form-field>
+        <i
+            (click)="searchKeyword()"
+            matSuffix
+            class="ml-1 text-center mr-1 px-1 py-2 rounded-md bg-zinc-300 h-full w-full hover:opacity-70 font-bold cursor-pointer fa-solid text-base icon fa-magnifying-glass"></i>
+    </div>
+    <div
+        (click)="isShowEmployeeTree = !isShowEmployeeTree"
+        class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+        <i class="fa-solid fa-user mr-3 text-base"></i>
+        <span class="text-sm">Nhân viên đặt</span>
+    </div>
+    <div *ngIf="isShowEmployeeTree" class="ml-3">
+        <app-menu-collapse-tree (newItemEvent)="selectOrderEmployee($event)"></app-menu-collapse-tree>
+    </div>
+    <!-- Nguồn đơn -->
+    <app-menu-collapse (Selection)="selectSource($event)" [Config]="sourceOrderMenu"></app-menu-collapse>
+    <!-- Trạng thái menu -->
+    <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
+    <!-- Trạng thái in menu -->
+    <app-menu-collapse (Selection)="selectPrintStatus($event)" [Config]="statusPrintMenu"></app-menu-collapse>
+    <!-- Viếng thăm menu -->
+    <app-menu-collapse (Selection)="selectVisit($event)" [Config]="visitionMenu"></app-menu-collapse>
+    <!-- Tuyến menu -->
+    <app-menu-collapse (Selection)="selectRoute($event)" [Config]="lineMenu"></app-menu-collapse>
+    <!-- Loại khách hàng menu -->
+    <app-menu-collapse (Selection)="selectTypeCustomer($event)" [Config]="typeCustomerMenu"></app-menu-collapse>
+    <!-- Nhóm khách hàng menu -->
+    <app-menu-collapse (Selection)="selectGroupCustomer($event)" [Config]="groupCustomerMenu"></app-menu-collapse>
+    <!-- Khu vực menu -->
+    <div
+        (click)="isSelectMenu = !isSelectMenu"
+        class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+        <i class="fa-solid fa-earth-americas mr-3 text-base"></i>
+        <span class="text-sm">Khu vực</span>
+    </div>
+    <div *ngIf="isSelectMenu" class="mt-1 w-full">
+        <mat-form-field style="font-size: 8px" class="px-2 w-full" appearance="outline">
+            <mat-label style="font-size: 14px">--Chọn khu vực--</mat-label>
+            <mat-select style="font-size: 12px">
+                <mat-option (onSelectionChange)="selectArea(area.id)" [value]="area.id" *ngFor="let area of areaList">
+                    <div>{{ area?.areaName }}</div>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <!-- Lưu trữ menu -->
+    <app-menu-collapse (Selection)="selectArchivedStatus($event)" [Config]="storageMenu"></app-menu-collapse>
+    <!-- Ngày giao hàng menu -->
+    <div
+        class="w-full items-center justify-between hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+        <div class="flex grow">
+            <i class="fa-solid fa-truck-fast mr-3 text-base"></i>
+            <span *ngIf="!isChoose" class="text-sm grow">Ngày giao hàng</span>
+        </div>
+        <div class="flex">
+            <input
+                matInput
+                [ngClass]="{ hidden: !isChoose }"
+                [matDatepicker]="picker"
+                (dateChange)="selectDeliveryDate($event)" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </div>
+    </div>
+    <!-- Tìm kiếm theo sản phẩm -->
+    <div class="mt-2 w-full">
+        <mat-form-field style="font-size: 8px" class="px-2 py-2 w-full" appearance="outline">
+            <mat-label style="font-size: 14px">Tìm kiếm theo sản phẩm</mat-label>
+            <mat-select style="font-size: 12px">
+                <mat-option>
+                    <ngx-mat-select-search
+                        [formControl]="productFilterCtrl"
+                        noEntriesFoundLabel="Không tìm thấy sản phẩm nào"
+                        placeholderLabel="Tìm kiếm sản phẩm"></ngx-mat-select-search>
+                </mat-option>
+                <mat-option
+                    (onSelectionChange)="selectProductFilter(product?.id)"
+                    [value]="product?.productName"
+                    style="height: 50px"
+                    class="flex flex-col"
+                    *ngFor="let product of listSearchedProduct">
+                    <div>{{ product?.sku }} - {{ product.productName }}</div>
+                    <div class="mt-[-16px]">Giá: {{ product?.price }} - Giá lẻ: {{ product?.retailPrice }}</div>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
     </div>
 </div>
