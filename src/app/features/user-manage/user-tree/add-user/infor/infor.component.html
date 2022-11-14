@@ -165,12 +165,12 @@
         <div class="flex flex-row w-96 items-center">
             <img [src]="avt" class="w-40 h-40">
             <input type="file" class="hidden" #uploader (change)="uploadFile($event)">
-            <button [disabled]="status != 'view'"
+            <button
                 class="flex flex-row mx-2 border border-solid h-fit bg-gray-100 px-2 py-1" (click)="uploader.click()">
                 <span class="text-xs font-bold">Tải ảnh lên</span>
                 <i class="fa-solid fa-upload mx-2 text-emerald-500"></i>
             </button>
-            <button [disabled]="status != 'view'"
+            <button
                 class="flex flex-row mx-2 border border-solid h-fit bg-gray-100 px-2 py-1" (click)="deleteImage()">
                 <span class="text-xs font-bold">Xóa ảnh</span>
             </button>
