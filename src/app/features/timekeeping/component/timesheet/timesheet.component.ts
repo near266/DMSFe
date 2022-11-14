@@ -2,6 +2,8 @@ import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Config } from 'src/app/core/model/Config';
+import { Days } from '../../models/Days';
+import { DateService } from '../../services/date.service';
 
 @Component({
   selector: 'app-timesheet',
@@ -11,12 +13,16 @@ import { Config } from 'src/app/core/model/Config';
 export class TimesheetComponent implements OnInit, AfterViewInit {
 
   now: any;
+  search: boolean = false;
   loading = false;
   hasEmployee = false;
 
+  days: Days[] = [];
+
+
   positionMenu: Config = {
     icon: '<i class="fa-solid fa-filter"></i>',
-    title: 'Lọc theo chức danh',
+    title: 'Lọc theo chức danh ',
     menuChildrens: ['Tất cả', 'Nhân viên', 'Kế toán', 'Giám sát', 'Chủ sở hữu'],
   };
 
@@ -47,6 +53,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
   constructor(
     private datePipe: DatePipe,
     private title: Title,
+    private dateService: DateService
   ) { }
 
   ngOnInit(): void {
@@ -81,6 +88,24 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
       right: 'w-10/12',
       statusbar: true,
   };
+
+  init() {
+    if(this.search == false) {
+      this.search = true;
+      this.initDays();
+    }
+  }
+
+  initDays() {
+    let temp = new Date(this.now);
+    let count: number = temp.getDate();
+    for(let i = count-1; i >= 0; i--) {
+      this.days.push({
+        date: count - i,
+        day: this.dateService.getDay(count-i, temp.getMonth(), temp.getFullYear())
+      })
+    }
+  }
 
   searchUser(event: any) {
 

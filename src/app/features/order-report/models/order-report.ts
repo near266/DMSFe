@@ -9,6 +9,7 @@ export class RootOrderReport {
     total!: number;
     page?: number;
     pageSize?: number;
+    sumOfTradeDiscount: number;
 }
 
 export class Datum {

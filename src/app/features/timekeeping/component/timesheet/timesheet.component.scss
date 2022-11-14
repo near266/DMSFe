@@ -13,7 +13,6 @@ input:focus {
   margin-top: 8px;
   padding-bottom: 20px;
   height: calc(100vh - 210px);
-  @apply rounded-lg;
 }
 
 .width-vw-60 {
@@ -62,7 +61,7 @@ tbody {
 }
 
 .custom-thead {
-  @apply text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-xs;
+  @apply text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-xs;
 }
 
 .custom-row {

@@ -13,3 +13,19 @@
 .ml-button {
   margin-left: 10px;
 }
+
+input[type='file']{
+
+  height: 200px;
+  width: 100%;
+  position:absolute;
+  top:0;
+  left:0;
+  opacity:0;
+  z-index: 15;
+  cursor:pointer;
+}
+
+.box {
+  border: 1px dashed;
+}

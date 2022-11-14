@@ -69,7 +69,6 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
         this.subscriptions.push(
             this.returnDetailsService.returnListProducts$.subscribe((_) => {
                 this.productsInput = _;
-                console.log(_);
                 this.returnDetailsService.totalPrice$.next(this.getSumOfTotalPrice());
                 this.returnDetailsService.discountAmount$.next(this.getSumOfDiscount());
                 this.productQuantitySum = this.productsInput.reduce((a, b) => +a + +b.returnsQuantity, 0);

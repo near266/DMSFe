@@ -50,7 +50,6 @@ export class ViewEditDetailReturnComponent implements OnInit {
                 }),
             )
             .subscribe((data) => {
-                console.log(data);
                 this.status = data.status;
             });
         this.returnDetailsService.currentMode$.subscribe((_) => {
