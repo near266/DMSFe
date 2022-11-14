@@ -7,7 +7,7 @@
                 <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
                     placeholder="example@gmail.com" [ngClass]="{'border-red-600':this.employee.get('email')?.errors}"
                     *ngIf="status != 'view' && status != 'edit'" formControlName="email">
-                <div class="w-96 text-xs" *ngIf="status == 'view'|| status == 'edit'">{{employee.value.email}}</div>
+                <div class="w-96 text-sm" *ngIf="status == 'view'|| status == 'edit'">{{employee.value.email}}</div>
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
             <input formControlName="employeeCode"
                 [ngClass]="{'border-red-600':this.employee.get('employeeCode')?.errors}"
                 class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'">
-            <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.employeeCode}}</div>
+            <div class="w-96 text-sm" *ngIf="status == 'view'">{{employee.value.employeeCode}}</div>
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
@@ -28,7 +28,7 @@
             <input formControlName="employeeName"
                 [ngClass]="{'border-red-600':this.employee.get('employeeName')?.errors}"
                 class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" *ngIf="status != 'view'">
-            <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.employeeName}}</div>
+            <div class="w-96 text-sm" *ngIf="status == 'view'">{{employee.value.employeeName}}</div>
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2"
@@ -53,7 +53,7 @@
                 <option value="Nhân viên">Nhân viên</option>
                 <option value="Nhân viên dùng gói Basic">Nhân viên dùng gói Basic</option>
             </select>
-            <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.employeeTitle}}</div>
+            <div class="w-96 text-sm" *ngIf="status == 'view'">{{employee.value.employeeTitle}}</div>
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
@@ -62,13 +62,13 @@
             formControlName="langKey">
             <option value="vn">Tiếng Việt</option>
         </select>
-        <div class="w-96 text-xs" *ngIf="status == 'view'">
+        <div class="w-96 text-sm" *ngIf="status == 'view'">
             <span *ngIf="employee.value.langKey == 'vn'">Tiếng Việt</span>
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Trạng thái</div>
-        <div class="w-96 text-xs" *ngIf="status == 'view'">Hoạt động</div>
+        <div class="w-96 text-sm" *ngIf="status == 'view'">Hoạt động</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Version Mobile
@@ -76,7 +76,7 @@
         </div>
         <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" disabled
             *ngIf="status != 'view'" [value]="employee.value?.versionMobile || null">
-        <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value?.versionMobile}}</div>
+        <div class="w-96 text-sm" *ngIf="status == 'view'">{{employee.value?.versionMobile}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Thời gian online cuối
@@ -84,7 +84,7 @@
         </div>
         <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" disabled
             *ngIf="status != 'view'" [value]="employee.value?.lastSeenDate || null">
-        <div class="w-96 text-xs" *ngIf="status == 'view'">{{datePipe.transform(employee.value?.lastSeenDate,'dd-MM-YYYY')}}</div>
+        <div class="w-96 text-sm" *ngIf="status == 'view'">{{datePipe.transform(employee.value?.lastSeenDate,'dd-MM-YYYY')}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Thời gian đồng bộ cuối
@@ -92,25 +92,25 @@
         </div>
         <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" disabled
             *ngIf="status != 'view'" [value]="employee.value?.lastSyncDate || null">
-        <div class="w-96 text-xs" *ngIf="status == 'view'">{{datePipe.transform(employee.value?.lastSyncDate,'dd-MM-YYYY')}}</div>
+        <div class="w-96 text-sm" *ngIf="status == 'view'">{{datePipe.transform(employee.value?.lastSyncDate,'dd-MM-YYYY')}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Số điện thoại</div>
         <input formControlName="phone" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
             *ngIf="status != 'view'">
-        <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.phone}}</div>
+        <div class="w-96 text-sm" *ngIf="status == 'view'">{{employee.value.phone}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Chức vụ</div>
         <input formControlName="position" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
             *ngIf="status != 'view'">
-        <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.position}}</div>
+        <div class="w-96 text-sm" *ngIf="status == 'view'">{{employee.value.position}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Bộ phận</div>
         <input formControlName="department" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
             *ngIf="status != 'view'">
-        <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.department}}</div>
+        <div class="w-96 text-sm" *ngIf="status == 'view'">{{employee.value.department}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Ngày vào công ty</div>
@@ -122,7 +122,7 @@
             <input class="border border-solid border-black p-1 rounded-sm w-20 text-xs h-7 mr-4" placeholder="Năm"
                 type="number" [(ngModel)]="entranceDate.year" [ngModelOptions]="{standalone:true}" min="1">
         </div>
-        <div class="w-96 text-xs" *ngIf="status == 'view'">
+        <div class="w-96 text-sm" *ngIf="status == 'view'">
             {{datePipe.transform(employee.value.entranceDate,'dd-MM-YYYY')}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-4">
@@ -135,14 +135,14 @@
             <input class="border border-solid border-black p-1 rounded-sm w-20 text-xs h-7 mr-4" placeholder="Năm"
                 type="number" min="1" [(ngModel)]="exitDate.year" [ngModelOptions]="{standalone:true}">
         </div>
-        <div class="w-96 text-xs" *ngIf="status == 'view'">{{datePipe.transform(employee.value.exitDate,'dd-MM-YYYY')}}
+        <div class="w-96 text-sm" *ngIf="status == 'view'">{{datePipe.transform(employee.value.exitDate,'dd-MM-YYYY')}}
         </div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
         <div class="font-bold">Địa chỉ</div>
         <input formControlName="address" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
             *ngIf="status != 'view'">
-        <div class="w-96 text-xs" *ngIf="status == 'view'">{{employee.value.address}}</div>
+        <div class="w-96 text-sm" *ngIf="status == 'view'">{{employee.value.address}}</div>
     </div>
     <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-3">
         <div class="font-bold">Giới tính</div>
@@ -154,7 +154,7 @@
             <input type="radio" formControlName='gender' id="n/a" [value]="2">
             <label class="mr-4 ml-2 text-sm" for="n/a">N/A</label>
         </div>
-        <div class="w-96 text-xs" *ngIf="status == 'view'">
+        <div class="w-96 text-sm" *ngIf="status == 'view'">
             <span *ngIf="employee.value.gender == 0">Nam</span>
             <span *ngIf="employee.value.gender == 1">Nữ</span>
             <span *ngIf="employee.value.gender == 2">N/A</span>
