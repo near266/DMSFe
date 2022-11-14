@@ -41,7 +41,7 @@ export class FormatReportOrderService {
             },
             {
                 header: 'Tiền chiết khấu (tổng bill)',
-                content: 'Chưa trả',
+                content: this.currency.transform(dataList.sumOfTradeDiscount, 'VND', 'symbol', '1.0-0')!,
             },
         ];
         dataReturn = dataList.data!.map((data: any, index: number) => {
@@ -111,12 +111,12 @@ export class FormatReportOrderService {
                 },
                 // Số lần bán
                 {
-                    content: 'Chưa biết trường nào',
+                    content: data.billSale | 0,
                     hasChildren: false,
                 },
                 // Số lần trả
                 {
-                    content: 'Chưa biết trường nào',
+                    content: data.billReturn | 0,
                     hasChildren: false,
                 },
                 // Địa chỉ

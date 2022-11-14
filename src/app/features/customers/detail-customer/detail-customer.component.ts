@@ -12,6 +12,7 @@ import { ChannelService } from 'src/app/core/services/channel.service';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { CustomerService } from 'src/app/core/services/customer.service';
+import { ImagesService } from 'src/app/core/services/images.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -103,7 +104,8 @@ export class DetailCustomerComponent implements OnInit {
     private snackbar: SnackbarService,
     private rolesService: RolesService,
     private dialog: MatDialog,
-    private confirm: ConfirmDialogService
+    private confirm: ConfirmDialogService,
+    private imageService: ImagesService
     ) { }
 
   ngOnInit(): void {
@@ -144,7 +146,7 @@ export class DetailCustomerComponent implements OnInit {
         position: this.customer.position ? this.customer.position : null,
         phone: this.customer.phone? this.customer.phone : null,
         email: this.customer.email? this.customer.email: null,
-        avatar: null,
+        avatar: this.customer.avatar? this.customer.avatar: null,
         debtLimit: this.customer.debtLimit ? this.customer.debtLimit : null,
         cashAcc: this.customer.cashAcc? this.customer.cashAcc : null,
       };
@@ -362,6 +364,20 @@ export class DetailCustomerComponent implements OnInit {
       });
     } else {
       this.wardTemp = this.listWards;
+    }
+  }
+
+  upload(event: any) {
+    if (event.target.files.length == 1) {
+      this.imageService.uploadImg(event.target.files).subscribe( data => {
+        if(data) {
+          this.buf.avatar = data[0];
+        } else {
+          this.snackbar.openSnackbar('Tải ảnh thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        }
+      }, (error) => {
+        this.snackbar.openSnackbar('Tải ảnh thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+      });
     }
   }
 

@@ -13,7 +13,7 @@
         <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
         <input class="bg-white w-full text-xs h-full" placeholder="Tìm kiếm trên cây">
       </div> -->
-      <div class="w-fit p-2 text-xs">
+      <div class="w-fit p-2 text-sm">
         <app-menu-collapse-tree (newItemEvent)="searchUser($event)"></app-menu-collapse-tree>
       </div>
     </div>
@@ -79,13 +79,13 @@
             <td class="border-x border-solid align-middle px-2 py-3 text-emerald-500 font-medium cursor-pointer"
               (click)="openDetailRoute(route.id)">
               {{route.routeCode}} </td>
-            <td class="border-x border-solid align-middle px-2 py-3">{{route.routeName}}</td>
-            <td class="border-x border-solid align-middle px-2 py-3">{{route.employee?.employeeName}}</td>
-            <td class="border-x border-solid align-middle px-2 py-3">{{route.unitTreeGroup?.unitTreeGroup_Code}}</td>
-            <td class="border-x border-solid align-middle px-2 py-3">{{route.totalCus}}</td>
-            <td class="border-x border-solid align-middle px-2 py-3">{{datePipe.transform(route.createdDate,'dd-MM-YYYY')}}</td>
-            <td class="border-x border-solid align-middle px-2 py-3">{{datePipe.transform(route.lastModifiedDate,'dd-MM-YYYY')}}</td>
-            <td class="border-x border-solid align-middle px-2 py-3"> {{route.lastModifiedBy}}</td>
+            <td class="border-x border-solid align-middle px-2 py-3 font-medium">{{route.routeName}}</td>
+            <td class="border-x border-solid align-middle px-2 py-3 font-medium">{{route.employee?.employeeName}}</td>
+            <td class="border-x border-solid align-middle px-2 py-3 font-medium">{{route.unitTreeGroup?.unitTreeGroup_Code}}</td>
+            <td class="border-x border-solid align-middle px-2 py-3 font-medium">{{route.totalCus}}</td>
+            <td class="border-x border-solid align-middle px-2 py-3 font-medium">{{datePipe.transform(route.createdDate,'dd-MM-YYYY')}}</td>
+            <td class="border-x border-solid align-middle px-2 py-3 font-medium">{{datePipe.transform(route.lastModifiedDate,'dd-MM-YYYY')}}</td>
+            <td class="border-x border-solid align-middle px-2 py-3 font-medium"> {{route.lastModifiedBy}}</td>
           </tr>
         </tbody>
       </table>

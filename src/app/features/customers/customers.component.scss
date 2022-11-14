@@ -19,3 +19,7 @@ input:focus {
   padding-bottom: 5px;
   padding-top: 5px;
 }
+
+:host ::ng-deep .mat-date-range-input-inner {
+  font-weight: 500;
+}

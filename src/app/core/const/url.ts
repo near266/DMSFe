@@ -14,3 +14,7 @@ export const customer_group_url = api_gateway_url + '/CustomerGroup';
 export const customer_type_url = api_gateway_url + '/CustomerType';
 export const channel_url = api_gateway_url + '/Channel';
 export const area_url = api_gateway_url + '/Area';
+
+export const upload_url = environment.UPLOAD_URL;
+export const gateway_img_url = upload_url + '/gateway';
+export const uploadImg_url = gateway_img_url + '/Image';
