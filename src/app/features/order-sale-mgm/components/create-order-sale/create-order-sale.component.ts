@@ -227,7 +227,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
             },
             () => {
                 this.snackbar.openSnackbar('Thêm mới đơn bán hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
-                this.router.navigate(['/ordersale']);
+                this.router.navigate(['/order/sale']);
             },
         );
     }
@@ -240,7 +240,7 @@ export class CreateOrderSaleComponent implements OnInit, AfterViewInit, DoCheck 
     // }
 
     close() {
-        this.router.navigate(['/ordersale']);
+        this.router.navigate(['/order/sale']);
     }
 
     setInfoCustomer(value: any) {

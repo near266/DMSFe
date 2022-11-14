@@ -376,7 +376,7 @@ export class ViewEditDetailComponent implements OnInit {
                     () => {
                         this.snackbar.openSnackbar('Lưu trữ thành công', 2000, 'Đóng', 'center', 'bottom', true);
                         setTimeout(() => {
-                            this.router.navigate(['/ordersale']);
+                            this.router.navigate(['/order/sale']);
                         }, 1000);
                     },
                 );

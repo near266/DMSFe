@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { OrderManagerModule } from 'src/app/features/order-manager/order-manager.module';
 import { MainComponent } from './main.component';
 
 const routes: Routes = [
@@ -67,7 +66,7 @@ const routes: Routes = [
                 redirectTo: 'orders',
             },
             {
-                path: 'optimalOrder',
+                path: 'order',
                 loadChildren: () =>
                     import('./../../../features/order-manager/order-manager.module').then((m) => m.OrderManagerModule),
             },

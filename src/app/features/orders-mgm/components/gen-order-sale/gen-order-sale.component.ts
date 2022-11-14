@@ -527,7 +527,7 @@ export class GenOrderSaleComponent implements OnInit, AfterViewInit, DoCheck {
                     true,
                 );
                 this.dialogRef.close();
-                this.router.navigate(['/orders']);
+                this.router.navigate(['/order']);
             },
         );
     }
