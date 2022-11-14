@@ -1,10 +1,7 @@
 <div class="min-h-screen bg-white p-3 w-60 border-r">
     <div class="w-full flex items-center justify-between">
-        <div class="py-1 px-1.5 bg-zinc-300 rounded cursor-pointer">
-            <i class="w-1/12 fa-solid fa-bars text-lg cursor-pointer hover:opacity-70"></i>
-        </div>
-        <mat-form-field class="w-8/12 ml-1 text-[12px]" appearance="outline">
-            <mat-label>Tìm kiếm phiếu đặt hàng</mat-label>
+        <mat-form-field class="w-4/5 ml-1 text-[12px]" appearance="outline">
+            <mat-label>Tìm kiếm phiếu</mat-label>
             <input matInput class="bg-white" [(ngModel)]="searchText" (keyup.enter)="searchKeyword()" />
         </mat-form-field>
         <i
@@ -21,16 +18,32 @@
     <div *ngIf="isShowEmployeeTree" class="ml-3">
         <app-menu-collapse-tree (newItemEvent)="selectOrderEmployee($event)"></app-menu-collapse-tree>
     </div>
-    <!-- Nguồn đơn -->
-    <app-menu-collapse (Selection)="selectSource($event)" [Config]="sourceOrderMenu"></app-menu-collapse>
-    <!-- Trạng thái menu -->
-    <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
+    <!-- Đơn đặt từ trên app -->
+    <ng-container *ngIf="type === 'Purchase'">
+        <app-menu-collapse (Selection)="selectSourceApp($event)" [Config]="sourceOrderMenu"></app-menu-collapse>
+    </ng-container>
+    <!-- Trạng thái menu purchase -->
+    <ng-container *ngIf="type === 'Purchase'">
+        <app-menu-collapse (Selection)="selectPurchaseStatus($event)" [Config]="statusPurchaseMenu"></app-menu-collapse>
+    </ng-container>
+    <!-- Trạng thái menu sale -->
+    <ng-container *ngIf="type === 'Sale'">
+        <app-menu-collapse (Selection)="selectSaleStatus($event)" [Config]="statusSaleMenu"></app-menu-collapse>
+    </ng-container>
     <!-- Trạng thái in menu -->
     <app-menu-collapse (Selection)="selectPrintStatus($event)" [Config]="statusPrintMenu"></app-menu-collapse>
+    <!-- Nguồn menu sale -->
+    <ng-container *ngIf="type === 'Sale'">
+        <app-menu-collapse (Selection)="selectSourceBill($event)" [Config]="sourceMenu"></app-menu-collapse>
+    </ng-container>
     <!-- Viếng thăm menu -->
-    <app-menu-collapse (Selection)="selectVisit($event)" [Config]="visitionMenu"></app-menu-collapse>
+    <ng-container *ngIf="type === 'Purchase'">
+        <app-menu-collapse (Selection)="selectVisit($event)" [Config]="visitionMenu"></app-menu-collapse>
+    </ng-container>
     <!-- Tuyến menu -->
-    <app-menu-collapse (Selection)="selectRoute($event)" [Config]="lineMenu"></app-menu-collapse>
+    <ng-container *ngIf="type === 'Purchase'">
+        <app-menu-collapse (Selection)="selectRoute($event)" [Config]="lineMenu"></app-menu-collapse>
+    </ng-container>
     <!-- Loại khách hàng menu -->
     <app-menu-collapse (Selection)="selectTypeCustomer($event)" [Config]="typeCustomerMenu"></app-menu-collapse>
     <!-- Nhóm khách hàng menu -->

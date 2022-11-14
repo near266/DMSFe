@@ -20,6 +20,10 @@ const routes: Routes = [
                 path: 'purchase',
                 loadChildren: () => import('./purchase-mgm/purchase-mgm.module').then((m) => m.PurchaseMgmModule),
             },
+            {
+                path: 'sale',
+                loadChildren: () => import('./sale-mgm/sale-mgm.module').then((m) => m.SaleMgmModule),
+            },
         ],
     },
 ];

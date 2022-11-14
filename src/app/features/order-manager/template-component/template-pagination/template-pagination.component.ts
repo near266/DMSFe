@@ -1,7 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { last } from 'rxjs-compat/operator/last';
 
 @Component({
-    selector: 'app-template-pagination',
+    selector: 'order-template-pagination',
     templateUrl: './template-pagination.component.html',
     styleUrls: ['./template-pagination.component.scss'],
 })

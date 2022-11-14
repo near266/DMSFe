@@ -1,10 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import moment from 'moment';
-import { BehaviorSubject, map, Observable } from 'rxjs';
-import { api_gateway_url } from 'src/app/core/const/url';
+import { BehaviorSubject } from 'rxjs';
+import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { PurchaseOrder, RootPurchases } from '../models/purchases';
 import { FormatPurchaseService } from './formatPurchase.service';
 
@@ -15,15 +14,19 @@ export class PurchaseLogicService {
     private listDataSource = new BehaviorSubject<any>([]);
     private isLoadingSource = new BehaviorSubject<boolean>(true);
     private totalSource = new BehaviorSubject<number>(0);
+    private isSucessArchivedSource = new BehaviorSubject<boolean>(false);
 
     listData$ = this.listDataSource.asObservable();
     isLoading$ = this.isLoadingSource.asObservable();
     total$ = this.totalSource.asObservable();
+    isSucessArchived$ = this.isSucessArchivedSource.asObservable();
 
     constructor(
         private purchaseService: PurchaseOrderService,
         private format: FormatPurchaseService,
         private router: Router,
+        private snackbar: SnackbarService,
+        private confirmService: ConfirmDialogService,
     ) {}
     searchAndFormatData(body: any, listIdSelected: string[]) {
         this.isLoadingSource.next(true);
@@ -59,6 +62,7 @@ export class PurchaseLogicService {
             toDate: string | null;
         },
     ) {
+        body.page = 1;
         body.fromDate = value.fromDate;
         body.toDate = value.toDate;
         if (body.fromDate === null || body.toDate === null) {
@@ -74,5 +78,73 @@ export class PurchaseLogicService {
     navigateToDetail(id: any) {
         localStorage.setItem('purchaseOrderId', id);
         this.router.navigate(['/orders/detailOrder/viewEdit']);
+    }
+
+    print(body: any) {
+        this.confirmService
+            .open(`Bạn có muốn in ${body.listId.length} bản ghi đã chọn không?`, ['In', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'In') {
+                    this.purchaseService.print(body).subscribe(
+                        (data) => {
+                            var blob = new Blob([data], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            });
+                            const blobUrl = window.URL.createObjectURL(blob);
+                            window.open(blobUrl);
+                        },
+                        (err) => {
+                            this.snackbar.failureSnackBar();
+                        },
+                    );
+                } else {
+                }
+            });
+    }
+
+    printFilter(body: any) {
+        this.confirmService
+            .open(`Bạn có muốn in ${body.filter.pageSize} bản ghi đã chọn không?`, ['In', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'In') {
+                    this.purchaseService.print(body).subscribe(
+                        (data) => {
+                            var blob = new Blob([data], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            });
+                            const blobUrl = window.URL.createObjectURL(blob);
+                            window.open(blobUrl);
+                        },
+                        (err) => {
+                            this.snackbar.failureSnackBar();
+                        },
+                    );
+                } else {
+                }
+            });
+    }
+
+    archiveOrders(listIdSelected: string[]) {
+        let body = {
+            purchaseOrderIds: listIdSelected,
+            lastModifiedBy: null,
+        };
+        this.isSucessArchivedSource.next(false);
+        this.confirmService
+            .open(`Bạn có muốn xóa ${body.purchaseOrderIds.length} bản ghi hay không ?`, ['Xóa', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'Xóa') {
+                    this.purchaseService.archive(body).subscribe(
+                        (data) => {},
+                        (err) => {
+                            this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+                        },
+                        () => {
+                            this.isSucessArchivedSource.next(true);
+                            this.snackbar.openSnackbar('Xóa thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                        },
+                    );
+                }
+            });
     }
 }

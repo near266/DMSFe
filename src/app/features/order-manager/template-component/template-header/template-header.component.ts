@@ -8,7 +8,7 @@ export class DateFilter {
 }
 
 @Component({
-    selector: 'app-template-header',
+    selector: 'order-template-header',
     templateUrl: './template-header.component.html',
     styleUrls: ['./template-header.component.scss'],
 })

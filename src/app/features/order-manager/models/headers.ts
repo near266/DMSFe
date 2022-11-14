@@ -16,3 +16,21 @@ export const PurchaseHeader = [
     'Người sửa',
     'Diễn giải',
 ];
+
+export const SaleHeader = [
+    'Người đặt',
+    'Người bán',
+    'Trạng thái',
+    'Mã phiếu',
+    'Mã KH',
+    'Tên khách hàng',
+    'Địa chỉ',
+    'Ngày đặt',
+    'Ngày bán',
+    'Tổng tiền',
+    'Ngày tạo',
+    'Người tạo',
+    'Ngày sửa',
+    'Người sửa',
+    'Diễn giải',
+];

@@ -3,14 +3,11 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { OrderManagerComponent } from './order-manager.component';
 import { OrderManagerRoutes } from './order-manager.routing';
-import { CreatePurchaseComponent } from './purchase-mgm/create-purchase/create-purchase.component';
-import { DetailPurchaseComponent } from './purchase-mgm/detail-purchase/detail-purchase.component';
-import { PurchaseMgmModule } from './purchase-mgm/purchase-mgm.module';
-import { PurchaseMgmRouting } from './purchase-mgm/purchase-mgm.routing';
-import { TemplateHeaderComponent } from './template-component/template-header/template-header.component';
-import { TemplatePaginationComponent } from './template-component/template-pagination/template-pagination.component';
-import { TemplateSidebarComponent } from './template-component/template-sidebar/template-sidebar.component';
-import { TemplateTableComponent } from './template-component/template-table/template-table.component';
+import { SaleMgmComponent } from './sale-mgm/sale-mgm.component';
+import { CreateComponent } from './sale-mgm/create/create.component';
+import { DetailComponent } from './sale-mgm/detail/detail.component';
+import { TableComponent } from './sale-mgm/table/table.component';
+import { SaleMgmModule } from './sale-mgm/sale-mgm.module';
 
 @NgModule({
     imports: [CommonModule, SharedModule, OrderManagerRoutes],

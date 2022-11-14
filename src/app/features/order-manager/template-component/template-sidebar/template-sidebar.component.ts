@@ -1,19 +1,24 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import moment from 'moment';
 import { Config } from 'src/app/core/model/Config';
 import { AreaService } from 'src/app/core/services/area.service';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
-import { Product } from '../../models/product';
+import { Area } from '../../models/area';
 import { CommonLogicService } from '../../services/commonLogic.service';
 
 @Component({
-    selector: 'app-template-sidebar',
+    selector: 'order-template-sidebar',
     templateUrl: './template-sidebar.component.html',
     styleUrls: ['./template-sidebar.component.scss'],
 })
-export class TemplateSidebarComponent implements OnInit {
+export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewInit {
+    @Input() type: string = '';
+    @Input() body: any;
+    @Output() body$ = new EventEmitter<Object>();
+
+    listSearchedProduct: any[] = [];
     searchText: string = '';
     isShowEmployeeTree: boolean = false;
     isSelectMenu: boolean = false;
@@ -22,14 +27,16 @@ export class TemplateSidebarComponent implements OnInit {
     listGroupCustomer: string[] = [];
     listGroupCustomerAndIds: any = [];
     listTypeCustomer: string[] = [];
+    areaList: Area[] = [];
     productFilterCtrl: FormControl = new FormControl();
-    listSearchedProduct: Product[] = [];
 
-    statusMenu: Config = {
+    // menu trạng thái đơn đặt
+    statusPurchaseMenu: Config = {
         icon: '<i class="fa-solid fa-flag"></i>',
         title: 'Trạng thái',
         menuChildrens: ['Tất cả', 'Chờ duyệt', 'Đã duyệt', 'Đã bán hàng', 'Đã xuất hàng', 'Từ chối'],
     };
+
     statusPrintMenu: Config = {
         icon: '<i class="fa-solid fa-print"></i>',
         title: 'Trạng thái in',
@@ -66,6 +73,18 @@ export class TemplateSidebarComponent implements OnInit {
         menuChildrens: ['Tất cả', 'Từ App'],
     };
 
+    // Đơn bán
+    sourceMenu: Config = {
+        icon: '<i class="fa-solid fa-house"></i>',
+        title: 'Nguồn',
+        menuChildrens: ['Tất cả', 'Từ phiếu đặt hàng', 'Thêm trực tiếp'],
+    };
+    statusSaleMenu: Config = {
+        icon: '<i class="fa-solid fa-flag"></i>',
+        title: 'Trạng thái',
+        menuChildrens: ['Tất cả', 'Đã bán hàng', 'Đã xuất hàng'],
+    };
+
     constructor(
         private customerType: CustomerTypeService,
         private customerGroup: CustomerGroupService,
@@ -74,14 +93,40 @@ export class TemplateSidebarComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.productFilterCtrl.valueChanges.subscribe(
-            (data) => (this.listSearchedProduct = this.commonLogicService.searchListProductActived(data)),
-        );
+        this.searchProduct();
     }
 
-    searchKeyword() {}
+    ngAfterViewInit(): void {
+        this.getAllArea();
+        this.getListTypeCustomer();
+        this.getListGroupCustomer();
+    }
 
-    selectSource(e: any) {
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log(this.type);
+    }
+
+    emitBody() {
+        this.body$.emit(this.body);
+    }
+
+    // Tìm kiếm theo keyword
+    searchKeyword() {
+        this.body.keyword = this.searchText.trim();
+        this.body.page = 1;
+        this.emitBody();
+    }
+
+    // Tìm kiếm theo nhân viên đặt
+    selectOrderEmployee(e: any) {
+        const id = ('' + e).split(',')[1];
+        this.body.orderEmployeeId = id;
+        this.body.page = 1;
+        this.emitBody();
+    }
+
+    // Đơn đặt từ trên app (đơn đặt)
+    selectSourceApp(e: any) {
         switch (e) {
             case 'Tất cả': {
                 e = null;
@@ -96,11 +141,13 @@ export class TemplateSidebarComponent implements OnInit {
                 break;
             }
         }
-        // this.body.isApp = e;
-        // this.emitBody();
+        this.body.isApp = e;
+        this.body.page = 1;
+        this.emitBody();
     }
 
-    selectStatus(e: any) {
+    // Tìm theo trạng thái đơn đặt
+    selectPurchaseStatus(e: any) {
         switch (e) {
             case 'Tất cả': {
                 e = null;
@@ -131,11 +178,37 @@ export class TemplateSidebarComponent implements OnInit {
                 break;
             }
         }
-        // this.body.page = 1;
-        // this.body.status = e;
-        // this.emitBody();
+        this.body.page = 1;
+        this.body.status = e;
+        this.emitBody();
     }
 
+    // Tìm theo trạng thái đơn bán
+    selectSaleStatus(e: any) {
+        switch (e) {
+            case 'Tất cả': {
+                e = null;
+                break;
+            }
+            case 'Đã bán hàng': {
+                e = 3;
+                break;
+            }
+            case 'Đã xuất hàng': {
+                e = 4;
+                break;
+            }
+            default: {
+                e = null;
+                break;
+            }
+        }
+        this.body.status = e;
+        this.body.page = 1;
+        this.emitBody();
+    }
+
+    // Tìm kiếm theo trạng thái in
     selectPrintStatus(e: any) {
         switch (e) {
             case 'Tất cả': {
@@ -155,43 +228,12 @@ export class TemplateSidebarComponent implements OnInit {
                 break;
             }
         }
-        // this.body.printStatus = e;
-        // this.body.page = 1;
-        // this.emitBody();
+        this.body.printStatus = e;
+        this.body.page = 1;
+        this.emitBody();
     }
 
-    selectTypeCustomer(e: any) {
-        let id = null;
-        this.listTypeCustomerNameAndIds.forEach((type: any) => {
-            if (type.customerTypeName === e) {
-                id = type.id;
-            }
-        });
-        console.log(id);
-        // this.body.customerTypeId = id;
-        // this.body.page = 1;
-        // this.emitBody();
-    }
-
-    selectGroupCustomer(e: any) {
-        let id = null;
-        this.listGroupCustomerAndIds.forEach((type: any) => {
-            if (type.customerGroupName === e) {
-                id = type.id;
-            }
-        });
-        console.log(id);
-        // this.body.customerGroupId = id;
-        // this.body.page = 1;
-        // this.emitBody();
-    }
-
-    selectArea(e: any) {
-        // this.body.areaId = e;
-        // this.body.page = 1;
-        // this.emitBody();
-    }
-
+    // Tìm kiếm theo viếng thăm (đơn đặt)
     selectVisit(e: any) {
         switch (e) {
             case 'Tất cả': {
@@ -211,11 +253,37 @@ export class TemplateSidebarComponent implements OnInit {
                 break;
             }
         }
-        // this.body.visit = e;
-        // this.body.page = 1;
-        // this.emitBody();
+        this.body.visit = e;
+        this.body.page = 1;
+        this.emitBody();
     }
 
+    // Tìm kiếm theo nguồn (đơn bán)
+    selectSourceBill(e: any) {
+        switch (e) {
+            case 'Tất cả': {
+                e = null;
+                break;
+            }
+            case 'Từ phiếu đặt hàng': {
+                e = true;
+                break;
+            }
+            case 'Thêm trực tiếp': {
+                e = false;
+                break;
+            }
+            default: {
+                e = null;
+                break;
+            }
+        }
+        this.body.sourceBill = e;
+        this.body.page = 1;
+        this.emitBody();
+    }
+
+    // Tìm kiếm theo tuyến (đơn đặt)
     selectRoute(e: any) {
         switch (e) {
             case 'Tất cả': {
@@ -235,11 +303,45 @@ export class TemplateSidebarComponent implements OnInit {
                 break;
             }
         }
-        // this.body.isRoute = e;
-        // this.body.page = 1;
-        // this.emitBody();
+        this.body.isRoute = e;
+        this.body.page = 1;
+        this.emitBody();
     }
 
+    // Tìm kiếm theo loại khách hàng
+    selectTypeCustomer(e: any) {
+        let id = null;
+        this.listTypeCustomerNameAndIds.forEach((type: any) => {
+            if (type.customerTypeName === e) {
+                id = type.id;
+            }
+        });
+        this.body.customerTypeId = id;
+        this.body.page = 1;
+        this.emitBody();
+    }
+
+    // Tìm kiếm theo nhóm khách hàng
+    selectGroupCustomer(e: any) {
+        let id = null;
+        this.listGroupCustomerAndIds.forEach((type: any) => {
+            if (type.customerGroupName === e) {
+                id = type.id;
+            }
+        });
+        this.body.customerGroupId = id;
+        this.body.page = 1;
+        this.emitBody();
+    }
+
+    // Tìm kiếm theo khu vực
+    selectArea(e: any) {
+        this.body.areaId = e;
+        this.body.page = 1;
+        this.emitBody();
+    }
+
+    // Tìm kiếm theo lưu trữ
     selectArchivedStatus(e: any) {
         switch (e) {
             case 'Tất cả': {
@@ -259,22 +361,30 @@ export class TemplateSidebarComponent implements OnInit {
                 break;
             }
         }
-        // this.body.archived = e;
-        // this.body.page = 1;
-        // this.emitBody();
+        this.body.archived = e;
+        this.body.page = 1;
+        this.emitBody();
     }
 
+    // Tìm kiếm theo ngày giao hàng
     selectDeliveryDate(e: any) {
-        // this.isChoose = true;
-        // this.body.deliveryDate = moment(e.value).format('YYYY-MM-DD');
-        // this.body.page = 1;
-        // this.emitBody();
+        this.isChoose = true;
+        this.body.deliveryDate = moment(e.value).format('YYYY-MM-DD');
+        this.body.page = 1;
+        this.emitBody();
     }
 
+    // Tìm kiếm theo sản phẩm
     selectProductFilter(e: any) {
-        // this.body.productId = e;
-        // this.body.page = 1;
-        // this.emitBody();
+        this.body.productId = e;
+        this.body.page = 1;
+        this.emitBody();
+    }
+
+    searchProduct() {
+        this.productFilterCtrl.valueChanges.subscribe((data) => {
+            this.listSearchedProduct = this.commonLogicService.searchListProductActived(data);
+        });
     }
 
     getListTypeCustomer() {
@@ -286,6 +396,9 @@ export class TemplateSidebarComponent implements OnInit {
             this.listTypeCustomer.push('Tất cả');
             this.typeCustomerMenu.menuChildrens = this.listTypeCustomer;
         });
+    }
+
+    getListGroupCustomer() {
         this.customerGroup.get_all().subscribe((data: CustomerGroup[]) => {
             this.listGroupCustomerAndIds = data;
             this.listGroupCustomer = data?.map((group: any) => {
@@ -296,7 +409,11 @@ export class TemplateSidebarComponent implements OnInit {
         });
     }
 
-    getListGroupCustomer() {}
+    getAllArea() {
+        this.areaService.get_all().subscribe((data: Area[]) => {
+            this.areaList = data;
+        });
+    }
 }
 
 export class CustomerGroup {

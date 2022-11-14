@@ -62,6 +62,7 @@ import { TemplateTableComponent } from 'src/app/features/order-manager/template-
 import { TemplatePaginationComponent } from 'src/app/features/order-manager/template-component/template-pagination/template-pagination.component';
 import { TemplateSidebarComponent } from 'src/app/features/order-manager/template-component/template-sidebar/template-sidebar.component';
 import { TemplateHeaderComponent } from 'src/app/features/order-manager/template-component/template-header/template-header.component';
+
 @NgModule({
     declarations: [
         MenuCollapseComponent,

@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecretInterceptor } from './core/interceptor/secret.interceptor';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { CurrencyPipe, DatePipe, PercentPipe, registerLocaleData } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe, PercentPipe, registerLocaleData } from '@angular/common';
 import { DataService } from './core/services/data.service';
 import { ForgotpasswordComponent } from './features/auth/forgotpassword/forgotpassword.component';
 import { OrderReportComponent } from './features/order-report/order-report.component';
@@ -35,6 +35,7 @@ registerLocaleData(localeVi);
         DataService,
         CurrencyPipe,
         PercentPipe,
+        AsyncPipe
     ],
     bootstrap: [AppComponent],
 })

@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -13,6 +14,8 @@ import { PurchaseLogicService } from '../../services/purchaseLogic.service';
 export class PurchaseTableComponent implements OnInit {
     purchaseOrder: string[] = PurchaseHeader;
     listIdSelected: string[] = [];
+    OrderDateUp: boolean = false;
+    OrderDateDown: boolean = false;
 
     defaultBody: any = {
         sortField: 'CreatedDate',
@@ -35,13 +38,10 @@ export class PurchaseTableComponent implements OnInit {
     isLoading$: Observable<boolean> = this.purchaseLogicService.isLoading$;
     total$: Observable<number> = this.purchaseLogicService.total$;
 
-    constructor(
-        private purchaseLogicService: PurchaseLogicService,
-        private fomat: FormatPurchaseService,
-        private router: Router,
-    ) {}
+    constructor(private purchaseLogicService: PurchaseLogicService, private async: AsyncPipe) {}
 
     ngOnInit(): void {}
+
     ngAfterViewInit(): void {
         this.search(this.defaultBody, []);
     }
@@ -51,6 +51,7 @@ export class PurchaseTableComponent implements OnInit {
     }
 
     handleEmitDateFilter(e: any) {
+        this.page = 1;
         this.body = this.purchaseLogicService.filterDate(this.body, this.listIdSelected, e);
     }
 
@@ -66,5 +67,69 @@ export class PurchaseTableComponent implements OnInit {
         this.page = e;
         this.body.page = e;
         this.search(this.body, this.listIdSelected);
+    }
+
+    handleEmitBody(body: any) {
+        this.body = body;
+        this.page = 1;
+        this.search(this.body, this.listIdSelected);
+    }
+
+    refresh() {
+        this.body.page = 1;
+        this.page = 1;
+        this.search(this.body, this.listIdSelected);
+    }
+
+    print() {
+        let body: any;
+        body = {
+            filter: null,
+            listId: this.listIdSelected,
+            type: 2,
+        };
+        this.purchaseLogicService.print(body);
+    }
+
+    printFilter() {
+        let bodySent: any;
+        bodySent = {
+            filter: this.body,
+            type: 1,
+        };
+        bodySent.filter.pageSize = this.async.transform(this.total$);
+        bodySent.filter.page = 1;
+        this.purchaseLogicService.printFilter(bodySent);
+    }
+
+    filterDateWithTime(type: number) {
+        this.body.dateFilter = type;
+        this.search(this.body, this.listIdSelected);
+    }
+
+    sortByOrderDate(type: any) {
+        if (type === 'up') {
+            this.OrderDateUp = true;
+            this.OrderDateDown = false;
+            this.body.isAscending = true;
+        } else if (type === 'down') {
+            this.OrderDateDown = true;
+            this.OrderDateUp = false;
+            this.body.isAscending = false;
+        }
+        this.search(this.body, this.listIdSelected);
+    }
+
+    archiveOrders() {
+        if (this.listIdSelected.length > 0) {
+            this.purchaseLogicService.archiveOrders(this.listIdSelected);
+            this.purchaseLogicService.isSucessArchived$.subscribe((data: boolean) => {
+                if (data) {
+                    this.listIdSelected = [];
+                    this.search(this.defaultBody, []);
+                } else {
+                }
+            });
+        }
     }
 }

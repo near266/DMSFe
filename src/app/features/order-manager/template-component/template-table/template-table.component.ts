@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 @Component({
-    selector: 'app-template-table',
+    selector: 'order-template-table',
     templateUrl: './template-table.component.html',
     styleUrls: ['./template-table.component.scss'],
 })
