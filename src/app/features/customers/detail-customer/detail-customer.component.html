@@ -199,10 +199,25 @@
       </div>
       <hr class="mx-2">
       <div class="w-8/12 px-2 py-4 text-base">
-        <!-- <div class="w-full flex mb-6">
+        <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Hình ảnh</div>
-          <div class="w-8/12"></div>
-        </div> -->
+          <div class="w-8/12" *ngIf="isChoseUpdated === false">
+            <div class="relative box uploadImg bg-slate-100 w-full h-[200px] flex justify-center items-center rounded-lg box-border overflow-hidden">
+              <img [src]="customer.avatar" alt="" class="absolute w-full object-cover">
+            </div>
+          </div>
+          <div class="w-8/12" *ngIf="isChoseUpdated === true">
+            <div
+              class="relative box uploadImg bg-slate-100 w-full h-[200px] flex justify-center items-center rounded-lg box-border overflow-hidden">
+              <img [src]="buf.avatar" alt="" class="absolute w-full object-cover">
+              <i *ngIf="buf.avatar == '' || buf.avatar == null" class="fa-solid fa-circle-plus text-2xl text-gray-600"></i>
+              <input class="upload-file" type="file" id="imgProduct1" id="img1"
+                (change)="upload($event)">
+              <i class="fa-regular fa-circle-xmark absolute text-2xl top-0 right-1 z-20 text-gray-600 cursor-pointer"
+                id="imgProduct1" *ngIf="buf.avatar != '' && buf.avatar != null" (click)="buf.avatar = ''"></i>
+            </div>
+          </div>
+        </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Hạn mức công nợ</div>
           <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.debtLimit}}</div>

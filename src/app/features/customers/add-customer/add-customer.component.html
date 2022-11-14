@@ -169,7 +169,17 @@
       <div class="w-8/12 px-2 py-4 text-base">
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Hình ảnh</div>
-          <div class="w-8/12"></div>
+          <div class="w-8/12">
+            <div
+              class="relative box uploadImg bg-slate-100 w-full h-[200px] flex justify-center items-center rounded-lg box-border overflow-hidden">
+              <img [src]="image" alt="" class="absolute w-full object-cover">
+              <i *ngIf="image == ''" class="fa-solid fa-circle-plus text-2xl text-gray-600"></i>
+              <input class="upload-file" type="file" id="imgProduct1" id="img1"
+                (change)="upload($event)">
+              <i class="fa-regular fa-circle-xmark absolute text-2xl top-0 right-1 z-20 text-gray-600 cursor-pointer"
+                id="imgProduct1" *ngIf="image != ''" (click)="image = ''"></i>
+            </div>
+          </div>
         </div>
         <div class="w-full flex mb-6">
           <div class="w-4/12 font-semibold">Hạn mức công nợ</div>

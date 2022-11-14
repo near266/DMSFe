@@ -11,6 +11,7 @@ import { ChannelService } from 'src/app/core/services/channel.service';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { CustomerService } from 'src/app/core/services/customer.service';
+import { ImagesService } from 'src/app/core/services/images.service';
 import { ProvincesService } from 'src/app/core/services/provinces.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
@@ -45,6 +46,7 @@ export interface IBody {
 })
 export class AddCustomerComponent implements OnInit, AfterViewInit {
 
+  image: string = '';
   loading = true;
   tabs = 'Information';
   customerGroup: CustomerGroup[] = [];
@@ -81,6 +83,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
     private areaService: AreaService,
     private snackbar: SnackbarService,
     private provincesService: ProvincesService,
+    private imageService: ImagesService,
     @Inject(MAT_DIALOG_DATA) public data: string,
     ) { }
   ngAfterViewInit(): void {
@@ -205,9 +208,9 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
       position: this.form.controls['position'].value !== '' ? this.form.controls['position'].value: null,
       phone:  this.form.controls['phone'].value !== '' ? this.form.controls['phone'].value: null,
       email: this.form.controls['email'].value !== '' ? this.form.controls['email'].value: null,
-      avatar: this.form.controls['avatar'].value !== '' ? this.form.controls['avatar'].value: null,
+      avatar: this.image !== '' ? this.image: null,
       debtLimit: this.form.controls['debtLimit'].value !== '' ? this.form.controls['debtLimit'].value: null,
-      cashAcc: this.form.controls['cashAcc'].value !== '' ? this.form.controls['cashAcc'].value: null
+      cashAcc: this.form.controls['cashAcc'].value !== '' ? this.form.controls['cashAcc'].value: null,
     }
 
     if(body.status == 'true') {
@@ -222,7 +225,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
       this.dialogRef.close({event: true});
     }, (error) => {
       this.loading = false;
-      this.snackbar.openSnackbar('Thêm khách hàng không thành công, vui lòng kiểm tra thông tin đã nhập', 2000, 'Đóng', 'center', 'bottom', true);
+      this.snackbar.openSnackbar('Thêm khách hàng không thành công, vui lòng kiểm tra thông tin đã nhập', 2000, 'Đóng', 'center', 'bottom', false);
     });
 
   }
@@ -339,6 +342,20 @@ export class AddCustomerComponent implements OnInit, AfterViewInit {
       }, 200);
     }else{
       this.showArea = true;
+    }
+  }
+
+  upload(event: any) {
+    if (event.target.files.length == 1) {
+      this.imageService.uploadImg(event.target.files).subscribe( data => {
+        if(data) {
+          this.image = data[0];
+        } else {
+          this.snackbar.openSnackbar('Tải ảnh thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        }
+      }, (error) => {
+        this.snackbar.openSnackbar('Tải ảnh thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+      });
     }
   }
 
