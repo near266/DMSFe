@@ -1,5 +1,5 @@
 <table *ngIf="!(_tableLoading$ | async)" id="return"
-  class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
+  class="min-w-full font-semibold  border-spacing-0 border-separate bg-gray-100 z-10">
   <thead class="h-10  border-gray-300 ">
     <tr>
       <th scope="col"
@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr class="h-14 text-xs"
+    <tr class="h-14 text-sm"
       *ngFor="let return of returns | paginate: { itemsPerPage: 30, currentPage,totalItems };let i =index; let o=odd; let e=even;"
       [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
       <td class="space-x-2 min-w-[50px] border-x border-solid align-midde h-full pl-2 "><input class="inline"
@@ -21,7 +21,7 @@
       </td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{i+1}}
       </td>
-      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.orderEmployee?.employeeName}}
+      <td class="border-x min-w-[180px] border-solid align-middle px-2">{{return.orderEmployee?.employeeName}}
       </td>
       <td class="border-x min-w-[140px] border-solid  px-2">
         <ng-container *ngIf="return?.status === Status.PENDING" [ngTemplateOutlet]="statusTmpl"
@@ -42,13 +42,13 @@
         </a>
       </td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.customer?.customerCode}} </td>
-      <td class="border-x min-w-[170px] border-solid align-middle px-2">{{return.customerName}}</td>
-      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.address}} </td>
+      <td class="border-x min-w-[300px] border-solid align-middle px-2">{{return.customerName}}</td>
+      <td class="border-x min-w-[300px] border-solid align-middle px-2">{{return.address}} </td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.returnDate | date:'dd/MM/yyyy'}}</td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.totalPayment | currency:'VND'}}</td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">web</td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.orderDate | date:'dd/MM/yyyy'}} </td>
-      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.orderEmployee?.employeeName}}
+      <td class="border-x min-w-[150px] border-solid align-middle px-2">{{return.orderEmployee?.employeeName}}
         {{return.orderEmployee?.employeeTitle?' - ' + return.orderEmployee?.employeeTitle:''}} </td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.lastModifiedDate | date:'dd/MM/yyyy'}}
       </td>
