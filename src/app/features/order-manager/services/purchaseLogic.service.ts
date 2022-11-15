@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { log } from 'console';
 import { BehaviorSubject } from 'rxjs';
+import { PurchaseOrderDetail } from 'src/app/core/model/PurchaseOrder';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { PurchaseDetail } from '../models/purchaseDetail';
 import { PurchaseOrder, RootPurchases } from '../models/purchases';
 import { FormatPurchaseService } from './formatPurchase.service';
 
@@ -15,11 +18,13 @@ export class PurchaseLogicService {
     private isLoadingSource = new BehaviorSubject<boolean>(true);
     private totalSource = new BehaviorSubject<number>(0);
     private isSucessArchivedSource = new BehaviorSubject<boolean>(false);
+    private detailSource = new BehaviorSubject<PurchaseDetail>(new PurchaseDetail());
 
     listData$ = this.listDataSource.asObservable();
     isLoading$ = this.isLoadingSource.asObservable();
     total$ = this.totalSource.asObservable();
     isSucessArchived$ = this.isSucessArchivedSource.asObservable();
+    detail$ = this.detailSource.asObservable();
 
     constructor(
         private purchaseService: PurchaseOrderService,
@@ -77,7 +82,7 @@ export class PurchaseLogicService {
 
     navigateToDetail(id: any) {
         localStorage.setItem('purchaseOrderId', id);
-        this.router.navigate(['/orders/detailOrder/viewEdit']);
+        this.router.navigate(['/order/purchase/detail']);
     }
 
     print(body: any) {
@@ -146,5 +151,11 @@ export class PurchaseLogicService {
                     );
                 }
             });
+    }
+
+    getDetail(id: any) {
+        this.purchaseService.detail(id).subscribe((data: PurchaseDetail) => {
+            this.detailSource.next(data);
+        });
     }
 }

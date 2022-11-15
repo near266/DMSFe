@@ -57,6 +57,7 @@ export class PurchaseTableComponent implements OnInit {
 
     handleEmitValue(e: any) {
         this.purchaseLogicService.navigateToDetail(e);
+        console.log(e);
     }
 
     handleEmitListIds(e: any) {

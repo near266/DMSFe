@@ -1,0 +1,147 @@
+<!-- <div class="fixed z-10 bg-white w-full">
+    <div class="p-3 w-full flex justify-between items-center">
+        <span style="font-size: 20px !important" class="font-medium">{{ option.title }}</span>
+        <div class="flex items-center">
+            <button class="button-success-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-circle-check text-white mr-2"></i>
+                <span class="text-white">Lưu & Đóng</span>
+            </button>
+            <button class="button-danger" (click)="cancel()">
+                <i class="fa-solid fa-ban text-white mr-2"></i>
+                <span class="text-white">Đóng</span>
+            </button>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div> -->
+<form action="" [formGroup]="form">
+    <div class="p-3">
+        <div style="font-size: 12px">
+            <div class="flex gap-x-6 justify-between">
+                <mat-form-field
+                    *ngIf="option.type === 'Detail'"
+                    class="w-full"
+                    appearance="outline"
+                    floatLabel="always">
+                    <mat-label>Mã phiếu</mat-label>
+                    <input matInput [readonly]="true" formControlName="code" />
+                </mat-form-field>
+                <mat-form-field
+                    *ngIf="option.order === 'Purchase'"
+                    class="w-full"
+                    appearance="outline"
+                    floatLabel="always">
+                    <mat-label>Trạng thái</mat-label>
+                    <mat-select formControlName="status" [disabled]="!isEdit">
+                        <mat-option *ngFor="let status of option.status" [value]="status.value">
+                            {{ status.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+                    <mat-label>Ngày đặt</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="orderDate" [disabled]="!isEdit" />
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field *ngIf="option.order === 'Sale'" class="w-full" appearance="outline" floatLabel="always">
+                    <mat-label>Ngày bán</mat-label>
+                    <input matInput [matDatepicker]="picker1" formControlName="saleDate" [disabled]="!isEdit" />
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+                    <mat-label>Ngày giao</mat-label>
+                    <input matInput [matDatepicker]="picker2" formControlName="deliveryDate" [disabled]="!isEdit" />
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="flex gap-x-6 justify-between">
+                <mat-form-field appearance="outline" floatLabel="always" class="w-full">
+                    <mat-label>Nhóm</mat-label>
+                    <mat-select formControlName="groupId" [disabled]="!isEdit">
+                        <mat-option *ngFor="let group of listGroup$ | async" [value]="group.id">
+                            {{ group.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" floatLabel="always" class="w-full">
+                    <mat-label>Nhân viên đặt</mat-label>
+                    <mat-select formControlName="orderEmployeeId" [disabled]="!isEdit">
+                        <mat-option>
+                            <ngx-mat-select-search
+                                [formControl]="employeeCtrl"
+                                placeholderLabel="Tìm kiếm"
+                                noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let employee of listEmployee$ | async" [value]="employee.id">
+                            {{ employee.employeeName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" floatLabel="always" class="w-full">
+                    <mat-label>Tuyến</mat-label>
+                    <mat-select formControlName="routeId" [disabled]="!isEdit">
+                        <mat-option>
+                            <ngx-mat-select-search
+                                [formControl]="routeCtrl"
+                                placeholderLabel="Tìm kiếm"
+                                noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let route of listRoute$ | async" [value]="route.id">
+                            {{ route.routeName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="option.order === 'Sale'" appearance="outline" floatLabel="always" class="w-full">
+                    <mat-label>Nhân viên bán</mat-label>
+                    <mat-select formControlName="saleEmployee" [disabled]="!isEdit">
+                        <mat-option>
+                            <ngx-mat-select-search
+                                [formControl]="employeeCtrl"
+                                placeholderLabel="Tìm kiếm"
+                                noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let employee of listEmployee$ | async" [value]="employee.id">
+                            {{ employee.employeeName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="flex gap-x-6 justify-between">
+                <mat-form-field appearance="outline" floatLabel="always" class="w-full">
+                    <mat-label>Mã khách hàng</mat-label>
+                    <mat-select formControlName="customerId" [disabled]="!isEdit">
+                        <mat-option>
+                            <ngx-mat-select-search
+                                [formControl]="cusCtrl"
+                                placeholderLabel="Tìm kiếm"
+                                noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option [value]="0">--Chọn khách hàng--</mat-option>
+                        <mat-option *ngFor="let customer of listCus$ | async" [value]="customer.id">
+                            {{ customer.customerCode }} - {{ customer.customerName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+                    <mat-label>Khách hàng</mat-label>
+                    <input matInput formControlName="customerName" [readonly]="true" />
+                </mat-form-field>
+                <mat-form-field class="w-1/3" appearance="outline" floatLabel="always">
+                    <mat-label>SĐT</mat-label>
+                    <input [readonly]="true" matInput formControlName="phone" />
+                </mat-form-field>
+                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+                    <mat-label>Địa chỉ</mat-label>
+                    <input [readonly]="true" matInput formControlName="address" />
+                </mat-form-field>
+            </div>
+            <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+                <mat-label>Diễn giải</mat-label>
+                <textarea matInput formControlName="description" [readonly]="!isEdit"></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+</form>

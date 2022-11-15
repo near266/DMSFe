@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TemplateInforOrderComponent } from 'src/app/features/order-manager/template-component/template-infor-order/template-infor-order.component';
 import { MainComponent } from './main.component';
 
 const routes: Routes = [

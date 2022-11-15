@@ -58,10 +58,13 @@ import { NgPrintModule } from 'ng-print';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { TemplateTableComponent } from 'src/app/features/order-manager/template-component/template-table/template-table.component';
-import { TemplatePaginationComponent } from 'src/app/features/order-manager/template-component/template-pagination/template-pagination.component';
-import { TemplateSidebarComponent } from 'src/app/features/order-manager/template-component/template-sidebar/template-sidebar.component';
 import { TemplateHeaderComponent } from 'src/app/features/order-manager/template-component/template-header/template-header.component';
+import { TemplateSidebarComponent } from 'src/app/features/order-manager/template-component/template-sidebar/template-sidebar.component';
+import { TemplatePaginationComponent } from 'src/app/features/order-manager/template-component/template-pagination/template-pagination.component';
+import { TemplateTableComponent } from 'src/app/features/order-manager/template-component/template-table/template-table.component';
+import { TemplateInforOrderComponent } from 'src/app/features/order-manager/template-component/template-infor-order/template-infor-order.component';
+import { TemplateTableProductComponent } from 'src/app/features/order-manager/template-component/template-table-product/template-table-product.component';
+import { TemplateFooterOrderComponent } from 'src/app/features/order-manager/template-component/template-footer-order/template-footer-order.component';
 
 @NgModule({
     declarations: [
@@ -76,6 +79,9 @@ import { TemplateHeaderComponent } from 'src/app/features/order-manager/template
         TemplatePaginationComponent,
         TemplateSidebarComponent,
         TemplateHeaderComponent,
+        TemplateInforOrderComponent,
+        TemplateTableProductComponent,
+        TemplateFooterOrderComponent,
     ],
     imports: [
         CommonModule,
@@ -182,6 +188,9 @@ import { TemplateHeaderComponent } from 'src/app/features/order-manager/template
         TemplatePaginationComponent,
         TemplateSidebarComponent,
         TemplateHeaderComponent,
+        TemplateInforOrderComponent,
+        TemplateTableProductComponent,
+        TemplateFooterOrderComponent,
     ],
 })
 export class SharedModule {}

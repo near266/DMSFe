@@ -1,14 +1,11 @@
-import { Component, OnInit, AfterViewInit, DoCheck } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { AfterViewInit, Component, DoCheck, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
-import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
-import { FormatService } from '../../services/format.service';
 
 @Component({
     selector: 'app-create-order-sale',
