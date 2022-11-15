@@ -91,7 +91,6 @@
                 [ngModel]="item.returnsQuantity"
                 (ngModelChange)="item.returnsQuantity=$event;updateItemTotalPrice(item)" />
             </mat-form-field>
-
           </div>
         </td>
         <td class="border-x max-w-[120px]  border-solid align-middle px-2  text-center">
@@ -121,7 +120,8 @@
             <textarea matInput [rows]="1" [(ngModel)]="item.note"></textarea>
           </mat-form-field>
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center" (click)="stopPropagation($event)">
+        <td class="border-x  border-solid align-middle px-2 text-center"
+          (click)="stopPropagation($event);removeProduct(i)">
           <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
         </td>
       </tr>

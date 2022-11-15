@@ -107,4 +107,7 @@ export class CreateReturnPromotionTableComponent implements OnInit {
             this.productsInput = res;
         });
     }
+    removeProduct(index: number) {
+        this.productsInput.splice(index, 1);
+    }
 }

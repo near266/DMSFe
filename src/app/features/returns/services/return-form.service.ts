@@ -8,6 +8,8 @@ import { ReturnApiService } from '../apis/return-api.service';
 import { ReturnDetailsService } from './return-details.service';
 import { ReturnOrderService } from './return-order.service';
 import { ReturnsService } from './returns.service';
+import { ProductApiService } from '../../product/apis/product.api.service';
+import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 
 @Injectable({
     providedIn: 'root',
@@ -20,6 +22,7 @@ export class ReturnFormService {
         private returnOrderService: ReturnOrderService,
         private returnDetailsService: ReturnDetailsService,
         private snackBarService: SnackbarService,
+        private purchaseOrder: PurchaseOrderService,
         private dialog: MatDialog,
         private router: Router,
     ) {}
@@ -29,8 +32,8 @@ export class ReturnFormService {
     submitPromotionForm$: Subject<any> = new Subject<any>();
     discountAmount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     formValues$: Subject<any> = new Subject<any>();
-    products$: Subject<any> = new Subject<any>();
-    promotionProducts$: Subject<any> = new Subject<any>();
+    products$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+    promotionProducts$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
     getOrderDetailsById(id: string) {
         // <--- this method is not used in real cases
@@ -168,5 +171,36 @@ export class ReturnFormService {
     }
     submitForms() {
         this.submitProductForm$.next(true);
+    }
+    getAllProducts() {
+        const settings = {
+            keyword: '',
+            page: 1,
+            pageSize: 100,
+        };
+        return this.purchaseOrder
+            .getListProductActived({
+                sortBy: {
+                    property: 'CreatedDate',
+                    value: true,
+                },
+                page: 1,
+                pageSize: 1000,
+            })
+            .pipe(
+                map((result) =>
+                    result.data.map((product: any) => {
+                        return { ...product, label: product.sku + ' - ' + product.productName };
+                    }),
+                ),
+            );
+    }
+    addProductToProductList(product: any) {
+        const { label, ...result } = product;
+        this.products$.next([...this.products$.getValue(), result]);
+    }
+    addProductToPromotionList(product: any) {
+        const { label, ...result } = product;
+        this.promotionProducts$.next([...this.promotionProducts$.getValue(), result]);
     }
 }

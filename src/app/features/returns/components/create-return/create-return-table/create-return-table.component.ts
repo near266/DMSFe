@@ -137,8 +137,6 @@ export class CreateReturnTableComponent implements OnInit {
     }
     updateItemTotalPrice(item: any) {
         item.totalPrice = item.returnsQuantity * item.unitPrice;
-        // item.salesQuantity = item.returnsQuantity;
-        // item.quantity = item.returnsQuantity;
         this.updateDiscountRate(item);
     }
     updateDiscountRate(item: any) {
@@ -156,6 +154,9 @@ export class CreateReturnTableComponent implements OnInit {
             }
         });
         return isValid;
+    }
+    removeProduct(index: number) {
+        this.productsInput.splice(index, 1);
     }
 
     // addProduct(formValue: any) {

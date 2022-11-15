@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
@@ -8,6 +8,8 @@ import { readMoney } from 'src/app/core/shared/utils/readMoney';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { ReturnFormService } from '../../services/return-form.service';
+import { Observable } from 'rxjs';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
     selector: 'app-create-return',
@@ -15,6 +17,8 @@ import { ReturnFormService } from '../../services/return-form.service';
     styleUrls: ['./create-return.component.scss'],
 })
 export class CreateReturnComponent implements OnInit {
+    @ViewChild('Product') ngSelectProductComponent: NgSelectComponent;
+    @ViewChild('Promotion') ngSelectPromotionComponent: NgSelectComponent;
     formValues: any;
     productsInput: any;
     statusList = [
@@ -29,7 +33,7 @@ export class CreateReturnComponent implements OnInit {
     ];
     createForm: FormGroup;
     listCustomer: any;
-    products: any;
+    products$: Observable<any[]>;
     totalPrice: number;
     textMoney: string;
     discountAmount: number;
@@ -61,11 +65,24 @@ export class CreateReturnComponent implements OnInit {
             const ins = new readMoney(data);
             this.textMoney = ins.doc(this.totalPrice - data);
         });
+
+        this.products$ = this.returnFormService.getAllProducts();
     }
     submitForms(): void {
         this.returnFormService.submitForms();
     }
-
+    handleChangeSelect(event: any): void {
+        if (event) {
+            this.returnFormService.addProductToProductList(event);
+        }
+        this.ngSelectProductComponent.handleClearClick();
+    }
+    handlePromotionChangeSelect(event: any): void {
+        if (event) {
+            this.returnFormService.addProductToPromotionList(event);
+        }
+        this.ngSelectPromotionComponent.handleClearClick();
+    }
     stopPropagation(e: any) {
         e.stopPropagation();
     }
@@ -84,9 +101,11 @@ export class CreateReturnComponent implements OnInit {
             .afterClosed()
             .subscribe((data) => {
                 if (type === 'products') {
-                    this.returnFormService.products$.next(data);
+                    this.returnFormService.products$.next(this.returnFormService.products$.value.concat(data));
                 } else {
-                    this.returnFormService.promotionProducts$.next(data);
+                    this.returnFormService.promotionProducts$.next(
+                        this.returnFormService.promotionProducts$.value.concat(data),
+                    );
                 }
             });
     }
