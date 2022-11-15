@@ -4,19 +4,19 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { Brand } from 'src/app/features/product/models/product';
-import { BranchService } from '../../services/branch.service';
+import { Major } from 'src/app/features/product/models/product';
+import { MajorService } from '../../services/major.service';
 
 @Component({
-  selector: 'app-detail-brand',
-  templateUrl: './detail-brand.component.html',
-  styleUrls: ['./detail-brand.component.scss']
+  selector: 'app-detail-major',
+  templateUrl: './detail-major.component.html',
+  styleUrls: ['./detail-major.component.scss']
 })
-export class DetailBrandComponent implements OnInit {
+export class DetailMajorComponent implements OnInit {
 
   @ViewChild('myForm') myForm: NgForm;
   @ViewChild('submitButton') submitButton: ElementRef;
-  @Input() brandModel: Brand | null;
+  @Input() majorModel: Major | null;
   @Input() status: string;
   @Input() dialogMode: 'create' | 'edit' | 'view' = 'create';
   form = new FormGroup({});
@@ -25,9 +25,8 @@ export class DetailBrandComponent implements OnInit {
 
   model = {
     id: null,
-    brandName: null,
-    brandCode: 0,
-    debtLimit: null,
+    commodityName: null,
+    commodityCode: 0,
     status: null,
   };
 
@@ -36,27 +35,27 @@ export class DetailBrandComponent implements OnInit {
         key: 'id',
     },
     {
-        key: 'brandName',
-        type: 'brand-input',
+        key: 'commodityName',
+        type: 'major-input',
         templateOptions: {
-            label: 'Tên nhãn hiệu',
-            placeholder: 'Nhập tên nhãn hiệu',
+            label: 'Tên ngành hàng',
+            placeholder: 'Nhập tên ngành hàng',
             required: true,
         },
     },
     {
-        key: 'brandCode',
-        type: 'brand-input',
+        key: 'commodityCode',
+        type: 'major-input',
         defaultValue: null,
         templateOptions: {
-            label: 'Mã nhãn hiệu',
-            placeholder: 'Nhập code nhãn hiệu',
+            label: 'Mã ngành hàng',
+            placeholder: 'Nhập code ngành hàng',
             required: true,
         },
     },
     {
         key: 'debtLimit',
-        type: 'brand-select',
+        type: 'major-select',
         defaultValue: null,
         templateOptions: {
             label: 'Giới hạn phòng ban',
@@ -69,7 +68,7 @@ export class DetailBrandComponent implements OnInit {
     },
     {
         key: 'status',
-        type: 'brand-select',
+        type: 'major-select',
         defaultValue: null,
         templateOptions: {
             label: 'Trạng thái',
@@ -82,12 +81,12 @@ export class DetailBrandComponent implements OnInit {
     },
   ];
 
-  onSubmit(brand: Brand) {
+  onSubmit(major: Major) {
     // console.log(brand);
     if (!this.form.invalid) {
-        if (!brand.id) {
-            delete brand.id;
-            this.branchService.addBrand(brand).subscribe({
+        if (!major.id) {
+            delete major.id;
+            this.majorService.addMajor(major).subscribe({
                 next: (res) => {
                     this.snackbar.openSnackbar('Thêm thành công', 2000, 'Đóng', 'center', 'top', true);
                     this.dialogRef.close({event: true});
@@ -97,7 +96,7 @@ export class DetailBrandComponent implements OnInit {
                 },
             });
         } else {
-            this.branchService.updateBrand(brand).subscribe({
+            this.majorService.updateMajor(major).subscribe({
                 next: (res) => {
                     this.snackbar.openSnackbar('Sửa nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
                     this.dialogRef.close({event: true});
@@ -112,25 +111,25 @@ export class DetailBrandComponent implements OnInit {
   }
 
   constructor(
-    public dialogRef: MatDialogRef<DetailBrandComponent>,
+    public dialogRef: MatDialogRef<DetailMajorComponent>,
     private snackbar: SnackbarService,
-    private branchService: BranchService,
+    private majorService: MajorService,
   ) { }
 
   ngOnInit(): void {
-    this.branchService.changeHeader('');
+    this.majorService.changeHeader('');
     setTimeout(() => {
-        if (this.brandModel) {
-            console.log(this.brandModel);
-            this.form.patchValue(this.brandModel || {});
-            this.branchService.changeHeader(this.brandModel.brandName || '');
+        if (this.majorModel) {
+            console.log(this.majorModel);
+            this.form.patchValue(this.majorModel || {});
+            this.majorService.changeHeader(this.majorModel.commodityName || '');
             this.form.disable();
         }
     }, 0);
-    this.subscription = this.branchService.submitForm$.subscribe(() => {
+    this.subscription = this.majorService.submitForm$.subscribe(() => {
         this.submitButton.nativeElement.click();
     });
-    this.subscription2 = this.branchService.toggleEdit$.subscribe((value: boolean) => {
+    this.subscription2 = this.majorService.toggleEdit$.subscribe((value: boolean) => {
         if (value) {
             this.form.enable();
         }

@@ -2,31 +2,30 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
-import { Brand } from 'src/app/features/product/models/product';
+import { Major } from 'src/app/features/product/models/product';
 import { environment } from 'src/environments/environment';
-import { BrandComponent } from '../brand/brand.component';
+import { MajorComponent } from '../major/major.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BranchService {
+export class MajorService {
 
-  private totalBranchs: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  public totalBranchs$ = this.totalBranchs.asObservable();
+  private totalMajors: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public totalMajors$ = this.totalMajors.asObservable();
 
   header: BehaviorSubject<string> = new BehaviorSubject<string>('');
   header$: Observable<string> = this.header.asObservable();
   submitForm$: Subject<boolean> = new Subject<boolean>();
   toggleEdit$: Subject<boolean> = new Subject<boolean>();
-  open(data: Brand | null = null) {
-    const dialogRef = this.dialogService.open(BrandComponent, {
+  open(data: Major | null = null) {
+    const dialogRef = this.dialogService.open(MajorComponent, {
         width: '730px',
         height: '90vh',
         data,
     });
       dialogRef.afterClosed().subscribe(result => {
         if(result?.event === true){
-          // this.getAllBrand();
         }
       });
   }
@@ -35,28 +34,28 @@ export class BranchService {
   }
 
   private endPoint = environment.API_URL + '/gw/Catalog';
-  private Point = environment.API_URL + '/gw/Branch'
+  private Point = environment.API_URL + '/gw/Major'
 
   constructor(private http: HttpClient, private dialogService: MatDialog) { }
 
-  getAllBrand(body: any): Observable<any> {
-    return this.http.post(this.endPoint + '/BrandSearch', body);
+  getAllMajor(body: any): Observable<any> {
+    return this.http.post(this.endPoint + '/MajorSearch', body); // chưa sửa
   }
 
-  getdetailBrand(body: any): Observable<Brand[]> {
-    return this.http.post<Brand[]>(this.endPoint + '/BrandViewDetail', body);
+  getdetailMajor(body: any): Observable<Major[]> {
+    return this.http.post<Major[]>(this.endPoint + '/MajorViewDetail', body); // chưa sửa
   }
 
-  addBrand(body: any): Observable<Brand[]> {
-    return this.http.post<Brand[]>(this.Point + '/add', body);
+  addMajor(body: any): Observable<Major[]> {
+    return this.http.post<Major[]>(this.Point + '/add', body);
   }
 
-  updateBrand(body: any): Observable<Brand[]> {
-    return this.http.put<Brand[]>(this.Point + '/update', body);
+  updateMajor(body: any): Observable<Major[]> {
+    return this.http.put<Major[]>(this.Point + '/update', body);
   }
 
-  searchBrand(body: any): Observable<Brand[]> {
-    return this.http.post<Brand[]>(this.endPoint + '/BrandSearch', body);
+  searchMajor(body: any): Observable<Major[]> {
+    return this.http.post<Major[]>(this.endPoint + '/BrandSearch', body); // chưa sửa
   }
 
   del(body: any): Observable<any> {

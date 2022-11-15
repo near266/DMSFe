@@ -2,22 +2,22 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { Brand } from '../../product/models/product';
-import { AddBrandComponent } from './add-brand/add-brand.component';
-import { BrandComponent } from './brand/brand.component';
-import { BranchService } from './services/branch.service';
+import { Major } from '../../product/models/product';
+import { AddMajorComponent } from './add-major/add-major.component';
+import { MajorComponent } from './major/major.component';
+import { MajorService } from './services/major.service';
 
 @Component({
-  selector: 'app-branchs',
-  templateUrl: './branchs.component.html',
-  styleUrls: ['./branchs.component.scss']
+  selector: 'app-majors',
+  templateUrl: './majors.component.html',
+  styleUrls: ['./majors.component.scss']
 })
-export class BranchsComponent implements OnInit {
+export class MajorsComponent implements OnInit {
 
   loading = true;
   sideBarWidth!: string;
   type!: string;
-  brand: Brand[] = [];
+  major: Major[] = [];
   totalCount: number;
   keywords: '';
   request: any = {
@@ -30,32 +30,31 @@ export class BranchsComponent implements OnInit {
   page: number = 1;
   pageSize: number = 30;
   total: number = 0;
-  totalbranchs: number;
+  totalmajors: number;
 
   constructor(
     public datepipe: DatePipe,
     private dialog: MatDialog,
-    private brandService: BranchService,
+    private majorService: MajorService,
     private snackbar: SnackbarService,
   ) { }
 
   ngOnInit(): void {
-
     this.view();
   }
 
   view(){
-    this.brandService.getAllBrand(this.request).subscribe(data => {
+    this.majorService.getAllMajor(this.request).subscribe(data => {
       if(data){
-        this.brand = data;
-        this.totalbranchs = data.length
+        this.major = data;
+        this.totalmajors = data.length
         // console.log(data);
       }
     })
   }
-  
-  AddBranch(){
-    const dialogRef = this.dialog.open(AddBrandComponent, {
+
+  AddMajor(){
+    const dialogRef = this.dialog.open(AddMajorComponent, {
       height: '100vh',
       minWidth: '900px',
       panelClass: 'custom-mat-dialog-container'
@@ -67,8 +66,8 @@ export class BranchsComponent implements OnInit {
     });
   }
 
-  open(data: Brand | null = null) {
-    const dialogRef = this.dialog.open(BrandComponent, {
+  open(data: Major | null = null) {
+    const dialogRef = this.dialog.open(MajorComponent, {
         width: '730px',
         height: '90vh',
         data,
@@ -91,11 +90,11 @@ export class BranchsComponent implements OnInit {
       this.keywords = request;
     }
     this.request.keyword = this.keywords;
-    this.brandService.searchBrand(this.request).subscribe(
+    this.majorService.searchMajor(this.request).subscribe(
         (data) => {
           this.loading = false;
           if(data) {
-            this.brand = data;
+            this.major = data;
           }
         },
         (error) => {

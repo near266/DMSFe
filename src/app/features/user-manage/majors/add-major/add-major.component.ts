@@ -2,23 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { BranchService } from '../services/branch.service';
+import { MajorService } from '../services/major.service';
 
 @Component({
-  selector: 'app-add-brand',
-  templateUrl: './add-brand.component.html',
-  styleUrls: ['./add-brand.component.scss']
+  selector: 'app-add-major',
+  templateUrl: './add-major.component.html',
+  styleUrls: ['./add-major.component.scss']
 })
-export class AddBrandComponent implements OnInit {
+export class AddMajorComponent implements OnInit {
 
   loading = true;
   form!: FormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<AddBrandComponent>,
+    public dialogRef: MatDialogRef<AddMajorComponent>,
     private snackbar: SnackbarService,
     private fb: FormBuilder,
-    private branchService: BranchService,
+    private majorService: MajorService,
   ) { }
 
   ngOnInit(): void {
@@ -48,11 +48,11 @@ export class AddBrandComponent implements OnInit {
     } else if(body.debtLimit == 'false') {
       body.debtLimit = false;
     }
-    this.branchService.addBrand(body).subscribe( data => {
-      this.snackbar.openSnackbar('Thêm nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
+    this.majorService.addMajor(body).subscribe( data => {
+      this.snackbar.openSnackbar('Thêm ngành hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
       this.dialogRef.close({event: true});
     }, (error) => {
-      this.snackbar.openSnackbar('Thêm nhãn hiệu thất bại', 2000, 'Đóng', 'center', 'bottom', true);
+      this.snackbar.openSnackbar('Thêm ngành hàng thất bại', 2000, 'Đóng', 'center', 'bottom', true);
     });
 
   }
