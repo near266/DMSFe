@@ -35,3 +35,10 @@
 .ng-select {
     padding-bottom: 0;
 }
+:host::ng-deep.mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0 0.5em 0;
+}
+:host::ng-deep.mat-form-field-label-wrapper {
+    padding-top: 1.5em;
+    top: -1.2em;
+}
