@@ -84,7 +84,7 @@
                     </td>
                     <td class="custom-td border">
                         <!-- {{ order?.createdDate }} -->
-                        {{ datepipe.transform(order.createdDate, 'dd/MM/yyyy') || 'No Data' }}
+                        {{ datepipe.transform(order.lastModifiedDate, 'dd/MM/yyyy') || 'No Data' }}
                     </td>
                 </tr>
             </tbody>

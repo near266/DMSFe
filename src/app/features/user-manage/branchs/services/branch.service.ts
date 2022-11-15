@@ -56,7 +56,7 @@ export class BranchService {
   }
 
   searchBrand(body: any): Observable<Brand[]> {
-    return this.http.post<Brand[]>(this.endPoint + '/search', body);
+    return this.http.post<Brand[]>(this.endPoint + '/BrandSearch', body);
   }
 
   del(body: any): Observable<any> {

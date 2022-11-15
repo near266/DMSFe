@@ -69,7 +69,7 @@ export class DetailComponent implements OnInit {
   ];
 
   onSubmit(unit: Unit) {
-    console.log(unit);
+    // console.log(unit);
     if (!this.form.invalid) {
         if (!unit.id) {
             delete unit.id;
@@ -107,7 +107,7 @@ export class DetailComponent implements OnInit {
     this.unitService.changeHeader('');
     setTimeout(() => {
         if (this.unitModel) {
-            console.log(this.unitModel);
+            // console.log(this.unitModel);
             this.form.patchValue(this.unitModel || {});
             this.unitService.changeHeader(this.unitModel.unitName || '');
             this.form.disable();

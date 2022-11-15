@@ -22,11 +22,11 @@
                 <span>Kho hàng</span>
             </button>
             <mat-divider></mat-divider>
-            <button mat-menu-item [routerLink]="['orders']">
+            <button mat-menu-item [routerLink]="['order']">
                 <i class="fa-solid fa-file-invoice mr-2"></i>
                 <span>Phiếu đặt hàng</span>
             </button>
-            <button mat-menu-item [routerLink]="['ordersale']">
+            <button mat-menu-item [routerLink]="['order/sale']">
                 <i class="fa-solid fa-calculator mr-2"></i>
                 <span>Phiếu bán hàng</span>
             </button>
@@ -85,15 +85,15 @@
                     <span>Đơn vị tính</span>
                 </button>
                 <button mat-menu-item class="flex items-center" [routerLink]="'/categories/brand'">
-                    <i class="fa-solid fa-tags  mr-2"></i>
+                    <i class="fa-solid fa-tags mr-2"></i>
                     <span>Nhãn hiệu</span>
                 </button>
                 <button mat-menu-item class="flex items-center">
                     <i class="fa-solid fa-industry mr-2"></i>
                     <span>Nhà cung cấp</span>
                 </button>
-                <button mat-menu-item class="flex items-center">
-                    <i class="fa-solid fa-pie-chart mr-2"></i>
+                <button mat-menu-item class="flex items-center" [routerLink]="'/categories/major'">
+                    <i class="fa-solid fa-pie-chart  mr-2"></i>
                     <span>Ngành hàng</span>
                 </button>
             </mat-menu>
@@ -172,6 +172,12 @@
             <img [src]="annonimousAvatar" alt="" />
         </div>
     </div>
+    <!-- <button class="button-primary" [routerLink]="['optimalOrder']" routerLinkActive="router-link-active">
+        Đơn đặt
+    </button>
+    <button class="button-primary" [routerLink]="['optimalOrder/sale']" routerLinkActive="router-link-active">
+        Đơn bán
+    </button> -->
     <mat-menu #menu="matMenu" class="mt-2">
         <button mat-menu-item class="flex items-center">
             <i class="fa-solid fa-user text-lg mr-2"></i>

@@ -49,23 +49,18 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
         this.type = 'View';
         this.changeType('View');
 
-        this.activatedRoute.queryParamMap.subscribe(param => {
-          console.log(param.get('id'));
-          if(param.get('id')){
-            console.log('Có');
-            this.id = param.get('id');
+        this.activatedRoute.queryParamMap.subscribe((param) => {
             console.log(param.get('id'));
-
-          }else{
-            console.log('Không');
-            this.id = localStorage.getItem('purchaseOrderId')!;
-            console.log(this.id);
-
-          }
-        })
-
-
-
+            if (param.get('id')) {
+                console.log('Có');
+                this.id = param.get('id');
+                console.log(param.get('id'));
+            } else {
+                console.log('Không');
+                this.id = localStorage.getItem('purchaseOrderId')!;
+                console.log(this.id);
+            }
+        });
 
         // get body Update
         this.purchaseOrder.updateOrder.subscribe((data) => {
@@ -371,7 +366,7 @@ export class ViewEditDetailOrderComponent implements OnInit, AfterViewInit, DoCh
                     () => {
                         this.snackbar.openSnackbar('Lưu trữ thành công', 2000, 'Đóng', 'center', 'bottom', true);
                         setTimeout(() => {
-                            this.router.navigate(['/orders']);
+                            this.router.navigate(['/order']);
                         }, 1000);
                     },
                 );

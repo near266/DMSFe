@@ -356,7 +356,7 @@ export class CreatePurchaseOrderComponent implements OnInit, AfterViewInit, DoCh
             },
             () => {
                 this.snackbar.openSnackbar('Tạo mới đơn đặt hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
-                this.router.navigate(['/orders']);
+                this.router.navigate(['/order']);
             },
         );
     }

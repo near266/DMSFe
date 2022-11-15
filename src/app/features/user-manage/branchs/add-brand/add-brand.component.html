@@ -2,7 +2,7 @@
     <div class="relative h-full overflow-hidden">
         <div class="flex-row justify-between h-fit p-2 sticky top-0 border-b border-green-600 bg-white"
         style="display: flex!important; margin: 0!important;">
-        <div class="text-2xl text-gray-500 italic font-semibold tracking-wider flex"><span>Thêm đơn vị tính</span></div>
+        <div class="text-2xl text-gray-500 italic font-semibold tracking-wider flex"><span>Thêm mới nhãn hiệu</span></div>
             <div class="flex flex-row text-xs">
                 <button
                 class="flex flex-row bg-blue-900 opacity-80 text-white justify-center items-center px-2 py-3 rounded-l-sm cursor-pointer">
@@ -28,20 +28,20 @@
                     </div>
                 </div> -->
                 <div class="w-full flex px-8 py-2">
-                    <div class="w-2/12">Mã đơn vị tính</div>
+                    <div class="w-2/12">Mã nhãn hiệu</div>
                     <div class="w-10/12">
                         <input formControlName="brandCode" class="border border-solid border-black rounded-sm w-96 text-xs h-7" >
                     </div>
                 </div>
                 <div class="w-full flex px-8 py-2">
-                    <div class="w-2/12">Đơn vị tính</div>
+                    <div class="w-2/12">Tên nhãn hiệu</div>
                     <div class="w-10/12">
                         <input formControlName="brandName" class="border border-solid border-black rounded-sm w-96 text-xs h-7">
                     </div>
                 </div>
                 <div class="w-full flex px-8 py-2">
                     <div class="w-2/12">Giới hạn phòng ban</div>
-                    <select formControlName="status" class="border border-solid border-black rounded-sm w-96 text-xs h-7">
+                    <select formControlName="debtLimit" class="border border-solid border-black rounded-sm w-96 text-xs h-7">
                         <option disabled selected value=""> --- Chọn trạng thái --- </option>
                         <option value="true">Giới hạn</option>
                         <option value="false">Không giới hạn</option>

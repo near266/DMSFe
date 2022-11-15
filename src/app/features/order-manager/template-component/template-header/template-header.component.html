@@ -1,0 +1,27 @@
+<!-- header -->
+<div class="mt-2 flex justify-between items-center">
+    <span class="text-xl font-medium">
+        {{ titleHeader }}
+        <span>({{ total }})</span>
+        <span class="ml-1" *ngIf="quantitySelected">( Đã chọn - {{ quantitySelected }})</span>
+    </span>
+    <div style="font-size: 12px" class="flex items-center">
+        <mat-form-field style="padding-bottom: 0px !important" appearance="outline" [formGroup]="dateSearchForm">
+            <mat-label>Khoảng thời gian</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate placeholder="Start date" formControlName="fromDate" />
+                <input matEndDate placeholder="End date" formControlName="toDate" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix>
+                <mat-icon matDatepickerToggleIcon (click)="clearDatePicker()">clear</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+        <i
+            (click)="emitFromAndEndDate()"
+            class="ml-1 text-center mr-1 px-2 py-2 rounded-md bg-zinc-300 h-full w-full hover:opacity-70 font-bold cursor-pointer fa-solid text-base icon fa-magnifying-glass"></i>
+    </div>
+</div>
+<!-- options select to edit -->
+<ng-content></ng-content>
