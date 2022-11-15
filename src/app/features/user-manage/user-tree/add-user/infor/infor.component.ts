@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/core/services/data.service';
 import { EmployeeService } from 'src/app/core/services/employee.service';
+import { ImagesService } from 'src/app/core/services/images.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -17,7 +18,8 @@ export class InforComponent implements OnInit, OnDestroy {
     private dataService: DataService,
     public datePipe: DatePipe,
     private employeeService: EmployeeService,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private imageService: ImagesService
   ) { }
 
   type: 'text'
@@ -216,17 +218,20 @@ export class InforComponent implements OnInit, OnDestroy {
   }
 
   uploadFile($event: any) {
-    let file = $event.target.files
-    let reader = new FileReader()
-    reader.readAsDataURL(file[0]);
-    reader.onload = (_event) => {
-      const img_obj = {
-        data: reader.result,
-        id: 1,
-        name: file[0].name
-      }
-      this.img = img_obj
-      this.employee.value.avatar = img_obj.data
+    let file = $event.target.files;
+    if (file.length == 1) {
+      let upload = this.imageService.uploadImg(file).subscribe( data => {
+        if (data) {
+          this.employee.controls['avatar'].setValue(data[0]);
+          this.avt = data[0];
+        } else {
+          this.snackbar.openSnackbar('Tải ảnh thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        }
+        upload.unsubscribe();
+      }, (error) => {
+        this.snackbar.openSnackbar('Tải ảnh thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        upload.unsubscribe();
+      })
     }
   }
 

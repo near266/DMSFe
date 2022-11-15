@@ -2,14 +2,15 @@
   <app-detail-return-info></app-detail-return-info>
   <!-- Sản phẩm đặt hàng -->
   <div>
-    <button class=" py-2"><span class="text-base text-gray-800 underline-offset-2 underline">Sản phẩm đặt
+    <button class=" py-2"><span class="text-base font-semibold text-gray-800 underline-offset-2 underline">Sản phẩm đặt
         hàng</span></button>
     <app-detail-return-table-edit *ngIf="currentMode === ComponentModeList.EDIT"></app-detail-return-table-edit>
     <app-detail-return-table *ngIf="currentMode === ComponentModeList.VIEW"></app-detail-return-table>
   </div>
   <!-- Sản phẩm khuyến mại -->
   <div class="mt-12">
-    <button class=" py-2"><span class="text-base text-gray-800 underline-offset-2 underline">Sản phẩm khuyến
+    <button class=" py-2"><span class="text-base font-semibold text-gray-800 underline-offset-2 underline">Sản phẩm
+        khuyến
         mãi</span></button>
     <app-detail-return-table-promotion-edit *ngIf="currentMode === ComponentModeList.EDIT">
     </app-detail-return-table-promotion-edit>

@@ -1,5 +1,5 @@
 <table *ngIf="!(_tableLoading$ | async)" id="product"
-  class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
+  class="min-w-full font-semibold border-spacing-0 border-separate bg-gray-100 z-10">
   <thead class="h-10  border-gray-300 ">
     <tr>
       <th scope="col"
@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr (click)="openUpdateProduct(product)" class="h-14 w-fit text-xs"
+    <tr (click)="openUpdateProduct(product)" class="h-14 w-fit text-sm"
       *ngFor="let product of products | paginate: { itemsPerPage: 30, currentPage,totalItems };let i =index; let o=odd; let e=even;"
       [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
       <td class="space-x-2 min-w-[56px] border-x border-solid align-midde h-full pl-2 "><input class="inline"

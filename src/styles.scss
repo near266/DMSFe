@@ -14,6 +14,14 @@ body {
 .ng-select .ng-select-container.ng-appearance-outline {
     min-height: 52px;
 }
+.mat-form-field {
+    font-weight: 500;
+    font-size: 14px;
+    label {
+        font-size: 14px;
+    }
+}
+
 .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
     padding: 8px;
 }
@@ -180,15 +188,15 @@ tree-node-expander .toggle-children-wrapper {
 }
 
 .custom-mat-dialog-container {
-  .mat-dialog-container {
-    padding: 0;
-    overflow: visible;
-  }
-  .mat-card-actions {
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-  }
+    .mat-dialog-container {
+        padding: 0;
+        overflow: visible;
+    }
+    .mat-card-actions {
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+    }
 }
 
 .tree-children::after {
