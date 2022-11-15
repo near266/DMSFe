@@ -2,6 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SaleHeader } from '../../models/headers';
+import { SaleDetail } from '../../models/saleDetail';
 import { SaleLogicService } from '../../services/saleLogic.service';
 
 @Component({
@@ -40,10 +41,17 @@ export class TableComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.roleMain = localStorage.getItem('roleMain')!;
+        this.clearDataInDetailOrderSource();
+    }
+
+    clearDataInDetailOrderSource() {
+        this.saleLogicService.clearDataInDetailOrderSoure();
     }
 
     ngAfterViewInit(): void {
-        this.search(this.defaultBody, []);
+        setTimeout(() => {
+            this.search(this.defaultBody, []);
+        }, 0);
     }
 
     search(body: any, listIdSelected: string[]) {

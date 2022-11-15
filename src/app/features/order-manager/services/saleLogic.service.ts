@@ -5,6 +5,7 @@ import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.servic
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { RootSaleReceipt, SaleOrder } from '../models/sale';
+import { SaleDetail } from '../models/saleDetail';
 import { FormatSaleService } from './formatSale.service';
 
 @Injectable({
@@ -16,12 +17,14 @@ export class SaleLogicService {
     private listDataSource = new BehaviorSubject<any>('');
     private idNavigateSource = new BehaviorSubject<string>('');
     private isSuccessArchivedSoure = new BehaviorSubject<boolean>(false);
+    private detailOrderSoure = new BehaviorSubject<SaleDetail>(new SaleDetail());
 
     total$ = this.totalSource.asObservable();
     isLoading$ = this.isLoadingSource.asObservable();
     listData$ = this.listDataSource.asObservable();
     id$ = this.idNavigateSource.asObservable();
     isSucessArchived$ = this.isSuccessArchivedSoure.asObservable();
+    detailOrder$ = this.detailOrderSoure.asObservable();
 
     constructor(
         private saleReceiptService: SaleReceiptService,
@@ -30,6 +33,10 @@ export class SaleLogicService {
         private confirmService: ConfirmDialogService,
         private snackbar: SnackbarService,
     ) {}
+
+    clearDataInDetailOrderSoure() {
+        this.detailOrderSoure.next(new SaleDetail());
+    }
 
     searchAndFormatData(body: any, listIdSelected: string[]) {
         this.isLoadingSource.next(true);
@@ -61,7 +68,7 @@ export class SaleLogicService {
         // this.idNavigateSource.next(id);
         // this.router.navigate(['/optimalOrder/sale/detail']);
         localStorage.setItem('receiptOrderId', id);
-        this.router.navigate(['/ordersale/detail/viewEdit']);
+        this.router.navigate(['/order/sale/detail/viewEdit']);
     }
 
     filterDate(
@@ -218,5 +225,11 @@ export class SaleLogicService {
                     );
                 }
             });
+    }
+
+    getDetail(id: string) {
+        this.saleReceiptService.searchReceiptById(id).subscribe((data: SaleDetail) => {
+            this.detailOrderSoure.next(data);
+        });
     }
 }

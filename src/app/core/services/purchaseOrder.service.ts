@@ -223,6 +223,10 @@ export class PurchaseOrderService {
             .pipe(map((reponse: any) => reponse));
     }
 
+    getRouteById(id: string): Observable<any> {
+        return this.http.get(this.api_gateway_url + '/Route/id?Id=' + id).pipe(map((reponse: any) => reponse));
+    }
+
     // group
     getAllGroup(type: number): Observable<any> {
         return this.http.get(this.id_url_gw + '/GetAllGroupByType?type=' + type).pipe(map((reponse: any) => reponse));

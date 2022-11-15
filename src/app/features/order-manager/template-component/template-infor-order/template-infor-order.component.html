@@ -14,7 +14,7 @@
     </div>
     <mat-divider></mat-divider>
 </div> -->
-<form action="" [formGroup]="form">
+<form [formGroup]="form">
     <div class="p-3">
         <div style="font-size: 12px">
             <div class="flex gap-x-6 justify-between">
@@ -75,8 +75,8 @@
                                 placeholderLabel="Tìm kiếm"
                                 noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
                         </mat-option>
-                        <mat-option *ngFor="let employee of listEmployee$ | async" [value]="employee.id">
-                            {{ employee.employeeName }}
+                        <mat-option *ngFor="let employee of listEmployee$ | async" [value]="employee?.id">
+                            {{ employee?.employeeCode }} - {{ employee?.employeeName }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -89,8 +89,8 @@
                                 placeholderLabel="Tìm kiếm"
                                 noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
                         </mat-option>
-                        <mat-option *ngFor="let route of listRoute$ | async" [value]="route.id">
-                            {{ route.routeName }}
+                        <mat-option *ngFor="let route of listRoute$ | async" [value]="route?.id">
+                            {{ route?.routeName }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -103,8 +103,8 @@
                                 placeholderLabel="Tìm kiếm"
                                 noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
                         </mat-option>
-                        <mat-option *ngFor="let employee of listEmployee$ | async" [value]="employee.id">
-                            {{ employee.employeeName }}
+                        <mat-option *ngFor="let employee of listSaleEmployee$ | async" [value]="employee?.id">
+                            {{ employee?.employeeCode }} - {{ employee?.employeeName }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -120,8 +120,8 @@
                                 noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
                         </mat-option>
                         <mat-option [value]="0">--Chọn khách hàng--</mat-option>
-                        <mat-option *ngFor="let customer of listCus$ | async" [value]="customer.id">
-                            {{ customer.customerCode }} - {{ customer.customerName }}
+                        <mat-option *ngFor="let customer of listCus$ | async" [value]="customer?.id">
+                            {{ customer?.customerCode }} - {{ customer?.customerName }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>

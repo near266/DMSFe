@@ -1,11 +1,13 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import moment from 'moment';
+import { Observable } from 'rxjs';
 import { Config } from 'src/app/core/model/Config';
 import { AreaService } from 'src/app/core/services/area.service';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { Area } from '../../models/area';
+import { Product } from '../../models/product';
 import { CommonLogicService } from '../../services/commonLogic.service';
 
 @Component({
@@ -18,7 +20,7 @@ export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewIni
     @Input() body: any;
     @Output() body$ = new EventEmitter<Object>();
 
-    listSearchedProduct: any[] = [];
+    listProductActive$: Observable<Product[]> = this.commonLogicService.listProductActive$;
     searchText: string = '';
     isShowEmployeeTree: boolean = false;
     isSelectMenu: boolean = false;
@@ -383,7 +385,7 @@ export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewIni
 
     searchProduct() {
         this.productFilterCtrl.valueChanges.subscribe((data) => {
-            this.listSearchedProduct = this.commonLogicService.searchListProductActived(data);
+            this.commonLogicService.searchListProductActived(data);
         });
     }
 

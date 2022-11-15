@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { PurchaseDetail } from '../../../models/purchaseDetail';
 import { CommonLogicService } from '../../../services/commonLogic.service';
 import { PurchaseLogicService } from '../../../services/purchaseLogic.service';
-import { Option } from '../../../template-component/template-infor-order/template-infor-order.component';
+import { DataInput, Option } from '../../../template-component/template-infor-order/template-infor-order.component';
 
 export const StatusList = [
     {
@@ -48,7 +48,7 @@ export class DetailPurchaseComponent implements OnInit, AfterViewInit {
     id: string;
     detail$: Observable<PurchaseDetail> = this.purchaseLogicService.detail$;
     isEdit$: Observable<boolean> = this.commonLogicService.isEdit$;
-    detailPassToInput: any;
+    detailPassToInput: DataInput;
 
     constructor(
         private purchaseLogicService: PurchaseLogicService,

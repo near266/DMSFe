@@ -1,8 +1,7 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { PurchaseDetail } from '../../models/purchaseDetail';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { SaleDetail } from '../../models/saleDetail';
 import { CommonLogicService } from '../../services/commonLogic.service';
-import { PurchaseLogicService } from '../../services/purchaseLogic.service';
+import { SaleLogicService } from '../../services/saleLogic.service';
 
 @Component({
     selector: 'app-detail-container',
@@ -11,23 +10,26 @@ import { PurchaseLogicService } from '../../services/purchaseLogic.service';
 })
 export class DetailContainerComponent implements OnInit, AfterViewInit {
     roleMain: string = 'member';
-    isEdit: boolean = false;
     statusNow: number;
+    isEdit: boolean = false;
+    id: string = '';
 
-    constructor(private commonLogicService: CommonLogicService, private purchaseLogicService: PurchaseLogicService) {}
+    constructor(private saleLogicService: SaleLogicService, private commonLogicService: CommonLogicService) {}
 
     ngOnInit(): void {
         this.roleMain = localStorage.getItem('roleMain')!;
-        this.getStatusNow();
     }
-
-    getStatusNow() {
-        this.purchaseLogicService.detail$.subscribe((data: PurchaseDetail) => {
-            this.statusNow = data.status;
+    ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.getStatusNow();
         });
     }
 
-    ngAfterViewInit(): void {}
+    getStatusNow() {
+        this.saleLogicService.detailOrder$.subscribe((data: SaleDetail) => {
+            this.statusNow = data.status;
+        });
+    }
 
     changeType() {
         this.isEdit = !this.isEdit;

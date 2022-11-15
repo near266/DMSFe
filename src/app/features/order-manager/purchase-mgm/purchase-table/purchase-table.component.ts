@@ -40,10 +40,18 @@ export class PurchaseTableComponent implements OnInit {
 
     constructor(private purchaseLogicService: PurchaseLogicService, private async: AsyncPipe) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.clearDataInDetailOrderSource();
+    }
+
+    clearDataInDetailOrderSource() {
+        this.purchaseLogicService.clearDataInDetailOrderSource();
+    }
 
     ngAfterViewInit(): void {
-        this.search(this.defaultBody, []);
+        setTimeout(() => {
+            this.search(this.defaultBody, []);
+        }, 0);
     }
 
     search(body: any, listIdSelected: string[]) {

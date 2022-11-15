@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { GroupModel } from '../models/group';
-import { Product, ProductSerch } from '../models/product';
+import { Product, ProductSearch } from '../models/product';
 
 @Injectable({
     providedIn: 'root',
@@ -12,15 +12,19 @@ export class CommonLogicService {
 
     private listRouteSource = new BehaviorSubject<any[]>([]);
     private listEmployeeSource = new BehaviorSubject<any[]>([]);
+    private listSaleEmployeeSource = new BehaviorSubject<any[]>([]);
     private listCusSource = new BehaviorSubject<any[]>([]);
     private listGroupSource = new BehaviorSubject<GroupModel[]>([]);
     private isEditSource = new BehaviorSubject<boolean>(false);
+    private listProductActiveSource = new BehaviorSubject<Product[]>([]);
 
     listRoute$ = this.listRouteSource.asObservable();
     listEmployee$ = this.listEmployeeSource.asObservable();
+    listSaleEmployee$ = this.listSaleEmployeeSource.asObservable();
     listCus$ = this.listCusSource.asObservable();
     listGroup$ = this.listGroupSource.asObservable();
     isEdit$ = this.isEditSource.asObservable();
+    listProductActive$ = this.listProductActiveSource.asObservable();
 
     constructor(private purchaseOrder: PurchaseOrderService) {}
 
@@ -34,10 +38,9 @@ export class CommonLogicService {
             page: 1,
             pageSize: 3,
         };
-        this.purchaseOrder.getListProductActived(body).subscribe((data: ProductSerch) => {
-            this.listSearchedProduct = data?.data;
+        this.purchaseOrder.getListProductActived(body).subscribe((data: ProductSearch) => {
+            this.listProductActiveSource.next(data.data);
         });
-        return this.listSearchedProduct;
     }
 
     getListRoute(roleMain: string) {
@@ -58,6 +61,22 @@ export class CommonLogicService {
             this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
                 if (data) {
                     this.listEmployeeSource.next(data);
+                }
+            });
+        }
+    }
+
+    // gọi tùy theo role
+    getListSaleEmployee(roleMain: string) {
+        let idDefault = this.getIdDefault();
+        if (roleMain != 'member') {
+            this.purchaseOrder.getAllEmployees('', 1, 30).subscribe((data) => {
+                this.listSaleEmployeeSource.next(data.data);
+            });
+        } else if (roleMain === 'member') {
+            this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
+                if (data) {
+                    this.listSaleEmployeeSource.next(data);
                 }
             });
         }
@@ -104,11 +123,25 @@ export class CommonLogicService {
         return JSON.parse(jsonPayload);
     }
 
+    changeTypeEdit(value: boolean) {
+        this.isEditSource.next(value);
+    }
+
     pushCusToListCus(id: string) {
         this.purchaseOrder.getCustomerById(id).subscribe((data) => this.listCusSource.next([data]));
     }
 
-    changeTypeEdit(value: boolean) {
-        this.isEditSource.next(value);
+    pushOrderEmployeeToListEmployee(orderEmployeeId: string) {
+        this.purchaseOrder.getEmployeeById(orderEmployeeId).subscribe((data) => this.listEmployeeSource.next([data]));
+    }
+
+    pushSaleEmployeeToListEmployee(saleEmployeeId: string) {
+        this.purchaseOrder
+            .getEmployeeById(saleEmployeeId)
+            .subscribe((data) => this.listSaleEmployeeSource.next([data]));
+    }
+
+    pushRouteToListRoute(routeId: string) {
+        this.purchaseOrder.getRouteById(routeId).subscribe((data) => this.listRouteSource.next([data]));
     }
 }

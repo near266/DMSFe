@@ -1,18 +1,7 @@
-import { ifStmt } from '@angular/compiler/src/output/output_ast';
-import {
-    AfterViewChecked,
-    AfterViewInit,
-    Component,
-    DoCheck,
-    Input,
-    OnChanges,
-    OnInit,
-    SimpleChanges,
-} from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Group } from 'src/app/core/model/PurchaseOrder';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { GroupModel } from '../../models/group';
 import { CommonLogicService } from '../../services/commonLogic.service';
@@ -30,6 +19,23 @@ export class Status {
     name: string;
 }
 
+export class DataInput {
+    code!: string;
+    status!: number;
+    orderDate?: string;
+    saleDate?: string;
+    deliveryDate?: string;
+    groupId?: string;
+    orderEmployeeId?: string;
+    saleEmployee?: string;
+    routeId?: string;
+    customerId?: string;
+    customerName?: string;
+    phone?: string;
+    address?: string;
+    description?: string;
+}
+
 @Component({
     selector: 'app-template-infor-order',
     templateUrl: './template-infor-order.component.html',
@@ -39,6 +45,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     @Input() option: Option;
     @Input() data: any;
     @Input() isEdit: boolean = false;
+    @Input() isSave: boolean = false;
 
     form: FormGroup;
     roleMain: string = 'member';
@@ -47,6 +54,8 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     cusCtrl: FormControl = new FormControl();
 
     listEmployee$: Observable<any[]> = this.commonLogicService.listEmployee$;
+    listSaleEmployee$: Observable<any[]> = this.commonLogicService.listSaleEmployee$;
+
     listRoute$: Observable<any[]> = this.commonLogicService.listRoute$;
     listCus$: Observable<any[]> = this.commonLogicService.listCus$;
     listGroup$: Observable<GroupModel[]> = this.commonLogicService.listGroup$;
@@ -67,6 +76,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         this.getListGroup();
         this.geListCus();
         this.getListEmployee();
+        this.getListSaleEmployee();
         this.getListRoute();
     }
 
@@ -74,7 +84,6 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         if (this.option.type === 'Detail' && this.data) {
             this.patchValue();
         }
-        console.log(this.isEdit);
     }
 
     initializationForm() {
@@ -98,13 +107,18 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
 
     patchValue() {
         this.pushCusToListCus();
+        this.pushOrderEmployeeToListEmployee();
+        this.pushSaleEmployeeToListEmployee();
+        this.pushRouteToListRoute();
         this.form.patchValue({
             code: this.data.code,
             status: this.data.status,
             orderDate: this.data.orderDate,
             deliveryDate: this.data.deliveryDate,
+            saleDate: this.data.saleDate,
             groupId: this.data.groupId,
             orderEmployeeId: this.data.orderEmployeeId,
+            saleEmployee: this.data.saleEmployee,
             routeId: this.data.routeId,
             customerId: this.data.customerId,
             customerName: this.data.customerName,
@@ -126,6 +140,10 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         this.commonLogicService.getListEmployee(this.roleMain);
     }
 
+    getListSaleEmployee() {
+        this.commonLogicService.getListSaleEmployee(this.roleMain);
+    }
+
     getListRoute() {
         this.commonLogicService.getListRoute(this.roleMain);
     }
@@ -142,6 +160,24 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     pushCusToListCus() {
         if (this.data && this.data.customerId) {
             this.commonLogicService.pushCusToListCus(this.data.customerId);
+        }
+    }
+
+    pushSaleEmployeeToListEmployee() {
+        if (this.data && this.data.saleEmployee) {
+            this.commonLogicService.pushSaleEmployeeToListEmployee(this.data.saleEmployee);
+        }
+    }
+
+    pushOrderEmployeeToListEmployee() {
+        if (this.data && this.data.orderEmployeeId) {
+            this.commonLogicService.pushOrderEmployeeToListEmployee(this.data.orderEmployeeId);
+        }
+    }
+
+    pushRouteToListRoute() {
+        if (this.data && this.data.routeId) {
+            this.commonLogicService.pushRouteToListRoute(this.data.routeId);
         }
     }
 }

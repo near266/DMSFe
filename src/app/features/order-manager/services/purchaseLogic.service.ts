@@ -33,6 +33,11 @@ export class PurchaseLogicService {
         private snackbar: SnackbarService,
         private confirmService: ConfirmDialogService,
     ) {}
+
+    clearDataInDetailOrderSource() {
+        this.detailSource.next(new PurchaseDetail());
+    }
+
     searchAndFormatData(body: any, listIdSelected: string[]) {
         this.isLoadingSource.next(true);
         this.purchaseService.search(body).subscribe((data: RootPurchases) => {
