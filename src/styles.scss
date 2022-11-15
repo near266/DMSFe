@@ -14,6 +14,9 @@ body {
 .ng-select .ng-select-container.ng-appearance-outline {
     min-height: 44px;
 }
+.ng-select .ng-select-container .ng-value-container {
+    padding: 0;
+}
 .mat-form-field {
     font-weight: 500;
     font-size: 14px;
