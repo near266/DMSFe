@@ -47,7 +47,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of productsInput;let i =index; let o=odd; let e=even;"
-        [ngClass]="{ 'bg-gray-100': o, 'bg-white': e } " class="h-14 w-fit text-xs">
+        [ngClass]="{ 'bg-gray-100': o, 'bg-white': e } " class="h-14 w-fit text-sm">
         <td class="space-x-2 border-x border-solid align-midde h-full pl-2">{{ i + 1 }}</td>
         <td class="border-x  border-solid align-middle px-2 text-center">{{item.sku}}</td>
         <td class="border-x  border-solid align-middle px-2 text-center">{{item.productName}}</td>
@@ -94,8 +94,16 @@
 
           </div>
         </td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[120px] text-center">
-          {{item.unitPrice | currency: 'VND'}}</td>
+        <td class="border-x max-w-[120px]  border-solid align-middle px-2  text-center">
+          <div class="flex">
+            <mat-form-field appearance="outline">
+              <input matInput currencyMask
+                [options]="{ suffix: 'đ', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                [ngModel]="item.unitPrice"
+                (ngModelChange)="item.unitPrice=$event;updateItemTotalPrice(item);updateDiscountRate(item);" />
+            </mat-form-field>
+          </div>
+        </td>
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
           {{item.totalPrice | currency: 'VND'}}
         </td>

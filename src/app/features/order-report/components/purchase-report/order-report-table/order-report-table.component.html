@@ -1,0 +1,6 @@
+<app-template-table
+    [headers]="tableHeader"
+    [listData]="listData$ | async"
+    (pageChange$)="handlePageChange($event)"
+    [total]="total$ | async"
+    (emitId$)="handleEmitId($event)"></app-template-table>

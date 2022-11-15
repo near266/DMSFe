@@ -1,4 +1,4 @@
 export class stickyRows {
-    header: string;
-    content: string;
+    header?: string;
+    content?: string | number;
 }

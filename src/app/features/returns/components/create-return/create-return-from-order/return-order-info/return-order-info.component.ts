@@ -269,8 +269,9 @@ export class ReturnOrderInfoComponent implements OnInit {
                                 totalDiscountProduct: this.returnDetailsService.discountAmount$.getValue(),
                                 totalPayment:
                                     this.returnDetailsService.totalPrice$.getValue() -
-                                    this.returnDetailsService.discountAmount$.getValue(),
-                                tradeDiscount: 0,
+                                    this.returnDetailsService.discountAmount$.getValue() -
+                                    this.returnDetailsService.tradeDiscount$.getValue(),
+                                tradeDiscount: this.returnDetailsService.tradeDiscount$.getValue() || 0,
                                 status: this.form.value.status || 1,
                             };
                             delete form.customerCode;
@@ -279,6 +280,7 @@ export class ReturnOrderInfoComponent implements OnInit {
                             delete form.orderEmployeeName;
                             delete form.saleCode;
                             this.returnFormService.addNewReturn(form);
+                            // console.log(form);
                         }
                         // console.log(this.form.getRawValue());
                     }

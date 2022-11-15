@@ -97,7 +97,7 @@ export class MenuCollapseTreeComponent implements OnInit {
             },
           };
           this.options = {
-            useCheckbox: false,
+            useCheckbox: true,
             animateExpand: false,
             actionMapping: this.action,
             getChildren: this.getChildren.bind(this),

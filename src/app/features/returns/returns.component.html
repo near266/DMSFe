@@ -19,7 +19,7 @@
             <span class="text-xl font-medium">Danh sách trả hàng ({{totalReturns$ |async}}) </span>
             <div style="font-size: 12px" class="flex items-center ">
               <mat-form-field appearance="outline" class="mr-2 " [formGroup]="dateSearchForm">
-                <mat-label>Khoảng thời gian</mat-label>
+                <mat-label class="font-bold">Khoảng thời gian</mat-label>
                 <mat-date-range-input [rangePicker]="picker">
                   <input matStartDate placeholder="Start date" formControlName="fromDate" />
                   <input matEndDate placeholder="End date" formControlName="toDate" />

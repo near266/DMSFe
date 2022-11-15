@@ -2,14 +2,15 @@
   <app-detail-return-info></app-detail-return-info>
   <!-- Sản phẩm đặt hàng -->
   <div>
-    <button class=" py-2"><span class="text-base text-gray-800 underline-offset-2 underline">Sản phẩm đặt
+    <button class=" py-2"><span class="text-base font-semibold text-gray-800 underline-offset-2 underline">Sản phẩm đặt
         hàng</span></button>
     <app-detail-return-table-edit *ngIf="currentMode === ComponentModeList.EDIT"></app-detail-return-table-edit>
     <app-detail-return-table *ngIf="currentMode === ComponentModeList.VIEW"></app-detail-return-table>
   </div>
   <!-- Sản phẩm khuyến mại -->
   <div class="mt-12">
-    <button class=" py-2"><span class="text-base text-gray-800 underline-offset-2 underline">Sản phẩm khuyến
+    <button class=" py-2"><span class="text-base font-semibold text-gray-800 underline-offset-2 underline">Sản phẩm
+        khuyến
         mãi</span></button>
     <app-detail-return-table-promotion-edit *ngIf="currentMode === ComponentModeList.EDIT">
     </app-detail-return-table-promotion-edit>
@@ -20,6 +21,7 @@
     <div>
       <div class="flex justify-between">
         <span class="font-medium w-1/3 py-2">Bằng chữ: {{textMoney}} {{textMoney?'đồng':''}}</span>
+
         <span class="font-medium w-1/3 py-2">Tổng tiền hàng: {{totalPrice | currency: 'VND'}}</span>
       </div>
       <div class="flex justify-between">
@@ -32,11 +34,15 @@
       </div>
       <div class="flex justify-between">
         <span class="font-medium w-1/3 py-2 text-green-700">Hình thức thanh toán:</span>
-        <span class="font-medium w-1/3 py-2">Chiết khấu đơn hàng: {{discountAmount | currency: 'VND'}}</span>
+        <span class="font-medium w-1/3 py-2">Chiết khấu sản phẩm: {{discountAmount | currency: 'VND'}}</span>
       </div>
-      <div class="flex justify-between">
-        <span class="font-medium w-1/3 py-2"></span>
-        <span class="font-medium w-1/3 py-2">Phải thanh toán:{{totalPrice - discountAmount | currency: 'VND'}} </span>
+      <div class="flex justify-end">
+        <span class="font-medium w-1/3 py-2">Chiết khấu đơn hàng: {{tradeDiscount | currency: 'VND'}}</span>
+      </div>
+
+      <div class="flex justify-end ">
+        <span class="font-medium w-1/3 py-2">Phải thanh
+          toán:{{totalPrice - discountAmount-tradeDiscount | currency: 'VND'}} </span>
       </div>
     </div>
   </div>

@@ -18,6 +18,5 @@ export class TemplatePaginationComponent implements OnInit {
     onTableDataChange(event: any) {
         this.page = event;
         this.pageCurent$.emit(this.page);
-        console.log(this.page);
     }
 }

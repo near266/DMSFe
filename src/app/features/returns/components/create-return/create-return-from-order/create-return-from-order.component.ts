@@ -35,6 +35,9 @@ export class CreateReturnFromOrderComponent implements OnInit {
         const ins = new readMoney(this.discountAmount);
         this.textMoney = ins.doc(this.totalPrice - this.discountAmount - this.tradeDiscount);
     }
+    updateTradeDiscount() {
+        this.returnOrderService.tradeDiscount$.next(this.tradeDiscount);
+    }
 
     submitAddReturnForm() {
         this.returnOrderService.submitFormInfo$.next(true);

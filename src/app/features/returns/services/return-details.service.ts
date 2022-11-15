@@ -17,6 +17,7 @@ export class ReturnDetailsService {
     currentMode$: BehaviorSubject<ComponentMode> = new BehaviorSubject<ComponentMode>(ComponentMode.VIEW);
     totalPrice$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     discountAmount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    tradeDiscount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     promotionListProduct$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     initialListPromotionProduct: any[] = [];
 
@@ -36,6 +37,7 @@ export class ReturnDetailsService {
                 data.customerCode = data.customer?.customerCode;
                 this.returnDetails$.next(data);
                 this.returnListProducts$.next(data.listProduct);
+                this.tradeDiscount$.next(data.tradeDiscount);
                 this.promotionListProduct$.next(data.listPromotionProduct);
                 this.initialListProduct = JSON.parse(JSON.stringify(data.listProduct));
                 this.initialListPromotionProduct = JSON.parse(JSON.stringify(data.listPromotionProduct));

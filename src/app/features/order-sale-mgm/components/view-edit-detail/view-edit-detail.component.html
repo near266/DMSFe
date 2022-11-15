@@ -67,14 +67,14 @@
                 <i class="fa-solid fa-check text-white mr-2"></i>
                 <span class="text-white">Lưu</span>
             </button>
-            <button
+            <!-- <button
                 *ngIf="type === 'Edit'"
                 (click)="changeType('View')"
                 class="button-success-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-circle-check text-white mr-2"></i>
                 <span class="text-white">Lưu & Đóng</span>
-            </button>
-            <button [routerLink]="['/ordersale']" class="button-cancel-sm flex items-center justify-between mr-2">
+            </button> -->
+            <button [routerLink]="['/order/sale']" class="button-cancel-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-ban text-white mr-2"></i>
                 <span class="text-white">Đóng</span>
             </button>
