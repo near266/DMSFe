@@ -70,6 +70,7 @@ export class ViewEditDetailReturnComponent implements OnInit {
             totalPayment:
                 this.returnDetailsService.totalPrice$.getValue() - this.returnDetailsService.discountAmount$.getValue(),
             discountAmount: this.returnDetailsService.discountAmount$.getValue(),
+            tradeDiscount: this.returnDetailsService.tradeDiscount$.getValue(),
             status,
         });
     }

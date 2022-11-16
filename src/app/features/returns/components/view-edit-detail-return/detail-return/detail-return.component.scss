@@ -25,3 +25,9 @@
     padding-top: 1.5em;
     top: -1.2em;
 }
+:host::ng-deep .mat-form-field-infix {
+    padding: 1em 0;
+}
+:host ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 8px !important;
+}

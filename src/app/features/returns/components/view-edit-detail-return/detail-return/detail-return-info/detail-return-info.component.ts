@@ -288,7 +288,7 @@ export class DetailReturnInfoComponent implements OnInit {
                             returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
                             totalOfVAT: 0,
                             totalDiscountProduct: value.discountAmount,
-                            tradeDiscount: 0,
+                            tradeDiscount: value.tradeDiscount,
                             status: value?.status || this.form.value.status,
                             totalPayment: value.totalPayment,
                         };
