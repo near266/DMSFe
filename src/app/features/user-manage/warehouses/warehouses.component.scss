@@ -6,7 +6,7 @@
         overflow-x: auto;
         margin-top: 8px;
         padding-bottom: 20px;
-        height: calc(100vh - 200px);
+        height: calc(100vh - 180px);
     }
 
     // .width-vw-60 {
@@ -68,7 +68,7 @@
     }
 
     .custom-td {
-        @apply space-x-2 border-x border-solid pl-2;
+        @apply space-x-2 border-x border-solid pl-2 text-sm font-medium;
     }
   }
 
