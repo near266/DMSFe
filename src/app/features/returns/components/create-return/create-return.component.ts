@@ -8,19 +8,20 @@ import { readMoney } from 'src/app/core/shared/utils/readMoney';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { ReturnFormService } from '../../services/return-form.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { CreateReturnFacade } from './create-return.facade';
 
 @Component({
     selector: 'app-create-return',
     templateUrl: './create-return.component.html',
     styleUrls: ['./create-return.component.scss'],
+    providers: [CreateReturnFacade],
 })
 export class CreateReturnComponent implements OnInit {
     @ViewChild('Product') ngSelectProductComponent: NgSelectComponent;
     @ViewChild('Promotion') ngSelectPromotionComponent: NgSelectComponent;
-    formValues: any;
-    productsInput: any;
+    subscription: Subscription[] = [];
     statusList = [
         {
             value: 1,
@@ -31,63 +32,50 @@ export class CreateReturnComponent implements OnInit {
             name: 'Đã duyệt',
         },
     ];
-    createForm: FormGroup;
-    listCustomer: any;
     products$: Observable<any[]>;
-    totalPrice: number;
+    totalPrice$: Observable<number>;
+    totalDiscountProduct$: Observable<number>;
+    tradeDiscount$: Observable<number>;
+    tradeDiscount: number;
     textMoney: string;
-    discountAmount: number;
 
     // TODO : add search product, add product to products$, both
-    selectedCar: number;
 
-    cars = [
-        { id: 1, name: 'Volvo' },
-        { id: 2, name: 'Saab' },
-        { id: 3, name: 'Opel' },
-        { id: 4, name: 'Audi' },
-    ];
     constructor(
-        private dataService: DataService,
         private dialog: MatDialog,
-        private fb: FormBuilder,
+        private facade: CreateReturnFacade,
         private returnFormService: ReturnFormService,
-    ) {}
+    ) {
+        this.totalPrice$ = this.facade.totalPrice$;
+        this.totalDiscountProduct$ = this.facade.totalDiscountProduct$;
+        this.tradeDiscount$ = this.facade.tradeDiscount$;
+    }
 
     ngOnInit(): void {
-        this.returnFormService.totalPrice$.subscribe((data) => {
-            this.totalPrice = data;
-            const ins = new readMoney(data);
-            this.textMoney = ins.doc(data - this.discountAmount);
-        });
-        this.returnFormService.discountAmount$.subscribe((data) => {
-            this.discountAmount = data;
-            const ins = new readMoney(data);
-            this.textMoney = ins.doc(this.totalPrice - data);
-        });
-
         this.products$ = this.returnFormService.getAllProducts();
+        this.calculateTotalPay();
+    }
+    ngOnDestroy() {
+        this.subscription.forEach((sub) => sub.unsubscribe());
     }
     submitForms(): void {
         this.returnFormService.submitForms();
     }
-    handleChangeSelect(event: any): void {
+
+    handleChangeSelect(event: Product): void {
         if (event) {
-            this.returnFormService.addProductToProductList(event);
+            this.facade.addProductsToTable([event]);
         }
         this.ngSelectProductComponent.handleClearClick();
     }
     handlePromotionChangeSelect(event: any): void {
         if (event) {
-            this.returnFormService.addProductToPromotionList(event);
+            this.facade.addPromotionProductsToTable([event]);
         }
         this.ngSelectPromotionComponent.handleClearClick();
     }
     stopPropagation(e: any) {
         e.stopPropagation();
-    }
-    passingDataFrom() {
-        this.dataService.openProductList('create', 'Đây là tạo sản phẩm');
     }
     openDialogProduct(type: string) {
         const dialogRef = this.dialog
@@ -99,37 +87,23 @@ export class CreateReturnComponent implements OnInit {
                 panelClass: 'full-screen-modal',
             })
             .afterClosed()
-            .subscribe((data) => {
+            .subscribe((data: Product[]) => {
                 if (type === 'products') {
-                    this.returnFormService.products$.next(this.returnFormService.products$.value.concat(data));
+                    this.facade.addProductsToTable(data);
                 } else {
-                    this.returnFormService.promotionProducts$.next(
-                        this.returnFormService.promotionProducts$.value.concat(data),
-                    );
+                    this.facade.addPromotionProductsToTable(data);
                 }
             });
     }
-
-    setInfoCustomer(id: string) {
-        let customer = this.listCustomer.filter((customer: any) => {
-            return customer.id === id;
-        })[0];
-        console.log(customer);
-        this.createForm.patchValue({
-            customer: {
-                customerId: customer.id,
-                customerName: [null],
-                phone: [null],
-                address: [null],
-            },
-        });
-        this.createForm.patchValue({
-            customer: {
-                customerId: customer.id,
-                customerName: customer.customerName,
-                phone: customer.phone,
-                address: customer.address,
-            },
-        });
+    calculateTotalPay() {
+        const ins = new readMoney(123);
+        this.textMoney = ins.doc(
+            (this.facade.getTotalPrice || 0) -
+                (this.facade.getTotalDiscountProduct || 0) -
+                (this.facade.getTradeDiscount || 0),
+        );
+    }
+    updateTradeDiscount() {
+        this.facade.updateTradeDiscount(this.tradeDiscount);
     }
 }

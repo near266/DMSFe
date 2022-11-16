@@ -2,6 +2,7 @@ import { RetailUnit } from 'src/app/core/model/PurchaseOrder';
 import { warehouses } from './../../../core/data/Warehousers';
 export interface Product {
     id?: string;
+    index?: string | number;
     status?: boolean;
     brandId?: string;
     sku?: string;
