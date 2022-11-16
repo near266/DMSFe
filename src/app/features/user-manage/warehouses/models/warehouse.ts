@@ -7,7 +7,7 @@ export interface Warehouse {
   description: string;
   responsibleAccountant: string;
   employee?: Employee;
-  unitTreeGroupId?: UnitTreeGroup;
+  unitTreeGroup?: UnitTreeGroup;
   createdBy: string;
   createdDate: string;
   lastModifiedBy: string;
