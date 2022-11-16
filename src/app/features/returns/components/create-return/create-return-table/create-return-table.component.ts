@@ -61,8 +61,8 @@ export class CreateReturnTableComponent implements OnInit {
                     });
                     this.returnFormService.submitPromotionForm$.next({
                         listProduct: requiredFields,
+                        tradeDiscount: this.facade.getTradeDiscount,
                         totalAmount: this.facade.getTotalPrice,
-                        totalDiscount: this.facade.getTradeDiscount,
                         totalDiscountProduct: this.facade.getTotalDiscountProduct,
                         totalOfVAT: 0,
                         totalPayment:
@@ -70,8 +70,6 @@ export class CreateReturnTableComponent implements OnInit {
                             this.facade.getTotalDiscountProduct -
                             this.facade.getTradeDiscount,
                     });
-                    this.returnFormService.totalPrice$.next(0);
-                    this.returnFormService.discountAmount$.next(0);
                 } else {
                     this.snackbarService.openSnackbar(
                         'Dữ liệu sản phẩm không hợp lệ',

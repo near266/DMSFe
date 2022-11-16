@@ -39,12 +39,14 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
         this.subscriptions.push(
             this.returnDetailsService.updateReturnProducts$.subscribe((res) => {
                 this.returnDetailsService.returnListProducts$.next(this.productsInput);
+                console.log(this.returnDetailsService.checkValidListProducts());
                 if (res && this.returnDetailsService.checkValidListProducts()) {
                     this.returnDetailsService.compareReturnListProductsWithInitialListProductAndUpdate().subscribe({
                         next: (res) => {
                             this.returnDetailsService.updateReturnInfo$.next({
                                 totalPayment: this.returnDetailsService.totalPrice$.getValue(),
                                 discountAmount: this.returnDetailsService.discountAmount$.getValue(),
+                                tradeDiscount: this.returnDetailsService.tradeDiscount$.getValue(),
                             });
                         },
                         error: (err) => {
@@ -60,8 +62,7 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
             this.productDialogService.getAllUnits().subscribe((data) => {
                 this.unitOptions = data;
             }),
-        );
-        this.subscriptions.push(
+
             this.productDialogService.getAllWarehouses().subscribe((data) => {
                 this.warehouseOptions = data;
             }),

@@ -8,7 +8,7 @@ import { readMoney } from 'src/app/core/shared/utils/readMoney';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { ReturnFormService } from '../../services/return-form.service';
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription, tap } from 'rxjs';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { CreateReturnFacade } from './create-return.facade';
 
@@ -46,14 +46,25 @@ export class CreateReturnComponent implements OnInit {
         private facade: CreateReturnFacade,
         private returnFormService: ReturnFormService,
     ) {
-        this.totalPrice$ = this.facade.totalPrice$;
-        this.totalDiscountProduct$ = this.facade.totalDiscountProduct$;
-        this.tradeDiscount$ = this.facade.tradeDiscount$;
+        this.totalPrice$ = this.facade.totalPrice$.pipe(
+            tap((_) => {
+                this.calculateTotalPay();
+            }),
+        );
+        this.totalDiscountProduct$ = this.facade.totalDiscountProduct$.pipe(
+            tap((_) => {
+                this.calculateTotalPay();
+            }),
+        );
+        this.tradeDiscount$ = this.facade.tradeDiscount$.pipe(
+            tap((_) => {
+                this.calculateTotalPay();
+            }),
+        );
     }
 
     ngOnInit(): void {
         this.products$ = this.returnFormService.getAllProducts();
-        this.calculateTotalPay();
     }
     ngOnDestroy() {
         this.subscription.forEach((sub) => sub.unsubscribe());
@@ -96,7 +107,7 @@ export class CreateReturnComponent implements OnInit {
             });
     }
     calculateTotalPay() {
-        const ins = new readMoney(123);
+        const ins = new readMoney(0);
         this.textMoney = ins.doc(
             (this.facade.getTotalPrice || 0) -
                 (this.facade.getTotalDiscountProduct || 0) -

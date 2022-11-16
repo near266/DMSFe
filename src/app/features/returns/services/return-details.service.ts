@@ -145,7 +145,9 @@ export class ReturnDetailsService {
     checkValidListProducts() {
         const listProducts = this.returnListProducts$.getValue();
         const invalidListProducts = listProducts.filter((item) => {
-            return item.quantity <= 0 || !item.warehouse?.id || !item.unit?.id;
+            const res = item.returnsQuantity <= 0 || !item.warehouse?.id || !item.unit?.id;
+            console.log(res);
+            return res;
         });
         return invalidListProducts.length === 0;
     }

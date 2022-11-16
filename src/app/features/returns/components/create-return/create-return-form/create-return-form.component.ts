@@ -329,8 +329,7 @@ export class CreateReturnFormComponent implements OnInit {
                     orderDate: moment(this.form.value.orderDate).format('YYYY-MM-DD'),
                     returnDate: moment(this.form.value.returnDate).format('YYYY-MM-DD'),
                 };
-                console.log(form);
-                // this.returnFormService.addNewReturn(form);
+                this.returnFormService.addNewReturn(form);
             }
         });
     }
