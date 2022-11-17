@@ -138,14 +138,16 @@ export class DetailReturnInfoComponent implements OnInit {
                     templateOptions: {
                         type: 'phoneNumber',
                         label: 'Số điện thoại',
+                        disabled: true,
+
                         appearance: 'outline',
                         // options: status,
                     },
-                    expressions: {
-                        'templateOptions.disabled': this.returnDetailsService.currentMode$.pipe(
-                            map((reponse: any) => reponse === ComponentMode.VIEW),
-                        ),
-                    },
+                    // expressions: {
+                    //     'templateOptions.disabled': this.returnDetailsService.currentMode$.pipe(
+                    //         map((reponse: any) => reponse === ComponentMode.VIEW),
+                    //     ),
+                    // },
                 },
                 {
                     key: 'address',
@@ -155,14 +157,15 @@ export class DetailReturnInfoComponent implements OnInit {
                     defaultValue: null,
                     templateOptions: {
                         label: 'Địa chỉ',
+                        disabled: true,
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
                     },
-                    expressions: {
-                        'templateOptions.disabled': this.returnDetailsService.currentMode$.pipe(
-                            map((reponse: any) => reponse === ComponentMode.VIEW),
-                        ),
-                    },
+                    // expressions: {
+                    //     'templateOptions.disabled': this.returnDetailsService.currentMode$.pipe(
+                    //         map((reponse: any) => reponse === ComponentMode.VIEW),
+                    //     ),
+                    // },
                 },
             ],
         },
@@ -270,11 +273,9 @@ export class DetailReturnInfoComponent implements OnInit {
     ngOnInit(): void {
         this.subscription.push(
             this.returnDetailsService.returnDetails$.subscribe((_) => {
-                console.log(_);
                 this.form.patchValue(_);
             }),
             this.returnDetailsService.currentMode$.subscribe((mode) => {
-                console.log(123);
                 this.disableField = mode === ComponentMode.VIEW;
             }),
             this.returnDetailsService.updateReturnInfo$.pipe(debounce(() => timer(50))).subscribe((value: any) => {
