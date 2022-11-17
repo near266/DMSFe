@@ -69,11 +69,11 @@
                         </span>
                     </td>
                     <td class="custom-td border">
-                        {{ order?.brandCode }}
+                        {{ order?.commodityCode }}
                     </td>
                     <td
                         class="cursor-pointer hover:text-blue-500 custom-td border" (click)="open(order)">
-                        {{ order?.brandName }}
+                        {{ order?.commodityName }}
                     </td>
                     <td class="custom-td border">
                         <button *ngIf="order.status == true" class="text-xs bg-[#10B981] text-white font-medium px-7 py-1 rounded-md w-full">Mở</button>

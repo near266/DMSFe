@@ -80,7 +80,7 @@
                 <span>Sản phẩm</span>
             </button>
             <mat-menu #matMenuChildren2="matMenu">
-                <button mat-menu-item class="flex items-center" [routerLink]="'/categories/units'">
+                <button mat-menu-item class="flex items-center" [routerLink]="'/categories/unit'">
                     <i class="fa-solid fa-cubes mr-2"></i>
                     <span>Đơn vị tính</span>
                 </button>
@@ -88,13 +88,35 @@
                     <i class="fa-solid fa-tags mr-2"></i>
                     <span>Nhãn hiệu</span>
                 </button>
-                <button mat-menu-item class="flex items-center">
+                <button mat-menu-item class="flex items-center" [routerLink]="'/categories/supplier'">
                     <i class="fa-solid fa-industry mr-2"></i>
                     <span>Nhà cung cấp</span>
                 </button>
                 <button mat-menu-item class="flex items-center" [routerLink]="'/categories/major'">
-                    <i class="fa-solid fa-pie-chart  mr-2"></i>
+                    <i class="fa-solid fa-pie-chart mr-2"></i>
                     <span>Ngành hàng</span>
+                </button>
+            </mat-menu>
+            <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren3">
+                <i class="fa-solid fa-user mr-2"></i>
+                <span>Khách hàng</span>
+            </button>
+            <mat-menu #matMenuChildren3="matMenu">
+                <button mat-menu-item class="flex items-center">
+                    <i class="fa-solid fa-grip mr-2"></i>
+                    <span>Loại khách hàng</span>
+                </button>
+                <button mat-menu-item class="flex items-center">
+                    <i class="fa-solid fa-users mr-2"></i>
+                    <span>Nhóm khách hàng</span>
+                </button>
+                <button mat-menu-item class="flex items-center">
+                    <i class="fa-solid fa-earth-asia mr-2"></i>
+                    <span>Khu vực</span>
+                </button>
+                <button mat-menu-item class="flex items-center" [routerLink]="'/categories/channel'">
+                    <i class="fa-solid fa-retweet mr-2"></i>
+                    <span>Kênh</span>
                 </button>
             </mat-menu>
         </mat-menu>

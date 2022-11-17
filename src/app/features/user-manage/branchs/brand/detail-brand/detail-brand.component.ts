@@ -121,7 +121,7 @@ export class DetailBrandComponent implements OnInit {
     this.branchService.changeHeader('');
     setTimeout(() => {
         if (this.brandModel) {
-            console.log(this.brandModel);
+            // console.log(this.brandModel);
             this.form.patchValue(this.brandModel || {});
             this.branchService.changeHeader(this.brandModel.brandName || '');
             this.form.disable();

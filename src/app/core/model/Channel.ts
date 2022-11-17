@@ -1,6 +1,5 @@
-export class Channel {
-  id: string;
-  serial: number;
+export interface Channel {
+  id?: string;
   channelCode: string;
   channelName: string;
   deptLimit: any;

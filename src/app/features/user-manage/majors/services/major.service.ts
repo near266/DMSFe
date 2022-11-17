@@ -39,11 +39,11 @@ export class MajorService {
   constructor(private http: HttpClient, private dialogService: MatDialog) { }
 
   getAllMajor(body: any): Observable<any> {
-    return this.http.post(this.endPoint + '/MajorSearch', body); // chưa sửa
+    return this.http.post(this.Point + '/search', body);
   }
 
   getdetailMajor(body: any): Observable<Major[]> {
-    return this.http.post<Major[]>(this.endPoint + '/MajorViewDetail', body); // chưa sửa
+    return this.http.post<Major[]>(this.Point + '/MajorViewDetail', body); // chưa sửa
   }
 
   addMajor(body: any): Observable<Major[]> {
@@ -54,8 +54,8 @@ export class MajorService {
     return this.http.put<Major[]>(this.Point + '/update', body);
   }
 
-  searchMajor(body: any): Observable<Major[]> {
-    return this.http.post<Major[]>(this.endPoint + '/BrandSearch', body); // chưa sửa
+  searchMajor(keyword: any): Observable<Major[]> {
+    return this.http.post<Major[]>(this.Point + '/search', keyword);
   }
 
   del(body: any): Observable<any> {

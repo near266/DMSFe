@@ -98,11 +98,11 @@ export class DetailMajorComponent implements OnInit {
         } else {
             this.majorService.updateMajor(major).subscribe({
                 next: (res) => {
-                    this.snackbar.openSnackbar('Sửa nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                    this.snackbar.openSnackbar('Sửa ngành hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
                     this.dialogRef.close({event: true});
                 },
                 error: (err) => {
-                    this.snackbar.openSnackbar('Sửa nhãn hiệu thất bại', 2000, 'Đóng', 'center', 'bottom', true);
+                    this.snackbar.openSnackbar('Sửa ngành hàng thất bại', 2000, 'Đóng', 'center', 'bottom', true);
                     console.log(err);
                 },
             });
@@ -120,7 +120,7 @@ export class DetailMajorComponent implements OnInit {
     this.majorService.changeHeader('');
     setTimeout(() => {
         if (this.majorModel) {
-            console.log(this.majorModel);
+            // console.log(this.majorModel);
             this.form.patchValue(this.majorModel || {});
             this.majorService.changeHeader(this.majorModel.commodityName || '');
             this.form.disable();

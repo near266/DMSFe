@@ -68,7 +68,7 @@ export class BrandComponent implements OnInit {
   deleteProduct(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
-            content: 'Bạn có chắc chắn muốn xóa sản phẩm này không',
+            content: 'Bạn có chắc chắn muốn xóa nhãn hiệu này không',
             action: ['Xóa', 'Hủy'],
         },
     });
@@ -77,7 +77,7 @@ export class BrandComponent implements OnInit {
         if (data.includes('Xóa')) {
             this.brandService.del(body).subscribe(data => {
               this.dialogRef.close({event: true});
-              this.snackbar.openSnackbar('Xóa đơn vị thành công', 2000, 'Đóng', 'center', 'bottom', true);
+              this.snackbar.openSnackbar('Xóa nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
             });            
         }else {
         }
