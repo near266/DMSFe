@@ -5,6 +5,7 @@ import { DetailPurchaseComponent } from './detail-purchase/detail-purchase.compo
 import { DetailContainerComponent } from './detail-container.component';
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { DetailCustomerComponent } from './detail-customer/detail-customer.component';
+import { TemplateComponentModule } from '../../template-component/template-component.module';
 
 const routes: Routes = [
     {
@@ -30,6 +31,6 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [DetailContainerComponent, DetailCustomerComponent],
-    imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
+    imports: [CommonModule, RouterModule.forChild(routes), SharedModule, TemplateComponentModule],
 })
 export class DetailContainerModule {}

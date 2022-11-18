@@ -7,9 +7,10 @@ import { DetailPurchaseComponent } from './detail-container/detail-purchase/deta
 import { CreatePurchaseComponent } from './create-purchase/create-purchase.component';
 import { TemplateHeaderComponent } from '../template-component/template-header/template-header.component';
 import { PurchaseTableComponent } from './purchase-table/purchase-table.component';
+import { TemplateComponentModule } from '../template-component/template-component.module';
 
 @NgModule({
-    imports: [CommonModule, SharedModule, PurchaseMgmRouting],
+    imports: [CommonModule, SharedModule, PurchaseMgmRouting, TemplateComponentModule],
     declarations: [PurchaseMgmComponent, CreatePurchaseComponent, DetailPurchaseComponent, PurchaseTableComponent],
 })
 export class PurchaseMgmModule {}

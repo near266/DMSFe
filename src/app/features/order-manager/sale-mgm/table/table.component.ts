@@ -41,11 +41,6 @@ export class TableComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.roleMain = localStorage.getItem('roleMain')!;
-        this.clearDataInDetailOrderSource();
-    }
-
-    clearDataInDetailOrderSource() {
-        this.saleLogicService.clearDataInDetailOrderSoure();
     }
 
     ngAfterViewInit(): void {
@@ -123,7 +118,7 @@ export class TableComponent implements OnInit, AfterViewInit {
     }
 
     archiveOrders() {
-        this.saleLogicService.archiveOrders(this.listIdSelected);
+        this.saleLogicService.archiveOrders(this.listIdSelected, null);
         this.saleLogicService.isSucessArchived$.subscribe((data: boolean) => {
             if (data) {
                 this.listIdSelected = [];

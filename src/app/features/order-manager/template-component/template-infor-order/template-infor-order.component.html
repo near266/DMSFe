@@ -32,7 +32,7 @@
                     appearance="outline"
                     floatLabel="always">
                     <mat-label>Trạng thái</mat-label>
-                    <mat-select formControlName="status" [disabled]="!isEdit">
+                    <mat-select formControlName="status" [disabled]="!(isEdit$ | async)">
                         <mat-option *ngFor="let status of option.status" [value]="status.value">
                             {{ status.name }}
                         </mat-option>
@@ -40,19 +40,31 @@
                 </mat-form-field>
                 <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Ngày đặt</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="orderDate" [disabled]="!isEdit" />
+                    <input
+                        matInput
+                        [matDatepicker]="picker"
+                        formControlName="orderDate"
+                        [disabled]="!(isEdit$ | async)" />
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field *ngIf="option.order === 'Sale'" class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Ngày bán</mat-label>
-                    <input matInput [matDatepicker]="picker1" formControlName="saleDate" [disabled]="!isEdit" />
+                    <input
+                        matInput
+                        [matDatepicker]="picker1"
+                        formControlName="saleDate"
+                        [disabled]="!(isEdit$ | async)" />
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                     <mat-label>Ngày giao</mat-label>
-                    <input matInput [matDatepicker]="picker2" formControlName="deliveryDate" [disabled]="!isEdit" />
+                    <input
+                        matInput
+                        [matDatepicker]="picker2"
+                        formControlName="deliveryDate"
+                        [disabled]="!(isEdit$ | async)" />
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker>
                 </mat-form-field>
@@ -60,7 +72,7 @@
             <div class="flex gap-x-6 justify-between">
                 <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                     <mat-label>Nhóm</mat-label>
-                    <mat-select formControlName="groupId" [disabled]="!isEdit">
+                    <mat-select formControlName="groupId" [disabled]="!(isEdit$ | async)">
                         <mat-option *ngFor="let group of listGroup$ | async" [value]="group.id">
                             {{ group.name }}
                         </mat-option>
@@ -68,10 +80,10 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                     <mat-label>Nhân viên đặt</mat-label>
-                    <mat-select formControlName="orderEmployeeId" [disabled]="!isEdit">
+                    <mat-select formControlName="orderEmployeeId" [disabled]="!(isEdit$ | async)">
                         <mat-option>
                             <ngx-mat-select-search
-                                [formControl]="employeeCtrl"
+                                [formControl]="orderEmployeeCtrl"
                                 placeholderLabel="Tìm kiếm"
                                 noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
                         </mat-option>
@@ -82,7 +94,7 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                     <mat-label>Tuyến</mat-label>
-                    <mat-select formControlName="routeId" [disabled]="!isEdit">
+                    <mat-select formControlName="routeId" [disabled]="!(isEdit$ | async)">
                         <mat-option>
                             <ngx-mat-select-search
                                 [formControl]="routeCtrl"
@@ -96,10 +108,10 @@
                 </mat-form-field>
                 <mat-form-field *ngIf="option.order === 'Sale'" appearance="outline" floatLabel="always" class="w-full">
                     <mat-label>Nhân viên bán</mat-label>
-                    <mat-select formControlName="saleEmployee" [disabled]="!isEdit">
+                    <mat-select formControlName="saleEmployee" [disabled]="!(isEdit$ | async)">
                         <mat-option>
                             <ngx-mat-select-search
-                                [formControl]="employeeCtrl"
+                                [formControl]="saleEmployeeCtrl"
                                 placeholderLabel="Tìm kiếm"
                                 noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
                         </mat-option>
@@ -112,14 +124,16 @@
             <div class="flex gap-x-6 justify-between">
                 <mat-form-field appearance="outline" floatLabel="always" class="w-full">
                     <mat-label>Mã khách hàng</mat-label>
-                    <mat-select formControlName="customerId" [disabled]="!isEdit">
+                    <mat-select
+                        (selectionChange)="setInfoCusAndRouteGroupAndOrderEmployee($event.value)"
+                        formControlName="customerId"
+                        [disabled]="!(isEdit$ | async)">
                         <mat-option>
                             <ngx-mat-select-search
                                 [formControl]="cusCtrl"
                                 placeholderLabel="Tìm kiếm"
                                 noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
                         </mat-option>
-                        <mat-option [value]="0">--Chọn khách hàng--</mat-option>
                         <mat-option *ngFor="let customer of listCus$ | async" [value]="customer?.id">
                             {{ customer?.customerCode }} - {{ customer?.customerName }}
                         </mat-option>
@@ -140,7 +154,7 @@
             </div>
             <mat-form-field class="w-full" appearance="outline" floatLabel="always">
                 <mat-label>Diễn giải</mat-label>
-                <textarea matInput formControlName="description" [readonly]="!isEdit"></textarea>
+                <textarea matInput formControlName="description" [readonly]="!(isEdit$ | async)"></textarea>
             </mat-form-field>
         </div>
     </div>

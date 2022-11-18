@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonLogicService } from '../../services/commonLogic.service';
 import { Option } from '../../template-component/template-infor-order/template-infor-order.component';
 
 @Component({
@@ -23,7 +24,28 @@ export class CreatePurchaseComponent implements OnInit {
             },
         ],
     };
-    constructor() {}
+    order: {
+        orderType: string;
+        screenType: string;
+    } = {
+        orderType: 'Purchase',
+        screenType: 'Create',
+    };
 
+    constructor(private commonLogicService: CommonLogicService) {}
+
+    create() {
+        this.commonLogicService.create();
+    }
     ngOnInit(): void {}
+
+    handleEmitBodyInfo(e: any) {
+        console.log(e);
+    }
+    handleEmitListProduct(e: any) {
+        console.log(e);
+    }
+    handleEmitListPromotion(e: any) {
+        console.log(e);
+    }
 }

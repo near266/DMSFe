@@ -18,21 +18,48 @@ export class DetailContainerComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.roleMain = localStorage.getItem('roleMain')!;
+        this.clearDataInDetailOrderSource();
     }
+
     ngAfterViewInit(): void {
         setTimeout(() => {
             this.getStatusNow();
         });
     }
 
+    clearDataInDetailOrderSource() {
+        this.saleLogicService.clearDataInDetailOrderSource();
+    }
+
     getStatusNow() {
         this.saleLogicService.detailOrder$.subscribe((data: SaleDetail) => {
             this.statusNow = data.status;
+            this.id = data.id;
         });
     }
 
     changeType() {
         this.isEdit = !this.isEdit;
         this.commonLogicService.changeTypeEdit(this.isEdit);
+    }
+
+    save() {
+        this.commonLogicService.save();
+    }
+
+    archive() {
+        this.saleLogicService.archiveOrders([this.id], 'order/sale');
+    }
+
+    print() {
+        this.saleLogicService.print([this.id]);
+    }
+
+    export() {
+        this.saleLogicService.export([this.id]);
+    }
+
+    updateOrder(changeTo: number) {
+        this.saleLogicService.updateStatusOrder(changeTo);
     }
 }

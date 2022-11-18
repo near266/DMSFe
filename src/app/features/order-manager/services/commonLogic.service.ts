@@ -1,8 +1,10 @@
-import { Injectable, OnInit } from '@angular/core';
+import { ifStmt } from '@angular/compiler/src/output/output_ast';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { GroupModel } from '../models/group';
 import { Product, ProductSearch } from '../models/product';
+import { ListProduct } from '../models/purchaseDetail';
 
 @Injectable({
     providedIn: 'root',
@@ -15,8 +17,13 @@ export class CommonLogicService {
     private listSaleEmployeeSource = new BehaviorSubject<any[]>([]);
     private listCusSource = new BehaviorSubject<any[]>([]);
     private listGroupSource = new BehaviorSubject<GroupModel[]>([]);
-    private isEditSource = new BehaviorSubject<boolean>(false);
     private listProductActiveSource = new BehaviorSubject<Product[]>([]);
+    private listProductSource = new BehaviorSubject<ListProduct[]>([]);
+    private listPromotionSource = new BehaviorSubject<ListProduct[]>([]);
+    private isEditSource = new BehaviorSubject<boolean>(false);
+    private isSaveSource = new BehaviorSubject<boolean>(false);
+    private isSucessSource = new BehaviorSubject<boolean>(false);
+    private isCreateSource = new BehaviorSubject<boolean>(false);
 
     listRoute$ = this.listRouteSource.asObservable();
     listEmployee$ = this.listEmployeeSource.asObservable();
@@ -25,8 +32,41 @@ export class CommonLogicService {
     listGroup$ = this.listGroupSource.asObservable();
     isEdit$ = this.isEditSource.asObservable();
     listProductActive$ = this.listProductActiveSource.asObservable();
+    listProduct$ = this.listProductSource.asObservable();
+    listPromotion$ = this.listPromotionSource.asObservable();
+    isSave$ = this.isSaveSource.asObservable();
+    isSucess$ = this.isSucessSource.asObservable();
+    isCreate$ = this.isCreateSource.asObservable();
 
     constructor(private purchaseOrder: PurchaseOrderService) {}
+
+    create() {
+        this.isCreateSource.next(true);
+    }
+
+    changeToCreateType() {
+        this.isEditSource.next(true);
+    }
+
+    clearEditSource() {
+        this.isEditSource.next(false);
+    }
+
+    setListEmployeeSource(list: any[]) {
+        this.listEmployeeSource.next(list);
+    }
+
+    successUpdate() {
+        this.isSucessSource.next(true);
+        this.isSaveSource.next(false);
+        this.isEditSource.next(false);
+    }
+
+    setCustomerIdToLocalStorage(id: string | null) {
+        if (id) {
+            localStorage.setItem('customerId', id);
+        }
+    }
 
     searchListProductActived(value: any) {
         const body = {
@@ -45,8 +85,7 @@ export class CommonLogicService {
 
     getListRoute(roleMain: string) {
         this.purchaseOrder.getAllRoute(1, 30, '').subscribe((data) => {
-            console.log(data.data);
-            this.listRouteSource.next(data.data);
+            this.listRouteSource.next(JSON.parse(JSON.stringify(data.data)));
         });
     }
 
@@ -55,12 +94,12 @@ export class CommonLogicService {
         let idDefault = this.getIdDefault();
         if (roleMain != 'member') {
             this.purchaseOrder.getAllEmployees('', 1, 30).subscribe((data) => {
-                this.listEmployeeSource.next(data.data);
+                this.listEmployeeSource.next(JSON.parse(JSON.stringify(data.data)));
             });
         } else if (roleMain === 'member') {
             this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
                 if (data) {
-                    this.listEmployeeSource.next(data);
+                    this.listEmployeeSource.next(JSON.parse(JSON.stringify(data)));
                 }
             });
         }
@@ -71,12 +110,12 @@ export class CommonLogicService {
         let idDefault = this.getIdDefault();
         if (roleMain != 'member') {
             this.purchaseOrder.getAllEmployees('', 1, 30).subscribe((data) => {
-                this.listSaleEmployeeSource.next(data.data);
+                this.listSaleEmployeeSource.next(JSON.parse(JSON.stringify(data.data)));
             });
         } else if (roleMain === 'member') {
             this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
                 if (data) {
-                    this.listSaleEmployeeSource.next(data);
+                    this.listSaleEmployeeSource.next(JSON.parse(JSON.stringify(data)));
                 }
             });
         }
@@ -89,22 +128,14 @@ export class CommonLogicService {
 
     // gọi tùy theo role
     getListCus(roleMain: string) {
-        // if (roleMain != 'member') {
-
-        // } else if (roleMain === 'member') {
-        //     this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 30 }).subscribe((data) => {
-        //         this.listCusSource.next(data.data);
-        //     });
-        // }
         this.purchaseOrder.searchCustomer({ keyword: '', page: 1, pageSize: 30 }).subscribe((data) => {
-            console.log(data.data);
-            this.listCusSource.next(data.data);
+            this.listCusSource.next(JSON.parse(JSON.stringify(data.data)));
         });
     }
 
     getListGroup() {
         this.purchaseOrder.getAllGroup(1).subscribe((data) => {
-            this.listGroupSource.next(data);
+            this.listGroupSource.next(JSON.parse(JSON.stringify(data)));
         });
     }
 
@@ -127,21 +158,186 @@ export class CommonLogicService {
         this.isEditSource.next(value);
     }
 
-    pushCusToListCus(id: string) {
-        this.purchaseOrder.getCustomerById(id).subscribe((data) => this.listCusSource.next([data]));
+    save() {
+        this.isSaveSource.next(true);
     }
 
-    pushOrderEmployeeToListEmployee(orderEmployeeId: string) {
-        this.purchaseOrder.getEmployeeById(orderEmployeeId).subscribe((data) => this.listEmployeeSource.next([data]));
+    pushCusToListCus(id: string, listCus: any) {
+        if (listCus && id) {
+            this.purchaseOrder.getCustomerById(id).subscribe((data) => this.listCusSource.next([data, ...listCus]));
+        } else if (!listCus && id) {
+            this.purchaseOrder.getCustomerById(id).subscribe((data) => this.listCusSource.next([data]));
+        } else if (!id) {
+            this.listCusSource.next(listCus);
+        }
     }
 
-    pushSaleEmployeeToListEmployee(saleEmployeeId: string) {
-        this.purchaseOrder
-            .getEmployeeById(saleEmployeeId)
-            .subscribe((data) => this.listSaleEmployeeSource.next([data]));
+    pushOrderEmployeeToListEmployee(orderEmployeeId: string, listOrderEmployee: any) {
+        if (listOrderEmployee && orderEmployeeId) {
+            this.purchaseOrder
+                .getEmployeeById(orderEmployeeId)
+                .subscribe((data) => this.listEmployeeSource.next([data, ...listOrderEmployee]));
+        } else if (!listOrderEmployee && orderEmployeeId) {
+            this.purchaseOrder
+                .getEmployeeById(orderEmployeeId)
+                .subscribe((data) => this.listEmployeeSource.next([data]));
+        } else if (!orderEmployeeId) {
+            this.listEmployeeSource.next(listOrderEmployee);
+        }
     }
 
-    pushRouteToListRoute(routeId: string) {
-        this.purchaseOrder.getRouteById(routeId).subscribe((data) => this.listRouteSource.next([data]));
+    pushSaleEmployeeToListEmployee(saleEmployeeId: string, listSaleEmployee: any) {
+        if (listSaleEmployee && saleEmployeeId) {
+            this.purchaseOrder
+                .getEmployeeById(saleEmployeeId)
+                .subscribe((data) => this.listSaleEmployeeSource.next([data, ...listSaleEmployee]));
+        } else if (!listSaleEmployee && saleEmployeeId) {
+            this.purchaseOrder
+                .getEmployeeById(saleEmployeeId)
+                .subscribe((data) => this.listSaleEmployeeSource.next([data]));
+        } else if (!saleEmployeeId) {
+            this.listSaleEmployeeSource.next(listSaleEmployee);
+        }
+    }
+
+    pushRouteToListRoute(routeId: string, listRoute: any[]) {
+        if (listRoute && routeId) {
+            this.purchaseOrder
+                .getRouteById(routeId)
+                .subscribe((data) => this.listRouteSource.next([data, ...listRoute]));
+        } else if (!listRoute && routeId) {
+            this.purchaseOrder.getRouteById(routeId).subscribe((data) => this.listRouteSource.next([data]));
+        } else if (!routeId) {
+            this.listRouteSource.next(listRoute);
+        }
+    }
+
+    // format để lôi warehouse.id thành wareHouseId, unit.id thành unitId
+    formatUnitIdAndWareHouseId(listProduct: ListProduct[], listPromotion: ListProduct[]) {
+        if (listProduct && listPromotion) {
+            // SP đặt hàng
+            listProduct.forEach((product: any) => {
+                product.warehouseId = product.warehouse?.id;
+                product.unitId = product.unit?.id;
+            });
+            this.listProductSource.next(listProduct);
+            // SP khuyến mại
+            listPromotion.forEach((product: any) => {
+                product.warehouseId = product.warehouse?.id;
+                product.unitId = product.unit?.id;
+            });
+            this.listPromotionSource.next(listPromotion);
+        }
+    }
+
+    // format khi add vào bảng -> dùng được cho cả promotion và product
+    formatProductFromCloseDialogAdd(listProdAdd: any, list: any) {
+        listProdAdd = listProdAdd.map((product: any) => {
+            return {
+                product: {
+                    id: product.id,
+                    sku: product.sku,
+                    productName: product.productName,
+                    retailPrice: product.retailPrice,
+                    price: product.price,
+                    vat: product.vat,
+                    warehouseId: product?.warehouse?.id,
+                    retailUnit: product.retailUnit,
+                    wholeSaleUnit: product.wholeSaleUnit,
+                },
+                unitId: product.retailUnit?.id, // mặc định chọn đvt lẻ
+                warehouseId: product?.warehouse?.id, // Mặc định chọn kho chính
+                unitPrice: product.retailPrice, // mặc định đơn giá là giá lẻ
+                quantity: 0,
+                totalPrice: 0,
+                discount: 0,
+                discountRate: 0,
+                note: null,
+                type: product.type,
+            };
+        });
+        // filter to remove product available
+        let listAvailbleIds = list.map((product: any) => {
+            return product?.product?.id;
+        });
+        listProdAdd = listProdAdd.filter((product: any) => {
+            return !listAvailbleIds.includes(product.product?.id);
+        });
+        return listProdAdd;
+    }
+
+    // format khi gửi đi body update cho cả product và promotion
+    formatListToSendAPI(list: any, orderType: string, tableType: string, id: string) {
+        list = list.map((product: any) => {
+            let body: any = {
+                productId: product?.product?.id,
+                unitId: product.unitId,
+                warehouseId: product.warehouseId,
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: tableType === 'Product' ? product.totalPrice : 0,
+                discount: tableType === 'Product' ? product.discount : 0,
+                discountRate: tableType === 'Product' ? product.discountRate : 0,
+                note: product.note,
+                type: product.type, // update thì k được thay đổi type product
+                index: product.index, // đánh index để phân biệt sản phẩm trùng
+            };
+            orderType === 'Purchase' ? (body.purchaseOrderId = id) : (body.saleRecieptId = id);
+            return body;
+        });
+        return list;
+    }
+
+    // format để gửi đi body add có thể là type 1 hoặc 2 (tùy xem thêm sản phẩm bình thường hay khuyến mại)
+    formatListtAddToSendAPI(list: any, orderType: string, type: number, id: string) {
+        list = list.map((product: any) => {
+            let body: any = {
+                productId: product?.product?.id,
+                unitId: product.unitId,
+                warehouseId: product.warehouseId,
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount,
+                discountRate: product.discountRate,
+                note: product.note,
+                type: type,
+            };
+            orderType === 'Purchase' ? (body.purchaseOrderId = id) : (body.saleRecieptId = id);
+            console.log(body);
+            return body;
+        });
+        return list;
+    }
+
+    // dùng cho cả product và promotion
+    formatListRemoveToSentAPI(list: any) {
+        return list.map((product: any) => {
+            return {
+                index: product.index,
+            };
+        });
+    }
+
+    getBodyUpdateProduct(id: string, typeOrder: string, typeTable: string, list: any) {
+        let body: any;
+        if (typeOrder === 'Purchase') {
+            body = {
+                purchaseOrderProducts: [this.formatListToSendAPI(list, typeOrder, typeTable, id)],
+            };
+        } else {
+            body = {
+                saleRecieptProducts: [this.formatListToSendAPI(list, typeOrder, typeTable, id)],
+            };
+        }
+        return body;
+    }
+
+    getBodyAddProduct(id: string, typeOrder: string, typeTable: string, list: any) {
+        if (typeTable === 'Product') {
+            this.formatListtAddToSendAPI(list, typeOrder, 1, id);
+        } else {
+            this.formatListtAddToSendAPI(list, typeOrder, 2, id);
+        }
     }
 }

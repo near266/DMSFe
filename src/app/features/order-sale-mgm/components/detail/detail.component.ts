@@ -1,17 +1,13 @@
-import { AfterViewInit, Component, DoCheck, OnInit, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ListProduct, ListPromotionProduct } from 'src/app/core/model/PurchaseOrder';
+import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+import { statusList } from 'src/app/core/data/PurchaseOrderList';
 import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
-import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
-import { Subscription } from 'rxjs';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
-import { statusList } from 'src/app/core/data/PurchaseOrderList';
-import * as moment from 'moment';
-import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 
 @Component({
     selector: 'app-detail',
@@ -173,9 +169,9 @@ export class DetailComponent implements OnInit, DoCheck, AfterViewInit, OnDestro
             prePayment: this.prePayment,
             debtRecord: this.detailOrderForm.get('debtRecord')?.value,
         });
-        // count totalAmount (Tổng tiền hàng)
+        // count totalAmount
         this.countTotalAmount();
-        // count totalDiscountProduct (Chiết khấu sản phẩm)
+        // count totalDiscountProduct
         this.countTotalDiscountProduct();
         // count totalPayment
         this.countTotalPayment();

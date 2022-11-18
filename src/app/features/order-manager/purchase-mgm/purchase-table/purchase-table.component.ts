@@ -1,9 +1,8 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
+import { Observable, Subscription } from 'rxjs';
 import { PurchaseHeader } from '../../models/headers';
-import { FormatPurchaseService } from '../../services/formatPurchase.service';
 import { PurchaseLogicService } from '../../services/purchaseLogic.service';
 
 @Component({
@@ -11,7 +10,9 @@ import { PurchaseLogicService } from '../../services/purchaseLogic.service';
     templateUrl: './purchase-table.component.html',
     styleUrls: ['./purchase-table.component.scss'],
 })
-export class PurchaseTableComponent implements OnInit {
+export class PurchaseTableComponent implements OnInit, OnDestroy {
+    private subscriptions: Subscription = new Subscription();
+
     purchaseOrder: string[] = PurchaseHeader;
     listIdSelected: string[] = [];
     OrderDateUp: boolean = false;
@@ -33,25 +34,25 @@ export class PurchaseTableComponent implements OnInit {
         archived: false,
     };
     page: number = 1;
-
+    @AutoUnsubscribe()
     listData$: Observable<any> = this.purchaseLogicService.listData$;
+    @AutoUnsubscribe()
     isLoading$: Observable<boolean> = this.purchaseLogicService.isLoading$;
+    @AutoUnsubscribe()
     total$: Observable<number> = this.purchaseLogicService.total$;
 
     constructor(private purchaseLogicService: PurchaseLogicService, private async: AsyncPipe) {}
 
-    ngOnInit(): void {
-        this.clearDataInDetailOrderSource();
-    }
-
-    clearDataInDetailOrderSource() {
-        this.purchaseLogicService.clearDataInDetailOrderSource();
-    }
+    ngOnInit(): void {}
 
     ngAfterViewInit(): void {
         setTimeout(() => {
             this.search(this.defaultBody, []);
         }, 0);
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     search(body: any, listIdSelected: string[]) {
@@ -131,14 +132,16 @@ export class PurchaseTableComponent implements OnInit {
 
     archiveOrders() {
         if (this.listIdSelected.length > 0) {
-            this.purchaseLogicService.archiveOrders(this.listIdSelected);
-            this.purchaseLogicService.isSucessArchived$.subscribe((data: boolean) => {
-                if (data) {
-                    this.listIdSelected = [];
-                    this.search(this.defaultBody, []);
-                } else {
-                }
-            });
+            this.purchaseLogicService.archiveOrders(this.listIdSelected, null);
+            this.subscriptions.add(
+                this.purchaseLogicService.isSucessArchived$.subscribe((data: boolean) => {
+                    if (data) {
+                        this.listIdSelected = [];
+                        this.search(this.defaultBody, []);
+                    } else {
+                    }
+                }),
+            );
         }
     }
 }

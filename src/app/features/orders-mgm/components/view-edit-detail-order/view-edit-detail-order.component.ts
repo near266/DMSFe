@@ -1,10 +1,8 @@
-import { AfterViewInit, Component, OnInit, HostListener, DoCheck, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
-import { map, Subscription } from 'rxjs';
-import { DetailPurchaseOrder } from 'src/app/core/data/PurchaseOrderList';
-import { PurchaseOrder, PurchaseOrderDetail } from 'src/app/core/model/PurchaseOrder';
+import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';

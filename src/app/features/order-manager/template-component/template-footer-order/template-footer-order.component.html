@@ -1,1 +1,95 @@
-<p>template-footer-order works!</p>
+<form action="" [formGroup]="paymentForm">
+    <div class="grid grid-cols-3 gap-y-5 mt-6">
+        <div class="grid grid-cols-4 col-span-2">
+            <span class="font-medium text-red-600">Bằng chữ:</span>
+            <span class="col-span-3">
+                <span *ngIf="payment.textMoney">{{ payment?.textMoney }} đồng</span>
+            </span>
+        </div>
+        <div class="grid grid-cols-2">
+            <span class="font-medium">Tổng tiền hàng:</span>
+            <span class="font-normal text-right">{{ payment?.totalAmount | currency: 'VND' }}</span>
+        </div>
+        <div class="grid grid-cols-4 col-span-2 text-green-600">
+            <span class="font-medium">Hạn mức dư nợ:</span>
+            <span class="col-span-3">{{ payment?.debtLimit }}</span>
+        </div>
+        <div class="grid grid-cols-2">
+            <span class="font-medium">Chiết khấu sản phẩm:</span>
+            <span class="font-normal text-right">
+                {{ payment?.totalDiscountProduct | currency: 'VND' }}
+            </span>
+        </div>
+        <div class="grid grid-cols-4 col-span-2 text-green-600">
+            <span class="font-medium">Dư nợ hiện tại:</span>
+            <span class="col-span-3"></span>
+        </div>
+        <div class="grid grid-cols-2">
+            <span class="font-medium">Chiết khấu đơn hàng:</span>
+            <span class="font-normal">
+                <input
+                    currencyMask
+                    [options]="{
+                        suffix: 'đ',
+                        thousands: '.',
+                        prefix: '',
+                        decimal: ',',
+                        precision: 0,
+                        allowNegative: false
+                    }"
+                    [readonly]="!(isEdit$ | async)"
+                    class="border-b border-gray-700"
+                    [ngModel]="payment.tradeDiscount"
+                    (ngModelChange)="payment.tradeDiscount = $event; countTotalPayment()"
+                    [ngModelOptions]="{ standalone: true }" />
+            </span>
+        </div>
+        <div class="grid grid-cols-4 col-span-2 text-green-600">
+            <span class="font-medium">Loại thanh toán:</span>
+            <span class="col-span-3">Thanh toán trực tiếp</span>
+        </div>
+        <div class="grid grid-cols-2">
+            <span class="font-medium">Phải thanh toán:</span>
+            <span class="font-normal text-right">
+                {{ payment.totalPayment | currency: 'VND' }}
+            </span>
+        </div>
+        <div *ngIf="order.orderType === 'Sale'" class="grid grid-cols-4 col-span-2 items-center">
+            <span class="font-medium text-green-600">Hạn thanh toán:</span>
+            <span style="font-size: 12px" class="col-span-3">
+                <mat-form-field appearance="outline" floatLabel="always">
+                    <input [disabled]="!(isEdit$ | async)" matInput [matDatepicker]="pickerDate" formControlName="paymentTerm" />
+                    <mat-datepicker-toggle matSuffix [for]="pickerDate"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerDate></mat-datepicker>
+                </mat-form-field>
+            </span>
+        </div>
+        <div class="grid grid-cols-4 col-span-2" *ngIf="order.orderType === 'Purchase'"></div>
+        <span class="grid grid-cols-2">
+            <span class="font-medium text-green-600">Thanh toán trước:</span>
+            <span class="font-normal">
+                <input
+                    currencyMask
+                    [options]="{
+                        suffix: 'đ',
+                        thousands: '.',
+                        prefix: '',
+                        decimal: ',',
+                        precision: 0,
+                        allowNegative: false
+                    }"
+                    [readonly]="!(isEdit$ | async)"
+                    class="border-b border-gray-700"
+                    [(ngModel)]="payment.prePayment"
+                    [ngModelOptions]="{ standalone: true }" />
+            </span>
+        </span>
+        <div class="grid grid-cols-4 col-span-2"></div>
+        <div *ngIf="order.orderType === 'Sale'" class="grid grid-cols-2">
+            <span class="font-medium text-blue-600">Ghi công nợ:</span>
+            <span class="font-normal">
+                <mat-checkbox formControlName="debtRecord" class="example-margin"></mat-checkbox>
+            </span>
+        </div>
+    </div>
+</form>

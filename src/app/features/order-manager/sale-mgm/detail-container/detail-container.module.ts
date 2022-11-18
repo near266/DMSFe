@@ -5,6 +5,7 @@ import { CustomerComponent } from './customer/customer.component';
 import { RouterModule, Routes } from '@angular/router';
 import { DetailComponent } from './detail/detail.component';
 import { SharedModule } from 'src/app/core/shared/shared.module';
+import { TemplateComponentModule } from '../../template-component/template-component.module';
 
 const routes: Routes = [
     {
@@ -25,6 +26,6 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [DetailComponent, CustomerComponent],
-    imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
+    imports: [CommonModule, SharedModule, RouterModule.forChild(routes), TemplateComponentModule],
 })
 export class DetailContainerModule {}

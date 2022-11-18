@@ -1,1 +1,19 @@
-<app-template-infor-order [option]="option"></app-template-infor-order>
+<div class="fixed z-10 bg-white w-full">
+    <div class="p-3 w-full flex justify-between items-center">
+        <span style="font-size: 20px !important" class="font-medium">Thêm mới phiếu bán hàng</span>
+        <div class="flex items-center">
+            <button class="button-success-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-circle-check text-white mr-2"></i>
+                <span class="text-white">Lưu & Đóng</span>
+            </button>
+            <button class="button-danger" [routerLink]="['/order/sale']">
+                <i class="fa-solid fa-ban text-white mr-2"></i>
+                <span class="text-white">Đóng</span>
+            </button>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+<div class="mt-16">
+    <app-template-infor-order [option]="option"></app-template-infor-order>
+</div>

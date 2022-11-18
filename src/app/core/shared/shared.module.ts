@@ -65,6 +65,7 @@ import { TemplateTableComponent } from 'src/app/features/order-manager/template-
 import { TemplateInforOrderComponent } from 'src/app/features/order-manager/template-component/template-infor-order/template-infor-order.component';
 import { TemplateTableProductComponent } from 'src/app/features/order-manager/template-component/template-table-product/template-table-product.component';
 import { TemplateFooterOrderComponent } from 'src/app/features/order-manager/template-component/template-footer-order/template-footer-order.component';
+import { TemplateCustomerComponent } from 'src/app/features/order-manager/template-component/template-customer/template-customer.component';
 
 @NgModule({
     declarations: [
@@ -75,13 +76,6 @@ import { TemplateFooterOrderComponent } from 'src/app/features/order-manager/tem
         EzPaginationComponent,
         ConfirmDialogComponent,
         ConfirmationDialogComponent,
-        TemplateTableComponent,
-        TemplatePaginationComponent,
-        TemplateSidebarComponent,
-        TemplateHeaderComponent,
-        TemplateInforOrderComponent,
-        TemplateTableProductComponent,
-        TemplateFooterOrderComponent,
     ],
     imports: [
         CommonModule,
@@ -184,13 +178,6 @@ import { TemplateFooterOrderComponent } from 'src/app/features/order-manager/tem
         TreeModule,
         NgxPaginationModule,
         ClipboardModule,
-        TemplateTableComponent,
-        TemplatePaginationComponent,
-        TemplateSidebarComponent,
-        TemplateHeaderComponent,
-        TemplateInforOrderComponent,
-        TemplateTableProductComponent,
-        TemplateFooterOrderComponent,
     ],
 })
 export class SharedModule {}
