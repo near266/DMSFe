@@ -40,6 +40,9 @@ import { MajorsComponent } from './majors/majors.component';
 import { AddMajorComponent } from './majors/add-major/add-major.component';
 import { MajorComponent } from './majors/major/major.component';
 import { DetailMajorComponent } from './majors/major/detail-major/detail-major.component';
+import { AddWarehouseComponent } from './warehouses/components/add-warehouse/add-warehouse.component';
+import { UpdateWarehouseComponent } from './warehouses/components/update-warehouse/update-warehouse.component';
+import { FormsComponent } from './warehouses/components/forms/forms.component';
 
 const routes: Routes = [
     {
@@ -97,6 +100,9 @@ const routes: Routes = [
         AddMajorComponent,
         MajorComponent,
         DetailMajorComponent,
+        AddWarehouseComponent,
+        UpdateWarehouseComponent,
+        FormsComponent,
     ],
     imports: [
         CommonModule, RouterModule.forChild(routes), 

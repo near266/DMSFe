@@ -62,6 +62,7 @@ import { TemplateTableComponent } from 'src/app/features/order-manager/template-
 import { TemplatePaginationComponent } from 'src/app/features/order-manager/template-component/template-pagination/template-pagination.component';
 import { TemplateSidebarComponent } from 'src/app/features/order-manager/template-component/template-sidebar/template-sidebar.component';
 import { TemplateHeaderComponent } from 'src/app/features/order-manager/template-component/template-header/template-header.component';
+import { MenuCollapseTreeMultipleComponent } from './components/menu-collapse-tree-multiple/menu-collapse-tree-multiple.component';
 
 @NgModule({
     declarations: [
@@ -76,6 +77,7 @@ import { TemplateHeaderComponent } from 'src/app/features/order-manager/template
         TemplatePaginationComponent,
         TemplateSidebarComponent,
         TemplateHeaderComponent,
+        MenuCollapseTreeMultipleComponent,
     ],
     imports: [
         CommonModule,
@@ -161,6 +163,7 @@ import { TemplateHeaderComponent } from 'src/app/features/order-manager/template
         NgxMatSelectSearchModule,
         MenuCollapseSearchComponent,
         MenuCollapseTreeComponent,
+        MenuCollapseTreeMultipleComponent,
         EzPaginationComponent,
         MatProgressSpinnerModule,
         MatProgressBarModule,

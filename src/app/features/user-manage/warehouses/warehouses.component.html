@@ -4,7 +4,7 @@
   </div>
   <div
       class="w-full px-2 py-1 bg-gray-100 border-gray-300 border-y border-solid h-10 flex flex-wrap items-center text-xs font-medium">
-      <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+      <button (click)="AddWareHouse()" class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
         <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
         Thêm mới
       </button>
@@ -22,7 +22,7 @@
       </button>
       <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
       </app-menu-bar>
-      <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+      <button (click)="DeleteWareHouse()" class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
         <i class="fa-sharp fa-solid fa-trash text-emerald-500 font-bold mr-2"></i>
         Xóa nhiều
       </button>
@@ -61,16 +61,16 @@
                   class="custom-row h-14 w-fit text-xs">
                   <td class="custom-td border-b">{{ i + 1 }}</td>
                   <td class="custom-td border-b">
-                      <mat-checkbox color="primary"></mat-checkbox>
+                      <mat-checkbox color="primary" (change)="change(item.id)"></mat-checkbox>
                   </td>
                   <td class="custom-td border-b">{{ item.warehouseCode }}</td>
-                  <td class="custom-td border-b text-emerald-500 cursor-pointer">{{ item.warehouseName }}</td>
+                  <td class="custom-td border-b text-emerald-500 cursor-pointer" (click)="DetailWareHouse(item)" >{{ item.warehouseName }}</td>
                   <td class="custom-td border-b">{{ item.warehouseType }}</td>
                   <td class="custom-td border-b">{{ item.description }}</td>
                   <td class="custom-td border-b">{{ item.responsibleAccountant }}</td>
                   <td class="custom-td border-b">{{ item.unitTreeGroup?.name }}</td>
                   <td class="custom-td border-b">{{ item.employee?.employeeName }}</td>
-                  <td class="custom-td border-b">{{ item.status == true ? 'Hoạt động': 'Không hoạt động' }}</td>
+                  <td class="custom-td border-b">{{ item.status == true ? 'Hoạt động': 'Khóa' }}</td>
                   <td class="custom-td border-b">{{ item.lastModifiedBy }}</td>
                   <td class="custom-td border-b">{{ datepipe.transform(item.lastModifiedDate, 'dd/MM/yyyy hh:mm') }}</td>
               </tr>

@@ -1,0 +1,64 @@
+@tailwind components;
+
+@layer components {
+    .table-wrapper {
+        overflow-y: auto;
+        overflow-x: auto;
+        margin-top: 8px;
+        padding-bottom: 20px;
+        height: calc(100vh - 180px);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0px;
+    }
+
+    table th {
+        position: sticky;
+        top: 0px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 14px;
+        z-index: 1;
+        @apply text-gray-700 bg-zinc-200;
+    }
+
+    table th,
+    table td {
+        padding: 15px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    table td {
+        text-align: center;
+        // font-size: 15px;
+        padding-left: 20px;
+    }
+
+    tbody {
+        font-size: 12px;
+    }
+
+    .custom-table {
+        @apply table-fixed text-gray-500 dark:text-gray-400;
+    }
+
+    .custom-thead {
+        @apply text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-xs;
+    }
+
+    .custom-row {
+        @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
+    }
+
+    .custom-th {
+        @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x;
+    }
+
+    .custom-td {
+        @apply space-x-2 border-x border-solid pl-2 text-sm font-medium;
+    }
+  }
