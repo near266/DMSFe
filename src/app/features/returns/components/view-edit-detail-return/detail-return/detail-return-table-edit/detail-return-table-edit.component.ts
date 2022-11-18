@@ -39,7 +39,6 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
         this.subscriptions.push(
             this.returnDetailsService.updateReturnProducts$.subscribe((res) => {
                 this.returnDetailsService.returnListProducts$.next(this.productsInput);
-                console.log(this.returnDetailsService.checkValidListProducts());
                 if (res && this.returnDetailsService.checkValidListProducts()) {
                     this.returnDetailsService.compareReturnListProductsWithInitialListProductAndUpdate().subscribe({
                         next: (res) => {
