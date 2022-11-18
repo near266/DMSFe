@@ -6,7 +6,9 @@
     <div class="flex justify-end w-[250px]">
       <button *ngIf="isChoseUpdated == false" mat-flat-button (click)="isChoseUpdated = !isChoseUpdated" class="bg-[#565869] text-white font-medium ml-button"><i class="fa-solid fa-pen mr-1"></i>Sửa</button>
       <button *ngIf="isChoseUpdated == true" mat-flat-button (click)="submit()" class="bg-[#1891C9] text-white font-medium ml-button"><i class="fa-solid fa-circle-check mr-1"></i>Lưu</button>
-      <button *ngIf="data.archived == false && requiredRoles('accountant') | async" type="button" mat-stroked-button (click)="archived()" class="text-[#565869] bg-white font-medium ml-button"><i class="fa-solid fa-trash mr-1"></i>Xóa</button>
+      <div *ngIf="data.archived == false">
+        <button *ngIf="requiredRoles('accountant') | async" type="button" mat-stroked-button (click)="archived()" class="text-[#565869] bg-white font-medium ml-button"><i class="fa-solid fa-trash mr-1"></i>Xóa</button>
+      </div>
       <button type="button" mat-stroked-button (click)="close()" class="text-[#565869] bg-white font-medium ml-button"><i class="fa-solid fa-right-from-bracket mr-1"></i>Đóng</button>
     </div>
   </div>

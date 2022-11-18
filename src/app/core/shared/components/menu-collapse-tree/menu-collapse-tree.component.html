@@ -11,20 +11,7 @@
     <i *ngIf="node.data.type == 0 && node.data.level != -1 " class="fa-solid fa-building  mr-1 text-orange-600 text-medium"></i>
     <i *ngIf="node.data.type == 1" class="fa-solid fa-users mr-1 text-green-600 text-medium"></i>
     <i *ngIf="node.data.type == 2" class="fa-solid mr-1 text-[#0369A1] fa-user"></i>
-    <!-- <i *ngIf="node.data.code === 'nhom2'" class="fa-solid fa-users mr-1 text-blue-600 text-medium"></i>
-    <i *ngIf="node.data.code === 'DV1'" class="fa-solid fa-user mr-1 text-green-600 text-medium"></i>
-    <i *ngIf="node.data.code === 'dv2'" class="fa-solid fa-user mr-1 text-blue-600 text-medium"></i> -->
-    <!-- ... tương tự với các icon khác -->
-
     <span class="relative" [class]="node.data.className + 'Index'">{{ node.data.name }}</span>
-    <!-- <span class="ml-1"
-    *ngIf="getTotalItemInTreeWithNoChildren(node.data.children)">({{getTotalItemInTreeWithNoChildren(node.data.children)}})</span> -->
-    <div *ngIf="node.data.expand == true"  class=" bg-blue-100 z-50 absolute">
-
-      <div (click)="menuBar(item, node)" class="w-[160px] hover:bg-white p-3 font-medium" *ngFor="let item of node.data.menubar">
-        {{item}}
-      </div>
-    </div>
   </ng-template>
 </tree-root>
 
