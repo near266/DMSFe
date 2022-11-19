@@ -19,10 +19,7 @@
                 (dateFilter$)="handleFilterDate($event)">
                 <!-- options select to edit -->
                 <div class="flex mt-2">
-                    <button
-                        [disabled]="roleMain === 'member'"
-                        class="p-2 button-option mr-2"
-                        [matMenuTriggerFor]="addMenu">
+                    <button *ngIf="roleMain != 'member'" class="p-2 button-option mr-2" [matMenuTriggerFor]="addMenu">
                         <i class="fa-solid fa-plus text-green-700 text-sm font-bold mr-1"></i>
                         <span>Thêm mới</span>
                         <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>

@@ -88,7 +88,7 @@ export class CommonLogicService {
     }
 
     getListRoute(roleMain: string) {
-        this.purchaseOrder.getAllRoute(1, 30, '').subscribe((data) => {
+        this.purchaseOrder.getAllRoute(1, 30, '').subscribe((data: { data: any[]; totalCount: number }) => {
             this.listRouteSource.next(JSON.parse(JSON.stringify(data.data)));
         });
     }

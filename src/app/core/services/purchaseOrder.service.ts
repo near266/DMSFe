@@ -209,7 +209,9 @@ export class PurchaseOrderService {
     // route
     getAllRoute(page: number, pageSize: number, keyword: any): Observable<any> {
         return this.http
-            .get(this.api_gateway_url + '/Route/getall?keyword=' + keyword + '&page=' + page + '&pagesize=' + pageSize)
+            .get<{ data: any[]; totalCount: number }>(
+                this.api_gateway_url + '/Route/getall?keyword=' + keyword + '&page=' + page + '&pagesize=' + pageSize,
+            )
             .pipe(map((reponse: any) => reponse));
     }
 
