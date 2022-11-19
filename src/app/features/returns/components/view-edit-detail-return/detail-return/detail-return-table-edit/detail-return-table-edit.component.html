@@ -56,7 +56,7 @@
         <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-[12px] text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-              <mat-select [disabled]="true" [(ngModel)]="item.unit.id">
+              <mat-select [disabled]="false" [(ngModel)]="item.unit.id">
                 <mat-option *ngFor="let option of unitOptions" value="{{option.value}}">{{option.label}}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -65,7 +65,7 @@
         <td class="border-x max-w-[120px]  align-middle px-2 text-center">
           <div class="flex">
             <mat-form-field appearance="outline">
-              <mat-select [disabled]="true" [(ngModel)]="item.warehouse.id">
+              <mat-select [disabled]="false" [(ngModel)]="item.warehouse.id">
                 <mat-option *ngFor="let option of warehouseOptions" value="{{option.value}}">{{option.label}}
                 </mat-option>
               </mat-select>
@@ -127,5 +127,4 @@
       </tr>
     </tbody>
   </table>
-  <!-- <pre>Form values: {{ productsInput | json }}</pre> -->
 </div>

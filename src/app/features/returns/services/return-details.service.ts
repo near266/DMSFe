@@ -32,8 +32,10 @@ export class ReturnDetailsService {
                 data.orderEmployeeName = data.orderEmployee?.employeeName || null;
                 data.groupName = data.group?.name || null;
                 data.customerId = data.customer?.id || null;
+                data.address = data.customer?.address || data.address;
                 data.orderEmployeePhone = data.orderEmployee?.phone;
                 data.saleCode = data.saleReciept?.saleCode;
+                data.phone = data.customer?.phone || data.phone;
                 data.customerCode = data.customer?.customerCode;
                 this.returnDetails$.next(data);
                 this.returnListProducts$.next(data.listProduct);
@@ -145,7 +147,9 @@ export class ReturnDetailsService {
     checkValidListProducts() {
         const listProducts = this.returnListProducts$.getValue();
         const invalidListProducts = listProducts.filter((item) => {
-            return item.quantity <= 0 || !item.warehouse?.id || !item.unit?.id;
+            const res = item.returnsQuantity <= 0 || !item.warehouse?.id || !item.unit?.id;
+            console.log(res);
+            return res;
         });
         return invalidListProducts.length === 0;
     }

@@ -37,7 +37,17 @@
         <span class="font-medium w-1/3 py-2">Chiết khấu sản phẩm: {{discountAmount | currency: 'VND'}}</span>
       </div>
       <div class="flex justify-end">
-        <span class="font-medium w-1/3 py-2">Chiết khấu đơn hàng: {{tradeDiscount | currency: 'VND'}}</span>
+        <span class="font-medium w-1/3 py-2" *ngIf="currentMode === ComponentModeList.VIEW">Chiết khấu đơn hàng:
+          {{tradeDiscount | currency: 'VND'}}</span>
+        <div class="w-1/3 py-2" *ngIf="currentMode === ComponentModeList.EDIT">
+          <mat-form-field appearance="standard" class="w-1/3">
+            <mat-label>Chiết khấu đơn hàng</mat-label>
+            <input name="tradeDiscount" matInput currencyMask class="w-1/2"
+              [options]="{align:'left', suffix: 'đ', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+              [ngModel]="tradeDiscount"
+              (ngModelChange)="tradeDiscount=$event;calculateTotalPay();updateTradeDiscount()" />
+          </mat-form-field>
+        </div>
       </div>
 
       <div class="flex justify-end ">

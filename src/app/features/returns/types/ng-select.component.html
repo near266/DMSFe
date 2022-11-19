@@ -2,5 +2,4 @@
   <ng-select [appearance]="'outline'" class="flex-1 " [items]="to.options|formlySelectOptions:field|async"
     [placeholder]="to.label || 'placeholder'" [bindValue]="'value'" (change)="to?.change(field,$event)"
     [formControl]="formControl"></ng-select>
-
 </div>

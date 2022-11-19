@@ -12,7 +12,10 @@ body {
     top: 0;
 }
 .ng-select .ng-select-container.ng-appearance-outline {
-    min-height: 52px;
+    min-height: 44px;
+}
+.ng-select .ng-select-container .ng-value-container {
+    padding: 0;
 }
 .mat-form-field {
     font-weight: 500;

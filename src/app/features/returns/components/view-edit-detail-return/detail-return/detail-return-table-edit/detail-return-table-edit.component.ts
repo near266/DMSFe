@@ -45,6 +45,7 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
                             this.returnDetailsService.updateReturnInfo$.next({
                                 totalPayment: this.returnDetailsService.totalPrice$.getValue(),
                                 discountAmount: this.returnDetailsService.discountAmount$.getValue(),
+                                tradeDiscount: this.returnDetailsService.tradeDiscount$.getValue(),
                             });
                         },
                         error: (err) => {
@@ -60,8 +61,7 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
             this.productDialogService.getAllUnits().subscribe((data) => {
                 this.unitOptions = data;
             }),
-        );
-        this.subscriptions.push(
+
             this.productDialogService.getAllWarehouses().subscribe((data) => {
                 this.warehouseOptions = data;
             }),

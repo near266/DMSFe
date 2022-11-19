@@ -36,6 +36,13 @@ import { BranchsComponent } from './branchs/branchs.component';
 import { AddBrandComponent } from './branchs/add-brand/add-brand.component';
 import { BrandComponent } from './branchs/brand/brand.component';
 import { DetailBrandComponent } from './branchs/brand/detail-brand/detail-brand.component';
+import { MajorsComponent } from './majors/majors.component';
+import { AddMajorComponent } from './majors/add-major/add-major.component';
+import { MajorComponent } from './majors/major/major.component';
+import { DetailMajorComponent } from './majors/major/detail-major/detail-major.component';
+import { AddWarehouseComponent } from './warehouses/components/add-warehouse/add-warehouse.component';
+import { UpdateWarehouseComponent } from './warehouses/components/update-warehouse/update-warehouse.component';
+import { FormsComponent } from './warehouses/components/forms/forms.component';
 
 const routes: Routes = [
     {
@@ -53,7 +60,11 @@ const routes: Routes = [
     {
         path: 'brand',
         component: BranchsComponent,
-    }
+    },
+    {
+        path: 'major',
+        component: MajorsComponent,
+    },
 ];
 
 @NgModule({
@@ -85,6 +96,13 @@ const routes: Routes = [
         AddBrandComponent,
         BrandComponent,
         DetailBrandComponent,
+        MajorsComponent,
+        AddMajorComponent,
+        MajorComponent,
+        DetailMajorComponent,
+        AddWarehouseComponent,
+        UpdateWarehouseComponent,
+        FormsComponent,
     ],
     imports: [
         CommonModule, RouterModule.forChild(routes), 
@@ -93,13 +111,16 @@ const routes: Routes = [
         FormlyModule.forChild({
             wrappers: [
                 { name: 'unit', component: ProductFieldWrapper },
-                { name: 'brand', component: ProductFieldWrapper }
+                { name: 'brand', component: ProductFieldWrapper },
+                { name: 'major', component: ProductFieldWrapper },
             ],
             types: [
                 { name: 'unit-input', component: ProductFieldInput, wrappers: ['unit'] },
                 { name: 'unit-select', component: ProductFieldSelect, wrappers: ['unit'] },
                 { name: 'brand-input', component: ProductFieldInput, wrappers: ['brand'] },
                 { name: 'brand-select', component: ProductFieldSelect, wrappers: ['brand'] },
+                { name: 'major-input', component: ProductFieldInput, wrappers: ['major'] },
+                { name: 'major-select', component: ProductFieldSelect, wrappers: ['major'] },
             ],
             validationMessages: [{ name: 'required', message: 'Trường này là bắt buộc' }],
         }),

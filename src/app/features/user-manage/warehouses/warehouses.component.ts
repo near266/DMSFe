@@ -6,6 +6,14 @@ import { DatePipe } from '@angular/common';
 import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { Title } from '@angular/platform-browser';
+import { WarehousesService } from 'src/app/core/services/warehouses.service';
+import { LogicService } from './services/logic.service';
+import { Warehouse } from './models/warehouse';
+import { IBodySearch } from './models/BodySearch';
+import { MatDialog } from '@angular/material/dialog';
+import { AddWarehouseComponent } from './components/add-warehouse/add-warehouse.component';
+import { UpdateWarehouseComponent } from './components/update-warehouse/update-warehouse.component';
+import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-warehouses',
@@ -17,88 +25,116 @@ export class WarehousesComponent implements OnInit {
   isShowSidebarToMargin = true;
   sideBarWidth!: string;
   type!: string;
-  listOrder: PurchaseOrder[] = [];
-  totalCount: number;
+  warehouses: Warehouse[] = [];
+  totalCount: number = 0;
+  listSelectedId: string[] = [];
+  bodySearch: IBodySearch = {
+    keyword: null,
+    status: null
+  }
 
   page: number = 1;
   pageSize: number = 30;
   total: number = 0;
-
-  constructor(
-    private title: Title,
-    private activatedroute: ActivatedRoute,
-    public datepipe: DatePipe,
-    public router: Router,
-    private dataService: DataService,
-    private purchaseOrderService: PurchaseOrderService
-    ) { }
-
-  ngOnInit(): void {
-    this.title.setTitle('Danh mục kho hàng - DMS.Delap');
-    this.purchaseOrderService.page.subscribe((data) => {
-      this.page = data;
-    });
-  }
-
-  ngAfterViewInit(): void {
-    this.purchaseOrderService.searchFilterPurchaseOrder().subscribe((data) => {
-        this.listOrder = data;
-        this.total = this.listOrder.length;
-        this.purchaseOrderService.setTotal(this.total);
-    });
-    // this.purchaseOrderService.searchFilterPurchaseOrderMockAPI().subscribe((data) => {
-    //     this.listOrder = data;
-    //     this.total = this.listOrder.length;
-    //     this.purchaseOrderService.setTotal(this.total);
-    // });
-}
-
-ngDoCheck(): void {
-    let table = document.getElementById('table');
-    table?.classList.add('width-vw-260');
-    if (this.isShowSidebarToMargin) {
-        table?.classList.remove('width-vw-60');
-        table?.classList.add('width-vw-260');
-    } else {
-        table?.classList.add('width-vw-60');
-        table?.classList.remove('width-vw-260');
-    }
-}
-
-ngOnDestroy(): void {}
-
-isShowSidebar(e: any) {
-    this.isShowSidebarToMargin = e;
-    let table = document.getElementById('table');
-    if (this.isShowSidebarToMargin) {
-        table?.classList.remove('width-vw-60');
-        table?.classList.add('width-vw-260');
-    } else {
-        table?.classList.add('width-vw-60');
-        table?.classList.remove('width-vw-260');
-    }
-}
-
-navigateToDetail(order: any) {
-    localStorage.setItem('status', order.status);
-    localStorage.setItem('purchaseOrderId', order.purchaseOrderId);
-    this.router.navigate(['/orders/detailOrder/viewEdit']);
-}
 
   listMenuObj = [
     {
       title: 'Trạng thái',
       leftTitleIcon: 'fa-filter',
       listMenuPosition: [
-        { title: 'Tất cả', leftIcon: '', value: 'all' },
-        { title: 'Hoạt động', leftIcon: '', value: 'emp' },
-        { title: 'Không hoạt động', leftIcon: '', value: 'emp' },
+        { title: 'Tất cả', leftIcon: '', value: 'null' },
+        { title: 'Hoạt động', leftIcon: '', value: 'true' },
+        { title: 'Không hoạt động', leftIcon: '', value: 'false' },
       ]
     }
   ]
 
-  Select(event: any) {
+  constructor(
+    private title: Title,
+    private activatedroute: ActivatedRoute,
+    public datepipe: DatePipe,
+    public router: Router,
+    private logicService: LogicService,
+    private dialog: MatDialog,
+    private confirmService: ConfirmDialogService
+    ) { }
 
+  ngOnInit(): void {
+    this.title.setTitle('Danh mục kho hàng');
+  }
+
+  ngAfterViewInit(): void {
+    this.logicService.getAllWareHouse();
+    this.logicService.warehouses$.subscribe(data => {
+      this.warehouses = data;
+    });
+    this.logicService.totalCountWarehouse$.subscribe(data => {
+      this.totalCount = data;
+    })
+  }
+
+  ngDoCheck(): void {
+
+  }
+
+  ngOnDestroy(): void {
+
+  }
+
+  Select(event: any) {
+    switch(event) {
+      case 'null': {
+        this.bodySearch.status = null;
+        break;
+      }
+      case 'true': {
+        this.bodySearch.status = true;
+        break;
+      }
+      case 'false': {
+        this.bodySearch.status = false;
+        break;
+      }
+    }
+    this.filter();
+
+  }
+
+  filter() {
+    this.logicService.searchWarehouse(this.bodySearch);
+  }
+
+  change(id: string) {
+    if(this.listSelectedId.indexOf(id) < 0) {
+      this.listSelectedId.push(id);
+    } else {
+      this.listSelectedId.splice(this.listSelectedId.indexOf(id), 1);
+    }
+  }
+
+  AddWareHouse() {
+    this.dialog.open(AddWarehouseComponent, {
+      height: '100vh',
+      minWidth: '900px',
+      panelClass: 'custom-mat-dialog-container'
+    });
+  }
+
+  DetailWareHouse(warehouse: Warehouse) {
+    this.dialog.open(UpdateWarehouseComponent, {
+      data: warehouse.id,
+      height: '100vh',
+      minWidth: '900px',
+      panelClass: 'custom-mat-dialog-container'
+    });
+  }
+
+  DeleteWareHouse() {
+    this.confirmService.openDialog({message: 'Bạn có chắc chắn muốn xóa những kho hàng này?',confirm: 'Xác nhận',cancel: 'Hủy'}).subscribe( data => {
+      if(data) {
+        this.logicService.deleteWareHouse(this.listSelectedId);
+      }
+    });
   }
 
 }

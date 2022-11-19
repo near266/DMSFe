@@ -49,10 +49,10 @@ export class AddBrandComponent implements OnInit {
       body.debtLimit = false;
     }
     this.branchService.addBrand(body).subscribe( data => {
-      this.snackbar.openSnackbar('Thêm đơn vị thành công', 2000, 'Đóng', 'center', 'bottom', true);
+      this.snackbar.openSnackbar('Thêm nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
       this.dialogRef.close({event: true});
     }, (error) => {
-      this.snackbar.openSnackbar('Thêm đơn vị thất bại', 2000, 'Đóng', 'center', 'bottom', true);
+      this.snackbar.openSnackbar('Thêm nhãn hiệu thất bại', 2000, 'Đóng', 'center', 'bottom', true);
     });
 
   }

@@ -104,7 +104,6 @@ export class BranchsComponent implements OnInit {
         },
     );
   }
-
   Select(e: string) {
     if(e.includes('Tất cả') || e.includes('Mở') || e.includes('Khóa')) {
       this.sortByType(e);
@@ -120,7 +119,6 @@ export class BranchsComponent implements OnInit {
       this.search('');
     }
   }
-
   sortByField(key: string) {
     let sort = key.split('-');
     this.request.sortFeild = sort[0];

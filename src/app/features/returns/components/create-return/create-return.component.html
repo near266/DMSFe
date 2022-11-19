@@ -21,12 +21,14 @@
   <div>
     <button class=" py-2"><span class="text-base text-gray-800 underline-offset-2 underline">Sản phẩm đặt
         hàng</span></button>
-    <div class="flex items-center mt-2 justify-between">
-      <div class="flex items-center">
-        <div class="flex items-center">
-          <label for="simple-search" class="sr-only">Search</label>
+    <div class="flex items-center mt-2 ">
+      <div class="mat-input-infix  w-1/4 mt-1">
+        <ng-select #Product class="pb-0" [appearance]="'outline'" class="flex-1 " (change)="handleChangeSelect($event)"
+          [items]="products$ |async" [placeholder]="'Tên sản phẩm'">
 
-        </div>
+        </ng-select>
+      </div>
+      <div class="flex items-center">
         <button (click)="openDialogProduct('products')"
           class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
           <i class="fa-solid fa-filter mr-2 px-2"></i>
@@ -45,22 +47,18 @@
   <div class="mt-12">
     <button class=" py-2"><span class="text-base text-gray-800 underline-offset-2 underline">Sản phẩm khuyến
         mãi</span></button>
-    <div class="flex items-center mt-2 justify-between">
-      <div class="flex items-center">
-        <div class="flex items-center">
-          <label for="simple-search" class="sr-only">Search</label>
-          <div class="relative w-full">
-            <!-- <ng-select [placeholder]="'Tìm kiếm'" class="w-[200px]" [items]="cars" bindLabel="name" bindValue="id"
-              [(ngModel)]="selectedCar">
-            </ng-select> -->
-          </div>
-        </div>
-        <button (click)="openDialogProduct('promotion')"
-          class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
-          <i class="fa-solid fa-filter mr-2 px-2"></i>
-          <span class="px-2">Tìm kiếm nâng cao</span>
-        </button>
+    <div class="flex items-center mt-2 ">
+      <div class="mat-input-infix  w-1/4 mt-1">
+        <ng-select #Promotion class="pb-0" [appearance]="'outline'" class="flex-1 "
+          (change)="handlePromotionChangeSelect($event)" [items]="products$ |async" [placeholder]="'Tên sản phẩm'">
+
+        </ng-select>
       </div>
+      <button (click)="openDialogProduct('promotion')"
+        class="text-gray-600 flex items-center ml-3 px-1 py-1.5 bg-zinc-200 hover:bg-zinc-300 rounded-lg hover:font-medium">
+        <i class="fa-solid fa-filter mr-2 px-2"></i>
+        <span class="px-2">Tìm kiếm nâng cao</span>
+      </button>
     </div>
     <app-create-return-promotion-table></app-create-return-promotion-table>
   </div>
@@ -68,23 +66,36 @@
   <div>
     <div class="flex justify-between">
       <span class="font-medium w-1/3 py-2">Bằng chữ: {{textMoney}} {{textMoney?'đồng':''}}</span>
-      <span class="font-medium w-1/3 py-2">Tổng tiền hàng: {{totalPrice | currency: 'VND'}}</span>
+      <span class="font-medium w-1/3 py-2">Tổng tiền hàng: {{totalPrice$| async | currency: 'VND'}}</span>
+
+    </div>
+    <div class="flex justify-end">
+      <div class="w-1/3 py-2">
+        <mat-form-field appearance="standard" class="w-1/3">
+          <mat-label>Chiết khấu đơn hàng</mat-label>
+          <input matInput currencyMask class="w-1/2"
+            [options]="{align:'left', suffix: 'đ', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+            [ngModel]="tradeDiscount"
+            (ngModelChange)="tradeDiscount=$event;calculateTotalPay();updateTradeDiscount()" />
+        </mat-form-field>
+      </div>
     </div>
     <div class="flex justify-between">
-      <!-- <span class="font-medium w-1/3 py-2 text-green-700">Hạn mức công nợ:</span> -->
-      <!-- <span class="font-medium w-1/3 py-2">Tổng tiền VAT:</span> -->
-    </div>
-    <div class="flex justify-between">
-      <!-- <span class="font-medium w-1/3 py-2 text-green-700">Dư nợ hiện tại:</span> -->
-      <!-- <span class="font-medium w-1/3 py-2">Chiết khấu sản phẩm: </span> -->
+
     </div>
     <div class="flex justify-between">
       <span class="font-medium w-1/3 py-2 text-green-700">Hình thức thanh toán:</span>
-      <span class="font-medium w-1/3 py-2">Chiết khấu sản phẩm: {{discountAmount | currency: 'VND'}}</span>
+      <ng-container *ngIf="(totalDiscountProduct$ | async) as totalDiscountProduct"><span
+          class="font-medium w-1/3 py-2">Chiết khấu sản phẩm:
+          {{totalDiscountProduct | currency: 'VND'}}</span></ng-container>
     </div>
     <div class="flex justify-between">
       <span class="font-medium w-1/3 py-2"></span>
-      <span class="font-medium w-1/3 py-2">Phải thanh toán:{{totalPrice - discountAmount | currency: 'VND'}} </span>
+      <ng-container *ngIf="(totalPrice$ | async) as totalPrice">
+        <span class="font-medium w-1/3 py-2">Phải thanh
+          toán:{{totalPrice - ((totalDiscountProduct$|async)||0) - ((tradeDiscount$|async)||0) | currency: 'VND'}}
+        </span>
+      </ng-container>
     </div>
   </div>
 </div>

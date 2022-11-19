@@ -1,3 +1,7 @@
+<div class="w-72 bg-white mx-1 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
+  <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
+  <input #filter class="bg-white w-full text-xs h-full font-medium text-black" (keyup)="tree.treeModel.filterNodes(filter.value)" placeholder="Tìm kiếm trên cây">
+</div>
 <tree-root #tree [ngClass]="'expand-tree'" class="reverse"  [nodes]="nodes" [options]="options" (contextmenu)="Config($event)">
   <ng-template #treeNodeTemplate let-node  let-index="index">
     <!-- Đây là điều kiện để đặt cái icon tất cả -->

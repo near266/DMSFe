@@ -27,6 +27,7 @@ export class DetailBrandComponent implements OnInit {
     id: null,
     brandName: null,
     brandCode: 0,
+    debtLimit: null,
     status: null,
   };
 
