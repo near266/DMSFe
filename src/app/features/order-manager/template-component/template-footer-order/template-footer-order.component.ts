@@ -1,4 +1,15 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, OnDestroy, DoCheck } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnChanges,
+    OnInit,
+    SimpleChanges,
+    OnDestroy,
+    DoCheck,
+    Output,
+    EventEmitter,
+    ChangeDetectorRef,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import moment from 'moment';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
@@ -27,18 +38,26 @@ export class Payment {
     styleUrls: ['./template-footer-order.component.scss'],
 })
 export class TemplateFooterOrderComponent implements OnInit, OnChanges, OnDestroy, DoCheck {
-    @Input() payment: Payment = new Payment();
+    @Input() payment: Payment = {
+        textMoney: '0',
+        prePayment: 0,
+        totalAmount: 0,
+        totalDiscountProduct: 0,
+        tradeDiscount: 0,
+        totalPayment: 0,
+    };
     @Input() order: {
         screenType: string;
         orderType: string;
     };
+    @Output() paymentCreate$: EventEmitter<Payment> = new EventEmitter();
 
     private subscriptions: Subscription = new Subscription();
 
     @AutoUnsubscribe()
     isEdit$: Observable<boolean> = this.commonLogicService.isEdit$;
     paymentForm: FormGroup = this.fb.group({
-        paymentTerm: [''],
+        paymentTerm: [moment(Date.now()).format('YYYY-MM-DD')],
         debtRecord: [null],
     });
     paymentTerm: FormControl = new FormControl();
@@ -49,6 +68,7 @@ export class TemplateFooterOrderComponent implements OnInit, OnChanges, OnDestro
         private commonLogicService: CommonLogicService,
         private purchaseLogicService: PurchaseLogicService,
         private saleLogicService: SaleLogicService,
+        private cdref: ChangeDetectorRef,
     ) {}
 
     ngOnInit(): void {
@@ -59,21 +79,31 @@ export class TemplateFooterOrderComponent implements OnInit, OnChanges, OnDestro
                 }
             }),
         );
+        if (this.order.screenType === 'Create') {
+            this.commonLogicService.changeToCreateType();
+        }
+        this.payment.tradeDiscount = 0;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (this.payment) {
             this.patchValue();
             this.setTotalAmount();
+            this.countTotalPayment();
         }
     }
 
     ngDoCheck(): void {
         // Phải dùng docheck vì độ trễ
-        if (this.order.orderType === 'Sale') {
+        if (this.order.orderType === 'Sale' && this.order.screenType === 'Detail') {
             this.payment.paymentTerm = moment(this.paymentForm.get('paymentTerm')?.value).format('YYYY-MM-DD');
             this.payment.debtRecord = this.paymentForm.get('debtRecord')?.value;
             this.saleLogicService.setPaymentSource(this.payment);
+        }
+        if (this.order.screenType === 'Create') {
+            this.payment.paymentTerm = moment(this.paymentForm.get('paymentTerm')?.value).format('YYYY-MM-DD');
+            this.payment.debtRecord = this.paymentForm.get('debtRecord')?.value;
+            this.create();
         }
     }
 
@@ -83,12 +113,16 @@ export class TemplateFooterOrderComponent implements OnInit, OnChanges, OnDestro
 
     patchValue() {
         this.paymentForm.patchValue({
-            paymentTerm: this.payment.paymentTerm,
+            paymentTerm: this.payment.paymentTerm || moment(Date.now()).format('YYYY-MM-DD'),
             debtRecord: this.payment.debtRecord,
         });
     }
 
     save() {}
+
+    create() {
+        this.paymentCreate$.emit(this.payment);
+    }
 
     setTotalAmount() {
         this.payment.totalAmount =

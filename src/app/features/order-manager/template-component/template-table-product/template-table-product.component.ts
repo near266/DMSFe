@@ -115,6 +115,9 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
         if (this.payment && this.typeTable === 'Product') {
             this.updatePayment();
         }
+        if (this.type === 'Create') {
+            this.create();
+        }
     }
 
     ngOnDestroy(): void {
@@ -122,7 +125,7 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
     }
 
     create() {
-        this.listCreate$.emit('Tạo');
+        this.listCreate$.emit(this.listAdd);
     }
 
     countTotalAmount() {
@@ -179,9 +182,19 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
         // count totalPayment
         this.countTotalPayment();
         if (this.orderType === 'Purchase') {
-            this.purchaseLogicService.setPaymentSource(this.payment);
+            if (this.type === 'Detail') {
+                this.purchaseLogicService.setPaymentSource(this.payment);
+            }
+            if (this.type === 'Create') {
+                this.purchaseLogicService.setPaymentCreateSource(this.payment);
+            }
         } else if (this.orderType === 'Sale') {
-            this.saleLogicService.setPaymentSource(this.payment);
+            if (this.type === 'Detail') {
+                this.saleLogicService.setPaymentSource(this.payment);
+            }
+            if (this.type === 'Create') {
+                this.saleLogicService.setPaymentCreateSource(this.payment);
+            }
         }
     }
 

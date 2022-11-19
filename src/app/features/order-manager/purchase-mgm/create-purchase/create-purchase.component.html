@@ -29,6 +29,9 @@
             [typeTable]="'Promotion'"
             [type]="'Create'"
             (listCreate$)="handleEmitListPromotion($event)"></app-template-table-product>
-        <app-template-footer-order [order]="order"></app-template-footer-order>
+        <app-template-footer-order
+            [payment]="paymentCreate$ | async"
+            [order]="order"
+            (paymentCreate$)="handleEmitPaymentCreate($event)"></app-template-footer-order>
     </div>
 </div>

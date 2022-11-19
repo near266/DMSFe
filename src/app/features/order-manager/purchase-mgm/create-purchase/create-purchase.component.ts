@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { CommonLogicService } from '../../services/commonLogic.service';
+import { PurchaseLogicService } from '../../services/purchaseLogic.service';
+import { Payment } from '../../template-component/template-footer-order/template-footer-order.component';
 import { Option } from '../../template-component/template-infor-order/template-infor-order.component';
 
 @Component({
@@ -32,20 +35,31 @@ export class CreatePurchaseComponent implements OnInit {
         screenType: 'Create',
     };
 
-    constructor(private commonLogicService: CommonLogicService) {}
+    paymentCreate$: Observable<Payment> = this.purchaseLogicService.paymentCreate$;
+
+    constructor(private commonLogicService: CommonLogicService, private purchaseLogicService: PurchaseLogicService) {}
 
     create() {
-        this.commonLogicService.create();
+        this.purchaseLogicService.create();
     }
-    ngOnInit(): void {}
 
-    handleEmitBodyInfo(e: any) {
-        console.log(e);
+    ngOnInit(): void {
+        this.commonLogicService.changeToCreateType();
     }
-    handleEmitListProduct(e: any) {
-        console.log(e);
+
+    handleEmitBodyInfo(body: any) {
+        this.purchaseLogicService.setInfoCreateSource(body);
     }
-    handleEmitListPromotion(e: any) {
-        console.log(e);
+
+    handleEmitListProduct(body: any) {
+        this.purchaseLogicService.setProductCreateSource(body);
+    }
+
+    handleEmitListPromotion(body: any) {
+        this.purchaseLogicService.setPromotionCreateSource(body);
+    }
+
+    handleEmitPaymentCreate(body: Payment) {
+        this.purchaseLogicService.setPaymentCreateSource(body);
     }
 }

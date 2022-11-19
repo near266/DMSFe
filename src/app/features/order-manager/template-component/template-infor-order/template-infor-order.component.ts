@@ -1,6 +1,7 @@
 import {
     AfterViewInit,
     Component,
+    DoCheck,
     EventEmitter,
     Input,
     OnChanges,
@@ -57,7 +58,7 @@ export class DataInput {
     templateUrl: './template-infor-order.component.html',
     styleUrls: ['./template-infor-order.component.scss'],
 })
-export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, DoCheck {
     @Input() option: Option;
     @Input() data: any;
     @Input() id: string;
@@ -146,6 +147,12 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                     }
                 }
             }
+        }
+    }
+
+    ngDoCheck(): void {
+        if (this.option.type === 'Create') {
+            this.createBody$.emit(this.form);
         }
     }
 

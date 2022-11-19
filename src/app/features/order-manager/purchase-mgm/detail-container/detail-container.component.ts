@@ -25,12 +25,12 @@ export class DetailContainerComponent implements OnInit, AfterViewInit, OnDestro
         this.getStatusNow();
         this.clearDataInDetailOrderSource();
         this.setCustomerIdToLocalStorage();
+        this.commonLogicService.changeToEditType();
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
-
     clearEditSource() {
         this.commonLogicService.clearEditSource();
     }

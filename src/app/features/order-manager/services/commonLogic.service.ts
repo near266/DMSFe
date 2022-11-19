@@ -48,6 +48,10 @@ export class CommonLogicService {
         this.isEditSource.next(true);
     }
 
+    changeToEditType() {
+        this.isEditSource.next(false);
+    }
+
     clearEditSource() {
         this.isEditSource.next(false);
     }
@@ -288,7 +292,7 @@ export class CommonLogicService {
         return list;
     }
 
-    // format để gửi đi body add có thể là type 1 hoặc 2 (tùy xem thêm sản phẩm bình thường hay khuyến mại)
+    // format để gửi đi body add (khi ở màn detail) có thể là type 1 hoặc 2 (tùy xem thêm sản phẩm bình thường hay khuyến mại)
     formatListtAddToSendAPI(list: any, orderType: string, type: number, id: string) {
         list = list.map((product: any) => {
             let body: any = {
@@ -304,7 +308,6 @@ export class CommonLogicService {
                 type: type,
             };
             orderType === 'Purchase' ? (body.purchaseOrderId = id) : (body.saleRecieptId = id);
-            console.log(body);
             return body;
         });
         return list;
@@ -317,6 +320,26 @@ export class CommonLogicService {
                 index: product.index,
             };
         });
+    }
+
+    // Khi format khi ở màn create dùng cho cả promotin, product, sale, purchase
+    formatListAddToSentApi(listAdd: any, type: number) {
+        listAdd = listAdd.map((product: any) => {
+            return {
+                productId: product?.product?.id,
+                productName: product?.product?.productName,
+                unitId: product.unitId, // chưa xét trường hợp k có đvt lẻ
+                warehouseId: product.warehouseId, // chưa xét trường hợp k có kho mặc định
+                unitPrice: product.unitPrice,
+                quantity: product.quantity,
+                totalPrice: product.totalPrice,
+                discount: product.discount,
+                discountRate: product.discountRate,
+                note: product.note,
+                type: type, // 1 là product, 2 là promotion
+            };
+        });
+        return listAdd;
     }
 
     getBodyUpdateProduct(id: string, typeOrder: string, typeTable: string, list: any) {

@@ -10,7 +10,14 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { ConfirmRejectComponent } from '../../orders-mgm/components/confirm-reject/confirm-reject.component';
 import { GenOrderSaleComponent } from '../../orders-mgm/components/gen-order-sale/gen-order-sale.component';
-import { PurchaseBodyUpdate } from '../models/purchaseAPI';
+import {
+    InfoCreate,
+    ListProductCreate,
+    ListPromotionProductCreate,
+    PaymentCreate,
+    PurchaseBodyCreate,
+    PurchaseBodyUpdate,
+} from '../models/purchaseAPI';
 import { PurchaseDetail } from '../models/purchaseDetail';
 import { PurchaseOrder, RootPurchases } from '../models/purchases';
 import { Payment } from '../template-component/template-footer-order/template-footer-order.component';
@@ -27,6 +34,17 @@ export class PurchaseLogicService {
     private isSucessArchivedSource = new BehaviorSubject<boolean>(false);
     private detailSource = new BehaviorSubject<PurchaseDetail>(new PurchaseDetail());
     private paymentSource = new BehaviorSubject<Payment>(new Payment());
+    private infoCreateSource = new BehaviorSubject<any>('');
+    private productCreateSource = new BehaviorSubject<ListProductCreate[]>([]);
+    private promtionCreateSource = new BehaviorSubject<ListPromotionProductCreate[]>([]);
+    private paymentCreateSource = new BehaviorSubject<Payment>({
+        textMoney: '0',
+        prePayment: 0,
+        totalAmount: 0,
+        tradeDiscount: 0,
+        totalDiscountProduct: 0,
+        totalPayment: 0,
+    });
 
     listData$ = this.listDataSource.asObservable();
     isLoading$ = this.isLoadingSource.asObservable();
@@ -34,6 +52,7 @@ export class PurchaseLogicService {
     isSucessArchived$ = this.isSucessArchivedSource.asObservable();
     detail$ = this.detailSource.asObservable();
     payment$ = this.paymentSource.asObservable();
+    paymentCreate$ = this.paymentCreateSource.asObservable();
 
     constructor(
         private purchaseService: PurchaseOrderService,
@@ -45,6 +64,23 @@ export class PurchaseLogicService {
         private numberToText: NumberToTextService,
         private dialog: MatDialog,
     ) {}
+
+    setInfoCreateSource(body: any) {
+        this.infoCreateSource.next(body);
+    }
+
+    setProductCreateSource(body: ListProductCreate[]) {
+        this.productCreateSource.next(body);
+    }
+
+    setPromotionCreateSource(body: ListPromotionProductCreate[]) {
+        this.promtionCreateSource.next(body);
+    }
+
+    setPaymentCreateSource(payment: Payment) {
+        payment.textMoney = this.numberToText.doc(payment.totalPayment);
+        this.paymentCreateSource.next(payment);
+    }
 
     setPaymentSource(payment: Payment) {
         payment.textMoney = this.numberToText.doc(payment.totalPayment);
@@ -452,5 +488,49 @@ export class PurchaseLogicService {
                 },
             );
         });
+    }
+
+    create() {
+        let infoSource = this.infoCreateSource.getValue();
+        let productSource = this.productCreateSource.getValue();
+        let promotionSource = this.promtionCreateSource.getValue();
+        let paymentSource = this.paymentCreateSource.getValue();
+
+        let body: PurchaseBodyCreate = {
+            orderDate: moment(infoSource.get('orderDate')?.value).format('YYYY-MM-DDTHH:mm:ss'),
+            groupId: infoSource.get('groupId')?.value,
+            orderEmployeeId: infoSource.get('orderEmployeeId')?.value,
+            customerId: infoSource.get('customerId')?.value,
+            routeId: infoSource.get('routeId')?.value,
+            type: 0,
+            status: infoSource.get('status')?.value,
+            description: infoSource.get('description')?.value,
+            phone: infoSource.get('phone')?.value,
+            address: infoSource.get('address')?.value,
+            customerName: infoSource.get('customerName')?.value,
+            archived: false,
+            createdDate: moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss'),
+            deliveryDate: moment(infoSource.get('deliveryDate')?.value).format('YYYY-MM-DD'),
+            listProduct: this.commonLogicService.formatListAddToSentApi(productSource, 1),
+            listPromotionProduct: this.commonLogicService.formatListAddToSentApi(promotionSource, 2),
+            paymentMethod: 0, // có 1 loại payment
+            prePayment: paymentSource.prePayment,
+            totalAmount: paymentSource.totalAmount,
+            totalOfVAT: 0, // là trường gì?
+            totalDiscountProduct: paymentSource.totalDiscountProduct,
+            tradeDiscount: paymentSource.tradeDiscount,
+            totalPayment: paymentSource.totalPayment,
+            source: 'Web',
+        };
+        this.purchaseService.createOrder(body).subscribe(
+            (data) => {},
+            (err) => {
+                this.snackbar.failureSnackBar();
+            },
+            () => {
+                this.snackbar.openSnackbar('Tạo mới đơn đặt hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                this.router.navigate(['/order']);
+            },
+        );
     }
 }

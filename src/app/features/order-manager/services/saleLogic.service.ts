@@ -7,8 +7,9 @@ import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.servic
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
+import { ListProductCreate, ListPromotionProductCreate } from '../models/purchaseAPI';
 import { RootSaleReceipt, SaleOrder } from '../models/sale';
-import { SaleUpdateBody } from '../models/SaleAPI';
+import { SaleCreateBody, SaleUpdateBody } from '../models/SaleAPI';
 import { SaleDetail } from '../models/saleDetail';
 import { Payment } from '../template-component/template-footer-order/template-footer-order.component';
 import { CommonLogicService } from './commonLogic.service';
@@ -26,6 +27,17 @@ export class SaleLogicService {
     private isSuccessArchivedSoure = new BehaviorSubject<boolean>(false);
     private detailOrderSoure = new BehaviorSubject<SaleDetail>(new SaleDetail());
     private paymentSource = new BehaviorSubject<Payment>(new Payment());
+    private infoCreateSource = new BehaviorSubject<any>('');
+    private productCreateSource = new BehaviorSubject<ListProductCreate[]>([]);
+    private promtionCreateSource = new BehaviorSubject<ListPromotionProductCreate[]>([]);
+    private paymentCreateSource = new BehaviorSubject<Payment>({
+        textMoney: '0',
+        prePayment: 0,
+        totalAmount: 0,
+        tradeDiscount: 0,
+        totalDiscountProduct: 0,
+        totalPayment: 0,
+    });
 
     total$ = this.totalSource.asObservable();
     isLoading$ = this.isLoadingSource.asObservable();
@@ -34,6 +46,7 @@ export class SaleLogicService {
     isSucessArchived$ = this.isSuccessArchivedSoure.asObservable();
     detailOrder$ = this.detailOrderSoure.asObservable();
     payment$ = this.paymentSource.asObservable();
+    paymentCreate$ = this.paymentCreateSource.asObservable();
 
     constructor(
         private saleReceiptService: SaleReceiptService,
@@ -45,6 +58,23 @@ export class SaleLogicService {
         private commonLogicService: CommonLogicService,
         private puchaseLogicService: PurchaseLogicService,
     ) {}
+
+    setInfoCreateSource(body: any) {
+        this.infoCreateSource.next(body);
+    }
+
+    setProductCreateSource(body: ListProductCreate[]) {
+        this.productCreateSource.next(body);
+    }
+
+    setPromotionCreateSource(body: ListPromotionProductCreate[]) {
+        this.promtionCreateSource.next(body);
+    }
+
+    setPaymentCreateSource(payment: Payment) {
+        payment.textMoney = this.numberToText.doc(payment.totalPayment);
+        this.paymentCreateSource.next(payment);
+    }
 
     clearDataInDetailOrderSource() {
         this.detailOrderSoure.next(new SaleDetail());
@@ -396,5 +426,51 @@ export class SaleLogicService {
                 },
             );
         }
+    }
+
+    create() {
+        let infoSource = this.infoCreateSource.getValue();
+        let productSource = this.productCreateSource.getValue();
+        let promotionSource = this.promtionCreateSource.getValue();
+        let paymentSource = this.paymentCreateSource.getValue();
+        let body: SaleCreateBody = {
+            saleEmployeeId: infoSource.get('saleEmployee')?.value,
+            orderDate: moment(infoSource.get('orderDate')?.value).format('YYYY-MM-DDTHH:mm:ss'),
+            groupId: infoSource.get('groupId')?.value,
+            orderEmployeeId: infoSource.get('orderEmployeeId')?.value,
+            customerId: infoSource.get('customerId')?.value,
+            routeId: infoSource.get('routeId')?.value,
+            type: 0,
+            status: infoSource.get('status')?.value,
+            description: infoSource.get('description')?.value,
+            phone: infoSource.get('phone')?.value,
+            address: infoSource.get('address')?.value,
+            customerName: infoSource.get('customerName')?.value,
+            archived: false,
+            createdDate: moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss'),
+            deliveryDate: moment(infoSource.get('deliveryDate')?.value).format('YYYY-MM-DD'),
+            listProduct: this.commonLogicService.formatListAddToSentApi(productSource, 1),
+            listPromotionProduct: this.commonLogicService.formatListAddToSentApi(promotionSource, 2),
+            paymentMethod: 0, // có 1 loại payment
+            prePayment: paymentSource.prePayment | 0,
+            totalAmount: paymentSource.totalAmount,
+            totalOfVAT: 0, // là trường gì?
+            totalDiscountProduct: paymentSource.totalDiscountProduct,
+            tradeDiscount: paymentSource.tradeDiscount,
+            totalPayment: paymentSource.totalPayment,
+            saleDate: infoSource.get('saleDate')?.value,
+            paymentTerm: paymentSource.paymentTerm!,
+            debtRecord: paymentSource.debtRecord!,
+        };
+        this.saleReceiptService.create(body).subscribe(
+            (data) => {},
+            (err) => {
+                this.snackbar.failureSnackBar();
+            },
+            () => {
+                this.snackbar.openSnackbar('Tạo mới đơn bán hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                this.router.navigate(['/order/sale']);
+            },
+        );
     }
 }

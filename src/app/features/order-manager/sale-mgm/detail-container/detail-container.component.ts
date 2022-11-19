@@ -19,6 +19,7 @@ export class DetailContainerComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.roleMain = localStorage.getItem('roleMain')!;
         this.clearDataInDetailOrderSource();
+        this.commonLogicService.changeToEditType()
     }
 
     ngAfterViewInit(): void {
