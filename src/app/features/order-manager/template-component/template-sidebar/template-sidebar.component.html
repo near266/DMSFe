@@ -1,6 +1,6 @@
 <div class="min-h-screen bg-white p-3 w-60 border-r">
     <div class="w-full flex items-center justify-between">
-        <mat-form-field class="w-4/5 ml-1 text-[12px]" appearance="outline">
+        <mat-form-field class="w-4/5 ml-1 text-[12px]" appearance="outline" floatLabel="always">
             <mat-label>Tìm kiếm phiếu</mat-label>
             <input matInput class="bg-white" [(ngModel)]="searchText" (keyup.enter)="searchKeyword()" />
         </mat-form-field>
