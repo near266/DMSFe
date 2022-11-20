@@ -5,8 +5,11 @@
         <span>({{ total }})</span>
         <span class="ml-1" *ngIf="quantitySelected">( Đã chọn - {{ quantitySelected }})</span>
     </span>
-    <div style="font-size: 12px" class="flex items-center">
-        <mat-form-field style="padding-bottom: 0px !important" appearance="outline" [formGroup]="dateSearchForm">
+    <div class="flex items-center">
+        <mat-form-field
+            style="padding-bottom: 0px !important; font-size: 12px"
+            appearance="outline"
+            [formGroup]="dateSearchForm">
             <mat-label>Khoảng thời gian</mat-label>
             <mat-date-range-input [rangePicker]="picker">
                 <input matStartDate placeholder="Start date" formControlName="fromDate" />

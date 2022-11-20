@@ -1,13 +1,13 @@
 <div class="min-h-screen bg-white p-3 w-60 border-r">
     <div class="w-full flex items-center justify-between">
-        <mat-form-field class="w-4/5 ml-1 text-[12px]" appearance="outline" floatLabel="always">
+        <mat-form-field class="w-full ml-1 text-[12px]" appearance="outline" floatLabel="always">
             <mat-label>Tìm kiếm phiếu</mat-label>
             <input matInput class="bg-white" [(ngModel)]="searchText" (keyup.enter)="searchKeyword()" />
         </mat-form-field>
-        <i
+        <!-- <i
             (click)="searchKeyword()"
             matSuffix
-            class="ml-1 text-center mr-1 px-1 py-2 rounded-md bg-zinc-300 h-full w-full hover:opacity-70 font-bold cursor-pointer fa-solid text-base icon fa-magnifying-glass"></i>
+            class="ml-1 text-center mr-1 px-1 py-2 rounded-md bg-zinc-300 h-full w-full hover:opacity-70 font-bold cursor-pointer fa-solid text-base icon fa-magnifying-glass"></i> -->
     </div>
     <div
         (click)="isShowEmployeeTree = !isShowEmployeeTree"
