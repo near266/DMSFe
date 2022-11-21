@@ -62,8 +62,8 @@ export class DetailMajorComponent implements OnInit {
             label: 'Giới hạn phòng ban',
             required: true,
             options: [
-                { value: true, label: 'Giới hạn' },
-                { value: false, label: 'Không giới hạn' },
+                { value: 'Giới hạn', label: 'Giới hạn' },
+                { value: 'Không giới hạn', label: 'Không giới hạn' },
             ],
         },
     },
