@@ -39,6 +39,6 @@ export class SaleReceiptReportTableComponent implements OnInit, AfterViewInit {
     navigateToDetail(id: any) {
         console.log(id);
         localStorage.setItem('receiptOrderId', id);
-        window.open('/ordersale/detail/viewEdit');
+        window.open('/order/sale/detail/viewEdit');
     }
 }

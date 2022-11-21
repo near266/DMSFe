@@ -330,23 +330,23 @@ export class PurchaseLogicService {
         );
     }
 
-    updateProduct(listUpdate: any) {
-        if (listUpdate.length > 0) {
-            let body = {
-                purchaseOrderProducts: listUpdate,
-            };
-            this.purchaseService.updateProductList(body).subscribe(
-                (data) => {},
-                (err) => {
-                    this.snackbar.failureSnackBar();
-                },
-                () => {
-                    this.snackbar.successSnackBar();
-                    this.commonLogicService.successUpdate();
-                },
-            );
-        }
-    }
+    // updateProduct(listUpdate: any) {
+    //     if (listUpdate.length > 0) {
+    //         let body = {
+    //             purchaseOrderProducts: listUpdate,
+    //         };
+    //         this.purchaseService.updateProductList(body).subscribe(
+    //             (data) => {},
+    //             (err) => {
+    //                 this.snackbar.failureSnackBar();
+    //             },
+    //             () => {
+    //                 this.snackbar.successSnackBar();
+    //                 this.commonLogicService.successUpdate();
+    //             },
+    //         );
+    //     }
+    // }
 
     // update status
     updateStatusOrder(changeTo: number) {
