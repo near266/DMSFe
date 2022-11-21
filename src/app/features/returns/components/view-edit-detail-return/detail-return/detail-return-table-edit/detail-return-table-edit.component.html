@@ -93,7 +93,7 @@
               <input currencyMask
                 [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
                 matInput [ngModel]="item.unitPrice" (ngModelChange)="item.unitPrice=$event;updateItemTotalPrice(item)"
-                [disabled]="!item.quantity" />
+                [disabled]="!item.returnsQuantity" />
             </mat-form-field>
           </div>
         </td>
@@ -117,11 +117,9 @@
             <mat-form-field appearance="outline">
               <textarea matInput [rows]="1" [(ngModel)]="item.note"></textarea>
             </mat-form-field>
-
           </div>
         </td>
-        <td class="border-x  border-solid align-middle px-2 text-center"
-          (click)="removeProductFromReturn(item.product?.id)">
+        <td class="border-x  border-solid align-middle px-2 text-center" (click)="removeProductFromReturn(item.index)">
           <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
         </td>
       </tr>

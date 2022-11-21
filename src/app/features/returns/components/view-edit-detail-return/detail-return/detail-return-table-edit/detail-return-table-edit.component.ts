@@ -106,15 +106,15 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
         this.updateDiscountRate(item);
     }
     updateDiscountRate(item: any) {
-        if (item.discountRate && item.totalPrice) {
-            item.discount = item.discountRate * item.totalPrice;
+        if (item.discount && item.totalPrice) {
+            item.discountRate = (item.discount / item.totalPrice) * 100;
         } else {
-            item.discount = 0;
+            item.discountRate = 0;
         }
     }
     removeProductFromReturn(id: string) {
         //find id in listProduct.product and remove
-        this.productsInput = this.productsInput.filter((item) => item.product.id !== id);
+        this.productsInput = this.productsInput.filter((item) => item.index !== id);
         this.returnDetailsService.returnListProducts$.next(this.productsInput);
     }
     ngOnDestroy() {

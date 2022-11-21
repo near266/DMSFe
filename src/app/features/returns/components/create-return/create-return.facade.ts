@@ -6,12 +6,12 @@ import { ProductReturn } from '../../models/product';
 @Injectable()
 export class CreateReturnFacade {
     private filteredProducts: BehaviorSubject<ProductReturn[]> = new BehaviorSubject<ProductReturn[]>([]);
+    filteredProducts$: Observable<ProductReturn[]> = this.filteredProducts.asObservable();
     private filteredPromotionProducts: BehaviorSubject<ProductReturn[]> = new BehaviorSubject<ProductReturn[]>([]);
     private tradeDiscount: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private returnsQuantity: BehaviorSubject<number> = new BehaviorSubject(0);
     private totalPrice: BehaviorSubject<number> = new BehaviorSubject(0);
     private totalDiscountProduct: BehaviorSubject<number> = new BehaviorSubject(0);
-    filteredProducts$: Observable<ProductReturn[]> = this.filteredProducts.asObservable();
     filteredPromotionProducts$: Observable<ProductReturn[]> = this.filteredPromotionProducts.asObservable();
     returnsQuantity$ = this.returnsQuantity.asObservable();
     tradeDiscount$ = this.tradeDiscount.asObservable();
@@ -70,6 +70,7 @@ export class CreateReturnFacade {
     updateTradeDiscount(tradeDiscount: number) {
         this.tradeDiscount.next(tradeDiscount);
     }
+
     updateTotalDiscountProduct() {
         if (this.getFilteredProducts.length) {
             this.totalDiscountProduct.next(this.getFilteredProducts.reduce((acc, cur) => acc + (cur.discount || 0), 0));

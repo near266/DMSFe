@@ -23,7 +23,7 @@ export class DetailReturnTablePromotionEditComponent implements OnInit {
     }
     removeProductFromReturn(id: string) {
         //find id in listProduct.product and remove
-        this.productsInput = this.productsInput.filter((item) => item.product.id !== id);
+        this.productsInput = this.productsInput.filter((item) => item.index !== id);
         this.returnDetailsService.promotionListProduct$.next(this.productsInput);
     }
     ngOnDestroy() {

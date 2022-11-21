@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable, startWith, Subscription } from 'rxjs';
 import { SelectOption } from 'src/app/core/model/Select';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ProductDialogService } from 'src/app/features/product/services/product-dialog.service';
@@ -14,19 +14,33 @@ import { CreateReturnFacade } from '../create-return.facade';
     styleUrls: ['./create-return-table.component.scss'],
 })
 export class CreateReturnTableComponent implements OnInit {
-    productsInput$: Observable<ProductReturn[]>;
-    productQuantity$: Observable<number>;
-    unitOptions: SelectOption[];
-    warehouseOptions: SelectOption[];
     subscription: Subscription[] = [];
+    vm$: Observable<{
+        filteredProducts: ProductReturn[];
+        returnsQuantity: number;
+        units: SelectOption[];
+        warehouses: SelectOption[];
+    }>;
     constructor(
         private returnFormService: ReturnFormService,
         private snackbarService: SnackbarService,
         private facade: CreateReturnFacade,
         private productDialogService: ProductDialogService,
     ) {
-        this.productsInput$ = this.facade.filteredProducts$;
-        this.productQuantity$ = this.facade.returnsQuantity$;
+        this.vm$ = combineLatest(
+            [
+                facade.filteredProducts$,
+                facade.returnsQuantity$,
+                productDialogService.getAllUnits().pipe(startWith([])),
+                productDialogService.getAllWarehouses().pipe(startWith([])),
+            ],
+            (filteredProducts, returnsQuantity, units, warehouses) => ({
+                filteredProducts,
+                returnsQuantity,
+                units,
+                warehouses,
+            }),
+        );
     }
     stopPropagation(e: any) {
         e.stopPropagation();
@@ -34,12 +48,6 @@ export class CreateReturnTableComponent implements OnInit {
     ngOnInit(): void {
         // calculate sum of product quantity
         this.subscription.push(
-            this.productDialogService.getAllUnits().subscribe((data) => {
-                this.unitOptions = data;
-            }),
-            this.productDialogService.getAllWarehouses().subscribe((data) => {
-                this.warehouseOptions = data;
-            }),
             this.returnFormService.submitProductForm$.subscribe((data) => {
                 if (data && this.facade.getFilteredProducts.length && this.checkValidListProducts()) {
                     const requiredFields = this.facade.getFilteredProducts.map((item: ProductReturn) => {

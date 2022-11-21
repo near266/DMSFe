@@ -36,15 +36,14 @@
       </td>
       <!-- mã phiếu -->
       <td class="border-x min-w-[200px] border-solid align-middle px-0.5 text-emerald-500 font-medium cursor-pointer">
-        <a [routerLink]="['/returns/details',return.id]" (click)="returnCodeEmit(return.id)"
-          class="flex items-center space-x-2">
+        <a [routerLink]="['/returns/details',return.id]" class="flex items-center space-x-2">
           {{return.returnCode}}
         </a>
       </td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.customer?.customerCode}} </td>
       <td class="border-x min-w-[300px] border-solid align-middle px-2">{{return.customerName}}</td>
       <td class="border-x min-w-[300px] border-solid align-middle px-2">{{return.address}} </td>
-      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.returnDate | date:'dd/MM/yyyy'}}</td>
+      <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.returnsDate | date:'dd/MM/yyyy'}}</td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.totalPayment | currency:'VND'}}</td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">web</td>
       <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.orderDate | date:'dd/MM/yyyy'}} </td>

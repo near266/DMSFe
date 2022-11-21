@@ -1,15 +1,11 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import * as moment from 'moment';
-import { Product } from '../../../product/models/product';
-import { DataService } from 'src/app/core/services/data.service';
-import { readMoney } from 'src/app/core/shared/utils/readMoney';
-import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
-import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
-import { ReturnFormService } from '../../services/return-form.service';
-import { combineLatest, Observable, Subscription, tap } from 'rxjs';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { Observable, Subscription, tap } from 'rxjs';
+import { readMoney } from 'src/app/core/shared/utils/readMoney';
+import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
+import { Product } from '../../../product/models/product';
+import { ReturnFormService } from '../../services/return-form.service';
 import { CreateReturnFacade } from './create-return.facade';
 
 @Component({
@@ -21,7 +17,6 @@ import { CreateReturnFacade } from './create-return.facade';
 export class CreateReturnComponent implements OnInit {
     @ViewChild('Product') ngSelectProductComponent: NgSelectComponent;
     @ViewChild('Promotion') ngSelectPromotionComponent: NgSelectComponent;
-    subscription: Subscription[] = [];
     statusList = [
         {
             value: 1,
@@ -66,9 +61,7 @@ export class CreateReturnComponent implements OnInit {
     ngOnInit(): void {
         this.products$ = this.returnFormService.getAllProducts();
     }
-    ngOnDestroy() {
-        this.subscription.forEach((sub) => sub.unsubscribe());
-    }
+
     submitForms(): void {
         this.returnFormService.submitForms();
     }
@@ -85,9 +78,7 @@ export class CreateReturnComponent implements OnInit {
         }
         this.ngSelectPromotionComponent.handleClearClick();
     }
-    stopPropagation(e: any) {
-        e.stopPropagation();
-    }
+
     openDialogProduct(type: string) {
         const dialogRef = this.dialog
             .open(ProductListComponent, {
@@ -106,6 +97,7 @@ export class CreateReturnComponent implements OnInit {
                 }
             });
     }
+
     calculateTotalPay() {
         const ins = new readMoney(0);
         this.textMoney = ins.doc(

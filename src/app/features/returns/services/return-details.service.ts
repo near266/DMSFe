@@ -53,7 +53,7 @@ export class ReturnDetailsService {
         const addListProduct: any[] = [];
         const removeListProduct: any[] = [];
         currentListProduct.forEach((product) => {
-            const duplicated = this.initialListProduct.find((item) => item.product.id === product.product.id);
+            const duplicated = this.initialListProduct.find((item) => item.index === product.index);
             if (duplicated) {
                 updateListProduct.push(product);
             } else {
@@ -62,7 +62,7 @@ export class ReturnDetailsService {
             return product;
         });
         promotionListProduct.forEach((product) => {
-            const duplicated = this.initialListPromotionProduct.find((item) => item.product.id === product.product.id);
+            const duplicated = this.initialListPromotionProduct.find((item) => item.index === product.index);
             if (duplicated) {
                 updateListProduct.push(product);
             } else {
@@ -71,14 +71,14 @@ export class ReturnDetailsService {
             return product;
         });
         this.initialListProduct.forEach((product) => {
-            const duplicated = currentListProduct.find((item) => item.product.id === product.product.id);
+            const duplicated = currentListProduct.find((item) => item.index === product.index);
             if (!duplicated) {
                 removeListProduct.push(product);
             }
             return product;
         });
         this.initialListPromotionProduct.forEach((product) => {
-            const duplicated = promotionListProduct.find((item) => item.product.id === product.product.id);
+            const duplicated = promotionListProduct.find((item) => item.index === product.index);
             if (!duplicated) {
                 removeListProduct.push(product);
             }

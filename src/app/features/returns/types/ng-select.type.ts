@@ -7,4 +7,8 @@ import { FieldType } from '@ngx-formly/core';
     templateUrl: 'ng-select.component.html',
     styleUrls: ['./ng-select.component.scss'],
 })
-export class NgSelectFormlyComponent extends FieldType {}
+export class NgSelectFormlyComponent extends FieldType {
+    get control() {
+        return this.formControl as FormControl;
+    }
+}
