@@ -56,7 +56,6 @@ export class CreateReturnFormComponent implements OnInit {
                         compareWith: (o1: any, o2: any) => o1.value === o2.value,
                         options: this.returnFormService.getAllCustomers(),
                         change: (field: FormlyFieldConfig, $event: any) => {
-                            console.log($event);
                             field.form!.get('customerName')?.setValue(field!.formControl!.value.customerName);
                             field.form!.get('address')?.setValue(field!.formControl!.value.address);
                             field.form!.get('phone')?.setValue(field!.formControl!.value.phone);
