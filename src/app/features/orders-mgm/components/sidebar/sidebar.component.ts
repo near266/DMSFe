@@ -15,7 +15,7 @@ import { DataService } from '../../services/data.service';
 export class SidebarComponent implements OnInit, AfterViewInit {
     @Output() isShowSidebarOutput = new EventEmitter<boolean>();
     @Output() bodyFilter = new EventEmitter<any>();
-
+    isSelectMenu: boolean = false;
     isShowSidebar = true;
     isSearchByBill = false;
     isChoose = false;

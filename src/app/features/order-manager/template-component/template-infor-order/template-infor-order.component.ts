@@ -36,7 +36,7 @@ export class Status {
 }
 
 export class DataInput {
-    code!: string;
+    code?: string;
     status!: number;
     orderDate?: string;
     saleDate?: string;
@@ -138,12 +138,16 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                         if (this.option.type === 'Detail') {
                             this.patchValue();
                         }
+                        if (this.option.type === 'Gen') {
+                            this.patchValue();
+                        }
                         break;
                     }
                     case 'option': {
                         if (this.option.type === 'Create') {
                             this.commonLogicService.changeToCreateType();
                         }
+                        break;
                     }
                 }
             }

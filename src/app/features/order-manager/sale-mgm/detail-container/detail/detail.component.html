@@ -2,7 +2,7 @@
     [option]="option"
     [data]="detailPassToInput"
     [id]="id"
-    [payment]="payment$ | async"></app-template-infor-order>
+    [payment]="(payment$ | async) || paymentNew"></app-template-infor-order>
 <div class="px-3">
     <app-template-table-product
         [id]="id"
@@ -10,7 +10,7 @@
         [typeTable]="'Product'"
         [list]="list$ | async"
         [title]="'Sản phẩm đặt hàng'"
-        [payment]="payment$ | async"></app-template-table-product>
+        [payment]="(payment$ | async) || paymentNew"></app-template-table-product>
     <app-template-table-product
         [id]="id"
         [orderType]="'Sale'"
@@ -19,5 +19,5 @@
         [title]="'Sản phẩm khuyến mại'"></app-template-table-product>
 </div>
 <div class="px-3 mb-3">
-    <app-template-footer-order [order]="order" [payment]="payment$ | async"></app-template-footer-order>
+    <app-template-footer-order [order]="order" [payment]="(payment$ | async) || paymentNew"></app-template-footer-order>
 </div>

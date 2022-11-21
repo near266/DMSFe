@@ -35,6 +35,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
     listPromotion$: Observable<any> = this.commonLogicService.listPromotion$;
     @AutoUnsubscribe()
     payment$: Observable<Payment> = this.saleLogicService.payment$;
+    paymentNew: Payment = new Payment();
 
     detailPassToInput: DataInput;
     constructor(private commonLogicService: CommonLogicService, private saleLogicService: SaleLogicService) {}

@@ -16,7 +16,7 @@
         </div>
         <div class="ml-8 px-1">
             <order-template-header
-                [total]="total$ | async"
+                [total]="(total$ | async) || 0"
                 [titleHeader]="'Danh sách đơn đặt hàng'"
                 [quantitySelected]="listIdSelected.length"
                 (dateFilter$)="handleEmitDateFilter($event)">
@@ -134,9 +134,9 @@
             <order-template-table
                 [headers]="purchaseOrder"
                 [listData]="listData$ | async"
-                [isLoading]="isLoading$ | async"
+                [isLoading]="(isLoading$ | async) || false"
                 [page]="page"
-                [total]="total$ | async"
+                [total]="(total$ | async) || 0"
                 (emitValue$)="handleEmitValue($event)"
                 (listIdsSelected$)="handleEmitListIds($event)"></order-template-table>
             <order-template-pagination (pageCurrent$)="handleEmitPageCurrent($event)"></order-template-pagination>
