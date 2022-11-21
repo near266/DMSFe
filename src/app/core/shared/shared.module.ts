@@ -6,12 +6,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
-import { NgSelectModule } from '@ng-select/ng-select';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
+import { NgSelectModule } from '@ng-select/ng-select';
 // Material Navigation
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -26,42 +26,39 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 // Material Buttons & Indicators
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatBadgeModule } from '@angular/material/badge';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // Material Popups & Modals
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 // Material Data tables
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TreeModule } from '@circlon/angular-tree-component';
-import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.component';
-import { MenuCollapseSearchComponent } from './components/menu-collapse-search/menu-collapse-search.component';
-import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
-import { MenuCollapseTreeComponent } from './components/menu-collapse-tree/menu-collapse-tree.component';
-import { EzPaginationComponent } from './components/ez-pagination/ez-pagination.component';
-import { NgxPaginationModule } from 'ngx-pagination';
+import { NgPrintModule } from 'ng-print';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
-import { NgPrintModule } from 'ng-print';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { EzPaginationComponent } from './components/ez-pagination/ez-pagination.component';
+import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
+import { MenuCollapseSearchComponent } from './components/menu-collapse-search/menu-collapse-search.component';
+import { MenuCollapseTreeComponent } from './components/menu-collapse-tree/menu-collapse-tree.component';
+import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.component';
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { TemplateTableComponent } from 'src/app/features/order-manager/template-component/template-table/template-table.component';
-import { TemplatePaginationComponent } from 'src/app/features/order-manager/template-component/template-pagination/template-pagination.component';
-import { TemplateSidebarComponent } from 'src/app/features/order-manager/template-component/template-sidebar/template-sidebar.component';
-import { TemplateHeaderComponent } from 'src/app/features/order-manager/template-component/template-header/template-header.component';
+import { MenuCollapseTreeMultipleComponent } from './components/menu-collapse-tree-multiple/menu-collapse-tree-multiple.component';
 
 @NgModule({
     declarations: [
@@ -72,10 +69,7 @@ import { TemplateHeaderComponent } from 'src/app/features/order-manager/template
         EzPaginationComponent,
         ConfirmDialogComponent,
         ConfirmationDialogComponent,
-        TemplateTableComponent,
-        TemplatePaginationComponent,
-        TemplateSidebarComponent,
-        TemplateHeaderComponent,
+        MenuCollapseTreeMultipleComponent,
     ],
     imports: [
         CommonModule,
@@ -161,6 +155,7 @@ import { TemplateHeaderComponent } from 'src/app/features/order-manager/template
         NgxMatSelectSearchModule,
         MenuCollapseSearchComponent,
         MenuCollapseTreeComponent,
+        MenuCollapseTreeMultipleComponent,
         EzPaginationComponent,
         MatProgressSpinnerModule,
         MatProgressBarModule,
@@ -178,10 +173,6 @@ import { TemplateHeaderComponent } from 'src/app/features/order-manager/template
         TreeModule,
         NgxPaginationModule,
         ClipboardModule,
-        TemplateTableComponent,
-        TemplatePaginationComponent,
-        TemplateSidebarComponent,
-        TemplateHeaderComponent,
     ],
 })
 export class SharedModule {}

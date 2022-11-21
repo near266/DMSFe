@@ -48,7 +48,7 @@ export class MajorsComponent implements OnInit {
       if(data){
         this.major = data;
         this.totalmajors = data.length
-        // console.log(data);
+        console.log(data);
       }
     })
   }

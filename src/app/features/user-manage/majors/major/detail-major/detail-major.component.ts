@@ -26,7 +26,8 @@ export class DetailMajorComponent implements OnInit {
   model = {
     id: null,
     commodityName: null,
-    commodityCode: 0,
+    commodityCode: null,
+    debtLimit: null,
     status: null,
   };
 
@@ -61,8 +62,8 @@ export class DetailMajorComponent implements OnInit {
             label: 'Giới hạn phòng ban',
             required: true,
             options: [
-                { value: true, label: 'Giới hạn' },
-                { value: false, label: 'Không giới hạn' },
+                { value: 'Giới hạn', label: 'Giới hạn' },
+                { value: 'Không giới hạn', label: 'Không giới hạn' },
             ],
         },
     },
@@ -96,13 +97,14 @@ export class DetailMajorComponent implements OnInit {
                 },
             });
         } else {
+            console.log(major);
             this.majorService.updateMajor(major).subscribe({
                 next: (res) => {
-                    this.snackbar.openSnackbar('Sửa nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                    this.snackbar.openSnackbar('Sửa ngành hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
                     this.dialogRef.close({event: true});
                 },
                 error: (err) => {
-                    this.snackbar.openSnackbar('Sửa nhãn hiệu thất bại', 2000, 'Đóng', 'center', 'bottom', true);
+                    this.snackbar.openSnackbar('Sửa ngành hàng thất bại', 2000, 'Đóng', 'center', 'bottom', true);
                     console.log(err);
                 },
             });
@@ -120,7 +122,7 @@ export class DetailMajorComponent implements OnInit {
     this.majorService.changeHeader('');
     setTimeout(() => {
         if (this.majorModel) {
-            console.log(this.majorModel);
+            // console.log(this.majorModel);
             this.form.patchValue(this.majorModel || {});
             this.majorService.changeHeader(this.majorModel.commodityName || '');
             this.form.disable();

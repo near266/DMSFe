@@ -9,7 +9,11 @@ import { Title } from '@angular/platform-browser';
 import { WarehousesService } from 'src/app/core/services/warehouses.service';
 import { LogicService } from './services/logic.service';
 import { Warehouse } from './models/warehouse';
-import { IBodySearch } from './models/Body';
+import { IBodySearch } from './models/BodySearch';
+import { MatDialog } from '@angular/material/dialog';
+import { AddWarehouseComponent } from './components/add-warehouse/add-warehouse.component';
+import { UpdateWarehouseComponent } from './components/update-warehouse/update-warehouse.component';
+import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-warehouses',
@@ -23,6 +27,7 @@ export class WarehousesComponent implements OnInit {
   type!: string;
   warehouses: Warehouse[] = [];
   totalCount: number = 0;
+  listSelectedId: string[] = [];
   bodySearch: IBodySearch = {
     keyword: null,
     status: null
@@ -49,7 +54,9 @@ export class WarehousesComponent implements OnInit {
     private activatedroute: ActivatedRoute,
     public datepipe: DatePipe,
     public router: Router,
-    private logicService: LogicService
+    private logicService: LogicService,
+    private dialog: MatDialog,
+    private confirmService: ConfirmDialogService
     ) { }
 
   ngOnInit(): void {
@@ -97,5 +104,37 @@ export class WarehousesComponent implements OnInit {
     this.logicService.searchWarehouse(this.bodySearch);
   }
 
+  change(id: string) {
+    if(this.listSelectedId.indexOf(id) < 0) {
+      this.listSelectedId.push(id);
+    } else {
+      this.listSelectedId.splice(this.listSelectedId.indexOf(id), 1);
+    }
+  }
+
+  AddWareHouse() {
+    this.dialog.open(AddWarehouseComponent, {
+      height: '100vh',
+      minWidth: '900px',
+      panelClass: 'custom-mat-dialog-container'
+    });
+  }
+
+  DetailWareHouse(warehouse: Warehouse) {
+    this.dialog.open(UpdateWarehouseComponent, {
+      data: warehouse.id,
+      height: '100vh',
+      minWidth: '900px',
+      panelClass: 'custom-mat-dialog-container'
+    });
+  }
+
+  DeleteWareHouse() {
+    this.confirmService.openDialog({message: 'Bạn có chắc chắn muốn xóa những kho hàng này?',confirm: 'Xác nhận',cancel: 'Hủy'}).subscribe( data => {
+      if(data) {
+        this.logicService.deleteWareHouse(this.listSelectedId);
+      }
+    });
+  }
 
 }

@@ -92,7 +92,7 @@ export interface Product {
     stt: number;
 }
 
-export interface ProductSerch {
+export interface ProductSearch {
     data: Product[];
     totalCount: number;
 }

@@ -6,6 +6,7 @@ export class Route {
   unitTreeGroupId?: string;
   unitTreeGroup?: UnitTreeGroup;
   routeDate?: string;
+  totalCus?: any;
   startedDate?: string;
   status?: boolean;
   id?: string;

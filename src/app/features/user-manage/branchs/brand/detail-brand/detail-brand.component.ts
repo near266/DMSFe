@@ -26,7 +26,7 @@ export class DetailBrandComponent implements OnInit {
   model = {
     id: null,
     brandName: null,
-    brandCode: 0,
+    brandCode: null,
     debtLimit: null,
     status: null,
   };
@@ -83,9 +83,8 @@ export class DetailBrandComponent implements OnInit {
   ];
 
   onSubmit(brand: Brand) {
-    // console.log(brand);
-    if (!this.form.invalid) {
-        if (!brand.id) {
+      if (!this.form.invalid) {
+          if (!brand.id) {
             delete brand.id;
             this.branchService.addBrand(brand).subscribe({
                 next: (res) => {
@@ -97,6 +96,7 @@ export class DetailBrandComponent implements OnInit {
                 },
             });
         } else {
+            // console.log(brand);
             this.branchService.updateBrand(brand).subscribe({
                 next: (res) => {
                     this.snackbar.openSnackbar('Sửa nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
@@ -121,7 +121,7 @@ export class DetailBrandComponent implements OnInit {
     this.branchService.changeHeader('');
     setTimeout(() => {
         if (this.brandModel) {
-            console.log(this.brandModel);
+            // console.log(this.brandModel);
             this.form.patchValue(this.brandModel || {});
             this.branchService.changeHeader(this.brandModel.brandName || '');
             this.form.disable();

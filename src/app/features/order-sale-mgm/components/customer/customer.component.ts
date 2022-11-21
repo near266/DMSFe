@@ -9,7 +9,7 @@ import { DataService } from 'src/app/core/services/data.service';
     styleUrls: ['./customer.component.scss'],
 })
 export class CustomerComponent implements OnInit {
-    subscription!: Subscription;
+    subscription: Subscription = new Subscription();
     type: string = 'View';
     customerId: any = '';
     customerInfo: any;
