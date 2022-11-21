@@ -1,0 +1,25 @@
+<app-template-infor-order
+    [option]="option"
+    [data]="detailPassToInput"
+    [id]="id"
+    [payment]="payment$ | async"></app-template-infor-order>
+<div class="px-3">
+    <app-template-table-product
+        [id]="id"
+        [orderType]="'Purchase'"
+        [typeTable]="'Product'"
+        [title]="'Sản phẩm đặt hàng'"
+        [list]="list$ | async"
+        (listUpdate$)="handleEmitListUpdate($event)"
+        [payment]="payment$ | async"></app-template-table-product>
+    <app-template-table-product
+        [id]="id"
+        [orderType]="'Purchase'"
+        [typeTable]="'Promotion'"
+        [title]="'Sản phẩm khuyến mại'"
+        [list]="listPromotion$ | async"
+        (listUpdate$)="handleEmitListPromotionUpdate($event)"></app-template-table-product>
+</div>
+<div class="px-3 mt-3">
+    <app-template-footer-order [order]="order" [payment]="payment$ | async"></app-template-footer-order>
+</div>

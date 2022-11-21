@@ -1,0 +1,83 @@
+<div class="fixed z-10 bg-white w-full">
+    <div class="p-3 w-full flex justify-between items-center">
+        <div>
+            <div class="flex" *ngIf="statusNow">
+                <button
+                    (click)="updateOrder(0)"
+                    *ngIf="!isEdit && (statusNow === 3 || statusNow === 4) && !(roleMain === 'member')"
+                    class="button-danger-sm flex items-center justify-between mr-2">
+                    <i class="fa-solid fa-file-export text-white mr-2"></i>
+                    <span class="text-white">Trả hàng</span>
+                </button>
+                <button
+                    (click)="updateOrder(4)"
+                    *ngIf="!isEdit && statusNow === 3 && !(roleMain === 'member')"
+                    class="button-primary-sm flex items-center justify-between mr-2">
+                    <i class="fa-solid fa-repeat text-white mr-2"></i>
+                    <span class="text-white">Xuất hàng</span>
+                </button>
+            </div>
+        </div>
+        <div class="flex items-center">
+            <button
+                *ngIf="!isEdit && !(roleMain === 'member')"
+                (click)="changeType()"
+                class="button-primary-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-pen-to-square text-white mr-2"></i>
+                <span class="text-white">Sửa</span>
+            </button>
+            <button *ngIf="!isEdit" (click)="print()" class="button-primary-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-print text-white mr-2"></i>
+                <span class="text-white">In</span>
+            </button>
+            <button (click)="export()" *ngIf="!isEdit" class="button-primary-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-download text-white mr-2"></i>
+                <span class="text-white">Excel</span>
+            </button>
+            <button
+                (click)="archive()"
+                *ngIf="!isEdit && !(roleMain === 'member') && !(roleMain === 'accountant') && !(roleMain === 'manager')"
+                class="button-danger-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-trash text-white mr-2"></i>
+                <span class="text-white">Xóa</span>
+            </button>
+
+            <button
+                *ngIf="isEdit"
+                (click)="changeType(); save()"
+                class="button-primary-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-check text-white mr-2"></i>
+                <span class="text-white">Lưu</span>
+            </button>
+            <button [routerLink]="['/order/sale']" class="button-cancel-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-ban text-white mr-2"></i>
+                <span class="text-white">Đóng</span>
+            </button>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+
+<div class="flex overflow-hidden mt-16">
+    <!-- sidebar -->
+    <div class="w-48 fixed border-r h-screen mr-1 flex flex-col items-stretch overflow-y-auto">
+        <div
+            [routerLink]="['/order/sale/detail/viewEdit']"
+            routerLinkActive=" active"
+            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
+            <i class="fa-solid fa-pen-to-square mr-2"></i>
+            <span>Bán hàng</span>
+        </div>
+        <div
+            [routerLink]="['/order/sale/detail/customer']"
+            routerLinkActive="active"
+            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
+            <i class="fa-solid fa-user-secret mr-2"></i>
+            <span>Khách hàng</span>
+        </div>
+    </div>
+    <!-- main -->
+    <div class="ml-48 w-full">
+        <router-outlet></router-outlet>
+    </div>
+</div>

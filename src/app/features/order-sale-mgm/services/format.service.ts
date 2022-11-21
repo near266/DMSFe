@@ -13,7 +13,6 @@ export class FormatService {
         });
         return list;
     }
-
     formatProductToSendAPI(list: any, saleRecieptId: any) {
         list = list.map((product: any) => {
             return {

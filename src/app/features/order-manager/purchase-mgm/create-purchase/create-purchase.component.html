@@ -1,1 +1,37 @@
-<p>create-purchase works!</p>
+<div class="fixed z-10 bg-white w-full">
+    <div class="p-3 w-full flex justify-between items-center">
+        <span style="font-size: 20px !important" class="font-medium">Thêm mới phiếu đặt hàng</span>
+        <div class="flex items-center">
+            <button (click)="create()" class="button-success-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-circle-check text-white mr-2"></i>
+                <span class="text-white">Lưu & Đóng</span>
+            </button>
+            <button class="button-danger" [routerLink]="['/order/sale']">
+                <i class="fa-solid fa-ban text-white mr-2"></i>
+                <span class="text-white">Đóng</span>
+            </button>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+<div class="mt-16">
+    <app-template-infor-order [option]="option" (createBody$)="handleEmitBodyInfo($event)"></app-template-infor-order>
+    <div class="px-3">
+        <app-template-table-product
+            [title]="'Sản phẩm đặt hàng'"
+            [orderType]="'Purchase'"
+            [typeTable]="'Product'"
+            [type]="'Create'"
+            (listCreate$)="handleEmitListProduct($event)"></app-template-table-product>
+        <app-template-table-product
+            [title]="'Sản phẩm khuyến mại'"
+            [orderType]="'Purchase'"
+            [typeTable]="'Promotion'"
+            [type]="'Create'"
+            (listCreate$)="handleEmitListPromotion($event)"></app-template-table-product>
+        <app-template-footer-order
+            [payment]="paymentCreate$ | async"
+            [order]="order"
+            (paymentCreate$)="handleEmitPaymentCreate($event)"></app-template-footer-order>
+    </div>
+</div>

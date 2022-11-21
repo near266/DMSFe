@@ -30,4 +30,8 @@ export class SnackbarService {
     public failureSnackBar() {
         this.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
     }
+
+    public successSnackBar() {
+        this.openSnackbar('Cập nhật thành công', 2000, 'Đóng', 'center', 'bottom', true);
+    }
 }
