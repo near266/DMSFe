@@ -379,4 +379,13 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
             product.discount = (product.discountRate / 100) * product.totalPrice;
         }
     }
+
+    updateTotalPriceAndDiscountRate(product: any) {
+        if (product.quantity) {
+            product.totalPrice = product.quantity * product.unitPrice;
+        }
+        if (product.discountRate && product.totalPrice) {
+            product.discount = (product.discountRate / 100) * product.totalPrice;
+        }
+    }
 }

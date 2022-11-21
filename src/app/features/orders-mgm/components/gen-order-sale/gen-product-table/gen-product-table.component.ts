@@ -68,6 +68,15 @@ export class GenProductTableComponent implements OnInit, DoCheck, OnChanges {
         });
     }
 
+    updateTotalPriceAndDiscountRate(product: any) {
+        if (product.quantity) {
+            product.totalPrice = product.quantity * product.unitPrice;
+        }
+        if (product.discountRate && product.totalPrice) {
+            product.discount = (product.discountRate / 100) * product.totalPrice;
+        }
+    }
+
     openDialogProduct() {
         this.pushListProductToDialog();
         const dialogRef = this.dialog.open(ProductListComponent, {

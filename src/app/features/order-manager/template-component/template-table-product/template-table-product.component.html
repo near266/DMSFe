@@ -175,7 +175,7 @@
                     <mat-form-field
                         *ngIf="isEdit$ | async"
                         appearance="outline"
-                        style="width: 80px"
+                        style="width: 50px"
                         floatLabel="always">
                         <input
                             currencyMask
@@ -195,7 +195,29 @@
                 </td>
                 <!-- Đơn giá -->
                 <td class="custom-th" *ngIf="typeTable === 'Product'">
-                    {{ product.unitPrice | currency: 'VND':'symbol' }}
+                    <div *ngIf="!(isEdit$ | async)">
+                        {{ product.unitPrice | currency: 'VND':'symbol' }}
+                    </div>
+                    <mat-form-field
+                        *ngIf="isEdit$ | async"
+                        appearance="outline"
+                        style="width: 80px"
+                        floatLabel="always">
+                        <input
+                            currencyMask
+                            [options]="{
+                                suffix: 'đ',
+                                thousands: '.',
+                                prefix: '',
+                                decimal: ',',
+                                precision: 0,
+                                allowNegative: false
+                            }"
+                            matInput
+                            [ngModel]="product.unitPrice"
+                            (ngModelChange)="product.unitPrice = $event; updateTotalPriceAndDiscountRate(product)"
+                            [ngModelOptions]="{ standalone: true }" />
+                    </mat-form-field>
                 </td>
                 <!-- Thành tiền -->
                 <td class="custom-th" *ngIf="typeTable === 'Product'">
@@ -322,7 +344,7 @@
                 </td>
                 <!-- Số lượng -->
                 <td class="custom-th">
-                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                    <mat-form-field appearance="outline" style="width: 50px" floatLabel="always">
                         <input
                             currencyMask
                             [options]="{
@@ -341,7 +363,23 @@
                 </td>
                 <!-- Đơn giá -->
                 <td *ngIf="typeTable === 'Product'" class="custom-th">
-                    {{ product.unitPrice | currency: 'VND':'symbol' }}
+                    <!-- {{ product.unitPrice | currency: 'VND':'symbol' }} -->
+                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                        <input
+                            currencyMask
+                            [options]="{
+                                suffix: 'đ',
+                                thousands: '.',
+                                prefix: '',
+                                decimal: ',',
+                                precision: 0,
+                                allowNegative: false
+                            }"
+                            matInput
+                            [ngModel]="product.unitPrice"
+                            (ngModelChange)="product.unitPrice = $event; updateTotalPriceAndDiscountRate(product)"
+                            [ngModelOptions]="{ standalone: true }" />
+                    </mat-form-field>
                 </td>
                 <!-- Thành tiền -->
                 <td *ngIf="typeTable === 'Product'" class="custom-th">

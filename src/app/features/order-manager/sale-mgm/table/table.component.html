@@ -18,7 +18,7 @@
                 [quantitySelected]="listIdSelected.length"
                 (dateFilter$)="handleFilterDate($event)">
                 <!-- options select to edit -->
-                <div class="flex mt-2">
+                <div class="flex mt-2 font-medium">
                     <button *ngIf="roleMain != 'member'" class="p-2 button-option mr-2" [matMenuTriggerFor]="addMenu">
                         <i class="fa-solid fa-plus text-green-700 text-sm font-bold mr-1"></i>
                         <span>Thêm mới</span>

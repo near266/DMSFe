@@ -59,6 +59,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
         this.subscriptions.add(
             this.commonLogicService.isSucess$.subscribe((data) => {
                 if (data) {
+                    console.log(123);
                     this.saleLogicService.clearDataInDetailOrderSource();
                     this.getDetail();
                 }

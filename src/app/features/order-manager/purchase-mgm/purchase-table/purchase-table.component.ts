@@ -66,7 +66,6 @@ export class PurchaseTableComponent implements OnInit, OnDestroy {
 
     handleEmitValue(e: any) {
         this.purchaseLogicService.navigateToDetail(e);
-        console.log(e);
     }
 
     handleEmitListIds(e: any) {
