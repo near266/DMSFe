@@ -13,7 +13,7 @@
         </div>
         <div class="ml-8 px-1">
             <order-template-header
-                [total]="total$ | async"
+                [total]="(total$ | async) || 0"
                 [titleHeader]="'Danh sách đơn bán hàng'"
                 [quantitySelected]="listIdSelected.length"
                 (dateFilter$)="handleFilterDate($event)">
@@ -133,9 +133,9 @@
             </order-template-header>
             <order-template-table
                 [headers]="saleHeader"
-                [isLoading]="isLoading$ | async"
+                [isLoading]="(isLoading$ | async) || false"
                 [listData]="listData$ | async"
-                [total]="total$ | async"
+                [total]="(total$ | async) || 0"
                 [page]="page"
                 (listIdsSelected$)="handleEmitListIdSelected($event)"
                 (emitValue$)="handleEmitId($event)"></order-template-table>

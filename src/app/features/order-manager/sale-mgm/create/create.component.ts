@@ -34,6 +34,7 @@ export class CreateComponent implements OnInit {
         orderType: 'Sale',
         screenType: 'Create',
     };
+    paymentNew: Payment = new Payment();
     paymentCreate$: Observable<Payment> = this.saleLogicService.paymentCreate$;
     constructor(private commonLogicService: CommonLogicService, private saleLogicService: SaleLogicService) {}
 
@@ -57,8 +58,7 @@ export class CreateComponent implements OnInit {
         this.saleLogicService.setPromotionCreateSource(body);
     }
 
-    handleEmitPaymentCreate(body: Payment) {
-        console.log(body);
+    handleEmitPaymentCreate(body: any) {
         this.saleLogicService.setPaymentCreateSource(body);
     }
 }

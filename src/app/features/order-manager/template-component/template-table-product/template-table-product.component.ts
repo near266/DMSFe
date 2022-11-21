@@ -22,6 +22,7 @@ import { CommonLogicService } from '../../services/commonLogic.service';
 import { PurchaseLogicService } from '../../services/purchaseLogic.service';
 import { Payment } from '../template-footer-order/template-footer-order.component';
 import { SaleLogicService } from '../../services/saleLogic.service';
+import { WareHouse } from '../../models/warehouse';
 
 @Component({
     selector: 'app-template-table-product',
@@ -58,7 +59,7 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
     listProductActive$: Observable<Product[]> = this.commonLogicService.listProductActive$;
 
     productFilterCtrl: FormControl = new FormControl();
-    listWarehouse: Warehouse;
+    listWarehouse: WareHouse[];
     listAdd: any = [];
     listRemove: any = [];
     listChoosenIds: { id: string }[] = [];
@@ -201,7 +202,9 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
     getListWareHouse() {
         this.subscriptions.add(
             this.purchaseService.getAllWarehouses().subscribe((data) => {
-                this.listWarehouse = data;
+                if (data) {
+                    this.listWarehouse = data;
+                }
             }),
         );
     }

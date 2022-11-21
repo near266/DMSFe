@@ -8,9 +8,10 @@ import { CreatePurchaseComponent } from './create-purchase/create-purchase.compo
 import { TemplateHeaderComponent } from '../template-component/template-header/template-header.component';
 import { PurchaseTableComponent } from './purchase-table/purchase-table.component';
 import { TemplateComponentModule } from '../template-component/template-component.module';
+import { GenSaleComponent } from './gen-sale/gen-sale.component';
 
 @NgModule({
     imports: [CommonModule, SharedModule, PurchaseMgmRouting, TemplateComponentModule],
-    declarations: [PurchaseMgmComponent, CreatePurchaseComponent, DetailPurchaseComponent, PurchaseTableComponent],
+    declarations: [PurchaseMgmComponent, CreatePurchaseComponent, DetailPurchaseComponent, PurchaseTableComponent, GenSaleComponent],
 })
 export class PurchaseMgmModule {}

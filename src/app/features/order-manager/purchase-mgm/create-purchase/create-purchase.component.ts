@@ -34,6 +34,7 @@ export class CreatePurchaseComponent implements OnInit {
         orderType: 'Purchase',
         screenType: 'Create',
     };
+    paymentNew: Payment = new Payment()
 
     paymentCreate$: Observable<Payment> = this.purchaseLogicService.paymentCreate$;
 
