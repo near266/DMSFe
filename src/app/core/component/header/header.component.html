@@ -102,11 +102,11 @@
                 <span>Khách hàng</span>
             </button>
             <mat-menu #matMenuChildren3="matMenu">
-                <button mat-menu-item class="flex items-center">
+                <button mat-menu-item class="flex items-center" [routerLink]="'/categories/customer-type'">
                     <i class="fa-solid fa-grip mr-2"></i>
                     <span>Loại khách hàng</span>
                 </button>
-                <button mat-menu-item class="flex items-center">
+                <button mat-menu-item class="flex items-center" [routerLink]="'/categories/customer-group'">
                     <i class="fa-solid fa-users mr-2"></i>
                     <span>Nhóm khách hàng</span>
                 </button>

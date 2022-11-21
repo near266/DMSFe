@@ -83,6 +83,14 @@ const routes: Routes = [
         component: MajorsComponent,
     },
     {
+        path: 'customer-type',
+        component: CustomerTypesComponent,
+    },
+    {
+        path: 'customer-group',
+        component: CustomerGroupsComponent,
+    },
+    {
         path: 'channel',
         component: ChannelsComponent,
     },
@@ -146,8 +154,9 @@ const routes: Routes = [
             wrappers: [
                 { name: 'unit', component: ProductFieldWrapper },
                 { name: 'brand', component: ProductFieldWrapper },
-                { name: 'major', component: ProductFieldWrapper },
                 { name: 'supplier', component: ProductFieldWrapper },
+                { name: 'major', component: ProductFieldWrapper },
+                { name: 'customerGroup', component: ProductFieldWrapper },
                 { name: 'channel', component: ProductFieldWrapper },
             ],
             types: [
@@ -159,6 +168,8 @@ const routes: Routes = [
                 { name: 'supplier-select', component: ProductFieldSelect, wrappers: ['supplier'] },
                 { name: 'major-input', component: ProductFieldInput, wrappers: ['major'] },
                 { name: 'major-select', component: ProductFieldSelect, wrappers: ['major'] },
+                { name: 'customerGroup-input', component: ProductFieldInput, wrappers: ['customerGroup'] },
+                { name: 'customerGroup-select', component: ProductFieldSelect, wrappers: ['customerGroup'] },
                 { name: 'channel-input', component: ProductFieldInput, wrappers: ['channel'] },
                 { name: 'channel-select', component: ProductFieldSelect, wrappers: ['channel'] },
             ],

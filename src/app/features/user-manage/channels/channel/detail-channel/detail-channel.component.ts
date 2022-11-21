@@ -26,7 +26,7 @@ export class DetailChannelComponent implements OnInit {
   model = {
     id: null,
     channelName: null,
-    channelCode: 0,
+    channelCode: null,
     deptLimit: null,
     status: null,
   };

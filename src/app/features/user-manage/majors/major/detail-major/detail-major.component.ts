@@ -26,7 +26,8 @@ export class DetailMajorComponent implements OnInit {
   model = {
     id: null,
     commodityName: null,
-    commodityCode: 0,
+    commodityCode: null,
+    debtLimit: null,
     status: null,
   };
 
@@ -96,6 +97,7 @@ export class DetailMajorComponent implements OnInit {
                 },
             });
         } else {
+            console.log(major);
             this.majorService.updateMajor(major).subscribe({
                 next: (res) => {
                     this.snackbar.openSnackbar('Sửa ngành hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
