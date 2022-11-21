@@ -424,19 +424,21 @@ export class PurchaseLogicService {
         // khi ấn vào nút bán hàng (chia 2 trường hợp nếu trạng thái hiện tại là duyệt hay đã bán hàng)
         // Tạm thời chỉ để 1 trường hợp là đã duyệt
         else if (changeTo === 3) {
-            // this.dialog.open(GenOrderSaleComponent, {
-            //     maxWidth: '100vw',
-            //     maxHeight: '100vh',
-            //     height: '100%',
-            //     width: '100%',
-            //     panelClass: 'full-screen-modal',
-            //     data: {
-            //         isSaled: false,
-            //         detailOrder: this.detailSource.getValue(),
-            //     },
-            // });
-            this.router.navigate(['order/purchase/genSale']);
-            this.genSaleSource.next(this.detailSource.getValue());
+            this.dialog.open(GenOrderSaleComponent, {
+                maxWidth: '100vw',
+                maxHeight: '100vh',
+                height: '100%',
+                width: '100%',
+                panelClass: 'full-screen-modal',
+                data: {
+                    isSaled: false,
+                    detailOrder: this.detailSource.getValue(),
+                },
+            });
+
+            // this.router.navigate(['order/purchase/genSale']);
+            // this.genSaleSource.next(this.detailSource.getValue());
+
             // if (this.statusNow === 2) {
             // } else if (this.statusNow === 3) {
             // this.dialog.open(GenOrderSaleComponent, {
