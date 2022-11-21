@@ -1,22 +1,12 @@
 import {
-    Component,
-    OnInit,
-    Input,
-    DoCheck,
-    AfterViewInit,
-    OnChanges,
-    SimpleChanges,
-    EventEmitter,
-    Output,
+    AfterViewInit, Component, DoCheck, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/core/services/data.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
-import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { ProductListComponent } from 'src/app/features/orders-mgm/components/product-list/product-list.component';
 import { FormatService } from '../../../services/format.service';
 

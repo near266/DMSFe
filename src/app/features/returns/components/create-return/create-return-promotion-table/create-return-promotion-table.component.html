@@ -36,67 +36,68 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of productsInput;let i =index; let o=odd; let e=even;"
-        [ngClass]="{ 'bg-gray-100': o, 'bg-white': e } " class="h-14 w-fit text-sm">
-        <td class="space-x-2 border-x border-solid align-midde h-full pl-2">{{ i + 1 }}</td>
-        <td class="border-x  border-solid align-middle px-2 text-center">{{item.sku}}</td>
-        <td class="border-x  border-solid align-middle px-2 text-center">{{item.productName}}</td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-[12px] text-center">
-          <div class="flex">
-            <mat-form-field appearance="outline">
-              <mat-select [(ngModel)]="item.unitId">
-                <mat-option *ngFor="let option of unitOptions" [value]="option.value">{{option.label}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </td>
-        <td class="border-x max-w-[120px]  align-middle px-2 text-center">
-          <div class="flex">
-            <mat-form-field appearance="outline">
-              <mat-select [(ngModel)]="item.warehouseId">
-                <mat-option *ngFor="let option of warehouseOptions" [value]="option.value">{{option.label}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </td>
-        <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
-          <div class="flex">
-          </div>
-        </td>
-        <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
-          <div class="flex">
-            <mat-form-field appearance="outline">
-              <input matInput currencyMask
-                [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
-                [ngModel]="item.exportQuantity" (ngModelChange)="item.exportQuantity=$event" />
-            </mat-form-field>
-          </div>
-        </td>
-        <td class="border-x max-w-[120px]  border-solid align-middle px-2 text-center">
-          <div class="flex">
-            <mat-form-field appearance="outline">
-              <input matInput currencyMask
-                [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
-                [ngModel]="item.returnsQuantity" (ngModelChange)="item.returnsQuantity=$event;item.salesQuantity = item.returnsQuantity;
-                item.quantity = item.returnsQuantity;" />
-            </mat-form-field>
 
-          </div>
-        </td>
-        <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
-          <div class="flex">
-            <mat-form-field appearance="outline">
-              <textarea matInput [rows]="1" [(ngModel)]="item.note"></textarea>
-            </mat-form-field>
-
-          </div>
-        </td>
-        <td class="border-x  border-solid align-middle px-2 text-center">
-          <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
-        </td>
-      </tr>
+      <ng-container *ngIf="(productsInput$ | async) as productList">
+        <tr *ngFor="let item of productList;let i =index; let o=odd; let e=even;"
+          [ngClass]="{ 'bg-gray-100': o, 'bg-white': e } " class="h-14 w-fit text-sm">
+          <td class="space-x-2 border-x border-solid align-midde h-full pl-2">{{ i + 1 }}</td>
+          <td class="border-x  border-solid align-middle px-2 text-center">{{item.sku}}</td>
+          <td class="border-x  border-solid align-middle px-2 text-center">{{item.productName}}</td>
+          <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-[12px] text-center">
+            <div class="flex">
+              <mat-form-field appearance="outline">
+                <mat-select [(ngModel)]="item.unitId">
+                  <mat-option *ngFor="let option of unitOptions" [value]="option.value">{{option.label}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </td>
+          <td class="border-x max-w-[120px]  align-middle px-2 text-center">
+            <div class="flex">
+              <mat-form-field appearance="outline">
+                <mat-select [(ngModel)]="item.warehouseId">
+                  <mat-option *ngFor="let option of warehouseOptions" [value]="option.value">{{option.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </td>
+          <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
+            <div class="flex">
+            </div>
+          </td>
+          <td class="border-x max-w-[80px]  border-solid align-middle px-2 text-center">
+            <div class="flex">
+              <mat-form-field appearance="outline">
+                <input matInput currencyMask
+                  [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                  [ngModel]="item.exportQuantity" (ngModelChange)="item.exportQuantity=$event" />
+              </mat-form-field>
+            </div>
+          </td>
+          <td class="border-x max-w-[120px]  border-solid align-middle px-2 text-center">
+            <div class="flex">
+              <mat-form-field appearance="outline">
+                <input matInput currencyMask
+                  [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
+                  [ngModel]="item.returnsQuantity" (ngModelChange)="item.returnsQuantity=$event;item.salesQuantity = item.returnsQuantity;
+                  item.quantity = item.returnsQuantity;" />
+              </mat-form-field>
+            </div>
+          </td>
+          <td class="border-x  border-solid align-middle px-2 max-w-[80px] text-center">
+            <div class="flex">
+              <mat-form-field appearance="outline">
+                <textarea matInput [rows]="1" [(ngModel)]="item.note"></textarea>
+              </mat-form-field>
+            </div>
+          </td>
+          <td class="border-x  border-solid align-middle px-2 text-center" (click)="removeProduct(i)">
+            <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
+          </td>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
-  <!-- <pre>Form values: {{ productsInput | json }}</pre> -->
+  <!-- <pre>Form values: {{ productsInput$ | async | json }}</pre> -->
 </div>

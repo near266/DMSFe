@@ -20,12 +20,12 @@ export class LoginComponent implements OnInit {
         'itms-services://?action=download-manifest&amp;url=' + api_gateway_url + '/InstallLink/fitolabs_manifest.plist';
 
     constructor(
-      private fb: FormBuilder,
-      private router: Router,
-      private auth: AuthService,
-      private rolesService:  RolesService,
-      private sanitizer: DomSanitizer,
-      private snackbar: SnackbarService
+        private fb: FormBuilder,
+        private router: Router,
+        private auth: AuthService,
+        private rolesService: RolesService,
+        private sanitizer: DomSanitizer,
+        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -42,18 +42,28 @@ export class LoginComponent implements OnInit {
             password: this.loginForm.controls['password'].value,
             rememberMe: true,
         };
-        this.auth.Authenticate(body).subscribe((data) => {
-            this.auth.setToken(data.id_token);
-            this.auth.setRoles(data.role);
-            this.router.navigate(['/orders']);
-            this.rolesService.fetchRoles();
-        }, (error) => {
-          this.snackbar.openSnackbar('Email hoặc mật khẩu không đúng, vui lòng nhập lại', 2000, 'Đóng', 'center', 'bottom', false);
-      return;
-        });
+        this.auth.Authenticate(body).subscribe(
+            (data) => {
+                this.auth.setToken(data.id_token);
+                this.auth.setRoles(data.role);
+                this.router.navigate(['/order']);
+                this.rolesService.fetchRoles();
+            },
+            (error) => {
+                this.snackbar.openSnackbar(
+                    'Email hoặc mật khẩu không đúng, vui lòng nhập lại',
+                    2000,
+                    'Đóng',
+                    'center',
+                    'bottom',
+                    false,
+                );
+                return;
+            },
+        );
     }
 
     getSafe() {
-      return this.sanitizer.bypassSecurityTrustUrl(this.downloadForIOS);
+        return this.sanitizer.bypassSecurityTrustUrl(this.downloadForIOS);
     }
 }

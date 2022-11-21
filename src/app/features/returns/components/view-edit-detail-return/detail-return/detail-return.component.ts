@@ -59,7 +59,17 @@ export class DetailReturnComponent implements OnInit {
             }),
         );
     }
-
+    calculateTotalPay() {
+        const ins = new readMoney(0);
+        this.textMoney = ins.doc(
+            this.returnDetailsService.totalPrice$.getValue() -
+                this.returnDetailsService.discountAmount$.getValue() -
+                this.tradeDiscount,
+        );
+    }
+    updateTradeDiscount() {
+        this.returnDetailsService.tradeDiscount$.next(this.tradeDiscount);
+    }
     ngOnDestroy(): void {
         this.subscription.forEach((service) => {
             service.unsubscribe();

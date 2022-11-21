@@ -29,3 +29,12 @@
         @apply cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
     }
 }
+.ng-select .ng-select-container.ng-appearance-outline {
+    min-height: 52px;
+}
+.ng-select {
+    padding-bottom: 0;
+}
+:host::ng-deep .mat-form-field-infix {
+    padding: 1em 0;
+}

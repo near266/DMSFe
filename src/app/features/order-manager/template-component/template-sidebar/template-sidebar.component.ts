@@ -1,11 +1,24 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+} from '@angular/core';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
 import { FormControl } from '@angular/forms';
 import moment from 'moment';
+import { Observable, Subscription } from 'rxjs';
 import { Config } from 'src/app/core/model/Config';
 import { AreaService } from 'src/app/core/services/area.service';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { Area } from '../../models/area';
+import { Product } from '../../models/product';
 import { CommonLogicService } from '../../services/commonLogic.service';
 
 @Component({
@@ -13,12 +26,15 @@ import { CommonLogicService } from '../../services/commonLogic.service';
     templateUrl: './template-sidebar.component.html',
     styleUrls: ['./template-sidebar.component.scss'],
 })
-export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewInit {
+export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @Input() type: string = '';
     @Input() body: any;
     @Output() body$ = new EventEmitter<Object>();
 
-    listSearchedProduct: any[] = [];
+    private subscriptions = new Subscription();
+
+    @AutoUnsubscribe()
+    listProductActive$: Observable<Product[]> = this.commonLogicService.listProductActive$;
     searchText: string = '';
     isShowEmployeeTree: boolean = false;
     isSelectMenu: boolean = false;
@@ -102,8 +118,10 @@ export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewIni
         this.getListGroupCustomer();
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        console.log(this.type);
+    ngOnChanges(changes: SimpleChanges): void {}
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     emitBody() {
@@ -382,37 +400,47 @@ export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewIni
     }
 
     searchProduct() {
-        this.productFilterCtrl.valueChanges.subscribe((data) => {
-            this.listSearchedProduct = this.commonLogicService.searchListProductActived(data);
-        });
+        this.subscriptions.add(
+            this.productFilterCtrl.valueChanges.subscribe((keyword) => {
+                if (keyword != '') {
+                    this.commonLogicService.searchListProductActived(keyword);
+                }
+            }),
+        );
     }
 
     getListTypeCustomer() {
-        this.customerType.get_all().subscribe((data) => {
-            this.listTypeCustomerNameAndIds = data;
-            this.listTypeCustomer = data?.map((type: any) => {
-                return type.customerTypeName;
-            });
-            this.listTypeCustomer.push('Tất cả');
-            this.typeCustomerMenu.menuChildrens = this.listTypeCustomer;
-        });
+        this.subscriptions.add(
+            this.customerType.get_all().subscribe((data) => {
+                this.listTypeCustomerNameAndIds = data;
+                this.listTypeCustomer = data?.map((type: any) => {
+                    return type.customerTypeName;
+                });
+                this.listTypeCustomer.push('Tất cả');
+                this.typeCustomerMenu.menuChildrens = this.listTypeCustomer;
+            }),
+        );
     }
 
     getListGroupCustomer() {
-        this.customerGroup.get_all().subscribe((data: CustomerGroup[]) => {
-            this.listGroupCustomerAndIds = data;
-            this.listGroupCustomer = data?.map((group: any) => {
-                return group.customerGroupName;
-            });
-            this.listGroupCustomer.push('Tất cả');
-            this.groupCustomerMenu.menuChildrens = this.listGroupCustomer;
-        });
+        this.subscriptions.add(
+            this.customerGroup.get_all().subscribe((data: CustomerGroup[]) => {
+                this.listGroupCustomerAndIds = data;
+                this.listGroupCustomer = data?.map((group: any) => {
+                    return group.customerGroupName;
+                });
+                this.listGroupCustomer.push('Tất cả');
+                this.groupCustomerMenu.menuChildrens = this.listGroupCustomer;
+            }),
+        );
     }
 
     getAllArea() {
-        this.areaService.get_all().subscribe((data: Area[]) => {
-            this.areaList = data;
-        });
+        this.subscriptions.add(
+            this.areaService.get_all().subscribe((data: Area[]) => {
+                this.areaList = data;
+            }),
+        );
     }
 }
 

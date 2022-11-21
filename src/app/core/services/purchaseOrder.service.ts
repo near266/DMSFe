@@ -209,7 +209,9 @@ export class PurchaseOrderService {
     // route
     getAllRoute(page: number, pageSize: number, keyword: any): Observable<any> {
         return this.http
-            .get(this.api_gateway_url + '/Route/getall?keyword=' + keyword + '&page=' + page + '&pagesize=' + pageSize)
+            .get<{ data: any[]; totalCount: number }>(
+                this.api_gateway_url + '/Route/getall?keyword=' + keyword + '&page=' + page + '&pagesize=' + pageSize,
+            )
             .pipe(map((reponse: any) => reponse));
     }
 
@@ -221,6 +223,10 @@ export class PurchaseOrderService {
         return this.http
             .get(this.api_gateway_url + '/Route/getall?EmployeeId=' + id + '&page=' + page + '&pageSize=' + pageSize)
             .pipe(map((reponse: any) => reponse));
+    }
+
+    getRouteById(id: string): Observable<any> {
+        return this.http.get(this.api_gateway_url + '/Route/id?Id=' + id).pipe(map((reponse: any) => reponse));
     }
 
     // group

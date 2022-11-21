@@ -1,0 +1,21 @@
+<div class="w-48 bg-white mx-1 my-2 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
+  <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
+  <input #filter class="bg-white w-full text-xs h-full font-medium text-black" (keyup)="tree.treeModel.filterNodes(filter.value)" placeholder="Tìm kiếm trên cây">
+</div>
+<tree-root #tree [ngClass]="'expand-tree'" class="reverse"  [nodes]="nodes" [options]="options">
+  <ng-template #treeNodeTemplate let-node  let-index="index">
+    <i *ngIf="node.data.level === -1" class="fa-solid fa-sitemap mr-1 text-blue-600 text-medium"></i>
+    <i *ngIf="node.data.type == 0 && node.data.level != -1 " class="fa-solid fa-building  mr-1 text-orange-600 text-medium"></i>
+    <i *ngIf="node.data.type == 1" class="fa-solid fa-users mr-1 text-green-600 text-medium"></i>
+    <i *ngIf="node.data.type == 2" class="fa-solid mr-1 text-[#0369A1] fa-user"></i>
+    <span [class]="node.data.className + 'Index'">{{ node.data.name }}</span>
+    <span class="ml-1" *ngIf="getTotalItemInTreeWithNoChildren(node.data.children)">
+      ({{getTotalItemInTreeWithNoChildren(node.data.children)}})
+    </span>
+  </ng-template>
+  <ng-template #loadingTemplate let-node>
+    <div [class]="node.data.className + 'Loading'">Loading {{ node.data.title }}...</div>
+  </ng-template>
+</tree-root>
+
+

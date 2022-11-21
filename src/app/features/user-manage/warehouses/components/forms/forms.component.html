@@ -1,0 +1,100 @@
+<form>
+  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="font-bold">STT</div>
+    <div class="flex flex-col">
+      <div class="flex flex-row">
+          <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="font-bold">Mã kho</div>
+    <div class="flex flex-col">
+      <div class="flex flex-row">
+          <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="font-bold">Tên kho</div>
+    <div class="flex flex-col">
+      <div class="flex flex-row">
+          <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="font-bold">Loại kho</div>
+    <div class="flex flex-col">
+      <div class="flex flex-row">
+          <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+            <option value="Kho sản phẩm">Kho sản phẩm</option>
+            <option value="Kho khuyến mãi">Kho khuyến mãi</option>
+            <option value="Kho nhân viên">Kho nhân viên</option>
+          </select>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="font-bold">Mô tả</div>
+    <div class="flex flex-col">
+      <div class="flex flex-row">
+          <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="font-bold">Trạng thái</div>
+    <div class="flex flex-col">
+      <div class="flex flex-row">
+          <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+            <option value="true">Hoạt động</option>
+            <option value="false">Khóa</option>
+          </select>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="font-bold">Phòng/nhóm</div>
+    <div class="flex flex-col">
+      <div class="flex flex-row relative">
+          <input (click)="showGroup = !showGroup" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+          <div *ngIf="showGroup" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
+            <app-menu-collapse-tree-multiple></app-menu-collapse-tree-multiple>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="font-bold">Kế toán phụ trách</div>
+  </div>
+  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="table-wrapper w-full">
+      <table class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
+            <thead class="h-10  border-gray-300 ">
+              <tr>
+                <th col class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ảnh</th>
+                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Tên thành viên</th>
+                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Email</th>
+                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">
+                    <mat-checkbox color="primary"></mat-checkbox>
+                </th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <td class="custom-td align-middle items-center text-center border-b">
+                  <img class="w-10 h-10 object-cover rounded-full" src="https://i.pinimg.com/564x/49/65/6f/49656ffd4a876b80e5c6d83b720401e3.jpg">
+                </td>
+                <td class="custom-td border-b">Đinh Ngọc Đức</td>
+                <td class="custom-td border-b">dnduc12bhla@gmail.com</td>
+                <td class="custom-td border-b">
+                    <mat-checkbox color="primary"></mat-checkbox>
+                </td>
+              </tr>
+          </tbody>
+
+      </table>
+    </div>
+  </div>
+</form>

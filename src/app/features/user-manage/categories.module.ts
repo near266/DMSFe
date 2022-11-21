@@ -56,6 +56,9 @@ import { CustomerTypesComponent } from './customer-types/customer-types.componen
 import { CustomerTypeComponent } from './customer-types/customer-type/customer-type.component';
 import { AddCustomerTypeComponent } from './customer-types/add-customer-type/add-customer-type.component';
 import { DetailCustomerTypeComponent } from './customer-types/customer-type/detail-customer-type/detail-customer-type.component';
+import { AddWarehouseComponent } from './warehouses/components/add-warehouse/add-warehouse.component';
+import { UpdateWarehouseComponent } from './warehouses/components/update-warehouse/update-warehouse.component';
+import { FormsComponent } from './warehouses/components/forms/forms.component';
 
 const routes: Routes = [
     {
@@ -145,6 +148,9 @@ const routes: Routes = [
         CustomerTypeComponent,
         AddCustomerTypeComponent,
         DetailCustomerTypeComponent,
+        AddWarehouseComponent,
+        UpdateWarehouseComponent,
+        FormsComponent,
     ],
     imports: [
         CommonModule, RouterModule.forChild(routes), 
