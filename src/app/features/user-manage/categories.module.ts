@@ -40,6 +40,22 @@ import { MajorsComponent } from './majors/majors.component';
 import { AddMajorComponent } from './majors/add-major/add-major.component';
 import { MajorComponent } from './majors/major/major.component';
 import { DetailMajorComponent } from './majors/major/detail-major/detail-major.component';
+import { ChannelsComponent } from './channels/channels.component';
+import { AddChannelComponent } from './channels/add-channel/add-channel.component';
+import { ChannelComponent } from './channels/channel/channel.component';
+import { DetailChannelComponent } from './channels/channel/detail-channel/detail-channel.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
+import { AddSupplierComponent } from './suppliers/add-supplier/add-supplier.component';
+import { SupplierComponent } from './suppliers/supplier/supplier.component';
+import { DetailSupplierComponent } from './suppliers/supplier/detail-supplier/detail-supplier.component';
+import { CustomerGroupsComponent } from './customer-groups/customer-groups.component';
+import { AddCustomerGroupsComponent } from './customer-groups/add-customer-groups/add-customer-groups.component';
+import { CustomerGroupComponent } from './customer-groups/customer-group/customer-group.component';
+import { DetailCustomerGroupComponent } from './customer-groups/customer-group/detail-customer-group/detail-customer-group.component';
+import { CustomerTypesComponent } from './customer-types/customer-types.component';
+import { CustomerTypeComponent } from './customer-types/customer-type/customer-type.component';
+import { AddCustomerTypeComponent } from './customer-types/add-customer-type/add-customer-type.component';
+import { DetailCustomerTypeComponent } from './customer-types/customer-type/detail-customer-type/detail-customer-type.component';
 import { AddWarehouseComponent } from './warehouses/components/add-warehouse/add-warehouse.component';
 import { UpdateWarehouseComponent } from './warehouses/components/update-warehouse/update-warehouse.component';
 import { FormsComponent } from './warehouses/components/forms/forms.component';
@@ -54,7 +70,7 @@ const routes: Routes = [
         component: WarehousesComponent,
     },
     {
-        path: 'units',
+        path: 'unit',
         component: UnitsComponent,
     },
     {
@@ -62,8 +78,24 @@ const routes: Routes = [
         component: BranchsComponent,
     },
     {
+        path: 'supplier',
+        component: SuppliersComponent,
+    },
+    {
         path: 'major',
         component: MajorsComponent,
+    },
+    {
+        path: 'customer-type',
+        component: CustomerTypesComponent,
+    },
+    {
+        path: 'customer-group',
+        component: CustomerGroupsComponent,
+    },
+    {
+        path: 'channel',
+        component: ChannelsComponent,
     },
 ];
 
@@ -100,6 +132,22 @@ const routes: Routes = [
         AddMajorComponent,
         MajorComponent,
         DetailMajorComponent,
+        ChannelsComponent,
+        AddChannelComponent,
+        ChannelComponent,
+        DetailChannelComponent,
+        SuppliersComponent,
+        AddSupplierComponent,
+        SupplierComponent,
+        DetailSupplierComponent,
+        CustomerGroupsComponent,
+        AddCustomerGroupsComponent,
+        CustomerGroupComponent,
+        DetailCustomerGroupComponent,
+        CustomerTypesComponent,
+        CustomerTypeComponent,
+        AddCustomerTypeComponent,
+        DetailCustomerTypeComponent,
         AddWarehouseComponent,
         UpdateWarehouseComponent,
         FormsComponent,
@@ -112,15 +160,24 @@ const routes: Routes = [
             wrappers: [
                 { name: 'unit', component: ProductFieldWrapper },
                 { name: 'brand', component: ProductFieldWrapper },
+                { name: 'supplier', component: ProductFieldWrapper },
                 { name: 'major', component: ProductFieldWrapper },
+                { name: 'customerGroup', component: ProductFieldWrapper },
+                { name: 'channel', component: ProductFieldWrapper },
             ],
             types: [
                 { name: 'unit-input', component: ProductFieldInput, wrappers: ['unit'] },
                 { name: 'unit-select', component: ProductFieldSelect, wrappers: ['unit'] },
                 { name: 'brand-input', component: ProductFieldInput, wrappers: ['brand'] },
                 { name: 'brand-select', component: ProductFieldSelect, wrappers: ['brand'] },
+                { name: 'supplier-input', component: ProductFieldInput, wrappers: ['supplier'] },
+                { name: 'supplier-select', component: ProductFieldSelect, wrappers: ['supplier'] },
                 { name: 'major-input', component: ProductFieldInput, wrappers: ['major'] },
                 { name: 'major-select', component: ProductFieldSelect, wrappers: ['major'] },
+                { name: 'customerGroup-input', component: ProductFieldInput, wrappers: ['customerGroup'] },
+                { name: 'customerGroup-select', component: ProductFieldSelect, wrappers: ['customerGroup'] },
+                { name: 'channel-input', component: ProductFieldInput, wrappers: ['channel'] },
+                { name: 'channel-select', component: ProductFieldSelect, wrappers: ['channel'] },
             ],
             validationMessages: [{ name: 'required', message: 'Trường này là bắt buộc' }],
         }),

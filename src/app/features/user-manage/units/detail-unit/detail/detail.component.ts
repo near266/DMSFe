@@ -26,7 +26,7 @@ export class DetailComponent implements OnInit {
   model = {
     id: null,
     unitName: null,
-    unitCode: 0,
+    unitCode: null,
     status: null,
   };
 

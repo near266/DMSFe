@@ -1,53 +1,53 @@
 <div class="relative mt-2" style="font-size: 12px">
-  <table class="min-w-full border-spacing-0 border-separate bg-gray-300 z-10">
-    <thead class="h-10  border-gray-300 ">
-      <tr>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          #</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Mã SP</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Sản phẩm</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          ĐVT</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Kho nhập</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          SL bán</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          VAT</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          SL trả
-          <span class="text-red-500">(Tổng: {{productQuantity$ | async}})</span>
-        </th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Đơn giá</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Thành tiền</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Chiết khấu</th>
-        <th scope="col"
-          class="sticky top-0 z-10 min-w-[200px] border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Ghi chú</th>
-        <th scope="col"
-          class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          Xóa</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-container *ngIf="(productsInput$ | async) as productsList">
-        <tr *ngFor="let item of productsList;let i =index; let o=odd; let e=even;"
+  <ng-container *ngIf="(vm$ | async) as vm">
+    <table class="min-w-full border-spacing-0 border-separate bg-gray-300 z-10">
+      <thead class="h-10  border-gray-300 ">
+        <tr>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            #</th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            Mã SP</th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            Sản phẩm</th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            ĐVT</th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            Kho nhập</th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            SL bán</th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            VAT</th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            SL trả
+            <span class="text-red-500">(Tổng: {{vm.returnsQuantity}})</span>
+          </th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            Đơn giá</th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            Thành tiền</th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur max-w-[80px] bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            Chiết khấu</th>
+          <th scope="col"
+            class="sticky top-0 z-10 min-w-[200px] border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            Ghi chú</th>
+          <th scope="col"
+            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
+            Xóa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of vm.filteredProducts;let i =index; let o=odd; let e=even;"
           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e } " class="h-14 w-fit text-sm">
           <td class="space-x-2 border-x border-solid align-midde h-full pl-2">{{ i + 1 }}</td>
           <td class="border-x  border-solid align-middle px-2 text-center">{{item.sku}}</td>
@@ -56,7 +56,7 @@
             <div class="flex">
               <mat-form-field appearance="outline">
                 <mat-select [(ngModel)]="item.unitId">
-                  <mat-option *ngFor="let option of unitOptions" [value]="option.value">{{option.label}}</mat-option>
+                  <mat-option *ngFor="let option of vm.units" [value]="option.value">{{option.label}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -65,7 +65,7 @@
             <div class="flex">
               <mat-form-field appearance="outline">
                 <mat-select [(ngModel)]="item.warehouseId">
-                  <mat-option *ngFor="let option of warehouseOptions" [value]="option.value">{{option.label}}
+                  <mat-option *ngFor="let option of vm.warehouses" [value]="option.value">{{option.label}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -123,8 +123,8 @@
             <i class="fa-solid fa-trash text-sm cursor-pointer hover:opacity-70"></i>
           </td>
         </tr>
-      </ng-container>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </ng-container>
   <!-- <pre>Form values: {{ productsInput | json }}</pre> -->
 </div>

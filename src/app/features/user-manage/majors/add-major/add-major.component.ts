@@ -23,8 +23,8 @@ export class AddMajorComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      brandCode: new FormControl(''),
-      brandName: new FormControl(''),
+      commodityCode: new FormControl(''),
+      commodityName: new FormControl(''),
       status: new FormControl(true),
       debtLimit: new FormControl(true),
     })
@@ -32,10 +32,10 @@ export class AddMajorComponent implements OnInit {
 
   add(){
     let body = {
-      brandName: this.form.controls['brandName'].value !== '' ? this.form.controls['brandName'].value: null,
-      brandCode: this.form.controls['brandCode'].value !== '' ? this.form.controls['brandCode'].value: null,
+      commodityName: this.form.controls['commodityName'].value !== '' ? this.form.controls['commodityName'].value: null,
+      commodityCode: this.form.controls['commodityCode'].value !== '' ? this.form.controls['commodityCode'].value: null,
       status: this.form.controls['status'].value !== '' ? this.form.controls['status'].value: false,
-      debtLimit: this.form.controls['debtLimit'].value !== '' ? this.form.controls['debtLimit'].value: false,
+      debtLimit: this.form.controls['debtLimit'].value !== '' ? this.form.controls['debtLimit'].value: '',
     }
 
     if(body.status == 'true') {

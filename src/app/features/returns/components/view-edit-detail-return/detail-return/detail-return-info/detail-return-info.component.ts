@@ -299,7 +299,6 @@ export class DetailReturnInfoComponent implements OnInit {
                         delete form.groupName;
                         this.returnFormService.updateReturn(form);
                     }
-                    // console.log(this.form.getRawValue());
                 }
             }),
         );

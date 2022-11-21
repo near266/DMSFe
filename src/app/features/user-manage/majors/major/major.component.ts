@@ -68,7 +68,7 @@ export class MajorComponent implements OnInit {
   deleteProduct(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
-            content: 'Bạn có chắc chắn muốn xóa sản phẩm này không',
+            content: 'Bạn có chắc chắn muốn xóa ngành hàng này không',
             action: ['Xóa', 'Hủy'],
         },
     });
@@ -77,7 +77,7 @@ export class MajorComponent implements OnInit {
       if (data.includes('Xóa')) {
           this.majorService.del(body).subscribe(data => {
             this.dialogRef.close({event: true});
-            this.snackbar.openSnackbar('Xóa đơn vị thành công', 2000, 'Đóng', 'center', 'bottom', true);
+            this.snackbar.openSnackbar('Xóa ngành hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
           });            
       }else {
       }

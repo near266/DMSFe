@@ -1,5 +1,5 @@
 <div class="mat-input-infix  w-full mt-1">
-  <ng-select [appearance]="'outline'" class="flex-1 " [items]="to.options|formlySelectOptions:field|async"
-    [placeholder]="to.label || 'placeholder'" [bindValue]="'value'" (change)="to?.change(field,$event)"
-    [formControl]="formControl"></ng-select>
+  <ng-select [required]="!!to.required" [appearance]="'outline'" class="flex-1 "
+    [items]="to.options|formlySelectOptions:field|async" [placeholder]="to.label || 'placeholder'" [bindValue]="'value'"
+    (change)="to?.change(field,$event)" [formControl]="control"></ng-select>
 </div>

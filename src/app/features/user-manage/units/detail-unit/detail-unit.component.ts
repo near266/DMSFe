@@ -69,7 +69,7 @@ export class DetailUnitComponent implements OnInit {
   deleteProduct(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
-            content: 'Bạn có chắc chắn muốn xóa sản phẩm này không',
+            content: 'Bạn có chắc chắn muốn xóa đơn vị tính này không',
             action: ['Xóa', 'Hủy'],
         },
     });
@@ -78,7 +78,7 @@ export class DetailUnitComponent implements OnInit {
         if (data.includes('Xóa')) {
             this.unitService.del(body).subscribe(data => {
               this.dialogRef.close({event: true});
-              this.snackbar.openSnackbar('Xóa đơn vị thành công', 2000, 'Đóng', 'center', 'bottom', true);
+              this.snackbar.openSnackbar('Xóa đơn vị tính thành công', 2000, 'Đóng', 'center', 'bottom', true);
             });            
         }else {
         }

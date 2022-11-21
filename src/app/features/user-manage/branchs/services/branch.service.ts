@@ -34,17 +34,17 @@ export class BranchService {
     this.header.next(value);
   }
 
-  private endPoint = environment.API_URL + '/gw/Catalog';
+  // private endPoint = environment.API_URL + '/gw/Catalog';
   private Point = environment.API_URL + '/gw/Branch'
 
   constructor(private http: HttpClient, private dialogService: MatDialog) { }
 
   getAllBrand(body: any): Observable<any> {
-    return this.http.post(this.endPoint + '/BrandSearch', body);
+    return this.http.post(this.Point + '/searchRequest', body);
   }
 
-  getdetailBrand(body: any): Observable<Brand[]> {
-    return this.http.post<Brand[]>(this.endPoint + '/BrandViewDetail', body);
+  getdetailBrand(id: any): Observable<Brand[]> {
+    return this.http.get<Brand[]>(this.Point + '/id?Id=' + id);
   }
 
   addBrand(body: any): Observable<Brand[]> {
@@ -55,8 +55,8 @@ export class BranchService {
     return this.http.put<Brand[]>(this.Point + '/update', body);
   }
 
-  searchBrand(body: any): Observable<Brand[]> {
-    return this.http.post<Brand[]>(this.endPoint + '/BrandSearch', body);
+  searchBrand(keyword: any): Observable<Brand[]> {
+    return this.http.post<Brand[]>(this.Point + '/searchRequest', keyword);
   }
 
   del(body: any): Observable<any> {

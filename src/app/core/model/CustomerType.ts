@@ -1,5 +1,5 @@
 export class CustomerType {
-  id: string;
+  id?: string;
   serial: number;
   customerTypeCode: string;
   customerTypeName: string

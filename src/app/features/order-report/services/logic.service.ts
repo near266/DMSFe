@@ -37,7 +37,7 @@ export class LogicService {
             this.isLoadingSource.next(true);
             this.reportService.SaleReceiptReport(body).subscribe((data: RootSaleReport) => {
                 let dataReturn: RootSaleReport = data;
-                console.log(dataReturn);
+                // console.log(dataReturn);
                 this.totalSource.next(dataReturn.total);
                 this.reportOrdersSource.next(this.formatSale.formatReportSale(dataReturn));
                 this.isLoadingSource.next(false);

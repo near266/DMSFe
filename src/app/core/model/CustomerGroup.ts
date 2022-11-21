@@ -1,5 +1,5 @@
 export class CustomerGroup {
-  id: string;
+  id?: string;
   serial: number;
   customerGroupCode: string;
   customerGroupName: string;
