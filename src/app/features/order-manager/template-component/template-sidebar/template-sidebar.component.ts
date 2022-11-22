@@ -110,6 +110,7 @@ export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewIni
 
     ngOnInit(): void {
         this.searchProduct();
+        this.getSearchText();
     }
 
     ngAfterViewInit(): void {
@@ -124,6 +125,13 @@ export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewIni
         this.subscriptions.unsubscribe();
     }
 
+    getSearchText() {
+        if (this.commonLogicService.getSearchTextSource()) {
+            this.searchText = this.commonLogicService.getSearchTextSource();
+            this.searchKeyword();
+        }
+    }
+
     emitBody() {
         this.body$.emit(this.body);
     }
@@ -132,6 +140,7 @@ export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewIni
     searchKeyword() {
         this.body.keyword = this.searchText.trim();
         this.body.page = 1;
+        this.commonLogicService.setSearchTextSource(this.searchText.trim());
         this.emitBody();
     }
 

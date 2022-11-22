@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CreatePurchaseComponent } from './create-purchase/create-purchase.component';
 import { DetailPurchaseComponent } from './detail-container/detail-purchase/detail-purchase.component';
+import { GenSaleComponent } from './gen-sale/gen-sale.component';
 import { PurchaseMgmComponent } from './purchase-mgm.component';
 import { PurchaseTableComponent } from './purchase-table/purchase-table.component';
 
@@ -22,6 +23,10 @@ const routes: Routes = [
                 path: 'detail',
                 loadChildren: () =>
                     import('./detail-container/detail-container.module').then((m) => m.DetailContainerModule),
+            },
+            {
+                path: 'genSale',
+                component: GenSaleComponent,
             },
         ],
     },

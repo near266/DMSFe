@@ -148,7 +148,24 @@
                             [ngModelOptions]="{ standalone: true }" /> -->
                     </mat-form-field>
                 </td>
-                <td class="custom-th">{{ product.unitPrice | currency: 'VND':'symbol' }}</td>
+                <td class="custom-th">
+                    <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">
+                        <input
+                            currencyMask
+                            [options]="{
+                                suffix: 'đ',
+                                thousands: '.',
+                                prefix: '',
+                                decimal: ',',
+                                precision: 0,
+                                allowNegative: false
+                            }"
+                            matInput
+                            [ngModel]="product.unitPrice"
+                            (ngModelChange)="product.unitPrice = $event; updateTotalPriceAndDiscountRate(product)"
+                            [ngModelOptions]="{ standalone: true }" />
+                    </mat-form-field>
+                </td>
                 <td class="custom-th">{{ product.totalPrice | currency: 'VND':'symbol' }}</td>
                 <td class="custom-th">
                     <mat-form-field appearance="outline" style="width: 80px" floatLabel="always">

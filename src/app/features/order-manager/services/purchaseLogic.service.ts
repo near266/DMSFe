@@ -45,6 +45,7 @@ export class PurchaseLogicService {
         totalDiscountProduct: 0,
         totalPayment: 0,
     });
+    private genSaleSource = new BehaviorSubject<any>('');
 
     listData$ = this.listDataSource.asObservable();
     isLoading$ = this.isLoadingSource.asObservable();
@@ -53,6 +54,7 @@ export class PurchaseLogicService {
     detail$ = this.detailSource.asObservable();
     payment$ = this.paymentSource.asObservable();
     paymentCreate$ = this.paymentCreateSource.asObservable();
+    genSale$ = this.genSaleSource.asObservable();
 
     constructor(
         private purchaseService: PurchaseOrderService,
@@ -328,23 +330,23 @@ export class PurchaseLogicService {
         );
     }
 
-    updateProduct(listUpdate: any) {
-        if (listUpdate.length > 0) {
-            let body = {
-                purchaseOrderProducts: listUpdate,
-            };
-            this.purchaseService.updateProductList(body).subscribe(
-                (data) => {},
-                (err) => {
-                    this.snackbar.failureSnackBar();
-                },
-                () => {
-                    this.snackbar.successSnackBar();
-                    this.commonLogicService.successUpdate();
-                },
-            );
-        }
-    }
+    // updateProduct(listUpdate: any) {
+    //     if (listUpdate.length > 0) {
+    //         let body = {
+    //             purchaseOrderProducts: listUpdate,
+    //         };
+    //         this.purchaseService.updateProductList(body).subscribe(
+    //             (data) => {},
+    //             (err) => {
+    //                 this.snackbar.failureSnackBar();
+    //             },
+    //             () => {
+    //                 this.snackbar.successSnackBar();
+    //                 this.commonLogicService.successUpdate();
+    //             },
+    //         );
+    //     }
+    // }
 
     // update status
     updateStatusOrder(changeTo: number) {
@@ -433,6 +435,10 @@ export class PurchaseLogicService {
                     detailOrder: this.detailSource.getValue(),
                 },
             });
+
+            // this.router.navigate(['order/purchase/genSale']);
+            // this.genSaleSource.next(this.detailSource.getValue());
+
             // if (this.statusNow === 2) {
             // } else if (this.statusNow === 3) {
             // this.dialog.open(GenOrderSaleComponent, {

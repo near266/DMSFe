@@ -39,21 +39,21 @@ export class FormatSaleService {
                         isEmit: true,
                         emitValue: order.id,
                         children: [
-                            {
-                                title: 'Tổng số lần xuất hàng',
-                                class: 'fa-solid fa-gears px-1 py-0.5 border rounded-sm text-sm',
-                                total: null,
-                            },
-                            {
-                                title: 'Tổng số lần trả hàng',
-                                class: 'fa-solid fa-repeat px-1 py-0.5 border rounded-sm text-sm',
-                                total: null,
-                            },
-                            {
-                                title: 'Trao đổi (Ghi chú)',
-                                class: 'fa-solid fa-comment px-1 py-0.5 border rounded-sm text-sm',
-                                total: null,
-                            },
+                            // {
+                            //     title: 'Tổng số lần xuất hàng',
+                            //     class: 'fa-solid fa-gears px-1 py-0.5 border rounded-sm text-sm',
+                            //     total: null,
+                            // },
+                            // {
+                            //     title: 'Tổng số lần trả hàng',
+                            //     class: 'fa-solid fa-repeat px-1 py-0.5 border rounded-sm text-sm',
+                            //     total: null,
+                            // },
+                            // {
+                            //     title: 'Trao đổi (Ghi chú)',
+                            //     class: 'fa-solid fa-comment px-1 py-0.5 border rounded-sm text-sm',
+                            //     total: null,
+                            // },
                             {
                                 title: 'Số lần in',
                                 class: 'fa-solid fa-print px-1 py-0.5 border rounded-sm text-sm flex items-center',

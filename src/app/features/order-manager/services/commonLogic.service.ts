@@ -24,6 +24,7 @@ export class CommonLogicService {
     private isSaveSource = new BehaviorSubject<boolean>(false);
     private isSucessSource = new BehaviorSubject<boolean>(false);
     private isCreateSource = new BehaviorSubject<boolean>(false);
+    private searchTextSource = new BehaviorSubject<string>('');
 
     listRoute$ = this.listRouteSource.asObservable();
     listEmployee$ = this.listEmployeeSource.asObservable();
@@ -37,8 +38,17 @@ export class CommonLogicService {
     isSave$ = this.isSaveSource.asObservable();
     isSucess$ = this.isSucessSource.asObservable();
     isCreate$ = this.isCreateSource.asObservable();
+    searchText$ = this.searchTextSource.asObservable();
 
     constructor(private purchaseOrder: PurchaseOrderService) {}
+
+    getSearchTextSource() {
+        return this.searchTextSource.getValue();
+    }
+
+    setSearchTextSource(searchText: string) {
+        this.searchTextSource.next(searchText);
+    }
 
     create() {
         this.isCreateSource.next(true);

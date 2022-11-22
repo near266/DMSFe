@@ -112,6 +112,8 @@ export class NumberToTextService {
                 result += ' phẩy ' + this.docsonguyen(cautrucso[1]);
             }
         }
-        return result;
+        result = result.trim();
+        let resultUpperCaseFirstLetter = result.charAt(0).toUpperCase() + result.slice(1);
+        return resultUpperCaseFirstLetter;
     }
 }

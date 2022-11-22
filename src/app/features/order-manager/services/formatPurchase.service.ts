@@ -37,32 +37,32 @@ export class FormatPurchaseService {
                         isEmit: true,
                         emitValue: order.id,
                         children: [
-                            {
-                                title: 'Tổng số lần bán hàng',
-                                class: 'fa-solid fa-calculator px-1 py-0.5 border rounded-sm text-sm',
-                                total: null,
-                            },
-                            {
-                                title: 'Tổng số lần xuất hàng',
-                                class: 'fa-solid fa-gears px-1 py-0.5 border rounded-sm text-sm',
-                                total: null,
-                            },
-                            {
-                                title: 'Tổng số lần chuyển kho',
-                                class: 'fa-solid fa-truck-fast px-1 py-0.5 border rounded-sm text-sm',
-                                total: null,
-                            },
-                            {
-                                title: 'Tổng số lần trả hàng',
-                                class: 'fa-solid fa-repeat px-1 py-0.5 border rounded-sm text-sm',
-                                total: null,
-                            },
-                            {
-                                title: 'Trao đổi (Ghi chú)',
-                                class: 'fa-solid fa-comment px-1 py-0.5 border rounded-sm text-sm',
+                            // {
+                            //     title: 'Tổng số lần bán hàng',
+                            //     class: 'fa-solid fa-calculator px-1 py-0.5 border rounded-sm text-sm',
+                            //     total: null,
+                            // },
+                            // {
+                            //     title: 'Tổng số lần xuất hàng',
+                            //     class: 'fa-solid fa-gears px-1 py-0.5 border rounded-sm text-sm',
+                            //     total: null,
+                            // },
+                            // {
+                            //     title: 'Tổng số lần chuyển kho',
+                            //     class: 'fa-solid fa-truck-fast px-1 py-0.5 border rounded-sm text-sm',
+                            //     total: null,
+                            // },
+                            // {
+                            //     title: 'Tổng số lần trả hàng',
+                            //     class: 'fa-solid fa-repeat px-1 py-0.5 border rounded-sm text-sm',
+                            //     total: null,
+                            // },
+                            // {
+                            //     title: 'Trao đổi (Ghi chú)',
+                            //     class: 'fa-solid fa-comment px-1 py-0.5 border rounded-sm text-sm',
 
-                                total: null,
-                            },
+                            //     total: null,
+                            // },
                             {
                                 title: 'Số lần in',
                                 class: 'fa-solid fa-print px-1 py-0.5 border rounded-sm text-sm flex items-center',

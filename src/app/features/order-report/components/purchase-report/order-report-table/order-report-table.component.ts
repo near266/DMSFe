@@ -42,6 +42,6 @@ export class OrderReportTableComponent implements OnInit, AfterViewInit {
 
     navigateToDetail(id: any) {
         localStorage.setItem('purchaseOrderId', id);
-        window.open('/orders/detailOrder/viewEdit');
+        window.open('/order/purchase/detail/viewEdit');
     }
 }
