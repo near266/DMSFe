@@ -3,7 +3,7 @@
 </div>
 <!-- Bảng phiếu bán hàng -->
 <div *ngIf="!(isLoading$ | async)" id="table" class="table-wrapper">
-    <table class="block custom-table text-black dark:text-gray-400">
+    <table class="block custom-table font-medium dark:text-gray-400">
         <thead class="custom-thead">
             <th scope="col" class="custom-th" *ngFor="let header of headers">{{ header }}</th>
         </thead>

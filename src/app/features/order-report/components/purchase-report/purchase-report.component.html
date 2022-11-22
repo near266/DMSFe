@@ -10,17 +10,7 @@
         [opened]="true"
         class="overflow-hidden relative z-50 navbar-container">
         <div class="w-60 p-3">
-            <div class="w-full relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
-                <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm khách hàng" />
-            </div>
-            <div class="w-full relative mt-3">
-                <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
-                <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm sản phẩm" />
-            </div>
-
-            <!-- todo loại KH -->
-            <app-menu-collapse (Selection)="selectType($event)" [Config]="statusMenu"></app-menu-collapse>
+            <report-template-sidebar></report-template-sidebar>
         </div>
     </mat-sidenav>
     <mat-sidenav-content class="overflow-y-auto">

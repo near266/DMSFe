@@ -226,7 +226,7 @@ export class FormatReportOrderService {
                 },
                 // thành tiền
                 {
-                    content: this.currency.transform(data.totalMoney, 'VND', 'symbol', '1.0-0'),
+                    content: 'Chưa trả', // Chưa trả (totalAmount)
                     hasChildren: false,
                 },
                 // Chiết khấu tổng bill
@@ -239,9 +239,9 @@ export class FormatReportOrderService {
                     content: this.currency.transform(data.tradeDiscount, 'VND', 'symbol', '1.0-0'),
                     hasChildren: false,
                 },
-                // thanh toán trước
+                // thanh toán
                 {
-                    content: this.currency.transform(data.preMoney, 'VND', 'symbol', '1.0-0'),
+                    content: this.currency.transform(data.totalMoney, 'VND', 'symbol', '1.0-0'),
                     hasChildren: false,
                 },
                 // Diễn giải

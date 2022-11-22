@@ -8,6 +8,7 @@ import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.servic
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
+import { ReturnOrderService } from '../../returns/services/return-order.service';
 import { ListProductCreate, ListPromotionProductCreate } from '../models/purchaseAPI';
 import { PurchaseDetail } from '../models/purchaseDetail';
 import { RootSaleReceipt, SaleOrder } from '../models/sale';
@@ -62,6 +63,7 @@ export class SaleLogicService {
         private commonLogicService: CommonLogicService,
         private puchaseLogicService: PurchaseLogicService,
         private purchaseService: PurchaseOrderService,
+        private returnOrderService: ReturnOrderService,
     ) {}
 
     setInfoCreateSource(body: any) {
@@ -419,6 +421,13 @@ export class SaleLogicService {
         };
         // ấn vào nút trả hàng -> navigate
         if (changeTo === 0) {
+            const { listProduct, listPromotionProduct, ...orderInfo } = this.detailOrderSoure.getValue();
+            this.returnOrderService.returnInfo$.next(this.returnOrderService.formatInfo(orderInfo));
+            this.returnOrderService.returnStatusInfo$.next(this.returnOrderService.formatUpdateStatusOrder(orderInfo));
+            this.returnOrderService.returnProductList$.next(this.returnOrderService.formatListProduct(listProduct));
+            this.returnOrderService.returnPromotionList$.next(
+                this.returnOrderService.formatListProduct(listPromotionProduct),
+            );
             this.router.navigate(['returns/return_from_order']);
         }
         // Ấn vào nút xuất hàng
