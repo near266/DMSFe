@@ -73,7 +73,7 @@ export class GenSaleComponent implements OnInit, AfterViewInit {
                 address: data.customer?.address,
                 description: data.description
                     ? `${data.description} - Bán hàng theo phiếu đặt hàng số [${data.orderCode}]`
-                    : data.description,
+                    : `Bán hàng theo phiếu đặt hàng số [${data.orderCode}]`,
                 customerId: data.customer?.id,
                 customerName: data.customer?.customerName,
                 relatedId: data.id,
