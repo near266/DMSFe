@@ -119,6 +119,8 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
         if (this.type === 'Create') {
             this.create();
         }
+        if (this.type === 'Gen') {
+        }
     }
 
     ngOnDestroy(): void {
