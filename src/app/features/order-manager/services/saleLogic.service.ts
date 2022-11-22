@@ -496,7 +496,7 @@ export class SaleLogicService {
             customerId: e.infoForm.get('customerId')?.value,
             routeId: e.infoForm.get('routeId')?.value,
             type: 0,
-            status: e.infoForm.get('status')?.value,
+            status: 3, // đã bán hàng
             description: e.infoForm.get('description')?.value,
             phone: e.infoForm.get('phone')?.value,
             address: e.infoForm.get('address')?.value,
@@ -540,7 +540,7 @@ export class SaleLogicService {
             customerId: relatedPurchase.customer?.id,
             routeId: relatedPurchase.route?.id,
             type: relatedPurchase.type,
-            status: 3,
+            status: 3, // đã bán hàng
             paymentMethod: 0,
             description: relatedPurchase.description,
             phone: relatedPurchase.phone,
