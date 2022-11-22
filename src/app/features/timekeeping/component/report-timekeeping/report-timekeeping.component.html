@@ -21,7 +21,7 @@
       <div>
         <div class="w-full items-center hover:font-medium mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
           <i class="text-base mr-3 fa-regular fa-calendar-xmark"></i>
-          <span class="text-sm">Đến ngày: </span><input type="date" [(ngModel)]="now" class="border border-solid border-black mx-1 p-1 rounded-sm text-xs font-medium h-7">
+          <span class="text-sm">Đến ngày: </span><input type="date" [(ngModel)]="now" class="w-24 border border-solid border-black mx-1 p-1 rounded-sm text-xs font-medium h-7">
         </div>
       </div>
       <app-menu-collapse (Selection)="selectPosition($event)" [Config]="positionMenu"></app-menu-collapse>
