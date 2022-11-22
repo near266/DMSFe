@@ -4,10 +4,12 @@ import { Router } from '@angular/router';
 import moment from 'moment';
 import { BehaviorSubject, forkJoin, of } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
+import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { ListProductCreate, ListPromotionProductCreate } from '../models/purchaseAPI';
+import { PurchaseDetail } from '../models/purchaseDetail';
 import { RootSaleReceipt, SaleOrder } from '../models/sale';
 import { SaleCreateBody, SaleUpdateBody } from '../models/SaleAPI';
 import { SaleDetail } from '../models/saleDetail';
@@ -38,6 +40,7 @@ export class SaleLogicService {
         totalDiscountProduct: 0,
         totalPayment: 0,
     });
+    private paymentGenSource = new BehaviorSubject<Payment>(new Payment());
 
     total$ = this.totalSource.asObservable();
     isLoading$ = this.isLoadingSource.asObservable();
@@ -47,6 +50,7 @@ export class SaleLogicService {
     detailOrder$ = this.detailOrderSoure.asObservable();
     payment$ = this.paymentSource.asObservable();
     paymentCreate$ = this.paymentCreateSource.asObservable();
+    paymentGen$ = this.paymentGenSource.asObservable();
 
     constructor(
         private saleReceiptService: SaleReceiptService,
@@ -57,6 +61,7 @@ export class SaleLogicService {
         private numberToText: NumberToTextService,
         private commonLogicService: CommonLogicService,
         private puchaseLogicService: PurchaseLogicService,
+        private purchaseService: PurchaseOrderService,
     ) {}
 
     setInfoCreateSource(body: any) {
@@ -69,6 +74,11 @@ export class SaleLogicService {
 
     setPromotionCreateSource(body: ListPromotionProductCreate[]) {
         this.promtionCreateSource.next(body);
+    }
+
+    setPaymentGenSource(payment: Payment) {
+        payment.textMoney = this.numberToText.doc(payment.totalPayment);
+        this.paymentGenSource.next(payment);
     }
 
     setPaymentCreateSource(payment: Payment) {
@@ -470,6 +480,96 @@ export class SaleLogicService {
             () => {
                 this.snackbar.openSnackbar('Tạo mới đơn bán hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
                 this.router.navigate(['/order/sale']);
+            },
+        );
+    }
+
+    createSaleGen(
+        e: { infoForm: FormGroup; listProduct: any[]; listPromotion: any[] },
+        relatedPurchase: PurchaseDetail,
+    ) {
+        let body: SaleCreateBody = {
+            saleEmployeeId: e.infoForm.get('saleEmployee')?.value,
+            orderDate: moment(e.infoForm.get('orderDate')?.value).format('YYYY-MM-DDTHH:mm:ss'),
+            groupId: e.infoForm.get('groupId')?.value,
+            orderEmployeeId: e.infoForm.get('orderEmployeeId')?.value,
+            customerId: e.infoForm.get('customerId')?.value,
+            routeId: e.infoForm.get('routeId')?.value,
+            type: 0,
+            status: e.infoForm.get('status')?.value,
+            description: e.infoForm.get('description')?.value,
+            phone: e.infoForm.get('phone')?.value,
+            address: e.infoForm.get('address')?.value,
+            customerName: e.infoForm.get('customerName')?.value,
+            archived: false,
+            createdDate: moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss'),
+            deliveryDate: moment(e.infoForm.get('deliveryDate')?.value).format('YYYY-MM-DD'),
+            listProduct: e.listProduct,
+            listPromotionProduct: e.listPromotion,
+            paymentMethod: 0, // có 1 loại payment
+            prePayment: this.paymentGenSource.getValue().prePayment | 0,
+            totalAmount: this.paymentGenSource.getValue().totalAmount,
+            totalOfVAT: 0, // là trường gì?
+            totalDiscountProduct: this.paymentGenSource.getValue().totalDiscountProduct,
+            tradeDiscount: this.paymentGenSource.getValue().tradeDiscount,
+            totalPayment: this.paymentGenSource.getValue().totalPayment,
+            saleDate: e.infoForm.get('saleDate')?.value,
+            paymentTerm: this.paymentGenSource.getValue().paymentTerm!,
+            debtRecord: this.paymentGenSource.getValue().debtRecord || false,
+        };
+        this.saleReceiptService.create(body).subscribe(
+            (data) => {},
+            (err) => {
+                this.snackbar.failureSnackBar();
+            },
+            () => {
+                // this.snackbar.openSnackbar('Tạo mới đơn bán hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                // this.router.navigate(['/order/sale']);
+                this.updatePurchaseOrderAfterGenSale(relatedPurchase);
+            },
+        );
+    }
+
+    updatePurchaseOrderAfterGenSale(relatedPurchase: PurchaseDetail) {
+        const body = {
+            purchaseOrderId: relatedPurchase.id,
+            orderDate: relatedPurchase.orderDate,
+            groupId: relatedPurchase.group?.id,
+            orderEmployeeId: relatedPurchase.orderEmployee?.id,
+            warehouseId: relatedPurchase.warehouse?.id,
+            customerId: relatedPurchase.customer?.id,
+            routeId: relatedPurchase.route?.id,
+            type: relatedPurchase.type,
+            status: 3,
+            paymentMethod: 0,
+            description: relatedPurchase.description,
+            phone: relatedPurchase.phone,
+            address: relatedPurchase.address,
+            customerName: relatedPurchase.customerName,
+            totalAmount: relatedPurchase.totalAmount,
+            totalOfVAT: relatedPurchase.totalOfVAT,
+            totalDiscountProduct: relatedPurchase.totalDiscountProduct,
+            tradeDiscount: relatedPurchase.tradeDiscount,
+            totalPayment: relatedPurchase.totalPayment,
+            archived: false,
+            lastModifiedDate: moment(Date.now()).format('YYYY-MM-DD'),
+            orderCode: relatedPurchase.orderCode,
+            deliveryDate: relatedPurchase.deliveryDate,
+            prePayment: relatedPurchase.prePayment,
+        };
+        this.purchaseService.update(body).subscribe(
+            (data) => {},
+            (err) => {},
+            () => {
+                this.snackbar.openSnackbar(
+                    'Thêm mới đơn bán hàng thành công. Lưu ý: Thông tin thay đổi ở phiếu bán hàng sẽ không được cập nhật ở phiếu đặt hàng',
+                    5000,
+                    'Đóng',
+                    'center',
+                    'bottom',
+                    true,
+                );
+                this.router.navigate(['/order']);
             },
         );
     }

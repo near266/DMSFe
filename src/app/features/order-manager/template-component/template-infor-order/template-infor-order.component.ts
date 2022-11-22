@@ -64,6 +64,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     @Input() id: string;
     @Input() payment: Payment;
     @Output() createBody$: EventEmitter<any> = new EventEmitter();
+    @Output() genSaleBody$: EventEmitter<any> = new EventEmitter();
 
     private subscriptions: Subscription = new Subscription();
 
@@ -115,6 +116,16 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                 }
             }),
         );
+        if (this.option.type === 'Gen') {
+            this.subscriptions.add(
+                this.purchaseLogicService.isGen$.subscribe((data) => {
+                    if (data) {
+                        this.genSale();
+                    }
+                }),
+            );
+        }
+
         this.searchListOrderEmployee();
         this.searchListSaleEmployee();
         this.searchListRoute();
@@ -162,6 +173,10 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    genSale() {
+        this.genSaleBody$.emit(this.form);
     }
 
     // Chỉ ở màn tạo

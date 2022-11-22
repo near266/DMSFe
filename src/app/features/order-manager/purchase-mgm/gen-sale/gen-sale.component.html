@@ -2,7 +2,7 @@
     <div class="p-3 w-full flex justify-between items-center">
         <span style="font-size: 20px !important" class="font-medium">Thêm mới phiếu bán hàng</span>
         <div class="flex items-center">
-            <button class="button-primary-sm flex items-center justify-between mr-2">
+            <button (click)="genSale()" class="button-primary-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-check text-white mr-2"></i>
                 <span class="text-white">Lưu</span>
             </button>
@@ -15,18 +15,26 @@
     <mat-divider></mat-divider>
 </div>
 <div>
-    <app-template-infor-order [option]="option" [data]="detailPassToInput"></app-template-infor-order>
+    <app-template-infor-order
+        [option]="option"
+        [data]="detailPassToInput"
+        (genSaleBody$)="handleEmitInfo($event)"></app-template-infor-order>
     <div class="px-4">
         <app-template-table-product
             [orderType]="'Sale'"
             [typeTable]="'Product'"
             [title]="'Sản phẩm đặt hàng'"
-            [list]="listProduct$ | async"></app-template-table-product>
+            [list]="listProduct$ | async"
+            [type]="'Gen'"
+            (listGenSale$)="handleEmitListProduct($event)"
+            [payment]="payment$ | async"></app-template-table-product>
         <app-template-table-product
             [orderType]="'Sale'"
             [typeTable]="'Promotion'"
             [title]="'Sản phẩm khuyến mại'"
-            [list]="listPromotion$ | async"></app-template-table-product>
-        <app-template-footer-order [order]="order"></app-template-footer-order>
+            [type]="'Gen'"
+            [list]="listPromotion$ | async"
+            (listGenSale$)="handleEmitListPromotion($event)"></app-template-table-product>
+        <app-template-footer-order [order]="order" [payment]="payment$ | async"></app-template-footer-order>
     </div>
 </div>
