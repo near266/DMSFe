@@ -216,6 +216,8 @@ export class TemplateSidebarComponent implements OnInit {
 
     selectMajor(e: any) {}
 
+    selectArea(e: any) {}
+
     emitBody() {
         this.body$.emit(this.body);
     }

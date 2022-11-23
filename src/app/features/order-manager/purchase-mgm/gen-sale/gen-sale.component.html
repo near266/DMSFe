@@ -27,7 +27,7 @@
             [list]="listProduct$ | async"
             [type]="'Gen'"
             (listGenSale$)="handleEmitListProduct($event)"
-            [payment]="payment$ | async"></app-template-table-product>
+            [payment]="(payment$ | async) || paymentNew"></app-template-table-product>
         <app-template-table-product
             [orderType]="'Sale'"
             [typeTable]="'Promotion'"
@@ -35,6 +35,8 @@
             [type]="'Gen'"
             [list]="listPromotion$ | async"
             (listGenSale$)="handleEmitListPromotion($event)"></app-template-table-product>
-        <app-template-footer-order [order]="order" [payment]="payment$ | async"></app-template-footer-order>
+        <app-template-footer-order
+            [order]="order"
+            [payment]="(payment$ | async) || paymentNew"></app-template-footer-order>
     </div>
 </div>

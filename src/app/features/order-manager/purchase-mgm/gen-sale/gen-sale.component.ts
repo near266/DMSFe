@@ -30,6 +30,7 @@ export class GenSaleComponent implements OnInit, AfterViewInit {
     };
 
     payment$: Observable<Payment> = this.saleLogicService.paymentGen$;
+    paymentNew: Payment = new Payment();
 
     detailPassToInput: DataInput;
     purchaseOrderId: string = '';
