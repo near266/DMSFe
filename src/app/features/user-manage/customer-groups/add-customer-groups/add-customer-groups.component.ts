@@ -35,7 +35,7 @@ export class AddCustomerGroupsComponent implements OnInit {
       customerGroupName: this.form.controls['customerGroupName'].value !== '' ? this.form.controls['customerGroupName'].value: null,
       customerGroupCode: this.form.controls['customerGroupCode'].value !== '' ? this.form.controls['customerGroupCode'].value: null,
       status: this.form.controls['status'].value !== '' ? this.form.controls['status'].value: false,
-      deptLimit: this.form.controls['debtLimit'].value !== '' ? this.form.controls['deptLimit'].value: false,
+      deptLimit: this.form.controls['deptLimit'].value !== '' ? this.form.controls['deptLimit'].value: false,
     }
 
     if(body.status == 'true') {
@@ -48,7 +48,7 @@ export class AddCustomerGroupsComponent implements OnInit {
     } else if(body.deptLimit == 'false') {
       body.deptLimit = false;
     }
-    console.log(body);
+    // console.log(body);
     
     this.customerGroupService.addCustomerGroup(body).subscribe( data => {
       this.snackbar.openSnackbar('Thêm nhóm khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
