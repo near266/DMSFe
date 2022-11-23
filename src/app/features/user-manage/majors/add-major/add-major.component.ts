@@ -25,8 +25,8 @@ export class AddMajorComponent implements OnInit {
     this.form = this.fb.group({
       commodityCode: new FormControl(''),
       commodityName: new FormControl(''),
-      status: new FormControl(true),
-      debtLimit: new FormControl(true),
+      status: new FormControl(''),
+      debtLimit: new FormControl(''),
     })
   }
 

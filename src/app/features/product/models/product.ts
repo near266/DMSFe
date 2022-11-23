@@ -41,6 +41,13 @@ export interface Supplier {
     id?: string;
     supplierName?: string;
     supplierCode?: string;
+    address?: string;
+    taxCode?: string;
+    phone?: string;
+    status?: boolean;
+    createdBy?: string;
+    createdDate?: Date;
+    lastModifiedDate?: Date
 }
 export interface Unit {
     id?: string;
@@ -49,6 +56,7 @@ export interface Unit {
     status?: boolean;
     createdBy?: string;
     createdDate?: Date;
+    lastModifiedDate?: Date
 }
 
 export interface Brand {
@@ -58,12 +66,16 @@ export interface Brand {
     status?: boolean;
     createdBy?: string;
     createdDate?: Date;
+    lastModifiedDate?: Date
 }
 
 export interface Major {
     id?: string;
     commodityName?: string;
     commodityCode?: string;
+    status?: boolean;
+    createdBy?: string;
+    lastModifiedDate?: Date;
 }
 
 export interface Warehouse {

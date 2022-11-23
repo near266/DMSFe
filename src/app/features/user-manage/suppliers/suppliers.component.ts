@@ -69,8 +69,9 @@ export class SuppliersComponent implements OnInit {
   open(data: Supplier | null = null) {
     const dialogRef = this.dialog.open(SupplierComponent, {
         width: '730px',
-        height: '90vh',
+        height: '95vh',
         data,
+        panelClass: 'custom-mat-dialog-container',
     });
       dialogRef.afterClosed().subscribe(result => {
         if(result?.event === true){

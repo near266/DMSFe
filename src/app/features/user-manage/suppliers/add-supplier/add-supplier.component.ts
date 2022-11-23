@@ -31,7 +31,7 @@ export class AddSupplierComponent implements OnInit {
       province: new FormControl(''),
       debtLimit: new FormControl(''),
       numberOfDaysOwed: new FormControl(''),
-      status: new FormControl(true),
+      status: new FormControl(''),
     })
   }
 

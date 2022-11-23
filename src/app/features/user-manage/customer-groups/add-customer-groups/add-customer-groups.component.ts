@@ -25,8 +25,8 @@ export class AddCustomerGroupsComponent implements OnInit {
     this.form = this.fb.group({
       customerGroupCode: new FormControl(''),
       customerGroupName: new FormControl(''),
-      status: new FormControl(true),
-      deptLimit: new FormControl(true),
+      status: new FormControl(''),
+      deptLimit: new FormControl(''),
     })
   }
 
