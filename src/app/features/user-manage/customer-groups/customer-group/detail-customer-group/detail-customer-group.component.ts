@@ -25,8 +25,8 @@ export class DetailCustomerGroupComponent implements OnInit {
 
   model = {
     id: null,
-    brandName: null,
-    brandCode: null,
+    customerGroupName: null,
+    customerGroupCode: null,
     deptLimit: null,
     status: null,
   };
@@ -99,11 +99,11 @@ export class DetailCustomerGroupComponent implements OnInit {
             // console.log(brand);
             this.customerGroupService.updateCustomerGroup(customerGroup).subscribe({
                 next: (res) => {
-                    this.snackbar.openSnackbar('Sửa nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                    this.snackbar.openSnackbar('Sửa nhóm khách hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
                     this.dialogRef.close({event: true});
                 },
                 error: (err) => {
-                    this.snackbar.openSnackbar('Sửa nhãn hiệu thất bại', 2000, 'Đóng', 'center', 'bottom', true);
+                    this.snackbar.openSnackbar('Sửa nhóm khách hàng thất bại', 2000, 'Đóng', 'center', 'bottom', true);
                     console.log(err);
                 },
             });

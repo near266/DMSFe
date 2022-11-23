@@ -18,7 +18,7 @@ export class SupplierService {
   open(data: Supplier | null = null) {
     const dialogRef = this.dialogService.open(SupplierComponent, {
         width: '750px',
-        height: '90vh',
+        height: '95vh',
         data,
     });
       dialogRef.afterClosed().subscribe(result => {

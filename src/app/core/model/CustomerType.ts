@@ -8,4 +8,6 @@ export class CustomerType {
   mandatoryInventoryRecord: any;
   deptLimit: any;
   status: boolean;
+  createdBy?: string;
+  lastModifiedDate?: Date
 }
