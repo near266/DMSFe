@@ -30,7 +30,6 @@
             [type]="'Create'"
             (listCreate$)="handleEmitListPromotion($event)"></app-template-table-product>
         <app-template-footer-order
-            *ngIf="paymentCreate$ | async"
             [payment]="(paymentCreate$ | async) || paymentNew"
             [order]="order"
             (paymentCreate$)="handleEmitPaymentCreate($event)"></app-template-footer-order>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { headerOrderReportTable } from '../../../models/header';
@@ -9,30 +9,41 @@ import { LogicService } from '../../../services/logic.service';
     templateUrl: './order-report-table.component.html',
     styleUrls: ['./order-report-table.component.scss'],
 })
-export class OrderReportTableComponent implements OnInit, AfterViewInit {
+export class OrderReportTableComponent implements OnInit, AfterViewInit, OnChanges {
+    @Input() body = JSON.stringify({
+        page: 1,
+        pageSize: 30,
+    });
+
     tableHeader: string[] = headerOrderReportTable;
     listData$: Observable<any> = this.logicService.reportOrders$;
     total$: Observable<any> = this.logicService.total$;
 
-    body = {
-        page: 1,
-        pageSize: 30,
-    };
-
     constructor(private router: Router, private logicService: LogicService) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        // clear data
+        this.logicService.clearSource();
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('body' in changes) {
+            this.getData();
+        }
+    }
 
     ngAfterViewInit(): void {
-        this.getData();
+        setTimeout(() => {
+            this.getData();
+        });
     }
 
     getData() {
-        this.logicService.getAllReportOrders(this.body, 'ordersReport');
+        this.logicService.getAllReportOrders(JSON.parse(this.body), 'ordersReport');
     }
 
     handlePageChange(e: any) {
-        this.body.page = e;
+        JSON.parse(this.body).page = e;
         this.getData();
     }
 

@@ -10,7 +10,7 @@
         [opened]="true"
         class="overflow-hidden relative z-50 navbar-container">
         <div class="w-60 p-3">
-            <report-template-sidebar></report-template-sidebar>
+            <report-template-sidebar [body]="body" (body$)="handleEmitBody($event)"></report-template-sidebar>
         </div>
     </mat-sidenav>
     <mat-sidenav-content class="overflow-y-auto">
@@ -59,7 +59,7 @@
                 </div>
                 <hr />
                 <div class="w-full table-container min-w-full box-border h-full px-3 bg-white">
-                    <app-order-report-table></app-order-report-table>
+                    <app-order-report-table [body]="body | json"></app-order-report-table>
                 </div>
             </div>
         </div>

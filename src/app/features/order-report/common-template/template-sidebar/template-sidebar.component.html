@@ -1,10 +1,18 @@
 <div class="w-full relative">
     <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
-    <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm khách hàng" />
+    <input
+        type="text"
+        class="p-2 rounded bg-gray-100 w-full pl-8"
+        placeholder="Gõ tìm khách hàng"
+        (keyup.enter)="searchCustomer($event)" />
 </div>
 <div class="w-full relative mt-3">
     <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
-    <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm sản phẩm" />
+    <input
+        type="text"
+        class="p-2 rounded bg-gray-100 w-full pl-8"
+        placeholder="Gõ tìm sản phẩm"
+        (keyup.enter)="searchProduct($event)" />
 </div>
 <div
     (click)="isShowEmployeeTree = !isShowEmployeeTree"
@@ -37,3 +45,10 @@
     </mat-form-field>
 </div>
 <!-- Kênh menu -->
+<app-menu-collapse (Selection)="selectChannel($event)" [Config]="channelMenu"></app-menu-collapse>
+<!-- Kênh menu -->
+<app-menu-collapse (Selection)="selectSupplier($event)" [Config]="supplierMenu"></app-menu-collapse>
+<!-- Nhãn hiệu -->
+<app-menu-collapse (Selection)="selectBrand($event)" [Config]="brandMenu"></app-menu-collapse>
+<!-- Ngành hàng -->
+<app-menu-collapse (Selection)="selectMajor($event)" [Config]="majorMenu"></app-menu-collapse>

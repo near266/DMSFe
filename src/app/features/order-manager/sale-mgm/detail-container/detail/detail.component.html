@@ -9,11 +9,13 @@
         [id]="id"
         [orderType]="'Sale'"
         [typeTable]="'Product'"
+        [type]="'Detail'"
         [list]="list$ | async"
         [title]="'Sản phẩm đặt hàng'"
         [payment]="(payment$ | async) || paymentNew"></app-template-table-product>
     <app-template-table-product
         [id]="id"
+        [type]="'Detail'"
         [orderType]="'Sale'"
         [typeTable]="'Promotion'"
         [list]="listPromotion$ | async"
