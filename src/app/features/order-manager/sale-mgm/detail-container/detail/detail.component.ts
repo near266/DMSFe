@@ -4,7 +4,11 @@ import { SaleEmployee } from 'src/app/core/model/SaleReceipt';
 import { SaleDetail } from '../../../models/saleDetail';
 import { CommonLogicService } from '../../../services/commonLogic.service';
 import { SaleLogicService } from '../../../services/saleLogic.service';
-import { DataInput, Option } from '../../../template-component/template-infor-order/template-infor-order.component';
+import {
+    coppyObject,
+    DataInput,
+    Option,
+} from '../../../template-component/template-infor-order/template-infor-order.component';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
 import { Payment } from '../../../template-component/template-footer-order/template-footer-order.component';
 
@@ -26,6 +30,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
         orderType: 'Sale',
         screenType: 'Detail',
     };
+    coppyObject: coppyObject = new coppyObject();
     id: string = '';
     @AutoUnsubscribe()
     isEdit$: Observable<boolean> = this.commonLogicService.isEdit$;
@@ -85,6 +90,13 @@ export class DetailComponent implements OnInit, AfterViewInit {
                 customerId: data.customer?.id,
                 customerName: data.customer?.customerName,
                 relatedId: data.purchaseOrder?.id,
+            };
+            this.coppyObject = {
+                groupCoppy: data.group?.name,
+                orderCoppy: data.orderEmployee?.employeeCode + ' - ' + data.orderEmployee?.employeeName,
+                routeCoppy: data.route?.routeCode + ' - ' + data.route?.routeName,
+                customerCoppy: data.customer?.customerCode + ' - ' + data.customer?.customerName,
+                saleCoppy: data.saleEmployee?.employeeCode + ' - ' + data.saleEmployee?.employeeName,
             };
             this.getListProductAndPromotionPassToInput(data);
         });

@@ -5,4 +5,10 @@ export class Config {
     dataReturn: [];
     listIds: string[];
     stickyRows: stickyRows[];
+    constructor() {
+        this.dataReturn = [];
+        this.dataReturn = [];
+        this.listIds = [];
+        this.stickyRows = [];
+    }
 }

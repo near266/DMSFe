@@ -65,7 +65,7 @@ export class ChannelComponent implements OnInit {
   submitChange(): void {
       this.channelService.submitForm$.next(true);
   }
-  deleteProduct(): void {
+  del(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
             content: 'Bạn có chắc chắn muốn xóa kênh này không',

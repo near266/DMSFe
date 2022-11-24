@@ -20,6 +20,7 @@ import {
 } from '../models/purchaseAPI';
 import { PurchaseDetail } from '../models/purchaseDetail';
 import { PurchaseOrder, RootPurchases } from '../models/purchases';
+import { SaleCreateBody } from '../models/SaleAPI';
 import { Payment } from '../template-component/template-footer-order/template-footer-order.component';
 import { CommonLogicService } from './commonLogic.service';
 import { FormatPurchaseService } from './formatPurchase.service';
@@ -32,6 +33,7 @@ export class PurchaseLogicService {
     private isLoadingSource = new BehaviorSubject<boolean>(true);
     private totalSource = new BehaviorSubject<number>(0);
     private isSucessArchivedSource = new BehaviorSubject<boolean>(false);
+    private isGenSource = new BehaviorSubject<boolean>(false);
     private detailSource = new BehaviorSubject<PurchaseDetail>(new PurchaseDetail());
     private paymentSource = new BehaviorSubject<Payment>(new Payment());
     private infoCreateSource = new BehaviorSubject<any>('');
@@ -55,6 +57,7 @@ export class PurchaseLogicService {
     payment$ = this.paymentSource.asObservable();
     paymentCreate$ = this.paymentCreateSource.asObservable();
     genSale$ = this.genSaleSource.asObservable();
+    isGen$ = this.isGenSource.asObservable();
 
     constructor(
         private purchaseService: PurchaseOrderService,
@@ -66,6 +69,10 @@ export class PurchaseLogicService {
         private numberToText: NumberToTextService,
         private dialog: MatDialog,
     ) {}
+
+    genSale() {
+        this.isGenSource.next(true);
+    }
 
     setInfoCreateSource(body: any) {
         this.infoCreateSource.next(body);
@@ -424,19 +431,19 @@ export class PurchaseLogicService {
         // khi ấn vào nút bán hàng (chia 2 trường hợp nếu trạng thái hiện tại là duyệt hay đã bán hàng)
         // Tạm thời chỉ để 1 trường hợp là đã duyệt
         else if (changeTo === 3) {
-            this.dialog.open(GenOrderSaleComponent, {
-                maxWidth: '100vw',
-                maxHeight: '100vh',
-                height: '100%',
-                width: '100%',
-                panelClass: 'full-screen-modal',
-                data: {
-                    isSaled: false,
-                    detailOrder: this.detailSource.getValue(),
-                },
-            });
+            // this.dialog.open(GenOrderSaleComponent, {
+            //     maxWidth: '100vw',
+            //     maxHeight: '100vh',
+            //     height: '100%',
+            //     width: '100%',
+            //     panelClass: 'full-screen-modal',
+            //     data: {
+            //         isSaled: false,
+            //         detailOrder: this.detailSource.getValue(),
+            //     },
+            // });
 
-            // this.router.navigate(['order/purchase/genSale']);
+            this.router.navigate(['order/purchase/genSale']);
             // this.genSaleSource.next(this.detailSource.getValue());
 
             // if (this.statusNow === 2) {

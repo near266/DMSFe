@@ -2,7 +2,7 @@ import { CurrencyPipe, DatePipe, PercentPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import products from '../../product/mocks/product';
 import { Config } from '../models/config';
-import { RootOrderReport } from '../models/order-report';
+import { ListProduct, RootOrderReport } from '../models/order-report';
 import { stickyRows } from '../models/stickyRow';
 
 @Injectable({
@@ -44,7 +44,7 @@ export class FormatReportOrderService {
                 content: this.currency.transform(dataList.sumOfTradeDiscount, 'VND', 'symbol', '1.0-0')!,
             },
         ];
-        dataReturn = dataList.data!.map((data: any, index: number) => {
+        dataReturn = dataList.data?.map((data: any, index: number) => {
             listIds.push(data.purchaseOrderId);
             let productInfo = this.getProductOrdersInfo(data.listProducts);
             let productCodeArray = productInfo.productCodeArray;
@@ -204,7 +204,7 @@ export class FormatReportOrderService {
                     content: unitPriceArray,
                     hasChildren: true,
                 },
-                // Thành tiền
+                // Thành tiền (từng sp)
                 {
                     content: totalPriceArray,
                     hasChildren: true,
@@ -226,7 +226,7 @@ export class FormatReportOrderService {
                 },
                 // thành tiền
                 {
-                    content: this.currency.transform(data.totalMoney, 'VND', 'symbol', '1.0-0'),
+                    content: this.currency.transform(data.totalAmount || 0, 'VND', 'symbol', '1.0-0'),
                     hasChildren: false,
                 },
                 // Chiết khấu tổng bill
@@ -239,9 +239,9 @@ export class FormatReportOrderService {
                     content: this.currency.transform(data.tradeDiscount, 'VND', 'symbol', '1.0-0'),
                     hasChildren: false,
                 },
-                // thanh toán trước
+                // thanh toán
                 {
-                    content: this.currency.transform(data.preMoney, 'VND', 'symbol', '1.0-0'),
+                    content: this.currency.transform(data.totalMoney, 'VND', 'symbol', '1.0-0'),
                     hasChildren: false,
                 },
                 // Diễn giải
@@ -279,13 +279,13 @@ export class FormatReportOrderService {
         let discountRateArray: any = [];
         let discountArray: any = [];
 
-        productList?.map((product: any) => {
+        productList?.map((product: ListProduct) => {
             productCodeArray.push(product.productCode);
             productNameArray.push(product.productName);
             warehouseCodeArray.push(product.warehouse?.warehouseCode || 'Chưa có');
             warehouseNameArray.push(product.warehouse?.warehouseName || 'Chưa có');
             descriptionArray.push(product.note);
-            majorArray.push(product.major?.majorName);
+            majorArray.push(product.major?.commodityName);
             brandArray.push(product.brand?.brandName);
             quantityArray.push(product.quantity);
             promotionNameArray.push(product.promotionName);
@@ -293,8 +293,8 @@ export class FormatReportOrderService {
             unitArray.push(product.unit?.unitName);
             unitPriceArray.push(this.currency.transform(product.unitPrice, 'VND', 'symbol', '1.0-0'));
             totalPriceArray.push(this.currency.transform(product.totalPrice, 'VND', 'symbol', '1.0-0'));
-            vatArray.push(product.vaTofPro || 0);
-            discountRateArray.push(this.percent.transform((product.discountRate / 100) | 0, '1.0-0'));
+            vatArray.push(this.percent.transform(product.vaTofPro! / 100 || 0, '1.0-0'));
+            discountRateArray.push(this.percent.transform(product.discountRate! / 100 || 0, '1.0-0'));
             discountArray.push(this.currency.transform(product.discount, 'VND', 'symbol', '1.0-0'));
         });
         return {

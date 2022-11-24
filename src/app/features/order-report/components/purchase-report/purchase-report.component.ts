@@ -19,12 +19,18 @@ export class PurchaseReportComponent implements OnInit {
 
     total$: Observable<number> = this.logicService.total$;
     dataOrderReport: RootOrderReport = new RootOrderReport();
+    body: any = {
+        page: 1,
+        pageSize: 30,
+    };
 
     constructor(private _reportSer: ReportService, private logicService: LogicService) {}
 
     ngOnInit(): void {}
 
-    selectType(event: any) {
-        console.log(event);
+    handleEmitBody(body: any) {
+        body.page = 1;
+        body.pageSize = 30;
+        this.body = body;
     }
 }

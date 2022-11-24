@@ -99,7 +99,9 @@ export class CommonLogicService {
 
     getListRoute(roleMain: string) {
         this.purchaseOrder.getAllRoute(1, 30, '').subscribe((data: { data: any[]; totalCount: number }) => {
-            this.listRouteSource.next(JSON.parse(JSON.stringify(data.data)));
+            if (data) {
+                this.listRouteSource.next(JSON.parse(JSON.stringify(data.data)));
+            }
         });
     }
 
@@ -109,6 +111,11 @@ export class CommonLogicService {
         if (roleMain != 'member') {
             this.purchaseOrder.getAllEmployees('', 1, 30).subscribe((data) => {
                 this.listEmployeeSource.next(JSON.parse(JSON.stringify(data.data)));
+                this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
+                    if (data) {
+                        this.listEmployeeSource.next([...this.listEmployeeSource.getValue(), data]);
+                    }
+                });
             });
         } else if (roleMain === 'member') {
             this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
@@ -125,6 +132,11 @@ export class CommonLogicService {
         if (roleMain != 'member') {
             this.purchaseOrder.getAllEmployees('', 1, 30).subscribe((data) => {
                 this.listSaleEmployeeSource.next(JSON.parse(JSON.stringify(data.data)));
+                this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
+                    if (data) {
+                        this.listSaleEmployeeSource.next([...this.listSaleEmployeeSource.getValue(), data]);
+                    }
+                });
             });
         } else if (roleMain === 'member') {
             this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
