@@ -5,4 +5,6 @@ export class CustomerGroup {
   customerGroupName: string;
   deptLimit: any;
   status: boolean;
+  createdBy?: string;
+  lastModifiedDate?: Date
 }

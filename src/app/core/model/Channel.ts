@@ -4,4 +4,6 @@ export interface Channel {
   channelName: string;
   deptLimit: any;
   status: boolean;
+  createdBy?: string;
+  lastModifiedDate?: Date
 }

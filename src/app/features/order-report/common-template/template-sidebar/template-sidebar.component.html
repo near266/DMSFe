@@ -1,1 +1,54 @@
-<p>template-sidebar works!</p>
+<div class="w-full relative">
+    <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
+    <input
+        type="text"
+        class="p-2 rounded bg-gray-100 w-full pl-8"
+        placeholder="Gõ tìm khách hàng"
+        (keyup.enter)="searchCustomer($event)" />
+</div>
+<div class="w-full relative mt-3">
+    <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
+    <input
+        type="text"
+        class="p-2 rounded bg-gray-100 w-full pl-8"
+        placeholder="Gõ tìm sản phẩm"
+        (keyup.enter)="searchProduct($event)" />
+</div>
+<div
+    (click)="isShowEmployeeTree = !isShowEmployeeTree"
+    class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+    <i class="fa-solid fa-user mr-3 text-base"></i>
+    <span class="text-sm">Phòng ban / Nhân viên</span>
+</div>
+<div *ngIf="isShowEmployeeTree" class="ml-3">
+    <app-menu-collapse-tree (newItemEvent)="selectOrderEmployee($event)"></app-menu-collapse-tree>
+</div>
+<!-- Loại khách hàng menu -->
+<app-menu-collapse (Selection)="selectTypeCustomer($event)" [Config]="typeCustomerMenu"></app-menu-collapse>
+<!-- Nhóm khách hàng menu -->
+<app-menu-collapse (Selection)="selectGroupCustomer($event)" [Config]="groupCustomerMenu"></app-menu-collapse>
+<!-- Khu vực menu -->
+<div
+    (click)="isSelectMenu = !isSelectMenu"
+    class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+    <i class="fa-solid fa-earth-americas mr-3 text-base"></i>
+    <span class="text-sm">Khu vực</span>
+</div>
+<div *ngIf="isSelectMenu" class="mt-1 w-full">
+    <mat-form-field style="font-size: 8px" class="px-2 w-full" appearance="outline" floatLabel="always">
+        <mat-label style="font-size: 14px">--Chọn khu vực--</mat-label>
+        <mat-select style="font-size: 12px">
+            <mat-option (onSelectionChange)="selectArea(area.id)" [value]="area.id" *ngFor="let area of areaList">
+                <div>{{ area?.areaName }}</div>
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<!-- Kênh menu -->
+<app-menu-collapse (Selection)="selectChannel($event)" [Config]="channelMenu"></app-menu-collapse>
+<!-- Kênh menu -->
+<app-menu-collapse (Selection)="selectSupplier($event)" [Config]="supplierMenu"></app-menu-collapse>
+<!-- Nhãn hiệu -->
+<app-menu-collapse (Selection)="selectBrand($event)" [Config]="brandMenu"></app-menu-collapse>
+<!-- Ngành hàng -->
+<app-menu-collapse (Selection)="selectMajor($event)" [Config]="majorMenu"></app-menu-collapse>

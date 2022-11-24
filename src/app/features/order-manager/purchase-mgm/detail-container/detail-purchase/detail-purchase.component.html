@@ -2,10 +2,12 @@
     [option]="option"
     [data]="detailPassToInput"
     [id]="id"
-    [payment]="payment$ | async"></app-template-infor-order>
+    [payment]="payment$ | async"
+    [coppyObject]="coppyObject"></app-template-infor-order>
 <div class="px-3">
     <app-template-table-product
         [id]="id"
+        [type]="'Detail'"
         [orderType]="'Purchase'"
         [typeTable]="'Product'"
         [title]="'Sản phẩm đặt hàng'"
@@ -13,6 +15,7 @@
         (listUpdate$)="handleEmitListUpdate($event)"
         [payment]="payment$ | async"></app-template-table-product>
     <app-template-table-product
+        [type]="'Detail'"
         [id]="id"
         [orderType]="'Purchase'"
         [typeTable]="'Promotion'"

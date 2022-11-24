@@ -6,7 +6,11 @@ import { NumberToTextService } from 'src/app/core/shared/services/number-to-text
 import { PurchaseDetail } from '../../../models/purchaseDetail';
 import { CommonLogicService } from '../../../services/commonLogic.service';
 import { PurchaseLogicService } from '../../../services/purchaseLogic.service';
-import { DataInput, Option } from '../../../template-component/template-infor-order/template-infor-order.component';
+import {
+    coppyObject,
+    DataInput,
+    Option,
+} from '../../../template-component/template-infor-order/template-infor-order.component';
 export const StatusList = [
     {
         value: 1,
@@ -55,6 +59,7 @@ export class DetailPurchaseComponent implements OnInit, AfterViewInit, OnDestroy
     };
     private subscriptions = new Subscription();
 
+    coppyObject: coppyObject;
     id: string;
     @AutoUnsubscribe()
     detail$: Observable<PurchaseDetail> = this.purchaseLogicService.detail$;
@@ -132,6 +137,12 @@ export class DetailPurchaseComponent implements OnInit, AfterViewInit, OnDestroy
             phone: data.customer?.phone,
             address: data.customer?.address,
             description: data.description,
+        };
+        this.coppyObject = {
+            groupCoppy: data.group?.name,
+            orderCoppy: data.orderEmployee?.employeeCode + ' - ' + data.orderEmployee?.employeeName,
+            routeCoppy: data.route?.routeCode + ' - ' + data.route?.routeName,
+            customerCoppy: data.customer?.customerCode + ' - ' + data.customer?.customerName,
         };
     }
 

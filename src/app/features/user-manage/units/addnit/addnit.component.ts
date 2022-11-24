@@ -25,7 +25,7 @@ export class AddnitComponent implements OnInit {
     this.form = this.fb.group({
       unitCode: new FormControl(''),
       unitName: new FormControl(''),
-      status: new FormControl(true),
+      status: new FormControl(''),
     })
   }
 

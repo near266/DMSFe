@@ -1,3 +1,5 @@
+import { Warehouse } from './saleReports';
+
 export class RootOrderReport {
     data?: Datum[];
     sumOfOrderProduct?: number;
@@ -27,6 +29,7 @@ export class Datum {
     tradeDiscount?: number;
     totalMoney?: number;
     totalOfVAT?: number;
+    totalAmount?: number;
     description?: string;
     preMoney?: number;
 }
@@ -36,15 +39,16 @@ export class ListProduct {
     productCode?: string;
     productName?: string;
     note?: string;
-    major?: any;
+    major?: Major;
     brand?: any;
     quantity?: number;
     promotionName?: any;
     promotionQuantity?: number;
-    unit?: any;
+    unit?: Unit;
     unitPrice?: number;
     totalPrice?: number;
     discountRate?: number;
+    warehouse: Warehouse;
     discount?: number;
     vaTofPro?: number;
     quantityReturn?: number;
@@ -92,4 +96,14 @@ export class OrderEmployee {
     employeeCode?: string;
     employeeName?: string;
     employeeTitle?: string;
+}
+
+export class Unit {
+    id: string;
+    unitName: string;
+}
+
+export class Major {
+    id: string;
+    commodityName: string;
 }

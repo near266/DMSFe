@@ -16,6 +16,7 @@ import moment from 'moment';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
 import { debounceTime, Observable, Subscription } from 'rxjs';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { GroupModel } from '../../models/group';
 import { CommonLogicService } from '../../services/commonLogic.service';
 import { PurchaseLogicService } from '../../services/purchaseLogic.service';
@@ -53,6 +54,14 @@ export class DataInput {
     relatedId?: string;
 }
 
+export class coppyObject {
+    groupCoppy?: string;
+    orderCoppy?: string;
+    routeCoppy?: string;
+    customerCoppy?: string;
+    saleCoppy?: string;
+}
+
 @Component({
     selector: 'app-template-infor-order',
     templateUrl: './template-infor-order.component.html',
@@ -63,11 +72,21 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     @Input() data: any;
     @Input() id: string;
     @Input() payment: Payment;
+    @Input() coppyObject: coppyObject = new coppyObject();
     @Output() createBody$: EventEmitter<any> = new EventEmitter();
+    @Output() genSaleBody$: EventEmitter<any> = new EventEmitter();
 
     private subscriptions: Subscription = new Subscription();
 
-    form!: FormGroup;
+    groupCoppy: any = '';
+    orderCoppy: any = '';
+    routeCoppy: any = '';
+    customerCoppy: any = '';
+    saleCoppy: any = '';
+
+    form: FormGroup = this.fb.group({
+        description: [''],
+    });
     roleMain: string = 'member';
 
     orderEmployeeCtrl: FormControl = new FormControl();
@@ -96,6 +115,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         private fb: FormBuilder,
         private purchaseLogicService: PurchaseLogicService,
         private saleLogicService: SaleLogicService,
+        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -115,19 +135,31 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                 }
             }),
         );
+        if (this.option.type === 'Gen') {
+            this.subscriptions.add(
+                this.purchaseLogicService.isGen$.subscribe((data) => {
+                    if (data) {
+                        this.genSale();
+                    }
+                }),
+            );
+        }
         this.searchListOrderEmployee();
         this.searchListSaleEmployee();
         this.searchListRoute();
         this.searchListCus();
+        this.setAutoDefaultInfo();
     }
 
     ngAfterViewInit(): void {
-        this.getListGroup();
-        this.geListCus();
-        this.getListEmployee();
-        this.getListSaleEmployee();
-        this.getListRoute();
-        this.setAutoDefaultInfo();
+        setTimeout(() => {
+            this.getListGroup();
+            this.geListCus();
+            this.getListEmployee();
+            this.getListSaleEmployee();
+            this.getListRoute();
+            this.getCoppyText();
+        }, 0);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -141,6 +173,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                         if (this.option.type === 'Gen') {
                             this.patchValue();
                         }
+                        console.log(this.data);
                         break;
                     }
                     case 'option': {
@@ -148,6 +181,9 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                             this.commonLogicService.changeToCreateType();
                         }
                         break;
+                    }
+                    case 'coppyObject': {
+                        this.getCoppyText();
                     }
                 }
             }
@@ -164,6 +200,10 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         this.subscriptions.unsubscribe();
     }
 
+    genSale() {
+        this.genSaleBody$.emit(this.form);
+    }
+
     // Chỉ ở màn tạo
     setAutoDefaultInfo() {
         if (this.option.type === 'Create' && this.option.order === 'Purchase') {
@@ -176,7 +216,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     setAutoDefaultCreatePurchase() {
         let idDefault = this.commonLogicService.getIdDefault();
         this.commonLogicService.pushOrderEmployeeToListEmployee(idDefault, []);
-        this.form.patchValue({
+        this.form!.patchValue({
             orderDate: moment(Date.now()).format('YYYY-MM-DD'),
             deliveryDate: moment(Date.now()).format('YYYY-MM-DD'),
             status: 1,
@@ -187,7 +227,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     setAutoDefaultCreateSale() {
         let idDefault = this.commonLogicService.getIdDefault();
         this.commonLogicService.pushSaleEmployeeToListEmployee(idDefault, []);
-        this.form.patchValue({
+        this.form!.patchValue({
             saleDate: moment(Date.now()).format('YYYY-MM-DD'),
             deliveryDate: moment(Date.now()).format('YYYY-MM-DD'),
             status: 3, // trạng thái đã bán hàng
@@ -323,7 +363,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         this.pushSaleEmployeeToListEmployee();
         this.pushRouteToListRoute();
         if (this.data) {
-            this.form.patchValue({
+            this.form!.patchValue({
                 code: this.data.code,
                 status: this.data.status,
                 orderDate: this.data.orderDate,
@@ -394,5 +434,19 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         if (this.data && this.data.routeId) {
             this.commonLogicService.pushRouteToListRoute(this.data.routeId, []);
         }
+    }
+
+    coppy(value: any, e: any) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(value);
+        this.snackbar.openSnackbar('Sao chép thành công', 1000, 'Đóng', 'center', 'bottom', true);
+    }
+
+    getCoppyText() {
+        this.groupCoppy = this.coppyObject?.groupCoppy;
+        this.orderCoppy = this.coppyObject?.orderCoppy;
+        this.routeCoppy = this.coppyObject?.routeCoppy;
+        this.customerCoppy = this.coppyObject?.customerCoppy;
+        this.saleCoppy = this.coppyObject?.saleCoppy;
     }
 }

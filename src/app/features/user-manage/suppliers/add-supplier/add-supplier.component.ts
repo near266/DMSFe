@@ -31,7 +31,7 @@ export class AddSupplierComponent implements OnInit {
       province: new FormControl(''),
       debtLimit: new FormControl(''),
       numberOfDaysOwed: new FormControl(''),
-      status: new FormControl(true),
+      status: new FormControl(''),
     })
   }
 
@@ -53,10 +53,10 @@ export class AddSupplierComponent implements OnInit {
       body.status = false;
     }
     this.supplierService.addSupplier(body).subscribe( data => {
-      this.snackbar.openSnackbar('Thêm nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
+      this.snackbar.openSnackbar('Thêm nhà cung cấp thành công', 2000, 'Đóng', 'center', 'bottom', true);
       this.dialogRef.close({event: true});
     }, (error) => {
-      this.snackbar.openSnackbar('Thêm nhãn hiệu thất bại', 2000, 'Đóng', 'center', 'bottom', true);
+      this.snackbar.openSnackbar('Thêm nhà cung cấp thất bại', 2000, 'Đóng', 'center', 'bottom', true);
     });
 
   }

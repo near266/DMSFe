@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { set } from 'lodash';
 import { Observable } from 'rxjs';
 import { headerSaleReceiptTable } from '../../../models/header';
 import { LogicService } from '../../../services/logic.service';
@@ -17,10 +18,15 @@ export class SaleReceiptReportTableComponent implements OnInit, AfterViewInit {
         page: 1,
         pageSize: 30,
     };
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        // clear data
+        this.logicService.clearSource();
+    }
 
     ngAfterViewInit(): void {
-        this.getData();
+        setTimeout(() => {
+            this.getData();
+        }, 0);
     }
 
     getData() {

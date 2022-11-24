@@ -106,6 +106,7 @@ export interface ListProduct {
     vaTofPro: number;
     quantityReturn: number;
     moneyReturn: number;
+    quatitySale: number;
 }
 
 export interface Major {

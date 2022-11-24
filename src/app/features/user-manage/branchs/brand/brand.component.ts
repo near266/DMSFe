@@ -65,7 +65,7 @@ export class BrandComponent implements OnInit {
   submitChange(): void {
       this.brandService.submitForm$.next(true);
   }
-  deleteProduct(): void {
+  del(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
             content: 'Bạn có chắc chắn muốn xóa nhãn hiệu này không',

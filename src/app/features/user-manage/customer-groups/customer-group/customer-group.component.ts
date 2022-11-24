@@ -65,7 +65,7 @@ export class CustomerGroupComponent implements OnInit {
   submitChange(): void {
       this.customerGroupService.submitForm$.next(true);
   }
-  deleteProduct(): void {
+  del(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
             content: 'Bạn có chắc chắn muốn xóa nhóm khách hàng này không',
