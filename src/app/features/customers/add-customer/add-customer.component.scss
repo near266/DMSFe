@@ -22,6 +22,11 @@ input[type='file']{
   cursor:pointer;
 }
 
+input, select, option {
+  font-weight: 600;
+}
+
+
 .box {
   border: 1px dashed;
 }
