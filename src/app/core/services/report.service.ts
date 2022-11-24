@@ -17,4 +17,18 @@ export class ReportService {
     SaleReceiptReport(body: any): Observable<any> {
         return this.http.post(this.urlAPIReport + '/SaleReport', body).pipe(map((res) => res));
     }
+
+    SaleReceiptExportGross(body: any): Observable<any> {
+        let optionHeader = { responseType: 'text' };
+        return this.http
+            .post(this.urlAPIReport + '/SaleExportDelap', body, { responseType: 'blob' })
+            .pipe(map((res) => res));
+    }
+
+    SaleReceiptExportNotGross(body: any): Observable<any> {
+        let optionHeader = { responseType: 'text' };
+        return this.http
+            .post(this.urlAPIReport + '/SaleExport', body, { responseType: 'blob' })
+            .pipe(map((res) => res));
+    }
 }
