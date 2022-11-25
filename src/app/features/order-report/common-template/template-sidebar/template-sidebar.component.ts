@@ -11,6 +11,7 @@ import { ProductApiService } from 'src/app/features/product/apis/product.api.ser
 import { Brand, Major, Supplier } from 'src/app/features/product/models/product';
 import { SupplierService } from 'src/app/features/user-manage/suppliers/services/supplier.service';
 import { Area, CustomerGroup } from '../../models/order-report';
+import { LogicService } from '../../services/logic.service';
 
 @Component({
     selector: 'report-template-sidebar',
@@ -70,6 +71,7 @@ export class TemplateSidebarComponent implements OnInit {
         private channelService: ChannelService,
         private supplierService: SupplierService,
         private productApi: ProductApiService,
+        private logicService: LogicService,
     ) {}
 
     ngOnInit(): void {}
@@ -185,38 +187,43 @@ export class TemplateSidebarComponent implements OnInit {
 
     // Tìm kiếm theo loại khách hàng
     selectTypeCustomer(e: any) {
-        let id = null;
-        this.listTypeCustomer.forEach((type: any) => {
-            if (type.customerTypeName === e) {
-                id = type.id;
-            }
-        });
-        this.body.customerTypeId = id;
+        this.body.customerTypeId = this.logicService.filterId(this.listTypeCustomer, 'id', 'customerTypeName', e);
         this.emitBody();
     }
 
     // Tìm kiếm theo nhóm khách hàng
     selectGroupCustomer(e: any) {
-        let id = null;
-        this.listGroupCustomer.forEach((type: any) => {
-            if (type.customerGroupName === e) {
-                id = type.id;
-            }
-        });
-        this.body.customerGroupId = id;
+        this.body.customerGroupId = this.logicService.filterId(this.listGroupCustomer, 'id', 'customerGroupName', e);
+        this.emitBody();
+    }
+
+    // Tìm kiếm theo khu vực
+    selectArea(e: any) {
+        this.body.areaId = e;
+        this.emitBody();
+    }
+    // Tìm kiếm theo kênh
+    selectChannel(e: any) {
+        this.body.channelId = this.logicService.filterId(this.listChannel, 'id', 'channelName', e);
+        this.emitBody();
+    }
+
+    // Tìm kiếm theo nhà cung cấp
+    selectSupplier(e: any) {
+        this.body.supplierId = this.logicService.filterId(this.listSupplier, 'id', 'supplierName', e);
         this.emitBody();
     }
 
     // Tìm kiếm theo brand
-    selectBrand(e: any) {}
+    selectBrand(e: any) {
+        this.body.brandId = this.logicService.filterId(this.listBrand, 'id', 'brandName', e);
+        this.emitBody();
+    }
 
-    selectChannel(e: any) {}
-
-    selectSupplier(e: any) {}
-
-    selectMajor(e: any) {}
-
-    selectArea(e: any) {}
+    selectMajor(e: any) {
+        this.body.majorId = this.logicService.filterId(this.listMajor, 'id', 'commodityName', e);
+        this.emitBody();
+    }
 
     emitBody() {
         this.body$.emit(this.body);

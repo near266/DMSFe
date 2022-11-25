@@ -29,7 +29,7 @@
         @apply py-1 text-center border-x max-w-2xl px-1;
     }
     &-tr {
-        @apply cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 border-x;
+        @apply cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 border-x h-fit;
     }
 }
 
