@@ -4,6 +4,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { DataService } from 'src/app/core/services/data.service';
 import { EmployeeService } from 'src/app/core/services/employee.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
 import { AddUserComponent } from './add-user/add-user.component';
 import { DetailUserComponent } from './detail-user/detail-user.component';
 
@@ -19,6 +21,8 @@ export class UserManageComponent implements OnInit {
         public datePipe: DatePipe,
         private employeeService: EmployeeService,
         private dataService: DataService,
+        private snackbar: SnackbarService,
+        private confirm: ConfirmDialogService
     ) { }
 
     pageSizeList = [30, 50, 100, 200, 500];
@@ -36,6 +40,8 @@ export class UserManageComponent implements OnInit {
         pagesize: this.pageSize
     }
 
+    listId: string[] = [];
+
     SearchEmployee() {
         let sub = this.employeeService.SearchEmployee(this.body).subscribe(data => {
             this.totalCount = data.totalCount
@@ -47,7 +53,12 @@ export class UserManageComponent implements OnInit {
             }
             this.users = []
             data.data.forEach((element: any) => {
-                this.users.push(element)
+              if (this.listId.indexOf(element.id) >= 0) {
+                element.checked = true;
+              } else {
+                element.checked = false;
+              }
+              this.users.push(element)
             });
             sub.unsubscribe()
         })
@@ -87,7 +98,12 @@ export class UserManageComponent implements OnInit {
                     }
                     this.users = []
                     data.data.forEach((element: any) => {
-                        this.users.push(element.employee);
+                      if (this.listId.indexOf(element.id) >= 0) {
+                        element.employee.checked = true;
+                      } else {
+                        element.employee.checked = false;
+                      }
+                      this.users.push(element.employee);
                     });
                 }
             });
@@ -102,7 +118,12 @@ export class UserManageComponent implements OnInit {
                 }
                 this.users = []
                 data.data.forEach((element: any) => {
-                    this.users.push(element)
+                  if (this.listId.indexOf(element.id) >= 0) {
+                    element.checked = true;
+                  } else {
+                    element.checked = false;
+                  }
+                  this.users.push(element)
                 });
                 sub.unsubscribe()
             })
@@ -211,23 +232,81 @@ export class UserManageComponent implements OnInit {
 
     GetListAll() {
         let sub = this.employeeService.GetAllEmployee(this.page, this.pageSize).subscribe(data => {
-            this.totalCount = data.totalCount
+            this.totalCount = data.totalCount;
             if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
                 this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
             }
             else {
-                this.totalPage = Math.round(this.totalCount / this.pageSize)
+                this.totalPage = Math.round(this.totalCount / this.pageSize);
             }
-            this.users = []
+            this.users = [];
             data.data.forEach((element: any) => {
-                this.users.push(element)
+              if (this.listId.indexOf(element.id) >= 0) {
+                element.checked = true;
+              } else {
+                element.checked = false;
+              }
+              this.users.push(element);
             });
-            sub.unsubscribe()
+            sub.unsubscribe();
         })
     }
 
     Select(e: any) {
-        console.log(e);
+      switch(e) {
+        case 'emp-lock': {
+          let ref = this.confirm.openDialog({message: 'Bạn có chắc chắn muốn khóa tài khoản này?', confirm: 'Đồng ý', cancel: 'Hủy'});
+          ref.subscribe( res => {
+            if (res) {
+              const body = {
+                listId: this.listId,
+                activated: false
+              };
+              this.employeeService.DisableEmployee(body).subscribe( data => {
+                if(data) {
+                  this.snackbar.openSnackbar('Khóa tài khoản thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                  this.GetListAll();
+                } else {
+                  this.snackbar.openSnackbar('Khóa tài khoản thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+                }
+              }, (error) => {
+                this.snackbar.openSnackbar('Khóa tài khoản thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+              });
+            }
+          });
+          return;
+        }
+        case 'emp-unlock': {
+          let ref = this.confirm.openDialog({message: 'Bạn có chắc chắn muốn mở tài khoản này?', confirm: 'Đồng ý', cancel: 'Hủy'});
+          ref.subscribe( res => {
+            if (res) {
+              const body = {
+                listId: this.listId,
+                activated: true
+              };
+              this.employeeService.DisableEmployee(body).subscribe( data => {
+                if(data) {
+                  this.snackbar.openSnackbar('Mở tài khoản thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                  this.GetListAll();
+                } else {
+                  this.snackbar.openSnackbar('Mở tài khoản thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+                }
+              }, (error) => {
+                this.snackbar.openSnackbar('Mở tài khoản thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+              });
+            }
+          });
+          return;
+        }
+      }
+    }
+
+    TickEmployee(id: string) {
+      if (this.listId.indexOf(id) >= 0) {
+        this.listId.splice(this.listId.indexOf(id), 1);
+      } else {
+        this.listId.push(id);
+      }
     }
 
     ChangePage(e: any) {
