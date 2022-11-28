@@ -54,6 +54,12 @@ export class EmployeeService {
       .pipe(map((response: any) => response));
   }
 
+  DisableEmployee(body: any): Observable<any> {
+    return this.http
+      .post(gateway_url + '/Employee/DisableEmployee', body)
+      .pipe(map((response: any) => response));
+  }
+
   GetGroupById(id: any): Observable<any> {
     return this.http.get(gateway_url + '/GetGroupById?Id=' + id).pipe(map((response: any) => response));
   }
