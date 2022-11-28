@@ -76,12 +76,12 @@
                 <th class="custom-th">Ngày công</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngFor="let item of listGroup">
                 <tr class="custom-row">
-                  <td *ngIf="days.length + 8 == 38" class="custom-td border-b" colspan="38">Nhóm Hà Nội</td>
-                  <td *ngIf="days.length + 8 == 39" class="custom-td border-b" colspan="39">Nhóm Hà Nội</td>
-                  <td *ngIf="days.length + 8 == 37" class="custom-td border-b" colspan="37">Nhóm Hà Nội</td>
-                  <td *ngIf="days.length + 8 == 36" class="custom-td border-b" colspan="36">Nhóm Hà Nội</td>
+                  <td *ngIf="days.length + 8 == 38" class="custom-td border-b" colspan="38">{{item.name}}</td>
+                  <td *ngIf="days.length + 8 == 39" class="custom-td border-b" colspan="39">{{item.name}}</td>
+                  <td *ngIf="days.length + 8 == 37" class="custom-td border-b" colspan="37">{{item.name}}</td>
+                  <td *ngIf="days.length + 8 == 36" class="custom-td border-b" colspan="36">{{item.name}}</td>
                   <td class="custom-td border-b" rowspan="7">0</td>
                 </tr>
                 <tr>
@@ -105,8 +105,8 @@
                 <tr>
                   <td class="custom-td border-b">Công</td>
                 </tr>
-            </tbody>
-        </table>
+              </tbody>
+            </table>
       </div>
       <div class="mt-2">
         <app-pagination></app-pagination>
