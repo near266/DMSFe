@@ -1,0 +1,8 @@
+<button class="w-6 h-6 items-center flex justify-center" [matMenuTriggerFor]="calendarMenu">
+  <i class="fa-solid fa-calendar text-xl"></i>
+</button>
+<mat-menu #calendarMenu="matMenu">
+  <mat-calendar (click)="$event.stopPropagation()" style="width:15rem" [selected]="activeOption?.value"
+    (selectedChange)="select($event)">
+  </mat-calendar>
+</mat-menu>

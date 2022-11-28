@@ -1,7 +1,8 @@
 <mat-sidenav-container [hasBackdrop]="false">
   <mat-sidenav [mode]="'side'" class="fixed" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" #sidenav
     [position]="'start'" class=" overflow-hidden relative z-50 navbar-container">
-    <app-returns-sidenav></app-returns-sidenav>
+    <app-returns-sidenav [query]="query" [menuItems]="menuItems$ | async" (filterChange)="handleFilterChange($event)">
+    </app-returns-sidenav>
   </mat-sidenav>
   <mat-sidenav-content class="">
     <div class=" bg-[#f2f2f2] fixed bottom-0 top-16 z-10 border-r border-gray-300 border-solid">
@@ -16,7 +17,10 @@
         <div class="z-0  ">
           <!-- header -->
           <div class="mt-2 px-2 flex justify-between items-center">
-            <span class="text-xl font-medium">Danh sách trả hàng ({{totalReturns$ |async}}) </span>
+            <span class="text-xl font-medium">Danh sách trả hàng <ng-container *ngIf="totalItems$| async as totalItems">
+                ({{totalItems}})</ng-container>
+            </span>
+
             <div style="font-size: 12px" class="flex items-center ">
               <mat-form-field appearance="outline" class="mr-2 " [formGroup]="dateSearchForm">
                 <mat-label class="font-bold">Khoảng thời gian</mat-label>
@@ -52,19 +56,25 @@
             </mat-menu>
             <app-menu-bar [menuObj]="menuObj" (message)="select($event)" *ngFor="let menuObj of listMenu">
             </app-menu-bar>
+
+            <button (click)="reload()" *ngIf="requiredRoles('accountant') | async"
+              class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white"><i
+                class="fa-sharp fa-solid fa-refresh text-emerald-500 font-bold mr-2"></i>Tải lại</button>
             <!-- <app-menu-bar [menuObj]="menuObj" (message)="sortTime($event)" *ngFor="let menuObj of timeSortList">
-            </app-menu-bar> -->
+                </app-menu-bar> -->
           </div>
         </div>
         <div class="w-full table-container overflow-scroll">
-          <app-returns-table>
+          <app-returns-table [loading$]="loading$" [returns$]="returns$" [totalItems$]="totalItems$"
+            [pagination$]="pagination$">
           </app-returns-table>
         </div>
       </div>
     </div>
     <div
       class="fixed bottom-0 right-0 ml-[26px] left-0 h-9 px-2 flex items-center justify-end bg-[#f2f2f2] border-t border-solid border-slate-400">
-      <app-returns-pagination></app-returns-pagination>
+      <app-returns-pagination [totalReturns$]="totalItems$" [pagination$]="pagination$"
+        (pageChange)="handlePaginationChange($event)"></app-returns-pagination>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
@@ -72,4 +82,5 @@
   <button [ngClass]="[ className ? className : '']">
     {{ label }}
   </button>
+
 </ng-template>

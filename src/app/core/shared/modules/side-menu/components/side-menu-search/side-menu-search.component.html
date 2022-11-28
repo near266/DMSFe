@@ -1,0 +1,5 @@
+  <div class="mt-1 w-[246px]">
+    <ng-select #Product class="pb-0" [ngModel]="activeOption" [appearance]="'outline'" class="flex-1 "
+      (change)="select($event)" [items]="(data?.values$ |async) || []" [placeholder]="data?.placeholder || ''">
+    </ng-select>
+  </div>

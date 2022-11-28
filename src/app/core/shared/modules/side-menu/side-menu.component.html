@@ -1,0 +1,5 @@
+<ng-container *ngIf="menuItems.length">
+  <ng-container *ngFor="let menuItem of menuItems">
+    <app-side-menu-item [menuItem]="menuItem" (optionChange)="handleOptionChange($event)"></app-side-menu-item>
+  </ng-container>
+</ng-container>

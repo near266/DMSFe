@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Return } from '../models/return';
+import { Return, ReturnResponse } from '../models/return';
 
 @Injectable({
     providedIn: 'root',
@@ -49,7 +49,7 @@ export class ReturnApiService {
         return this.http.put(this.returnUrl + '/arhivedOrUn', { returnsIds: [id] });
     }
 
-    getAllReturns(settings: any) {
+    getAllReturns(settings: any): Observable<ReturnResponse> {
         return this.http.post<any>(this.returnUrl + '/search', settings);
     }
 
