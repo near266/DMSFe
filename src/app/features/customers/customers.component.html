@@ -28,7 +28,7 @@
         <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
         <!-- <app-menu-collapse (Selection)="selectLocation($event)" [Config]="locationMenu"></app-menu-collapse> -->
         <app-menu-collapse (Selection)="selectArchive($event)" [Config]="archiveMenu"></app-menu-collapse>
-        <app-menu-collapse (Selection)="selectCustomer($event)" [Config]="customerMenu"></app-menu-collapse>
+        <!-- <app-menu-collapse (Selection)="selectCustomer($event)" [Config]="customerMenu"></app-menu-collapse> -->
         <app-menu-collapse-search (Selection)="selectCategory($event)" [Config]="categoryMenu"></app-menu-collapse-search>
         <app-menu-collapse-search (Selection)="selectGroup($event)" [Config]="groupMenu"></app-menu-collapse-search>
         <app-menu-collapse-search (Selection)="selectChannel($event)" [Config]="channelMenu"></app-menu-collapse-search>
@@ -41,21 +41,21 @@
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Tỉnh thành</span>
               <select [(ngModel)]="province" #provinces class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8" (change)="getDistrict(provinces.value)">
-                <option disabled selected value=""> --- Chọn tỉnh thành --- </option>
+                <option selected value=""> --- Chọn tỉnh thành --- </option>
                 <option *ngFor="let item of listProvinces" value="{{item.name}}">{{item.name}}</option>
               </select>
             </div>
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Quận huyện</span>
               <select [(ngModel)]="district" #districts class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8" (change)="getWard(districts.value)">
-                <option disabled selected value=""> --- Chọn quận huyện --- </option>
+                <option selected value=""> --- Chọn quận huyện --- </option>
                 <option *ngFor="let item of listDistricts" value="{{item.name}}">{{item.name}}</option>
               </select>
             </div>
             <div class="w-full items-center cursor-pointer py-2 px-3 rounded-lg">
               <span class="pl-4 text-[#0EAF8F] flex"><span class="flex flex-col justify-center"><i class="fa-solid fa-circle text-xs mr-3"></i></span>Xã phường</span>
               <select [(ngModel)]="ward" #wards class="border border-solid border-black my-1 p-1 rounded-sm text-xs w-full h-8" (change)="getAddress(wards.value)">
-                <option disabled selected value=""> --- Chọn xã phường --- </option>
+                <option selected value=""> --- Chọn xã phường --- </option>
                 <option *ngFor="let item of listWards" value="{{item.name}}">{{item.name}}</option>
               </select>
             </div>
@@ -133,11 +133,11 @@
                   <tbody>
                       <tr class="h-14 w-fit text-xs" *ngFor="let user of response.data; let o=odd; let e=even;"
                           [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-                          <td class="w-16 border-x border-solid align-middle px-2">
-                            <span class="flex items-center text-[#1891C9]">
+                          <td align="center" class="w-16 border-x border-solid text-center align-middle px-2">
+                            <span class="items-center text-[#1891C9]">
                               <input type="checkbox" [(ngModel)]="user.checked" (change)="checkSelectedList(user.id)">
-                              <i *ngIf="user.archived == true" class="fa-sharp fa-solid fa-lock mb-[1px] ml-2"></i>
-                              <i *ngIf="user.archived == false || user.archived == null" class="fa-sharp fa-solid fa-lock-open mb-[1px] ml-2"></i>
+                              <!-- <i *ngIf="user.archived == true" class="fa-sharp fa-solid fa-lock mb-[1px] ml-2"></i>
+                              <i *ngIf="user.archived == false || user.archived == null" class="fa-sharp fa-solid fa-lock-open mb-[1px] ml-2"></i> -->
                             </span>
                           </td>
                           <!-- <td class="border-x border-solid align-middle px-2">

@@ -70,6 +70,11 @@ export class EmployeeService {
     return this.http.delete(gateway_url + '/DeleteGroup?Id=' + id).pipe(map((response: any) => response));
   }
 
+  GetAllGroupByEmployeeId(): Observable<any> {
+    return this.http.get(gateway_url + '/GetAllGroupByEmployeeId').pipe(map((response: any) => response));
+  }
+
+
   GetChildrenByParentId(parentNodeId: any): Observable<any> {
     return this.http.get(gateway_url + '/GetChildrenByParentId?ParentNodeId=' + parentNodeId).pipe(map((response: any) => response));
   }
