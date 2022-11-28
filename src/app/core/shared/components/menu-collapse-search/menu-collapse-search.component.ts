@@ -12,6 +12,7 @@ export class MenuCollapseSearchComponent implements OnInit, AfterViewInit, OnCha
   keyword = '';
   isShowmenu = false;
   isSelect = false;
+  date: number = Date.now();
   selectedChildren!: string;
   buffer_menu_item:string[] = [];
   constructor() {}
@@ -24,7 +25,7 @@ export class MenuCollapseSearchComponent implements OnInit, AfterViewInit, OnCha
   }
 
   ngAfterViewInit(): void {
-      let iconNode = document.getElementById(`icon-${this.Config.title}`);
+      let iconNode = document.getElementById(`icon-${this.Config.title + this.date}`);
       if (this.Config.icon) {
           iconNode!.innerHTML = this.Config.icon;
       }

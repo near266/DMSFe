@@ -109,7 +109,7 @@ export class UserTreeViewComponent implements OnInit {
             },
           };
           this.options = {
-            useCheckbox: true,
+            useCheckbox: false,
             animateExpand: true,
             actionMapping: this.action,
             getChildren: this.getChildren.bind(this),
