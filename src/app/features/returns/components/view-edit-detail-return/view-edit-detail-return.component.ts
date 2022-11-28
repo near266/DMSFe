@@ -32,8 +32,6 @@ export class ViewEditDetailReturnComponent implements OnInit {
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,
-        private snackbar: SnackbarService,
-        private returnsService: ReturnsService,
         private rolesService: RolesService,
         private dialog: MatDialog,
         private returnFormService: ReturnFormService,
@@ -80,10 +78,7 @@ export class ViewEditDetailReturnComponent implements OnInit {
         this.returnDetailsService.returnDetails$.next({});
         this.returnDetailsService.returnListProducts$.next([]);
         this.router.navigate(['/returns']);
-        this.returnsService.resetAllFilter();
     }
-
-    ngDoCheck(): void {}
 
     toggleEditMode(_: boolean) {
         this.returnDetailsService.currentMode$.next(_ ? ComponentMode.EDIT : ComponentMode.VIEW);

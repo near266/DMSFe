@@ -1,0 +1,36 @@
+<div (click)="toggleExpand()"
+  class="w-[246px] justify-between items-center hover:font-medium transition-colors duration-100 flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded">
+  <ng-container *ngIf="!activeOption else ActiveLabel">
+    <div>
+      <i [ngClass]="menuItem.iconClass" class=" text-base mr-3"></i>
+      <span [ngClass]="{'font-semibold':expanded}" class="text-sm">{{ menuItem.label }}</span>
+    </div>
+    <ng-container [ngSwitch]="menuItem.type">
+      <ng-container *ngSwitchCase="MenuItemType.SELECT"><i *ngIf="expanded else CaretNotExpanded"
+          class="fa-solid fa-caret-up"></i>
+        <ng-template #CaretNotExpanded><i class="fa-solid fa-caret-down"></i></ng-template>
+      </ng-container>
+      <ng-container *ngSwitchCase="MenuItemType.DATE">
+        <app-side-menu-date class="w-6 h-6" [activeOption]="activeOption" (selectOption)="select($event)">
+        </app-side-menu-date>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+  <ng-template #ActiveLabel>
+    <div class="max-w-fit ">
+      <i [ngClass]=" menuItem.iconClass" class=" text-base mr-3"></i>
+      <span class="text-sm">{{ activeOption?.label }}</span>
+    </div>
+    <button class="font-semibold h-6 w-6 flex items-center justify-center" (click)="cancelSelect($event);">
+      <i class="fa-solid fa-xmark text-xl text-red-700"></i>
+    </button>
+  </ng-template>
+</div>
+<ng-container [ngSwitch]="menuItem.type">
+  <app-side-menu-select [hidden]="!expanded" [activeOption]="activeOption" (selectOption)="select($event)"
+    [data]="menuItem.data" *ngSwitchCase="MenuItemType.SELECT"></app-side-menu-select>
+  <app-side-menu-user [hidden]="!expanded" *ngSwitchCase="MenuItemType.USER"></app-side-menu-user>
+  <app-side-menu-search [hidden]="!expanded" [activeOption]="activeOption" (selectOption)="select($event)"
+    [data]="menuItem.data" *ngSwitchCase="MenuItemType.SEARCH">
+  </app-side-menu-search>
+</ng-container>

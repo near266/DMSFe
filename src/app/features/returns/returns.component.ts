@@ -1,34 +1,39 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { SelectOption } from 'src/app/core/model/Select';
 import { RolesService } from 'src/app/core/services/roles.service';
-import { sortList, timeSortList } from './utils/sort';
-import { ReturnsService } from './services/returns.service';
+import { MenuItem, SelectOptionOutput } from 'src/app/core/shared/modules/side-menu/models/side-menu';
+import { Return } from './models/return';
+import { Pagination, SidenavSettings } from './models/settings';
+import { ReturnsTableFacade } from './services/facade/returns-table.facade';
 import { SidenavService } from './services/sidenav.service';
-import { ReturnsFilterService } from './services/returns-filter.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import moment from 'moment';
+import { sortList, timeSortList } from './utils/sort';
 
 @Component({
     selector: 'app-returns',
     templateUrl: './returns.component.html',
     styleUrls: ['./returns.component.scss'],
+    providers: [ReturnsTableFacade],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReturnsComponent implements OnInit {
     @ViewChild('drawer') sidenav: MatSidenav;
-    isShowSidebarToMargin = true;
+    query: FormControl = new FormControl();
+    menuItems$: Observable<MenuItem<SelectOption>[] | null> = this.facade.menuItems$;
     listMenu = sortList;
     timeSortList = timeSortList;
-    sideBarWidth!: string;
     dateSearchForm: FormGroup;
-    totalReturns$: Observable<number>;
-
+    settings$: Observable<SidenavSettings> = this.facade.settings$;
+    returns$: Observable<Return[]>;
+    totalItems$: Observable<number> = this.facade.totalItems$;
+    loading$: Observable<boolean> = this.facade.loading$;
+    pagination$: Observable<Pagination> = this.facade.pagination$;
     constructor(
         private sidenavService: SidenavService,
         private rolesService: RolesService,
-        private returnsService: ReturnsService,
-        private filterService: ReturnsFilterService,
+        private facade: ReturnsTableFacade,
         private fb: FormBuilder,
     ) {}
     ngAfterViewInit(): void {
@@ -38,32 +43,25 @@ export class ReturnsComponent implements OnInit {
         return this.rolesService.requiredRoles(role);
     }
     ngOnInit(): void {
+        this.returns$ = this.facade.getReturns(this.query);
         this.dateSearchForm = this.fb.group({
             fromDate: [null],
             toDate: [null],
         });
-        this.totalReturns$ = this.returnsService.totalReturns$;
     }
-    select(event: any) {
-        this.filterService.currentFiler$.next(event.key);
-        this.filterService.isAscending$.next(event.isAsc);
-        this.returnsService.getInititalReturns(1);
-    }
-    sortTime(event: any) {
-        this.filterService.timeFilterType$.next(event.value);
-        if (this.filterService.startDate$.getValue() || this.filterService.endDate$.getValue()) {
-            this.returnsService.getInititalReturns(1);
-        }
+    select(event: { key: string; isAsc: boolean }) {
+        this.facade.handleSortFieldChange(event);
     }
     filterDate() {
         if (this.dateSearchForm.get('fromDate')?.value) {
-            this.filterService.startDate$.next(moment(this.dateSearchForm.get('fromDate')?.value).format('YYYY-MM-DD'));
+            this.facade.handleDateChange(
+                this.dateSearchForm.get('fromDate')?.value,
+                this.dateSearchForm.get('toDate')?.value,
+            );
         }
-        if (this.dateSearchForm.get('toDate')?.value) {
-            this.filterService.endDate$.next(moment(this.dateSearchForm.get('toDate')?.value).format('YYYY-MM-DD'));
-        }
-        // set lại page
-        this.returnsService.getInititalReturns(1);
+    }
+    handleFilterChange(option: SelectOptionOutput) {
+        this.facade.handleFilterChange(option);
     }
 
     clearDatePicker() {
@@ -71,7 +69,12 @@ export class ReturnsComponent implements OnInit {
             fromDate: null,
             toDate: null,
         });
-        this.filterService.startDate$.next('');
-        this.filterService.endDate$.next('');
+    }
+    handlePaginationChange(page: number) {
+        this.facade.handlePaginationChange(page);
+    }
+    reload() {
+        this.clearDatePicker();
+        this.facade.reload();
     }
 }

@@ -1,27 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { combineLatest, Observable, tap } from 'rxjs';
+import { Pagination } from '../../models/settings';
 import { ReturnsService } from '../../services/returns.service';
 
 @Component({
     selector: 'app-returns-pagination',
     templateUrl: './returns-pagination.component.html',
     styleUrls: ['./returns-pagination.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReturnsPaginationComponent implements OnInit {
-    startIndex: number;
-    endIndex: number;
-    totalReturns: number;
-    constructor(private returnsService: ReturnsService) {}
+export class ReturnsPaginationComponent {
+    @Input() pagination$: Observable<Pagination>;
+    vm$: Observable<{ totalReturns: number; start: number; end: number }>;
+    @Input() totalReturns$: Observable<number>;
+    @Output() pageChange: EventEmitter<number> = new EventEmitter();
 
     ngOnInit(): void {
-        this.returnsService.totalReturns$.subscribe((res) => {
-            this.totalReturns = res;
-        });
-        this.returnsService.startAndEndIndex$.subscribe((data: { start: number; end: number }) => {
-            this.startIndex = data.start;
-            this.endIndex = data.end;
+        this.vm$ = combineLatest([this.pagination$, this.totalReturns$], (pagination, totalReturns) => {
+            const { page, pageSize } = pagination;
+            //calculate start and end using page,pagesize and totalreturns
+            let start = (page - 1) * pageSize + 1;
+            let end = page * pageSize;
+            if (end > totalReturns) {
+                end = totalReturns;
+            }
+            if (!totalReturns) {
+                start = 0;
+            }
+            return { totalReturns, start, end };
         });
     }
     handlePageChange(page: number): void {
-        this.returnsService.setCurrentPage(page);
+        this.pageChange.emit(page);
     }
 }

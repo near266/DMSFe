@@ -24,6 +24,7 @@ import { ReturnOrderProductsComponent } from './components/create-return/create-
 import { ReturnOrderPromotionComponent } from './components/create-return/create-return-from-order/return-order-promotion/return-order-promotion.component';
 import { NgSelectFormlyComponent } from './types/ng-select.type';
 import { ReturnsSidenavComponent } from './components/returns-sidenav/returns-sidenav.component';
+import { SideMenuModule } from 'src/app/core/shared/modules/side-menu';
 
 @NgModule({
     declarations: [
@@ -58,6 +59,7 @@ import { ReturnsSidenavComponent } from './components/returns-sidenav/returns-si
         FormlyMaterialModule,
         FormlyMatDatepickerModule,
         FormlyMatTextAreaModule,
+        SideMenuModule,
         SharedModule,
     ],
 })

@@ -39,7 +39,7 @@
 
       <ng-container *ngIf="(productsInput$ | async) as productList">
         <tr *ngFor="let item of productList;let i =index; let o=odd; let e=even;"
-          [ngClass]="{ 'bg-gray-100': o, 'bg-white': e } " class="h-14 w-fit text-sm">
+          [ngClass]="{ 'bg-gray-100': o, 'bg-white': e } " class="h-8 w-fit text-sm">
           <td class="space-x-2 border-x border-solid align-midde h-full pl-2">{{ i + 1 }}</td>
           <td class="border-x  border-solid align-middle px-2 text-center">{{item.sku}}</td>
           <td class="border-x  border-solid align-middle px-2 text-center">{{item.productName}}</td>
