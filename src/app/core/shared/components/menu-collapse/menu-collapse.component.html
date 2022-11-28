@@ -2,7 +2,7 @@
     (click)="isShowmenu = !isShowmenu"
     class="w-full justify-between items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded">
     <div>
-        <span id="icon-{{ Config.title }}" class="text-base mr-3"></span>
+        <span id="icon-{{ Config.title + date }}" class="text-base mr-3"></span>
         <span *ngIf="!isSelect" class="text-sm">{{ Config.title }}</span>
         <span *ngIf="isSelect" class="text-sm">{{ selectedChildren }}</span>
     </div>

@@ -1,5 +1,5 @@
 <mat-drawer-container [hasBackdrop]="false" class="fixed top-0 left-0 right-0 bottom-0">
-    <mat-drawer #sidenav mode="side" class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
+    <mat-drawer #sidenav [opened]="true" mode="side" class="fixed top-16 left-0 bottom-0 overflow-y-auto z-10">
         <order-template-sidebar
             [type]="'Purchase'"
             [body]="body"

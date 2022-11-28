@@ -41,7 +41,7 @@ export class FormtatReportSaleReceiptService {
                 )!,
             },
         ];
-        dataReturn = dataList.data!.map((data: any, index: number) => {
+        dataReturn = dataList.data?.map((data: any, index: number) => {
             listIds.push(data.id);
             let productInfo = this.getProductOrdersInfo(data.listProducts);
             let productCodeArray = productInfo.productCodeArray;

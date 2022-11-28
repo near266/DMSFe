@@ -597,6 +597,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     this.district = '';
     this.ward = '';
     this.request.province = event;
+    if(event == '') this.request.province = null;
     this.request.district = null;
     this.request.ward = null;
     this.filter();
@@ -612,6 +613,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   getWard(event: any) {
     this.ward = '';
     this.request.district = event;
+    if(event == '') this.request.district = null;
     this.request.ward = null;
     this.filter();
     this.listDistricts.forEach(data => {
@@ -625,6 +627,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
   getAddress(event: any) {
     this.request.ward = event;
+    if(event == '') this.request.ward = null;
     this.filter();
   }
 

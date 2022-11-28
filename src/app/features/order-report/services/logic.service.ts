@@ -42,7 +42,7 @@ export class LogicService {
             this.isLoadingSource.next(true);
             this.reportService.SaleReceiptReport(body).subscribe((data: RootSaleReport) => {
                 let dataReturn: RootSaleReport = data;
-                // console.log(dataReturn);
+                console.log(dataReturn);
                 this.totalSource.next(dataReturn.total);
                 this.reportOrdersSource.next(this.formatSale.formatReportSale(dataReturn));
                 this.isLoadingSource.next(false);
@@ -53,5 +53,15 @@ export class LogicService {
     clearSource() {
         this.reportOrdersSource.next('');
         this.totalSource.next(0);
+    }
+
+    filterId(list: any[], selectorId: string, selectorCompare: string, selection: string) {
+        let id = null;
+        list.forEach((item: any) => {
+            if (item[`${selectorCompare}`] === selection) {
+                id = item[`${selectorId}`];
+            }
+        });
+        return id;
     }
 }

@@ -42,6 +42,7 @@ table th {
 table th,
 table td {
   padding: 8px;
+  font-weight: 500;
   // padding-top: 10px;
   // padding-bottom: 10px;
 }
@@ -69,7 +70,7 @@ tbody {
 }
 
 .custom-th {
-  @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x;
+  @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-1 border-x;
 }
 
 .custom-td {
