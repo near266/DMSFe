@@ -1,5 +1,9 @@
 <div class="justify-end px-2 text-sm font-medium flex items-center">
   <pagination-controls previousLabel="Trước" nextLabel="Sau" (pageChange)="handlePageChange($event)"
     [directionLinks]="true"></pagination-controls>
-  <span>Hiển thị {{startIndex}} - {{endIndex}} trên tổng số {{totalReturns}} bản ghi</span>
+  <ng-container *ngIf="vm$ |async as vm">
+    <span>Hiển thị
+      {{vm.start}} -
+      {{vm.end}} trên tổng số {{vm.totalReturns}} bản ghi</span>
+  </ng-container>
 </div>
