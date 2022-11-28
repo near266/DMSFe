@@ -201,6 +201,22 @@ export class PurchaseOrderService {
             .pipe(map((reponse: any) => reponse));
     }
 
+    searchEmployeeInGroup(keyword: string, groupId: string, page: number, pageSize: number): Observable<any> {
+        return this.http
+            .get(
+                this.id_url_gw +
+                    '/SearchEmployeeInGroup?keyword=' +
+                    keyword +
+                    '&GroupId=' +
+                    groupId +
+                    '&page=' +
+                    page +
+                    '&pageSize=' +
+                    pageSize,
+            )
+            .pipe(map((reponse: any) => reponse));
+    }
+
     // warehouse
     getAllWarehouses(): Observable<any> {
         return this.http.get(this.api_gateway_url + '/Warehouse/getall').pipe(map((reponse: any) => reponse));
@@ -225,8 +241,27 @@ export class PurchaseOrderService {
             .pipe(map((reponse: any) => reponse));
     }
 
+    // searach theo keyword và groupId
+    searchRoute(keyword: string, groupId: string, page: number, pageSize: number): Observable<any> {
+        return this.http.get(
+            this.api_gateway_url +
+                '/Route/getall?keyword=' +
+                keyword +
+                '&GroupId=' +
+                groupId +
+                '&page=' +
+                page +
+                '&pageSize=' +
+                pageSize,
+        );
+    }
+
     getRouteById(id: string): Observable<any> {
         return this.http.get(this.api_gateway_url + '/Route/id?Id=' + id).pipe(map((reponse: any) => reponse));
+    }
+
+    searchAllRouteByGroupId(groupId: string): Observable<any> {
+        return this.http.get(this.api_gateway_url + '/Route/SearchAllRouteByGroupId?Id=' + groupId);
     }
 
     // group
