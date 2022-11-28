@@ -106,9 +106,6 @@ export class ReturnsTableFacade {
         sideMenuItemHelpers('Loại khách hàng', MenuItemType.SEARCH, 'customerTypeId', 'fa-solid fa-user', {
             placeholder: 'Chọn loại khách hàng',
             values$: this.customerTypeService.get_all().pipe(
-                tap((res) => {
-                    console.log(res);
-                }),
                 map((result) =>
                     result.map((item: CustomerType) => {
                         return {
@@ -122,9 +119,6 @@ export class ReturnsTableFacade {
         sideMenuItemHelpers('Nhóm khách hàng', MenuItemType.SEARCH, 'customerGroupId', 'fa-solid fa-users', {
             placeholder: 'Chọn nhóm khách hàng',
             values$: this.customerGroupService.get_all().pipe(
-                tap((res) => {
-                    console.log(res);
-                }),
                 map((result) =>
                     result.map((item: CustomerGroup) => {
                         return {
@@ -138,9 +132,6 @@ export class ReturnsTableFacade {
         sideMenuItemHelpers('Khu vực', MenuItemType.SEARCH, 'areaId', 'fa-solid fa-earth-americas', {
             placeholder: 'Chọn Khu vực',
             values$: this.areaService.get_all().pipe(
-                tap((res) => {
-                    console.log(res);
-                }),
                 map((result) =>
                     result.map((item: Area) => {
                         return {
@@ -151,19 +142,6 @@ export class ReturnsTableFacade {
                 ),
             ),
         }),
-        // sideMenuItemHelpers('Người phê duyệt', MenuItemType.SELECT, 'visit', 'fa-solid fa-user-tie', {
-        //     placeholder: '',
-        //     values$: of([
-        //         {
-        //             label: 'ADMIN',
-        //             value: 'admin',
-        //         },
-        //         {
-        //             label: 'Kế Toán',
-        //             value: 'trình dược viên',
-        //         },
-        //     ]),
-        // }),
         sideMenuItemHelpers('Nguồn đơn', MenuItemType.SELECT, 'isApp', 'fa-solid fa-desktop', {
             placeholder: '',
             values$: of([
