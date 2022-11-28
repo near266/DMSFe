@@ -64,7 +64,7 @@ tbody {
 }
 
 .custom-sticky {
-    @apply sticky top-[33px] z-10  border-b backdrop-blur bg-yellow-100 backdrop-filter  border-solid border-gray-300 px-2 border-x text-center;
+    @apply sticky top-[33px] z-10  border-b backdrop-blur bg-yellow-200 backdrop-filter  border-solid border-gray-300 px-2 border-x text-center;
 }
 
 .custom-row:hover .nested-row {
