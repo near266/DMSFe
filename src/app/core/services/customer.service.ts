@@ -31,6 +31,13 @@ export class CustomerService {
       )
   }
 
+  export(body: any): Observable<any> {
+    return this.http.post(customer_url + '/export', body, { responseType: 'blob' })
+      .pipe(
+        map((response: any) => response)
+      )
+  }
+
   get_by_id(id: string): Observable<any> {
     return this.http.get(customer_url + '/id?Id=' + id)
       .pipe(

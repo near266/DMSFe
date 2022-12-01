@@ -8,6 +8,7 @@ import { DetailCustomerComponent } from './detail-customer/detail-customer.compo
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { ChangeRouteComponent } from './change-route/change-route.component';
 import { AddRouteComponent } from './add-route/add-route.component';
+import { FieldsDialogComponent } from './fields-dialog/fields-dialog.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { AddRouteComponent } from './add-route/add-route.component';
     DetailCustomerComponent,
     AddCustomerComponent,
     ChangeRouteComponent,
-    AddRouteComponent
+    AddRouteComponent,
+    FieldsDialogComponent
   ],
   imports: [
     CommonModule,

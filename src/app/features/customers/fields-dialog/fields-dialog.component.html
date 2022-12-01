@@ -1,0 +1,21 @@
+<div class="w-full h-full bg-gray-100">
+  <div class="w-full flex justify-between py-2 px-4 text-xl border-b-[1px] bg-white">
+    <div class="font-semibold flex flex-col justify-center">
+      <span>Chọn trường xuất dữ liệu</span>
+    </div>
+  </div>
+  <div class="w-full h-[78%] border-b-[1px] overflow-y-scroll py-1 bg-white">
+    <div class="w-full flex pt-2 pb-1 px-3 border-b-[1px]">
+      <div class="font-semibold w-3/4 text-lg">Tên cột</div>
+      <div class="font-semibold w-1/4 text-lg">Dữ liệu</div>
+    </div>
+    <div *ngFor="let field of fields" class="w-full flex py-1 px-3 border-b-[1px]">
+      <div class="font-medium w-3/4 text-base">{{field.key}}</div>
+      <div class="font-medium w-1/4 text-base"><mat-checkbox color="primary" [checked]="true" class="mx-4" (change)="change(field.value)"></mat-checkbox></div>
+    </div>
+  </div>
+  <div class="w-full flex justify-end px-5 pt-3">
+    <button (click)="submit()" mat-flat-button class="bg-[#1891C9] text-white font-medium"><i class="fa-solid fa-circle-check mr-1"></i>Hoàn thành</button>
+    <button type="button" mat-stroked-button class="text-[#565869] bg-white font-medium ml-10px" (click)="close()"><i class="fa-solid  fa-right-from-bracket mr-1"></i>Đóng</button>
+  </div>
+</div>
