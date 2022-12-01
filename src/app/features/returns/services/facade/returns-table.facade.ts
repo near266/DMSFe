@@ -76,7 +76,7 @@ export class ReturnsTableFacade {
                     value: Status.PENDING,
                 },
                 {
-                    label: 'Đã nhập kho',
+                    label: 'Đã nhập trả',
                     value: Status.IMPORTED,
                 },
                 {

@@ -92,8 +92,8 @@
             <mat-form-field appearance="outline">
               <input currencyMask
                 [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
-                matInput [ngModel]="item.unitPrice" (ngModelChange)="item.unitPrice=$event;updateItemTotalPrice(item)"
-                [disabled]="!item.returnsQuanity" />
+                matInput [ngModel]="item.unitPrice"
+                (ngModelChange)="item.unitPrice=$event;updateItemTotalPrice(item)" />
             </mat-form-field>
           </div>
         </td>

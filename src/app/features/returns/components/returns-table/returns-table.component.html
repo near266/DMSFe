@@ -45,8 +45,8 @@
               </a>
             </td>
             <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.customer?.customerCode}} </td>
-            <td class="border-x min-w-[300px] border-solid align-middle px-2">{{return.customerName}}</td>
-            <td class="border-x min-w-[300px] border-solid align-middle px-2">{{return.address}} </td>
+            <td class="border-x min-w-[300px] border-solid align-middle px-2">{{return.customer?.customerName}}</td>
+            <td class="border-x min-w-[300px] border-solid align-middle px-2">{{return.customer?.address}} </td>
             <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.returnsDate | date:'dd/MM/yyyy'}}
             </td>
             <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.totalPayment | currency:'VND'}}

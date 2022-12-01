@@ -55,6 +55,7 @@ export interface Customer {
     id?: string;
     customerCode?: string;
     customerName?: string;
+    address?: string;
     customerGroupId?: string;
     customerTypeId?: string;
     channelId?: string;
