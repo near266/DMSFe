@@ -235,6 +235,10 @@ export class PurchaseOrderService {
         return this.http.get(this.api_gateway_url + '/Route/by_cusId?Id=' + id).pipe(map((reponse: any) => reponse));
     }
 
+    SearchAllRouteByCustomerId(id: string): Observable<any> {
+        return this.http.get(this.api_gateway_url + '/Route/SearchAllRouteByCustomerId?Id=' + id);
+    }
+
     getRouteAndGroupIdByEmployeeId(id: string, page: number, pageSize: number): Observable<any> {
         return this.http
             .get(this.api_gateway_url + '/Route/getall?EmployeeId=' + id + '&page=' + page + '&pageSize=' + pageSize)

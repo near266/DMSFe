@@ -150,14 +150,24 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         this.searchListCus();
         this.subscriptions.add(
             this.form.get('groupId')?.valueChanges.subscribe((data) => {
-                if (data) {
+                // set khi chưa chọn customerID (ở màn tạo)
+                if (data && !this.form.get('customerId')?.value && this.option.type === 'Create') {
+                    this.setEmployeeAndRouteWhenChangeGroup(data);
+                }
+                // ở màn detail và gen
+                if (data && (this.option.type === 'Detail' || this.option.type === 'Gen')) {
                     this.setEmployeeAndRouteWhenChangeGroup(data);
                 }
             }),
         );
         this.subscriptions.add(
             this.form.get('orderEmployeeId')?.valueChanges.subscribe((data) => {
-                if (data) {
+                // set khi chưa chọn customerID (ở màn tạo)
+                if (data && !this.form.get('customerId')?.value && this.option.type === 'Create') {
+                    this.setRouteWhenChangeOrderEmployee(data);
+                }
+                // ở màn detail và gen
+                if (data && (this.option.type === 'Detail' || this.option.type === 'Gen')) {
                     this.setRouteWhenChangeOrderEmployee(data);
                 }
             }),
@@ -212,6 +222,10 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+        // clear data
+        this.commonLogicService.setListCusSource([]);
+        this.commonLogicService.setListEmployeeSource([]);
+        this.commonLogicService.setListRouteSource([]);
     }
 
     genSale() {
@@ -224,16 +238,18 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
 
     setRouteWhenChangeOrderEmployee(orderEmployeeId: string) {
         this.commonLogicService.setRouteWhenChangeOrderEmployee(orderEmployeeId);
-        // lắng nghe để lấy id route đầu tiên trong list route vừa search
-        this.subscriptions.add(
-            this.commonLogicService.routeId$.subscribe((data: string) => {
-                if (data) {
-                    this.form.patchValue({
-                        routeId: data,
-                    });
-                }
-            }),
-        );
+        // lắng nghe để lấy id route đầu tiên trong list route vừa set (Đang chỉ là màn tạo vì màn detail đang lỗi khi vào -> set luôn)
+        if (this.option.type === 'Create') {
+            this.subscriptions.add(
+                this.commonLogicService.routeId$.subscribe((data: string) => {
+                    if (data) {
+                        this.form.patchValue({
+                            routeId: data,
+                        });
+                    }
+                }),
+            );
+        }
     }
 
     // Chỉ ở màn tạo
@@ -276,7 +292,6 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                     this.purchaseOrder
                         .searchCustomer({ page: 1, pageSize: 10, keyword: keyword.trim() })
                         .subscribe((listCusSearched: any) => {
-                            console.log(listCusSearched.data);
                             this.commonLogicService.pushCusToListCus(this.data?.customerId, listCusSearched.data);
                         });
                 }
@@ -287,11 +302,8 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     private searchListRoute() {
         this.subscriptions.add(
             this.routeCtrl.valueChanges.pipe(debounceTime(300)).subscribe((keyword) => {
-                // search listRoute trong group
-                if (this.form.get('groupId')?.value) {
-                    // this.purchaseOrder.getAllRoute(1, 10, keyword.trim()).subscribe((listRouteSearch) => {
-                    //     this.commonLogicService.pushRouteToListRoute(this.data?.routeId, listRouteSearch.data);
-                    // });
+                // search listRoute trong group khi có groupId và khi chưa chọn orderEmployee
+                if (this.form.get('groupId')?.value && !this.form.get('orderEmployeeId')?.value) {
                     this.purchaseOrder
                         .searchRoute(keyword, this.form.get('groupId')?.value, 1, 100)
                         .pipe(map((data) => data.data))
@@ -332,16 +344,8 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     private searchListOrderEmployee() {
         this.subscriptions.add(
             this.orderEmployeeCtrl.valueChanges.pipe(debounceTime(300)).subscribe((keyword) => {
-                // search nếu có keyword và groupId -> chỉ search trong group đó
-                if (this.form.get('groupId')?.value) {
-                    // this.purchaseOrder
-                    //     .getAllEmployees(keyword.trim(), 1, 10)
-                    //     .subscribe((listSearched: any) =>
-                    //         this.commonLogicService.pushOrderEmployeeToListEmployee(
-                    //             this.data?.orderEmployeeId,
-                    //             listSearched.data,
-                    //         ),
-                    //     );
+                // search nếu có groupId -> chỉ search trong group đó (khi có customerId -> k search all)
+                if (this.form.get('groupId')?.value && !this.form.get('customerId')?.value) {
                     this.purchaseOrder
                         .searchEmployeeInGroup(keyword, this.form.get('groupId')?.value, 1, 100)
                         .pipe(
@@ -376,16 +380,57 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     }
 
     setRouteGroupAndOrderEmployee(cusId: string) {
+        let listRoute: any = [];
+        let listEmployee: any = [];
+        let roleMain: string = 'member';
         this.subscriptions.add(
-            this.purchaseOrder.getRouteByCustomerId(cusId).subscribe((data) => {
+            this.purchaseOrder.SearchAllRouteByCustomerId(cusId).subscribe((data: any) => {
                 if (data) {
-                    this.commonLogicService.pushOrderEmployeeToListEmployee(data.route?.employee?.id, []);
-                    this.commonLogicService.pushRouteToListRoute(data.route?.id, []);
-                    this.form.patchValue({
-                        routeId: data.route?.id,
-                        groupId: data.route?.unitTreeGroup?.id,
-                        orderEmployeeId: data.route?.employee?.id,
+                    // set listRoute và listEmployee
+                    listRoute = data.list;
+                    listEmployee = listRoute.map((route: any) => {
+                        return route.employee;
                     });
+                    this.commonLogicService.setListRouteSource(listRoute);
+                    this.commonLogicService.setListEmployeeSource(listEmployee);
+                    roleMain = localStorage.getItem('roleMain')!;
+                    switch (roleMain) {
+                        // nếu là admin -> set đầu
+                        case 'admin': {
+                            this.form.patchValue({
+                                routeId: listRoute[0].id,
+                                groupId: listRoute[0].unitTreeGroup.id,
+                                orderEmployeeId: listEmployee[0].id,
+                            });
+                            break;
+                        }
+                        // nếu là member -> lọc qua -> nếu có employeeId -> set employeeId và routeId
+                        case 'member': {
+                            let idDefault = this.commonLogicService.getIdDefault();
+                            listRoute = listRoute.filter((route: any) => {
+                                return route.employee.id === idDefault;
+                            });
+                            listEmployee = listEmployee.filter((employee: any) => {
+                                return employee.id === idDefault;
+                            });
+                            this.form.patchValue({
+                                routeId: listRoute[0]?.id,
+                                groupId: listRoute[0]?.unitTreeGroup?.id,
+                                orderEmployeeId: listEmployee[0]?.id,
+                            });
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                    // this.commonLogicService.pushOrderEmployeeToListEmployee(data.route?.employee?.id, []);
+                    // this.commonLogicService.pushRouteToListRoute(data.route?.id, []);
+                    // this.form.patchValue({
+                    //     routeId: data.route?.id,
+                    //     groupId: data.route?.unitTreeGroup?.id,
+                    //     orderEmployeeId: data.route?.employee?.id,
+                    // });
                 }
             }),
         );

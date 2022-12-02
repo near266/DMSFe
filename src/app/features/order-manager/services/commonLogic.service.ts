@@ -53,6 +53,7 @@ export class CommonLogicService {
     }
 
     setListEmployeeSource(list: any[]) {
+        console.log('set list employee source');
         this.listEmployeeSource.next(list);
     }
 
@@ -62,6 +63,10 @@ export class CommonLogicService {
 
     setListRouteSource(list: any[]) {
         this.listRouteSource.next(list);
+    }
+
+    setListCusSource(list: any[]) {
+        this.listCusSource.next(list);
     }
 
     create() {
@@ -225,6 +230,8 @@ export class CommonLogicService {
                 if (data) {
                     this.listRouteSource.next(data);
                     this.routeIdSource.next(data[0].id);
+                } else {
+                    this.listRouteSource.next([]);
                 }
             });
     }
