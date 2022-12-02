@@ -108,9 +108,25 @@
           <button *ngIf="requiredRoles('accountant') | async" class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="add()">
             <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
             Thêm mới
-        </button>
+          </button>
           <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
           </app-menu-bar>
+          <!-- <app-menu-bar [menuObj]="menuObj" (message)="SelectTypeExport($event)" *ngFor="let menuObj of listMenuExport">
+          </app-menu-bar> -->
+          <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" [matMenuTriggerFor]="menuExport">
+            <i class="fa-sharp fa-solid fa-download text-emerald-500 font-bold mr-2"></i>
+            Xuất dữ liệu
+            <i class="fa-sharp fa-solid fa-caret-down text-emerald-500 font-bold ml-2"></i>
+          </button>
+          <mat-menu #menuExport="matMenu">
+            <button mat-menu-item [matMenuTriggerFor]="menuCustomer">
+              Xuất danh sách khách hàng
+            </button>
+            <mat-menu #menuCustomer="matMenu">
+              <button mat-menu-item (click)="SelectTypeExport(2)"><i class="fa-sharp fa-regular fa-circle-check mr-2"></i>Được chọn</button>
+              <button mat-menu-item (click)="SelectTypeExport(1)"><i class="fa-sharp fa-solid fa-magnifying-glass mr-2"></i>Điều kiện tìm</button>
+            </mat-menu>
+          </mat-menu>
           <button type="button" (click)="filter()" class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
             <i class="fa-sharp fa-solid fa-refresh text-emerald-500 font-bold mr-2"></i>
             Tải lại
