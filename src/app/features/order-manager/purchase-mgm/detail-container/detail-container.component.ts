@@ -31,6 +31,7 @@ export class DetailContainerComponent implements OnInit, AfterViewInit, OnDestro
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
+
     clearEditSource() {
         this.commonLogicService.clearEditSource();
     }
