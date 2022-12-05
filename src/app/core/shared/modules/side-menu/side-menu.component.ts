@@ -10,7 +10,7 @@ import { SelectOption } from 'src/app/core/model/Select';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SideMenuComponent {
-    @Input() menuItems: MenuItem<SelectOption>[] = defaultMenuItems;
+    @Input() menuItems: MenuItem<SelectOption>[];
     @Output() filterChange: EventEmitter<SelectOptionOutput> = new EventEmitter();
     handleOptionChange($event: SelectOptionOutput) {
         this.filterChange.emit($event);

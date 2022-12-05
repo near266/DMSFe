@@ -8,6 +8,7 @@ export enum MenuItemType {
     DATE,
 }
 export interface MenuItem<T> {
+    currentOption: T | null;
     type: MenuItemType;
     label: string;
     iconClass: string;

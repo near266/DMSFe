@@ -12,14 +12,12 @@ export class SideMenuItemComponent {
     @Input() menuItem: MenuItem<SelectOption>;
     @Output() optionChange: EventEmitter<SelectOptionOutput> = new EventEmitter();
     MenuItemType = MenuItemType;
-    activeOption: SelectOption | null;
     expanded = false;
     cancelSelect($event: Event) {
         $event.stopPropagation();
         this.select(null);
     }
     select(value: SelectOption | null): void {
-        this.activeOption = value;
         this.expanded = false;
         if (value) {
             this.optionChange.emit({ ...value, filterType: this.menuItem.filterType });

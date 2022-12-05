@@ -25,8 +25,10 @@ import { ReturnOrderPromotionComponent } from './components/create-return/create
 import { NgSelectFormlyComponent } from './types/ng-select.type';
 import { ReturnsSidenavComponent } from './components/returns-sidenav/returns-sidenav.component';
 import { SideMenuModule } from 'src/app/core/shared/modules/side-menu';
+import { ReturnsTableFacade } from './services/facade/returns-table.facade';
 
 @NgModule({
+    providers: [ReturnsTableFacade],
     declarations: [
         ReturnsComponent,
         ReturnsPaginationComponent,

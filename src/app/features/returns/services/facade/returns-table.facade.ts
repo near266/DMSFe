@@ -9,6 +9,7 @@ import {
     map,
     Observable,
     of,
+    shareReplay,
     startWith,
     switchMap,
     tap,
@@ -27,13 +28,10 @@ import { CustomerGroup } from 'src/app/features/order-manager/template-component
 import { ProductApiService } from 'src/app/features/product/apis/product.api.service';
 import { Product } from 'src/app/features/product/models/product';
 import { ReturnApiService } from '../../apis/return-api.service';
-import { Employee, Return, ReturnResponse } from '../../models/return';
+import { Employee, Return, ReturnResponse, Status } from '../../models/return';
 import { Pagination, SidenavSettings } from '../../models/settings';
-import { Status } from '../../models/return';
 
-@Injectable({
-    providedIn: 'root',
-})
+@Injectable()
 export class ReturnsTableFacade {
     private PAGE_SIZE = 30;
     private DEFAULT_SETTINGS = {
@@ -187,11 +185,23 @@ export class ReturnsTableFacade {
     private menuItems: BehaviorSubject<MenuItem<SelectOption>[]> = new BehaviorSubject<MenuItem<SelectOption>[]>(
         this.MENU_ITEMS,
     );
-    menuItems$: Observable<MenuItem<SelectOption>[]> = this.menuItems.asObservable();
+    private cachedSidenavSettings: BehaviorSubject<SelectOptionOutput[]> = new BehaviorSubject<SelectOptionOutput[]>(
+        [],
+    );
+    cachedTextSearch: BehaviorSubject<string> = new BehaviorSubject<string>('');
+    menuItems$: Observable<MenuItem<SelectOption>[]> = combineLatest([this.menuItems, this.cachedSidenavSettings]).pipe(
+        map(([menuItems, cachedSidenavSettings]) => this.mapMenuItems(menuItems, cachedSidenavSettings)),
+    );
     loading$: Observable<boolean> = this.loading.asObservable();
     totalItems$: Observable<number> = this.totalItems.asObservable();
     settings$: Observable<SidenavSettings> = this.settings.asObservable();
-    pagination$: Observable<Pagination> = this.pagination.asObservable();
+    pagination$: Observable<Pagination> = this.pagination.asObservable().pipe(
+        shareReplay(1),
+        distinctUntilChanged((previous: Pagination, current: Pagination) => {
+            return previous.page === current.page;
+        }),
+        debounceTime(0),
+    );
 
     constructor(
         private routeService: RouteService,
@@ -201,19 +211,21 @@ export class ReturnsTableFacade {
         private returnApiService: ReturnApiService,
         private productApiService: ProductApiService,
     ) {}
+
     getReturns(query: FormControl): Observable<Return[]> {
         const textSearch$ = query.valueChanges.pipe(
             debounceTime(300),
             distinctUntilChanged(),
-            tap(() => {
+            tap((value) => {
+                this.cachedTextSearch.next(value);
                 this.handlePaginationChange(1);
             }),
-            startWith(''),
+            startWith(this.cachedTextSearch.getValue()),
         );
         return combineLatest([textSearch$, this.settings$]).pipe(
             tap(() => {
                 this.loading.next(true);
-                this.pagination.next(this.DEFAULT_PAGINATION);
+                this.handlePaginationChange(1);
             }),
             map(([textSearch, settings]) => ({
                 keyword: textSearch,
@@ -245,11 +257,29 @@ export class ReturnsTableFacade {
         );
     }
     handleFilterChange(option: SelectOptionOutput) {
+        console.log(this.cachedSidenavSettings.getValue());
         if (option.value !== null) {
             this.settings.next(Object.assign({}, this.settings.getValue(), { [option.filterType]: option.value }));
+            //add to cachedSidenavSettings, if value is the same, do nothing, else update
+            const cachedSidenavSettings = this.cachedSidenavSettings.getValue();
+            const index = cachedSidenavSettings.findIndex((item) => item.filterType === option.filterType);
+            if (index === -1) {
+                cachedSidenavSettings.push(option);
+            }
+            if (index !== -1 && cachedSidenavSettings[index].value !== option.value) {
+                cachedSidenavSettings[index] = option;
+            }
+            this.cachedSidenavSettings.next(cachedSidenavSettings);
         } else {
             const { [option.filterType]: removed, ...rest } = this.settings.getValue();
             this.settings.next(rest);
+            //remove from cachedSidenavSettings
+            const cachedSidenavSettings = this.cachedSidenavSettings.getValue();
+            const index = cachedSidenavSettings.findIndex((item) => item.filterType === option.filterType);
+            if (index !== -1) {
+                cachedSidenavSettings.splice(index, 1);
+            }
+            this.cachedSidenavSettings.next(cachedSidenavSettings);
         }
     }
     handleSortFieldChange(option: { key: string; isAsc: boolean }) {
@@ -282,9 +312,26 @@ export class ReturnsTableFacade {
         this.settings.next(this.DEFAULT_SETTINGS);
         //bind menuItems to itself
         // clone MENU_ITEMS
-        this.menuItems.next([]);
-        setTimeout(() => {
-            this.menuItems.next(this.MENU_ITEMS);
-        }, 0);
+        this.cachedSidenavSettings.next([]);
+    }
+    mapMenuItems(menuItems: MenuItem<SelectOption>[], cachedOptions: SelectOptionOutput[]): MenuItem<SelectOption>[] {
+        //if cachedOptions is not empty, return menuItem but default option is cachedOption, match by filterType
+        if (cachedOptions.length === 0) {
+            return menuItems;
+        }
+        const newMenuItems = menuItems.map((item) => {
+            const cachedOption = cachedOptions.find((option) => option.filterType === item.filterType);
+            if (cachedOption) {
+                return {
+                    ...item,
+                    currentOption: {
+                        label: cachedOption.label,
+                        value: cachedOption.value,
+                    },
+                };
+            }
+            return item;
+        });
+        return newMenuItems;
     }
 }

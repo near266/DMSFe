@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CategoryGuard } from '../../guards/category.guard';
+import { RolesGuard } from '../../guards/roles.guard';
 import { MainComponent } from './main.component';
 
 const routes: Routes = [
@@ -8,6 +10,7 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
+                canActivate: [RolesGuard],
                 path: 'product',
                 loadChildren: () => import('../../../features/product/product.module').then((m) => m.ProductModule),
             },
@@ -37,6 +40,7 @@ const routes: Routes = [
                     import('../../../features/warehouse/warehouse.module').then((m) => m.WarehouseModule),
             },
             {
+                canActivate: [CategoryGuard],
                 path: 'categories',
                 loadChildren: () =>
                     import('../../../features/user-manage/categories.module').then((m) => m.UserManageModule),

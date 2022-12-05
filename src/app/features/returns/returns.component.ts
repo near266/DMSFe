@@ -15,12 +15,11 @@ import { sortList, timeSortList } from './utils/sort';
     selector: 'app-returns',
     templateUrl: './returns.component.html',
     styleUrls: ['./returns.component.scss'],
-    providers: [ReturnsTableFacade],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReturnsComponent implements OnInit {
     @ViewChild('drawer') sidenav: MatSidenav;
-    query: FormControl = new FormControl();
+    query: FormControl = new FormControl(this.facade.cachedTextSearch.getValue());
     menuItems$: Observable<MenuItem<SelectOption>[] | null> = this.facade.menuItems$;
     listMenu = sortList;
     timeSortList = timeSortList;

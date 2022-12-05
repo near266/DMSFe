@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Return, ReturnResponse } from '../models/return';
 
@@ -50,7 +50,8 @@ export class ReturnApiService {
     }
 
     getAllReturns(settings: any): Observable<ReturnResponse> {
-        return this.http.post<any>(this.returnUrl + '/search', settings);
+        console.log('@!#!@#');
+        return this.http.post<any>(this.returnUrl + '/search', settings).pipe(shareReplay(1));
     }
 
     getReturnById(id: string | null): Observable<any> {
