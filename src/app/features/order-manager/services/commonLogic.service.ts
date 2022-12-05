@@ -44,6 +44,14 @@ export class CommonLogicService {
 
     constructor(private purchaseOrder: PurchaseOrderService) {}
 
+    setListProduct(list: any) {
+        this.listProductSource.next(list);
+    }
+
+    setListPromotionProduct(list: any) {
+        this.listPromotionSource.next(list);
+    }
+
     getSearchTextSource() {
         return this.searchTextSource.getValue();
     }

@@ -494,6 +494,13 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         }
     }
 
+    clearRoute(e: any) {
+        e.stopPropagation();
+        this.form.patchValue({
+            routeId: null,
+        });
+    }
+
     cancel() {
         this.router.navigate([`/${this.option.routerLink}`]);
     }

@@ -109,6 +109,12 @@
                         (click)="coppy(routeCoppy, $event)"
                         matPrefix
                         class="fa-regular fa-copy translate-y-[-45%] mr-2"></i>
+                    <i
+                        *ngIf="isEdit$ | async"
+                        style="font-size: 15px"
+                        (click)="clearRoute($event)"
+                        matSuffix
+                        class="hover:opacity-70 fa-circle-xmark fa-solid translate-y-[-15%] text-red-500 ml-1"></i>
                     <mat-select formControlName="routeId" [disabled]="!(isEdit$ | async)">
                         <mat-option>
                             <ngx-mat-select-search

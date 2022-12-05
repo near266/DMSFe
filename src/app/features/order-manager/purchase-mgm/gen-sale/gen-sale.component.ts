@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import moment from 'moment';
 import { Observable } from 'rxjs';
@@ -16,7 +16,7 @@ import { DataInput, Option } from '../../template-component/template-infor-order
     templateUrl: './gen-sale.component.html',
     styleUrls: ['./gen-sale.component.scss'],
 })
-export class GenSaleComponent implements OnInit, AfterViewInit {
+export class GenSaleComponent implements OnInit, AfterViewInit, OnDestroy {
     option: Option = {
         type: 'Gen',
         order: 'Sale',
@@ -52,6 +52,10 @@ export class GenSaleComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.purchaseOrderId = localStorage.getItem('purchaseOrderId')!;
         this.commonLogicService.changeToCreateType();
+    }
+
+    ngOnDestroy(): void {
+        this.purchaseLogicService.setGenSaleSource(false);
     }
 
     ngAfterViewInit(): void {
@@ -93,6 +97,7 @@ export class GenSaleComponent implements OnInit, AfterViewInit {
     }
 
     genSale() {
+        console.log('Gen đơn bán');
         this.purchaseLogicService.genSale();
     }
 

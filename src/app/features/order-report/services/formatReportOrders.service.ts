@@ -230,10 +230,10 @@ export class FormatReportOrderService {
                     hasChildren: false,
                 },
                 // Chiết khấu tổng bill
-                {
-                    content: this.percent.transform(data.tradeDiscountRate / 100, '1.0-0'),
-                    hasChildren: false,
-                },
+                // {
+                //     content: this.percent.transform(data.tradeDiscountRate / 100, '1.0-0'),
+                //     hasChildren: false,
+                // },
                 // tiền chiết khấu
                 {
                     content: this.currency.transform(data.tradeDiscount, 'VND', 'symbol', '1.0-0'),

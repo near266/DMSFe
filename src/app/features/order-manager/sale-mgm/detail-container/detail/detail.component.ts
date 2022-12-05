@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { SaleEmployee } from 'src/app/core/model/SaleReceipt';
 import { SaleDetail } from '../../../models/saleDetail';
@@ -17,7 +17,7 @@ import { Payment } from '../../../template-component/template-footer-order/templ
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
 })
-export class DetailComponent implements OnInit, AfterViewInit {
+export class DetailComponent implements OnInit, AfterViewInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     option: Option = {
         type: 'Detail',
@@ -48,10 +48,15 @@ export class DetailComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.isSuccessUpdate();
     }
+
     ngAfterViewInit(): void {
         setTimeout(() => {
             this.getDetail();
         }, 0);
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     getDetail() {

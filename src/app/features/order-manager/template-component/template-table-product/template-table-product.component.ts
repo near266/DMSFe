@@ -141,6 +141,8 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+        this.commonLogicService.setListProduct([]);
+        this.commonLogicService.setListPromotionProduct([]);
     }
 
     genSale() {

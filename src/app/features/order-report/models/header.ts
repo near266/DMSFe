@@ -32,7 +32,7 @@ export const headerOrderReportTable: string[] = [
     'Chiết khấu(%) (từng SP)',
     'Tiền chiết khấu (từng SP)',
     'Thành tiền (tổng bill)',
-    'Chiết khấu(%) (tổng bill)',
+    // 'Chiết khấu(%) (tổng bill)',
     'Tiền chiết khấu (tổng bill)',
     'Thanh toán',
     'Diễn giải',

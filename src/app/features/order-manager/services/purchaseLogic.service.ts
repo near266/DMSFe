@@ -70,6 +70,10 @@ export class PurchaseLogicService {
         private dialog: MatDialog,
     ) {}
 
+    setGenSaleSource(value: boolean) {
+        this.isGenSource.next(value);
+    }
+
     genSale() {
         this.isGenSource.next(true);
     }
