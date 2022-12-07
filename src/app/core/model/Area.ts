@@ -1,9 +1,11 @@
 export class Area {
-  id: string;
+  id?: string;
   serial: number;
   areaCode: string;
   areaName: string;
-  fatherArea: any;
-  deptLimit: any;
-  status: any;
+  fatherArea?: any;
+  deptLimit?: any;
+  status?: any;
+  createdBy?: string;
+  lastModifiedDate?: Date
 }

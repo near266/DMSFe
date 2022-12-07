@@ -59,6 +59,10 @@ import { DetailCustomerTypeComponent } from './customer-types/customer-type/deta
 import { AddWarehouseComponent } from './warehouses/components/add-warehouse/add-warehouse.component';
 import { UpdateWarehouseComponent } from './warehouses/components/update-warehouse/update-warehouse.component';
 import { FormsComponent } from './warehouses/components/forms/forms.component';
+import { AreasComponent } from './areas/areas.component';
+import { AddAreaComponent } from './areas/add-area/add-area.component';
+import { AreaComponent } from './areas/area/area.component';
+import { DetailAreaComponent } from './areas/area/detail-area/detail-area.component';
 
 const routes: Routes = [
     {
@@ -92,6 +96,10 @@ const routes: Routes = [
     {
         path: 'customer-group',
         component: CustomerGroupsComponent,
+    },
+    {
+        path: 'area',
+        component: AreasComponent,
     },
     {
         path: 'channel',
@@ -151,6 +159,10 @@ const routes: Routes = [
         AddWarehouseComponent,
         UpdateWarehouseComponent,
         FormsComponent,
+        AreasComponent,
+        AddAreaComponent,
+        AreaComponent,
+        DetailAreaComponent,
     ],
     imports: [
         CommonModule, RouterModule.forChild(routes), 
@@ -164,6 +176,7 @@ const routes: Routes = [
                 { name: 'major', component: ProductFieldWrapper },
                 { name: 'customerGroup', component: ProductFieldWrapper },
                 { name: 'customerType', component: ProductFieldWrapper },
+                { name: 'area', component: ProductFieldWrapper },
                 { name: 'channel', component: ProductFieldWrapper },
             ],
             types: [
@@ -179,6 +192,8 @@ const routes: Routes = [
                 { name: 'customerGroup-select', component: ProductFieldSelect, wrappers: ['customerGroup'] },
                 { name: 'customerType-input', component: ProductFieldInput, wrappers: ['customerType'] },
                 { name: 'customerType-select', component: ProductFieldSelect, wrappers: ['customerType'] },
+                { name: 'area-input', component: ProductFieldInput, wrappers: ['area'] },
+                { name: 'area-select', component: ProductFieldSelect, wrappers: ['area'] },
                 { name: 'channel-input', component: ProductFieldInput, wrappers: ['channel'] },
                 { name: 'channel-select', component: ProductFieldSelect, wrappers: ['channel'] },
             ],
