@@ -41,7 +41,7 @@ export class AddCustomerTypeComponent implements OnInit {
       compulsoryPhotography: this.form.controls['compulsoryPhotography'].value !== '' ? this.form.controls['compulsoryPhotography'].value: null,
       mandatoryInventoryRecord: this.form.controls['mandatoryInventoryRecord'].value !== '' ? this.form.controls['mandatoryInventoryRecord'].value: null,
       status: this.form.controls['status'].value !== '' ? this.form.controls['status'].value: false,
-      deptLimit: this.form.controls['debtLimit'].value !== '' ? this.form.controls['deptLimit'].value: false,
+      deptLimit: this.form.controls['deptLimit'].value !== '' ? this.form.controls['deptLimit'].value: false,
     }
 
     if(body.status == 'true') {
