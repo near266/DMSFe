@@ -1,10 +1,14 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { SaleEmployee } from 'src/app/core/model/SaleReceipt';
 import { SaleDetail } from '../../../models/saleDetail';
 import { CommonLogicService } from '../../../services/commonLogic.service';
 import { SaleLogicService } from '../../../services/saleLogic.service';
-import { DataInput, Option } from '../../../template-component/template-infor-order/template-infor-order.component';
+import {
+    coppyObject,
+    DataInput,
+    Option,
+} from '../../../template-component/template-infor-order/template-infor-order.component';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
 import { Payment } from '../../../template-component/template-footer-order/template-footer-order.component';
 
@@ -13,7 +17,7 @@ import { Payment } from '../../../template-component/template-footer-order/templ
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
 })
-export class DetailComponent implements OnInit, AfterViewInit {
+export class DetailComponent implements OnInit, AfterViewInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     option: Option = {
         type: 'Detail',
@@ -26,6 +30,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
         orderType: 'Sale',
         screenType: 'Detail',
     };
+    coppyObject: coppyObject = new coppyObject();
     id: string = '';
     @AutoUnsubscribe()
     isEdit$: Observable<boolean> = this.commonLogicService.isEdit$;
@@ -43,10 +48,15 @@ export class DetailComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.isSuccessUpdate();
     }
+
     ngAfterViewInit(): void {
         setTimeout(() => {
             this.getDetail();
         }, 0);
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     getDetail() {
@@ -85,6 +95,13 @@ export class DetailComponent implements OnInit, AfterViewInit {
                 customerId: data.customer?.id,
                 customerName: data.customer?.customerName,
                 relatedId: data.purchaseOrder?.id,
+            };
+            this.coppyObject = {
+                groupCoppy: data.group?.name,
+                orderCoppy: data.orderEmployee?.employeeCode + ' - ' + data.orderEmployee?.employeeName,
+                routeCoppy: data.route?.routeCode + ' - ' + data.route?.routeName,
+                customerCoppy: data.customer?.customerCode + ' - ' + data.customer?.customerName,
+                saleCoppy: data.saleEmployee?.employeeCode + ' - ' + data.saleEmployee?.employeeName,
             };
             this.getListProductAndPromotionPassToInput(data);
         });

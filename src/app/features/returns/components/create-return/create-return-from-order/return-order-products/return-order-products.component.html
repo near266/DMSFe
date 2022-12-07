@@ -49,7 +49,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of productsInput;let i =index; let o=odd; let e=even;"
-        [ngClass]="{ 'bg-gray-100': o, 'bg-white': e } " class="h-14 w-fit text-sm">
+        [ngClass]="{ 'bg-gray-100': o, 'bg-white': e } " class="h-8 w-fit text-sm">
         <td class="space-x-2 border-x border-solid align-midde h-full pl-2">{{ i + 1 }}</td>
         <td class="border-x  border-solid align-middle px-2 text-center">{{item.product.sku}}</td>
         <td class="border-x  border-solid align-middle px-2 text-center">{{item.product.productName}}</td>
@@ -92,8 +92,8 @@
             <mat-form-field appearance="outline">
               <input currencyMask
                 [options]="{ suffix: '', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
-                matInput [ngModel]="item.unitPrice" (ngModelChange)="item.unitPrice=$event;updateItemTotalPrice(item)"
-                [disabled]="!item.quantity" />
+                matInput [ngModel]="item.unitPrice"
+                (ngModelChange)="item.unitPrice=$event;updateItemTotalPrice(item)" />
             </mat-form-field>
           </div>
         </td>
@@ -108,7 +108,7 @@
               <input currencyMask
                 [options]="{ suffix: 'đ', thousands: '.',prefix :'', decimal: ',' ,precision :0 ,allowNegative :false}"
                 matInput [ngModel]="item.discount" (ngModelChange)="item.discount=$event;updateDiscountRate(item)"
-                [disabled]="!item.quantity" [max]="item.totalPrice" />
+                [disabled]="!item.returnsQuantity" [max]="item.totalPrice" />
             </mat-form-field>
           </div>
         </td>

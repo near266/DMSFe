@@ -37,6 +37,7 @@ export class ReturnDetailsService {
                 data.saleCode = data.saleReciept?.saleCode;
                 data.phone = data.customer?.phone || data.phone;
                 data.customerCode = data.customer?.customerCode;
+                data.customerName = data.customer?.customerName || data?.customerName;
                 this.returnDetails$.next(data);
                 this.returnListProducts$.next(data.listProduct);
                 this.tradeDiscount$.next(data.tradeDiscount);

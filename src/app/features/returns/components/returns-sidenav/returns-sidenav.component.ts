@@ -1,31 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ReturnsFilterService } from '../../services/returns-filter.service';
-import { ReturnsService } from '../../services/returns.service';
-import * as _ from 'lodash';
-import { Config } from 'src/app/core/model/Config';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { SelectOption } from 'src/app/core/model/Select';
+import { MenuItem, SelectOptionOutput } from 'src/app/core/shared/modules/side-menu/models/side-menu';
 
 @Component({
     selector: 'app-returns-sidenav',
     templateUrl: './returns-sidenav.component.html',
     styleUrls: ['./returns-sidenav.component.scss'],
 })
-export class ReturnsSidenavComponent implements OnInit {
-    searchValues: string = '';
-    statusMenu: Config = {
-        icon: '<i class="fa-solid fa-flag"></i>',
-        title: 'Trạng thái',
-        menuChildrens: ['Tất cả', 'Chờ duyệt', 'Đã duyệt', 'Đã bán hàng', 'Đã xuất hàng', 'Từ chối'],
-    };
-    constructor(private returnsService: ReturnsService, private filterService: ReturnsFilterService) {
-        this.search = _.debounce(this.search, 500);
-    }
-
-    ngOnInit(): void {}
-    search(event: string): void {
-        this.filterService.keyword$.next(event);
-        this.returnsService.getInititalReturns(1);
-    }
-    select(e: any) {
-        console.log(e);
+export class ReturnsSidenavComponent {
+    @Input() query: FormControl;
+    @Input() menuItems: MenuItem<SelectOption>[] | null;
+    @Output() filterChange: EventEmitter<SelectOptionOutput> = new EventEmitter<SelectOptionOutput>();
+    select(option: SelectOptionOutput) {
+        this.filterChange.emit(option);
     }
 }

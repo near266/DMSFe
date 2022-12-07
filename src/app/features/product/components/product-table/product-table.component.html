@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr (click)="openUpdateProduct(product)" class="h-14 w-fit text-sm"
+    <tr (click)="openUpdateProduct(product)" class="h-8 w-fit text-sm"
       *ngFor="let product of products | paginate: { itemsPerPage: 30, currentPage,totalItems };let i =index; let o=odd; let e=even;"
       [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
       <td class="space-x-2 min-w-[56px] border-x border-solid align-midde h-full pl-2 "><input class="inline"

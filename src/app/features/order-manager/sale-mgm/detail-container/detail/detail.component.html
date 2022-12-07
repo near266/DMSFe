@@ -2,17 +2,20 @@
     [option]="option"
     [data]="detailPassToInput"
     [id]="id"
-    [payment]="(payment$ | async) || paymentNew"></app-template-infor-order>
+    [payment]="(payment$ | async) || paymentNew"
+    [coppyObject]="coppyObject"></app-template-infor-order>
 <div class="px-3">
     <app-template-table-product
         [id]="id"
         [orderType]="'Sale'"
         [typeTable]="'Product'"
+        [type]="'Detail'"
         [list]="list$ | async"
         [title]="'Sản phẩm đặt hàng'"
         [payment]="(payment$ | async) || paymentNew"></app-template-table-product>
     <app-template-table-product
         [id]="id"
+        [type]="'Detail'"
         [orderType]="'Sale'"
         [typeTable]="'Promotion'"
         [list]="listPromotion$ | async"

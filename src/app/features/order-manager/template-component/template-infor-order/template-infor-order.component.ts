@@ -14,8 +14,9 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import moment from 'moment';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
-import { debounceTime, Observable, Subscription } from 'rxjs';
+import { debounceTime, map, Observable, Subscription } from 'rxjs';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { GroupModel } from '../../models/group';
 import { CommonLogicService } from '../../services/commonLogic.service';
 import { PurchaseLogicService } from '../../services/purchaseLogic.service';
@@ -53,6 +54,14 @@ export class DataInput {
     relatedId?: string;
 }
 
+export class coppyObject {
+    groupCoppy?: string;
+    orderCoppy?: string;
+    routeCoppy?: string;
+    customerCoppy?: string;
+    saleCoppy?: string;
+}
+
 @Component({
     selector: 'app-template-infor-order',
     templateUrl: './template-infor-order.component.html',
@@ -63,11 +72,21 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     @Input() data: any;
     @Input() id: string;
     @Input() payment: Payment;
+    @Input() coppyObject: coppyObject = new coppyObject();
     @Output() createBody$: EventEmitter<any> = new EventEmitter();
+    @Output() genSaleBody$: EventEmitter<any> = new EventEmitter();
 
     private subscriptions: Subscription = new Subscription();
 
-    form!: FormGroup;
+    groupCoppy: any = '';
+    orderCoppy: any = '';
+    routeCoppy: any = '';
+    customerCoppy: any = '';
+    saleCoppy: any = '';
+
+    form: FormGroup = this.fb.group({
+        description: [''],
+    });
     roleMain: string = 'member';
 
     orderEmployeeCtrl: FormControl = new FormControl();
@@ -96,6 +115,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         private fb: FormBuilder,
         private purchaseLogicService: PurchaseLogicService,
         private saleLogicService: SaleLogicService,
+        private snackbar: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -115,19 +135,56 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                 }
             }),
         );
+        if (this.option.type === 'Gen') {
+            this.subscriptions.add(
+                this.purchaseLogicService.isGen$.subscribe((data) => {
+                    if (data) {
+                        this.genSale();
+                    }
+                }),
+            );
+        }
         this.searchListOrderEmployee();
         this.searchListSaleEmployee();
         this.searchListRoute();
         this.searchListCus();
+        this.subscriptions.add(
+            this.form.get('groupId')?.valueChanges.subscribe((data) => {
+                // set khi chưa chọn customerID (ở màn tạo)
+                if (data && !this.form.get('customerId')?.value && this.option.type === 'Create') {
+                    this.setEmployeeAndRouteWhenChangeGroup(data);
+                }
+                // ở màn detail và gen
+                if (data && (this.option.type === 'Detail' || this.option.type === 'Gen')) {
+                    this.setEmployeeAndRouteWhenChangeGroup(data);
+                }
+            }),
+        );
+        this.subscriptions.add(
+            this.form.get('orderEmployeeId')?.valueChanges.subscribe((data) => {
+                // set khi chưa chọn customerID (ở màn tạo)
+                if (data && !this.form.get('customerId')?.value && this.option.type === 'Create') {
+                    this.setRouteWhenChangeOrderEmployee(data);
+                }
+                // ở màn detail và gen
+                if (data && (this.option.type === 'Detail' || this.option.type === 'Gen')) {
+                    this.setRouteWhenChangeOrderEmployee(data);
+                }
+            }),
+        );
     }
 
     ngAfterViewInit(): void {
-        this.getListGroup();
-        this.geListCus();
-        this.getListEmployee();
-        this.getListSaleEmployee();
-        this.getListRoute();
-        this.setAutoDefaultInfo();
+        setTimeout(() => {
+            this.getListGroup();
+            // this.geListCus();
+            // this.getListEmployee();
+            this.getListSaleEmployee();
+            // this.getListRoute();
+            this.getCoppyText();
+            this.setAutoDefaultInfo();
+            this.commonLogicService.setListRouteSource([]);
+        }, 0);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -149,6 +206,9 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                         }
                         break;
                     }
+                    case 'coppyObject': {
+                        this.getCoppyText();
+                    }
                 }
             }
         }
@@ -162,6 +222,34 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+        // clear data
+        this.commonLogicService.setListCusSource([]);
+        this.commonLogicService.setListEmployeeSource([]);
+        this.commonLogicService.setListRouteSource([]);
+    }
+
+    genSale() {
+        this.genSaleBody$.emit(this.form);
+    }
+
+    setEmployeeAndRouteWhenChangeGroup(groupId: string) {
+        this.commonLogicService.setEmployeeAndRouteWhenChangeGroup(groupId);
+    }
+
+    setRouteWhenChangeOrderEmployee(orderEmployeeId: string) {
+        this.commonLogicService.setRouteWhenChangeOrderEmployee(orderEmployeeId);
+        // lắng nghe để lấy id route đầu tiên trong list route vừa set (Đang chỉ là màn tạo vì màn detail đang lỗi khi vào -> set luôn)
+        if (this.option.type === 'Create') {
+            this.subscriptions.add(
+                this.commonLogicService.routeId$.subscribe((data: string) => {
+                    if (data) {
+                        this.form.patchValue({
+                            routeId: data,
+                        });
+                    }
+                }),
+            );
+        }
     }
 
     // Chỉ ở màn tạo
@@ -170,13 +258,14 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
             this.setAutoDefaultCreatePurchase();
         } else if (this.option.type === 'Create' && this.option.order === 'Sale') {
             this.setAutoDefaultCreateSale();
+            this.commonLogicService.setListEmployeeSource([]);
         }
     }
 
     setAutoDefaultCreatePurchase() {
         let idDefault = this.commonLogicService.getIdDefault();
         this.commonLogicService.pushOrderEmployeeToListEmployee(idDefault, []);
-        this.form.patchValue({
+        this.form!.patchValue({
             orderDate: moment(Date.now()).format('YYYY-MM-DD'),
             deliveryDate: moment(Date.now()).format('YYYY-MM-DD'),
             status: 1,
@@ -187,7 +276,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     setAutoDefaultCreateSale() {
         let idDefault = this.commonLogicService.getIdDefault();
         this.commonLogicService.pushSaleEmployeeToListEmployee(idDefault, []);
-        this.form.patchValue({
+        this.form!.patchValue({
             saleDate: moment(Date.now()).format('YYYY-MM-DD'),
             deliveryDate: moment(Date.now()).format('YYYY-MM-DD'),
             status: 3, // trạng thái đã bán hàng
@@ -203,7 +292,6 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                     this.purchaseOrder
                         .searchCustomer({ page: 1, pageSize: 10, keyword: keyword.trim() })
                         .subscribe((listCusSearched: any) => {
-                            console.log(listCusSearched.data);
                             this.commonLogicService.pushCusToListCus(this.data?.customerId, listCusSearched.data);
                         });
                 }
@@ -214,10 +302,14 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     private searchListRoute() {
         this.subscriptions.add(
             this.routeCtrl.valueChanges.pipe(debounceTime(300)).subscribe((keyword) => {
-                if (keyword != '') {
-                    this.purchaseOrder.getAllRoute(1, 10, keyword.trim()).subscribe((listRouteSearch) => {
-                        this.commonLogicService.pushRouteToListRoute(this.data?.routeId, listRouteSearch.data);
-                    });
+                // search listRoute trong group khi có groupId và khi chưa chọn orderEmployee
+                if (this.form.get('groupId')?.value && !this.form.get('orderEmployeeId')?.value) {
+                    this.purchaseOrder
+                        .searchRoute(keyword, this.form.get('groupId')?.value, 1, 100)
+                        .pipe(map((data) => data.data))
+                        .subscribe((listRouteSearched) => {
+                            this.commonLogicService.setListRouteSource(listRouteSearched);
+                        });
                 }
             }),
         );
@@ -226,11 +318,25 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     private searchListSaleEmployee() {
         this.subscriptions.add(
             this.saleEmployeeCtrl.valueChanges.pipe(debounceTime(300)).subscribe((keyword) => {
-                if (keyword != '') {
+                // search bình thường không liên quán đến route, group của nv bán
+                if (keyword !== '') {
                     this.purchaseOrder.getAllEmployees(keyword.trim(), 1, 10).subscribe((listSearched) => {
                         this.commonLogicService.pushSaleEmployeeToListEmployee(this.data?.id, listSearched.data);
                     });
                 }
+                // if (keyword) {
+                // this.purchaseOrder
+                //     .searchEmployeeInGroup(keyword, this.form.get('groupId')?.value, 1, 100)
+                //     .pipe(
+                //         map((data) => data.data),
+                //         map((data) => data.map((data: any) => data.employee)),
+                //     )
+                //     .subscribe((listSearched: any) => {
+                //         if (listSearched) {
+                //             this.commonLogicService.setListSaleEmployeeSource(listSearched);
+                //         }
+                //     });
+                // }
             }),
         );
     }
@@ -238,15 +344,19 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     private searchListOrderEmployee() {
         this.subscriptions.add(
             this.orderEmployeeCtrl.valueChanges.pipe(debounceTime(300)).subscribe((keyword) => {
-                if (keyword != '') {
+                // search nếu có groupId -> chỉ search trong group đó (khi có customerId -> k search all)
+                if (this.form.get('groupId')?.value && !this.form.get('customerId')?.value) {
                     this.purchaseOrder
-                        .getAllEmployees(keyword.trim(), 1, 10)
-                        .subscribe((listSearched: any) =>
-                            this.commonLogicService.pushOrderEmployeeToListEmployee(
-                                this.data?.orderEmployeeId,
-                                listSearched.data,
-                            ),
-                        );
+                        .searchEmployeeInGroup(keyword, this.form.get('groupId')?.value, 1, 100)
+                        .pipe(
+                            map((data) => data.data),
+                            map((data) => data.map((data: any) => data.employee)),
+                        )
+                        .subscribe((listSearched: any) => {
+                            if (listSearched) {
+                                this.commonLogicService.setListEmployeeSource(listSearched);
+                            }
+                        });
                 }
             }),
         );
@@ -270,16 +380,57 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     }
 
     setRouteGroupAndOrderEmployee(cusId: string) {
+        let listRoute: any = [];
+        let listEmployee: any = [];
+        let roleMain: string = 'member';
         this.subscriptions.add(
-            this.purchaseOrder.getRouteByCustomerId(cusId).subscribe((data) => {
+            this.purchaseOrder.SearchAllRouteByCustomerId(cusId).subscribe((data: any) => {
                 if (data) {
-                    this.commonLogicService.pushOrderEmployeeToListEmployee(data.route?.employee?.id, []);
-                    this.commonLogicService.pushRouteToListRoute(data.route?.id, []);
-                    this.form.patchValue({
-                        routeId: data.route?.id,
-                        groupId: data.route?.unitTreeGroup?.id,
-                        orderEmployeeId: data.route?.employee?.id,
+                    // set listRoute và listEmployee
+                    listRoute = data.list;
+                    listEmployee = listRoute.map((route: any) => {
+                        return route.employee;
                     });
+                    this.commonLogicService.setListRouteSource(listRoute);
+                    this.commonLogicService.setListEmployeeSource(listEmployee);
+                    roleMain = localStorage.getItem('roleMain')!;
+                    switch (roleMain) {
+                        // nếu là admin -> set đầu
+                        case 'admin': {
+                            this.form.patchValue({
+                                routeId: listRoute[0].id,
+                                groupId: listRoute[0].unitTreeGroup.id,
+                                orderEmployeeId: listEmployee[0].id,
+                            });
+                            break;
+                        }
+                        // nếu là member -> lọc qua -> nếu có employeeId -> set employeeId và routeId
+                        case 'member': {
+                            let idDefault = this.commonLogicService.getIdDefault();
+                            listRoute = listRoute.filter((route: any) => {
+                                return route.employee.id === idDefault;
+                            });
+                            listEmployee = listEmployee.filter((employee: any) => {
+                                return employee.id === idDefault;
+                            });
+                            this.form.patchValue({
+                                routeId: listRoute[0]?.id,
+                                groupId: listRoute[0]?.unitTreeGroup?.id,
+                                orderEmployeeId: listEmployee[0]?.id,
+                            });
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                    // this.commonLogicService.pushOrderEmployeeToListEmployee(data.route?.employee?.id, []);
+                    // this.commonLogicService.pushRouteToListRoute(data.route?.id, []);
+                    // this.form.patchValue({
+                    //     routeId: data.route?.id,
+                    //     groupId: data.route?.unitTreeGroup?.id,
+                    //     orderEmployeeId: data.route?.employee?.id,
+                    // });
                 }
             }),
         );
@@ -323,7 +474,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         this.pushSaleEmployeeToListEmployee();
         this.pushRouteToListRoute();
         if (this.data) {
-            this.form.patchValue({
+            this.form!.patchValue({
                 code: this.data.code,
                 status: this.data.status,
                 orderDate: this.data.orderDate,
@@ -341,6 +492,13 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                 relatedId: this.data.relatedId,
             });
         }
+    }
+
+    clearRoute(e: any) {
+        e.stopPropagation();
+        this.form.patchValue({
+            routeId: null,
+        });
     }
 
     cancel() {
@@ -394,5 +552,19 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         if (this.data && this.data.routeId) {
             this.commonLogicService.pushRouteToListRoute(this.data.routeId, []);
         }
+    }
+
+    coppy(value: any, e: any) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(value);
+        this.snackbar.openSnackbar('Sao chép thành công', 1000, 'Đóng', 'center', 'bottom', true);
+    }
+
+    getCoppyText() {
+        this.groupCoppy = this.coppyObject?.groupCoppy;
+        this.orderCoppy = this.coppyObject?.orderCoppy;
+        this.routeCoppy = this.coppyObject?.routeCoppy;
+        this.customerCoppy = this.coppyObject?.customerCoppy;
+        this.saleCoppy = this.coppyObject?.saleCoppy;
     }
 }

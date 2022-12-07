@@ -1,0 +1,6 @@
+<ng-container *ngIf="data?.values$ | async as options">
+  <div (click)="select(option)" *ngFor="let option of options"
+    class="w-full items-center hover:font-medium flex mt-2 pl-10 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+    <span class="text-sm" [ngClass]="{'text-red-400':activeOption?.value===option.value}">{{ option.label }}</span>
+  </div>
+</ng-container>

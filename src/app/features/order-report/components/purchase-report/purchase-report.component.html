@@ -10,17 +10,7 @@
         [opened]="true"
         class="overflow-hidden relative z-50 navbar-container">
         <div class="w-60 p-3">
-            <div class="w-full relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
-                <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm khách hàng" />
-            </div>
-            <div class="w-full relative mt-3">
-                <i class="fa-solid fa-magnifying-glass absolute left-2 bottom-1/2 translate-y-1/2 text-blue-900"></i>
-                <input type="text" class="p-2 rounded bg-gray-100 w-full pl-8" placeholder="Gõ tìm sản phẩm" />
-            </div>
-
-            <!-- todo loại KH -->
-            <app-menu-collapse (Selection)="selectType($event)" [Config]="statusMenu"></app-menu-collapse>
+            <report-template-sidebar [body]="body" (body$)="handleEmitBody($event)"></report-template-sidebar>
         </div>
     </mat-sidenav>
     <mat-sidenav-content class="overflow-y-auto">
@@ -36,40 +26,52 @@
             <div class="flex w-full h-full relative flex-col">
                 <div class="z-20">
                     <!-- header -->
-                    <div class="px-3 mt-2 flex justify-between items-center">
+                    <div class="px-3 py-2 mt-2 mb-1 flex justify-between items-center">
                         <span class="text-xl font-bold">Báo cáo tổng hợp đặt hàng ( {{ total$ | async }} )</span>
                         <div class="space-x-3 flex items-center">
-                            <button class="button-primary-sm text-white">
-                                Tìm kiếm
-                                <i class="fa-solid fa-magnifying-glass ml-1"></i>
+                            <!-- <button class="p-2 button-option mr-1 search-btn">
+                                <i class="fa-solid fa-magnifying-glass mr-1 text-green-700 text-sm font-bold"></i>
+                                <span>Tìm kiếm</span>
+                            </button> -->
+                            <!-- <button class="p-2 button-option mr-1" [matMenuTriggerFor]="exportData">
+                                <i class="fa-solid fa-file-export text-green-700 text-sm font-bold mr-1"></i>
+                                <span>Xuất dữ liệu</span>
+                                <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
                             </button>
-                            <button class="button-primary-sm text-white relative whitespace-nowrap text-justify">
-                                Xuất Excel
-                                <i class="fa-solid fa-file-export ml-2"></i>
-                                <div
-                                    class="absolute hidden group-hover:block bg-gray-100 z-50 border border-solid border-gray-500 text-blue-text px-3 -bottom-18 -left-1 rounded">
-                                    <div>
-                                        <i class="fa-solid fa-file-excel mr-2 py-3"></i>
-                                        Xuất gộp thông tin đơn hàng
-                                    </div>
-                                    <div>
-                                        <i class="fa-solid fa-file-invoice mr-2 py-3"></i>
-                                        Không xuất gộp thông tin đơn hàng
-                                    </div>
-                                </div>
-                            </button>
-                            <mat-form-field style="font-size: 12px" appearance="outline" class="example-form-field">
-                                <mat-label>Chọn ngày</mat-label>
-                                <input matInput [matDatepicker]="datepicker" />
-                                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-                                <mat-datepicker #datepicker></mat-datepicker>
+                            <mat-menu #exportData="matMenu">
+                                <button mat-menu-item>
+                                    <i class="fa-regular fa-circle-check mr-2"></i>
+                                    Xuất gộp
+                                </button>
+                                <button mat-menu-item>
+                                    <i class="fa-brands fa-searchengin mr-2"></i>
+                                    Xuất không gộp
+                                </button>
+                            </mat-menu> -->
+                            <mat-form-field
+                                style="padding-bottom: 0px !important"
+                                appearance="outline"
+                                [formGroup]="dateSearchForm">
+                                <mat-label>Khoảng thời gian</mat-label>
+                                <mat-date-range-input [rangePicker]="picker">
+                                    <input matStartDate placeholder="Start date" formControlName="startDate" />
+                                    <input matEndDate placeholder="End date" formControlName="endDate" />
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker-toggle matSuffix>
+                                    <mat-icon matDatepickerToggleIcon (click)="clearDatePicker()">clear</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
                             </mat-form-field>
+                            <i
+                                (click)="filterDate()"
+                                class="ml-1 text-center mr-1 px-3 py-2 h-[39px] rounded-md bg-zinc-300 hover:opacity-70 font-bold cursor-pointer fa-solid text-base icon fa-magnifying-glass"></i>
                         </div>
                     </div>
                 </div>
                 <hr />
                 <div class="w-full table-container min-w-full box-border h-full px-3 bg-white">
-                    <app-order-report-table></app-order-report-table>
+                    <app-order-report-table [body]="body | json"></app-order-report-table>
                 </div>
             </div>
         </div>

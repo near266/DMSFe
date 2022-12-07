@@ -3,13 +3,13 @@
 </div>
 <!-- Bảng phiếu bán hàng -->
 <div *ngIf="!(isLoading$ | async)" id="table" class="table-wrapper">
-    <table class="block custom-table text-black dark:text-gray-400">
+    <table class="block custom-table font-medium text-black">
         <thead class="custom-thead">
             <th scope="col" class="custom-th" *ngFor="let header of headers">{{ header }}</th>
         </thead>
         <tbody>
             <tr class="custom-sticky text-red-500 font-bold">
-                <td *ngFor="let stickyContent of stickyRowsAfterProcessing" class="custom-td border-b">
+                <td *ngFor="let stickyContent of stickyRowsAfterProcessing" class="custom-td border border-gray-200">
                     {{ stickyContent }}
                 </td>
             </tr>
@@ -28,18 +28,22 @@
                 <ng-container *ngFor="let item of data; index as k">
                     <td
                         *ngIf="!item.hasChildren"
-                        class="custom-td border-b"
+                        class="custom-td border-b border-zinc-300 border-t"
                         (click)="emitTouch(k, i)"
                         [ngClass]="{ 'hover:text-blue-700 cursor-pointer': k === listData.emitTdOrder }">
                         <ng-container>
                             {{ item.content }}
                         </ng-container>
                     </td>
-                    <td *ngIf="item.hasChildren" class="custom-td border-b">
-                        <tr class="nested-row" *ngFor="let content of item.content; index as index1; last as isLast">
-                            <div>
-                                {{ content }}
-                            </div>
+                    <td
+                        style="padding-left: 0px; padding-right: 0px; padding-bottom: 0px"
+                        *ngIf="item.hasChildren"
+                        class="custom-td border-y border-zinc-300">
+                        <tr
+                            style="padding-top: 50px"
+                            class="nested-row custom-row-product h-full w-full border-gray-200"
+                            *ngFor="let content of item.content; index as index1; last as isLast">
+                            <div class="px-2">{{ content }} &nbsp;</div>
                         </tr>
                     </td>
                 </ng-container>

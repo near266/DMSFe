@@ -1,7 +1,7 @@
 import { CurrencyPipe, DatePipe, PercentPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Config } from '../models/config';
-import { ListProduct } from '../models/order-report';
+import { ListProduct } from '../models/saleReports';
 import { RootSaleReport } from '../models/saleReports';
 import { stickyRows } from '../models/stickyRow';
 
@@ -41,12 +41,12 @@ export class FormtatReportSaleReceiptService {
                 )!,
             },
         ];
-        dataReturn = dataList.data!.map((data: any, index: number) => {
+        dataReturn = dataList.data?.map((data: any, index: number) => {
             listIds.push(data.id);
             let productInfo = this.getProductOrdersInfo(data.listProducts);
             let productCodeArray = productInfo.productCodeArray;
             let productNameArray = productInfo.productNameArray;
-            let quantityArray = productInfo.quantityArray;
+            let quantitySaleArray = productInfo.quantitySaleArray;
             let unitArray = productInfo.unitArray;
             let unitPriceArray = productInfo.unitPriceArray;
             let totalPriceArray = productInfo.totalPriceArray;
@@ -97,7 +97,7 @@ export class FormtatReportSaleReceiptService {
                 },
                 // Mã phòng nhóm
                 {
-                    content: data.customer?.customerGroup?.customerGroupCode || 'Chưa trả',
+                    content: data.customer?.customerGroup?.customerGroupCode,
                     hasChildren: false,
                 },
                 // Tên nhân viên đặt hàng
@@ -122,7 +122,7 @@ export class FormtatReportSaleReceiptService {
                 },
                 // Số lượng bán
                 {
-                    content: quantityArray,
+                    content: quantitySaleArray,
                     hasChildren: true,
                 },
                 // Đơn giá
@@ -182,6 +182,7 @@ export class FormtatReportSaleReceiptService {
         let totalPriceArray: any = [];
         let discountArray: any = [];
         let quantityReturnArray: any = [];
+        let quantitySaleArray: any = [];
         let moneyReturnArray: any = [];
         let netSalesArray: any = [];
 
@@ -189,10 +190,12 @@ export class FormtatReportSaleReceiptService {
             productCodeArray.push(product.productCode);
             productNameArray.push(product.productName);
             descriptionArray.push(product.note);
+            unitArray.push(product.unit?.unitName);
             unitPriceArray.push(this.currency.transform(product.unitPrice, 'VND', 'symbol', '1.0-0'));
             totalPriceArray.push(this.currency.transform(product.totalPrice, 'VND', 'symbol', '1.0-0'));
             discountArray.push(this.currency.transform(product.discount, 'VND', 'symbol', '1.0-0'));
             quantityReturnArray.push(product.quantityReturn);
+            quantitySaleArray.push(product.quatitySale);
             moneyReturnArray.push(this.currency.transform(product.moneyReturn, 'VND', 'symbol', '1.0-0'));
             netSalesArray.push(
                 this.currency.transform((product.totalPrice || 0) - (product.discount || 0), 'VND', 'symbol', '1.0-0'),
@@ -209,6 +212,7 @@ export class FormtatReportSaleReceiptService {
             quantityReturnArray: quantityReturnArray,
             moneyReturnArray: moneyReturnArray,
             netSalesArray: netSalesArray,
+            quantitySaleArray: quantitySaleArray,
         };
     }
 }

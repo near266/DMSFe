@@ -14,6 +14,7 @@ export interface Return {
     address?: string;
     employee?: Employee;
     lastModifiedBy?: string;
+    source?: string | null;
     lastModifiedDate?: string;
     type?: number;
     status?: Status;
@@ -29,6 +30,11 @@ export interface Return {
     orderCode?: string;
     listProduct?: Product[];
     listPromotionProduct?: Product[];
+}
+
+export interface ReturnResponse {
+    data: Return[] | null;
+    totalCount: number;
 }
 
 export type ReturnStatus = 'pending' | 'approved' | 'imported';
@@ -49,6 +55,7 @@ export interface Customer {
     id?: string;
     customerCode?: string;
     customerName?: string;
+    address?: string;
     customerGroupId?: string;
     customerTypeId?: string;
     channelId?: string;

@@ -23,7 +23,15 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { environment } from 'src/environments/environment';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { DetailCustomerComponent } from './detail-customer/detail-customer.component';
+import { FieldsDialogComponent } from './fields-dialog/fields-dialog.component';
 
+
+export interface IBody {
+  filter?: any;
+  listId?: any[] | null;
+  type?: any;
+  listProperties?: any[] | null;
+}
 @Component({
     selector: 'app-customers',
     templateUrl: './customers.component.html',
@@ -458,6 +466,56 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       statusbar: true,
   };
 
+  listMenuExport = [
+    {
+      title: 'Xuất dữ liệu',
+      leftTitleIcon: 'fa-download',
+      listMenuPosition: [
+          { title: 'Được chọn', leftIcon: 'fa-magnifying-glass text-emerald-500', value: 'Được chọn' },
+          { title: 'Điều kiện tìm', leftIcon: 'fa-arrow-down text-emerald-500', value: 'Điều kiện tìm' },
+
+      ],
+    }
+  ]
+
+  SelectTypeExport(type: number) {
+    let body: IBody = {
+      filter: null,
+      type: type
+    };
+    if (type == 1) {
+      body.filter = this.request;
+      body.filter.page = 1;
+      body.filter.pageSize = this.response.totalCount;
+      body.listId = null;
+    } else {
+      body.filter = null;
+      body.listId = this.selectedList;
+    }
+    const dialogRef = this.dialog.open(FieldsDialogComponent, {
+      height: '70vh',
+      minWidth: '700px',
+      panelClass: 'custom-mat-dialog-container',
+      autoFocus: false
+    });
+    dialogRef.afterClosed().subscribe(data => {
+      if(data) {
+        body.listProperties = data.event;
+        this.customerService.export(body).subscribe( data => {
+          if (data) {
+            const blob = new Blob([data], {
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            });
+            const url = window.URL.createObjectURL(blob);
+            window.open(url);
+          }
+        }, (error) => {
+          this.snackbar.failureSnackBar();
+        });
+      }
+    });
+  }
+
   listMenuObj = [
       {
           title: 'Lọc thời gian',
@@ -597,6 +655,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     this.district = '';
     this.ward = '';
     this.request.province = event;
+    if(event == '') this.request.province = null;
     this.request.district = null;
     this.request.ward = null;
     this.filter();
@@ -612,6 +671,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   getWard(event: any) {
     this.ward = '';
     this.request.district = event;
+    if(event == '') this.request.district = null;
     this.request.ward = null;
     this.filter();
     this.listDistricts.forEach(data => {
@@ -625,6 +685,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
   getAddress(event: any) {
     this.request.ward = event;
+    if(event == '') this.request.ward = null;
     this.filter();
   }
 
@@ -683,5 +744,4 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         },
     );
   }
-
 }

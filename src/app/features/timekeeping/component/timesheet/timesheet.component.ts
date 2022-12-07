@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Config } from 'src/app/core/model/Config';
+import { EmployeeService } from 'src/app/core/services/employee.service';
 import { Days } from '../../models/Days';
 import { DateService } from '../../services/date.service';
 
@@ -16,6 +17,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
   search: boolean = false;
   loading = false;
   hasEmployee = false;
+  listGroup: any[] = [];
 
   days: Days[] = [];
 
@@ -53,7 +55,8 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
   constructor(
     private datePipe: DatePipe,
     private title: Title,
-    private dateService: DateService
+    private dateService: DateService,
+    private employeeService: EmployeeService
   ) { }
 
   ngOnInit(): void {
@@ -64,7 +67,12 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.employeeService.GetAllGroupByEmployeeId().subscribe( data => {
+      if(data) {
+        this.listGroup = data;
+      }
 
+    });
   }
 
   openSideBar() {

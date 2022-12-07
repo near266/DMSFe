@@ -35,4 +35,7 @@ export class RolesService {
         // console.log(this.currentRole === role.toUpperCase())
         return of(this.currentRole === role.toUpperCase());
     }
+    requiredRolesList(roles: string[]) {
+        return of(this.currentRoleList.some((r) => roles.includes(r.toUpperCase())));
+    }
 }

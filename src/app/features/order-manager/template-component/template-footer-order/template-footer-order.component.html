@@ -1,9 +1,9 @@
 <form action="" [formGroup]="paymentForm">
-    <div class="grid grid-cols-3 gap-y-5 mt-6">
+    <div class="grid grid-cols-3 gap-y-2 mt-6">
         <div class="grid grid-cols-4 col-span-2">
             <span class="font-medium text-red-600">Bằng chữ:</span>
             <span class="col-span-3">
-                <span *ngIf="payment.textMoney">{{ payment?.textMoney }} đồng</span>
+                <span>{{ payment?.textMoney || 0 }} đồng</span>
             </span>
         </div>
         <div class="grid grid-cols-2">

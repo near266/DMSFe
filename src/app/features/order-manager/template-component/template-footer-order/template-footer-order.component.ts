@@ -82,7 +82,6 @@ export class TemplateFooterOrderComponent implements OnInit, OnChanges, OnDestro
         if (this.order.screenType === 'Create') {
             this.commonLogicService.changeToCreateType();
         }
-        this.payment.tradeDiscount = 0;
     }
 
     ngOnChanges(changes: SimpleChanges): void {

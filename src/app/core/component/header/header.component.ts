@@ -39,6 +39,9 @@ export class HeaderComponent implements OnInit {
     requiredRoles(role: string) {
         return this.rolesService.requiredRoles(role);
     }
+    requiredRolesList(roles: string[]) {
+        return this.rolesService.requiredRolesList(roles);
+    }
 
     onlyRole(role: string) {
         return this.rolesService.onlyRole(role);

@@ -33,10 +33,17 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
     @Input() id: string;
     @Input() orderType: string = '';
     @Input() typeTable: string = ''; // Product / Promotion
-    @Input() type: string = ''; // Create / Detail
+    @Input() type: string = ''; // Create / Detail / Gen
     @Input() title: string = ''; // Sản phẩm đặt hàng / Sản phẩm khuyến mại
     @Input() list: any = []; // truyền vào khi type = 'Detail'
-    @Input() payment: Payment = new Payment();
+    @Input() payment: Payment = {
+        textMoney: '0',
+        prePayment: 0,
+        totalAmount: 0,
+        tradeDiscount: 0,
+        totalDiscountProduct: 0,
+        totalPayment: 0,
+    };
     @Output() listUpdate$ = new EventEmitter<{
         data: any;
         isUpdate: boolean;
@@ -50,6 +57,7 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
         isAdd: boolean;
     }>();
     @Output() listCreate$ = new EventEmitter<any>();
+    @Output() listGenSale$ = new EventEmitter<any>();
 
     private subscriptions: Subscription = new Subscription();
 
@@ -102,6 +110,13 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
                 }
             }),
         );
+        this.subscriptions.add(
+            this.purchaseLogicService.isGen$.subscribe((data) => {
+                if (data && this.type === 'Gen') {
+                    this.genSale();
+                }
+            }),
+        );
     }
 
     ngAfterViewInit(): void {
@@ -119,10 +134,22 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
         if (this.type === 'Create') {
             this.create();
         }
+        // if (this.type === 'Gen') {
+        //     this.genSale();
+        // }
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+        this.commonLogicService.setListProduct([]);
+        this.commonLogicService.setListPromotionProduct([]);
+    }
+
+    genSale() {
+        this.listGenSale$.emit({
+            list: this.list,
+            listAdd: this.listAdd,
+        });
     }
 
     create() {
@@ -182,19 +209,22 @@ export class TemplateTableProductComponent implements OnInit, AfterViewInit, OnC
         this.countTotalDiscountProduct();
         // count totalPayment
         this.countTotalPayment();
-        if (this.orderType === 'Purchase') {
+        if (this.orderType === 'Purchase' && this.typeTable === 'Product') {
             if (this.type === 'Detail') {
                 this.purchaseLogicService.setPaymentSource(this.payment);
             }
             if (this.type === 'Create') {
                 this.purchaseLogicService.setPaymentCreateSource(this.payment);
             }
-        } else if (this.orderType === 'Sale') {
+        } else if (this.orderType === 'Sale' && this.typeTable === 'Product') {
             if (this.type === 'Detail') {
                 this.saleLogicService.setPaymentSource(this.payment);
             }
             if (this.type === 'Create') {
                 this.saleLogicService.setPaymentCreateSource(this.payment);
+            }
+            if (this.type === 'Gen' && this.typeTable === 'Product') {
+                this.saleLogicService.setPaymentGenSource(this.payment);
             }
         }
     }

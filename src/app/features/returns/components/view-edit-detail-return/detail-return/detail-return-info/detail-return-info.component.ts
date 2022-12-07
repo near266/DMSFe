@@ -236,7 +236,7 @@ export class DetailReturnInfoComponent implements OnInit {
                     type: 'textarea',
                     defaultValue: null,
                     templateOptions: {
-                        rows: 3,
+                        rows: 2,
                         autosize: true,
                         label: 'Diễn giải',
                         placeholder: 'Diễn giải',

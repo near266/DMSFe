@@ -206,6 +206,201 @@
         <button mat-menu-item (click)="logout()">
             <i class="fa-solid fa-right-from-bracket text-lg mr-2"></i>
             <span>Đăng xuất</span>
+  <!-- class="w-full z-20 header-shadow bg-zinc-100 h-16 flex items-center justify-between px-3 fixed top-0 right-0 left-0"> -->
+  <img src="./../../../../assets/images/Logo-Fitolab-logo.png" class="h-5/6" alt="" />
+  <ul class="flex md:space-x-10 lg:space-x-20 text-sm">
+    <li class="mr-4 font-medium hover:opacity-70 cursor-pointer">Công việc</li>
+    <!-- Menu Bán hàng -->
+    <li class="mr-4 font-medium hover:opacity-70 cursor-pointer flex items-center" [matMenuTriggerFor]="menu1">
+      <span class="mr-1">Bán hàng</span>
+      <i class="fa-solid fa-caret-down"></i>
+    </li>
+    <mat-menu #menu1="matMenu" class="mt-1">
+      <button mat-menu-item class="flex items-center" [routerLink]="['customers']">
+        <i class="fa-solid fa-users mr-2"></i>
+        <span>Khách hàng</span>
+      </button>
+      <ng-container *ngIf="requiredRoles('SALE_ADMIN') | async">
+        <button mat-menu-item [routerLink]="['product']">
+          <i class="fa-solid fa-cart-shopping mr-2"></i>
+          <span>Sản phẩm</span>
         </button>
+      </ng-container>
+      <button mat-menu-item [routerLink]="['warehouses']">
+        <i class="fa-solid fa-shop mr-2"></i>
+        <span>Kho hàng</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item [routerLink]="['order']" (click)="resetSearchTextSource()">
+        <i class="fa-solid fa-file-invoice mr-2"></i>
+        <span>Phiếu đặt hàng</span>
+      </button>
+      <button mat-menu-item [routerLink]="['order/sale']" (click)="resetSearchTextSource()">
+        <i class="fa-solid fa-calculator mr-2"></i>
+        <span>Phiếu bán hàng</span>
+      </button>
+      <button mat-menu-item [routerLink]="['returns']">
+        <i class="fa-solid fa-clock-rotate-left mr-2"></i>
+        <span>Phiếu trả hàng</span>
+      </button>
     </mat-menu>
+    <!-- Menu Danh mục -->
+    <ng-container *ngIf="requiredRoles('SALE_ADMIN') | async">
+      <li class="mr-4 font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="menu2">
+        <span class="mr-1">Danh mục</span>
+        <i class="fa-solid fa-caret-down"></i>
+      </li>
+      <mat-menu #menu2="matMenu">
+        <button mat-menu-item class="flex items-center" (click)="openTree()">
+          <i class="fa-solid fa-sitemap mr-2"></i>
+          <span>Cây đơn vị</span>
+        </button>
+        <button mat-menu-item [routerLink]="['/categories/warehouses']">
+          <i class="fa-solid fa-box-archive mr-2"></i>
+          <span>Kho hàng</span>
+        </button>
+        <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren1">
+          <i class="fa-solid fa-user-tag mr-2"></i>
+          <span>Phân quyền, chỉ tiêu</span>
+        </button>
+        <mat-menu #matMenuChildren1="matMenu">
+          <button mat-menu-item class="flex items-center" [routerLink]="'/route'">
+            <i class="fa-solid fa-shuffle mr-2"></i>
+            <span>Quản lý tuyến</span>
+          </button>
+          <button mat-menu-item class="flex items-center">
+            <i class="fa-solid fa-lock-open mr-2"></i>
+            <span>Quyền bán sản phẩm</span>
+          </button>
+          <button mat-menu-item class="flex items-center">
+            <i class="fa-regular fa-thumbs-up mr-2"></i>
+            <span>Chỉ tiêu KPI</span>
+          </button>
+        </mat-menu>
+        <mat-divider></mat-divider>
+        <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren2">
+          <i class="fa-solid fa-cart-shopping mr-2"></i>
+          <span>Sản phẩm</span>
+        </button>
+        <mat-menu #matMenuChildren2="matMenu">
+          <button mat-menu-item class="flex items-center" [routerLink]="'/categories/unit'">
+            <i class="fa-solid fa-cubes mr-2"></i>
+            <span>Đơn vị tính</span>
+          </button>
+          <button mat-menu-item class="flex items-center" [routerLink]="'/categories/brand'">
+            <i class="fa-solid fa-tags mr-2"></i>
+            <span>Nhãn hiệu</span>
+          </button>
+          <button mat-menu-item class="flex items-center" [routerLink]="'/categories/supplier'">
+            <i class="fa-solid fa-industry mr-2"></i>
+            <span>Nhà cung cấp</span>
+          </button>
+          <button mat-menu-item class="flex items-center" [routerLink]="'/categories/major'">
+            <i class="fa-solid fa-pie-chart mr-2"></i>
+            <span>Ngành hàng</span>
+          </button>
+        </mat-menu>
+        <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren3">
+          <i class="fa-solid fa-user mr-2"></i>
+          <span>Khách hàng</span>
+        </button>
+        <mat-menu #matMenuChildren3="matMenu">
+          <button mat-menu-item class="flex items-center" [routerLink]="'/categories/customer-type'">
+            <i class="fa-solid fa-grip mr-2"></i>
+            <span>Loại khách hàng</span>
+          </button>
+          <button mat-menu-item class="flex items-center" [routerLink]="'/categories/customer-group'">
+            <i class="fa-solid fa-users mr-2"></i>
+            <span>Nhóm khách hàng</span>
+          </button>
+          <button mat-menu-item class="flex items-center">
+            <i class="fa-solid fa-earth-asia mr-2"></i>
+            <span>Khu vực</span>
+          </button>
+          <button mat-menu-item class="flex items-center" [routerLink]="'/categories/channel'">
+            <i class="fa-solid fa-retweet mr-2"></i>
+            <span>Kênh</span>
+          </button>
+        </mat-menu>
+      </mat-menu>
+    </ng-container>
+    <!-- Menu Báo cáo -->
+    <li class="mr-4 font-medium hover:opacity-70 cursor-pointer" [matMenuTriggerFor]="report">
+      Báo cáo
+      <i class="fa-solid fa-caret-down ml-1"></i>
+    </li>
+    <mat-menu #report="matMenu" class="mt-1">
+      <button mat-menu-item [matMenuTriggerFor]="monitoringReport">
+        <i class="fa-solid fa-user-secret mr-2"></i>
+        <span>Báo cáo giám sát</span>
+      </button>
+      <mat-menu #monitoringReport="matMenu">
+        <button mat-menu-item class="flex items-center" routerLinkActive="text-green-500">
+          <i class="fa-solid fa-calendar-days mr-1"></i>
+          <span>Viến thăm khách hàng</span>
+        </button>
+        <button mat-menu-item class="flex items-center" [routerLink]="['reports/timekeeping']"
+          routerLinkActive="text-green-500">
+          <i class="fa-solid fa-calendar-days mr-1"></i>
+          <span>Báo cáo chấm công tháng</span>
+        </button>
+        <button mat-menu-item class="flex items-center" [routerLink]="['reports/timesheet']"
+          routerLinkActive="text-green-500">
+          <i class="fa-regular fa-calendar-check mr-1"></i>
+          <span>Chấm công</span>
+        </button>
+      </mat-menu>
+      <mat-divider></mat-divider>
+      <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="orderReport">
+        <i class="fa-regular fa-file-excel mr-2"></i>
+        <span>Báo cáo đặt hàng</span>
+      </button>
+      <mat-menu #orderReport="matMenu">
+        <button mat-menu-item class="flex items-center" [routerLink]="['order-report/purchase']"
+          routerLinkActive="text-green-500">
+          <i class="fa-solid fa-list mr-1"></i>
+          <span>Tổng hợp đặt hàng</span>
+        </button>
+      </mat-menu>
+      <button mat-menu-item [routerLink]="['product']" [matMenuTriggerFor]="saleReceipt">
+        <i class="fa-solid fa-chart-line mr-2"></i>
+        <span>Báo cáo bán hàng</span>
+      </button>
+      <mat-menu #saleReceipt="matMenu">
+        <button mat-menu-item class="flex items-center" [routerLink]="['order-report/saleReceipt']"
+          routerLinkActive="text-green-500">
+          <i class="fa-solid fa-list mr-1"></i>
+          <span>Tổng hợp bán hàng</span>
+        </button>
+      </mat-menu>
+    </mat-menu>
+    <!-- Menu trợ giúp -->
+    <li class="mr-4 font-medium hover:opacity-70 cursor-pointer">Trợ giúp</li>
+  </ul>
+  <div class="flex items-center">
+    <div class="mr-6 cursor-pointer hover:opacity-70 text-blue-text">
+      <i class="fa-solid fa-bell fa-xl"></i>
+    </div>
+    <div class="mr-6 cursor-pointer hover:opacity-70 text-green-text">
+      <i class="fa-solid fa-download fa-xl"></i>
+    </div>
+    <div [matMenuTriggerFor]="menu"
+      class="cursor-pointer overflow-hidden relative w-10 h-10 bg-gray-100 rounded-full dark:bg-gray-500">
+      <img [src]="annonimousAvatar" alt="" />
+    </div>
+  </div>
+  <mat-menu #menu="matMenu" class="mt-2">
+    <button mat-menu-item class="flex items-center">
+      <i class="fa-solid fa-user text-lg mr-2"></i>
+      <span>Tài khoản cá nhân</span>
+    </button>
+    <button mat-menu-item>
+      <i class="fa-solid fa-bell text-lg mr-2"></i>
+      <span>Nhận Email thông báo</span>
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <i class="fa-solid fa-right-from-bracket text-lg mr-2"></i>
+      <span>Đăng xuất</span>
+    </button>
+  </mat-menu>
 </div>

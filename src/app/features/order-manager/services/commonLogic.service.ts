@@ -1,6 +1,6 @@
 import { ifStmt } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { GroupModel } from '../models/group';
 import { Product, ProductSearch } from '../models/product';
@@ -25,6 +25,7 @@ export class CommonLogicService {
     private isSucessSource = new BehaviorSubject<boolean>(false);
     private isCreateSource = new BehaviorSubject<boolean>(false);
     private searchTextSource = new BehaviorSubject<string>('');
+    private routeIdSource = new BehaviorSubject<string>('');
 
     listRoute$ = this.listRouteSource.asObservable();
     listEmployee$ = this.listEmployeeSource.asObservable();
@@ -39,8 +40,17 @@ export class CommonLogicService {
     isSucess$ = this.isSucessSource.asObservable();
     isCreate$ = this.isCreateSource.asObservable();
     searchText$ = this.searchTextSource.asObservable();
+    routeId$ = this.routeIdSource.asObservable();
 
     constructor(private purchaseOrder: PurchaseOrderService) {}
+
+    setListProduct(list: any) {
+        this.listProductSource.next(list);
+    }
+
+    setListPromotionProduct(list: any) {
+        this.listPromotionSource.next(list);
+    }
 
     getSearchTextSource() {
         return this.searchTextSource.getValue();
@@ -48,6 +58,23 @@ export class CommonLogicService {
 
     setSearchTextSource(searchText: string) {
         this.searchTextSource.next(searchText);
+    }
+
+    setListEmployeeSource(list: any[]) {
+        console.log('set list employee source');
+        this.listEmployeeSource.next(list);
+    }
+
+    setListSaleEmployeeSource(list: any[]) {
+        this.listSaleEmployeeSource.next(list);
+    }
+
+    setListRouteSource(list: any[]) {
+        this.listRouteSource.next(list);
+    }
+
+    setListCusSource(list: any[]) {
+        this.listCusSource.next(list);
     }
 
     create() {
@@ -64,10 +91,6 @@ export class CommonLogicService {
 
     clearEditSource() {
         this.isEditSource.next(false);
-    }
-
-    setListEmployeeSource(list: any[]) {
-        this.listEmployeeSource.next(list);
     }
 
     successUpdate() {
@@ -99,7 +122,9 @@ export class CommonLogicService {
 
     getListRoute(roleMain: string) {
         this.purchaseOrder.getAllRoute(1, 30, '').subscribe((data: { data: any[]; totalCount: number }) => {
-            this.listRouteSource.next(JSON.parse(JSON.stringify(data.data)));
+            if (data) {
+                this.listRouteSource.next(JSON.parse(JSON.stringify(data.data)));
+            }
         });
     }
 
@@ -109,6 +134,11 @@ export class CommonLogicService {
         if (roleMain != 'member') {
             this.purchaseOrder.getAllEmployees('', 1, 30).subscribe((data) => {
                 this.listEmployeeSource.next(JSON.parse(JSON.stringify(data.data)));
+                this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
+                    if (data) {
+                        this.listEmployeeSource.next([...this.listEmployeeSource.getValue(), data]);
+                    }
+                });
             });
         } else if (roleMain === 'member') {
             this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
@@ -125,6 +155,11 @@ export class CommonLogicService {
         if (roleMain != 'member') {
             this.purchaseOrder.getAllEmployees('', 1, 30).subscribe((data) => {
                 this.listSaleEmployeeSource.next(JSON.parse(JSON.stringify(data.data)));
+                this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
+                    if (data) {
+                        this.listSaleEmployeeSource.next([...this.listSaleEmployeeSource.getValue(), data]);
+                    }
+                });
             });
         } else if (roleMain === 'member') {
             this.purchaseOrder.getEmployeeById(idDefault).subscribe((data) => {
@@ -174,6 +209,39 @@ export class CommonLogicService {
 
     save() {
         this.isSaveSource.next(true);
+    }
+
+    // change groupId -> gọi api set lại listEmployee, saleEmployee, route
+    setEmployeeAndRouteWhenChangeGroup(groupId: string) {
+        this.purchaseOrder
+            .searchEmployeeInGroup('', groupId, 1, 100)
+            .pipe(
+                map((data) => data.data),
+                map((data) => data.map((data: any) => data.employee)),
+            )
+            .subscribe((data) => {
+                this.listEmployeeSource.next(data);
+                // this.listSaleEmployeeSource.next(data);
+            });
+        this.purchaseOrder
+            .searchAllRouteByGroupId(groupId)
+            .pipe(map((data) => data.list))
+            .subscribe((data) => this.listRouteSource.next(data));
+    }
+
+    // change orderEmployeeId -> gọi api get ra listRoute và đẩy routeId vào
+    setRouteWhenChangeOrderEmployee(orderEmployeeId: string) {
+        this.purchaseOrder
+            .getRouteAndGroupIdByEmployeeId(orderEmployeeId, 1, 100)
+            .pipe(map((data) => data.data))
+            .subscribe((data) => {
+                if (data) {
+                    this.listRouteSource.next(data);
+                    this.routeIdSource.next(data[0].id);
+                } else {
+                    this.listRouteSource.next([]);
+                }
+            });
     }
 
     pushCusToListCus(id: string, listCus: any) {

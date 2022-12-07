@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Return } from '../models/return';
+import { Return, ReturnResponse } from '../models/return';
 
 @Injectable({
     providedIn: 'root',
@@ -49,8 +49,9 @@ export class ReturnApiService {
         return this.http.put(this.returnUrl + '/arhivedOrUn', { returnsIds: [id] });
     }
 
-    getAllReturns(settings: any) {
-        return this.http.post<any>(this.returnUrl + '/search', settings);
+    getAllReturns(settings: any): Observable<ReturnResponse> {
+        console.log('@!#!@#');
+        return this.http.post<any>(this.returnUrl + '/search', settings).pipe(shareReplay(1));
     }
 
     getReturnById(id: string | null): Observable<any> {

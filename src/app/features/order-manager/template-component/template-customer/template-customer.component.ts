@@ -33,7 +33,6 @@ export class TemplateCustomerComponent implements OnInit, AfterViewInit, OnChang
         this.subctriptions.add(
             this.customerService.get_by_id(this.customerId).subscribe((data) => {
                 this.customerInfo = data;
-                console.log(this.customerInfo);
             }),
         );
     }

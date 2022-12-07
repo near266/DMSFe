@@ -1,9 +1,8 @@
 <div class="w-full px-2 py-4 min-h-[700px]">
   <div class="border-2 border-gray-300 border-solid flex items-center">
     <i class="fa-solid fa-magnifying-glass text-gray-700 px-2"></i>
-    <input [ngModel]="searchValues" (ngModelChange)="searchValues=$event;search($event)" type="text"
-      class="w-full  px-2 py-1 text-gray-700" placeholder="Tên sản phẩm">
+    <input [formControl]="query" type="text" class="w-full  px-2 py-1 text-gray-700" placeholder="Tìm kiếm...">
   </div>
-  <!-- Trạng thái in menu -->
-
+  <!--  menu -->
+  <app-side-menu (filterChange)="select($event)" [menuItems]="menuItems || []"></app-side-menu>
 </div>
