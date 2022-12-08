@@ -28,8 +28,8 @@ export class AddCustomerTypeComponent implements OnInit {
       miniumCheckinTime: new FormControl(''),
       compulsoryPhotography: new FormControl(''),
       mandatoryInventoryRecord: new FormControl(''),
-      status: new FormControl(''),
-      deptLimit: new FormControl(''),
+      status: new FormControl('true'),
+      deptLimit: new FormControl('true'),
     })
   }
 

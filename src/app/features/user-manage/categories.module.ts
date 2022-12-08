@@ -63,6 +63,7 @@ import { AreasComponent } from './areas/areas.component';
 import { AddAreaComponent } from './areas/add-area/add-area.component';
 import { AreaComponent } from './areas/area/area.component';
 import { DetailAreaComponent } from './areas/area/detail-area/detail-area.component';
+import { FieldInput, FieldSelect } from './field-type/field-type.component';
 
 const routes: Routes = [
     {
@@ -116,6 +117,8 @@ const routes: Routes = [
         ConfigComponent,
         AppComponent,
         MenuComponent,
+        FieldInput,
+        FieldSelect,
 
         UserTreeViewComponent,
         ResetPasswordComponent,
@@ -180,22 +183,22 @@ const routes: Routes = [
                 { name: 'channel', component: ProductFieldWrapper },
             ],
             types: [
-                { name: 'unit-input', component: ProductFieldInput, wrappers: ['unit'] },
-                { name: 'unit-select', component: ProductFieldSelect, wrappers: ['unit'] },
-                { name: 'brand-input', component: ProductFieldInput, wrappers: ['brand'] },
-                { name: 'brand-select', component: ProductFieldSelect, wrappers: ['brand'] },
-                { name: 'supplier-input', component: ProductFieldInput, wrappers: ['supplier'] },
-                { name: 'supplier-select', component: ProductFieldSelect, wrappers: ['supplier'] },
-                { name: 'major-input', component: ProductFieldInput, wrappers: ['major'] },
-                { name: 'major-select', component: ProductFieldSelect, wrappers: ['major'] },
-                { name: 'customerGroup-input', component: ProductFieldInput, wrappers: ['customerGroup'] },
-                { name: 'customerGroup-select', component: ProductFieldSelect, wrappers: ['customerGroup'] },
-                { name: 'customerType-input', component: ProductFieldInput, wrappers: ['customerType'] },
-                { name: 'customerType-select', component: ProductFieldSelect, wrappers: ['customerType'] },
-                { name: 'area-input', component: ProductFieldInput, wrappers: ['area'] },
-                { name: 'area-select', component: ProductFieldSelect, wrappers: ['area'] },
-                { name: 'channel-input', component: ProductFieldInput, wrappers: ['channel'] },
-                { name: 'channel-select', component: ProductFieldSelect, wrappers: ['channel'] },
+                { name: 'unit-input', component: FieldInput, wrappers: ['unit'] },
+                { name: 'unit-select', component: FieldSelect, wrappers: ['unit'] },
+                { name: 'brand-input', component: FieldInput, wrappers: ['brand'] },
+                { name: 'brand-select', component: FieldSelect, wrappers: ['brand'] },
+                { name: 'supplier-input', component: FieldInput, wrappers: ['supplier'] },
+                { name: 'supplier-select', component: FieldSelect, wrappers: ['supplier'] },
+                { name: 'major-input', component: FieldInput, wrappers: ['major'] },
+                { name: 'major-select', component: FieldSelect, wrappers: ['major'] },
+                { name: 'customerGroup-input', component: FieldInput, wrappers: ['customerGroup'] },
+                { name: 'customerGroup-select', component: FieldSelect, wrappers: ['customerGroup'] },
+                { name: 'customerType-input', component: FieldInput, wrappers: ['customerType'] },
+                { name: 'customerType-select', component: FieldSelect, wrappers: ['customerType'] },
+                { name: 'area-input', component: FieldInput, wrappers: ['area'] },
+                { name: 'area-select', component: FieldSelect, wrappers: ['area'] },
+                { name: 'channel-input', component: FieldInput, wrappers: ['channel'] },
+                { name: 'channel-select', component: FieldSelect, wrappers: ['channel'] },
             ],
             validationMessages: [{ name: 'required', message: 'Trường này là bắt buộc' }],
         }),

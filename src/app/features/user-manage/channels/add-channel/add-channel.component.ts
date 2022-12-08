@@ -25,8 +25,8 @@ export class AddChannelComponent implements OnInit {
     this.form = this.fb.group({
       channelCode: new FormControl(''),
       channelName: new FormControl(''),
-      status: new FormControl(''),
-      deptLimit: new FormControl(''),
+      status: new FormControl('true'),
+      deptLimit: new FormControl('true'),
     })
   }
 

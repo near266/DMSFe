@@ -36,21 +36,21 @@ export class DetailMajorComponent implements OnInit {
         key: 'id',
     },
     {
-        key: 'commodityName',
-        type: 'major-input',
-        templateOptions: {
-            label: 'Tên ngành hàng',
-            placeholder: 'Nhập tên ngành hàng',
-            required: true,
-        },
-    },
-    {
         key: 'commodityCode',
         type: 'major-input',
         defaultValue: null,
         templateOptions: {
             label: 'Mã ngành hàng',
             placeholder: 'Nhập code ngành hàng',
+            required: true,
+        },
+    },
+    {
+        key: 'commodityName',
+        type: 'major-input',
+        templateOptions: {
+            label: 'Tên ngành hàng',
+            placeholder: 'Nhập tên ngành hàng',
             required: true,
         },
     },

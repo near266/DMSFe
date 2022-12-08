@@ -25,8 +25,8 @@ export class DetailChannelComponent implements OnInit {
 
   model = {
     id: null,
-    channelName: null,
     channelCode: null,
+    channelName: null,
     deptLimit: null,
     status: null,
   };
@@ -36,21 +36,21 @@ export class DetailChannelComponent implements OnInit {
         key: 'id',
     },
     {
-        key: 'channelName',
-        type: 'channel-input',
-        templateOptions: {
-            label: 'Tên kênh',
-            placeholder: 'Nhập tên kênh',
-            required: true,
-        },
-    },
-    {
         key: 'channelCode',
         type: 'channel-input',
         defaultValue: null,
         templateOptions: {
             label: 'Mã kênh',
             placeholder: 'Nhập code kênh',
+            required: true,
+        },
+    },
+    {
+        key: 'channelName',
+        type: 'channel-input',
+        templateOptions: {
+            label: 'Tên kênh',
+            placeholder: 'Nhập tên kênh',
             required: true,
         },
     },

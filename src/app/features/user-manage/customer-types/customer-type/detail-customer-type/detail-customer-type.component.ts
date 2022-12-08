@@ -36,21 +36,21 @@ export class DetailCustomerTypeComponent implements OnInit {
         key: 'id',
     },
     {
-        key: 'customerTypeName',
-        type: 'customerType-input',
-        templateOptions: {
-            label: 'Tên loại khách hàng',
-            placeholder: 'Nhập tên loại khách hàng',
-            required: true,
-        },
-    },
-    {
         key: 'customerTypeCode',
         type: 'customerType-input',
         defaultValue: null,
         templateOptions: {
             label: 'Mã loại khách hàng',
             placeholder: 'Nhập code loại khách hàng',
+            required: true,
+        },
+    },
+    {
+        key: 'customerTypeName',
+        type: 'customerType-input',
+        templateOptions: {
+            label: 'Tên loại khách hàng',
+            placeholder: 'Nhập tên loại khách hàng',
             required: true,
         },
     },

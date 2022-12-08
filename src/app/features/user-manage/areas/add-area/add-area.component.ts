@@ -25,8 +25,8 @@ export class AddAreaComponent implements OnInit {
     this.form = this.fb.group({
       brandCode: new FormControl(''),
       brandName: new FormControl(''),
-      status: new FormControl(''),
-      debtLimit: new FormControl(''),
+      status: new FormControl('true'),
+      debtLimit: new FormControl('true'),
     })
   }
 

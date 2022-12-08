@@ -41,21 +41,21 @@ export class DetailSupplierComponent implements OnInit {
         key: 'id',
     },
     {
-        key: 'supplierName',
-        type: 'supplier-input',
-        templateOptions: {
-            label: 'Tên nhà cung cấp',
-            placeholder: 'Nhập tên nhà cung cấp',
-            required: true,
-        },
-    },
-    {
         key: 'supplierCode',
         type: 'supplier-input',
         defaultValue: null,
         templateOptions: {
             label: 'Mã nhà cung cấp',
             placeholder: 'Nhập code nhà cung cấp',
+            required: true,
+        },
+    },
+    {
+        key: 'supplierName',
+        type: 'supplier-input',
+        templateOptions: {
+            label: 'Tên nhà cung cấp',
+            placeholder: 'Nhập tên nhà cung cấp',
             required: true,
         },
     },

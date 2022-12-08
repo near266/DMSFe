@@ -36,21 +36,21 @@ export class DetailAreaComponent implements OnInit {
         key: 'id',
     },
     {
-        key: 'areaName',
-        type: 'area-input',
-        templateOptions: {
-            label: 'Tên khu vực',
-            placeholder: 'Nhập tên khu vực',
-            required: true,
-        },
-    },
-    {
         key: 'areaCode',
         type: 'area-input',
         defaultValue: null,
         templateOptions: {
             label: 'Mã khu vực',
             placeholder: 'Nhập code khu vực',
+            required: true,
+        },
+    },
+    {
+        key: 'areaName',
+        type: 'area-input',
+        templateOptions: {
+            label: 'Tên khu vực',
+            placeholder: 'Nhập tên khu vực',
             required: true,
         },
     },

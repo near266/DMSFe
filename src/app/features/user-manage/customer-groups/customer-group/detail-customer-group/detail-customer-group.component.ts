@@ -36,21 +36,21 @@ export class DetailCustomerGroupComponent implements OnInit {
         key: 'id',
     },
     {
-        key: 'customerGroupName',
-        type: 'customerGroup-input',
-        templateOptions: {
-            label: 'Tên nhóm khách hàng',
-            placeholder: 'Nhập tên nhóm khách hàng',
-            required: true,
-        },
-    },
-    {
         key: 'customerGroupCode',
         type: 'customerGroup-input',
         defaultValue: null,
         templateOptions: {
             label: 'Mã nhóm khách hàng',
             placeholder: 'Nhập code nhóm khách hàng',
+            required: true,
+        },
+    },
+    {
+        key: 'customerGroupName',
+        type: 'customerGroup-input',
+        templateOptions: {
+            label: 'Tên nhóm khách hàng',
+            placeholder: 'Nhập tên nhóm khách hàng',
             required: true,
         },
     },

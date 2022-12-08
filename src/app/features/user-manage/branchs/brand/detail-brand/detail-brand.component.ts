@@ -36,21 +36,21 @@ export class DetailBrandComponent implements OnInit {
         key: 'id',
     },
     {
-        key: 'brandName',
-        type: 'brand-input',
-        templateOptions: {
-            label: 'Tên nhãn hiệu',
-            placeholder: 'Nhập tên nhãn hiệu',
-            required: true,
-        },
-    },
-    {
         key: 'brandCode',
         type: 'brand-input',
         defaultValue: null,
         templateOptions: {
             label: 'Mã nhãn hiệu',
             placeholder: 'Nhập code nhãn hiệu',
+            required: true,
+        },
+    },
+    {
+        key: 'brandName',
+        type: 'brand-input',
+        templateOptions: {
+            label: 'Tên nhãn hiệu',
+            placeholder: 'Nhập tên nhãn hiệu',
             required: true,
         },
     },

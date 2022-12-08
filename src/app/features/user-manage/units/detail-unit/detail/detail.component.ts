@@ -35,16 +35,13 @@ export class DetailComponent implements OnInit {
         key: 'id',
     },
     {
-        key: 'status',
-        type: 'unit-select',
+        key: 'unitCode',
+        type: 'unit-input',
         defaultValue: null,
         templateOptions: {
-            label: 'Trạng thái',
+            label: 'Mã đơn vị tính',
+            placeholder: 'Nhập code đơn vị tính',
             required: true,
-            options: [
-                { value: true, label: 'Mở' },
-                { value: false, label: 'Khóa' },
-            ],
         },
     },
     {
@@ -57,13 +54,16 @@ export class DetailComponent implements OnInit {
         },
     },
     {
-        key: 'unitCode',
-        type: 'unit-input',
+        key: 'status',
+        type: 'unit-select',
         defaultValue: null,
         templateOptions: {
-            label: 'ĐVT lẻ',
-            placeholder: 'Nhập code đơn vị tính',
+            label: 'Trạng thái',
             required: true,
+            options: [
+                { value: true, label: 'Mở' },
+                { value: false, label: 'Khóa' },
+            ],
         },
     },
   ];

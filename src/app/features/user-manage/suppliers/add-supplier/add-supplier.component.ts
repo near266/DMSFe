@@ -29,9 +29,9 @@ export class AddSupplierComponent implements OnInit {
       taxCode: new FormControl(''),
       phone: new FormControl(''),
       province: new FormControl(''),
-      debtLimit: new FormControl(''),
+      debtLimit: new FormControl('true'),
       numberOfDaysOwed: new FormControl(''),
-      status: new FormControl(''),
+      status: new FormControl('true'),
     })
   }
 
