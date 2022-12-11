@@ -148,18 +148,18 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
         this.searchListSaleEmployee();
         this.searchListRoute();
         this.searchListCus();
-        this.subscriptions.add(
-            this.form.get('groupId')?.valueChanges.subscribe((data) => {
-                // set khi chưa chọn customerID (ở màn tạo)
-                if (data && !this.form.get('customerId')?.value && this.option.type === 'Create') {
-                    this.setEmployeeAndRouteWhenChangeGroup(data);
-                }
-                // ở màn detail và gen
-                if (data && (this.option.type === 'Detail' || this.option.type === 'Gen')) {
-                    this.setEmployeeAndRouteWhenChangeGroup(data);
-                }
-            }),
-        );
+        // this.subscriptions.add(
+        //     this.form.get('groupId')?.valueChanges.subscribe((data) => {
+        //         // set khi chưa chọn customerID (ở màn tạo)
+        //         if (data && !this.form.get('customerId')?.value && this.option.type === 'Create') {
+        //             this.setEmployeeAndRouteWhenChangeGroup(data);
+        //         }
+        //         // ở màn detail và gen
+        //         if (data && (this.option.type === 'Detail' || this.option.type === 'Gen')) {
+        //             this.setEmployeeAndRouteWhenChangeGroup(data);
+        //         }
+        //     }),
+        // );
         this.subscriptions.add(
             this.form.get('orderEmployeeId')?.valueChanges.subscribe((data) => {
                 // set khi chưa chọn customerID (ở màn tạo)
@@ -230,6 +230,10 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
 
     genSale() {
         this.genSaleBody$.emit(this.form);
+    }
+
+    setListRouteAndEmployee(groupId: string) {
+        this.setEmployeeAndRouteWhenChangeGroup(groupId);
     }
 
     setEmployeeAndRouteWhenChangeGroup(groupId: string) {
@@ -363,6 +367,8 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
     }
 
     setInfoCusAndRouteGroupAndOrderEmployee(cusId: string) {
+        console.log(cusId);
+
         this.setInfoCus(cusId);
         this.setRouteGroupAndOrderEmployee(cusId);
     }
@@ -388,7 +394,7 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                 if (data) {
                     // set listRoute và listEmployee
                     listRoute = data.list;
-                    listEmployee = listRoute.map((route: any) => {
+                    listEmployee = listRoute?.map((route: any) => {
                         return route.employee;
                     });
                     this.commonLogicService.setListRouteSource(listRoute);
@@ -397,11 +403,13 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                     switch (roleMain) {
                         // nếu là admin -> set đầu
                         case 'admin': {
-                            this.form.patchValue({
-                                routeId: listRoute[0].id,
-                                groupId: listRoute[0].unitTreeGroup.id,
-                                orderEmployeeId: listEmployee[0].id,
-                            });
+                            if (data.list) {
+                                this.form.patchValue({
+                                    routeId: listRoute[0]?.id,
+                                    groupId: listRoute[0]?.unitTreeGroup?.id,
+                                    orderEmployeeId: listEmployee[0]?.id,
+                                });
+                            }
                             break;
                         }
                         // nếu là member -> lọc qua -> nếu có employeeId -> set employeeId và routeId
@@ -424,13 +432,6 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                             break;
                         }
                     }
-                    // this.commonLogicService.pushOrderEmployeeToListEmployee(data.route?.employee?.id, []);
-                    // this.commonLogicService.pushRouteToListRoute(data.route?.id, []);
-                    // this.form.patchValue({
-                    //     routeId: data.route?.id,
-                    //     groupId: data.route?.unitTreeGroup?.id,
-                    //     orderEmployeeId: data.route?.employee?.id,
-                    // });
                 }
             }),
         );
