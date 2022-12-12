@@ -104,6 +104,10 @@ export class EmployeeService {
     return this.http.delete(gateway_url + '/DeleteEmployeeUnitTree?EmployeeId=' + EmployeeId + '&UnitTreeGroupId=' + UnitTreeGroupId).pipe(map((response: any) => response));
   }
 
+  MoveEmployee(body: any): Observable<any> {
+    return this.http.delete(gateway_url + '/MoveEmployee', {body: body}).pipe(map((response: any) => response));
+  }
+
   SearchEmployeeInGroup(GroupId: string, page: number, pageSize: number): Observable<any> {
     const body = {
       GroupId: GroupId,
