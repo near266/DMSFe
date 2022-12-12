@@ -279,4 +279,11 @@ export class PurchaseOrderService {
             .post(this.api_gateway_url + '/PurchaseOrder/print', body, { responseType: 'blob' })
             .pipe(map((res) => res));
     }
+
+    print006(body: any): Observable<any> {
+      let optionHeader = { responseType: 'text' };
+      return this.http
+          .post(this.api_gateway_url + '/PurchaseOrder/print006', body, { responseType: 'blob' })
+          .pipe(map((res) => res));
+  }
 }
