@@ -50,7 +50,6 @@ export class ReturnApiService {
     }
 
     getAllReturns(settings: any): Observable<ReturnResponse> {
-        console.log('@!#!@#');
         return this.http.post<any>(this.returnUrl + '/search', settings).pipe(shareReplay(1));
     }
 

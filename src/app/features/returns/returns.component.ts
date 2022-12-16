@@ -22,9 +22,7 @@ export class ReturnsComponent implements OnInit {
     query: FormControl = new FormControl(this.facade.cachedTextSearch.getValue());
     menuItems$: Observable<MenuItem<SelectOption>[] | null> = this.facade.menuItems$;
     listMenu = sortList;
-    timeSortList = timeSortList;
     dateSearchForm: FormGroup;
-    settings$: Observable<SidenavSettings> = this.facade.settings$;
     returns$: Observable<Return[]>;
     totalItems$: Observable<number> = this.facade.totalItems$;
     loading$: Observable<boolean> = this.facade.loading$;

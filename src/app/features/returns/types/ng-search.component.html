@@ -1,0 +1,17 @@
+<mat-form-field class="w-full" [appearance]="props['appearance']">
+    <mat-label>{{ props.label }}</mat-label>
+    <input
+        type="text"
+        placeholder="{{ props.placeholder }}"
+        matInput
+        [value]=""
+        [formControl]="control"
+        [matAutocomplete]="auto" />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="props?.change(field, $event)">
+        <ng-container *ngIf="filter$ | async as options">
+            <mat-option *ngFor="let option of options" [value]="option">
+                {{ option.label }}
+            </mat-option>
+        </ng-container>
+    </mat-autocomplete>
+</mat-form-field>

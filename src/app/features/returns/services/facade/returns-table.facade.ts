@@ -239,7 +239,7 @@ export class ReturnsTableFacade {
                     })),
                     switchMap((settings: SidenavSettings) =>
                         this.returnApiService.getAllReturns(settings).pipe(
-                            catchError((err) => {
+                            catchError(() => {
                                 return of({
                                     data: [],
                                     totalCount: 0,
