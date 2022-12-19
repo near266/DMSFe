@@ -1,13 +1,13 @@
 <form [formGroup]="employee">
-    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-4">
         <div class="font-bold">Email</div>
         <div class="flex flex-col">
             <div class="flex flex-row">
                 <div class="text-red-500 mr-4">*</div>
                 <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
                     placeholder="example@gmail.com" [ngClass]="{'border-red-600':this.employee.get('email')?.errors}"
-                    *ngIf="status != 'view' && status != 'edit'" formControlName="email">
-                <div class="w-96 text-sm" *ngIf="status == 'view'|| status == 'edit'">{{employee.value.email}}</div>
+                    *ngIf="status != 'view'" formControlName="email">
+                <div class="w-96 text-sm" *ngIf="status == 'view'">{{employee.value.email}}</div>
             </div>
         </div>
     </div>

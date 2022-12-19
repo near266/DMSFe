@@ -17,7 +17,7 @@
     </div>
     <div class="flex flex-row" style="height: calc(100% - 50px)">
         <div class="min-w-max bg-gray-200 h-full">
-            <div class="w-full pl-2 pr-5 py-2 flex flex-row text-sm font-medium items-center cursor-pointer"
+            <div class="w-full pl-2 pr-5 py-4 flex flex-row text-sm font-medium items-center cursor-pointer"
                 *ngFor="let tab of tabList" (click)="title = tab.title"
                 [ngClass]="{'bg-white border-b-gray-300 border-l-green-500 border-solid border-l-4 border-b-2':title==tab.title}">
                 <i class="mx-2" [ngClass]="tab.leftIcon"></i>
