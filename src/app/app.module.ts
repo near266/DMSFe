@@ -15,10 +15,9 @@ import { SecretInterceptor } from './core/interceptor/secret.interceptor';
 import { DataService } from './core/services/data.service';
 import { SharedModule } from './core/shared/shared.module';
 import { ForgotpasswordComponent } from './features/auth/forgotpassword/forgotpassword.component';
-import { VisitReportComponent } from './features/visit-report/visit-report.component';
 registerLocaleData(localeVi);
 @NgModule({
-    declarations: [AppComponent, ForgotpasswordComponent, VisitReportComponent],
+    declarations: [AppComponent, ForgotpasswordComponent],
     imports: [SharedModule, RouterModule, BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule],
     providers: [
         DatePipe,

@@ -1,0 +1,5 @@
+<table class="block custom-table font-medium text-black">
+    <tr *ngFor="let row of tableData.headers" class="custom-thead">
+        <th [colSpan]="col.colspan" [rowSpan]="1 ? !col.rowspan : col.rowspan" *ngFor="let col of row" class="custom-td text-white">{{col.text}}</th>
+    </tr>
+</table>

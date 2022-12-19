@@ -97,7 +97,7 @@ export class FormtatReportSaleReceiptService {
                 },
                 // Mã phòng nhóm
                 {
-                    content: data.customer?.customerGroup?.customerGroupCode,
+                    content: data.group?.unitTreeGroup_Code,
                     hasChildren: false,
                 },
                 // Tên nhân viên đặt hàng
