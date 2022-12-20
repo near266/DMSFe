@@ -8,7 +8,7 @@
           <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
           Thêm mới
         </button>
-        <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+        <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="filter()">
           <i class="fa-sharp fa-solid fa-refresh text-emerald-500 font-bold mr-2"></i>
           Tải lại
         </button>
@@ -22,7 +22,7 @@
         </button> -->
         <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
         </app-menu-bar>
-        <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+        <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="DeleteSuppliers()">
           <i class="fa-sharp fa-solid fa-trash text-emerald-500 font-bold mr-2"></i>
           Xóa nhiều
         </button>
@@ -66,7 +66,7 @@
                     <td class="w-16 custom-td border">{{ i + 1 }}</td>
                     <td class="w-16 border align-middle px-2">
                         <span class="flex items-center text-[#1891C9]">
-                          <input type="checkbox">
+                          <input type="checkbox" (change)="change(order?.id + '')">
                           <i *ngIf="order?.status == false" class="fa-sharp fa-solid fa-lock mb-[1px] ml-2"></i>
                           <i *ngIf="order?.status == true || order?.status == null" class="fa-sharp fa-solid fa-lock-open mb-[1px] ml-2"></i>
                         </span>
@@ -89,7 +89,7 @@
                     </td>
                     <td class="custom-td border">
                         <button *ngIf="order.status == true" class="text-xs bg-[#10B981] text-white font-medium px-7 py-1 rounded-md w-full">Mở</button>
-                        <button *ngIf="order.status != true" class="text-xs bg-[#CB0D0C] text-white font-medium px-7 py-1 rounded-md w-full">Khóa</button>
+                        <button *ngIf="order.status == false" class="text-xs bg-[#CB0D0C] text-white font-medium px-7 py-1 rounded-md w-full">Khóa</button>
                     </td>
                     <td class="custom-td border">
                         {{ order?.createdBy }}

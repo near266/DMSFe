@@ -7,6 +7,7 @@ import { UnitService } from './services/unit.service';
 import { Response } from 'src/app/core/model/Response';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { DatePipe } from '@angular/common';
+import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-units',
@@ -18,7 +19,7 @@ export class UnitsComponent implements OnInit {
   loading = true;
   sideBarWidth!: string;
   type!: string;
-  // listOrder: PurchaseOrder[] = [];
+  selectedIds: string[] = [];
   unit: Unit[] = [];
   totalCount: number;
   keywords: '';
@@ -29,6 +30,7 @@ export class UnitsComponent implements OnInit {
     pageSize: 30
   };
 
+  res: any;
   dia?: any;
   page: number = 1;
   pageSize: number = 30;
@@ -40,6 +42,7 @@ export class UnitsComponent implements OnInit {
     private dialog: MatDialog,
     private unitService: UnitService,
     private snackbar: SnackbarService,
+    private confirmService: ConfirmDialogService
   ) { }
 
   ngOnInit(): void {
@@ -174,6 +177,62 @@ export class UnitsComponent implements OnInit {
   //   if (this.request.sortValue == 'down') this.request.sortValue = false;
   //   this.search(key);
   // }
+
+  filter() {
+    this.loading = true;
+    this.unitService.getAllUnits().subscribe(
+      (data) => {
+        if (data) {
+          this.res = data;
+          this.unit = [];
+          this.totalunits = this.res.length;
+          this.unit = data;
+          this.loading = false;
+        } else {
+          this.loading = false;
+          this.snackbar.openSnackbar('Không tìm thấy danh sách đơn vị', 2000, 'Đóng', 'center', 'bottom', false);
+        }
+      },
+      (error) => {
+        this.loading = false;
+        this.snackbar.openSnackbar('Không tìm thấy danh sách đơn vị', 2000, 'Đóng', 'center', 'bottom', false);
+      },
+    );
+  }
+
+  change(id: string) {
+    if (this.selectedIds.indexOf(id) < 0) {
+      this.selectedIds.push(id);
+    } else {
+      this.selectedIds.splice(this.selectedIds.indexOf(id), 1);
+    }
+  }
+
+  DeleteUnits() {
+    this.confirmService.openDialog({ message: 'Bạn có chắc chắn muốn xóa những đơn vị tính này?', confirm: 'Xác nhận', cancel: 'Hủy' }).subscribe(data => {
+      if (data) {
+        this.deleteUnitsByIds(this.selectedIds);
+      }
+    });
+  }
+
+  deleteUnitsByIds(selectedIds: string[]) {
+    const body = {
+      id: selectedIds
+    };
+    let sub = this.unitService.del(body).subscribe(data => {
+      if (data && data.message > 0) {
+        this.snackbar.openSnackbar('Xóa đơn vị thành công', 2000, 'Đóng', 'center', 'bottom', true);
+        this.filter();
+      } else {
+        this.snackbar.openSnackbar('Xóa đơn vị thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+      }
+      sub.unsubscribe();
+    }, (error) => {
+      this.snackbar.openSnackbar('Xóa đơn vị thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+      sub.unsubscribe();
+    });
+  }
 
   listMenuObj = [
     {
