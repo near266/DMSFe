@@ -229,14 +229,12 @@ export class FormsComponent implements OnInit, OnChanges, AfterViewInit, AfterCo
             this.logic.addWarehouse(body);
             this.logic.message$.subscribe( message => {
                 this.signalEvent.emit(message);
-                this.logic.message.next(false);
             });
         } else {
             body.id = this.warehouse.id;
             this.logic.updateWarehouse(body);
             this.logic.isUpdateSuccess$.subscribe( message => {
                 this.signalEvent.emit(message);
-                this.logic.isUpdateSuccess.next(false);
             });
         }
     }
