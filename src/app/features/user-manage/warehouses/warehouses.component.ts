@@ -113,10 +113,15 @@ export class WarehousesComponent implements OnInit {
   }
 
   AddWareHouse() {
-    this.dialog.open(AddWarehouseComponent, {
+    let sub = this.dialog.open(AddWarehouseComponent, {
       height: '100vh',
       minWidth: '900px',
       panelClass: 'custom-mat-dialog-container'
+    });
+    sub.afterClosed().subscribe( event => {
+        if(event) {
+            this.logicService.getAllWareHouse();
+        }
     });
   }
 

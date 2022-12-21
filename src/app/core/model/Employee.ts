@@ -17,3 +17,7 @@ export class Employee {
   checked?: boolean;
   disabled?: boolean;
 }
+
+export class EmployeeInGroup {
+    employee: Employee;
+}

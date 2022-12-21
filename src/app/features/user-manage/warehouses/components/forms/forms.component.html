@@ -1,17 +1,17 @@
-<form>
-  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+<form [formGroup]="formGroup">
+  <!-- <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
     <div class="font-bold">STT</div>
     <div class="flex flex-col">
       <div class="flex flex-row">
           <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
       </div>
     </div>
-  </div>
+  </div> -->
   <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
     <div class="font-bold">Mã kho</div>
     <div class="flex flex-col">
       <div class="flex flex-row">
-          <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+          <input formControlName="warehouseCode" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@
     <div class="font-bold">Tên kho</div>
     <div class="flex flex-col">
       <div class="flex flex-row">
-          <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+          <input formControlName="warehouseName" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
       </div>
     </div>
   </div>
@@ -27,7 +27,7 @@
     <div class="font-bold">Loại kho</div>
     <div class="flex flex-col">
       <div class="flex flex-row">
-          <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+          <select #typeWarehouse class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" (change)="selectEmployeeList(typeWarehouse.value)" formControlName="warehouseType">
             <option value="Kho sản phẩm">Kho sản phẩm</option>
             <option value="Kho khuyến mãi">Kho khuyến mãi</option>
             <option value="Kho nhân viên">Kho nhân viên</option>
@@ -35,11 +35,31 @@
       </div>
     </div>
   </div>
+  <div *ngIf="showEmployeeList" class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="font-bold">Phòng/nhóm</div>
+    <div class="flex flex-col">
+      <div class="flex flex-row">
+        <select #groupSelect (change)="searchBySelect(groupSelect.value)" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" formControlName="unitTreeGroupId">
+            <option *ngFor="let item of unitGroup" value="{{item.id}}">{{item.name}}</option>
+          </select>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showEmployeeList" class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+    <div class="font-bold">Nhân viên</div>
+    <div class="flex flex-col">
+      <div class="flex flex-row">
+        <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" formControlName="employeeId" [value]="warehouse.employee?.id">
+            <option *ngFor="let item of employees" value="{{item.employee.id}}">{{item.employee.employeeName}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
   <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
     <div class="font-bold">Mô tả</div>
     <div class="flex flex-col">
       <div class="flex flex-row">
-          <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+          <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" formControlName="description">
       </div>
     </div>
   </div>
@@ -47,20 +67,20 @@
     <div class="font-bold">Trạng thái</div>
     <div class="flex flex-col">
       <div class="flex flex-row">
-          <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+          <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" formControlName="status">
             <option value="true">Hoạt động</option>
             <option value="false">Khóa</option>
           </select>
       </div>
     </div>
   </div>
-  <div class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
+  <div *ngIf="!showEmployeeList" class="flex flex-row justify-between items-center min-w-max w-full px-3 py-2">
     <div class="font-bold">Phòng/nhóm</div>
     <div class="flex flex-col">
       <div class="flex flex-row relative">
-          <input (click)="showGroup = !showGroup" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
+          <input (click)="showGroup = !showGroup" placeholder="Chọn phòng/nhóm" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7">
           <div *ngIf="showGroup" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
-            <app-menu-collapse-tree-multiple></app-menu-collapse-tree-multiple>
+            <app-menu-collapse-tree-multiple (newItemEvent)="search($event)"></app-menu-collapse-tree-multiple>
           </div>
       </div>
     </div>
@@ -82,14 +102,14 @@
               </tr>
           </thead>
           <tbody>
-              <tr>
+              <tr *ngFor="let item of accountants">
                 <td class="custom-td align-middle items-center text-center border-b">
-                  <img class="w-10 h-10 object-cover rounded-full" src="https://i.pinimg.com/564x/49/65/6f/49656ffd4a876b80e5c6d83b720401e3.jpg">
+                  <img class="w-10 h-10 object-cover rounded-full" src="{{item.employee.avatar}}">
                 </td>
-                <td class="custom-td border-b">Đinh Ngọc Đức</td>
-                <td class="custom-td border-b">dnduc12bhla@gmail.com</td>
+                <td class="custom-td border-b">{{item.employee.employeeName}}</td>
+                <td class="custom-td border-b">{{item.employee.email}}</td>
                 <td class="custom-td border-b">
-                    <mat-checkbox color="primary"></mat-checkbox>
+                    <mat-checkbox [(ngModel)]="item.employee.checked" [ngModelOptions]="{standalone: true}" color="primary" (change)="toggleAccountant(item.employee.id)"></mat-checkbox>
                 </td>
               </tr>
           </tbody>

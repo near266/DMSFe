@@ -13,14 +13,11 @@ import { EmployeeService } from 'src/app/core/services/employee.service';
 export class MenuCollapseTreeMultipleComponent implements OnInit, AfterViewInit {
 
   @ViewChild(TreeComponent) private tree: TreeComponent;
-  @Output() newItemEvent = new EventEmitter<string[]>();
+  @Output() newItemEvent = new EventEmitter<string>();
 
   nodes: any[] = [];
   action: IActionMapping;
-  options: ITreeOptions = {
-    useCheckbox: true,
-    animateExpand: true
-  };
+  options: ITreeOptions;
 
   settings: any = {};
   total: number;
@@ -33,22 +30,34 @@ export class MenuCollapseTreeMultipleComponent implements OnInit, AfterViewInit 
       newTree.children = this.convertTree(tree);
       this.nodes = [newTree];
       this.total = this.getTotalItemInTreeWithNoChildren(this.nodes);
+      this.action = {
+        mouse: {
+          click: (tree, node, $event) => {
+            this.newItemEvent.emit(node.data.id);
+          }
+        },
+      };
+      this.options = {
+        useCheckbox: true,
+        animateExpand: false,
+        actionMapping: this.action
+      };
     });
   }
 
   ngAfterViewInit(): void {
-    this.tree.treeModel.subscribeToState((state: any) => {
-      const selected = Object.assign({}, this.tree.treeModel.selectedLeafNodeIds);
-      if(Object.keys(selected).length > 0){
-        const listIdSelected: string[] = [];
-        Object.keys(selected).forEach( element => {
-          if (selected[element]) {
-            listIdSelected.push(element);
-          }
-        });
-        this.newItemEvent.emit(listIdSelected);
-      }
-    });
+    // this.tree.treeModel.subscribeToState((state: any) => {
+    //   const selected = Object.assign({}, this.tree.treeModel.selectedLeafNodeIds);
+    //   if(Object.keys(selected).length > 0){
+    //     const listIdSelected: string[] = [];
+    //     Object.keys(selected).forEach( element => {
+    //       if (selected[element]) {
+    //         listIdSelected.push(element);
+    //       }
+    //     });
+    //     this.newItemEvent.emit(listIdSelected);
+    //   }
+    // });
   }
 
   convertTree(tree: any[]) {
