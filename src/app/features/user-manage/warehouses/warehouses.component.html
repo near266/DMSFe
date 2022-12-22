@@ -31,7 +31,7 @@
           <input class="bg-white text-xs w-48 h-full" placeholder="Tìm kiếm kho hàng" [(ngModel)]="bodySearch.keyword" (keyup.enter)="filter()">
       </div>
   </div>
-  <div class="w-full">
+  <div class="w-full relative">
     <div id="table" class="table-wrapper w-full">
       <table class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
             <thead class="h-10  border-gray-300 ">
@@ -44,9 +44,9 @@
               <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Tên kho</th>
               <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Loại kho</th>
               <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Mô tả</th>
-              <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Kế toán phụ trách</th>
+              <!-- <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Kế toán phụ trách</th> -->
               <!-- <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Nhóm BH</th> -->
-              <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Nhân viên phụ trách</th>
+              <!-- <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Nhân viên phụ trách</th> -->
               <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Trạng thái</th>
               <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Người cập nhật</th>
               <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ngày cập nhật</th>
@@ -67,9 +67,9 @@
                   <td class="custom-td border-b text-emerald-500 cursor-pointer" (click)="DetailWareHouse(item)" >{{ item.warehouseName }}</td>
                   <td class="custom-td border-b">{{ item.warehouseType }}</td>
                   <td class="custom-td border-b">{{ item.description }}</td>
-                  <td class="custom-td border-b">{{ item.responsibleAccountant }}</td>
+                  <!-- <td class="custom-td border-b">{{ item.responsibleAccountant }}</td> -->
                   <!-- <td class="custom-td border-b">{{ item.unitTreeGroup?.name }}</td> -->
-                  <td class="custom-td border-b">{{ item.employee?.employeeName }}</td>
+                  <!-- <td class="custom-td border-b">{{ item.employee?.employeeName }}</td> -->
                   <td class="custom-td border-b">{{ item.status == true ? 'Hoạt động': 'Khóa' }}</td>
                   <td class="custom-td border-b">{{ item.lastModifiedBy }}</td>
                   <td class="custom-td border-b">{{ datepipe.transform(item.lastModifiedDate, 'dd/MM/yyyy hh:mm') }}</td>

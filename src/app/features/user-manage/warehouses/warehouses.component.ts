@@ -64,13 +64,7 @@ export class WarehousesComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.logicService.getAllWareHouse();
-    this.logicService.warehouses$.subscribe(data => {
-      this.warehouses = data;
-    });
-    this.logicService.totalCountWarehouse$.subscribe(data => {
-      this.totalCount = data;
-    })
+    this.init();
   }
 
   ngDoCheck(): void {
@@ -98,6 +92,16 @@ export class WarehousesComponent implements OnInit {
     }
     this.filter();
 
+  }
+
+  init() {
+    this.logicService.getAllWareHouse();
+    this.logicService.warehouses$.subscribe(data => {
+      this.warehouses = data;
+    });
+    this.logicService.totalCountWarehouse$.subscribe(data => {
+      this.totalCount = data;
+    });
   }
 
   filter() {
