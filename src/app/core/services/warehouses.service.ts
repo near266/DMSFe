@@ -39,4 +39,16 @@ export class WarehousesService {
     .delete(warehouses_url + '/delete', {body: body})
     .pipe(map((response: any) => response));
   }
+
+  addAccountant(body: any): Observable<any> {
+    return this.http
+    .post(warehouses_url + '/addAccountant', body)
+    .pipe(map((response: any) => response));
+  }
+
+  deleteAccountant(body: any): Observable<any> {
+    return this.http
+    .delete(warehouses_url + '/deleteAccountant', {body: body})
+    .pipe(map((response: any) => response));
+  }
 }

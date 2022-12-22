@@ -126,11 +126,16 @@ export class WarehousesComponent implements OnInit {
   }
 
   DetailWareHouse(warehouse: Warehouse) {
-    this.dialog.open(UpdateWarehouseComponent, {
+    let sub = this.dialog.open(UpdateWarehouseComponent, {
       data: warehouse.id,
       height: '100vh',
       minWidth: '900px',
       panelClass: 'custom-mat-dialog-container'
+    });
+    sub.afterClosed().subscribe( event => {
+        if(event) {
+            this.logicService.getAllWareHouse();
+        }
     });
   }
 

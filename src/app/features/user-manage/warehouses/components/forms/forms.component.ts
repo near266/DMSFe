@@ -203,8 +203,22 @@ export class FormsComponent implements OnInit, OnChanges, AfterViewInit, AfterCo
     toggleAccountant(id: any) {
         if(this.listIdAccountant.indexOf(id) > -1) {
             this.listIdAccountant.splice(this.listIdAccountant.indexOf(id), 1);
+            if(this.type != 0 && this.warehouse) {
+                const body = {
+                    listAccId: [id],
+                    warehouseId: this.warehouse.id
+                }
+                this.logic.deleteAccountantToWarehouse(body);
+            }
         } else {
             this.listIdAccountant.push(id);
+            if(this.type != 0 && this.warehouse) {
+                const body = {
+                    listAccId: [id],
+                    warehouseId: this.warehouse.id
+                }
+                this.logic.addAccountantToWarehouse(body);
+            }
         }
     }
 
@@ -232,6 +246,7 @@ export class FormsComponent implements OnInit, OnChanges, AfterViewInit, AfterCo
             });
         } else {
             body.id = this.warehouse.id;
+            delete body['listAccId'];
             this.logic.updateWarehouse(body);
             this.logic.isUpdateSuccess$.subscribe( message => {
                 this.signalEvent.emit(message);

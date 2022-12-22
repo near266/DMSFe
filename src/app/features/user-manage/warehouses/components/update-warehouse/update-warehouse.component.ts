@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Warehouse } from '../../models/warehouse';
 import { LogicService } from '../../services/logic.service';
+import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-update-warehouse',
@@ -33,7 +34,8 @@ export class UpdateWarehouseComponent implements OnInit, AfterViewInit {
   constructor(
     public dialogRef: MatDialogRef<UpdateWarehouseComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
-    private logic: LogicService
+    private logic: LogicService,
+    private confirmService: ConfirmDialogService
   ) { }
 
   ngAfterViewInit(): void {
@@ -64,7 +66,17 @@ export class UpdateWarehouseComponent implements OnInit, AfterViewInit {
   }
 
   DeleteWareHouse() {
-
+    this.confirmService.openDialog({message: 'Bạn có chắc chắn muốn xóa kho hàng này?',confirm: 'Xác nhận',cancel: 'Hủy'}).subscribe( data => {
+        if(data) {
+          this.logic.deleteWareHouse([this.warehouse.id]);
+          this.logic.isDeleteSuccess$.subscribe( response => {
+            if(response == true) {
+                this.dialogRef.close();
+                return;
+            }
+          });
+        }
+      });
   }
 
 }

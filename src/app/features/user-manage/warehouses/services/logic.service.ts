@@ -44,6 +44,7 @@ export class LogicService {
   private accountant: BehaviorSubject<EmployeeInGroup[]> = new BehaviorSubject<EmployeeInGroup[]>(this.defaultListEmployee);
   public message: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isUpdateSuccess: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public isDeleteSuccess: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   public unitGroup$ = this.unitGroup.asObservable();
   public warehouses$ = this.warehouses.asObservable();
@@ -51,6 +52,7 @@ export class LogicService {
   public accountant$ = this.accountant.asObservable();
   public message$ = this.message.asObservable();
   public isUpdateSuccess$ = this.isUpdateSuccess.asObservable();
+  public isDeleteSuccess$ = this.isDeleteSuccess.asObservable();
   public detailWarehouse$ = this.detailWarehouse.asObservable();
   public totalCountWarehouse$ = this.totalCountWarehouse.asObservable();
 
@@ -109,11 +111,14 @@ export class LogicService {
         if(data.message > 0) {
           this.snackbar.openSnackbar('Xóa kho hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
           this.searchWarehouse(this.bodySearch);
+          this.isDeleteSuccess.next(true);
         } else {
           this.snackbar.openSnackbar('Xóa kho hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+          this.isDeleteSuccess.next(false);
         }
       } else {
         this.snackbar.openSnackbar('Xóa kho hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        this.isDeleteSuccess.next(false);
       }
       sub.unsubscribe();
     }, (error) => {
@@ -228,7 +233,7 @@ export class LogicService {
 
   updateWarehouse(body: any) {
     let sub = this.warehouse.updateWareHouse(body).subscribe( data => {
-        if(data && data.message == 1) {
+        if(data) {
             this.snackbar.openSnackbar('Cập nhật kho hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
             this.isUpdateSuccess.next(true);
         } else {
@@ -253,6 +258,34 @@ export class LogicService {
         sub.unsubscribe();
     }, (error) => {
         this.snackbar.openSnackbar('Không tìm thấy thông tin kho hàng', 2000, 'Đóng', 'center', 'bottom', false);
+        sub.unsubscribe();
+    });
+  }
+
+  addAccountantToWarehouse(body: any) {
+    let sub = this.warehouse.addAccountant(body).subscribe( response => {
+        if(response && response.message == 1) {
+            this.snackbar.openSnackbar('Thêm kế toán vào kho hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+        } else {
+            this.snackbar.openSnackbar('Thêm kế toán vào kho hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        }
+        sub.unsubscribe();
+    }, (error) => {
+        this.snackbar.openSnackbar('Thêm kế toán vào kho hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        sub.unsubscribe();
+    });
+  }
+
+  deleteAccountantToWarehouse(body: any) {
+    let sub = this.warehouse.deleteAccountant(body).subscribe( response => {
+        if(response && response.message == 1) {
+            this.snackbar.openSnackbar('Xóa kế toán ra khỏi kho hàng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+        } else {
+            this.snackbar.openSnackbar('Xóa kế toán ra khỏi kho hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        }
+        sub.unsubscribe();
+    }, (error) => {
+        this.snackbar.openSnackbar('Xóa kế toán ra khỏi kho hàng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
         sub.unsubscribe();
     });
   }
