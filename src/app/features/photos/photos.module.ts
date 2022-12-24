@@ -6,12 +6,14 @@ import { PhotosComponent } from './photos.component';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { PhotoNewCustomerComponent } from './components/photo-new-customer/photo-new-customer.component';
+import { DetailPhotoComponent } from './components/detail-photo/detail-photo.component';
 
 
 @NgModule({
   declarations: [
     PhotosComponent,
-    PhotoNewCustomerComponent
+    PhotoNewCustomerComponent,
+    DetailPhotoComponent
   ],
   imports: [
     CommonModule,
