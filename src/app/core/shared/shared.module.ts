@@ -59,6 +59,7 @@ import { MenuCollapseComponent } from './components/menu-collapse/menu-collapse.
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MenuCollapseTreeMultipleComponent } from './components/menu-collapse-tree-multiple/menu-collapse-tree-multiple.component';
+import { TemplateTableNormalComponent } from './components/template-table-normal/template-table-normal.component';
 
 @NgModule({
     declarations: [
@@ -70,6 +71,7 @@ import { MenuCollapseTreeMultipleComponent } from './components/menu-collapse-tr
         ConfirmDialogComponent,
         ConfirmationDialogComponent,
         MenuCollapseTreeMultipleComponent,
+        TemplateTableNormalComponent,
     ],
     imports: [
         CommonModule,
@@ -173,6 +175,7 @@ import { MenuCollapseTreeMultipleComponent } from './components/menu-collapse-tr
         TreeModule,
         NgxPaginationModule,
         ClipboardModule,
+        TemplateTableNormalComponent,
     ],
 })
 export class SharedModule {}

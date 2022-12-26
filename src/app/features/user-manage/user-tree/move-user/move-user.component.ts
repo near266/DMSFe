@@ -50,21 +50,28 @@ export class MoveUserComponent implements OnInit, AfterViewInit {
   }
 
   submit() {
-    let body = {
-      unitTreeGroupId: this.groupId,
-      employeeId: [this.user.id]
-    }
-    this.employeeService.AddEmployeeUnitTree(body).subscribe( data => {
-      if(data) {
-        this.employeeService.DeleteEmployeeUnitTree(this.user.id, this.user.parentId).subscribe(res => {
-          this.snackbar.openSnackbar('Di chuyển người dùng thành công', 2000, 'Đóng', 'center', 'bottom', true);
-          this.dialogRef.close({event: this.groupId});
-        }, (error) => {
-          this.employeeService.DeleteEmployeeUnitTree(this.user.id, this.groupId).subscribe(res => {
-            this.snackbar.openSnackbar('Di chuyển người dùng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
-          });
-        });
-      }
+    // let body = {
+    //   unitTreeGroupId: this.groupId,
+    //   employeeId: [this.user.id]
+    // }
+    // this.employeeService.AddEmployeeUnitTree(body).subscribe( data => {
+    //   if(data) {
+    //     this.employeeService.DeleteEmployeeUnitTree(this.user.id, this.user.parentId).subscribe(res => {
+    //       this.snackbar.openSnackbar('Di chuyển người dùng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+    //       this.dialogRef.close({event: this.groupId});
+    //     }, (error) => {
+    //       this.employeeService.DeleteEmployeeUnitTree(this.user.id, this.groupId).subscribe(res => {
+    //         this.snackbar.openSnackbar('Di chuyển người dùng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+    //       });
+    //     });
+    //   }
+    // }, (error) => {
+    //   this.snackbar.openSnackbar('Di chuyển người dùng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+    // });
+
+    this.employeeService.MoveEmployee({employeeId: this.user.id, oldGroupId: this.user.parentId, newGroupId: this.groupId}).subscribe(res => {
+      this.snackbar.openSnackbar('Di chuyển người dùng thành công', 2000, 'Đóng', 'center', 'bottom', true);
+      this.dialogRef.close({event: this.groupId});
     }, (error) => {
       this.snackbar.openSnackbar('Di chuyển người dùng thất bại', 2000, 'Đóng', 'center', 'bottom', false);
     });

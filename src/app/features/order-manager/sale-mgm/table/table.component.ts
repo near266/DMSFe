@@ -104,6 +104,13 @@ export class TableComponent implements OnInit, AfterViewInit {
         this.saleLogicService.printWithFilter(this.body, this.asyncPipe.transform(this.total$)!);
     }
 
+    printExcel() {
+        this.saleLogicService.printExcel(this.listIdSelected)
+    }
+    printExcelWithFilter() {
+        this.saleLogicService.printExcelWithFilter(this.body, this.asyncPipe.transform(this.total$)!);
+    }
+
     sortByCreatedDate(type: any) {
         if (type === 'up') {
             this.createdDateUp = true;

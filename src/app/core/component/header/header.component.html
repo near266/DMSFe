@@ -2,7 +2,18 @@
   class="w-full z-20 header-shadow bg-zinc-100 h-16 flex items-center justify-between px-3 fixed top-0 right-0 left-0">
   <img src="./../../../../assets/images/Logo-Fitolab-logo.png" class="h-5/6" alt="" />
   <ul class="flex md:space-x-10 lg:space-x-20 text-sm">
-    <li class="mr-4 font-medium hover:opacity-70 cursor-pointer">Công việc</li>
+    <li class="mr-4 font-medium hover:opacity-70 cursor-pointer flex items-center" [matMenuTriggerFor]="menu0">
+        <span class="mr-1">Công việc</span>
+        <i class="fa-solid fa-caret-down"></i>
+    </li>
+    <mat-menu #menu0="matMenu" class="mt-1">
+        <ng-container *ngIf="requiredRoles('SALE_ADMIN') | async">
+            <button mat-menu-item [routerLink]="['photo']">
+              <i class="fa-solid fa-image mr-2"></i>
+              <span>Hình ảnh viếng thăm</span>
+            </button>
+          </ng-container>
+    </mat-menu>
     <!-- Menu Bán hàng -->
     <li class="mr-4 font-medium hover:opacity-70 cursor-pointer flex items-center" [matMenuTriggerFor]="menu1">
       <span class="mr-1">Bán hàng</span>
@@ -128,9 +139,9 @@
         <span>Báo cáo giám sát</span>
       </button>
       <mat-menu #monitoringReport="matMenu">
-        <button mat-menu-item class="flex items-center" routerLinkActive="text-green-500">
+        <button [routerLink]="['reportVisit']" mat-menu-item class="flex items-center" routerLinkActive="text-green-500">
           <i class="fa-solid fa-calendar-days mr-1"></i>
-          <span>Viến thăm khách hàng</span>
+          <span>Viếng thăm khách hàng</span>
         </button>
         <button mat-menu-item class="flex items-center" [routerLink]="['reports/timekeeping']"
           routerLinkActive="text-green-500">

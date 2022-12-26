@@ -1,0 +1,97 @@
+<!-- <div class="table-wrapper">
+    <table class="block custom-table font-medium text-black" width="100%" border="1" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr *ngFor="let row of tableData.headers" class="custom-thead">
+                <th [attr.colspan]="col.colspan" [attr.rowspan]="col.rowspan" *ngFor="let col of row" class="custom-td text-white">{{col.text}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="custom-row" *ngFor="let row of tableData.data; index as i" >
+                <ng-container *ngFor="let col of row">
+                    <td class="custom-td" [attr.rowspan]="col.rowspan" *ngIf="!col.isList">
+                        {{col.text}}
+                    </td>
+                    <ng-container *ngIf="col.isList">
+                        <ng-container *ngFor="let data of col.list">
+                            <ng-container *ngFor="let lv1 of data">
+                                <td class="custom-td" [attr.rowspan]="lv1.rowspan" *ngIf="!lv1.isList">{{lv1.text}}</td>
+                                <ng-container *ngIf="lv1.isList">
+                                    <ng-container class="custom-row" *ngFor="let lv2List of lv1.list">
+                                        <td class="custom-td" *ngFor="let detail of lv2List">
+                                            {{detail}}
+                                        </td>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+</div> -->
+<div class="table-wrapper">
+    <table class="block custom-table font-medium text-black" width="100%" border="1" cellspacing="0" cellpadding="0">
+        <thead class="sticky top-0 z-10 custom-thead">
+            <tr *ngFor="let row of headers">
+                <th
+                    [attr.colspan]="col.colspan"
+                    [attr.rowspan]="col.rowspan"
+                    *ngFor="let col of row"
+                    class="custom-th text-white"
+                >
+                    {{ col.text }}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let group of data">
+                <!-- Nhóm -->
+                <tr class="custom-row">
+                    <td [attr.colspan]="28" class="custom-td font-semibold text-sm italic">{{ group.content }}</td>
+                </tr>
+                <!-- Nhân viên -->
+                <tr style="height: 1px" class="custom-row" *ngFor="let employee of group.list; index as i">
+                    <td class="custom-td">{{ i + 1 }}</td>
+                    <td class="custom-td" *ngFor="let infoEmployee of employee.content">{{ infoEmployee }}</td>
+                    <!-- Timekeeping -->
+                    <td *ngFor="let lv1Col of employee.listLv1Col" style="padding: 0px; height: inherit">
+                        <div style="height: 100%" class="custom-td flex flex-col">
+                            <tr class="grow custom-row w-full nested-row" *ngFor="let lv1Row of lv1Col">
+                                <div class="px-2">{{ lv1Row }}</div>
+                            </tr>
+                        </div>
+                    </td>
+                    <!-- List Checkin -->
+                    <ng-container>
+                        <tr *ngFor="let lv2Row of employee.listLv2Col; index as j">
+                            1
+                        </tr>
+                    </ng-container>
+                    <!-- <td *ngFor="let lv2Col of employee.listLv2Col" style="padding: 0px; height: inherit">
+                        <div style="height: 100%" class="custom-td flex flex-col">
+                            <tr class="grow custom-row w-full nested-row" *ngFor="let lv2Row of lv2Col">
+                                <div class="px-2">
+                                    {{ lv2Row }}
+                                </div>
+                            </tr>
+                        </div>
+                    </td> -->
+                </tr>
+                <!-- <tr class="custom-row"> -->
+                <!-- Nhân viên -->
+                <!-- <ng-container *ngFor="let employee of row.content.list; index as i"> -->
+                <!-- Info -->
+                <!-- <td *ngFor="let info of employee.contents" [attr.rowspan]="info.rowspan" class="custom-td">{{info.text}}</td> -->
+                <!-- Time Keeping -->
+                <!-- <ng-container *ngFor="let timekeeping of employee.list" class="custom-td">
+                            <td *ngFor="let time of timekeeping.contents" [attr.rowspan]="time.rowspan" class="custom-td">{{time.text}}</td>
+                        </ng-container> -->
+                <!-- List Checkin -->
+                <!-- </ng-container> -->
+                <!-- </tr> -->
+                <!-- List TimeKeeping -->
+            </ng-container>
+        </tbody>
+    </table>
+</div>

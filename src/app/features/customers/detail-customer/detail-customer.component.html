@@ -1,33 +1,74 @@
 <div>
-  <div class="w-full flex justify-between">
-    <div class="flex flex-col justify-center">
-      <span class="text-lg text-[#888] font-medium italic">{{title}}</span>
+    <div class="w-full flex justify-between">
+        <div class="flex flex-col justify-center">
+            <span class="text-lg text-[#888] font-medium italic">{{ title }}</span>
+        </div>
+        <div class="flex justify-end w-[250px]">
+            <button
+                *ngIf="isChoseUpdated == false"
+                mat-flat-button
+                (click)="isChoseUpdated = !isChoseUpdated"
+                class="bg-[#565869] text-white font-medium ml-button"
+            >
+                <i class="fa-solid fa-pen mr-1"></i>Sửa
+            </button>
+            <button
+                *ngIf="isChoseUpdated == true"
+                mat-flat-button
+                (click)="submit()"
+                class="bg-[#1891C9] text-white font-medium ml-button"
+            >
+                <i class="fa-solid fa-circle-check mr-1"></i>Lưu
+            </button>
+            <div *ngIf="data.archived == false">
+                <button
+                    *ngIf="requiredRoles('accountant') | async"
+                    type="button"
+                    mat-stroked-button
+                    (click)="archived()"
+                    class="text-[#565869] bg-white font-medium ml-button"
+                >
+                    <i class="fa-solid fa-trash mr-1"></i>Xóa
+                </button>
+            </div>
+            <button
+                type="button"
+                mat-stroked-button
+                (click)="close()"
+                class="text-[#565869] bg-white font-medium ml-button"
+            >
+                <i class="fa-solid fa-right-from-bracket mr-1"></i>Đóng
+            </button>
+        </div>
     </div>
-    <div class="flex justify-end w-[250px]">
-      <button *ngIf="isChoseUpdated == false" mat-flat-button (click)="isChoseUpdated = !isChoseUpdated" class="bg-[#565869] text-white font-medium ml-button"><i class="fa-solid fa-pen mr-1"></i>Sửa</button>
-      <button *ngIf="isChoseUpdated == true" mat-flat-button (click)="submit()" class="bg-[#1891C9] text-white font-medium ml-button"><i class="fa-solid fa-circle-check mr-1"></i>Lưu</button>
-      <div *ngIf="data.archived == false">
-        <button *ngIf="requiredRoles('accountant') | async" type="button" mat-stroked-button (click)="archived()" class="text-[#565869] bg-white font-medium ml-button"><i class="fa-solid fa-trash mr-1"></i>Xóa</button>
-      </div>
-      <button type="button" mat-stroked-button (click)="close()" class="text-[#565869] bg-white font-medium ml-button"><i class="fa-solid fa-right-from-bracket mr-1"></i>Đóng</button>
+    <hr class="my-2" />
+    <div *ngIf="loading == true" class="mt-10 text-center">
+        <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
     </div>
-  </div>
-  <hr class="my-2">
-  <div *ngIf="loading == true" class="mt-10 text-center">
-    <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
-  </div>
-  <div *ngIf="loading == false" class="w-full flex">
-    <div class="w-2/12 justify-between menu-collapse ">
-      <div class="w-full border-gray-400 hover:bg-zinc-200 py-2 px-1 font-medium text-base mb-1" (click)="tabs = 'Information'">
-        <i class="fa-regular fa-file-lines mr-2"></i><span>Thông tin chung</span>
-      </div>
-      <div class="w-full border-gray-400 hover:bg-zinc-200 py-2 px-1 font-medium text-base mb-1" (click)="tabs = 'Route'">
-        <i class="fa-solid fa-shuffle mr-2"></i><span>Tuyến bán hàng</span>
-      </div>
-    </div>
-    <div *ngIf="tabs == 'Information'" class="w-10/12">
-      <div class="w-8/12 px-2 py-4 text-base">
-        <!-- <div class="w-full flex mb-6">
+    <div *ngIf="loading == false" class="w-full flex">
+        <div class="w-2/12 justify-between menu-collapse">
+            <div
+                class="w-full border-gray-400 hover:bg-zinc-200 py-2 px-1 font-medium text-base mb-1"
+                (click)="tabs = 'Information'"
+            >
+                <i class="fa-regular fa-file-lines mr-2"></i><span>Thông tin chung</span>
+            </div>
+            <div
+                class="w-full border-gray-400 hover:bg-zinc-200 py-2 px-1 font-medium text-base mb-1"
+                (click)="tabs = 'Route'"
+            >
+                <i class="fa-solid fa-shuffle mr-2"></i><span>Tuyến bán hàng</span>
+            </div>
+            <div
+                class="w-full border-gray-400 hover:bg-zinc-200 py-2 px-1 font-medium text-base mb-1"
+                (click)="tabs = 'History'"
+            >
+                <i class="fa-solid fa-clock-rotate-left mr-2"></i><span>Lịch sử</span>
+            </div>
+        </div>
+        <div *ngIf="tabs == 'Information'" class="w-10/12">
+            <div class="w-8/12 px-2 py-4 text-base">
+                <!-- <div class="w-full flex mb-6">
             <div class="w-4/12 font-semibold">Kiểm tra trùng mã</div>
             <div class="w-8/12" *ngIf="isChoseUpdated === false"></div>
             <div class="w-8/12" *ngIf="isChoseUpdated === true">
@@ -35,209 +76,351 @@
             </div>
         </div> -->
 
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold flex flex-col justify-center">
-            Mã khách hàng
-          </div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.customerCode}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.customerCode">
-            <!-- <span class="w-96 rounded-sm flex"><input disabled="true" class="border border-solid border-r-0 disabled:bg-gray-300 border-black p-1 w-1/4 text-xs h-7" [(ngModel)]="buf.customerCode"><input [(ngModel)]="buf.customerPrefix" class="border border-solid border-l-0 border-black p-1 w-3/4 text-xs h-7"></span> -->
-          </div>
-        </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold flex flex-col justify-center">Mã khách hàng</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.customerCode }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.customerCode"
+                        />
+                        <!-- <span class="w-96 rounded-sm flex"><input disabled="true" class="border border-solid border-r-0 disabled:bg-gray-300 border-black p-1 w-1/4 text-xs h-7" [(ngModel)]="buf.customerCode"><input [(ngModel)]="buf.customerPrefix" class="border border-solid border-l-0 border-black p-1 w-3/4 text-xs h-7"></span> -->
+                    </div>
+                </div>
 
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold flex flex-col justify-center">Khách hàng</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.customerName}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.customerName">
-          </div>
-        </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold flex flex-col justify-center">Khách hàng</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.customerName }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.customerName"
+                        />
+                    </div>
+                </div>
 
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold flex flex-col justify-center">Nhóm khách hàng</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.customerGroup ? customer.customerGroup.customerGroupName: ''}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.customerGroupId">
-              <option *ngFor="let item of customerGroup" value="{{item.id}}">{{item.customerGroupName}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold flex flex-col justify-center">Loại khách hàng</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.customerType ? customer.customerType.customerTypeName: ''}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.customerTypeId">
-              <option *ngFor="let item of customerType" value="{{item.id}}">{{item.customerTypeName}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold flex flex-col justify-center">Trạng thái</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.status}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.status">
-              <option value="true">Hoạt động</option>
-              <option value="false">Không hoạt động</option>
-            </select>
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold flex flex-col justify-center">Kênh</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.channel ? customer.channel.channelName: ''}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.channelId">
-              <option *ngFor="let item of channel" value="{{item.id}}">{{item.channelName}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold flex flex-col justify-center">Địa chỉ</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.address}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.address">
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold flex flex-col justify-center">Địa chỉ giao hàng</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.deliveryAddress}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.deliveryAddress">
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold flex flex-col justify-center">Khu vực</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.area ? customer.area.areaName : ''}}</div>
-          <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
-            <input type="text" (focus)="showArea = !showArea" [(ngModel)]="areaName" (input)="searchArea()" [ngModelOptions]="{standalone: true}" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" placeholder="--- Chọn khu vực---"/>
-            <div *ngIf="showArea" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
-              <div *ngFor="let item of areaTemp" class="px-3 py-1 hover:bg-gray-100 cursor-pointer" (click)="selectArea(item)">{{item.areaName}}</div>
-            </div>
-            <!-- <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.areaId">
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold flex flex-col justify-center">Nhóm khách hàng</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">
+                        {{ customer.customerGroup ? customer.customerGroup.customerGroupName : '' }}
+                    </div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <select
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.customerGroupId"
+                        >
+                            <option *ngFor="let item of customerGroup" value="{{ item.id }}">
+                                {{ item.customerGroupName }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold flex flex-col justify-center">Loại khách hàng</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">
+                        {{ customer.customerType ? customer.customerType.customerTypeName : '' }}
+                    </div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <select
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.customerTypeId"
+                        >
+                            <option *ngFor="let item of customerType" value="{{ item.id }}">
+                                {{ item.customerTypeName }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold flex flex-col justify-center">Trạng thái</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.status }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <select
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.status"
+                        >
+                            <option value="true">Hoạt động</option>
+                            <option value="false">Không hoạt động</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold flex flex-col justify-center">Kênh</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">
+                        {{ customer.channel ? customer.channel.channelName : '' }}
+                    </div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <select
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.channelId"
+                        >
+                            <option *ngFor="let item of channel" value="{{ item.id }}">{{ item.channelName }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold flex flex-col justify-center">Địa chỉ</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.address }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.address"
+                        />
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold flex flex-col justify-center">Địa chỉ giao hàng</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.deliveryAddress }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.deliveryAddress"
+                        />
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold flex flex-col justify-center">Khu vực</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">
+                        {{ customer.area ? customer.area.areaName : '' }}
+                    </div>
+                    <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
+                        <input
+                            type="text"
+                            (focus)="showArea = !showArea"
+                            [(ngModel)]="areaName"
+                            (input)="searchArea()"
+                            [ngModelOptions]="{ standalone: true }"
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            placeholder="--- Chọn khu vực---"
+                        />
+                        <div
+                            *ngIf="showArea"
+                            class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20"
+                        >
+                            <div
+                                *ngFor="let item of areaTemp"
+                                class="px-3 py-1 hover:bg-gray-100 cursor-pointer"
+                                (click)="selectArea(item)"
+                            >
+                                {{ item.areaName }}
+                            </div>
+                        </div>
+                        <!-- <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.areaId">
               <option *ngFor="let item of area" value="{{item.id}}">{{item.areaName}}</option>
             </select> -->
-          </div>
-        </div>
-      </div>
-      <hr class="mx-2">
-      <div class="w-8/12 px-2 py-4 text-base">
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold flex flex-col justify-center">Tỉnh/Thành phố</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.province}}</div>
-          <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
-            <input disabled type="text" [(ngModel)]="buf.province" (input)="searchProvince()" [ngModelOptions]="{standalone: true}" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" placeholder="--- Chọn tỉnh thành ---"/>
-            <div *ngIf="showProvince" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
-              <div *ngFor="let item of provinceTemp" class="px-3 py-1 hover:bg-gray-100 cursor-pointer" (click)="selectProvince(item)">{{item.name}}</div>
+                    </div>
+                </div>
             </div>
-            <!-- <select disabled #province class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.province" (change)="getDistrict(province.value)">
+            <hr class="mx-2" />
+            <div class="w-8/12 px-2 py-4 text-base">
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold flex flex-col justify-center">Tỉnh/Thành phố</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.province }}</div>
+                    <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
+                        <input
+                            disabled
+                            type="text"
+                            [(ngModel)]="buf.province"
+                            (input)="searchProvince()"
+                            [ngModelOptions]="{ standalone: true }"
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            placeholder="--- Chọn tỉnh thành ---"
+                        />
+                        <div
+                            *ngIf="showProvince"
+                            class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20"
+                        >
+                            <div
+                                *ngFor="let item of provinceTemp"
+                                class="px-3 py-1 hover:bg-gray-100 cursor-pointer"
+                                (click)="selectProvince(item)"
+                            >
+                                {{ item.name }}
+                            </div>
+                        </div>
+                        <!-- <select disabled #province class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.province" (change)="getDistrict(province.value)">
               <option disabled value=""> --- Chọn nhóm tỉnh/thành phố --- </option>
               <option *ngFor="let item of listProvinces" value="{{item.name}}">{{item.name}}</option>
             </select> -->
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold">Quận/Huyện</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.district}}</div>
-          <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
-            <input type="text" (click)="showDistrict = !showDistrict" [(ngModel)]="buf.district" (input)="searchDistrict()" [ngModelOptions]="{standalone: true}" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" placeholder="--- Chọn quận/huyện ---"/>
-            <div *ngIf="showDistrict" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
-              <div *ngFor="let item of districtTemp" class="px-3 py-1 hover:bg-gray-100 cursor-pointer" (click)="selectDistrict(item)">{{item.name}}</div>
-            </div>
-            <!-- <select #district class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.district" (change)="getWard(district.value)">
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold">Quận/Huyện</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.district }}</div>
+                    <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
+                        <input
+                            type="text"
+                            (click)="showDistrict = !showDistrict"
+                            [(ngModel)]="buf.district"
+                            (input)="searchDistrict()"
+                            [ngModelOptions]="{ standalone: true }"
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            placeholder="--- Chọn quận/huyện ---"
+                        />
+                        <div
+                            *ngIf="showDistrict"
+                            class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20"
+                        >
+                            <div
+                                *ngFor="let item of districtTemp"
+                                class="px-3 py-1 hover:bg-gray-100 cursor-pointer"
+                                (click)="selectDistrict(item)"
+                            >
+                                {{ item.name }}
+                            </div>
+                        </div>
+                        <!-- <select #district class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.district" (change)="getWard(district.value)">
               <option disabled value=""> --- Chọn nhóm quận huyện --- </option>
               <option *ngFor="let item of listDistricts" value="{{item.name}}">{{item.name}}</option>
             </select> -->
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold">Xã/Phường</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.ward}}</div>
-          <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
-            <input type="text" (click)="showWard = !showWard" [(ngModel)]="buf.ward" (input)="searchWard()" [ngModelOptions]="{standalone: true}" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" placeholder="--- Chọn xã/phường ---"/>
-            <div *ngIf="showWard" class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20">
-              <div *ngFor="let item of wardTemp" class="px-3 py-1 hover:bg-gray-100 cursor-pointer" (click)="selectWard(item)">{{item.name}}</div>
-            </div>
-            <!-- <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.ward">
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold">Xã/Phường</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.ward }}</div>
+                    <div class="w-8/12 relative" *ngIf="isChoseUpdated === true">
+                        <input
+                            type="text"
+                            (click)="showWard = !showWard"
+                            [(ngModel)]="buf.ward"
+                            (input)="searchWard()"
+                            [ngModelOptions]="{ standalone: true }"
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            placeholder="--- Chọn xã/phường ---"
+                        />
+                        <div
+                            *ngIf="showWard"
+                            class="absolute top-full bg-gray-50 w-full h-fit max-h-[200px] overflow-y-scroll z-20"
+                        >
+                            <div
+                                *ngFor="let item of wardTemp"
+                                class="px-3 py-1 hover:bg-gray-100 cursor-pointer"
+                                (click)="selectWard(item)"
+                            >
+                                {{ item.name }}
+                            </div>
+                        </div>
+                        <!-- <select class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.ward">
               <option disabled value=""> --- Chọn nhóm xã phường --- </option>
               <option *ngFor="let item of listWards" value="{{item.name}}">{{item.name}}</option>
             </select> -->
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold">Sinh nhật</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.dob}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input type="date" class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.dob">
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold">Tên Chủ Quầy/Shop</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.contactName}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.contactName">
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold">Chức vụ</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.position}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.position">
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold">SĐT</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.phone}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.phone">
-          </div>
-        </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold">Email</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.email}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.email">
-          </div>
-        </div>
-      </div>
-      <hr class="mx-2">
-      <div class="w-8/12 px-2 py-4 text-base">
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold">Hình ảnh</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">
-            <div class="relative box uploadImg bg-slate-100 w-full h-[200px] flex justify-center items-center rounded-lg box-border overflow-hidden">
-              <img [src]="customer.avatar" alt="" class="absolute w-full object-cover">
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold">Sinh nhật</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.dob }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            type="date"
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.dob"
+                        />
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold">Tên Chủ Quầy/Shop</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.contactName }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.contactName"
+                        />
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold">Chức vụ</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.position }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.position"
+                        />
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold">SĐT</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.phone }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.phone"
+                        />
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold">Email</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.email }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.email"
+                        />
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <div
-              class="relative box uploadImg bg-slate-100 w-full h-[200px] flex justify-center items-center rounded-lg box-border overflow-hidden">
-              <img [src]="buf.avatar" alt="" class="absolute w-full object-cover">
-              <i *ngIf="buf.avatar == '' || buf.avatar == null" class="fa-solid fa-circle-plus text-2xl text-gray-600"></i>
-              <input class="upload-file" type="file" id="imgProduct1" id="img1"
-                (change)="upload($event)">
-              <i class="fa-regular fa-circle-xmark absolute text-2xl top-0 right-1 z-20 text-gray-600 cursor-pointer"
-                id="imgProduct1" *ngIf="buf.avatar != '' && buf.avatar != null" (click)="buf.avatar = ''"></i>
+            <hr class="mx-2" />
+            <div class="w-8/12 px-2 py-4 text-base">
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold">Hình ảnh</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">
+                        <div
+                            class="relative box uploadImg bg-slate-100 w-full h-[200px] flex justify-center items-center rounded-lg box-border overflow-hidden"
+                        >
+                            <img [src]="customer.avatar" alt="" class="absolute w-full object-cover" />
+                        </div>
+                    </div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <div
+                            class="relative box uploadImg bg-slate-100 w-full h-[200px] flex justify-center items-center rounded-lg box-border overflow-hidden"
+                        >
+                            <img [src]="buf.avatar" alt="" class="absolute w-full object-cover" />
+                            <i
+                                *ngIf="buf.avatar == '' || buf.avatar == null"
+                                class="fa-solid fa-circle-plus text-2xl text-gray-600"
+                            ></i>
+                            <input
+                                class="upload-file"
+                                type="file"
+                                id="imgProduct1"
+                                id="img1"
+                                (change)="upload($event)"
+                            />
+                            <i
+                                class="fa-regular fa-circle-xmark absolute text-2xl top-0 right-1 z-20 text-gray-600 cursor-pointer"
+                                id="imgProduct1"
+                                *ngIf="buf.avatar != '' && buf.avatar != null"
+                                (click)="buf.avatar = ''"
+                            ></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold">Hạn mức công nợ</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.debtLimit }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.debtLimit"
+                        />
+                    </div>
+                </div>
+                <div class="w-full flex mb-6">
+                    <div class="w-4/12 font-semibold">TK Tiền/Chi phí/Nợ</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === false">{{ customer.cashAcc }}</div>
+                    <div class="w-8/12" *ngIf="isChoseUpdated === true">
+                        <input
+                            class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7"
+                            [(ngModel)]="buf.cashAcc"
+                        />
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold">Hạn mức công nợ</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.debtLimit}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.debtLimit">
-          </div>
+        <div *ngIf="tabs == 'Route'" class="w-10/12">
+            <app-change-route [id]="data.id"></app-change-route>
         </div>
-        <div class="w-full flex mb-6">
-          <div class="w-4/12 font-semibold">TK Tiền/Chi phí/Nợ</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === false">{{customer.cashAcc}}</div>
-          <div class="w-8/12" *ngIf="isChoseUpdated === true">
-            <input class="border border-solid border-black p-1 rounded-sm w-96 text-xs h-7" [(ngModel)]="buf.cashAcc">
-          </div>
+        <div *ngIf="tabs == 'History'" class="w-10/12">
+            <customer-history></customer-history>
         </div>
-      </div>
     </div>
-    <div *ngIf="tabs == 'Route'" class="w-10/12">
-      <app-change-route [id]="data.id"></app-change-route>
-    </div>
-  </div>
 </div>

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyField, FormlyFieldConfig } from '@ngx-formly/core';
-import { of, switchMap, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, of, startWith, switchMap, tap } from 'rxjs';
 import { Status } from '../../../models/return';
 import * as moment from 'moment';
 import { ReturnFormService } from '../../../services/return-form.service';
+import { getField } from '@ngx-formly/core/lib/utils';
 
 @Component({
     selector: 'app-create-return-form',
@@ -41,25 +42,43 @@ export class CreateReturnFormComponent implements OnInit {
                         // options: status,
                     },
                 },
+
+                // {
+                //     key: 'customerCode',
+                //     // type: 'product-select',
+                //     type: 'autocomplete-formly',
+                //     className: 'flex-1',
+                //     defaultValue: null,
+                //     templateOptions: {
+                //         label: 'Mã khách hàng',
+                //         placeholder: 'Mã khách hàng',
+                //         required: true,
+                //         appearance: 'outline',
+                //         valueProp: (option: any) => option,
+                //         compareWith: (o1: any, o2: any) => o1.value === o2.value,
+                //         options: this.returnFormService.getAllCustomers(),
+                //     },
+                // },
                 {
                     key: 'customerCode',
                     // type: 'product-select',
-                    type: 'autocomplete-formly',
+                    type: 'auto-search',
                     className: 'flex-1',
                     defaultValue: null,
                     templateOptions: {
                         label: 'Mã khách hàng',
                         placeholder: 'Mã khách hàng',
                         required: true,
-                        appearance: 'outline',
-                        valueProp: (option: any) => option,
-                        compareWith: (o1: any, o2: any) => o1.value === o2.value,
-                        options: this.returnFormService.getAllCustomers(),
+                        valueProp: (option: any) => option.label,
+                        search: (text: string) => {
+                            return this.returnFormService.getAllCustomers(text);
+                        },
                         change: (field: FormlyFieldConfig, $event: any) => {
                             field.form!.get('customerName')?.setValue(field!.formControl!.value.customerName);
                             field.form!.get('address')?.setValue(field!.formControl!.value.address);
                             field.form!.get('phone')?.setValue(field!.formControl!.value.phone);
                         },
+                        appearance: 'outline',
                     },
                 },
                 {
@@ -75,19 +94,6 @@ export class CreateReturnFormComponent implements OnInit {
                         // disabled: true,
                         appearance: 'outline',
                         // options: this.productDialogService.getAllBrands(),
-                    },
-                    hooks: {
-                        onInit: (field: FormlyFieldConfig) => {
-                            field.form?.get('customerCode')?.valueChanges.pipe(
-                                tap((customerId) => {
-                                    field.formControl?.setValue(
-                                        this.returnFormService.filterCustomerById(customerId).subscribe((result) => {
-                                            console.log(result);
-                                        }),
-                                    );
-                                }),
-                            );
-                        },
                     },
                 },
             ],

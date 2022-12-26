@@ -12,6 +12,7 @@ export interface Warehouse {
   createdDate: string;
   lastModifiedBy: string;
   lastModifiedDate: string;
+  warehouseEmployee?: IAccountant[];
 }
 
 export interface Employee {
@@ -28,4 +29,17 @@ export interface UnitTreeGroup {
   name: string;
   orgName: any;
   fullOrgName: any;
+}
+
+export class IAccountant {
+    accountant: Accountant;
+}
+
+export class Accountant {
+    id: string;
+    employeeCode: string;
+    employeeName: string;
+    email: string;
+    employeeTitle: string;
+    avatar?: string;
 }

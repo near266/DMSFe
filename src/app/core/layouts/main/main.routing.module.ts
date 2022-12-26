@@ -74,6 +74,13 @@ const routes: Routes = [
                 loadChildren: () =>
                     import('./../../../features/order-manager/order-manager.module').then((m) => m.OrderManagerModule),
             },
+            {
+                path: 'reportVisit',
+                loadChildren: () => import('./../../../features/visit-report/visit-report.module').then((m) => m.VisitReportModule),
+            },
+            {
+                path: 'photo',
+                loadChildren: () => import('./../../../features/photos/photos.module').then(m => m.PhotosModule) },
         ],
     },
 ];

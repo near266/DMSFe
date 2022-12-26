@@ -1,0 +1,19 @@
+<div class="table-wrapper font-medium">
+    <table class="block custom-table text-black dark:text-gray-400">
+        <thead #header class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full">
+            <th class="py-2 px-5 custom-th" *ngFor="let heading of headers">{{ heading }}</th>
+        </thead>
+        <tbody>
+            <tr class="custom-row" *ngFor="let row of rows" [attr.colspan]="row.colspan">
+                <!-- has colspan -->
+                <ng-container *ngIf="row.colspan">
+                    <td class="custom-td" [attr.colspan]="row.colspan" *ngFor="let col of row.listCol">{{ col }}</td>
+                </ng-container>
+                <!-- not has colspan -->
+                <ng-container *ngIf="!row.colspan">
+                    <td class="custom-td" *ngFor="let col of row.listCol">{{ col }}</td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+</div>

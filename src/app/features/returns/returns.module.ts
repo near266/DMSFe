@@ -22,6 +22,7 @@ import { CreateReturnFromOrderComponent } from './components/create-return/creat
 import { ReturnOrderInfoComponent } from './components/create-return/create-return-from-order/return-order-info/return-order-info.component';
 import { ReturnOrderProductsComponent } from './components/create-return/create-return-from-order/return-order-products/return-order-products.component';
 import { ReturnOrderPromotionComponent } from './components/create-return/create-return-from-order/return-order-promotion/return-order-promotion.component';
+import { NgSearchComponent } from './types/ng-search.type';
 import { NgSelectFormlyComponent } from './types/ng-select.type';
 import { ReturnsSidenavComponent } from './components/returns-sidenav/returns-sidenav.component';
 import { SideMenuModule } from 'src/app/core/shared/modules/side-menu';
@@ -30,6 +31,7 @@ import { ReturnsTableFacade } from './services/facade/returns-table.facade';
 @NgModule({
     providers: [ReturnsTableFacade],
     declarations: [
+        NgSearchComponent,
         ReturnsComponent,
         ReturnsPaginationComponent,
         ReturnsTableComponent,
@@ -54,6 +56,10 @@ import { ReturnsTableFacade } from './services/facade/returns-table.facade';
                 {
                     name: 'autocomplete-formly',
                     component: NgSelectFormlyComponent,
+                },
+                {
+                    name: 'auto-search',
+                    component: NgSearchComponent,
                 },
             ],
         }),

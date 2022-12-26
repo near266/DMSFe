@@ -161,13 +161,18 @@ export class PurchaseLogicService {
             .open(`Bạn có muốn in ${body.listId.length} bản ghi đã chọn không?`, ['In', 'Hủy'])
             .subscribe((data) => {
                 if (data === 'In') {
-                    this.purchaseService.print(body).subscribe(
+                    this.purchaseService.print006(body).subscribe(
                         (data) => {
                             var blob = new Blob([data], {
-                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                type: 'application/pdf',
                             });
                             const blobUrl = window.URL.createObjectURL(blob);
-                            window.open(blobUrl);
+                            const iframe = document.createElement('iframe');
+                            iframe.style.display = 'none';
+                            iframe.src = blobUrl;
+                            document.body.appendChild(iframe);
+                            iframe.contentWindow?.print();
+                            // window.open(blobUrl);
                         },
                         (err) => {
                             this.snackbar.failureSnackBar();
@@ -183,13 +188,18 @@ export class PurchaseLogicService {
             .open(`Bạn có muốn in ${body.filter.pageSize} bản ghi đã chọn không?`, ['In', 'Hủy'])
             .subscribe((data) => {
                 if (data === 'In') {
-                    this.purchaseService.print(body).subscribe(
+                    this.purchaseService.print006(body).subscribe(
                         (data) => {
                             var blob = new Blob([data], {
-                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                type: 'application/pdf',
                             });
                             const blobUrl = window.URL.createObjectURL(blob);
-                            window.open(blobUrl);
+                            const iframe = document.createElement('iframe');
+                            iframe.style.display = 'none';
+                            iframe.src = blobUrl;
+                            document.body.appendChild(iframe);
+                            iframe.contentWindow?.print();
+                            // window.open(blobUrl);
                         },
                         (err) => {
                             this.snackbar.failureSnackBar();
@@ -207,7 +217,7 @@ export class PurchaseLogicService {
             listId: listId,
             type: 2,
         };
-        this.purchaseService.print(body).subscribe(
+        this.purchaseService.print006(body).subscribe(
             (data) => {
                 const blob = new Blob([data], {
                     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

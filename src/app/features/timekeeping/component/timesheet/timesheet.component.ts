@@ -4,7 +4,9 @@ import { Title } from '@angular/platform-browser';
 import { Config } from 'src/app/core/model/Config';
 import { EmployeeService } from 'src/app/core/services/employee.service';
 import { Days } from '../../models/Days';
+import { TimeSheet } from '../../models/TimeSheet';
 import { DateService } from '../../services/date.service';
+import { TimeSheetService } from '../../services/time-sheet.service';
 
 @Component({
   selector: 'app-timesheet',
@@ -18,6 +20,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
   loading = false;
   hasEmployee = false;
   listGroup: any[] = [];
+  timeSheets: TimeSheet[] = [];
 
   days: Days[] = [];
 
@@ -56,7 +59,8 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
     private datePipe: DatePipe,
     private title: Title,
     private dateService: DateService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private timeSheetService: TimeSheetService
   ) { }
 
   ngOnInit(): void {
@@ -71,8 +75,11 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
       if(data) {
         this.listGroup = data;
       }
-
     });
+    this.timeSheetService.getEmployee();
+    this.timeSheetService.timeSheets$.subscribe(data => {
+        this.timeSheets = data;
+    })
   }
 
   openSideBar() {

@@ -137,7 +137,9 @@ export class UserTreeViewComponent implements OnInit {
               menubar: this.menubar_group,
               hasChildren: true
             };
-            if(nodes.type == 0) node.menubar = this.menubar_unit;
+            if(nodes.type == 0) {
+              nodes.menubar = this.menubar_unit;
+            }
             children.push(nodes);
           });
         }

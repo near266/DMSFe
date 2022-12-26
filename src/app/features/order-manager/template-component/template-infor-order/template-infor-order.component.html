@@ -71,7 +71,7 @@
                         class="fa-regular fa-copy translate-y-[-45%] mr-2"></i>
                     <mat-select formControlName="groupId" [disabled]="!(isEdit$ | async)">
                         <mat-option
-                            (click)="groupCoppy = group.name"
+                            (click)="groupCoppy = group.name; setListRouteAndEmployee(group.id)"
                             *ngFor="let group of listGroup$ | async"
                             [value]="group.id">
                             {{ group.name }}

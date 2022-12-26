@@ -1,8 +1,16 @@
 <div class="flex w-96 items-center">
-  <div *ngIf="props.required" class="text-red-500 mr-4">*</div>
-  <div *ngIf="!props?.required" class="text-transparent mr-4">*</div>
-  <input [placeholder]="!props.disabled?props.placeholder:''" class="flex-1 rounded px-2 py-1 border-2  border-solid"
-    type="text" [disabled]="props.disabled || false"
-    [ngClass]="{'border-red-600 ': showError,'bg-gray-100 border-gray-200':props.disabled, 'border-gray-600':!showError}"
-    [formControl]="formControl" [formlyAttributes]="field" />
+    <div *ngIf="props.required" class="text-red-500 mr-4">*</div>
+    <div *ngIf="!props?.required" class="text-transparent mr-4">*</div>
+    <input
+        [placeholder]="!props.disabled ? props.placeholder : ''"
+        class="flex-1 rounded px-2 py-1 border-2 border-solid"
+        [type]="props?.type || 'text'"
+        [disabled]="props.disabled || false"
+        [ngClass]="{
+            'border-red-600 ': showError,
+            'bg-gray-100 border-gray-200': props.disabled,
+            'border-gray-600': !showError
+        }"
+        [formControl]="formControl"
+        [formlyAttributes]="field" />
 </div>

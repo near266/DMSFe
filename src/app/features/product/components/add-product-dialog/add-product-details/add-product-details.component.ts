@@ -71,6 +71,7 @@ export class AddProductDetailsComponent implements OnInit {
         },
         {
             key: 'stt',
+            parsers: [(value: string) => parseInt(value)],
             type: 'product-input',
             defaultValue: null,
             templateOptions: {
@@ -83,7 +84,6 @@ export class AddProductDetailsComponent implements OnInit {
             key: 'brandId',
             type: 'product-select',
             defaultValue: null,
-
             templateOptions: {
                 label: 'Nhãn hiệu',
                 options: this.productDialogService.getAllBrands(),

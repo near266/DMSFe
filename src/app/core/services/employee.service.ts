@@ -17,6 +17,15 @@ export class EmployeeService {
       })
       .pipe(map((response: any) => response));
   }
+  GetAllEmployeePost(title: string, page: any, pageSize: any): Observable<any> {
+    return this.http
+      .post(gateway_url + '/Employee/SearchAllEmployeePost', {
+        title: title,
+        page: page,
+        pagesize: pageSize
+      })
+      .pipe(map((response: any) => response));
+  }
   SearchEmployee(body: any): Observable<any> {
     return this.http
       .post(gateway_url + '/Employee/SearchAllEmployeePost', body)
@@ -104,9 +113,23 @@ export class EmployeeService {
     return this.http.delete(gateway_url + '/DeleteEmployeeUnitTree?EmployeeId=' + EmployeeId + '&UnitTreeGroupId=' + UnitTreeGroupId).pipe(map((response: any) => response));
   }
 
+  MoveEmployee(body: any): Observable<any> {
+    return this.http.delete(gateway_url + '/MoveEmployee', {body: body}).pipe(map((response: any) => response));
+  }
+
   SearchEmployeeInGroup(GroupId: string, page: number, pageSize: number): Observable<any> {
     const body = {
       GroupId: GroupId,
+      page: page,
+      pageSize: pageSize
+    }
+    return this.http.post(gateway_url + '/SearchEmployeeInGroupPost', body).pipe(map((response: any) => response));
+  }
+
+  SearchEmployeeInGroupPost(title: string, GroupId: string, page: number, pageSize: number): Observable<any> {
+    const body = {
+      GroupId: GroupId,
+      title: title,
       page: page,
       pageSize: pageSize
     }

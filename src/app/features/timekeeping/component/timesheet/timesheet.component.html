@@ -76,12 +76,12 @@
                 <th class="custom-th">Ngày công</th>
               </tr>
             </thead>
-            <tbody *ngFor="let item of listGroup">
+            <tbody *ngFor="let item of timeSheets">
                 <tr class="custom-row">
-                  <td *ngIf="days.length + 8 == 38" class="custom-td border-b" colspan="38">{{item.name}}</td>
-                  <td *ngIf="days.length + 8 == 39" class="custom-td border-b" colspan="39">{{item.name}}</td>
-                  <td *ngIf="days.length + 8 == 37" class="custom-td border-b" colspan="37">{{item.name}}</td>
-                  <td *ngIf="days.length + 8 == 36" class="custom-td border-b" colspan="36">{{item.name}}</td>
+                  <td *ngIf="days.length + 8 == 38" class="custom-td border-b" colspan="38">{{item.employee.employeeName}}</td>
+                  <td *ngIf="days.length + 8 == 39" class="custom-td border-b" colspan="39">{{item.employee.employeeName}}</td>
+                  <td *ngIf="days.length + 8 == 37" class="custom-td border-b" colspan="37">{{item.employee.employeeName}}</td>
+                  <td *ngIf="days.length + 8 == 36" class="custom-td border-b" colspan="36">{{item.employee.employeeName}}</td>
                   <td class="custom-td border-b" rowspan="7">0</td>
                 </tr>
                 <tr>

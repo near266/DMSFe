@@ -217,13 +217,18 @@ export class SaleLogicService {
             .open(`Bạn có muốn in ${listIdSelected.length} bản ghi đã chọn không?`, ['In', 'Hủy'])
             .subscribe((data) => {
                 if (data === 'In') {
-                    this.saleReceiptService.print(body).subscribe(
+                    this.saleReceiptService.print006(body).subscribe(
                         (data) => {
                             var blob = new Blob([data], {
-                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                type: 'application/pdf',
                             });
                             const blobUrl = window.URL.createObjectURL(blob);
-                            window.open(blobUrl);
+                            const iframe = document.createElement('iframe');
+                            iframe.style.display = 'none';
+                            iframe.src = blobUrl;
+                            document.body.appendChild(iframe);
+                            iframe.contentWindow?.print();
+                            // window.open(blobUrl);
                         },
                         (err) => {
                             this.snackbar.failureSnackBar();
@@ -242,6 +247,65 @@ export class SaleLogicService {
         bodySent.filter.pageSize = total;
         bodySent.filter.page = 1;
         this.confirmService.open(`Bạn có muốn in ${total} bản ghi đã chọn không?`, ['In', 'Hủy']).subscribe((data) => {
+            if (data === 'In') {
+                this.saleReceiptService.print006(bodySent).subscribe(
+                    (data) => {
+                        var blob = new Blob([data], {
+                            type: 'application/pdf',
+                        });
+                        const blobUrl = window.URL.createObjectURL(blob);
+                        const iframe = document.createElement('iframe');
+                        iframe.style.display = 'none';
+                        iframe.src = blobUrl;
+                        document.body.appendChild(iframe);
+                        iframe.contentWindow?.print();
+                        // window.open(blobUrl);
+                    },
+                    (err) => {
+                        this.snackbar.failureSnackBar();
+                    },
+                );
+            } else {
+            }
+        });
+    }
+
+    printExcel(listIdSelected: string[]) {
+        let body: any;
+        body = {
+            filter: null,
+            listId: listIdSelected,
+            type: 2,
+        };
+        this.confirmService
+            .open(`Bạn có muốn in excel ${listIdSelected.length} bản ghi đã chọn không?`, ['In', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'In') {
+                    this.saleReceiptService.print(body).subscribe(
+                        (data) => {
+                            var blob = new Blob([data], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            });
+                            const blobUrl = window.URL.createObjectURL(blob);
+                            window.open(blobUrl);
+                        },
+                        (err) => {
+                            this.snackbar.failureSnackBar();
+                        },
+                    );
+                }
+            });
+    }
+    
+    printExcelWithFilter(bodyFilter: string[], total: number) {
+        let bodySent: any;
+        bodySent = {
+            filter: bodyFilter,
+            type: 1,
+        };
+        bodySent.filter.pageSize = total;
+        bodySent.filter.page = 1;
+        this.confirmService.open(`Bạn có muốn in excel ${total} bản ghi đã chọn không?`, ['In', 'Hủy']).subscribe((data) => {
             if (data === 'In') {
                 this.saleReceiptService.print(bodySent).subscribe(
                     (data) => {

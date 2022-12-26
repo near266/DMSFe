@@ -22,6 +22,10 @@ module.exports = {
               'blue-text': '#1d214e'
 
             },
+            gridTemplateColumns: {
+              '12': 'repeat(12, minmax(0, 1fr))',
+              '18': 'repeat(18, minmax(0, 1fr))'
+            }
         },
     },
     plugins: [],
