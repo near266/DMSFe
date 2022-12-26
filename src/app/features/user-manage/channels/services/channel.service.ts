@@ -55,7 +55,7 @@ export class ChannelService {
     return this.http.put<Channel[]>(this.Point + '/update', body);
   }
 
-  searchChannel(keyword: any): Observable<Channel[]> {
+  searchChannel(keyword: any): Observable<any> {
     return this.http.post<Channel[]>(this.Point + '/search', keyword);
   }
 

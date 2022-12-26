@@ -54,8 +54,8 @@ export class CustomerTypeService {
     return this.http.put<CustomerType[]>(this.Point + '/update', body);
   }
 
-  searchCustomerType(keyword: any): Observable<CustomerType[]> {
-    return this.http.post<CustomerType[]>(this.Point + '/search', keyword);
+  searchCustomerType(keyword: any): Observable<any> {
+    return this.http.post(this.Point + '/search', keyword);
   }
 
   del(body: any): Observable<any> {

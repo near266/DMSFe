@@ -54,7 +54,7 @@ export class CustomerGroupsService {
     return this.http.put<CustomerGroup[]>(this.Point + '/update', body);
   }
 
-  searchCustomerGroup(keyword: any): Observable<CustomerGroup[]> {
+  searchCustomerGroup(keyword: any): Observable<any> {
     return this.http.post<CustomerGroup[]>(this.Point + '/search', keyword);
   }
 

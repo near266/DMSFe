@@ -148,7 +148,7 @@ export class DetailSupplierComponent implements OnInit {
                 },
             });
         } else {
-            // console.log(brand);
+            // console.log(supplier);
             this.supplierService.updateSupplier(supplier).subscribe({
                 next: (res) => {
                     this.snackbar.openSnackbar('Sửa nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);

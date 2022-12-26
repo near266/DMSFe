@@ -85,10 +85,14 @@ export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         this.logic.getListPhoto();
         this.logic.photos$.subscribe((data) => {
-            this.photo = data;
+            Promise.resolve().then(() => {
+                this.photo = data;
+            })
         });
         this.logic.totalPhoto$.subscribe((data) => {
-            this.totalCount = data;
+            Promise.resolve().then(() => {
+                this.totalCount = data;
+            })
         });
     }
 
