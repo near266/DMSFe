@@ -1,17 +1,28 @@
 <div class="table-wrapper font-medium">
     <table class="block custom-table text-black dark:text-gray-400">
-        <thead #header class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full">
+        <thead
+            #header
+            class="z-10 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 w-full"
+        >
             <th class="py-2 px-5 custom-th" *ngFor="let heading of headers">{{ heading }}</th>
         </thead>
-        <tbody>
+        <tbody class="z-0">
             <tr class="custom-row" *ngFor="let row of rows" [attr.colspan]="row.colspan">
                 <!-- has colspan -->
                 <ng-container *ngIf="row.colspan">
-                    <td class="custom-td" [attr.colspan]="row.colspan" *ngFor="let col of row.listCol">{{ col }}</td>
+                    <td
+                        class="custom-td {{ row.addClass }}"
+                        [attr.colspan]="row.colspan"
+                        *ngFor="let col of row.listCol"
+                    >
+                        {{ col.text }}
+                    </td>
                 </ng-container>
                 <!-- not has colspan -->
                 <ng-container *ngIf="!row.colspan">
-                    <td class="custom-td" *ngFor="let col of row.listCol">{{ col }}</td>
+                    <td *ngFor="let col of row.listCol" class="custom-td {{ row.addClass }} {{ col.addClass }}">
+                        {{ col.text }}
+                    </td>
                 </ng-container>
             </tr>
         </tbody>

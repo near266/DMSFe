@@ -30,6 +30,12 @@ export class TemplateTableNormalComponent implements OnInit, AfterViewInit {
 }
 
 export class CRow {
-    listCol: string[];
+    listCol: CTd[];
     colspan?: number;
+    addClass?: string;
+}
+
+export class CTd {
+    text?: string;
+    addClass?: string;
 }

@@ -16,6 +16,7 @@ export const customer_type_url = api_gateway_url + '/CustomerType';
 export const channel_url = api_gateway_url + '/Channel';
 export const area_url = api_gateway_url + '/Area';
 export const check_in_url = api_gateway_url + '/CheckIn';
+export const history_url = api_gateway_url + '/HistoryLog';
 
 export const upload_url = environment.UPLOAD_URL;
 export const gateway_img_url = upload_url + '/gateway';
