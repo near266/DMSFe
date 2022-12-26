@@ -25,7 +25,7 @@ export class UnitsComponent implements OnInit {
   keywords: '';
   request: any = {
     keyword: '',
-    status: true,
+    status: null,
     page: 1,
     pageSize: 30
   };
@@ -111,6 +111,7 @@ export class UnitsComponent implements OnInit {
   }
 
   Select(e: string) {
+    // console.log(this.request);
     if(e.includes('Tất cả')) {
       this.request.keyword = this.keywords;
       this.request.status = null;

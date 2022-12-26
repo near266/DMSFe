@@ -24,6 +24,7 @@ export class SuppliersComponent implements OnInit {
   keywords: '';
   request: any = {
     keyword: '',
+    status: null,
     page: 1,
     pageSize: 30
   };
@@ -110,6 +111,7 @@ export class SuppliersComponent implements OnInit {
   }
 
   Select(e: string) {
+    // console.log(this.request);
     if(e.includes('Tất cả')) {
       this.request.keyword = this.keywords;
       this.request.status = null;
@@ -236,9 +238,9 @@ export class SuppliersComponent implements OnInit {
       title: 'Trạng thái',
       leftTitleIcon: 'fa-filter',
       listMenuPosition: [
-        { title: 'Tất cả', leftIcon: '', value: 'all' },
-        { title: 'Mở', leftIcon: '', value: 'emp' },
-        { title: 'Khóa', leftIcon: '', value: 'emp' },
+        { title: 'Tất cả', leftIcon: '', value: 'Tất cả' },
+        { title: 'Hoạt động', leftIcon: '', value: 'Hoạt động' },
+        { title: 'Khóa', leftIcon: '', value: 'Khóa' },
       ]
     }
   ]

@@ -55,7 +55,7 @@ export class AreaService {
     return this.http.put<Area[]>(this.Point + '/update', body);
   }
 
-  searchArea(keyword: any): Observable<Area[]> {
+  searchArea(keyword: any): Observable<any> {
     return this.http.post<Area[]>(this.Point + '/search', keyword);
   }
 
