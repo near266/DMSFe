@@ -216,7 +216,7 @@ export class BranchsComponent implements OnInit {
 
   deleteBranchsByIds(selectedIds: string[]) {
     const body = {
-      listId: selectedIds
+      id: selectedIds
     };
     console.log(body);
     
