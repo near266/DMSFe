@@ -14,8 +14,8 @@
     <ul>
         <li *ngFor="let item of photo" class="m-1 relative">
             <img (click)="detail(item.checkIn.id)" class="cursor-pointer" [src]="item.image[0]" loading="lazy"/>
-            <div class="absolute bottom-0 w-full min-h-[130px] max-h[170px] bg-[#1ab89a]/50 text-white py-2 px-3 hover:h-[200px] hover:bg-red-500/50">
-                <div class="mb-1 cursor-pointer">
+            <div class="absolute bottom-0 w-full min-h-[120px] max-h[150px] bg-[#1ab89a]/50 text-white py-2 px-3 hover:h-[200px] hover:bg-red-500/50">
+                <div class="mb-1 cursor-pointer" (click)="routeToCustomer(item.checkIn.customer.customerCode)">
                     <i class="w-3 fa-solid fa-building mr-3"></i>
                     <span>{{item.checkIn.customer.customerCode}} - {{item.checkIn.customer.customerName}}</span>
                 </div>
@@ -35,11 +35,15 @@
                     <i class="w-3 fa-solid fa-location-pin mr-3"></i>
                     <span>{{item.checkIn.checkInAddress}}</span>
                 </div>
+                <div class="mb-1">
+                    <i class="w-3 fa-solid fa-house mr-3"></i>
+                    <span>{{item.checkIn.customer.address}}</span>
+                </div>
             </div>
         </li>
         <li></li>
     </ul>
-    <div class="w-full flex justify-center font-medium">
+    <div *ngIf="totalCount > photo.length" class="w-full flex justify-center font-medium cursor-pointer" (click)="loadMore()">
         <i class="fa-solid fa-rotate mr-2"></i>
         <span class="text-center">Tải thêm</span>
     </div>

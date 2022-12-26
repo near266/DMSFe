@@ -4,6 +4,7 @@ import { Photo } from '../../models/Photo'
 import { DatePipe } from '@angular/common'
 import { MatDialog } from '@angular/material/dialog'
 import { DetailPhotoComponent } from '../detail-photo/detail-photo.component'
+import { Router } from '@angular/router'
 
 @Component({
     selector: 'app-photo-new-customer',
@@ -12,6 +13,9 @@ import { DetailPhotoComponent } from '../detail-photo/detail-photo.component'
 })
 export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
     photo: Photo[] = []
+    totalCount = 0
+    page: number = 1
+    showLoadMore: boolean = true
 
     listMenuObj = [
         {
@@ -69,12 +73,20 @@ export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
         },
     ]
 
-    constructor(private logic: LogicService, public datePipe: DatePipe, private dialog: MatDialog) {}
+    constructor(
+        private logic: LogicService,
+        public datePipe: DatePipe,
+        private dialog: MatDialog,
+        private router: Router,
+    ) {}
 
     ngAfterViewInit(): void {
         this.logic.getListPhoto()
         this.logic.photos$.subscribe((data) => {
             this.photo = data
+        })
+        this.logic.totalPhoto$.subscribe((data) => {
+            this.totalCount = data
         })
     }
 
@@ -82,12 +94,22 @@ export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
 
     detail(id: string) {
         let sub = this.dialog.open(DetailPhotoComponent, {
-            height: '70vh',
-            minWidth: '700px',
+            height: '100vh',
+            minWidth: '1000px',
             panelClass: 'custom-mat-dialog-container',
             autoFocus: false,
-            data: id
+            data: id,
         })
+        sub.afterClosed().subscribe((event) => {})
+    }
+
+    routeToCustomer(id: string) {
+        this.router.navigate(['customers'])
+    }
+
+    loadMore() {
+        this.page++
+        this.logic.loadPhoto(this.page)
     }
 
     Select(event: any) {}
