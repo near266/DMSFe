@@ -397,19 +397,12 @@ export class CustomersComponent implements OnInit, AfterViewInit {
                     for (let i = 1; i <= this.totalPage; i++) {
                         this.pageList.push(i);
                     }
-                    let splitUrl = this.router.url.split('/');
                     this.response.data.forEach((element) => {
                         if (element.status == true) element.status = 'Hoạt động';
                         else if (element.status == false) element.status = 'Không hoạt động';
                         else element.status = 'Không hoạt động';
                         if (element.dob) {
                             element.dob = this.datePipe.transform(element.dob, 'dd/MM/yyyy');
-                        }
-                        if (splitUrl.length == 3 && this.firstLoad == true) {
-                            if (element.id == splitUrl[2]) {
-                                this.firstLoad = false;
-                                this.DetailCustomer(element);
-                            }
                         }
                     });
                 }
@@ -426,6 +419,23 @@ export class CustomersComponent implements OnInit, AfterViewInit {
                 );
             },
         );
+        let splitUrl = this.router.url.split('/');
+        if (splitUrl.length == 3 && this.firstLoad == true) {
+            this.customerService.get_by_id(splitUrl[2]).subscribe(
+                (data) => {
+                    if (data) {
+                        data.archived = false;
+                        this.firstLoad = false;
+                        this.DetailCustomer(data);
+                    } else {
+                        this.snackbar.openSnackbar('Không tìm thấy khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
+                    }
+                },
+                (error) => {
+                    this.snackbar.openSnackbar('Không tìm thấy khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
+                },
+            );
+        }
     }
 
     requiredRoles(role: string) {
