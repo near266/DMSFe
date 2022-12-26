@@ -421,20 +421,16 @@ export class CustomersComponent implements OnInit, AfterViewInit {
         );
         let splitUrl = this.router.url.split('/');
         if (splitUrl.length == 3 && this.firstLoad == true) {
-            this.customerService.get_by_id(splitUrl[2]).subscribe(
-                (data) => {
-                    if (data) {
-                        data.archived = false;
-                        this.firstLoad = false;
-                        this.DetailCustomer(data);
-                    } else {
-                        this.snackbar.openSnackbar('Không tìm thấy khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
-                    }
-                },
-                (error) => {
-                    this.snackbar.openSnackbar('Không tìm thấy khách hàng', 2000, 'Đóng', 'center', 'bottom', true);
-                },
-            );
+            const dialogRef = this.dialog.open(DetailCustomerComponent, {
+                height: '100vh',
+                minWidth: '1100px',
+                data: { id: splitUrl[2], archived: false },
+            });
+            dialogRef.afterClosed().subscribe((data) => {
+                if (data) {
+                    this.init(this.keywords, this.page, this.pageSize);
+                }
+            });
         }
     }
 
