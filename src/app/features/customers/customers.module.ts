@@ -9,6 +9,7 @@ import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { ChangeRouteComponent } from './change-route/change-route.component';
 import { AddRouteComponent } from './add-route/add-route.component';
 import { FieldsDialogComponent } from './fields-dialog/fields-dialog.component';
+import { HistoryComponent } from './history/history.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { FieldsDialogComponent } from './fields-dialog/fields-dialog.component';
     AddCustomerComponent,
     ChangeRouteComponent,
     AddRouteComponent,
-    FieldsDialogComponent
+    FieldsDialogComponent,
+    HistoryComponent
   ],
   imports: [
     CommonModule,
