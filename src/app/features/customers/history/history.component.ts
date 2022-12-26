@@ -55,7 +55,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
                                 text: `${detail.createdBy} khởi tạo khách hàng từ ${detail.source}`,
                             },
                             {
-                                text: `${this.datePipe.transform(detail.createdDate, 'dd/MM/yyyy')}`,
+                                text: ` ${this.datePipe.transform(detail.createdDate, 'dd/MM/yyyy - H:mm')}`,
                             },
                         ],
                         colspan: 6,
@@ -70,7 +70,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
                                 text: `${detail.lastModifiedBy} cập nhật thông tin khách hàng từ ${detail.source}`,
                             },
                             {
-                                text: `${this.datePipe.transform(detail.lastModifiedDate, 'dd/MM/yyyy')}`,
+                                text: `${this.datePipe.transform(detail.lastModifiedDate, 'dd/MM/yyyy - H:mm')}`,
                             },
                         ],
                         colspan: 6,
@@ -126,5 +126,36 @@ export class HistoryComponent implements OnInit, AfterViewInit {
             dataAfterFormat.push(row1, row2);
         });
         this.rows = dataAfterFormat;
+    }
+
+    countBetween(date: Date): string {
+        let today = Date.now();
+        let between: string = 'Vừa xong';
+        const ONE_DAY = 1000 * 60 * 60 * 24;
+        const ONE_HOUR = 1000 * 60 * 60;
+        const ONE_MINUTE = 1000 * 60;
+        let dayBetween: number = 0;
+        let hourBetween: number = 0;
+        let minuteBetween: number = 0;
+        const differenceMs = Math.abs(today - date.getTime());
+        dayBetween = Math.round(differenceMs / ONE_DAY);
+        hourBetween = Math.round(differenceMs / ONE_HOUR);
+        minuteBetween = Math.round(differenceMs / ONE_MINUTE);
+        console.log(today, differenceMs, dayBetween, hourBetween, minuteBetween);
+        if (dayBetween == 0) {
+            if (hourBetween == 0) {
+                if (minuteBetween == 0) {
+                    between = 'Vừa xong';
+                } else {
+                    between = minuteBetween + ' phút trước';
+                }
+            } else {
+                between = hourBetween + ' giờ trước';
+            }
+        } else {
+            between = dayBetween + ' ngày trước';
+        }
+
+        return between;
     }
 }
