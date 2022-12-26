@@ -11,8 +11,14 @@ import { LogicService } from '../../services/logic.service'
 })
 export class DetailPhotoComponent implements OnInit, AfterViewInit {
     photo: DetailPhoto = {
-        checkIn: new CheckIn(),
-        album: new Album(),
+        checkIn: {
+            createdBy: '',
+            createdDate: ''
+        },
+        album: {
+            id: '',
+            albumName: ''
+        },
         image: [],
     }
     currentIndex = 0

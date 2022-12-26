@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core'
-import { LogicService } from '../../services/logic.service'
-import { Photo } from '../../models/Photo'
-import { DatePipe } from '@angular/common'
-import { MatDialog } from '@angular/material/dialog'
-import { DetailPhotoComponent } from '../detail-photo/detail-photo.component'
-import { Router } from '@angular/router'
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { LogicService } from '../../services/logic.service';
+import { Photo } from '../../models/Photo';
+import { DatePipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { DetailPhotoComponent } from '../detail-photo/detail-photo.component';
+import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-photo-new-customer',
@@ -12,10 +13,10 @@ import { Router } from '@angular/router'
     styleUrls: ['./photo-new-customer.component.scss'],
 })
 export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
-    photo: Photo[] = []
-    totalCount = 0
-    page: number = 1
-    showLoadMore: boolean = true
+    photo: Photo[] = [];
+    totalCount = 0;
+    page: number = 1;
+    showLoadMore: boolean = true;
 
     listMenuObj = [
         {
@@ -71,26 +72,29 @@ export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
                 { title: 'Vãng lai', leftIcon: '', value: '' },
             ],
         },
-    ]
+    ];
 
     constructor(
         private logic: LogicService,
         public datePipe: DatePipe,
         private dialog: MatDialog,
         private router: Router,
+        private title: Title,
     ) {}
 
     ngAfterViewInit(): void {
-        this.logic.getListPhoto()
+        this.logic.getListPhoto();
         this.logic.photos$.subscribe((data) => {
-            this.photo = data
-        })
+            this.photo = data;
+        });
         this.logic.totalPhoto$.subscribe((data) => {
-            this.totalCount = data
-        })
+            this.totalCount = data;
+        });
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.title.setTitle('Hình ảnh viếng thăm');
+    }
 
     detail(id: string) {
         let sub = this.dialog.open(DetailPhotoComponent, {
@@ -99,17 +103,17 @@ export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
             panelClass: 'custom-mat-dialog-container',
             autoFocus: false,
             data: id,
-        })
-        sub.afterClosed().subscribe((event) => {})
+        });
+        sub.afterClosed().subscribe((event) => {});
     }
 
     routeToCustomer(id: string) {
-        this.router.navigate(['customers'])
+        this.router.navigate(['customers/' + id]);
     }
 
     loadMore() {
-        this.page++
-        this.logic.loadPhoto(this.page)
+        this.page++;
+        this.logic.loadPhoto(this.page);
     }
 
     Select(event: any) {}
