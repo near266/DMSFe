@@ -1,0 +1,51 @@
+<div class="h-full w-full px-4 py-2">
+    <div
+        class="w-full px-2 py-1 bg-gray-100 border-gray-300 border-y border-solid h-10 flex flex-wrap items-center text-xs font-medium">
+        <div class="bg-white mx-1 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
+            <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
+            <input class="bg-white text-xs w-48 h-full" placeholder="Tìm kiếm khách hàng" />
+        </div>
+        <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj"></app-menu-bar>
+        <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
+            <i class="fa-sharp fa-solid fa-refresh text-emerald-500 font-bold mr-2"></i>
+            Tải lại
+        </button>
+    </div>
+    <ul>
+        <li *ngFor="let item of photo" class="m-1 relative">
+            <img (click)="detail(item.checkIn.id)" class="cursor-pointer" [src]="item.image[0]" loading="lazy"/>
+            <div class="absolute bottom-0 w-full min-h-[120px] max-h[150px] bg-[#1ab89a]/50 text-white py-2 px-3 hover:h-[200px] hover:bg-red-500/50">
+                <div class="mb-1 cursor-pointer" (click)="routeToCustomer(item.checkIn.customer.customerCode)">
+                    <i class="w-3 fa-solid fa-building mr-3"></i>
+                    <span>{{item.checkIn.customer.customerCode}} - {{item.checkIn.customer.customerName}}</span>
+                </div>
+                <div class="mb-1">
+                    <i class="w-3 fa-regular fa-clock mr-3"></i>
+                    <span>{{datePipe.transform(item.checkIn.checkInTime, 'dd-MM-yyyy hh:mm')}}</span>
+                </div>
+                <div class="mb-1">
+                    <i class="w-3 fa-solid fa-user mr-3"></i>
+                    <span>{{item.checkIn.employee.employeeName}}</span>
+                </div>
+                <div class="mb-1">
+                    <i class="w-3 fa-solid fa-image mr-3"></i>
+                    <span>{{item.album.albumName}}</span>
+                </div>
+                <div class="mb-1">
+                    <i class="w-3 fa-solid fa-location-pin mr-3"></i>
+                    <span>{{item.checkIn.checkInAddress}}</span>
+                </div>
+                <div class="mb-1">
+                    <i class="w-3 fa-solid fa-house mr-3"></i>
+                    <span>{{item.checkIn.customer.address}}</span>
+                </div>
+            </div>
+        </li>
+        <li></li>
+    </ul>
+    <div *ngIf="totalCount > photo.length" class="w-full flex justify-center font-medium cursor-pointer" (click)="loadMore()">
+        <i class="fa-solid fa-rotate mr-2"></i>
+        <span class="text-center">Tải thêm</span>
+    </div>
+</div>
+

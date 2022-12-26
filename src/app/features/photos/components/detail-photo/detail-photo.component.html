@@ -1,0 +1,26 @@
+<div class="w-full flex justify-end px-3 pt-2">
+    <button type="button" mat-stroked-button (click)="close()" class="text-[#565869] bg-white font-medium ml-button">
+        <i class="fa-solid fa-right-from-bracket mr-1"></i>
+        Đóng
+    </button>
+</div>
+<hr class="my-2" />
+<div class="w-full">
+    <mat-tab-group [(selectedIndex)]="currentIndex" mat-stretch-tabs="false" mat-align-tabs="center">
+        <mat-tab *ngFor="let image of photo.image" dynamicHeight>
+            <div class="w-full flex justify-center py-2 relative">
+                <img class="max-w-full max-h-[50vh]" [src]="image" loading="lazy" />
+                <div class="absolute cursor-pointer rounded-sm top-[45%] left-1 bg-black/30 hover:bg-black/60 text-white px-2 py-3 text-[3vh]" (click)="slide('prev')">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </div>
+                <div class="absolute cursor-pointer rounded-sm top-[45%] right-1 bg-black/30 hover:bg-black/60 text-white px-2 py-3 text-[3vh]" (click)="slide('aft')">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+<div class="my-1 text-center w-full text-base bg-black/70 hover:bg-black text-white font-semibold p-3">
+    <span>Album: {{photo.album.albumName}}. Chụp bởi: {{photo.checkIn.createdBy}}</span><br>
+    <span>Vào: {{datePipe.transform(photo.checkIn.createdDate, 'dd-MM-yyyy hh:mm')}}</span>
+</div>

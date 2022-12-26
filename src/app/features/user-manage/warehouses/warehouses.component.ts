@@ -64,13 +64,7 @@ export class WarehousesComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.logicService.getAllWareHouse();
-    this.logicService.warehouses$.subscribe(data => {
-      this.warehouses = data;
-    });
-    this.logicService.totalCountWarehouse$.subscribe(data => {
-      this.totalCount = data;
-    })
+    this.init();
   }
 
   ngDoCheck(): void {
@@ -100,6 +94,16 @@ export class WarehousesComponent implements OnInit {
 
   }
 
+  init() {
+    this.logicService.getAllWareHouse();
+    this.logicService.warehouses$.subscribe(data => {
+      this.warehouses = data;
+    });
+    this.logicService.totalCountWarehouse$.subscribe(data => {
+      this.totalCount = data;
+    });
+  }
+
   filter() {
     this.logicService.searchWarehouse(this.bodySearch);
   }
@@ -113,19 +117,29 @@ export class WarehousesComponent implements OnInit {
   }
 
   AddWareHouse() {
-    this.dialog.open(AddWarehouseComponent, {
+    let sub = this.dialog.open(AddWarehouseComponent, {
       height: '100vh',
       minWidth: '900px',
       panelClass: 'custom-mat-dialog-container'
     });
+    sub.afterClosed().subscribe( event => {
+        if(event) {
+            this.logicService.getAllWareHouse();
+        }
+    });
   }
 
   DetailWareHouse(warehouse: Warehouse) {
-    this.dialog.open(UpdateWarehouseComponent, {
+    let sub = this.dialog.open(UpdateWarehouseComponent, {
       data: warehouse.id,
       height: '100vh',
       minWidth: '900px',
       panelClass: 'custom-mat-dialog-container'
+    });
+    sub.afterClosed().subscribe( event => {
+        if(event) {
+            this.logicService.getAllWareHouse();
+        }
     });
   }
 
