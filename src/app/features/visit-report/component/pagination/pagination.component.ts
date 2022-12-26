@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-pagination',
+  selector: 'visit-pagination',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
@@ -10,6 +10,10 @@ export class PaginationComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onTableDataChange(e: any) {
+    
   }
 
 }

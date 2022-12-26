@@ -1,1 +1,23 @@
-<p>sidebar works!</p>
+<div
+    (click)="isShowEmployeeTree = !isShowEmployeeTree"
+    class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+    <i class="fa-solid fa-user mr-3 text-base"></i>
+    <span class="text-sm">Phòng ban / Nhân viên</span>
+</div>
+<div *ngIf="isShowEmployeeTree" class="ml-3">
+    <app-menu-collapse-tree (newItemEvent)="selectOrderEmployee($event)"></app-menu-collapse-tree>
+</div>
+<!-- Loại khách hàng menu -->
+<app-menu-collapse (Selection)="selectTypeCustomer($event)" [Config]="typeCustomerMenu"></app-menu-collapse>
+<!-- Nhóm khách hàng menu -->
+<app-menu-collapse (Selection)="selectGroupCustomer($event)" [Config]="groupCustomerMenu"></app-menu-collapse>
+<!-- Từ - Đến -->
+<mat-form-field appearance="outline" class="w-full px-2 mt-2">
+    <mat-label>Từ - Đến</mat-label>
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate placeholder="Start date">
+      <input matEndDate placeholder="End date">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+</mat-form-field>

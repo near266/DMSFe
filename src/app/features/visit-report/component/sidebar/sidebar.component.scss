@@ -1,0 +1,11 @@
+:host ::ng-deep {
+    .mat-form-field-wrapper {
+        padding-bottom: 0px !important;
+    }
+    .mat-form-field-appearance-outline .mat-form-field-flex {
+        align-items: center !important;
+    }
+    .mat-form-field-appearance-outline .mat-form-field-infix {
+        padding: 0.6em 0 1em 0 !important;
+    }
+}

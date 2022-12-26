@@ -3,12 +3,17 @@ import { CommonModule } from '@angular/common';
 import { VisitReportComponent } from './visit-report.component';
 import { VisitReportRoutes } from './visit-report.routing';
 import { ColSpanTemplateTableComponent } from './common-template/col-span-template-table/col-span-template-table.component';
+import { SharedModule } from 'src/app/core/shared/shared.module';
+import { PaginationComponent } from './component/pagination/pagination.component';
+import { SidebarComponent } from './component/sidebar/sidebar.component';
+import { TableComponent } from './component/table/table.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    VisitReportRoutes
+    VisitReportRoutes,
+    SharedModule
   ],
-  declarations: [VisitReportComponent, ColSpanTemplateTableComponent]
+  declarations: [VisitReportComponent, ColSpanTemplateTableComponent, SidebarComponent, PaginationComponent, TableComponent]
 })
 export class VisitReportModule { }

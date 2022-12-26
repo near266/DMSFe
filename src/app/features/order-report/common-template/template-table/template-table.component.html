@@ -14,6 +14,7 @@
                 </td>
             </tr>
             <tr
+                style="height: 1px"
                 *ngFor="
                     let data of listData.dataReturn
                         | paginate
@@ -24,27 +25,32 @@
                               };
                     index as i
                 "
-                class="custom-row">
+                class="custom-row"
+            >
                 <ng-container *ngFor="let item of data; index as k">
                     <td
                         *ngIf="!item.hasChildren"
                         class="custom-td border-b border-zinc-300 border-t"
                         (click)="emitTouch(k, i)"
-                        [ngClass]="{ 'hover:text-blue-700 cursor-pointer': k === listData.emitTdOrder }">
+                        [ngClass]="{ 'hover:text-blue-700 cursor-pointer': k === listData.emitTdOrder }"
+                    >
                         <ng-container>
                             {{ item.content }}
                         </ng-container>
                     </td>
                     <td
-                        style="padding-left: 0px; padding-right: 0px; padding-bottom: 0px"
+                        style="padding: 0px; height: inherit"
                         *ngIf="item.hasChildren"
-                        class="custom-td border-y border-zinc-300">
-                        <tr
-                            style="padding-top: 50px"
-                            class="nested-row custom-row-product h-full w-full border-gray-200"
-                            *ngFor="let content of item.content; index as index1; last as isLast">
-                            <div class="px-2">{{ content }} &nbsp;</div>
-                        </tr>
+                        class="custom-td border-y border-zinc-300"
+                    >
+                        <div style="height: 100%" class="custom-td flex flex-col">
+                            <tr
+                                class="grow custom-row w-full nested-row"
+                                *ngFor="let content of item.content; index as index1; last as isLast"
+                            >
+                                <div class="px-2">{{ content }} &nbsp;</div>
+                            </tr>
+                        </div>
                     </td>
                 </ng-container>
             </tr>

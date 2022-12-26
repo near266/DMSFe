@@ -1,1 +1,53 @@
-<app-col-span-template-table [tableData]="tableData"></app-col-span-template-table>
+<mat-drawer-container [hasBackdrop]="false" class="fixed top-0 left-0 right-0 bottom-0">
+    <mat-drawer
+        [mode]="'side'"
+        class="fixed"
+        #sidenav
+        [position]="'start'"
+        [opened]="true"
+        class="overflow-hidden relative z-50 navbar-container"
+    >
+        <div class="w-60 p-1">
+            <visit-sidebar></visit-sidebar>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div class="bg-[#f2f2f2] fixed bottom-0 top-16 z-10 border-r border-gray-300 border-solid">
+            <button
+                (click)="sidenav.toggle()"
+                class="h-5 flex items-center justify-center border-solid border-2 border-slate-400 py-4 px-2"
+            >
+                <i class="fa-solid fa-caret-right" [ngClass]="{ 'rotate-180': !sidenav?.opened }"></i>
+            </button>
+        </div>
+        <div class="ml-6 flex justify-between items-center px-3">
+            <span class="font-medium text-xl"> Báo cáo viếng thăm </span>
+            <div class="py-2">
+                <div class="space-x-3 flex items-center">
+                    <button class="p-2 button-option mr-1" [matMenuTriggerFor]="exportData">
+                        <i class="fa-solid fa-file-export text-green-700 text-sm font-bold mr-1"></i>
+                        <span>Xuất Excel</span>
+                        <i class="fa-solid fa-caret-down text-green-700 text-sm font-bold ml-1"></i>
+                    </button>
+                    <mat-menu #exportData="matMenu">
+                        <button mat-menu-item (click)="exportGross()">
+                            <i class="fa-regular fa-circle-check mr-2"></i>
+                            Xuất gộp
+                        </button>
+                        <button mat-menu-item (click)="exportNotGross()">
+                            <i class="fa-brands fa-searchengin mr-2"></i>
+                            Xuất không gộp
+                        </button>
+                    </mat-menu>
+                </div>
+            </div>
+        </div>
+        <div class="ml-6 px-1">
+            <app-col-span-template-table
+                [data]="visitReport$ | async"
+                [headers]="headers"
+            ></app-col-span-template-table>
+        </div>
+        <visit-pagination class="fixed right-0 bottom-0"></visit-pagination>
+    </mat-drawer-content>
+</mat-drawer-container>

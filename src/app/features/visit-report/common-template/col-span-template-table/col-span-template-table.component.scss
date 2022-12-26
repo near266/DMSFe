@@ -4,6 +4,14 @@ table {
     border-spacing: 0px;
 }
 
+.table-wrapper {
+    overflow-y: auto;
+    overflow-x: auto;
+    margin-top: 8px;
+    padding-bottom: 20px;
+    height: calc(100vh - 150px);
+}
+
 table th {
     position: sticky;
     top: 0px;
@@ -40,7 +48,7 @@ tbody {
 }
 
 .custom-th {
-    @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x text-white;
+    @apply border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x text-white;
 }
 
 .custom-sticky {
@@ -53,5 +61,22 @@ tbody {
 
 .custom-td {
     max-width: 180px;
-    @apply border-x border-solid pl-2 border-y;
+    @apply border-x border-solid border-y;
+}
+
+.header {
+    position: sticky;
+    top: 0px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    z-index: 1;
+    color: white;
+    @apply bg-green-600;
+}
+
+.nested-row {
+    display: block;
+    padding: 8px 0px;
+    @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
 }

@@ -1,1 +1,12 @@
-<p>table works!</p>
+<div class="table-wrapper">
+    <table >
+        <thead>
+            <tr class="custom-tr" *ngFor="let row of headers">
+                <th class="custom-th" *ngFor="let col of row" [attr.colspan]="col.colspan" [attr.rowspan]="col.rowspan">{{col.text}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+</div>
