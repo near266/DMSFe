@@ -11,7 +11,7 @@
                 <!-- has colspan -->
                 <ng-container *ngIf="row.colspan">
                     <td
-                        class="custom-td {{ row.addClass }}"
+                        class="py-1 custom-td {{ row.addClass }}"
                         [attr.colspan]="row.colspan"
                         *ngFor="let col of row.listCol"
                     >
@@ -20,7 +20,7 @@
                 </ng-container>
                 <!-- not has colspan -->
                 <ng-container *ngIf="!row.colspan">
-                    <td *ngFor="let col of row.listCol" class="custom-td {{ row.addClass }} {{ col.addClass }}">
+                    <td *ngFor="let col of row.listCol" class=" custom-td {{ row.addClass }} {{ col.addClass }}">
                         {{ col.text }}
                     </td>
                 </ng-container>

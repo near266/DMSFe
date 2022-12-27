@@ -14,14 +14,19 @@ import {
     templateUrl: './template-table-normal.component.html',
     styleUrls: ['./template-table-normal.component.scss'],
 })
-export class TemplateTableNormalComponent implements OnInit, AfterViewInit {
+export class TemplateTableNormalComponent implements OnInit, AfterViewInit, OnChanges {
     @ViewChild('header') header!: ElementRef;
     @Input() headers: string[] = [];
     @Input() rows: CRow[] = [];
     @Input() colorHeader: string = '';
+    @Input() textSize: string = '14px';
     constructor() {}
 
     ngOnInit(): void {}
+
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log(this.rows);
+    }
 
     ngAfterViewInit(): void {
         this.header.nativeElement.style.backgroundColor = this.colorHeader;
@@ -36,6 +41,6 @@ export class CRow {
 }
 
 export class CTd {
-    text?: string;
+    text?: string | number | null;
     addClass?: string;
 }

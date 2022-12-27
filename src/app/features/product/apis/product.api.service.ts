@@ -1,6 +1,7 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
+import { api_base_url, api_url } from 'src/app/core/const/url';
 import { environment } from '../../../../environments/environment';
 import { Brand, Major, Product, Supplier, Unit, Warehouse } from '../models/product';
 
@@ -67,5 +68,8 @@ export class ProductApiService {
             id: productId,
         };
         return this.http.put<HttpResponse<any>>(this.endPoint + '/arhived', payload);
+    }
+    getProductHistory(id: string): Observable<any> {
+        return this.http.get(api_base_url + '/HistoryLogProduct/getall?ProductId=' + id);
     }
 }
