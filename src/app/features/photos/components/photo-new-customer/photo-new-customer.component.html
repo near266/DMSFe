@@ -12,7 +12,7 @@
         </button>
     </div>
     <ul>
-        <li *ngFor="let item of photo" class="m-1 relative">
+        <li *ngFor="let item of logic.photos$ | async" class="m-1 relative">
             <img (click)="detail(item.checkIn.id)" class="cursor-pointer" [src]="item.image[0]" loading="lazy"/>
             <div class="absolute bottom-0 w-full min-h-[120px] max-h[150px] bg-[#1ab89a]/50 text-white py-2 px-3 hover:h-max hover:bg-red-500/50">
                 <div class="mb-1 cursor-pointer" (click)="routeToCustomer(item.checkIn.customer.id)">

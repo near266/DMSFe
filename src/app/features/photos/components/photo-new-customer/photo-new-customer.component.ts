@@ -75,7 +75,7 @@ export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
     ];
 
     constructor(
-        private logic: LogicService,
+        public logic: LogicService,
         public datePipe: DatePipe,
         private dialog: MatDialog,
         private router: Router,
@@ -87,12 +87,12 @@ export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
         this.logic.photos$.subscribe((data) => {
             Promise.resolve().then(() => {
                 this.photo = data;
-            })
+            });
         });
         this.logic.totalPhoto$.subscribe((data) => {
             Promise.resolve().then(() => {
                 this.totalCount = data;
-            })
+            });
         });
     }
 
