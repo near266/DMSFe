@@ -76,8 +76,12 @@
                 <th class="custom-th">Ngày công</th>
               </tr>
             </thead>
-            <tbody *ngFor="let item of timeSheets">
-                <tr class="custom-row">
+            <tbody>
+                <tr class="custom-row"*ngFor="let item of timeSheets" >
+                    
+                    <td class="custom-td border-b" >{{item.employee.employeeName}}</td>
+                </tr>
+                <!-- <tr class="custom-row">
                   <td *ngIf="days.length + 8 == 38" class="custom-td border-b" colspan="38">{{item.employee.employeeName}}</td>
                   <td *ngIf="days.length + 8 == 39" class="custom-td border-b" colspan="39">{{item.employee.employeeName}}</td>
                   <td *ngIf="days.length + 8 == 37" class="custom-td border-b" colspan="37">{{item.employee.employeeName}}</td>
@@ -104,7 +108,7 @@
                 </tr>
                 <tr>
                   <td class="custom-td border-b">Công</td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
       </div>

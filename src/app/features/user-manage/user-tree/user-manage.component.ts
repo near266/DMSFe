@@ -22,8 +22,10 @@ export class UserManageComponent implements OnInit {
         private employeeService: EmployeeService,
         private dataService: DataService,
         private snackbar: SnackbarService,
-        private confirm: ConfirmDialogService
-    ) { }
+        private confirm: ConfirmDialogService,
+    ) {}
+
+    users: any = [];
 
     pageSizeList = [30, 50, 100, 200, 500];
     pageSize = 30;
@@ -35,40 +37,34 @@ export class UserManageComponent implements OnInit {
     dia?: any;
     body = {
         keyword: '',
-        position: "string",
+        position: 'string',
         page: this.page,
-        pagesize: this.pageSize
-    }
+        pagesize: this.pageSize,
+    };
 
     listId: string[] = [];
 
+    request: any = {
+        page: 1,
+        pageSize: 30,
+        groupId: 'root',
+    };
+    typeRequest: string = 'normal';
+
     SearchEmployee() {
-        let sub = this.employeeService.SearchEmployee(this.body).subscribe(data => {
-            this.totalCount = data.totalCount
-            if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
-                this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
-            }
-            else {
-                this.totalPage = Math.round(this.totalCount / this.pageSize)
-            }
-            this.users = []
-            data.data.forEach((element: any) => {
-              if (this.listId.indexOf(element.id) >= 0) {
-                element.checked = true;
-              } else {
-                element.checked = false;
-              }
-              this.users.push(element)
-            });
-            sub.unsubscribe()
-        })
+        if (this.body.keyword == '') {
+            this.request.keyword = null;
+        } else {
+            this.request.keyword = this.body.keyword;
+        }
+        this.filterEmployee();
     }
 
     AddUser() {
         this.dia = this.dialog.open(AddUserComponent, {
             height: '100vh',
             minWidth: '900px',
-            panelClass: 'custom-mat-dialog-container'
+            panelClass: 'custom-mat-dialog-container',
         });
     }
     DetailUser(id: any, email: any) {
@@ -78,56 +74,62 @@ export class UserManageComponent implements OnInit {
             data: {
                 id: id,
                 status: 'view',
-                login: email
+                login: email,
             },
-            panelClass: 'custom-mat-dialog-container'
+            panelClass: 'custom-mat-dialog-container',
         });
     }
 
     searchUser(event: any) {
-        if (event != 'root') {
-            this.employeeService.SearchEmployeeInGroup(event, 1, 1000).subscribe(data => {
+        this.request.groupId = event;
+        this.filterEmployee();
+    }
+
+    filterEmployee() {
+        let type = this.request.groupId;
+        if (this.request.groupId == 'root') {
+            delete this.request['groupId'];
+            let sub = this.employeeService.SearchEmployee(this.request).subscribe((data) => {
+                this.totalCount = data.totalCount;
+                if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
+                    this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
+                } else {
+                    this.totalPage = Math.round(this.totalCount / this.pageSize);
+                }
+                this.users = [];
+                data.data.forEach((element: any) => {
+                    if (this.listId.indexOf(element.id) >= 0) {
+                        element.checked = true;
+                    } else {
+                        element.checked = false;
+                    }
+                    this.users.push(element);
+                });
+                sub.unsubscribe();
+            });
+        } else {
+            this.employeeService.GetEmployeeInGroup(this.request).subscribe((data) => {
                 if (data) {
                     this.page = 1;
                     this.totalCount = data.totalCount;
                     if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
                         this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
+                    } else {
+                        this.totalPage = Math.round(this.totalCount / this.pageSize);
                     }
-                    else {
-                        this.totalPage = Math.round(this.totalCount / this.pageSize)
-                    }
-                    this.users = []
+                    this.users = [];
                     data.data.forEach((element: any) => {
-                      if (this.listId.indexOf(element.id) >= 0) {
-                        element.employee.checked = true;
-                      } else {
-                        element.employee.checked = false;
-                      }
-                      this.users.push(element.employee);
+                        if (this.listId.indexOf(element.id) >= 0) {
+                            element.employee.checked = true;
+                        } else {
+                            element.employee.checked = false;
+                        }
+                        this.users.push(element.employee);
                     });
                 }
             });
-        } else {
-            let sub = this.employeeService.GetAllEmployee(1, this.pageSize).subscribe(data => {
-                this.totalCount = data.totalCount
-                if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
-                    this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
-                }
-                else {
-                    this.totalPage = Math.round(this.totalCount / this.pageSize)
-                }
-                this.users = []
-                data.data.forEach((element: any) => {
-                  if (this.listId.indexOf(element.id) >= 0) {
-                    element.checked = true;
-                  } else {
-                    element.checked = false;
-                  }
-                  this.users.push(element)
-                });
-                sub.unsubscribe()
-            })
         }
+        this.request.groupId = type;
     }
 
     closeSideBar() {
@@ -154,43 +156,41 @@ export class UserManageComponent implements OnInit {
 
     ngOnInit(): void {
         this.title.setTitle('Cây đơn vị');
-        this.GetListAll()
-        this.dataService.employee.subscribe(data => {
+        this.filterEmployee();
+        this.dataService.employee.subscribe((data) => {
             if (data == 'success') {
-                this.GetListAll()
-                this.dia.close()
+                this.filterEmployee();
+                this.dia.close();
             }
-        })
+        });
     }
     listMenuObj = [
         {
             title: 'Chức danh',
             leftTitleIcon: 'fa-filter',
             listMenuPosition: [
-                { title: 'Tất cả', leftIcon: 'fa-check text-emerald-500', value: 'all' },
-                { title: 'Nhân viên', leftIcon: 'fa-person text-emerald-500', value: 'emp' },
-                { title: 'Nhân viên gói Basic', leftIcon: 'fa-person text-emerald-500', value: 'emp-basic' },
-                { title: 'Kế toán', leftIcon: 'fa-dollar-sign text-red-500', value: 'ketoan' },
-                { title: 'Giám sát', leftIcon: 'fa-user text-yellow-500', value: 'giamsat' },
-                { title: 'Chủ sở hữu', leftIcon: 'fa-dollar-sign text-red-500', value: 'ketoan' },
+                { title: 'Tất cả', leftIcon: 'fa-check text-emerald-500', value: 'positionAll' },
+                { title: 'Chủ sở hữu', leftIcon: 'fa-dollar-sign text-red-500', value: 'positionOwner' },
+                { title: 'Giám sát', leftIcon: 'fa-user text-yellow-500', value: 'positionMonitor' },
+                { title: 'Kế toán', leftIcon: 'fa-dollar-sign text-red-500', value: 'positionAccountant' },
+                { title: 'Nhân viên', leftIcon: 'fa-person text-emerald-500', value: 'positionEmployee' },
             ],
         },
         {
             title: 'Trạng thái',
             leftTitleIcon: 'fa-flag',
             listMenuPosition: [
-                { title: 'Tất cả', leftIcon: 'fa-check text-emerald-500', value: 'all' },
-                { title: 'Hoạt động', leftIcon: '', value: 'act' },
-                { title: 'Khóa mật khẩu', leftIcon: '', value: 'lockpass' },
-                { title: 'Khóa tài khoản', leftIcon: '', value: 'lockacc' },
+                { title: 'Tất cả', leftIcon: 'fa-check text-emerald-500', value: 'statusAll' },
+                { title: 'Hoạt động', leftIcon: '', value: 'statusActive' },
+                { title: 'Không hoạt động', leftIcon: '', value: 'statusInActive' },
             ],
         },
         {
             title: 'Tải lại',
             leftTitleIcon: 'fa-arrows-rotate',
             listMenuPosition: [
-                { title: 'Danh sách nhân viên', leftIcon: 'fa-bars text-emerald-500', value: 'all' },
-                { title: 'Cây đơn vị', leftIcon: '', value: 'act' },
+                { title: 'Danh sách nhân viên', leftIcon: 'fa-bars text-emerald-500', value: 'reload' },
+                // { title: 'Cây đơn vị', leftIcon: '', value: 'act' },
             ],
         },
         {
@@ -212,115 +212,183 @@ export class UserManageComponent implements OnInit {
             title: 'Thao tác nhiều',
             leftTitleIcon: 'fa-grid',
             listMenuPosition: [
-                { title: 'Chuyển tài khoản sang email fake', leftIcon: 'fa-user-xmark text-emerald-500', value: 'all' },
                 { title: 'Xóa tài khoản', leftIcon: 'fa-user-xmark text-emerald-500', value: 'all' },
-                { title: 'Logout tài khoản web/mobile', leftIcon: 'fa-user-xmark text-emerald-500', value: 'all' },
                 { title: 'Khóa tài khoản', leftIcon: 'fa-lock text-emerald-500', value: 'emp-lock' },
                 { title: 'Mở khóa tài khoản', leftIcon: 'fa-unlock text-emerald-500', value: 'emp-unlock' },
-                { title: 'Cài đặt bảo mật', leftIcon: 'fa-circle-exclamation text-emerald-500', value: 'ketoan' },
-                { title: 'Cài đặt phân quyền', leftIcon: 'fa-user text-emerald-500', value: 'giamsat' },
-                { title: 'Cấu hình mobile', leftIcon: 'fa-mobile text-emerald-500', value: 'ketoan' },
-                { title: 'Cài đặt menu hiển thị', leftIcon: 'fa-gear text-emerald-500', value: 'ketoan' },
             ],
-        },
-        {
-            title: 'Trạng thái',
-            leftTitleIcon: 'fa-log',
-            listMenuPosition: [{ title: 'Thông tin tổ chức', leftIcon: 'fa-gears text-emerald-500', value: 'all' }],
         },
     ];
 
-    GetListAll() {
-        let sub = this.employeeService.GetAllEmployee(this.page, this.pageSize).subscribe(data => {
-            this.totalCount = data.totalCount;
-            if (this.totalCount / this.pageSize > Math.round(this.totalCount / this.pageSize)) {
-                this.totalPage = Math.round(this.totalCount / this.pageSize) + 1;
-            }
-            else {
-                this.totalPage = Math.round(this.totalCount / this.pageSize);
-            }
-            this.users = [];
-            data.data.forEach((element: any) => {
-              if (this.listId.indexOf(element.id) >= 0) {
-                element.checked = true;
-              } else {
-                element.checked = false;
-              }
-              this.users.push(element);
-            });
-            sub.unsubscribe();
-        })
-    }
-
     Select(e: any) {
-      switch(e) {
-        case 'emp-lock': {
-          let ref = this.confirm.openDialog({message: 'Bạn có chắc chắn muốn khóa tài khoản này?', confirm: 'Đồng ý', cancel: 'Hủy'});
-          ref.subscribe( res => {
-            if (res) {
-              const body = {
-                listId: this.listId,
-                activated: false
-              };
-              this.employeeService.DisableEmployee(body).subscribe( data => {
-                if(data) {
-                  this.snackbar.openSnackbar('Khóa tài khoản thành công', 2000, 'Đóng', 'center', 'bottom', true);
-                  this.GetListAll();
-                } else {
-                  this.snackbar.openSnackbar('Khóa tài khoản thất bại', 2000, 'Đóng', 'center', 'bottom', false);
-                }
-              }, (error) => {
-                this.snackbar.openSnackbar('Khóa tài khoản thất bại', 2000, 'Đóng', 'center', 'bottom', false);
-              });
+        switch (e) {
+            case 'positionAll': {
+                this.request.title = null;
+                this.filterEmployee();
+                break;
             }
-          });
-          return;
-        }
-        case 'emp-unlock': {
-          let ref = this.confirm.openDialog({message: 'Bạn có chắc chắn muốn mở tài khoản này?', confirm: 'Đồng ý', cancel: 'Hủy'});
-          ref.subscribe( res => {
-            if (res) {
-              const body = {
-                listId: this.listId,
-                activated: true
-              };
-              this.employeeService.DisableEmployee(body).subscribe( data => {
-                if(data) {
-                  this.snackbar.openSnackbar('Mở tài khoản thành công', 2000, 'Đóng', 'center', 'bottom', true);
-                  this.GetListAll();
-                } else {
-                  this.snackbar.openSnackbar('Mở tài khoản thất bại', 2000, 'Đóng', 'center', 'bottom', false);
-                }
-              }, (error) => {
-                this.snackbar.openSnackbar('Mở tài khoản thất bại', 2000, 'Đóng', 'center', 'bottom', false);
-              });
+            case 'positionOwner': {
+                this.request.title = 'Chủ sở hữu';
+                this.filterEmployee();
+                break;
             }
-          });
-          return;
+            case 'positionMonitor': {
+                this.request.title = 'Giám sát';
+                this.filterEmployee();
+                break;
+            }
+            case 'positionAccountant': {
+                this.request.title = 'Kế toán';
+                this.filterEmployee();
+                break;
+            }
+            case 'positionEmployee': {
+                this.request.title = 'Nhân viên';
+                this.filterEmployee();
+                break;
+            }
+            case 'statusAll': {
+                this.request.status = null;
+                this.filterEmployee();
+                break;
+            }
+            case 'statusActive': {
+                this.request.status = true;
+                this.filterEmployee();
+                break;
+            }
+            case 'statusInActive': {
+                this.request.status = false;
+                this.filterEmployee();
+                break;
+            }
+            case 'reload': {
+                this.request.page = 1;
+                this.page = 1;
+                this.filterEmployee();
+                break;
+            }
+            case 'emp-lock': {
+                let ref = this.confirm.openDialog({
+                    message: 'Bạn có chắc chắn muốn khóa tài khoản này?',
+                    confirm: 'Đồng ý',
+                    cancel: 'Hủy',
+                });
+                ref.subscribe((res) => {
+                    if (res) {
+                        const body = {
+                            listId: this.listId,
+                            activated: false,
+                        };
+                        this.employeeService.DisableEmployee(body).subscribe(
+                            (data) => {
+                                if (data) {
+                                    this.snackbar.openSnackbar(
+                                        'Khóa tài khoản thành công',
+                                        2000,
+                                        'Đóng',
+                                        'center',
+                                        'bottom',
+                                        true,
+                                    );
+                                    this.filterEmployee();
+                                } else {
+                                    this.snackbar.openSnackbar(
+                                        'Khóa tài khoản thất bại',
+                                        2000,
+                                        'Đóng',
+                                        'center',
+                                        'bottom',
+                                        false,
+                                    );
+                                }
+                            },
+                            (error) => {
+                                this.snackbar.openSnackbar(
+                                    'Khóa tài khoản thất bại',
+                                    2000,
+                                    'Đóng',
+                                    'center',
+                                    'bottom',
+                                    false,
+                                );
+                            },
+                        );
+                    }
+                });
+                return;
+            }
+            case 'emp-unlock': {
+                let ref = this.confirm.openDialog({
+                    message: 'Bạn có chắc chắn muốn mở tài khoản này?',
+                    confirm: 'Đồng ý',
+                    cancel: 'Hủy',
+                });
+                ref.subscribe((res) => {
+                    if (res) {
+                        const body = {
+                            listId: this.listId,
+                            activated: true,
+                        };
+                        this.employeeService.DisableEmployee(body).subscribe(
+                            (data) => {
+                                if (data) {
+                                    this.snackbar.openSnackbar(
+                                        'Mở tài khoản thành công',
+                                        2000,
+                                        'Đóng',
+                                        'center',
+                                        'bottom',
+                                        true,
+                                    );
+                                    this.filterEmployee();
+                                } else {
+                                    this.snackbar.openSnackbar(
+                                        'Mở tài khoản thất bại',
+                                        2000,
+                                        'Đóng',
+                                        'center',
+                                        'bottom',
+                                        false,
+                                    );
+                                }
+                            },
+                            (error) => {
+                                this.snackbar.openSnackbar(
+                                    'Mở tài khoản thất bại',
+                                    2000,
+                                    'Đóng',
+                                    'center',
+                                    'bottom',
+                                    false,
+                                );
+                            },
+                        );
+                    }
+                });
+                return;
+            }
         }
-      }
     }
 
     TickEmployee(id: string) {
-      if (this.listId.indexOf(id) >= 0) {
-        this.listId.splice(this.listId.indexOf(id), 1);
-      } else {
-        this.listId.push(id);
-      }
+        if (this.listId.indexOf(id) >= 0) {
+            this.listId.splice(this.listId.indexOf(id), 1);
+        } else {
+            this.listId.push(id);
+        }
     }
 
     ChangePage(e: any) {
         this.page = e;
-        this.GetListAll()
+        this.request.page = this.page;
+        this.filterEmployee();
     }
 
     ChangePageSize() {
         if (this.page * this.pageSize > this.totalCount) {
-            this.page = 1
+            this.page = 1;
+            this.request.page = this.page;
         }
-        this.GetListAll()
+        this.filterEmployee();
     }
-
-    users: any = [];
-
 }

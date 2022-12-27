@@ -1,6 +1,8 @@
 export class TimeSheet {
     employee: Employee;
     unitTreeGroup: UnitTreeGroup;
+    row?: number;
+    col?: number;
 }
 
 export class Employee {
