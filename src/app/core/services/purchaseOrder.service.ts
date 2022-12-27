@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, map, of, delay, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { api_gateway_url, api_url, base_url, gateway_url } from '../const/url';
+import { api_gateway_url, api_url, base_url, gateway_url, history_url } from '../const/url';
 @Injectable({
     providedIn: 'root',
 })
@@ -281,9 +281,18 @@ export class PurchaseOrderService {
     }
 
     print006(body: any): Observable<any> {
-      let optionHeader = { responseType: 'text' };
-      return this.http
-          .post(this.api_gateway_url + '/PurchaseOrder/print006', body, { responseType: 'blob' })
-          .pipe(map((res) => res));
-  }
+        let optionHeader = { responseType: 'text' };
+        return this.http
+            .post(this.api_gateway_url + '/PurchaseOrder/print006', body, { responseType: 'blob' })
+            .pipe(map((res) => res));
+    }
+    // history log
+    updateLog(type: number, id: string): Observable<any> {
+        let body = {
+            id: id,
+            type: type,
+        };
+        console.log(body);
+        return this.http.post(history_url + '/UpdateLog', body).pipe(map((response: any) => response));
+    }
 }

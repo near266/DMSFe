@@ -22,6 +22,7 @@ import { PurchaseDetail } from '../models/purchaseDetail';
 import { PurchaseOrder, RootPurchases } from '../models/purchases';
 import { SaleCreateBody } from '../models/SaleAPI';
 import { Payment } from '../template-component/template-footer-order/template-footer-order.component';
+import { CommonService } from './common.service';
 import { CommonLogicService } from './commonLogic.service';
 import { FormatPurchaseService } from './formatPurchase.service';
 
@@ -68,6 +69,7 @@ export class PurchaseLogicService {
         private commonLogicService: CommonLogicService,
         private numberToText: NumberToTextService,
         private dialog: MatDialog,
+        private commonService: CommonService,
     ) {}
 
     setGenSaleSource(value: boolean) {
@@ -330,7 +332,6 @@ export class PurchaseLogicService {
                 listIdRemove: this.commonLogicService.formatListRemoveToSentAPI(listRemove.data),
                 purchaseOrderId: id,
             };
-            console.log(bodyRemove);
             removeAPI = this.purchaseService.removeProduct(bodyRemove);
         }
         if (listUpdate.length > 0) {
@@ -347,27 +348,10 @@ export class PurchaseLogicService {
             () => {
                 this.commonLogicService.successUpdate();
                 this.snackbar.successSnackBar();
+                this.purchaseService.updateLog(1, id);
             },
         );
     }
-
-    // updateProduct(listUpdate: any) {
-    //     if (listUpdate.length > 0) {
-    //         let body = {
-    //             purchaseOrderProducts: listUpdate,
-    //         };
-    //         this.purchaseService.updateProductList(body).subscribe(
-    //             (data) => {},
-    //             (err) => {
-    //                 this.snackbar.failureSnackBar();
-    //             },
-    //             () => {
-    //                 this.snackbar.successSnackBar();
-    //                 this.commonLogicService.successUpdate();
-    //             },
-    //         );
-    //     }
-    // }
 
     // update status
     updateStatusOrder(changeTo: number) {

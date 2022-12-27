@@ -1,8 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import moment from 'moment';
 import { BehaviorSubject, forkJoin, of } from 'rxjs';
+import { history_url } from 'src/app/core/const/url';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SaleReceiptService } from 'src/app/core/services/saleReceipt.service';
@@ -15,6 +17,7 @@ import { RootSaleReceipt, SaleOrder } from '../models/sale';
 import { SaleCreateBody, SaleUpdateBody } from '../models/SaleAPI';
 import { SaleDetail } from '../models/saleDetail';
 import { Payment } from '../template-component/template-footer-order/template-footer-order.component';
+import { CommonService } from './common.service';
 import { CommonLogicService } from './commonLogic.service';
 import { FormatSaleService } from './formatSale.service';
 import { PurchaseLogicService } from './purchaseLogic.service';
@@ -64,6 +67,8 @@ export class SaleLogicService {
         private puchaseLogicService: PurchaseLogicService,
         private purchaseService: PurchaseOrderService,
         private returnOrderService: ReturnOrderService,
+        private commonService: CommonService,
+        private http: HttpClient,
     ) {}
 
     setInfoCreateSource(body: any) {
@@ -296,7 +301,7 @@ export class SaleLogicService {
                 }
             });
     }
-    
+
     printExcelWithFilter(bodyFilter: string[], total: number) {
         let bodySent: any;
         bodySent = {
@@ -305,23 +310,25 @@ export class SaleLogicService {
         };
         bodySent.filter.pageSize = total;
         bodySent.filter.page = 1;
-        this.confirmService.open(`Bạn có muốn in excel ${total} bản ghi đã chọn không?`, ['In', 'Hủy']).subscribe((data) => {
-            if (data === 'In') {
-                this.saleReceiptService.print(bodySent).subscribe(
-                    (data) => {
-                        var blob = new Blob([data], {
-                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                        });
-                        const blobUrl = window.URL.createObjectURL(blob);
-                        window.open(blobUrl);
-                    },
-                    (err) => {
-                        this.snackbar.failureSnackBar();
-                    },
-                );
-            } else {
-            }
-        });
+        this.confirmService
+            .open(`Bạn có muốn in excel ${total} bản ghi đã chọn không?`, ['In', 'Hủy'])
+            .subscribe((data) => {
+                if (data === 'In') {
+                    this.saleReceiptService.print(bodySent).subscribe(
+                        (data) => {
+                            var blob = new Blob([data], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            });
+                            const blobUrl = window.URL.createObjectURL(blob);
+                            window.open(blobUrl);
+                        },
+                        (err) => {
+                            this.snackbar.failureSnackBar();
+                        },
+                    );
+                } else {
+                }
+            });
     }
 
     archiveOrders(listIdSelected: string[], routerLink: string | null) {
@@ -448,6 +455,7 @@ export class SaleLogicService {
             () => {
                 this.commonLogicService.successUpdate();
                 this.snackbar.successSnackBar();
+                this.purchaseService.updateLog(2, id);
             },
         );
     }

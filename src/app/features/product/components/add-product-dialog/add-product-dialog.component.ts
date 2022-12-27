@@ -72,7 +72,7 @@ export class AddProductDialogComponent implements OnInit {
             }
         });
     }
-    tabList = [
+    tabList: tabModel[] = [
         { title: 'Thông tin chung', leftIcon: 'fa-regular fa-file-lines' },
         { title: 'Bảng giá', leftIcon: 'fa-solid fa-dollar-sign' },
         { title: 'Định mức tồn kho', leftIcon: 'fa-solid fa-flag' },
@@ -81,4 +81,11 @@ export class AddProductDialogComponent implements OnInit {
         { title: 'Lịch sử', leftIcon: 'fa-solid fa-clock-rotate-left' },
         // { title: 'Chấm thi phòng nhóm', leftIcon: 'fa-solid fa-location-dot' },
     ];
+
+    tabNow: tabModel = this.tabList[0];
+}
+
+export class tabModel {
+    title: string;
+    leftIcon: string;
 }
