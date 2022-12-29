@@ -455,7 +455,7 @@ export class SaleLogicService {
             () => {
                 this.commonLogicService.successUpdate();
                 this.snackbar.successSnackBar();
-                this.purchaseService.updateLog(2, id);
+                this.commonService.updateLog(2, id).subscribe();
             },
         );
     }

@@ -25,7 +25,7 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
         private returnDetailsService: ReturnDetailsService,
         private productDialogService: ProductDialogService,
         private snackbarService: SnackbarService,
-        private purchaseService: PurchaseOrderService,
+        private commonService: CommonService,
         private router: ActivatedRoute,
     ) {
         this.checkAndUpdate = _.debounce(this.checkAndUpdate, 1);
@@ -54,7 +54,7 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
                                 discountAmount: this.returnDetailsService.discountAmount$.getValue(),
                                 tradeDiscount: this.returnDetailsService.tradeDiscount$.getValue(),
                             });
-                            this.purchaseService.updateLog(3, this.id);
+                            this.commonService.updateLog(3, this.id).subscribe();
                         },
                         error: (err) => {
                             this.snackbarService.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'top', false);

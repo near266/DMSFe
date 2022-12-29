@@ -12,20 +12,19 @@ table {
     height: calc(100vh - 150px);
 }
 
-
-table th {
+table th,
+.custom-header {
     position: sticky;
     top: 0px;
     text-align: center;
     font-weight: 600;
     font-size: 14px;
     z-index: 1;
-    @apply bg-green-600;
+    @apply bg-green-600 text-white;
 }
 
-table th,
 table td {
-    padding: 8px;
+    // padding: 8px;
 }
 
 table td {
@@ -49,7 +48,7 @@ tbody {
 }
 
 .custom-th {
-    @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x text-white;
+    @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300  border-x text-white;
 }
 
 .custom-sticky {
@@ -62,7 +61,7 @@ tbody {
 
 .custom-td {
     max-width: 180px;
-    @apply border-x border-solid pl-2 border-y;
+    @apply border-x border-solid border-y;
 }
 
 .header {

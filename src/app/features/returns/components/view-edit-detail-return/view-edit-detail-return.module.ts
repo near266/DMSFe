@@ -15,6 +15,8 @@ import { DetailReturnTableComponent } from './detail-return/detail-return-table/
 import { DetailReturnTableEditComponent } from './detail-return/detail-return-table-edit/detail-return-table-edit.component';
 import { DetailReturnPromotionComponent } from './detail-return/detail-return-promotion/detail-return-promotion.component';
 import { DetailReturnTablePromotionEditComponent } from './detail-return/detail-return-table-promotion-edit/detail-return-table-promotion-edit.component';
+import { HistoryComponent } from './history/history.component';
+import { TemplateComponentModule } from 'src/app/features/order-manager/template-component/template-component.module';
 
 @NgModule({
     declarations: [
@@ -25,6 +27,7 @@ import { DetailReturnTablePromotionEditComponent } from './detail-return/detail-
         DetailReturnTableEditComponent,
         DetailReturnPromotionComponent,
         DetailReturnTablePromotionEditComponent,
+        HistoryComponent,
     ],
     imports: [
         CommonModule,
@@ -35,6 +38,7 @@ import { DetailReturnTablePromotionEditComponent } from './detail-return/detail-
         FormlyMaterialModule,
         FormlyMatDatepickerModule,
         FormlyMatTextAreaModule,
+        TemplateComponentModule,
     ],
 })
 export class ViewEditDetailReturnModule {}

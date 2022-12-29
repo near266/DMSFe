@@ -55,7 +55,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
                                 text: `${detail.createdBy} khởi tạo khách hàng từ ${detail.source}`,
                             },
                             {
-                                text: ` ${this.datePipe.transform(detail.createdDate, 'dd/MM/yyyy - H:mm')}`,
+                                text: ` ${this.datePipe.transform(detail.createdDate)}`,
                             },
                         ],
                         colspan: 6,
@@ -70,7 +70,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
                                 text: `${detail.lastModifiedBy} cập nhật thông tin khách hàng từ ${detail.source}`,
                             },
                             {
-                                text: `${this.datePipe.transform(detail.lastModifiedDate, 'dd/MM/yyyy - H:mm')}`,
+                                text: `${this.datePipe.transform(detail.lastModifiedDate)}`,
                             },
                         ],
                         colspan: 6,

@@ -348,7 +348,7 @@ export class PurchaseLogicService {
             () => {
                 this.commonLogicService.successUpdate();
                 this.snackbar.successSnackBar();
-                this.purchaseService.updateLog(1, id);
+                this.commonService.updateLog(1, id).subscribe();
             },
         );
     }

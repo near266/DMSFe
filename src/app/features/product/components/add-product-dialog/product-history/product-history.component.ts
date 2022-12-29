@@ -44,7 +44,7 @@ export class ProductHistoryComponent implements OnInit {
                                 text: `${detail.createdBy} khởi tạo sản phẩm từ ${detail.source}`,
                             },
                             {
-                                text: ` ${this.datePipe.transform(detail.createdDate, 'dd/MM/yyyy - H:mm')}`,
+                                text: ` ${this.datePipe.transform(detail.createdDate)}`,
                             },
                         ],
                         colspan: 4,
@@ -59,7 +59,7 @@ export class ProductHistoryComponent implements OnInit {
                                 text: `${detail.lastModifiedBy} cập nhật thông tin sản phẩm từ ${detail.source}`,
                             },
                             {
-                                text: `${this.datePipe.transform(detail.lastModifiedDate, 'dd/MM/yyyy - H:mm')}`,
+                                text: `${this.datePipe.transform(detail.lastModifiedDate)}`,
                             },
                         ],
                         colspan: 4,
@@ -89,7 +89,7 @@ export class ProductHistoryComponent implements OnInit {
                         text: detail.conversionNumber,
                     },
                     {
-                        text: this.currencyPipe.transform(detail.price),
+                        text: this.currencyPipe.transform(detail.price, 'VND', 'symbol', '1.0-0'),
                     },
                     {
                         text: this.currencyPipe.transform(detail.retailPrice),

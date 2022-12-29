@@ -286,13 +286,4 @@ export class PurchaseOrderService {
             .post(this.api_gateway_url + '/PurchaseOrder/print006', body, { responseType: 'blob' })
             .pipe(map((res) => res));
     }
-    // history log
-    updateLog(type: number, id: string): Observable<any> {
-        let body = {
-            id: id,
-            type: type,
-        };
-        console.log(body);
-        return this.http.post(history_url + '/UpdateLog', body).pipe(map((response: any) => response));
-    }
 }
