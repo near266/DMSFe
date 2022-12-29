@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, OnDestroy } from '@angular/core';
 import { LogicService } from '../../services/logic.service';
 import { Photo } from '../../models/Photo';
 import { DatePipe } from '@angular/common';
@@ -6,13 +6,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { DetailPhotoComponent } from '../detail-photo/detail-photo.component';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-photo-new-customer',
     templateUrl: './photo-new-customer.component.html',
     styleUrls: ['./photo-new-customer.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
+export class PhotoNewCustomerComponent implements OnInit, AfterViewInit, OnDestroy {
+    private _subPhoto: Subscription;
+    private _subTotal: Subscription;
+
     photo: Photo[] = [];
     totalCount = 0;
     page: number = 1;
@@ -81,15 +86,19 @@ export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
         private router: Router,
         private title: Title,
     ) {}
+    ngOnDestroy(): void {
+        this._subPhoto.unsubscribe();
+        this._subTotal.unsubscribe();
+    }
 
     ngAfterViewInit(): void {
         this.logic.getListPhoto();
-        this.logic.photos$.subscribe((data) => {
+        this._subPhoto = this.logic.photos$.subscribe((data) => {
             Promise.resolve().then(() => {
                 this.photo = data;
             });
         });
-        this.logic.totalPhoto$.subscribe((data) => {
+        this._subTotal = this.logic.totalPhoto$.subscribe((data) => {
             Promise.resolve().then(() => {
                 this.totalCount = data;
             });
@@ -98,6 +107,11 @@ export class PhotoNewCustomerComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.title.setTitle('Hình ảnh viếng thăm');
+    }
+
+    trackByFn(index: number, item: any) {
+        if (!item) return null;
+        return item.checkIn.id;
     }
 
     detail(id: string) {
