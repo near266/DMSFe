@@ -10,6 +10,7 @@ import { ChangeRouteComponent } from './change-route/change-route.component';
 import { AddRouteComponent } from './add-route/add-route.component';
 import { FieldsDialogComponent } from './fields-dialog/fields-dialog.component';
 import { HistoryComponent } from './history/history.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { HistoryComponent } from './history/history.component';
   imports: [
     CommonModule,
     SharedModule,
+    ScrollingModule,
     CustomersRoutingModule
   ]
 })
