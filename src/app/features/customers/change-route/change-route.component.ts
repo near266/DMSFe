@@ -38,7 +38,8 @@ export class ChangeRouteComponent implements OnInit, AfterViewInit {
   open() {
     let dialogRef = this.dialog.open(AddRouteComponent, {
       minWidth: '400px',
-      data: this.id
+      data: this.id,
+      autoFocus: false
     });
     dialogRef.afterClosed().subscribe(data => {
       if(data) {
@@ -50,7 +51,7 @@ export class ChangeRouteComponent implements OnInit, AfterViewInit {
   }
 
   requiredRoles(role: string){
-    
+
     return this.rolesService.requiredRoles(role)
   }
 
