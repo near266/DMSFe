@@ -1,7 +1,11 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, QueryList } from '@angular/core';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { SaleDetail } from '../../models/saleDetail';
 import { CommonLogicService } from '../../services/commonLogic.service';
 import { SaleLogicService } from '../../services/saleLogic.service';
+import { Validate, ValidateService } from '../../services/validate.service';
+import { TemplateInforOrderComponent } from '../../template-component/template-infor-order/template-infor-order.component';
+import { TemplateTableProductComponent } from '../../template-component/template-table-product/template-table-product.component';
 
 @Component({
     selector: 'app-detail-container',
@@ -9,23 +13,39 @@ import { SaleLogicService } from '../../services/saleLogic.service';
     styleUrls: ['./detail-container.component.scss'],
 })
 export class DetailContainerComponent implements OnInit, AfterViewInit {
+    templateInforOrder: TemplateInforOrderComponent;
+    templateTableProducts: QueryList<TemplateTableProductComponent>;
     roleMain: string = 'member';
     statusNow: number;
     isEdit: boolean = false;
     id: string = '';
 
-    constructor(private saleLogicService: SaleLogicService, private commonLogicService: CommonLogicService) {}
+    constructor(
+        private saleLogicService: SaleLogicService,
+        private commonLogicService: CommonLogicService,
+        private validateService: ValidateService,
+        private snackBarService: SnackbarService,
+    ) {}
 
     ngOnInit(): void {
         this.roleMain = localStorage.getItem('roleMain')!;
         this.clearDataInDetailOrderSource();
-        this.commonLogicService.changeToEditType()
+        this.commonLogicService.changeToEditType();
     }
 
     ngAfterViewInit(): void {
         setTimeout(() => {
             this.getStatusNow();
-        });
+        }, 0);
+    }
+
+    onActivate(componentActive: any) {
+        if (componentActive.isDetailReceipt) {
+            setTimeout(() => {
+                this.templateInforOrder = componentActive.templateInforOrder;
+                this.templateTableProducts = componentActive.templateTableProducts;
+            });
+        }
     }
 
     clearDataInDetailOrderSource() {
@@ -45,7 +65,15 @@ export class DetailContainerComponent implements OnInit, AfterViewInit {
     }
 
     save() {
-        this.commonLogicService.save();
+        let validate: Validate = this.validateService.validateSale(this.templateInforOrder, this.templateTableProducts);
+        if (validate.isValid) {
+            this.commonLogicService.save();
+            this.changeType();
+        } else {
+            this.snackBarService.openSnackbar(validate.noteList.join('\n'), 2000, 'Đóng', 'center', 'bottom', false, [
+                'bg-red-500',
+            ]);
+        }
     }
 
     archive() {

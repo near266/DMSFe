@@ -13,12 +13,17 @@ export class SnackbarService {
         horizontalPosition: MatSnackBarHorizontalPosition,
         verticalPosition: MatSnackBarVerticalPosition,
         status: boolean,
+        panelClassAdd?: string[],
     ) {
         let panelClass;
+        let listClassAdd = new Array();
+        if (panelClassAdd) {
+            listClassAdd = panelClassAdd;
+        }
         if (status === true) {
-            panelClass = ['bg-green-500', 'text-white', 'w-fit'];
+            panelClass = [...listClassAdd, 'bg-green-500', 'text-white', 'w-fit', 'whitespace-pre-wrap'];
         } else {
-            panelClass = ['bg-yellow-500', 'text-white', 'w-fit'];
+            panelClass = [...listClassAdd, 'bg-yellow-500', 'text-white', 'w-fit', 'whitespace-pre-wrap'];
         }
         this._snackbar.open(message, action, {
             panelClass: panelClass,

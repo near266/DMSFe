@@ -1,16 +1,19 @@
 import { AsyncPipe } from '@angular/common';
-import { AfterViewInit, Component, OnInit, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, OnInit, OnDestroy, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
 import { Observable, Subscription } from 'rxjs';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { PurchaseDetail } from '../../../models/purchaseDetail';
 import { CommonLogicService } from '../../../services/commonLogic.service';
 import { PurchaseLogicService } from '../../../services/purchaseLogic.service';
+import { ValidateService } from '../../../services/validate.service';
 import {
     coppyObject,
     DataInput,
     Option,
+    TemplateInforOrderComponent,
 } from '../../../template-component/template-infor-order/template-infor-order.component';
+import { TemplateTableProductComponent } from '../../../template-component/template-table-product/template-table-product.component';
 export const StatusList = [
     {
         value: 1,
@@ -43,7 +46,11 @@ export const StatusList = [
     templateUrl: './detail-purchase.component.html',
     styleUrls: ['./detail-purchase.component.scss'],
 })
-export class DetailPurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DetailPurchaseComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewInit {
+    @ViewChild(TemplateInforOrderComponent) templateInforOrder: TemplateInforOrderComponent;
+    @ViewChildren(TemplateTableProductComponent) templateTableProducts: QueryList<TemplateTableProductComponent>;
+
+    isDetailPurchase: boolean = true;
     option: Option = {
         routerLink: 'order',
         type: 'Detail',
@@ -81,6 +88,7 @@ export class DetailPurchaseComponent implements OnInit, AfterViewInit, OnDestroy
         private async: AsyncPipe,
         private commonLogicService: CommonLogicService,
         private numberToText: NumberToTextService,
+        private validateService: ValidateService,
     ) {}
 
     ngOnInit(): void {
@@ -105,6 +113,7 @@ export class DetailPurchaseComponent implements OnInit, AfterViewInit, OnDestroy
     ngAfterViewInit(): void {
         setTimeout(() => {
             this.getDetail();
+            // this.validateService.validatePurchase(this.templateInforOrder);
         }, 0);
     }
 

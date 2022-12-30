@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { SaleEmployee } from 'src/app/core/model/SaleReceipt';
 import { SaleDetail } from '../../../models/saleDetail';
@@ -8,9 +8,11 @@ import {
     coppyObject,
     DataInput,
     Option,
+    TemplateInforOrderComponent,
 } from '../../../template-component/template-infor-order/template-infor-order.component';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
 import { Payment } from '../../../template-component/template-footer-order/template-footer-order.component';
+import { TemplateTableProductComponent } from '../../../template-component/template-table-product/template-table-product.component';
 
 @Component({
     selector: 'app-detail',
@@ -18,7 +20,11 @@ import { Payment } from '../../../template-component/template-footer-order/templ
     styleUrls: ['./detail.component.scss'],
 })
 export class DetailComponent implements OnInit, AfterViewInit, OnDestroy {
+    @ViewChild(TemplateInforOrderComponent) templateInforOrder: TemplateInforOrderComponent;
+    @ViewChildren(TemplateTableProductComponent) templateTableProducts: QueryList<TemplateTableProductComponent>;
     private subscriptions: Subscription = new Subscription();
+    isDetailReceipt: boolean = true;
+
     option: Option = {
         type: 'Detail',
         order: 'Sale',

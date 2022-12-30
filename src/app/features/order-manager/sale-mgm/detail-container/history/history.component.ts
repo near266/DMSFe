@@ -10,6 +10,7 @@ import { TypeOrder } from '../../../template-component/template-history-order/ty
     styleUrls: ['./history.component.scss'],
 })
 export class HistoryComponent implements OnInit, OnDestroy {
+    isDetailReceipt: boolean = false;
     data: HistoryOrder = new HistoryOrder();
     TypeOrder = TypeOrder;
     subscription: Subscription = new Subscription();

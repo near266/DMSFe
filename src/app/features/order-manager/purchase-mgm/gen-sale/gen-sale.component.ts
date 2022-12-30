@@ -1,15 +1,22 @@
-import { AfterViewInit, Component, OnInit, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, OnInit, OnDestroy, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import moment from 'moment';
 import { Observable } from 'rxjs';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { PurchaseDetail } from '../../models/purchaseDetail';
 import { CommonLogicService } from '../../services/commonLogic.service';
 import { PurchaseLogicService } from '../../services/purchaseLogic.service';
 import { SaleLogicService } from '../../services/saleLogic.service';
+import { Validate, ValidateService } from '../../services/validate.service';
 import { Payment } from '../../template-component/template-footer-order/template-footer-order.component';
-import { DataInput, Option } from '../../template-component/template-infor-order/template-infor-order.component';
+import {
+    DataInput,
+    Option,
+    TemplateInforOrderComponent,
+} from '../../template-component/template-infor-order/template-infor-order.component';
+import { TemplateTableProductComponent } from '../../template-component/template-table-product/template-table-product.component';
 
 @Component({
     selector: 'app-gen-sale',
@@ -17,6 +24,8 @@ import { DataInput, Option } from '../../template-component/template-infor-order
     styleUrls: ['./gen-sale.component.scss'],
 })
 export class GenSaleComponent implements OnInit, AfterViewInit, OnDestroy {
+    @ViewChild(TemplateInforOrderComponent) templateInforOrder: TemplateInforOrderComponent;
+    @ViewChildren(TemplateTableProductComponent) templateTableProducts: QueryList<TemplateTableProductComponent>;
     option: Option = {
         type: 'Gen',
         order: 'Sale',
@@ -47,6 +56,8 @@ export class GenSaleComponent implements OnInit, AfterViewInit, OnDestroy {
         private purchaseService: PurchaseOrderService,
         private commonLogicService: CommonLogicService,
         private numberToText: NumberToTextService,
+        private validateService: ValidateService,
+        private snackBarService: SnackbarService,
     ) {}
 
     ngOnInit(): void {
@@ -97,8 +108,14 @@ export class GenSaleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     genSale() {
-        console.log('Gen đơn bán');
-        this.purchaseLogicService.genSale();
+        let validate: Validate = this.validateService.validateSale(this.templateInforOrder, this.templateTableProducts);
+        if (validate.isValid) {
+            this.purchaseLogicService.genSale();
+        } else {
+            this.snackBarService.openSnackbar(validate.noteList.join('\n'), 2000, 'Đóng', 'center', 'bottom', false, [
+                'bg-red-500',
+            ]);
+        }
     }
 
     getListProductAndPromotionPassToInput(data: PurchaseDetail) {

@@ -10,7 +10,7 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import moment from 'moment';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
@@ -222,6 +222,8 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
 
     setListRouteAndEmployee(groupId: string) {
         this.setEmployeeAndRouteWhenChangeGroup(groupId);
+        // set lại orderEmployeeId về null
+        this.form.get('orderEmployeeId')?.setValue(null);
     }
 
     setEmployeeAndRouteWhenChangeGroup(groupId: string) {
@@ -373,11 +375,20 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
                     switch (roleMain) {
                         // nếu là admin -> set đầu
                         case 'admin': {
+                            // nếu có thông tin về route và tuyến
                             if (data.list) {
                                 this.form.patchValue({
                                     routeId: listRoute[0]?.id,
                                     groupId: listRoute[0]?.unitTreeGroup?.id,
                                     orderEmployeeId: listEmployee[0]?.id,
+                                });
+                            }
+                            // nếu ko có thông tin về route và tuyến
+                            else {
+                                this.form.patchValue({
+                                    routeId: null,
+                                    groupId: null,
+                                    orderEmployeeId: null,
                                 });
                             }
                             break;
@@ -428,10 +439,10 @@ export class TemplateInforOrderComponent implements OnInit, AfterViewInit, OnCha
             saleDate: [null],
             deliveryDate: [null],
             groupId: [null],
-            orderEmployeeId: [null],
-            saleEmployee: [null],
+            orderEmployeeId: [null, Validators.required],
+            saleEmployee: [null, Validators.required],
             routeId: [null],
-            customerId: [null],
+            customerId: [null, Validators.required],
             customerName: [null],
             phone: [null],
             address: [null],

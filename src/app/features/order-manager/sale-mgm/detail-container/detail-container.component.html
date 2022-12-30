@@ -46,11 +46,7 @@
                 <span class="text-white">Xóa</span>
             </button>
 
-            <button
-                *ngIf="isEdit"
-                (click)="changeType(); save()"
-                class="button-primary-sm flex items-center justify-between mr-2"
-            >
+            <button *ngIf="isEdit" (click)="save()" class="button-primary-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-check text-white mr-2"></i>
                 <span class="text-white">Lưu</span>
             </button>
@@ -93,6 +89,6 @@
     </div>
     <!-- main -->
     <div class="ml-48 w-full">
-        <router-outlet></router-outlet>
+        <router-outlet (activate)="onActivate($event)"></router-outlet>
     </div>
 </div>
