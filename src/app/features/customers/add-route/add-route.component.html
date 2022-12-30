@@ -11,7 +11,7 @@
   <hr class="my-2">
   <mat-form-field appearance="outline" class="w-full">
     <mat-label>Tìm kiếm tuyến</mat-label>
-    <input #input matInput>
+    <input #input matInput (keyup.enter)="search(input.value)">
     <mat-icon matSuffix class="cursor-pointer" (click)="search(input.value)">search</mat-icon>
   </mat-form-field>
     <cdk-virtual-scroll-viewport itemSize="10" class="w-full h-[40vh]">
