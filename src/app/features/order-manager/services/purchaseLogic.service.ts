@@ -381,84 +381,65 @@ export class PurchaseLogicService {
             deliveryDate: this.detailSource.getValue().deliveryDate,
             prePayment: this.detailSource.getValue().prePayment,
         };
-        // Chuyển sang trạng thái đã duyệt
-        if (changeTo === 2) {
-            this.purchaseService.update(body).subscribe(
-                (data) => {},
-                (err) => {},
-                () => {
-                    // update thành công sẽ gửi tín hiểu để reload thông tin
-                    this.commonLogicService.successUpdate();
-                    // custom Status when done
-                    this.snackbar.openSnackbar('Duyệt thành công', 2000, 'Đóng', 'center', 'bottom', true);
-                },
-            );
-        }
-        // Chuyển sang trạng thái từ chối -> mở dialog confirm
-        else if (changeTo === 5) {
-            let dialogRef = this.dialog.open(ConfirmRejectComponent, {
-                maxWidth: '100vw',
-                maxHeight: '100vh',
-                height: '100%',
-                width: '100%',
-                panelClass: 'full-screen-modal',
-            });
-            dialogRef.afterClosed().subscribe((data) => {
-                if (data === 'Lưu') {
-                    this.purchaseService.update(body).subscribe(
-                        (data) => {},
-                        (err) => {},
-                        () => {
-                            // update thành công sẽ gửi tín hiểu để reload thông tin
-                            this.commonLogicService.successUpdate();
-                            // custom Status when done
-                            this.snackbar.openSnackbar(
-                                'Từ chối đơn đặt hàng thành công',
-                                2000,
-                                'Đóng',
-                                'center',
-                                'bottom',
-                                true,
-                            );
-                        },
-                    );
-                } else {
-                }
-            });
-        }
-        // khi ấn vào nút bán hàng (chia 2 trường hợp nếu trạng thái hiện tại là duyệt hay đã bán hàng)
-        // Tạm thời chỉ để 1 trường hợp là đã duyệt
-        else if (changeTo === 3) {
-            // this.dialog.open(GenOrderSaleComponent, {
-            //     maxWidth: '100vw',
-            //     maxHeight: '100vh',
-            //     height: '100%',
-            //     width: '100%',
-            //     panelClass: 'full-screen-modal',
-            //     data: {
-            //         isSaled: false,
-            //         detailOrder: this.detailSource.getValue(),
-            //     },
-            // });
-
-            this.router.navigate(['order/purchase/genSale']);
-            // this.genSaleSource.next(this.detailSource.getValue());
-
-            // if (this.statusNow === 2) {
-            // } else if (this.statusNow === 3) {
-            // this.dialog.open(GenOrderSaleComponent, {
-            //     maxWidth: '100vw',
-            //     maxHeight: '100vh',
-            //     height: '100%',
-            //     width: '100%',
-            //     panelClass: 'full-screen-modal',
-            //     data: {
-            //         isSaled: true,
-            //     },
-            // });
-            // console.log('Tạo mới đơn bán hàng khi trạng thái hiện tại là đã bán hàng');
-        } else if (changeTo === 4) {
-            this.purchaseService.update(body);
+        switch (changeTo) {
+            // Chuyển sang trạng thái đã duyệt
+            case 2: {
+                this.purchaseService.update(body).subscribe(
+                    (data) => {},
+                    (err) => {},
+                    () => {
+                        console.log('OK');
+                        // custom Status when done
+                        this.snackbar.openSnackbar('Duyệt thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                        // update thành công sẽ gửi tín hiểu để reload thông tin
+                        this.commonLogicService.successUpdate();
+                    },
+                );
+                break;
+            }
+            case 3: {
+                this.router.navigate(['order/purchase/genSale']);
+                break;
+            }
+            case 4: {
+                this.purchaseService.update(body);
+                break;
+            }
+            case 5: {
+                let dialogRef = this.dialog.open(ConfirmRejectComponent, {
+                    maxWidth: '100vw',
+                    maxHeight: '100vh',
+                    height: '100%',
+                    width: '100%',
+                    panelClass: 'full-screen-modal',
+                });
+                dialogRef.afterClosed().subscribe((data) => {
+                    if (data === 'Lưu') {
+                        this.purchaseService.update(body).subscribe(
+                            (data) => {},
+                            (err) => {},
+                            () => {
+                                // update thành công sẽ gửi tín hiểu để reload thông tin
+                                this.commonLogicService.successUpdate();
+                                // custom Status when done
+                                this.snackbar.openSnackbar(
+                                    'Từ chối đơn đặt hàng thành công',
+                                    2000,
+                                    'Đóng',
+                                    'center',
+                                    'bottom',
+                                    true,
+                                );
+                            },
+                        );
+                    } else {
+                    }
+                });
+                break;
+            }
+            default: {
+                break;
+            }
         }
     }
 
@@ -533,6 +514,7 @@ export class PurchaseLogicService {
             totalPayment: paymentSource.totalPayment,
             source: 'Web',
         };
+        console.log(body);
         this.purchaseService.createOrder(body).subscribe(
             (data) => {},
             (err) => {

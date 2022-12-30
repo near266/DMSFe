@@ -1,5 +1,6 @@
 import { CurrencyPipe, DatePipe, PercentPipe } from '@angular/common';
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CRow } from 'src/app/core/shared/components/template-table-normal/template-table-normal.component';
 import { ProductApiService } from '../../../apis/product.api.service';
 import { ProductHistory } from '../../../models/productHistory';
@@ -9,10 +10,11 @@ import { ProductHistory } from '../../../models/productHistory';
     templateUrl: './product-history.component.html',
     styleUrls: ['./product-history.component.scss'],
 })
-export class ProductHistoryComponent implements OnInit {
+export class ProductHistoryComponent implements OnInit, OnDestroy {
     @Input() productId?: string = '';
     headers = ['Mã sản phẩm', 'Tên sản phẩm', 'VAT', 'ĐVT', 'ĐVT Lẻ', 'HSQĐ', 'Giá', 'Giá lẻ'];
     rows: CRow[] = [];
+    subscriptions: Subscription = new Subscription();
     constructor(
         private productService: ProductApiService,
         private datePipe: DatePipe,
@@ -24,10 +26,16 @@ export class ProductHistoryComponent implements OnInit {
         this.getHistory();
     }
 
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
     getHistory() {
-        this.productService.getProductHistory(this.productId!).subscribe((data: ProductHistory[]) => {
-            this.formatData(data);
-        });
+        this.subscriptions.add(
+            this.productService.getProductHistory(this.productId!).subscribe((data: ProductHistory[]) => {
+                this.formatData(data);
+            }),
+        );
     }
 
     formatData(data: ProductHistory[]) {
@@ -77,7 +85,7 @@ export class ProductHistoryComponent implements OnInit {
                         text: detail.productName,
                     },
                     {
-                        text: this.percentPipe.transform(detail.vat),
+                        text: this.percentPipe.transform(detail.vat / 100),
                     },
                     {
                         text: detail.wholeSaleUnit?.unitName,
@@ -92,7 +100,7 @@ export class ProductHistoryComponent implements OnInit {
                         text: this.currencyPipe.transform(detail.price, 'VND', 'symbol', '1.0-0'),
                     },
                     {
-                        text: this.currencyPipe.transform(detail.retailPrice),
+                        text: this.currencyPipe.transform(detail.retailPrice, 'VND', 'symbol', '1.0-0'),
                     },
                 ],
             };
