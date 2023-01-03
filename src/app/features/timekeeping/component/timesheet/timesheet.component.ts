@@ -56,7 +56,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
     constructor(
         private datePipe: DatePipe,
         private title: Title,
-        private dateService: DateService,
+        public dateService: DateService,
         private employeeService: EmployeeService,
         private timeSheetService: TimeSheetService,
     ) {}
@@ -102,6 +102,11 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
             right: 'w-full',
             statusbar: false,
         };
+    }
+
+    trackByFn(index: number, item: any) {
+        if(!item) return null;
+        return index;
     }
 
     init() {
