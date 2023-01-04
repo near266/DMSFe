@@ -21,7 +21,7 @@
       <div>
         <div class="w-full items-center hover:font-medium mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
           <i class="text-base mr-3 fa-regular fa-calendar-xmark"></i>
-          <span class="text-sm">Đến ngày: </span><input type="date" [(ngModel)]="now" class="w-24 border border-solid border-black mx-1 p-1 rounded-sm text-xs font-medium h-7">
+          <span class="text-sm">Đến ngày: </span><input type="date" [(ngModel)]="now" (ngModelChange)="selectedDate()" class="w-24 border border-solid border-black mx-1 p-1 rounded-sm text-xs font-medium h-7">
         </div>
       </div>
       <app-menu-collapse (Selection)="selectPosition($event)" [Config]="positionMenu"></app-menu-collapse>
@@ -57,20 +57,20 @@
                 <th class="custom-th">STT</th>
                 <th class="custom-th">Mã nhân viên</th>
                 <th class="custom-th">Nhân viên</th>
-                <th class="custom-th">
-                  <div class="flex flex-col">
-                    <span class="mb-2 text-center">Ngày</span>
-                    <span class="text-center">Thứ</span>
-                  </div>
+                <th style="padding: 8px 0;" class="custom-th">
+                    <div class="flex flex-col">
+                        <tr class="flex-1 px-[8px] text-center">Ngày</tr>
+                        <div class="h-[1.5px] my-1 w-full bg-gray-300 border-solid"></div>
+                        <tr class=" flex-1 px-[8px] text-center">Thứ</tr>
+                    </div>
                 </th>
-
-                    <th class="custom-th" *ngFor="let i of dateService.allDayOfMonth$ | async; trackBy: trackByFn">
-                      <div class="flex flex-col">
-                        <span class="mb-2 text-center">{{i.date}}</span>
-                        <span class="text-center">{{i.day}}</span>
-                      </div>
-                    </th>
-
+                <th style="padding: 8px 0;" class="custom-th" *ngFor="let i of dateService.allDayOfMonth$ | async; trackBy: trackByFn">
+                    <div class="flex flex-col">
+                        <tr class="text-center flex-1 px-[8px]">{{i.date}}</tr>
+                        <div class="h-[1.5px] my-1 w-full bg-gray-300 border-solid"></div>
+                        <tr class="text-center flex-1 px-[8px]">{{i.day}}</tr>
+                    </div>
+                </th>
                 <th class="custom-th">Ngày đi làm</th>
                 <th class="custom-th">Trễ</th>
                 <th class="custom-th">Sớm</th>
@@ -79,38 +79,88 @@
               </tr>
             </thead>
             <tbody>
-                <tr class="custom-row"*ngFor="let item of timeSheets; trackBy: trackByFn" >
+                <ng-container *ngFor="let item of timeSheetService.list$ | async; trackBy: trackByFn">
+                  <tr class="custom-row">
+                      <td class="custom-td border-b" [colSpan]="days.length + 9">{{item.group.name}}</td>
+                  </tr>
+                  <tr class="custom-row" *ngFor="let i of item.listData; let j = index">
+                    <td align="center" class="custom-td border-b text-center" ><div class="text-center">{{j + 1}}</div></td>
+                    <td class="custom-td border-b">{{i.employee ? i.employee.employeeCode : ''}}</td>
+                    <td class="custom-td border-b">{{i.employee ? i.employee.employeeName : ''}}</td>
 
-                    <td class="custom-td border-b" >{{item.employee.employeeName}}</td>
-                </tr>
-                <!-- <tr class="custom-row">
-                  <td *ngIf="days.length + 8 == 38" class="custom-td border-b" colspan="38">{{item.employee.employeeName}}</td>
-                  <td *ngIf="days.length + 8 == 39" class="custom-td border-b" colspan="39">{{item.employee.employeeName}}</td>
-                  <td *ngIf="days.length + 8 == 37" class="custom-td border-b" colspan="37">{{item.employee.employeeName}}</td>
-                  <td *ngIf="days.length + 8 == 36" class="custom-td border-b" colspan="36">{{item.employee.employeeName}}</td>
-                  <td class="custom-td border-b" rowspan="7">0</td>
-                </tr>
-                <tr>
-                  <td class="custom-td border-b" rowspan="6">1</td>
-                  <td class="custom-td border-b" rowspan="6">NV_01</td>
-                  <td class="custom-td border-b" rowspan="6">BH_Lê Tuấn Anh</td>
-                  <td class="custom-td border-b">Vào đầu</td>
-                </tr>
-                <tr>
-                  <td class="custom-td border-b">Ra cuối</td>
-                </tr>
-                <tr>
-                  <td class="custom-td border-b">Trễ</td>
-                </tr>
-                <tr>
-                  <td class="custom-td border-b">Sớm</td>
-                </tr>
-                <tr>
-                  <td class="custom-td border-b">T.Giờ</td>
-                </tr>
-                <tr>
-                  <td class="custom-td border-b">Công</td>
-                </tr> -->
+                    <td style="padding: 8px 0;" class="custom-td border-b">
+                        <div class="flex flex-col">
+                            <tr class="flex-1 text-center">Vào đầu</tr>
+                            <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <tr class="flex-1 text-center">Ra cuối</tr>
+                            <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <tr class="flex-1 text-center">Trễ</tr>
+                            <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <tr class="flex-1 text-center">Sớm</tr>
+                            <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <tr class="flex-1 text-center">T.Giờ</tr>
+                            <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <tr class="flex-1 text-center">Công</tr>
+                        </div>
+                    </td>
+                    <td style="padding: 8px 0;" class="custom-td border-b" *ngFor="let col of dateService.allDayOfMonth$ | async; let index = index; trackBy: trackByFn">
+                        <div style="height: 100%;" class="text-center">
+                            <span style="height: 16.666667%;" class="px-[8px]">
+                                <span *ngIf="i.listTime && i.listTime[0].minList">
+                                    {{i.listTime[0].minList[col.date] != null ? i.listTime[0].minList[col.date].time.split(':')[0] + ':' + i.listTime[0].minList[col.date].time.split(':')[1] : ''}}
+                                </span>
+                            </span>
+                            <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <span style="height: 16.666667%;" class="px-[8px]">
+                                <span *ngIf="i.listTime && i.listTime[0].maxList && col.date">
+                                    {{i.listTime[0].maxList[col.date] != null ? i.listTime[0].maxList[col.date].time.split(':')[0] + ':' + i.listTime[0].maxList[col.date].time.split(':')[1] : ''}}
+                                </span>
+                            </span>
+                            <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <span style="height: 16.666667%;" class="px-[8px]">
+                                <span *ngIf="i.listTime && i.listTime[0].minList">
+                                    {{i.listTime[0].minList[col.date] != null ? i.listTime[0].minList[col.date].late.split(':')[0] + ':' + i.listTime[0].minList[col.date].late.split(':')[1] : ''}}
+                                </span>
+                            </span>
+                            <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <span style="height: 16.666667%;" class="px-[8px]">
+                                <span *ngIf="i.listTime && i.listTime[0].maxList">
+                                    {{i.listTime[0].maxList[col.date] != null ? i.listTime[0].maxList[col.date].early.split(':')[0] + ':' + i.listTime[0].maxList[col.date].early.split(':')[1] : ''}}
+                                </span>
+                            </span>
+                            <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <span style="height: 16.666667%;" class="px-[8px]">
+                                <span *ngIf="i.listTime && i.listTime[0].minList">
+                                    {{i.listTime[0].minList[col.date] != null && i.listTime[0].minList[col.date].workDay != null ? i.listTime[0].minList[col.date].workDay : ''}}
+                                </span>
+                            </span>
+                            <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <span style="height: 16.666667%;" class="px-[8px]">
+                                <span *ngIf="i.listTime && i.listTime[0].minList">
+                                    {{i.listTime[0].minList[col.date] != null && i.listTime[0].minList[col.date].totalWork != null ? i.listTime[0].minList[col.date].totalWork : '0'}}
+                                </span>
+                            </span>
+                            <!-- <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
+                            <span *ngIf="i.listTime != null  && i.listTime.length > 0 && i.listTime[0].maxList != null && i.listTime[0].maxList.length > 0 && index <= i.listTime[0].maxList.length " class="h-1/6 px-[8px]">{{i.listTime[0].maxList[index] && i.listTime[0].maxList[index].time != null ? i.listTime[0].maxList[index].time.split(':')[0] + ':' + i.listTime[0].maxList[index].time.split(':')[1] : ''}}</span> -->
+                        </div>
+                    </td>
+                    <td class="custom-td border-b">
+                        <div class="text-center"></div>
+                    </td>
+                    <td class="custom-td border-b">
+                        <div class="text-center"></div>
+                    </td>
+                    <td class="custom-td border-b">
+                        <div class="text-center"></div>
+                    </td>
+                    <td class="custom-td border-b">
+                        <div class="text-center"></div>
+                    </td>
+                    <td class="custom-td border-b">
+                        <div class="text-center"></div>
+                    </td>
+                  </tr>
+                </ng-container>
               </tbody>
             </table>
       </div>
