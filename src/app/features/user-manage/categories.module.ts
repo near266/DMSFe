@@ -64,6 +64,10 @@ import { AddAreaComponent } from './areas/add-area/add-area.component';
 import { AreaComponent } from './areas/area/area.component';
 import { DetailAreaComponent } from './areas/area/detail-area/detail-area.component';
 import { FieldInput, FieldSelect } from './field-type/field-type.component';
+import { AlbumsComponent } from './albums/albums.component';
+import { AddAlbumComponent } from './albums/add-album/add-album.component';
+import { AlbumComponent } from './albums/album/album.component';
+import { DetailAlbumComponent } from './albums/album/detail-album/detail-album.component';
 
 const routes: Routes = [
     {
@@ -105,6 +109,10 @@ const routes: Routes = [
     {
         path: 'channel',
         component: ChannelsComponent,
+    },
+    {
+        path: 'album',
+        component: AlbumsComponent,
     },
 ];
 
@@ -166,6 +174,10 @@ const routes: Routes = [
         AddAreaComponent,
         AreaComponent,
         DetailAreaComponent,
+        AlbumsComponent,
+        AddAlbumComponent,
+        AlbumComponent,
+        DetailAlbumComponent,
     ],
     imports: [
         CommonModule, RouterModule.forChild(routes), 
@@ -181,6 +193,7 @@ const routes: Routes = [
                 { name: 'customerType', component: ProductFieldWrapper },
                 { name: 'area', component: ProductFieldWrapper },
                 { name: 'channel', component: ProductFieldWrapper },
+                { name: 'album', component: ProductFieldWrapper },
             ],
             types: [
                 { name: 'unit-input', component: FieldInput, wrappers: ['unit'] },
@@ -199,6 +212,8 @@ const routes: Routes = [
                 { name: 'area-select', component: FieldSelect, wrappers: ['area'] },
                 { name: 'channel-input', component: FieldInput, wrappers: ['channel'] },
                 { name: 'channel-select', component: FieldSelect, wrappers: ['channel'] },
+                { name: 'album-input', component: FieldInput, wrappers: ['album'] },
+                { name: 'album-select', component: FieldSelect, wrappers: ['album'] },
             ],
             validationMessages: [{ name: 'required', message: 'Trường này là bắt buộc' }],
         }),
