@@ -8,101 +8,183 @@ import { Data1, Employee, Group, TimeKeepingC, VisitReport, CheckInC } from '../
 export class FormatDataToTableService {
     constructor(private datePipe: DatePipe) {}
     formatListData(data: { data: VisitReport[] }, totalColSpan: number) {
-        let dataAfterFormat: any = data.data.map((visiReport: VisitReport) => {
-            // employee Info
-            let employeeList = visiReport.data1.map((data1: Data1) => {
-                let listLv1Col: any[] = [];
-                let lv11Row: any[] = [];
-                let lv12Row: any[] = [];
-                let lv13Row: any[] = [];
-                let lv14Row: any[] = [];
-                // timeKeepingList
-                let timeKeepingList = data1.timeKeepingCs.map((timeKeeping: TimeKeepingC) => {
-                    // Ngày
-                    lv11Row.push(this.datePipe.transform(timeKeeping.timeKeepingDate, 'dd/MM/yyyy'));
-                    // Thứ
-                    lv12Row.push(this.datePipe.transform(timeKeeping.timeKeepingDate, 'dd/MM/yyyy'));
-                    // Giờ làm
-                    lv13Row.push('Giờ làm chưa biết lấy trường nào');
-                    // Giờ VT
-                    lv14Row.push('Giờ VT chưa biết lấy trường nào');
-                    // chechkin List
-                    let checkinList = timeKeeping.checkInC.map((checkinInfo: CheckInC) => {
-                        // Giờ đồng bộ
-                        return {
-                            content: [
-                                // Giờ đồng bộ
-                                'Không biết lấy giờ đồng bộ trường nào',
-                                // Mã
-                                checkinInfo.customer.customerCode,
-                                // Tên
-                                checkinInfo.customer.customerName,
-                                // Địa chỉ
-                                checkinInfo.customer.address,
-                                // Loại KH
-                                checkinInfo.customer.customerType.customerTypeName,
-                                // Nhóm KH
-                                checkinInfo.customer.customerGroup.customerGroupName,
-                                // SĐT
-                                checkinInfo.customer.phone,
-                                // Liên hệ
-                                checkinInfo.customer.contactName,
-                                // Check in
-                                this.datePipe.transform(checkinInfo.checkInTime),
-                                // Check out
-                                this.datePipe.transform(checkinInfo.checkOutTime),
-                                // Số giờ
-                                'Chưa biết lấy số giờ trường nào',
-                                // Địa chỉ checkin
-                                checkinInfo.checkInAddress,
-                                // Cách KH
-                                'Chưa biết lấy cách KH trường nào',
-                                // Cách checkin
-                                'Chưa biết lấy cách checkin trường nào',
-                                // Thiết bị
-                                'Chưa biết lấy thiết bị trường nào',
-                                // Chụp ảnh
-                                'Chưa biết lấy chụp ảnh trường nào',
-                                // Đúng tuyến
-                                checkinInfo.isRoute,
-                                // Đơn hàng
-                                checkinInfo.isOrder,
-                                // Ghi tồn
-                                'Chưa biết ghi tồn lấy trường nào',
-                                // Số km di chuyển
-                                'Chưa biết lấy số km di chuyển trường nào',
-                                // Ghi chú
-                                checkinInfo.note,
+        // let dataAfterFormat: any = data.data.map((visiReport: VisitReport) => {
+        //     // employee Info
+        //     let employeeList = visiReport.data1.map((data1: Data1) => {
+        //         let listLv1Col: any[] = [];
+        //         let lv11Row: any[] = [];
+        //         let lv12Row: any[] = [];
+        //         let lv13Row: any[] = [];
+        //         let lv14Row: any[] = [];
+        //         // timeKeepingList
+        //         let timeKeepingList = data1.timeKeepingCs.map((timeKeeping: TimeKeepingC) => {
+        //             // Ngày
+        //             lv11Row.push(this.datePipe.transform(timeKeeping.timeKeepingDate, 'dd/MM/yyyy'));
+        //             // Thứ
+        //             lv12Row.push(this.datePipe.transform(timeKeeping.timeKeepingDate, 'dd/MM/yyyy'));
+        //             // Giờ làm
+        //             lv13Row.push('Giờ làm chưa biết lấy trường nào');
+        //             // Giờ VT
+        //             lv14Row.push('Giờ VT chưa biết lấy trường nào');
+        //             // chechkin List
+        //             let checkinList = timeKeeping.checkInC.map((checkinInfo: CheckInC) => {
+        //                 // Giờ đồng bộ
+        //                 return {
+        //                     content: [
+        //                         // Giờ đồng bộ
+        //                         'Không biết lấy giờ đồng bộ trường nào',
+        //                         // Mã
+        //                         checkinInfo.customer.customerCode,
+        //                         // Tên
+        //                         checkinInfo.customer.customerName,
+        //                         // Địa chỉ
+        //                         checkinInfo.customer.address,
+        //                         // Loại KH
+        //                         checkinInfo.customer.customerType.customerTypeName,
+        //                         // Nhóm KH
+        //                         checkinInfo.customer.customerGroup.customerGroupName,
+        //                         // SĐT
+        //                         checkinInfo.customer.phone,
+        //                         // Liên hệ
+        //                         checkinInfo.customer.contactName,
+        //                         // Check in
+        //                         this.datePipe.transform(checkinInfo.checkInTime),
+        //                         // Check out
+        //                         this.datePipe.transform(checkinInfo.checkOutTime),
+        //                         // Số giờ
+        //                         'Chưa biết lấy số giờ trường nào',
+        //                         // Địa chỉ checkin
+        //                         checkinInfo.checkInAddress,
+        //                         // Cách KH
+        //                         'Chưa biết lấy cách KH trường nào',
+        //                         // Cách checkin
+        //                         'Chưa biết lấy cách checkin trường nào',
+        //                         // Thiết bị
+        //                         'Chưa biết lấy thiết bị trường nào',
+        //                         // Chụp ảnh
+        //                         'Chưa biết lấy chụp ảnh trường nào',
+        //                         // Đúng tuyến
+        //                         checkinInfo.isRoute,
+        //                         // Đơn hàng
+        //                         checkinInfo.isOrder,
+        //                         // Ghi tồn
+        //                         'Chưa biết ghi tồn lấy trường nào',
+        //                         // Số km di chuyển
+        //                         'Chưa biết lấy số km di chuyển trường nào',
+        //                         // Ghi chú
+        //                         checkinInfo.note,
+        //                     ],
+        //                 };
+        //             });
+        //             return {
+        //                 content: [
+        //                     // Ngày
+        //                     this.datePipe.transform(timeKeeping.timeKeepingDate, 'dd/MM/yyyy'),
+        //                     // Thứ
+        //                     this.datePipe.transform(timeKeeping.timeKeepingDate, 'dd/MM/yyyy'),
+        //                     // Giờ làm
+        //                     'Chưa biết lấy trường nào',
+        //                     // Giờ VT
+        //                     'Chưa biết lấy trường nào',
+        //                 ],
+        //                 list: checkinList,
+        //             };
+        //         });
+        //         listLv1Col.push(lv11Row, lv12Row, lv13Row, lv14Row);
+        //         return {
+        //             content: [data1.employee.employeeCode, data1.employee.employeeName],
+        //             list: timeKeepingList,
+        //             listLv1Col: listLv1Col,
+        //             listLv2Col: this.getListCheckin(data1.timeKeepingCs),
+        //         };
+        //     });
+        //     return {
+        //         content: [visiReport.group.name],
+        //         list: employeeList,
+        //     };
+        // });
+        let dataAfterFormat: any = [
+            [
+                {
+                    employeeName: 'NV1',
+                    timkeepingList: [
+                        {
+                            time: 'TimeKeeping 1',
+                            checkinList: [
+                                {
+                                    address: 'Adress 11',
+                                },
+                                {
+                                    address: 'Adress 12',
+                                },
+                                {
+                                    address: 'Adress 13',
+                                },
+                                {
+                                    address: 'Adress 14',
+                                },
                             ],
-                        };
-                    });
-                    return {
-                        content: [
-                            // Ngày
-                            this.datePipe.transform(timeKeeping.timeKeepingDate, 'dd/MM/yyyy'),
-                            // Thứ
-                            this.datePipe.transform(timeKeeping.timeKeepingDate, 'dd/MM/yyyy'),
-                            // Giờ làm
-                            'Chưa biết lấy trường nào',
-                            // Giờ VT
-                            'Chưa biết lấy trường nào',
-                        ],
-                        list: checkinList,
-                    };
-                });
-                listLv1Col.push(lv11Row, lv12Row, lv13Row, lv14Row);
-                return {
-                    content: [data1.employee.employeeCode, data1.employee.employeeName],
-                    list: timeKeepingList,
-                    listLv1Col: listLv1Col,
-                    listLv2Col: this.getListCheckin(data1.timeKeepingCs),
-                };
-            });
-            return {
-                content: [visiReport.group.name],
-                list: employeeList,
-            };
-        });
+                        },
+                        {
+                            time: 'TimeKeeping 2',
+                            checkinList: [
+                                {
+                                    address: 'Adress 21',
+                                },
+                                {
+                                    address: 'Adress 22',
+                                },
+                                {
+                                    address: 'Adress 23',
+                                },
+                                {
+                                    address: 'Adress 23',
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    employeeName: 'NV2',
+                    timkeepingList: [
+                        {
+                            time: 'TimeKeeping 1',
+                            checkinList: [
+                                {
+                                    address: 'Adress 11',
+                                },
+                                {
+                                    address: 'Adress 12',
+                                },
+                                {
+                                    address: 'Adress 13',
+                                },
+                                {
+                                    address: 'Adress 14',
+                                },
+                            ],
+                        },
+                        {
+                            time: 'TimeKeeping 2',
+                            checkinList: [
+                                {
+                                    address: 'Adress 21',
+                                },
+                                {
+                                    address: 'Adress 22',
+                                },
+                                {
+                                    address: 'Adress 23',
+                                },
+                                {
+                                    address: 'Adress 23',
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        ];
         return dataAfterFormat;
     }
 

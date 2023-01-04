@@ -7,7 +7,8 @@
                     *ngIf="option.type === 'Detail'"
                     class="w-full"
                     appearance="outline"
-                    floatLabel="always">
+                    floatLabel="always"
+                >
                     <mat-label>Mã phiếu</mat-label>
                     <input matInput [readonly]="true" formControlName="code" />
                 </mat-form-field>
@@ -16,7 +17,8 @@
                     *ngIf="option.order === 'Purchase'"
                     class="w-full"
                     appearance="outline"
-                    floatLabel="always">
+                    floatLabel="always"
+                >
                     <mat-label>Trạng thái</mat-label>
                     <mat-select formControlName="status" [disabled]="!(isEdit$ | async)">
                         <mat-option *ngFor="let status of option.status" [value]="status.value">
@@ -30,7 +32,8 @@
                         matInput
                         [matDatepicker]="picker"
                         formControlName="orderDate"
-                        [disabled]="!(isEdit$ | async)" />
+                        [disabled]="!(isEdit$ | async)"
+                    />
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -39,13 +42,15 @@
                     *ngIf="option.order === 'Sale'"
                     class="w-full"
                     appearance="outline"
-                    floatLabel="always">
+                    floatLabel="always"
+                >
                     <mat-label>Ngày bán</mat-label>
                     <input
                         matInput
                         [matDatepicker]="picker1"
                         formControlName="saleDate"
-                        [disabled]="!(isEdit$ | async)" />
+                        [disabled]="!(isEdit$ | async)"
+                    />
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
@@ -55,7 +60,8 @@
                         matInput
                         [matDatepicker]="picker2"
                         formControlName="deliveryDate"
-                        [disabled]="!(isEdit$ | async)" />
+                        [disabled]="!(isEdit$ | async)"
+                    />
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker>
                 </mat-form-field>
@@ -68,12 +74,14 @@
                         style="cursor: copy; font-size: 13px"
                         (click)="coppy(groupCoppy, $event)"
                         matPrefix
-                        class="fa-regular fa-copy translate-y-[-45%] mr-2"></i>
+                        class="fa-regular fa-copy translate-y-[-45%] mr-2"
+                    ></i>
                     <mat-select formControlName="groupId" [disabled]="!(isEdit$ | async)">
                         <mat-option
                             (click)="groupCoppy = group.name; setListRouteAndEmployee(group.id)"
                             *ngFor="let group of listGroup$ | async"
-                            [value]="group.id">
+                            [value]="group.id"
+                        >
                             {{ group.name }}
                         </mat-option>
                     </mat-select>
@@ -85,18 +93,21 @@
                         style="cursor: copy; font-size: 13px"
                         (click)="coppy(orderCoppy, $event)"
                         matPrefix
-                        class="fa-regular fa-copy translate-y-[-45%] mr-2"></i>
+                        class="fa-regular fa-copy translate-y-[-45%] mr-2"
+                    ></i>
                     <mat-select formControlName="orderEmployeeId" [disabled]="!(isEdit$ | async)">
                         <mat-option>
                             <ngx-mat-select-search
                                 [formControl]="orderEmployeeCtrl"
                                 placeholderLabel="Tìm kiếm"
-                                noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
+                                noEntriesFoundLabel="Không có kết quả nào"
+                            ></ngx-mat-select-search>
                         </mat-option>
                         <mat-option
-                            (click)="orderCoppy = employee.employeeCode + ' - ' + employee.employeeName"
+                            (click)="orderCoppy = employee.employeeCode + ' - ' + employee.employeeName; setRoute()"
                             *ngFor="let employee of listEmployee$ | async"
-                            [value]="employee?.id">
+                            [value]="employee?.id"
+                        >
                             {{ employee?.employeeCode }} - {{ employee?.employeeName }}
                         </mat-option>
                     </mat-select>
@@ -108,24 +119,28 @@
                         style="cursor: copy; font-size: 13px"
                         (click)="coppy(routeCoppy, $event)"
                         matPrefix
-                        class="fa-regular fa-copy translate-y-[-45%] mr-2"></i>
+                        class="fa-regular fa-copy translate-y-[-45%] mr-2"
+                    ></i>
                     <i
                         *ngIf="isEdit$ | async"
                         style="font-size: 15px"
                         (click)="clearRoute($event)"
                         matSuffix
-                        class="hover:opacity-70 fa-circle-xmark fa-solid translate-y-[-15%] text-red-500 ml-1"></i>
+                        class="hover:opacity-70 fa-circle-xmark fa-solid translate-y-[-15%] text-red-500 ml-1"
+                    ></i>
                     <mat-select formControlName="routeId" [disabled]="!(isEdit$ | async)">
                         <mat-option>
                             <ngx-mat-select-search
                                 [formControl]="routeCtrl"
                                 placeholderLabel="Tìm kiếm"
-                                noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
+                                noEntriesFoundLabel="Không có kết quả nào"
+                            ></ngx-mat-select-search>
                         </mat-option>
                         <mat-option
                             (click)="routeCoppy = route.routeCode + ' - ' + route.routeName"
                             *ngFor="let route of listRoute$ | async"
-                            [value]="route?.id">
+                            [value]="route?.id"
+                        >
                             {{ route?.routeCode }} - {{ route?.routeName }}
                         </mat-option>
                     </mat-select>
@@ -135,25 +150,29 @@
                     *ngIf="option.order === 'Sale'"
                     appearance="outline"
                     floatLabel="always"
-                    class="w-full">
+                    class="w-full"
+                >
                     <mat-label>Nhân viên bán</mat-label>
                     <i
                         *ngIf="groupCoppy"
                         style="cursor: copy; font-size: 13px"
                         (click)="coppy(saleCoppy, $event)"
                         matPrefix
-                        class="fa-regular fa-copy translate-y-[-45%] mr-2"></i>
+                        class="fa-regular fa-copy translate-y-[-45%] mr-2"
+                    ></i>
                     <mat-select formControlName="saleEmployee" [disabled]="!(isEdit$ | async)">
                         <mat-option>
                             <ngx-mat-select-search
                                 [formControl]="saleEmployeeCtrl"
                                 placeholderLabel="Tìm kiếm"
-                                noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
+                                noEntriesFoundLabel="Không có kết quả nào"
+                            ></ngx-mat-select-search>
                         </mat-option>
                         <mat-option
                             (click)="saleCoppy = employee.employeeCode + ' - ' + employee.employeeName"
                             *ngFor="let employee of listSaleEmployee$ | async"
-                            [value]="employee?.id">
+                            [value]="employee?.id"
+                        >
                             {{ employee?.employeeCode }} - {{ employee?.employeeName }}
                         </mat-option>
                     </mat-select>
@@ -167,21 +186,25 @@
                         style="cursor: copy; font-size: 13px"
                         (click)="coppy(customerCoppy, $event)"
                         matPrefix
-                        class="fa-regular fa-copy translate-y-[-45%] mr-2"></i>
+                        class="fa-regular fa-copy translate-y-[-45%] mr-2"
+                    ></i>
                     <mat-select
                         (selectionChange)="setInfoCusAndRouteGroupAndOrderEmployee($event.value)"
                         formControlName="customerId"
-                        [disabled]="!(isEdit$ | async)">
+                        [disabled]="!(isEdit$ | async)"
+                    >
                         <mat-option>
                             <ngx-mat-select-search
                                 [formControl]="cusCtrl"
                                 placeholderLabel="Tìm kiếm"
-                                noEntriesFoundLabel="Không có kết quả nào"></ngx-mat-select-search>
+                                noEntriesFoundLabel="Không có kết quả nào"
+                            ></ngx-mat-select-search>
                         </mat-option>
                         <mat-option
                             (click)="customerCoppy = customer.customerCode + ' - ' + customer.customerName"
                             *ngFor="let customer of listCus$ | async"
-                            [value]="customer?.id">
+                            [value]="customer?.id"
+                        >
                             {{ customer?.customerCode }} - {{ customer?.customerName }}
                         </mat-option>
                     </mat-select>

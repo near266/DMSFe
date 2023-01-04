@@ -18,8 +18,8 @@ export class ProductDialogService {
     public toggleEdit$: Subject<boolean> = new Subject<boolean>();
     openProductDialog(data: Product | null = null) {
         this.dialogService.open(AddProductDialogComponent, {
-            width: '730px',
-            height: '90vh',
+            width: '70%',
+            height: '95vh',
             data,
         });
     }

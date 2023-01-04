@@ -5,6 +5,9 @@ import * as _ from 'lodash';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { SelectOption } from 'src/app/core/model/Select';
 import { Subscription } from 'rxjs';
+import { CommonService } from 'src/app/features/order-manager/services/common.service';
+import { ActivatedRoute } from '@angular/router';
+import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 
 @Component({
     selector: 'app-detail-return-table-edit',
@@ -17,10 +20,13 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
     warehouseOptions: SelectOption[];
     unitOptions: SelectOption[];
     subscriptions: Subscription[] = [];
+    id: string = '';
     constructor(
         private returnDetailsService: ReturnDetailsService,
         private productDialogService: ProductDialogService,
         private snackbarService: SnackbarService,
+        private commonService: CommonService,
+        private router: ActivatedRoute,
     ) {
         this.checkAndUpdate = _.debounce(this.checkAndUpdate, 1);
     }
@@ -36,6 +42,7 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
         }
     }
     ngOnInit(): void {
+        this.id = this.router.snapshot.params['id'];
         this.subscriptions.push(
             this.returnDetailsService.updateReturnProducts$.subscribe((res) => {
                 this.returnDetailsService.returnListProducts$.next(this.productsInput);
@@ -47,6 +54,7 @@ export class DetailReturnTableEditComponent implements OnInit, DoCheck {
                                 discountAmount: this.returnDetailsService.discountAmount$.getValue(),
                                 tradeDiscount: this.returnDetailsService.tradeDiscount$.getValue(),
                             });
+                            this.commonService.updateLog(3, this.id).subscribe();
                         },
                         error: (err) => {
                             this.snackbarService.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'top', false);

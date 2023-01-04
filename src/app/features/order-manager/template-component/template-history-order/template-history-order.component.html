@@ -1,0 +1,76 @@
+<ng-container *ngIf="data.data">
+    <mat-stepper orientation="vertical">
+        <mat-step *ngFor="let history of data.data">
+            <ng-template matStepLabel
+                >{{ history.lastModifiedBy }}
+                <span *ngIf="history.lastModifiedDate" class="font-medium"
+                    >({{ history.lastModifiedDate | date : 'dd/MM/yyyy H:mm' }})</span
+                >
+            </ng-template>
+            <ng-template matStepContent>
+                <div class="my-2">
+                    {{ history.note }}, &nbsp;<span class="text-red-500 underline">Ngày đặt</span>&nbsp;
+                    {{ history.createdDate | date }}
+                </div>
+                <table *ngIf="history.data" class="w-full mb-2">
+                    <thead>
+                        <th class="border">#</th>
+                        <th class="border">Mã SP</th>
+                        <th class="border">Tên SP</th>
+                        <th class="border">ĐVT</th>
+                        <th class="border">Kho</th>
+                        <th class="border">VAT</th>
+                        <th class="border" *ngIf="type != TypeOrder.RETURN">Số lượng</th>
+                        <th class="border" *ngIf="type === TypeOrder.RETURN">Số lượng trả</th>
+                        <th class="border" *ngIf="type === TypeOrder.RETURN">Số lượng bán</th>
+                        <th class="border">Đơn giá</th>
+                        <th class="border">Thành tiền</th>
+                        <th class="border">Chiết khấu</th>
+                    </thead>
+                    <tbody>
+                        <tr class="border p-2" *ngFor="let row of history.data; index as i">
+                            <td class="border p-1">
+                                {{ i + 1 }}
+                            </td>
+                            <td class="border p-1">
+                                {{ row.product?.sku }}
+                            </td>
+                            <td class="border p-1">
+                                {{ row.product?.productName }}
+                            </td>
+                            <td class="border p-1">
+                                {{ row.unit?.unitName }}
+                            </td>
+                            <td class="border p-1">
+                                {{ row.warehouse?.warehouseName }}
+                            </td>
+                            <td class="border p-1">Chưa trả</td>
+                            <td class="border p-1" *ngIf="type !== TypeOrder.RETURN">
+                                {{ row.quantity }}
+                            </td>
+                            <td class="border p-1" *ngIf="type === TypeOrder.RETURN">
+                                {{ row.returnsQuantity }}
+                            </td>
+                            <td class="border p-1" *ngIf="type === TypeOrder.RETURN">
+                                {{ row.salesQuantity }}
+                            </td>
+                            <td class="border p-1">
+                                {{ row.unitPrice | currency : 'VND' }}
+                            </td>
+                            <td class="border p-1">
+                                {{ row.totalPrice | currency : 'VND' }}
+                            </td>
+                            <div class="border p-1">
+                                {{ row.discount | currency : 'VND' }}
+                            </div>
+                        </tr>
+                    </tbody>
+                </table>
+                <button mat-button matStepperNext>Tiếp theo</button>
+            </ng-template>
+        </mat-step>
+    </mat-stepper>
+</ng-container>
+<ng-container *ngIf="!data.data">
+    <div class="mt-2 font-bold opacity-70 text-xl w-full text-center">Không có lịch sử</div>
+</ng-container>

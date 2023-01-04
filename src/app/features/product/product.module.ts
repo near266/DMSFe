@@ -23,6 +23,7 @@ import {
     ProductFieldTextarea,
 } from './components/add-product-dialog/add-product-details/product-field-type/product-field-type.component';
 import { ProductSidenavMenuComponent } from './components/product-sidenav-menu/product-sidenav-menu.component';
+import { ProductHistoryComponent } from './components/add-product-dialog/product-history/product-history.component';
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import { ProductSidenavMenuComponent } from './components/product-sidenav-menu/p
         ProductFieldSelect,
         ProductFieldTextarea,
         ProductSidenavMenuComponent,
+        ProductHistoryComponent,
     ],
     imports: [
         CommonModule,

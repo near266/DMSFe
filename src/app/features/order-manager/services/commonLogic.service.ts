@@ -61,7 +61,6 @@ export class CommonLogicService {
     }
 
     setListEmployeeSource(list: any[]) {
-        console.log('set list employee source');
         this.listEmployeeSource.next(list);
     }
 

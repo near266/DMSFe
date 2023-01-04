@@ -45,7 +45,8 @@ export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewIni
     listTypeCustomer: string[] = [];
     areaList: Area[] = [];
     productFilterCtrl: FormControl = new FormControl();
-
+    productSelected: any;
+    areaSelected: any;
     // menu trạng thái đơn đặt
     statusPurchaseMenu: Config = {
         icon: '<i class="fa-solid fa-flag"></i>',
@@ -362,8 +363,17 @@ export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewIni
     }
 
     // Tìm kiếm theo khu vực
-    selectArea(e: any) {
-        this.body.areaId = e;
+    selectArea(id: any, e: any) {
+        if (e.isUserInput) {
+            this.body.areaId = id;
+            this.body.page = 1;
+            this.emitBody();
+        }
+    }
+
+    cancelSelectArea() {
+        this.areaSelected = null;
+        this.body.areaId = null;
         this.body.page = 1;
         this.emitBody();
     }
@@ -402,8 +412,17 @@ export class TemplateSidebarComponent implements OnInit, OnChanges, AfterViewIni
     }
 
     // Tìm kiếm theo sản phẩm
-    selectProductFilter(e: any) {
-        this.body.productId = e;
+    selectProductFilter(id: any, e: any) {
+        if (e.isUserInput) {
+            this.body.productId = id;
+            this.body.page = 1;
+            this.emitBody();
+        }
+    }
+
+    cancelSelectProduct() {
+        this.productSelected = null;
+        this.body.productId = null;
         this.body.page = 1;
         this.emitBody();
     }

@@ -5,21 +5,24 @@
                 <button
                     (click)="updateOrder(2)"
                     *ngIf="!isEdit && (statusNow === 1 || statusNow === 5) && !(roleMain === 'member')"
-                    class="button-primary-sm flex items-center justify-between mr-2">
+                    class="button-primary-sm flex items-center justify-between mr-2"
+                >
                     <i class="fa-solid fa-thumbs-up text-white mr-2"></i>
                     <span class="text-white">Duyệt</span>
                 </button>
                 <button
                     (click)="updateOrder(5)"
                     *ngIf="!isEdit && statusNow === 1 && !(roleMain === 'member')"
-                    class="button-primary-sm flex items-center justify-between mr-2">
+                    class="button-primary-sm flex items-center justify-between mr-2"
+                >
                     <i class="fa-solid fa-thumbs-down text-white mr-2"></i>
                     <span class="text-white">Từ chối</span>
                 </button>
                 <button
                     (click)="updateOrder(3)"
                     *ngIf="!isEdit && statusNow === 2 && !(roleMain === 'member')"
-                    class="button-primary-sm flex items-center justify-between mr-2">
+                    class="button-primary-sm flex items-center justify-between mr-2"
+                >
                     <i class="fa-solid fa-calculator text-white mr-2"></i>
                     <span class="text-white">Bán hàng</span>
                 </button>
@@ -29,7 +32,8 @@
             <button
                 *ngIf="!isEdit && !(roleMain === 'member')"
                 (click)="changeType()"
-                class="button-primary-sm flex items-center justify-between mr-2">
+                class="button-primary-sm flex items-center justify-between mr-2"
+            >
                 <i class="fa-solid fa-pen-to-square text-white mr-2"></i>
                 <span class="text-white">Sửa</span>
             </button>
@@ -40,21 +44,20 @@
             <button
                 (click)="exportExcel()"
                 *ngIf="!isEdit"
-                class="button-primary-sm flex items-center justify-between mr-2">
+                class="button-primary-sm flex items-center justify-between mr-2"
+            >
                 <i class="fa-solid fa-download text-white mr-2"></i>
                 <span class="text-white">Excel</span>
             </button>
             <button
                 *ngIf="!isEdit && !(roleMain === 'member') && !(roleMain === 'accountant') && !(roleMain === 'manager')"
                 (click)="archive()"
-                class="button-danger-sm flex items-center justify-between mr-2">
+                class="button-danger-sm flex items-center justify-between mr-2"
+            >
                 <i class="fa-solid fa-trash text-white mr-2"></i>
                 <span class="text-white">Xóa</span>
             </button>
-            <button
-                *ngIf="isEdit"
-                (click)="changeType(); save()"
-                class="button-primary-sm flex items-center justify-between mr-2">
+            <button *ngIf="isEdit" (click)="save()" class="button-primary-sm flex items-center justify-between mr-2">
                 <i class="fa-solid fa-check text-white mr-2"></i>
                 <span class="text-white">Lưu</span>
             </button>
@@ -79,20 +82,30 @@
         <div
             [routerLink]="['/order/purchase/detail/viewEdit']"
             routerLinkActive=" active"
-            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
+            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium"
+        >
             <i class="fa-solid fa-pen-to-square mr-2"></i>
             <span>Đặt hàng</span>
         </div>
         <div
             [routerLink]="['/order/purchase/detail/customer']"
             routerLinkActive="active"
-            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
+            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium"
+        >
             <i class="fa-solid fa-user-secret mr-2"></i>
             <span>Khách hàng</span>
+        </div>
+        <div
+            [routerLink]="['/order/purchase/detail/history']"
+            routerLinkActive="active"
+            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium"
+        >
+            <i class="fa-solid fa-clock-rotate-left mr-2"></i>
+            <span>Lịch sử</span>
         </div>
     </div>
     <!-- main -->
     <div class="ml-48 w-full">
-        <router-outlet></router-outlet>
+        <router-outlet (activate)="onActivate($event)"></router-outlet>
     </div>
 </div>

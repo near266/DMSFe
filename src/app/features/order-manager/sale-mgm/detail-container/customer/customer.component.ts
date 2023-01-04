@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CustomerComponent implements OnInit {
     custId: string;
+    isDetailReceipt: boolean = false;
+
     constructor() {}
 
     ngOnInit(): void {

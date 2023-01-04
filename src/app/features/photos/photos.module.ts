@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { PhotoNewCustomerComponent } from './components/photo-new-customer/photo-new-customer.component';
 import { DetailPhotoComponent } from './components/detail-photo/detail-photo.component';
-
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,8 @@ import { DetailPhotoComponent } from './components/detail-photo/detail-photo.com
     CommonModule,
     RouterModule,
     SharedModule,
+    ScrollingModule,
     PhotosRoutingModule
-  ]
+  ],
 })
 export class PhotosModule { }

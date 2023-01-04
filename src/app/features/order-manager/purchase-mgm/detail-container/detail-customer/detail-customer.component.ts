@@ -10,6 +10,7 @@ import { PurchaseLogicService } from '../../../services/purchaseLogic.service';
 })
 export class DetailCustomerComponent implements OnInit {
     customerId: string;
+    isDetailPurchase: boolean = false;
     constructor() {}
 
     ngOnInit(): void {

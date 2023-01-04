@@ -17,7 +17,7 @@ export class TimeSheetService {
     constructor(private employeeService: EmployeeService, public snackbar: SnackbarService) {}
 
     getEmployee() {
-        this.employeeService.GetAllGroupByEmployeeId().subscribe(
+        this.employeeService.GetAllByEmployeeId().subscribe(
             (data: TimeSheet[]) => {
                 if (data) {
                     this.timeSheets.next(data);

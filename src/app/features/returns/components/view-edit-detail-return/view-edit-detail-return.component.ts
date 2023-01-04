@@ -11,7 +11,7 @@ import { GenOrderSaleComponent } from 'src/app/features/orders-mgm/components/ge
 import { GenReturnOrderComponent } from 'src/app/features/order-sale-mgm/components/gen-return-order/gen-return-order.component';
 import { ReturnDetailsService } from '../../services/return-details.service';
 import { HttpParams } from '@angular/common/http';
-import { ComponentMode } from '../../models/componentMode';
+import { ComponentMode, Tabs } from '../../models/componentMode';
 import { Status } from '../../models/return';
 import { ReturnFormService } from '../../services/return-form.service';
 import { RolesService } from 'src/app/core/services/roles.service';
@@ -29,6 +29,9 @@ export class ViewEditDetailReturnComponent implements OnInit {
     id!: string;
     subscription: Subscription[] = [];
     ComponentMode = ComponentMode;
+    TabNow = Tabs.VIEWEDIT;
+    Tabs = Tabs;
+
     constructor(
         public activatedRoute: ActivatedRoute,
         public router: Router,

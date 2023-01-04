@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { CRow } from 'src/app/core/shared/components/template-table-normal/template-table-normal.component';
 import { CustomerHistory, CustomerHistoryList } from './models/customerHistory';
@@ -9,8 +10,9 @@ import { CustomerHistory, CustomerHistoryList } from './models/customerHistory';
     templateUrl: './history.component.html',
     styleUrls: ['./history.component.scss'],
 })
-export class HistoryComponent implements OnInit, AfterViewInit {
+export class HistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() id: string = '';
+    subscription: Subscription = new Subscription();
     headers = [
         'Trạng thái',
         'Mã KH',
@@ -31,14 +33,20 @@ export class HistoryComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {}
 
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+    }
+
     ngAfterViewInit(): void {
         this.getData();
     }
 
     getData() {
-        this.customerService.getCustomerHistory(this.id).subscribe((data: CustomerHistory) => {
-            this.formatData(data.list);
-        });
+        this.subscription.add(
+            this.customerService.getCustomerHistory(this.id).subscribe((data: CustomerHistory) => {
+                this.formatData(data.list);
+            }),
+        );
     }
 
     formatData(data: CustomerHistoryList[]) {
@@ -55,7 +63,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
                                 text: `${detail.createdBy} khởi tạo khách hàng từ ${detail.source}`,
                             },
                             {
-                                text: ` ${this.datePipe.transform(detail.createdDate, 'dd/MM/yyyy - H:mm')}`,
+                                text: ` ${this.datePipe.transform(detail.createdDate)}`,
                             },
                         ],
                         colspan: 6,
@@ -70,7 +78,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
                                 text: `${detail.lastModifiedBy} cập nhật thông tin khách hàng từ ${detail.source}`,
                             },
                             {
-                                text: `${this.datePipe.transform(detail.lastModifiedDate, 'dd/MM/yyyy - H:mm')}`,
+                                text: `${this.datePipe.transform(detail.lastModifiedDate)}`,
                             },
                         ],
                         colspan: 6,

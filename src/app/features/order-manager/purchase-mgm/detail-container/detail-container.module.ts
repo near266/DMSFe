@@ -6,6 +6,7 @@ import { DetailContainerComponent } from './detail-container.component';
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { DetailCustomerComponent } from './detail-customer/detail-customer.component';
 import { TemplateComponentModule } from '../../template-component/template-component.module';
+import { DetailHistoryComponent } from './detail-history/detail-history.component';
 
 const routes: Routes = [
     {
@@ -25,12 +26,16 @@ const routes: Routes = [
                 path: 'customer',
                 component: DetailCustomerComponent,
             },
+            {
+                path: 'history',
+                component: DetailHistoryComponent,
+            },
         ],
     },
 ];
 
 @NgModule({
-    declarations: [DetailContainerComponent, DetailCustomerComponent],
+    declarations: [DetailContainerComponent, DetailCustomerComponent, DetailHistoryComponent],
     imports: [CommonModule, RouterModule.forChild(routes), SharedModule, TemplateComponentModule],
 })
 export class DetailContainerModule {}

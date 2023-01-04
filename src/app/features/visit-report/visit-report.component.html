@@ -43,10 +43,11 @@
             </div>
         </div>
         <div class="ml-6 px-1">
-            <app-col-span-template-table
+            <!-- <app-col-span-template-table
                 [data]="visitReport$ | async"
                 [headers]="headers"
-            ></app-col-span-template-table>
+            ></app-col-span-template-table> -->
+            <visit-table></visit-table>
         </div>
         <visit-pagination class="fixed right-0 bottom-0"></visit-pagination>
     </mat-drawer-content>

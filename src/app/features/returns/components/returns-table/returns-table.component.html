@@ -1,89 +1,140 @@
-<table *ngIf="returns$ | async as returns;else loadingTmpl" id="return"
-  class="min-w-full border-b border-solid border-gray-400 font-medium   border-spacing-0 border-separate bg-gray-100 z-10">
-  <ng-container *ngIf="!(loading$ | async); else loadingTmpl">
-    <thead class="h-10  border-gray-300 ">
-      <tr>
-        <th scope="col"
-          class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">
-          <input type="checkbox">
-        </th>
-        <th scope="col" *ngFor="let header of headers"
-          class="sticky min-w-[100px] top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x">
-          {{header}}</th>
-      </tr>
-    </thead>
-    <ng-container *ngIf="pagination$| async as pagination">
-      <ng-container *ngIf="{totalItems: totalItems$ | async} as vm">
-        <tbody class="">
-          <tr class="h-14 text-xs "
-            *ngFor="let return of returns | paginate: { itemsPerPage: 30, currentPage:pagination.page,totalItems: vm.totalItems || 0 };let i =index; let o=odd; let e=even;"
-            [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }">
-            <td class="space-x-2 min-w-[50px] border-x border-solid align-midde h-full pl-2 "><input class="inline"
-                type="checkbox"><i *ngIf="!return?.type" class="fa-solid fa-lock text-base text-[#2e799c]"></i><i
-                *ngIf="return.type" class="fa-solid fa-lock-open text-base text-[#2e799c]"></i>
-            </td>
-            <td class="border-x min-w-[100px] border-solid align-middle px-2">{{i+1}}
-            </td>
-            <td class="border-x min-w-[180px] border-solid align-middle px-2">{{return.orderEmployee?.employeeName}}
-            </td>
-            <td class="border-x min-w-[140px] border-solid  px-2">
-              <ng-container *ngIf="return?.status === Status.PENDING" [ngTemplateOutlet]="statusTmpl"
-                [ngTemplateOutletContext]="{ label: 'Chờ duyệt', className: ' bg-yellow-800'  }">
-              </ng-container>
-              <ng-container *ngIf="return?.status === Status.IMPORTED" [ngTemplateOutlet]="statusTmpl"
-                [ngTemplateOutletContext]="{ label: 'Đã nhập trả', className: ' bg-green-600'  }">
-              </ng-container>
-              <ng-container *ngIf="return?.status === Status.APPROVED" [ngTemplateOutlet]="statusTmpl"
-                [ngTemplateOutletContext]="{ label: 'Đã duyệt', className: ' bg-blue-600'  }">
-              </ng-container>
-            </td>
-            <!-- mã phiếu -->
-            <td
-              class="border-x min-w-[200px] border-solid align-middle px-0.5 text-emerald-500 font-medium cursor-pointer">
-              <a [routerLink]="['/returns/details',return.id]" class="flex items-center space-x-2">
-                {{return.returnCode}}
-              </a>
-            </td>
-            <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.customer?.customerCode}} </td>
-            <td class="border-x min-w-[300px] border-solid align-middle px-2">{{return.customer?.customerName}}</td>
-            <td class="border-x min-w-[300px] border-solid align-middle px-2">{{return.customer?.address}} </td>
-            <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.returnsDate | date:'dd/MM/yyyy'}}
-            </td>
-            <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.totalPayment | currency:'VND'}}
-            </td>
-            <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.source}}</td>
-            <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.orderDate | date:'dd/MM/yyyy'}}
-            </td>
-            <td class="border-x min-w-[150px] border-solid align-middle px-2">{{return.orderEmployee?.employeeName}}
-              {{return.orderEmployee?.employeeTitle?' - ' + return.orderEmployee?.employeeTitle:''}} </td>
-            <td class="border-x min-w-[100px] border-solid align-middle px-2">
-              {{return.lastModifiedDate | date:'dd/MM/yyyy'}}
-            </td>
-            <td class="border-x min-w-[100px] border-solid align-middle px-2">{{return.lastModifiedBy}} </td>
-            <td class="border-x min-w-[400px] border-solid align-middle px-2">{{return.description}}</td>
-          </tr>
-        </tbody>
-        <ng-container *ngIf="!vm.totalItems">
-          <tbody>
-            <tr class="relative">
-              <th class="h-14  flex items-center justify-center" colspan="14">
-                <span class="w-full absolute font-normal inset-0 mt-4 text-lg">Không có dữ liệu</span>
-              </th>
+<table
+    *ngIf="returns$ | async as returns; else loadingTmpl"
+    id="return"
+    class="min-w-full border-b border-solid border-gray-400 font-medium border-spacing-0 border-separate bg-gray-100 z-10"
+>
+    <ng-container *ngIf="!(loading$ | async); else loadingTmpl">
+        <thead class="h-10 border-gray-300">
+            <tr>
+                <th
+                    scope="col"
+                    class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x"
+                >
+                    <input type="checkbox" />
+                </th>
+                <th
+                    scope="col"
+                    *ngFor="let header of headers"
+                    class="sticky min-w-[100px] top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x"
+                >
+                    {{ header }}
+                </th>
             </tr>
-          </tbody>
+        </thead>
+        <ng-container *ngIf="pagination$ | async as pagination">
+            <ng-container *ngIf="{ totalItems: totalItems$ | async } as vm">
+                <tbody class="">
+                    <tr
+                        class="h-14 text-xs"
+                        *ngFor="
+                            let return of returns
+                                | paginate
+                                    : {
+                                          itemsPerPage: 30,
+                                          currentPage: pagination.page,
+                                          totalItems: vm.totalItems || 0
+                                      };
+                            let i = index;
+                            let o = odd;
+                            let e = even
+                        "
+                        [ngClass]="{ 'bg-gray-100': o, 'bg-white': e }"
+                    >
+                        <td class="space-x-2 min-w-[50px] border-x border-solid align-midde h-full pl-2">
+                            <input class="inline" type="checkbox" /><i
+                                *ngIf="!return?.type"
+                                class="fa-solid fa-lock text-base text-[#2e799c]"
+                            ></i
+                            ><i *ngIf="return.type" class="fa-solid fa-lock-open text-base text-[#2e799c]"></i>
+                        </td>
+                        <td class="border-x min-w-[100px] border-solid align-middle px-2">{{ i + 1 }}</td>
+                        <td class="border-x min-w-[180px] border-solid align-middle px-2">
+                            {{ return.orderEmployee?.employeeName }}
+                        </td>
+                        <td class="border-x min-w-[140px] border-solid px-2">
+                            <ng-container
+                                *ngIf="return?.status === Status.PENDING"
+                                [ngTemplateOutlet]="statusTmpl"
+                                [ngTemplateOutletContext]="{ label: 'Chờ duyệt', className: ' bg-yellow-800' }"
+                            >
+                            </ng-container>
+                            <ng-container
+                                *ngIf="return?.status === Status.IMPORTED"
+                                [ngTemplateOutlet]="statusTmpl"
+                                [ngTemplateOutletContext]="{ label: 'Đã nhập trả', className: ' bg-green-600' }"
+                            >
+                            </ng-container>
+                            <ng-container
+                                *ngIf="return?.status === Status.APPROVED"
+                                [ngTemplateOutlet]="statusTmpl"
+                                [ngTemplateOutletContext]="{ label: 'Đã duyệt', className: ' bg-blue-600' }"
+                            >
+                            </ng-container>
+                        </td>
+                        <!-- mã phiếu -->
+                        <td
+                            class="border-x min-w-[200px] border-solid align-middle px-0.5 text-emerald-500 font-medium cursor-pointer"
+                        >
+                            <a
+                                [routerLink]="['/returns/details/viewEdit', return.id]"
+                                class="flex items-center space-x-2"
+                            >
+                                {{ return.returnCode }}
+                            </a>
+                        </td>
+                        <td class="border-x min-w-[100px] border-solid align-middle px-2">
+                            {{ return.customer?.customerCode }}
+                        </td>
+                        <td class="border-x min-w-[300px] border-solid align-middle px-2">
+                            {{ return.customer?.customerName }}
+                        </td>
+                        <td class="border-x min-w-[300px] border-solid align-middle px-2">
+                            {{ return.customer?.address }}
+                        </td>
+                        <td class="border-x min-w-[100px] border-solid align-middle px-2">
+                            {{ return.returnsDate | date : 'dd/MM/yyyy' }}
+                        </td>
+                        <td class="border-x min-w-[100px] border-solid align-middle px-2">
+                            {{ return.totalPayment | currency : 'VND' }}
+                        </td>
+                        <td class="border-x min-w-[100px] border-solid align-middle px-2">{{ return.source }}</td>
+                        <td class="border-x min-w-[100px] border-solid align-middle px-2">
+                            {{ return.orderDate | date : 'dd/MM/yyyy' }}
+                        </td>
+                        <td class="border-x min-w-[150px] border-solid align-middle px-2">
+                            {{ return.orderEmployee?.employeeName }}
+                            {{ return.orderEmployee?.employeeTitle ? ' - ' + return.orderEmployee?.employeeTitle : '' }}
+                        </td>
+                        <td class="border-x min-w-[100px] border-solid align-middle px-2">
+                            {{ return.lastModifiedDate | date : 'dd/MM/yyyy' }}
+                        </td>
+                        <td class="border-x min-w-[100px] border-solid align-middle px-2">
+                            {{ return.lastModifiedBy }}
+                        </td>
+                        <td class="border-x min-w-[400px] border-solid align-middle px-2">{{ return.description }}</td>
+                    </tr>
+                </tbody>
+                <ng-container *ngIf="!vm.totalItems">
+                    <tbody>
+                        <tr class="relative">
+                            <th class="h-14 flex items-center justify-center" colspan="14">
+                                <span class="w-full absolute font-normal inset-0 mt-4 text-lg">Không có dữ liệu</span>
+                            </th>
+                        </tr>
+                    </tbody>
+                </ng-container>
+            </ng-container>
         </ng-container>
-      </ng-container>
     </ng-container>
-  </ng-container>
 </table>
 
 <ng-template #loadingTmpl>
-  <div class="mt-10 text-center">
-    <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
-  </div>
+    <div class="mt-10 text-center">
+        <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+    </div>
 </ng-template>
 <ng-template #statusTmpl let-label="label" let-className="className">
-  <button [ngClass]="['px-3 py-2 rounded-md text-white', className ? className : '']">
-    {{ label }}
-  </button>
+    <button [ngClass]="['px-3 py-2 rounded-md text-white', className ? className : '']">
+        {{ label }}
+    </button>
 </ng-template>

@@ -1,68 +1,89 @@
 <div class="fixed z-10 bg-white w-full">
-  <div class="p-3 w-full flex justify-between items-center">
-    <div>
-      <div class="flex" *ngIf="requiredRoles('accountant') | async">
-        <button *ngIf="status!==StatusList.PENDING && status!==StatusList.IMPORTED"
-          (click)="updateStatus(StatusList.IMPORTED)" class="button-danger-sm flex items-center justify-between mr-2">
-          <i class="fa-solid fa-file-export text-white mr-2"></i>
-          <span class="text-white">Nhập trả</span>
-        </button>
-        <button *ngIf="status===StatusList.PENDING" (click)="updateStatus(StatusList.APPROVED)"
-          class="button-primary-sm flex items-center justify-between mr-2">
-          <i class="fa-solid fa-repeat text-white mr-2"></i>
-          <span class="text-white">Duyệt</span>
-        </button>
-        <!-- <button
+    <div class="p-3 w-full flex justify-between items-center">
+        <div>
+            <div class="flex" *ngIf="requiredRoles('accountant') | async">
+                <button
+                    *ngIf="status !== StatusList.PENDING && status !== StatusList.IMPORTED"
+                    (click)="updateStatus(StatusList.IMPORTED)"
+                    class="button-danger-sm flex items-center justify-between mr-2"
+                >
+                    <i class="fa-solid fa-file-export text-white mr-2"></i>
+                    <span class="text-white">Nhập trả</span>
+                </button>
+                <button
+                    *ngIf="status === StatusList.PENDING"
+                    (click)="updateStatus(StatusList.APPROVED)"
+                    class="button-primary-sm flex items-center justify-between mr-2"
+                >
+                    <i class="fa-solid fa-repeat text-white mr-2"></i>
+                    <span class="text-white">Duyệt</span>
+                </button>
+                <!-- <button
                   (click)="updateOrder(3)"
                   *ngIf="type === 'View' && (statusNow === 3 || statusNow === 4)"
                   class="button-cancel-sm flex items-center justify-between mr-2">
                   <i class="fa-solid fa-close text-white mr-2"></i>
                   <span class="text-white">Hủy</span>
               </button> -->
-      </div>
+            </div>
+        </div>
+        <div class="flex items-center">
+            <button
+                *ngIf="type === ComponentMode.VIEW && (requiredRoles('accountant') | async)"
+                (click)="toggleEditMode(true)"
+                class="button-primary-sm flex items-center justify-between mr-2"
+            >
+                <i class="fa-solid fa-pen-to-square text-white mr-2"></i>
+                <span class="text-white">Sửa</span>
+            </button>
+            <button
+                *ngIf="type === ComponentMode.VIEW && (requiredRoles('accountant') | async)"
+                (click)="deleteReturn()"
+                class="button-danger-sm flex items-center justify-between mr-2"
+            >
+                <i class="fa-solid fa-trash text-white mr-2"></i>
+                <span class="text-white">Xóa</span>
+            </button>
+            <button
+                *ngIf="type === ComponentMode.EDIT && (requiredRoles('accountant') | async)"
+                (click)="updateReturn()"
+                class="button-primary-sm flex items-center justify-between mr-2"
+            >
+                <i class="fa-solid fa-check text-white mr-2"></i>
+                <span class="text-white">Lưu</span>
+            </button>
+            <button (click)="closeAndReset()" class="button-cancel-sm flex items-center justify-between mr-2">
+                <i class="fa-solid fa-ban text-white mr-2"></i>
+                <span class="text-white">Đóng</span>
+            </button>
+        </div>
     </div>
-    <div class="flex items-center">
-      <button *ngIf="type === ComponentMode.VIEW && (requiredRoles('accountant') | async)"
-        (click)="toggleEditMode(true)" class="button-primary-sm flex items-center justify-between mr-2">
-        <i class="fa-solid fa-pen-to-square text-white mr-2"></i>
-        <span class="text-white">Sửa</span>
-      </button>
-      <button *ngIf="type === ComponentMode.VIEW && (requiredRoles('accountant') | async)" (click)="deleteReturn()"
-        class="button-danger-sm flex items-center justify-between mr-2">
-        <i class="fa-solid fa-trash text-white mr-2"></i>
-        <span class="text-white">Xóa</span>
-      </button>
-      <button *ngIf="type === ComponentMode.EDIT && (requiredRoles('accountant') | async)" (click)="updateReturn()"
-        class="button-primary-sm flex items-center justify-between mr-2">
-        <i class="fa-solid fa-check text-white mr-2"></i>
-        <span class="text-white">Lưu</span>
-      </button>
-      <button (click)="closeAndReset()" class="button-cancel-sm flex items-center justify-between mr-2">
-        <i class="fa-solid fa-ban text-white mr-2"></i>
-        <span class="text-white">Đóng</span>
-      </button>
-    </div>
-  </div>
-  <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
 </div>
 <div class="flex overflow-x-hidden">
-  <!-- sidebar -->
-  <div class="w-48 fixed mt-16 border-r h-screen mr-1 flex flex-col items-stretch overflow-y-auto">
-    <div [routerLink]="['/ordersale/detail/viewEdit', this.id]" routerLinkActive=" active"
-      class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
-      <i class="fa-solid fa-repeat mr-2"></i>
-      <span>Phiếu trả hàng</span>
+    <!-- sidebar -->
+    <div class="w-48 fixed mt-16 border-r h-screen mr-1 flex flex-col items-stretch overflow-y-auto">
+        <div
+            (click)="TabNow = Tabs.VIEWEDIT"
+            [routerLink]="['/returns/details/viewEdit', this.id]"
+            [ngClass]="{ active: TabNow === Tabs.VIEWEDIT }"
+            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium"
+        >
+            <i class="fa-solid fa-repeat mr-2"></i>
+            <span>Phiếu trả hàng</span>
+        </div>
+        <div
+            (click)="TabNow = Tabs.HISTORY"
+            [ngClass]="{ active: TabNow === Tabs.HISTORY }"
+            class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium"
+        >
+            <i class="fa-solid fa-clock-rotate-left mr-2"></i>
+            <span>Lịch sử</span>
+        </div>
     </div>
-    <!-- <div
-          [routerLink]="['/ordersale/detail/customer', this.id]"
-          routerLinkActive="active"
-          class="flex items-center px-4 py-2 mt-3 mx-2 bg-zinc-100 rounded-lg cursor-pointer hover:bg-zinc-200 hover:font-medium">
-          <i class="fa-solid fa-user-secret mr-2"></i>
-          <span>Khách hàng</span>
-      </div> -->
-  </div>
-  <!-- main -->
-  <div class="overflow-x-auto w-full ml-48 mt-16">
-    <app-detail-return></app-detail-return>
-  </div>
+    <!-- main -->
+    <div class="overflow-x-auto w-full ml-48 mt-16">
+        <app-detail-return [hidden]="TabNow === Tabs.HISTORY"></app-detail-return>
+        <return-history [hidden]="TabNow === Tabs.VIEWEDIT"></return-history>
+    </div>
 </div>

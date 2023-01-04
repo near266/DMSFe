@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DetailComponent } from './detail/detail.component';
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { TemplateComponentModule } from '../../template-component/template-component.module';
+import { HistoryComponent } from './history/history.component';
 
 const routes: Routes = [
     {
@@ -20,12 +21,16 @@ const routes: Routes = [
                 path: 'customer',
                 component: CustomerComponent,
             },
+            {
+                path: 'history',
+                component: HistoryComponent,
+            },
         ],
     },
 ];
 
 @NgModule({
-    declarations: [DetailComponent, CustomerComponent],
+    declarations: [DetailComponent, CustomerComponent, HistoryComponent],
     imports: [CommonModule, SharedModule, RouterModule.forChild(routes), TemplateComponentModule],
 })
 export class DetailContainerModule {}

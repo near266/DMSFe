@@ -63,12 +63,14 @@
                     <span class="text-center">Thứ</span>
                   </div>
                 </th>
-                <th class="custom-th" *ngFor="let i of days">
-                  <div class="flex flex-col">
-                    <span class="mb-2 text-center">{{i.date}}</span>
-                    <span class="text-center">{{i.day}}</span>
-                  </div>
-                </th>
+
+                    <th class="custom-th" *ngFor="let i of dateService.allDayOfMonth$ | async; trackBy: trackByFn">
+                      <div class="flex flex-col">
+                        <span class="mb-2 text-center">{{i.date}}</span>
+                        <span class="text-center">{{i.day}}</span>
+                      </div>
+                    </th>
+
                 <th class="custom-th">Ngày đi làm</th>
                 <th class="custom-th">Trễ</th>
                 <th class="custom-th">Sớm</th>
@@ -76,8 +78,12 @@
                 <th class="custom-th">Ngày công</th>
               </tr>
             </thead>
-            <tbody *ngFor="let item of timeSheets">
-                <tr class="custom-row">
+            <tbody>
+                <tr class="custom-row"*ngFor="let item of timeSheets; trackBy: trackByFn" >
+
+                    <td class="custom-td border-b" >{{item.employee.employeeName}}</td>
+                </tr>
+                <!-- <tr class="custom-row">
                   <td *ngIf="days.length + 8 == 38" class="custom-td border-b" colspan="38">{{item.employee.employeeName}}</td>
                   <td *ngIf="days.length + 8 == 39" class="custom-td border-b" colspan="39">{{item.employee.employeeName}}</td>
                   <td *ngIf="days.length + 8 == 37" class="custom-td border-b" colspan="37">{{item.employee.employeeName}}</td>
@@ -104,7 +110,7 @@
                 </tr>
                 <tr>
                   <td class="custom-td border-b">Công</td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
       </div>

@@ -9,7 +9,7 @@ import { TemplateInforOrderComponent } from './template-infor-order/template-inf
 import { TemplateTableProductComponent } from './template-table-product/template-table-product.component';
 import { TemplateFooterOrderComponent } from './template-footer-order/template-footer-order.component';
 import { TemplateCustomerComponent } from './template-customer/template-customer.component';
-
+import { TemplateHistoryOrderComponent } from './template-history-order/template-history-order.component';
 @NgModule({
     imports: [CommonModule, SharedModule],
     declarations: [
@@ -21,6 +21,7 @@ import { TemplateCustomerComponent } from './template-customer/template-customer
         TemplateHeaderComponent,
         TemplateTableProductComponent,
         TemplateCustomerComponent,
+        TemplateHistoryOrderComponent,
     ],
     exports: [
         TemplateInforOrderComponent,
@@ -31,6 +32,7 @@ import { TemplateCustomerComponent } from './template-customer/template-customer
         TemplateHeaderComponent,
         TemplateTableProductComponent,
         TemplateCustomerComponent,
+        TemplateHistoryOrderComponent,
     ],
 })
 export class TemplateComponentModule {}
