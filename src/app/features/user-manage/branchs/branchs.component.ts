@@ -181,7 +181,7 @@ export class BranchsComponent implements OnInit {
     this.brandService.getAllBrand(this.request).subscribe(
       (data) => {
         if (data) {
-          this.res = data.list;
+          this.res = data;
           this.brand = [];
           this.totalbranchs = this.res.length;
           this.brand = data;
@@ -198,7 +198,9 @@ export class BranchsComponent implements OnInit {
     );
   }
 
-  change(id: string) {
+  change(id: any) {
+    console.log(id);
+    
     if (this.selectedIds.indexOf(id) < 0) {
       this.selectedIds.push(id);
     } else {

@@ -9,5 +9,6 @@ export class CustomerType {
   deptLimit: any;
   status: boolean;
   createdBy?: string;
+  lastModifiedBy?: string;
   lastModifiedDate?: Date
 }

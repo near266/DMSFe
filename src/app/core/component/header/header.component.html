@@ -126,6 +126,28 @@
             <span>Kênh</span>
           </button>
         </mat-menu>
+        <button mat-menu-item class="flex items-center" [matMenuTriggerFor]="matMenuChildren4">
+          <i class="fa-solid fa-tags mr-2"></i>
+          <span>Danh mục khác</span>
+        </button>
+        <mat-menu #matMenuChildren4="matMenu">
+          <button mat-menu-item class="flex items-center" >
+            <i class="fa-solid fa-file mr-2"></i>
+            <span>Loại ghi chú</span>
+          </button>
+          <button mat-menu-item class="flex items-center" >
+            <i class="fa-solid fa-earth-asia mr-2"></i>
+            <span>Loại thông báo</span>
+          </button>
+          <button mat-menu-item class="flex items-center" [routerLink]="'/categories/album'">
+            <i class="fa-solid fa-folder-open mr-2"></i>
+            <span>Album ảnh</span>
+          </button>
+          <button mat-menu-item class="flex items-center" >
+            <i class="fa-solid fa-comment mr-2"></i>
+            <span>Lý do khai báo vị trí</span>
+          </button>
+        </mat-menu>
       </mat-menu>
     </ng-container>
     <!-- Menu Báo cáo -->

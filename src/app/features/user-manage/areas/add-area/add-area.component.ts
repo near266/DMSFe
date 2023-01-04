@@ -23,8 +23,8 @@ export class AddAreaComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      brandCode: new FormControl(''),
-      brandName: new FormControl(''),
+      areaCode: new FormControl(''),
+      areaName: new FormControl(''),
       status: new FormControl('true'),
       debtLimit: new FormControl('true'),
     })
@@ -32,8 +32,8 @@ export class AddAreaComponent implements OnInit {
 
   add(){
     let body = {
-      brandName: this.form.controls['brandName'].value !== '' ? this.form.controls['brandName'].value: null,
-      brandCode: this.form.controls['brandCode'].value !== '' ? this.form.controls['brandCode'].value: null,
+      areaName: this.form.controls['areaName'].value !== '' ? this.form.controls['areaName'].value: null,
+      areaCode: this.form.controls['areaCode'].value !== '' ? this.form.controls['areaCode'].value: null,
       status: this.form.controls['status'].value !== '' ? this.form.controls['status'].value: false,
       debtLimit: this.form.controls['debtLimit'].value !== '' ? this.form.controls['debtLimit'].value: false,
     }
