@@ -12,7 +12,7 @@ input:focus {
   overflow-x: auto;
   margin-top: 8px;
   padding-bottom: 20px;
-  height: calc(100vh - 210px);
+  height: calc(100vh - 180px);
 }
 
 .width-vw-60 {
@@ -36,7 +36,7 @@ table th {
   font-weight: 600;
   font-size: 14px;
   z-index: 1;
-  @apply text-gray-700 bg-zinc-200;
+  @apply text-white bg-green-600;
 }
 
 table th,
@@ -62,7 +62,7 @@ tbody {
 }
 
 .custom-thead {
-  @apply text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-xs;
+  @apply text-white bg-green-600 text-xs;
 }
 
 .custom-row {
@@ -70,7 +70,7 @@ tbody {
 }
 
 .custom-th {
-  @apply sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-1 border-x;
+  @apply sticky top-0 z-10  border-b bg-green-600 border-solid border-gray-300 px-1 border-x;
 }
 
 .custom-td {

@@ -31,4 +31,8 @@ export class ReportService {
             .post(this.urlAPIReport + '/SaleExport', body, { responseType: 'blob' })
             .pipe(map((res) => res));
     }
+
+    TimeKeepingReport(body: any): Observable<any> {
+        return this.http.post(this.urlAPIReport + '/TimeKeepingReport', body).pipe(map((res) => res));
+    }
 }

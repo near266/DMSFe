@@ -4,6 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { Config } from 'src/app/core/model/Config';
 import { EmployeeService } from 'src/app/core/services/employee.service';
 import { Days } from '../../models/Days';
+import { IBody } from '../../models/IBody';
 import { TimeSheet } from '../../models/TimeSheet';
 import { DateService } from '../../services/date.service';
 import { TimeSheetService } from '../../services/time-sheet.service';
@@ -14,7 +15,7 @@ import { TimeSheetService } from '../../services/time-sheet.service';
     styleUrls: ['./timesheet.component.scss'],
 })
 export class TimesheetComponent implements OnInit, AfterViewInit {
-    now: any = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);;
+    now: any = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
     search: boolean = false;
     loading = false;
     hasEmployee = false;
@@ -22,6 +23,13 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
     timeSheets: TimeSheet[] = [];
 
     days: Days[] = [];
+
+    body: IBody = {
+        from: this.datePipe.transform(new Date().setDate(1), 'yyyy-MM-dd') + 'T00:00:00.000Z',
+        to: this.datePipe.transform(this.now, 'yyyy-MM-dd') + 'T23:59:59.999Z',
+        page: 1,
+        pageSize: 3,
+    };
 
     positionMenu: Config = {
         icon: '<i class="fa-solid fa-filter"></i>',
@@ -44,7 +52,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
     class = {
         left: 'w-2/12',
         right: 'w-10/12',
-        statusbar: false,
+        statusbar: true,
     };
 
     selectPosition(event: any) {}
@@ -54,38 +62,35 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
     selectTimekeeping(event: any) {}
 
     constructor(
-        private datePipe: DatePipe,
+        public datePipe: DatePipe,
         private title: Title,
-        private dateService: DateService,
-        private employeeService: EmployeeService,
-        private timeSheetService: TimeSheetService,
+        public dateService: DateService,
+        public timeSheetService: TimeSheetService,
     ) {}
 
     ngOnInit(): void {
-        this.title.setTitle('Báo cáo chấm công tháng');
+        this.title.setTitle('Báo cáo chấm công');
+        this.timeSheetService.loading$.subscribe((data) => {
+            Promise.resolve().then(() => {
+                this.loading = data;
+            });
+        });
     }
 
     ngAfterViewInit(): void {
-        // this.employeeService.GetAllGroupByEmployeeId().subscribe((data) => {
-        //     if (data) {
-        //         this.listGroup = data;
-        //     }
-        // });
-        this.timeSheetService.getEmployee();
-        this.timeSheetService.timeSheets$.subscribe((data) => {
-            Promise.resolve().then(() => {
-                this.timeSheets = data;
-            })
-        });
         Promise.resolve().then(() => {
             this.now = this.datePipe.transform(this.now, 'yyyy-MM-dd');
-        })
+        });
         this.dateService.getAllDayOfMonth(this.now);
         this.dateService.allDayOfMonth$.subscribe((data) => {
             Promise.resolve().then(() => {
                 this.days = data;
-            })
+            });
         });
+    }
+
+    show() {
+        this.timeSheetService.getList(this.body);
     }
 
     openSideBar() {
@@ -104,8 +109,14 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
         };
     }
 
+    trackByFn(index: number, item: any) {
+        if (!item) return null;
+        return index;
+    }
+
     init() {
         if (this.search == false) {
+            this.show();
             this.search = true;
         }
     }
@@ -121,5 +132,27 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
         }
     }
 
-    searchUser(event: any) {}
+    searchUser(event: any) {
+        let arrays: any[] = event.split(',');
+        if (arrays[1] == 'root') {
+            this.body.groupId = null;
+            this.body.employeeId = null;
+        } else {
+            if (arrays[0] == '2') {
+                this.body.employeeId = [arrays[1]];
+                this.body.groupId = null;
+            } else {
+                this.body.groupId = [arrays[1]];
+                this.body.employeeId = null;
+            }
+        }
+        this.show();
+    }
+
+    selectedDate() {
+        this.body.to = this.now + 'T23:59:59.999Z';
+        this.body.from = this.dateService.ReturnDayStart(this.now) + 'T00:00:00.000Z';
+        this.body.page = 1;
+        this.show();
+    }
 }

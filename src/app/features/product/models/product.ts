@@ -47,6 +47,7 @@ export interface Supplier {
     status?: boolean;
     createdBy?: string;
     createdDate?: Date;
+    lastModifiedBy?: string;
     lastModifiedDate?: Date
 }
 export interface Unit {
@@ -56,6 +57,7 @@ export interface Unit {
     status?: boolean;
     createdBy?: string;
     createdDate?: Date;
+    lastModifiedBy?: string;
     lastModifiedDate?: Date
 }
 
@@ -66,6 +68,7 @@ export interface Brand {
     status?: boolean;
     createdBy?: string;
     createdDate?: Date;
+    lastModifiedBy?: string;
     lastModifiedDate?: Date
 }
 
@@ -75,6 +78,7 @@ export interface Major {
     commodityCode?: string;
     status?: boolean;
     createdBy?: string;
+    lastModifiedBy?: string;
     lastModifiedDate?: Date;
 }
 

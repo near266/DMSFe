@@ -33,6 +33,8 @@ export class WarehousesComponent implements OnInit {
     status: null
   }
 
+  loading: boolean = false;
+
   page: number = 1;
   pageSize: number = 30;
   total: number = 0;
@@ -61,6 +63,11 @@ export class WarehousesComponent implements OnInit {
 
   ngOnInit(): void {
     this.title.setTitle('Danh mục kho hàng');
+    this.logicService.loading$.subscribe(data => {
+        Promise.resolve().then(() => {
+            this.loading = data;
+        })
+    })
   }
 
   ngAfterViewInit(): void {

@@ -5,5 +5,6 @@ export interface Channel {
   deptLimit: any;
   status: boolean;
   createdBy?: string;
+  lastModifiedBy?: string;
   lastModifiedDate?: Date
 }

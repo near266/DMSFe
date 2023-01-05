@@ -1,4 +1,4 @@
-<div class="h-full w-full px-4 py-2 overflow-hidden">
+<div class="h-full w-full px-4 py-2 overflow-hidden relative">
   <div class="w-full bg-white h-9 flex items-center text-lg font-medium">
     Danh mục kho hàng ({{totalCount}})
   </div>
@@ -31,7 +31,10 @@
           <input class="bg-white text-xs w-48 h-full" placeholder="Tìm kiếm kho hàng" [(ngModel)]="bodySearch.keyword" (keyup.enter)="filter()">
       </div>
   </div>
-  <div class="w-full relative">
+  <div class="w-full">
+    <div *ngIf="loading == true" class="absolute text-center top-1/2 left-1/2">
+        <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+      </div>
     <div id="table" class="table-wrapper w-full">
       <table class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
             <thead class="h-10  border-gray-300 ">
@@ -52,14 +55,14 @@
               <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ngày cập nhật</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody *ngIf="loading == false">
               <tr
                   *ngFor="
                       let item of warehouses,
                       index as i
                   "
                   class="custom-row h-14 w-fit text-xs">
-                  <td class="custom-td border-b">{{ i + 1 }}</td>
+                  <td class="custom-td border-b"><span style="width: 100%;" class="text-center">{{ i + 1 }}</span></td>
                   <td class="custom-td border-b">
                       <mat-checkbox color="primary" (change)="change(item.id)"></mat-checkbox>
                   </td>

@@ -64,6 +64,11 @@ export class ReportTimekeepingComponent implements OnInit, AfterViewInit {
         };
     }
 
+    trackByFn(index: number, item: any) {
+        if(!item) return null;
+        return item.date;
+    }
+
     searchUser(event: any) {}
 
     initDays() {

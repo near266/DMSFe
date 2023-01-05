@@ -2,29 +2,30 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { AreaService } from '../services/area.service';
+import { AlbumService } from '../services/album.service';
 
 @Component({
-  selector: 'app-add-area',
-  templateUrl: './add-area.component.html',
-  styleUrls: ['./add-area.component.scss']
+  selector: 'app-add-album',
+  templateUrl: './add-album.component.html',
+  styleUrls: ['./add-album.component.scss']
 })
-export class AddAreaComponent implements OnInit {
+export class AddAlbumComponent implements OnInit {
 
   loading = true;
   form!: FormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<AddAreaComponent>,
+    public dialogRef: MatDialogRef<AddAlbumComponent>,
     private snackbar: SnackbarService,
     private fb: FormBuilder,
-    private areaService: AreaService,
+    private albumService: AlbumService,
   ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      areaCode: new FormControl(''),
-      areaName: new FormControl(''),
+      albumCode: new FormControl(''),
+      albumName: new FormControl(''),
+      unitTreeGroupId: new FormControl(''),
       status: new FormControl('true'),
       debtLimit: new FormControl('true'),
     })
@@ -32,8 +33,9 @@ export class AddAreaComponent implements OnInit {
 
   add(){
     let body = {
-      areaName: this.form.controls['areaName'].value !== '' ? this.form.controls['areaName'].value: null,
-      areaCode: this.form.controls['areaCode'].value !== '' ? this.form.controls['areaCode'].value: null,
+      albumName: this.form.controls['albumName'].value !== '' ? this.form.controls['albumName'].value: null,
+      albumCode: this.form.controls['albumCode'].value !== '' ? this.form.controls['albumCode'].value: null,
+      unitTreeGroupId: this.form.controls['unitTreeGroupId'].value !== '' ? this.form.controls['unitTreeGroupId'].value: null,
       status: this.form.controls['status'].value !== '' ? this.form.controls['status'].value: false,
       debtLimit: this.form.controls['debtLimit'].value !== '' ? this.form.controls['debtLimit'].value: false,
     }
@@ -48,11 +50,11 @@ export class AddAreaComponent implements OnInit {
     } else if(body.debtLimit == 'false') {
       body.debtLimit = false;
     }
-    this.areaService.addArea(body).subscribe( data => {
-      this.snackbar.openSnackbar('Thêm khu vực thành công', 2000, 'Đóng', 'center', 'bottom', true);
+    this.albumService.addAlbum(body).subscribe( data => {
+      this.snackbar.openSnackbar('Thêm album ảnh thành công', 2000, 'Đóng', 'center', 'bottom', true);
       this.dialogRef.close({event: true});
     }, (error) => {
-      this.snackbar.openSnackbar('Thêm khu vực thất bại', 2000, 'Đóng', 'center', 'bottom', true);
+      this.snackbar.openSnackbar('Thêm album ảnh thất bại', 2000, 'Đóng', 'center', 'bottom', true);
     });
 
   }

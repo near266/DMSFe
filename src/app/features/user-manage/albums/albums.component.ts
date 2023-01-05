@@ -1,25 +1,25 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Album } from 'src/app/core/model/Album';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
-import { Brand } from '../../product/models/product';
-import { AddBrandComponent } from './add-brand/add-brand.component';
-import { BrandComponent } from './brand/brand.component';
-import { BranchService } from './services/branch.service';
+import { AddAlbumComponent } from './add-album/add-album.component';
+import { AlbumComponent } from './album/album.component';
+import { AlbumService } from './services/album.service';
 
 @Component({
-  selector: 'app-branchs',
-  templateUrl: './branchs.component.html',
-  styleUrls: ['./branchs.component.scss']
+  selector: 'app-albums',
+  templateUrl: './albums.component.html',
+  styleUrls: ['./albums.component.scss']
 })
-export class BranchsComponent implements OnInit {
+export class AlbumsComponent implements OnInit {
 
   loading = true;
   sideBarWidth!: string;
   type!: string;
   selectedIds: string[] = [];
-  brand: Brand[] = [];
+  album: Album[] = [];
   totalCount: number;
   keywords: '';
   request: any = {
@@ -34,33 +34,32 @@ export class BranchsComponent implements OnInit {
   page: number = 1;
   pageSize: number = 30;
   total: number = 0;
-  totalbranchs: number;
+  totalalbums: number;
 
   constructor(
     public datepipe: DatePipe,
     private dialog: MatDialog,
-    private brandService: BranchService,
+    private albumService: AlbumService,
     private snackbar: SnackbarService,
     private confirmService: ConfirmDialogService,
   ) { }
 
   ngOnInit(): void {
-
     this.view();
   }
 
   view(){
-    this.brandService.getAllBrand(this.request).subscribe(data => {
+    this.albumService.getAllAlbum(this.request).subscribe(data => {
       if(data){
-        this.brand = data;
-        this.totalbranchs = data.length
-        // console.log(data);
+        console.log(data);
+        this.album = data;
+        this.totalalbums = data.length
       }
     })
   }
   
-  AddBranch(){
-    const dialogRef = this.dialog.open(AddBrandComponent, {
+  AddAlbum(){
+    const dialogRef = this.dialog.open(AddAlbumComponent, {
       height: '100vh',
       minWidth: '900px',
       panelClass: 'custom-mat-dialog-container'
@@ -72,8 +71,8 @@ export class BranchsComponent implements OnInit {
     });
   }
 
-  open(data: Brand | null = null) {
-    const dialogRef = this.dialog.open(BrandComponent, {
+  open(data: Album | null = null) {
+    const dialogRef = this.dialog.open(AlbumComponent, {
         width: '730px',
         height: '90vh',
         data,
@@ -96,11 +95,11 @@ export class BranchsComponent implements OnInit {
       this.keywords = request;
     }
     this.request.keyword = this.keywords;
-    this.brandService.searchBrand(this.request).subscribe(
+    this.albumService.searchAlbum(this.request).subscribe(
         (data) => {
           this.loading = false;
           if(data) {
-            this.brand = data;
+            this.album = data;
           }
         },
         (error) => {
@@ -114,11 +113,11 @@ export class BranchsComponent implements OnInit {
     if(e.includes('Tất cả')) {
       this.request.keyword = this.keywords;
       this.request.status = null;
-      this.brandService.searchBrand(this.request).subscribe(
+      this.albumService.searchAlbum(this.request).subscribe(
         (data) => {
           this.loading = false;
           if(data) {
-            this.brand = data;
+            this.album = data;
           }
         },
         (error) => {
@@ -130,11 +129,11 @@ export class BranchsComponent implements OnInit {
     } else if (e.includes('Hoạt động')) {
       this.request.keyword = this.keywords;
       this.request.status = true;
-      this.brandService.searchBrand(this.request).subscribe(
+      this.albumService.searchAlbum(this.request).subscribe(
         (data) => {
           this.loading = false;
           if(data) {
-            this.brand = data;
+            this.album = data;
           }
         },
         (error) => {
@@ -146,11 +145,11 @@ export class BranchsComponent implements OnInit {
     } else if (e.includes('Khóa')) {
       this.request.keyword = this.keywords;
       this.request.status = false;
-      this.brandService.searchBrand(this.request).subscribe(
+      this.albumService.searchAlbum(this.request).subscribe(
         (data) => {
           this.loading = false;
           if(data) {
-            this.brand = data;
+            this.album = data;
           }
         },
         (error) => {
@@ -178,27 +177,27 @@ export class BranchsComponent implements OnInit {
 
   filter() {
     this.loading = true;
-    this.brandService.getAllBrand(this.request).subscribe(
+    this.albumService.getAllAlbum(this.request).subscribe(
       (data) => {
         if (data) {
           this.res = data;
-          this.brand = [];
-          this.totalbranchs = this.res.length;
-          this.brand = data;
+          this.album = [];
+          this.totalalbums = this.res.length;
+          this.album = data;
           this.loading = false;
         } else {
           this.loading = false;
-          this.snackbar.openSnackbar('Không tìm thấy danh sách nhãn hiệu', 2000, 'Đóng', 'center', 'bottom', false);
+          this.snackbar.openSnackbar('Không tìm thấy danh sách album ảnh', 2000, 'Đóng', 'center', 'bottom', false);
         }
       },
       (error) => {
         this.loading = false;
-        this.snackbar.openSnackbar('Không tìm thấy danh sách nhãn hiệu', 2000, 'Đóng', 'center', 'bottom', false);
+        this.snackbar.openSnackbar('Không tìm thấy danh sách album ảnh', 2000, 'Đóng', 'center', 'bottom', false);
       },
     );
   }
 
-  change(id: any) {
+  change(id: string) {
     console.log(id);
     
     if (this.selectedIds.indexOf(id) < 0) {
@@ -208,30 +207,30 @@ export class BranchsComponent implements OnInit {
     }
   }
 
-  DeleteBranchs() {
-    this.confirmService.openDialog({ message: 'Bạn có chắc chắn muốn xóa những nhãn hiệu này?', confirm: 'Xác nhận', cancel: 'Hủy' }).subscribe(data => {
+  DeleteAlbums() {
+    this.confirmService.openDialog({ message: 'Bạn có chắc chắn muốn xóa những album ảnh này?', confirm: 'Xác nhận', cancel: 'Hủy' }).subscribe(data => {
       if (data) {
-        this.deleteBranchsByIds(this.selectedIds);
+        this.deleteAlbumsByIds(this.selectedIds);
       }
     });
   }
 
-  deleteBranchsByIds(selectedIds: string[]) {
+  deleteAlbumsByIds(selectedIds: string[]) {
     const body = {
-      id: selectedIds
+      listId: selectedIds
     };
     console.log(body);
     
-    let sub = this.brandService.del(body).subscribe(data => {
+    let sub = this.albumService.del(body).subscribe(data => {
       if (data && data.message > 0) {
-        this.snackbar.openSnackbar('Xóa nhãn hiệu thành công', 2000, 'Đóng', 'center', 'bottom', true);
+        this.snackbar.openSnackbar('Xóa album ảnh thành công', 2000, 'Đóng', 'center', 'bottom', true);
         this.filter();
       } else {
-        this.snackbar.openSnackbar('Xóa nhãn hiệu thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+        this.snackbar.openSnackbar('Xóa album ảnh thất bại', 2000, 'Đóng', 'center', 'bottom', false);
       }
       sub.unsubscribe();
     }, (error) => {
-      this.snackbar.openSnackbar('Xóa nhãn hiệu thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+      this.snackbar.openSnackbar('Xóa album ảnh thất bại', 2000, 'Đóng', 'center', 'bottom', false);
       sub.unsubscribe();
     });
   }

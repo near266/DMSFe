@@ -1,4 +1,4 @@
 export interface Days {
-  date?: number;
+  date: number;
   day?: string;
 }
