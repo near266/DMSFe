@@ -82,7 +82,12 @@
               </tr>
             </thead>
             <tbody *ngIf="search == true && loading == false">
-                <ng-container *ngFor="let item of timeSheetService.list$ | async; trackBy: trackByFn">
+                <ng-container *ngFor="let item of list | paginate
+                : {
+                      itemsPerPage: body.pageSize,
+                      currentPage: body.page,
+                      totalItems: totalCount
+                  }; trackBy: trackByFn">
                   <tr class="custom-row">
                       <td class="custom-td border-b" [colSpan]="days.length + 9">{{item.group.name}}</td>
                   </tr>
@@ -148,19 +153,19 @@
                         </div>
                     </td>
                     <td class="custom-td border-b">
-                        <div class="text-center"></div>
+                        <div class="text-center">{{i.totalDay ? i.totalDay : ''}}</div>
                     </td>
                     <td class="custom-td border-b">
-                        <div class="text-center"></div>
+                        <div class="text-center">{{i.totalEarly ? i.totalEarly : ''}}</div>
                     </td>
                     <td class="custom-td border-b">
-                        <div class="text-center"></div>
+                        <div class="text-center">{{i.totalLate ? i.totalLate : ''}}</div>
                     </td>
                     <td class="custom-td border-b">
-                        <div class="text-center"></div>
+                        <div class="text-center">{{i.totalWorkDay ? i.totalWorkDay : ''}}</div>
                     </td>
                     <td class="custom-td border-b">
-                        <div class="text-center"></div>
+                        <div class="text-center">{{i.totalWorkDay ? i.totalWorkDay : '0'}}</div>
                     </td>
                   </tr>
                 </ng-container>
@@ -168,7 +173,7 @@
             </table>
       </div>
       <div class="mt-2">
-        <app-pagination></app-pagination>
+        <app-pagination (pageCurrent$)="handlePageChange($event)"></app-pagination>
       </div>
     </div>
   </div>
