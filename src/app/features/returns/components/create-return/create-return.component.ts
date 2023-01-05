@@ -43,17 +43,23 @@ export class CreateReturnComponent implements OnInit {
     ) {
         this.totalPrice$ = this.facade.totalPrice$.pipe(
             tap((_) => {
-                this.calculateTotalPay();
+                setTimeout(() => {
+                    this.calculateTotalPay();
+                });
             }),
         );
         this.totalDiscountProduct$ = this.facade.totalDiscountProduct$.pipe(
             tap((_) => {
-                this.calculateTotalPay();
+                setTimeout(() => {
+                    this.calculateTotalPay();
+                });
             }),
         );
         this.tradeDiscount$ = this.facade.tradeDiscount$.pipe(
             tap((_) => {
-                this.calculateTotalPay();
+                setTimeout(() => {
+                    this.calculateTotalPay();
+                });
             }),
         );
     }

@@ -10,6 +10,7 @@ import { ReturnOrderService } from './return-order.service';
 import { ReturnsService } from './returns.service';
 import { ProductApiService } from '../../product/apis/product.api.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
+import { CommonService } from '../../order-manager/services/common.service';
 
 @Injectable({
     providedIn: 'root',
@@ -25,6 +26,7 @@ export class ReturnFormService {
         private purchaseOrder: PurchaseOrderService,
         private dialog: MatDialog,
         private router: Router,
+        private commonService: CommonService,
     ) {}
     totalPrice$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     submitInfoForm$: Subject<any> = new Subject<any>();
@@ -65,6 +67,7 @@ export class ReturnFormService {
     addNewReturn(form: any) {
         return this.returnApiService.createNewReturn(form).subscribe({
             next: (result) => {
+                this.commonService.updateLog(3, result).subscribe();
                 this.snackBarService.openSnackbar('Tạo phiếu trả hàng thành công', 2000, 'Đóng', 'center', 'top', true);
                 this.totalPrice$.next(0);
                 this.discountAmount$.next(0);

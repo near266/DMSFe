@@ -1,6 +1,9 @@
 <ng-container *ngIf="data.data">
     <mat-stepper orientation="vertical">
-        <mat-step *ngFor="let history of data.data">
+        <mat-step *ngFor="let history of data.data; index as i">
+            <ng-template matStepperIcon="edit">
+                <mat-icon>bubble_chart</mat-icon>
+            </ng-template>
             <ng-template matStepLabel
                 >{{ history.lastModifiedBy }}
                 <span *ngIf="history.lastModifiedDate" class="font-medium"

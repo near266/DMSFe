@@ -1,194 +1,80 @@
 <div class="table-wrapper">
-    <table class="table-auto overflow-y-scroll" [width]="'2000px'">
+    <div *ngIf="isLoading$ | async" class="mt-10 text-center">
+        <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+    </div>
+    <table *ngIf="!(isLoading$ | async)" class="table-auto overflow-y-scroll" [width]="'2500px'">
+        <!-- header -->
         <tr class="text-center font-bold custom-header">
-            <th class="border px-4 py-2">STT</th>
-            <th class="border px-4 py-2">Mã NV</th>
-            <th class="border px-4 py-2">Nhân viên</th>
-            <th>
+            <th class="border px-4 py-2 custom-header">STT</th>
+            <th class="border px-4 py-2 custom-header">Mã NV</th>
+            <th class="border px-4 py-2 custom-header">Nhân viên</th>
+            <th class="custom-header">
                 <table class="table-auto" style="width: 100%">
                     <tr class="text-center">
-                        <td style="text-align: center" class="border px-4 py-2 text-center" colspan="10">Thông tin</td>
+                        <td style="text-align: center" class="border px-4 py-2 text-center" colspan="25">Thông tin</td>
                     </tr>
-                    <tr class="text-center flex">
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Ngày</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Thứ</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Giờ làm</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Giờ VT</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Giờ đồng bộ</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Mã KH</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Tên KH</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Địa chỉ KH</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Loại KH</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Nhóm KH</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">SĐT</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Liên hệ</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Checkin</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Checkou</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Số giờ</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Địa chỉ checkin</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Cách KH</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Cách checkin</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Thiết bị</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Chụp ảnh</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Đúng tuyến</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Đơn hàng</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Ghi tồn</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Số KM di chuyển</td>
-                        <td style="text-align: center" class="border px-4 py-2 flex-1">Ghi chú</td>
+                    <tr class="text-center" style="width: 100%">
+                        <td
+                            *ngFor="let header of headers"
+                            style="text-align: center; width: calc(100% / 25)"
+                            class="border px-2 py-2"
+                        >
+                            {{ header }}
+                        </td>
                     </tr>
                 </table>
             </th>
         </tr>
-        <tr class="text-center font-bold" *ngFor="let employee of data; index as i">
-            <td class="border px-4 py-2">{{ i + 1 }}</td>
-            <td class="border px-4 py-2">{{ employee.employeeName }}</td>
-            <td class="border px-4 py-2">{{ employee.employeeName }}</td>
-            <td class="">
-                <table class="table-auto" style="width: 100%">
-                    <tr class="text-center" *ngFor="let timekeeping of employee.timkeepingList">
-                        <td class="border px-1 py-2" colspan="1" style="width: calc(100% / 25)">
-                            {{ timekeeping.time }}
-                        </td>
-                        <td class="border px-1 py-2" colspan="1" style="width: calc(100% / 25)">
-                            {{ timekeeping.time }}
-                        </td>
-                        <td class="border px-1 py-2" colspan="1" style="width: calc(100% / 25)">
-                            {{ timekeeping.time }}
-                        </td>
-                        <td style="width: 100%">
-                            <table class="table-auto" style="width: 100%">
-                                <tr class="text-center" *ngFor="let checkin of timekeeping.checkinList">
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <div class="h-10">
-                                            <span>{{ checkin.address }}</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+        <!-- body -->
+        <ng-container *ngFor="let group of visitReport$ | async">
+            <!-- group -->
+            <tr class="text-left">
+                <td colspan="28" class="py-2 px-2 font-semibold w-full">
+                    {{ group.groupName }}
+                </td>
+            </tr>
+            <!-- employee -->
+            <tr class="text-center font-medium" *ngFor="let employee of group.listEmployee; index as i">
+                <td class="border px-2 py-2">{{ i + 1 }}</td>
+                <td class="border px-2 py-2">{{ employee.employeeCode }}</td>
+                <td class="border px-2 py-2">
+                    <div>
+                        {{ employee.employeeName }}
+                    </div>
+                </td>
+                <td class="">
+                    <table class="table-auto" style="width: 100%">
+                        <tr class="text-center" *ngFor="let timekeeping of employee.timkeepingList">
+                            <td class="border px-1 py-2">
+                                <div>
+                                    {{ timekeeping.date | date : 'dd' }}
+                                </div>
+                            </td>
+                            <td class="border px-1 py-2">
+                                <div>
+                                    {{ timekeeping.day }}
+                                </div>
+                            </td>
+                            <td class="border px-1 py-2">
+                                <div>
+                                    {{ timekeeping.hourWork }}
+                                </div>
+                            </td>
+                            <td colspan="22" style="width: calc((100% / 25) * 22)">
+                                <table class="table-auto" style="width: 100%">
+                                    <tr class="text-center" *ngFor="let checkin of timekeeping.checkinList">
+                                        <td *ngFor="let detail of checkin" class="border px-1 py-2">
+                                            <div class="min-h-10">
+                                                {{ detail }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </ng-container>
     </table>
 </div>

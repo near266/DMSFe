@@ -554,7 +554,11 @@ export class SaleLogicService {
             debtRecord: paymentSource.debtRecord!,
         };
         this.saleReceiptService.create(body).subscribe(
-            (data) => {},
+            (data) => {
+                if (data) {
+                    this.commonService.updateLog(2, data).subscribe();
+                }
+            },
             (err) => {
                 this.snackbar.failureSnackBar();
             },
@@ -599,7 +603,11 @@ export class SaleLogicService {
             debtRecord: this.paymentGenSource.getValue().debtRecord || false,
         };
         this.saleReceiptService.create(body).subscribe(
-            (data) => {},
+            (data) => {
+                if (data) {
+                    this.commonService.updateLog(2, data).subscribe();
+                }
+            },
             (err) => {
                 this.snackbar.failureSnackBar();
             },

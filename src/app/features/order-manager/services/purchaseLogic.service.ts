@@ -3,24 +3,20 @@ import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import moment from 'moment';
-import { BehaviorSubject, combineLatest, forkJoin, of } from 'rxjs';
+import { BehaviorSubject, forkJoin, of } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { PurchaseOrderService } from 'src/app/core/services/purchaseOrder.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { NumberToTextService } from 'src/app/core/shared/services/number-to-text.service';
 import { ConfirmRejectComponent } from '../../orders-mgm/components/confirm-reject/confirm-reject.component';
-import { GenOrderSaleComponent } from '../../orders-mgm/components/gen-order-sale/gen-order-sale.component';
 import {
-    InfoCreate,
     ListProductCreate,
     ListPromotionProductCreate,
-    PaymentCreate,
     PurchaseBodyCreate,
     PurchaseBodyUpdate,
 } from '../models/purchaseAPI';
 import { PurchaseDetail } from '../models/purchaseDetail';
 import { PurchaseOrder, RootPurchases } from '../models/purchases';
-import { SaleCreateBody } from '../models/SaleAPI';
 import { Payment } from '../template-component/template-footer-order/template-footer-order.component';
 import { CommonService } from './common.service';
 import { CommonLogicService } from './commonLogic.service';
@@ -514,9 +510,12 @@ export class PurchaseLogicService {
             totalPayment: paymentSource.totalPayment,
             source: 'Web',
         };
-        console.log(body);
         this.purchaseService.createOrder(body).subscribe(
-            (data) => {},
+            (data) => {
+                if (data) {
+                    this.commonService.updateLog(1, data).subscribe();
+                }
+            },
             (err) => {
                 this.snackbar.failureSnackBar();
             },

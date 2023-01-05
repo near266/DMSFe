@@ -1,5 +1,4 @@
 table {
-    min-width: max-content;
     border-collapse: separate;
     border-spacing: 0px;
 }
@@ -24,11 +23,11 @@ table th,
 }
 
 table td {
-    // padding: 8px;
-}
-
-table td {
     text-align: left;
+    div {
+        width: 150px;
+        white-space: pre-wrap;
+    }
 }
 
 tbody {

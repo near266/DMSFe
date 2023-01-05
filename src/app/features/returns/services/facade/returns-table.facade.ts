@@ -238,19 +238,24 @@ export class ReturnsTableFacade {
                         ...pagination,
                     })),
                     switchMap((settings: SidenavSettings) =>
-                        this.returnApiService.getAllReturns(settings).pipe(
-                            catchError(() => {
-                                return of({
-                                    data: [],
-                                    totalCount: 0,
-                                });
-                            }),
-                            tap((res: ReturnResponse) => {
-                                this.totalItems.next(res.totalCount);
-                                this.loading.next(false);
-                            }),
-                            map((res: ReturnResponse) => res.data || []),
-                        ),
+                        this.returnApiService
+                            .getAllReturns({
+                                ...settings,
+                                archived: false,
+                            })
+                            .pipe(
+                                catchError(() => {
+                                    return of({
+                                        data: [],
+                                        totalCount: 0,
+                                    });
+                                }),
+                                tap((res: ReturnResponse) => {
+                                    this.totalItems.next(res.totalCount);
+                                    this.loading.next(false);
+                                }),
+                                map((res: ReturnResponse) => res.data || []),
+                            ),
                     ),
                 ),
             ),

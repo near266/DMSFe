@@ -27,9 +27,7 @@ export class VisitReportComponent implements OnInit {
 
     constructor(private logicService: LogicServiceService, private async: AsyncPipe) {}
 
-    ngOnInit(): void {
-        this.logicService.searchReport(this.body);
-    }
+    ngOnInit(): void {}
 
     exportGross() {}
 

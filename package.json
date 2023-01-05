@@ -25,6 +25,7 @@
     "@ngx-formly/core": "^6.0.0",
     "@ngx-formly/material": "^6.0.0",
     "@pdftron/webviewer": "^8.9.0",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "angular-tree-component": "^8.5.6",
     "jspdf": "^2.5.1",
     "lodash": "^4.17.21",
