@@ -7,5 +7,6 @@ export class Area {
   deptLimit?: any;
   status?: any;
   createdBy?: string;
+  lastModifiedBy?: string;
   lastModifiedDate?: Date
 }
