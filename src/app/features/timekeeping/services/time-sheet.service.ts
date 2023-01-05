@@ -16,9 +16,11 @@ export class TimeSheetService {
 
     private timeSheets: BehaviorSubject<TimeSheet[]> = new BehaviorSubject<TimeSheet[]>(this.defaultTimeSheet);
     private listTimeSheet: BehaviorSubject<List[]> = new BehaviorSubject<List[]>(this.defaultList);
+    private loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     public timeSheets$ = this.timeSheets.asObservable();
     public list$ = this.listTimeSheet.asObservable();
+    public loading$ = this.loading.asObservable();
 
     constructor(
         private employeeService: EmployeeService,
@@ -56,6 +58,7 @@ export class TimeSheetService {
     }
 
     getList(body: IBody) {
+        this.loading.next(true);
         this.report.TimeKeepingReport(body).subscribe(
             (response: Response) => {
                 if (response) {
@@ -73,9 +76,8 @@ export class TimeSheetService {
                             data.listTime[0].minList = minList;
                         });
                     });
-                    console.log(response.list);
-
                     this.listTimeSheet.next(response.list);
+                    this.loading.next(false);
                 } else {
                     this.snackbar.openSnackbar(
                         'Không thể tải danh sách chấm công',
@@ -85,6 +87,7 @@ export class TimeSheetService {
                         'bottom',
                         false,
                     );
+                    this.loading.next(false);
                 }
             },
             (error) => {
@@ -96,6 +99,7 @@ export class TimeSheetService {
                     'bottom',
                     false,
                 );
+                this.loading.next(false);
             },
         );
     }

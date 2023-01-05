@@ -1,8 +1,8 @@
 export interface IBody {
     from?: any;
     to?: any;
-    groupId?: string[];
-    employeeId?: string[];
+    groupId?: any;
+    employeeId?: any;
     page?: number;
     pageSize?: number;
 }

@@ -24,7 +24,7 @@
           <span class="text-sm">Đến ngày: </span><input type="date" [(ngModel)]="now" (ngModelChange)="selectedDate()" class="w-24 border border-solid border-black mx-1 p-1 rounded-sm text-xs font-medium h-7">
         </div>
       </div>
-      <app-menu-collapse (Selection)="selectPosition($event)" [Config]="positionMenu"></app-menu-collapse>
+      <!-- <app-menu-collapse (Selection)="selectPosition($event)" [Config]="positionMenu"></app-menu-collapse>
       <app-menu-collapse (Selection)="selectStatus($event)" [Config]="statusMenu"></app-menu-collapse>
       <app-menu-collapse (Selection)="selectTimekeeping($event)" [Config]="timekeepingMenu"></app-menu-collapse>
       <div>
@@ -32,7 +32,7 @@
           <i class="text-base mr-3 fa-solid fa-gear"></i>
           <span class="text-sm">Đặt lịch xuất báo cáo</span>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="h-full bg-white my-1 mx-1 flex flex-col relative" [ngClass]="class.right">
@@ -46,12 +46,15 @@
       </div>
     </div>
     <mat-divider></mat-divider>
+    <div *ngIf="search == false && loading == false" class="w-full mt-3 p-1 text-center border-solid border border-black">
+        <span class="text-lg font-semibold">Bấm tìm kiếm để xem báo cáo</span>
+      </div>
     <div *ngIf="loading == true" class="absolute text-center top-1/2 left-1/2">
       <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
     </div>
-    <div *ngIf="loading == false && search == true">
+    <div *ngIf="search == true">
       <div id="table" class="table-wrapper">
-        <table *ngIf="!loading" class="block custom-table text-black dark:text-gray-400">
+        <table class="block custom-table text-black dark:text-gray-400">
             <thead class="custom-thead">
               <tr>
                 <th class="custom-th">STT</th>
@@ -78,7 +81,7 @@
                 <th class="custom-th">Ngày công</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="search == true && loading == false">
                 <ng-container *ngFor="let item of timeSheetService.list$ | async; trackBy: trackByFn">
                   <tr class="custom-row">
                       <td class="custom-td border-b" [colSpan]="days.length + 9">{{item.group.name}}</td>

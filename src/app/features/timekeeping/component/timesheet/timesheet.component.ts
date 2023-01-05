@@ -70,6 +70,11 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.title.setTitle('Báo cáo chấm công');
+        this.timeSheetService.loading$.subscribe((data) => {
+            Promise.resolve().then(() => {
+                this.loading = data;
+            });
+        });
     }
 
     ngAfterViewInit(): void {
@@ -127,11 +132,26 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
         }
     }
 
-    searchUser(event: any) {}
+    searchUser(event: any) {
+        let arrays: any[] = event.split(',');
+        if (arrays[1] == 'root') {
+            this.body.groupId = null;
+            this.body.employeeId = null;
+        } else {
+            if (arrays[0] == '2') {
+                this.body.employeeId = [arrays[1]];
+                this.body.groupId = null;
+            } else {
+                this.body.groupId = [arrays[1]];
+                this.body.employeeId = null;
+            }
+        }
+        this.show();
+    }
 
     selectedDate() {
         this.body.to = this.now + 'T23:59:59.999Z';
-        this.body.from = this.dateService.ReturnDayStart(this.now)+ 'T00:00:00.000Z';
+        this.body.from = this.dateService.ReturnDayStart(this.now) + 'T00:00:00.000Z';
         this.body.page = 1;
         this.show();
     }
