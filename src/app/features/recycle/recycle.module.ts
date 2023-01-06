@@ -11,6 +11,7 @@ import { CustomerComponent } from './components/customer/customer.component';
 import { ProductComponent } from './components/product/product.component';
 import { HeaderRecycleComponent } from './components/header-recycle/header-recycle.component';
 import { TableRecycleComponent } from './components/table-recycle/table-recycle.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { TableRecycleComponent } from './components/table-recycle/table-recycle.
     CustomerComponent,
     ProductComponent,
     HeaderRecycleComponent,
-    TableRecycleComponent
+    TableRecycleComponent,
+    PaginationComponent
   ],
   imports: [
     CommonModule,
