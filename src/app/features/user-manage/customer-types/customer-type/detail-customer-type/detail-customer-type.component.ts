@@ -61,7 +61,7 @@ export class DetailCustomerTypeComponent implements OnInit {
         templateOptions: {
             label: 'Thời gian checkin tối thiểu',
             placeholder: '1 ==> 60 Phút',
-            required: true,
+            required: false,
         },
     },
     {
@@ -71,7 +71,7 @@ export class DetailCustomerTypeComponent implements OnInit {
         templateOptions: {
             label: 'Bắt buộc chụp ảnh',
             placeholder: 'Mặc định theo tổ chức',
-            required: true,
+            required: false,
         },
     },
     {
@@ -81,7 +81,7 @@ export class DetailCustomerTypeComponent implements OnInit {
         templateOptions: {
             label: 'Bắt buộc ghi tồn kho',
             placeholder: 'Mặc định theo tổ chức',
-            required: true,
+            required: false,
         },
     },
     {

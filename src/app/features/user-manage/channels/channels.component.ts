@@ -99,7 +99,7 @@ export class ChannelsComponent implements OnInit {
         (data) => {
           this.loading = false;
           if(data) {
-            this.channel = data;
+            this.channel = data.list;
           }
         },
         (error) => {
@@ -211,7 +211,7 @@ export class ChannelsComponent implements OnInit {
     const body = {
       listId: selectedIds
     };
-    console.log(body);
+    // console.log(body);
     
     let sub = this.channelService.del(body).subscribe(data => {
       if (data && data.message > 0) {

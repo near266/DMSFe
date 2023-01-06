@@ -61,7 +61,7 @@ export class DetailAreaComponent implements OnInit {
         templateOptions: {
             label: 'Mã khu vực cha',
             placeholder: 'Nhập tên khu vực cha',
-            required: true,
+            required: false,
         },
     },
     {

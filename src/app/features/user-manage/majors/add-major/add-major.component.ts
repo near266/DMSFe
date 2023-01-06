@@ -35,7 +35,7 @@ export class AddMajorComponent implements OnInit {
       commodityName: this.form.controls['commodityName'].value !== '' ? this.form.controls['commodityName'].value: null,
       commodityCode: this.form.controls['commodityCode'].value !== '' ? this.form.controls['commodityCode'].value: null,
       status: this.form.controls['status'].value !== '' ? this.form.controls['status'].value: false,
-      debtLimit: this.form.controls['debtLimit'].value !== '' ? this.form.controls['debtLimit'].value: '',
+      debtLimit: this.form.controls['debtLimit'].value !== '' ? this.form.controls['debtLimit'].value: false,
     }
 
     if(body.status == 'true') {
