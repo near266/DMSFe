@@ -1,0 +1,45 @@
+<div id="table" class="table-wrapper w-full">
+    <table class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
+          <thead class="h-10  border-gray-300 ">
+            <tr>
+            <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">
+                <mat-checkbox color="primary"></mat-checkbox>
+            </th>
+            <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Tiêu đề bản ghi rác</th>
+            <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ngày xóa</th>
+            <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Người xóa</th>
+            <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x"></th>
+          </tr>
+        </thead>
+        <tbody>
+            <!-- *ngFor="
+                let item of warehouses,
+                index as i
+            " -->
+            <tr
+                class="custom-row h-14 w-fit text-xs">
+                <td class="custom-td border-b">
+                    <div class="text-center w-full">
+                        <mat-checkbox color="primary"></mat-checkbox>
+                    </div>
+                </td>
+                <td class="custom-td border-b">
+                    Hoàng Phương Cúc
+                </td>
+                <td class="custom-td border-b">
+                    {{ datePipe.transform('2011-10-11T20:30:00.000Z', 'dd/MM/yyyy hh:mm:ss') }}
+                </td>
+                <td class="custom-td border-b">
+                    Hoàng Phương Cúc
+                </td>
+                <td class="custom-td border-b">
+                    <div class="w-full text-center text-lg">
+                        <i class="cursor-pointer fa-solid fa-rotate-left mr-2"></i>
+                        <i class="cursor-pointer fa-solid fa-trash" (click)="delete()"></i>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
