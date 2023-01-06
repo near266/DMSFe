@@ -21,6 +21,7 @@ export class ListData {
     totalEarly: any;
     totalLate: any;
     totalWorkDay: any;
+    totalWorkTime: any;
 }
 
 export class Employee {

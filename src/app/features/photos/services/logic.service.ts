@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Album } from 'src/app/core/model/Album';
+import { CustomerGroup } from 'src/app/core/model/CustomerGroup';
+import { CustomerType } from 'src/app/core/model/CustomerType';
 import { Response } from 'src/app/core/model/Response';
+import { AlbumService } from 'src/app/core/services/album.service';
 import { CheckInService } from 'src/app/core/services/check-in.service';
+import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
+import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { DetailPhoto } from '../models/DetailPhoto';
+import { IBody } from '../models/IBody';
 import { Photo } from '../models/Photo';
 
 @Injectable({
@@ -11,51 +18,72 @@ import { Photo } from '../models/Photo';
 })
 export class LogicService {
     private readonly defaultListPhoto: Photo[] = [];
+    private readonly defaultListType: CustomerType[] = [];
+    private readonly defaultListGroup: CustomerGroup[] = [];
+    private readonly defaultListAlbum: Album[] = [];
 
     private photos: BehaviorSubject<Photo[]> = new BehaviorSubject<Photo[]>(this.defaultListPhoto);
+    private customerTypeList: BehaviorSubject<CustomerType[]> = new BehaviorSubject<CustomerType[]>(
+        this.defaultListType,
+    );
+    private customerGroupList: BehaviorSubject<CustomerGroup[]> = new BehaviorSubject<CustomerGroup[]>(
+        this.defaultListGroup,
+    );
+    private albumList: BehaviorSubject<Album[]> = new BehaviorSubject<Album[]>(this.defaultListAlbum);
 
     private totalPhoto: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
     private detailPhoto: BehaviorSubject<DetailPhoto> = new BehaviorSubject<DetailPhoto>(new DetailPhoto());
 
     public photos$ = this.photos.asObservable();
+    public customerTypeList$ = this.customerTypeList.asObservable();
+    public customerGroupList$ = this.customerGroupList.asObservable();
+    public albumList$ = this.albumList.asObservable();
     public totalPhoto$ = this.totalPhoto.asObservable();
     public detailPhoto$ = this.detailPhoto.asObservable();
 
-    constructor(private checkIn: CheckInService, public snackbar: SnackbarService) {}
+    constructor(
+        private checkIn: CheckInService,
+        public snackbar: SnackbarService,
+        private customerType: CustomerTypeService,
+        private customerGroup: CustomerGroupService,
+        private albumService: AlbumService,
+    ) {}
 
-    getListPhoto() {
-        this.checkIn.getAll(1, 8).subscribe(
-            (response: Response<Photo>) => {
-                if (response) {
-                    this.photos.next(response.data);
-                    this.totalPhoto.next(response.totalCount);
-                } else {
-                    this.snackbar.openSnackbar(
-                        'Không thể tải danh sách hình ảnh',
-                        2000,
-                        'Đóng',
-                        'center',
-                        'bottom',
-                        false,
-                    );
-                }
-            },
-            (error) => {
-                this.snackbar.openSnackbar('Không thể tải danh sách hình ảnh', 2000, 'Đóng', 'center', 'bottom', false);
-            },
-        );
+    getCustomerType() {
+        this.customerType.get_all().subscribe((response) => {
+            if (response) {
+                this.customerTypeList.next(response);
+            }
+        });
     }
 
-    loadPhoto(page: number) {
-        this.checkIn.getAll(page, 8).subscribe(
+    getCustomerGroup() {
+        this.customerGroup.get_all().subscribe((response) => {
+            if (response) {
+                this.customerGroupList.next(response);
+            }
+        });
+    }
+
+    getAlbum() {
+        this.albumService.getAll().subscribe((response) => {
+            if (response) {
+                this.albumList.next(response.data);
+            }
+        });
+    }
+
+    getListPhoto(body: IBody) {
+        this.checkIn.getList(body).subscribe(
             (response: Response<Photo>) => {
                 if (response) {
-                    if (page == 1) {
+                    if (body.page == 1) {
                         this.photos.next(response.data);
                     } else {
                         this.photos.next([...this.photos.getValue(), ...response.data]);
                     }
+                    this.totalPhoto.next(response.totalCount);
                 } else {
                     this.snackbar.openSnackbar(
                         'Không thể tải danh sách hình ảnh',

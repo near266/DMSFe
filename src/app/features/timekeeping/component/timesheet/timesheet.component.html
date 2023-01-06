@@ -139,13 +139,13 @@
                             <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
                             <span style="height: 16.666667%;" class="px-[8px]">
                                 <span *ngIf="i.listTime && i.listTime[0].minList">
-                                    {{i.listTime[0].minList[col.date] != null && i.listTime[0].minList[col.date].workDay != null ? i.listTime[0].minList[col.date].workDay : ''}}
+                                    {{i.listTime[0].minList[col.date] != null && i.listTime[0].minList[col.date].totalWork != null ? i.listTime[0].minList[col.date].totalWork : ''}}
                                 </span>
                             </span>
                             <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
                             <span style="height: 16.666667%;" class="px-[8px]">
                                 <span *ngIf="i.listTime && i.listTime[0].minList">
-                                    {{i.listTime[0].minList[col.date] != null && i.listTime[0].minList[col.date].totalWork != null ? i.listTime[0].minList[col.date].totalWork : '0'}}
+                                    {{i.listTime[0].minList[col.date] != null && i.listTime[0].minList[col.date].workDay != null ? i.listTime[0].minList[col.date].workDay : '0'}}
                                 </span>
                             </span>
                             <!-- <div class="h-[1px] my-1 w-full bg-gray-300 border-solid"></div>
@@ -156,13 +156,13 @@
                         <div class="text-center">{{i.totalDay ? i.totalDay : ''}}</div>
                     </td>
                     <td class="custom-td border-b">
-                        <div class="text-center">{{i.totalEarly ? i.totalEarly : ''}}</div>
+                        <div class="text-center">{{i.totalEarly != null ? i.totalEarly.split(':')[0] + ':' + i.totalEarly.split(':')[1] : ''}}</div>
                     </td>
                     <td class="custom-td border-b">
-                        <div class="text-center">{{i.totalLate ? i.totalLate : ''}}</div>
+                        <div class="text-center">{{i.totalLate != null ? i.totalLate.split(':')[0] + ':' + i.totalLate.split(':')[1] : ''}}</div>
                     </td>
                     <td class="custom-td border-b">
-                        <div class="text-center">{{i.totalWorkDay ? i.totalWorkDay : ''}}</div>
+                        <div class="text-center">{{i.totalWorkTime != null ? i.totalWorkTime.split(':')[0] + ':' + i.totalWorkTime.split(':')[1] : ''}}</div>
                     </td>
                     <td class="custom-td border-b">
                         <div class="text-center">{{i.totalWorkDay ? i.totalWorkDay : '0'}}</div>
