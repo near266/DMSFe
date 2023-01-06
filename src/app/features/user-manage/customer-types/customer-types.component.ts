@@ -99,7 +99,7 @@ export class CustomerTypesComponent implements OnInit {
         (data) => {
           this.loading = false;
           if(data) {
-            this.customerType = data;
+            this.customerType = data.list;
           }
         },
         (error) => {
@@ -217,7 +217,7 @@ export class CustomerTypesComponent implements OnInit {
     const body = {
       listId: selectedIds
     };
-    console.log(body);
+    // console.log(body);
     
     let sub = this.customerTypeService.del(body).subscribe(data => {
       if (data && data.message > 0) {

@@ -100,7 +100,7 @@ export class AreasComponent implements OnInit {
         (data) => {
           this.loading = false;
           if(data) {
-            this.area = data;
+            this.area = data.list;
           }
         },
         (error) => {
@@ -218,7 +218,7 @@ export class AreasComponent implements OnInit {
     const body = {
       listId: selectedIds
     };
-    console.log(body);
+    // console.log(body);
     
     let sub = this.areaService.del(body).subscribe(data => {
       if (data && data.message > 0) {
