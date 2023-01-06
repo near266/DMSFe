@@ -78,7 +78,6 @@ export class TimeSheetService {
                             data.listTime[0].minList = minList;
                         });
                     });
-                    console.log(response.list);
 
                     this.totalCount.next(response.totalCount);
                     this.listTimeSheet.next(response.list);
@@ -105,6 +104,8 @@ export class TimeSheetService {
                     false,
                 );
                 this.loading.next(false);
+                this.listTimeSheet.next(this.defaultList);
+                this.totalCount.next(0);
             },
         );
     }

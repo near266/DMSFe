@@ -51,27 +51,48 @@ export class LogicService {
     ) {}
 
     getCustomerType() {
-        this.customerType.get_all().subscribe((response) => {
-            if (response) {
-                this.customerTypeList.next(response);
-            }
-        });
+        this.customerType.get_all().subscribe(
+            (response) => {
+                if (response) {
+                    this.customerTypeList.next(response);
+                } else {
+                    this.customerTypeList.next(this.defaultListType);
+                }
+            },
+            (error) => {
+                this.customerTypeList.next(this.defaultListType);
+            },
+        );
     }
 
     getCustomerGroup() {
-        this.customerGroup.get_all().subscribe((response) => {
-            if (response) {
-                this.customerGroupList.next(response);
-            }
-        });
+        this.customerGroup.get_all().subscribe(
+            (response) => {
+                if (response) {
+                    this.customerGroupList.next(response);
+                } else {
+                    this.customerGroupList.next(this.defaultListGroup);
+                }
+            },
+            (error) => {
+                this.customerGroupList.next(this.defaultListGroup);
+            },
+        );
     }
 
     getAlbum() {
-        this.albumService.getAll().subscribe((response) => {
-            if (response) {
-                this.albumList.next(response.data);
-            }
-        });
+        this.albumService.getAll().subscribe(
+            (response: { data: Album[]; }) => {
+                if (response) {
+                    this.albumList.next(response.data);
+                } else {
+                    this.albumList.next(this.defaultListAlbum);
+                }
+            },
+            () => {
+                this.albumList.next(this.defaultListAlbum);
+            },
+        );
     }
 
     getListPhoto(body: IBody) {
@@ -86,17 +107,26 @@ export class LogicService {
                     this.totalPhoto.next(response.totalCount);
                 } else {
                     this.snackbar.openSnackbar(
-                        'Không thể tải danh sách hình ảnh',
+                        'Không tìm thấy danh sách hình ảnh',
                         2000,
                         'Đóng',
                         'center',
                         'bottom',
                         false,
                     );
+                    this.photos.next(this.defaultListPhoto);
                 }
             },
             (error) => {
-                this.snackbar.openSnackbar('Không thể tải danh sách hình ảnh', 2000, 'Đóng', 'center', 'bottom', false);
+                this.snackbar.openSnackbar(
+                    'Không tìm thấy danh sách hình ảnh',
+                    2000,
+                    'Đóng',
+                    'center',
+                    'bottom',
+                    false,
+                );
+                this.photos.next(this.defaultListPhoto);
             },
         );
     }
