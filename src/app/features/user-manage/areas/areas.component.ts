@@ -54,7 +54,7 @@ export class AreasComponent implements OnInit {
       if(data){
         this.area = data.list;
         this.totalareas = data.list.length
-        // console.log(data);
+        console.log(data);
       }
     })
   }
