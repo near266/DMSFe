@@ -1,5 +1,6 @@
 export class Response {
     list: List[];
+    totalCount: number;
 }
 
 export class List {
@@ -16,6 +17,10 @@ export class Group {
 export class ListData {
     employee: Employee;
     listTime: ListTime[];
+    totalDay: any;
+    totalEarly: any;
+    totalLate: any;
+    totalWorkDay: any;
 }
 
 export class Employee {

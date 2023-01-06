@@ -16,10 +16,12 @@ export class TimeSheetService {
 
     private timeSheets: BehaviorSubject<TimeSheet[]> = new BehaviorSubject<TimeSheet[]>(this.defaultTimeSheet);
     private listTimeSheet: BehaviorSubject<List[]> = new BehaviorSubject<List[]>(this.defaultList);
+    private totalCount: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     public timeSheets$ = this.timeSheets.asObservable();
     public list$ = this.listTimeSheet.asObservable();
+    public totalCount$ = this.totalCount.asObservable();
     public loading$ = this.loading.asObservable();
 
     constructor(
@@ -76,6 +78,9 @@ export class TimeSheetService {
                             data.listTime[0].minList = minList;
                         });
                     });
+                    console.log(response.list);
+
+                    this.totalCount.next(response.totalCount);
                     this.listTimeSheet.next(response.list);
                     this.loading.next(false);
                 } else {
