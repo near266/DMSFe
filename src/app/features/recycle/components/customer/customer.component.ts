@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Customer } from '../../models/Customer';
 import { IBody } from '../../models/IBody';
+import { IListReturn } from '../../models/IListReturn';
 import { LogicService } from '../../services/logic.service';
 
 @Component({
@@ -43,16 +44,7 @@ export class CustomerComponent implements OnInit, AfterViewInit {
     }
 
     signal(event: any) {
-        if (event && event != '') {
-            if(event == 'restore') {
-                Promise.resolve().then(() => {
-                    this.status = true;
-                });
-            } else {
-                Promise.resolve().then(() => {
-                    this.status = false;
-                });
-            }
+        if (event) {
             Promise.resolve().then(() => {
                 this.command = event;
             });
@@ -61,6 +53,25 @@ export class CustomerComponent implements OnInit, AfterViewInit {
                 this.command = '';
             });
         }
+        console.log(this.command);
+    }
+
+    refreshCommand(event: any) {
+        console.log(event);
+
+        if (event == 'restore') {
+            this.status = true;
+            Promise.resolve().then(() => {});
+            console.log(this.status);
+        } else {
+            Promise.resolve().then(() => {
+                this.status = false;
+            });
+        }
+
+        Promise.resolve().then(() => {
+            this.command = '';
+        });
     }
 
     search(event: any) {
@@ -74,13 +85,18 @@ export class CustomerComponent implements OnInit, AfterViewInit {
         this.getData();
     }
 
-    getListId(event: any[]) {
-        console.log(event);
-        if(this.status == true) {
-            console.log(this.status);
-        } else {
-            console.log(this.status);
-
+    getListId(event: IListReturn) {
+        if (event.type == 'restore') {
+            const body = {
+                listId: event.list,
+                archived: false,
+            };
+            this.logic.restoreCustomer(body, this.body);
+        } else if (event.type == 'delete') {
+            const body = {
+                listId: event.list,
+            };
+            this.logic.deleteCustomer(body, this.body);
         }
     }
 }

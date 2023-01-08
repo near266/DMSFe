@@ -23,11 +23,13 @@ export class LogicService {
 
     constructor(private customerService: CustomerService, public snackbar: SnackbarService) {}
 
+    // Customer service
+
     getCustomer(body: IBody) {
         this.customerService.searchArchived(body.page, body.pagesize, body.keyword).subscribe(
             (response: Response<Customer>) => {
                 if (response) {
-                    if(response.data) this.customers.next(response.data);
+                    if (response.data) this.customers.next(response.data);
                     else this.customers.next(this.defaultCustomers);
                     this.totalCustomer.next(response.totalCount);
                 } else {
@@ -57,4 +59,68 @@ export class LogicService {
             },
         );
     }
+
+    restoreCustomer(body: any, bodyGet: IBody) {
+        this.customerService.archivedCustomer(body).subscribe(
+            (data) => {
+                if (data && data.message == true) {
+                    this.snackbar.openSnackbar(
+                        'Khôi phục các bản ghi thành công',
+                        2000,
+                        'Đóng',
+                        'center',
+                        'bottom',
+                        true,
+                    );
+                    this.getCustomer(bodyGet);
+                } else {
+                    this.snackbar.openSnackbar(
+                        'Khôi phục các bản ghi thất bại',
+                        2000,
+                        'Đóng',
+                        'center',
+                        'bottom',
+                        false,
+                    );
+                }
+            },
+            (error) => {
+                this.snackbar.openSnackbar('Khôi phục các bản ghi thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+        );
+    }
+
+    deleteCustomer(body: any, bodyGet: IBody) {
+        this.customerService.delete(body).subscribe(
+            (data) => {
+                if (data && data.data > 0) {
+                    this.snackbar.openSnackbar(
+                        'Xóa các bản ghi thành công',
+                        2000,
+                        'Đóng',
+                        'center',
+                        'bottom',
+                        true,
+                    );
+                    this.getCustomer(bodyGet);
+                } else {
+                    this.snackbar.openSnackbar(
+                        'Xóa các bản ghi thất bại',
+                        2000,
+                        'Đóng',
+                        'center',
+                        'bottom',
+                        false,
+                    );
+                }
+            },
+            (error) => {
+                this.snackbar.openSnackbar('Xóa các bản ghi thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+        );
+    }
+
+    // Product service
+
+    // Order service
 }

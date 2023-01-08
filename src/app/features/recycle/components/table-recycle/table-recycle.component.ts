@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
+import { IListReturn } from '../../models/IListReturn';
 
 @Component({
     selector: 'app-table-recycle',
@@ -13,7 +14,7 @@ export class TableRecycleComponent implements OnInit, OnChanges {
     @Input() signal: string = '';
     @Output() indexPage = new EventEmitter<number>();
     @Output() statusEvent = new EventEmitter<string>();
-    @Output() pushListEvent = new EventEmitter<any[]>();
+    @Output() pushListEvent = new EventEmitter<IListReturn>();
 
     page: number = 1;
     listId: string[] = [];
@@ -24,13 +25,14 @@ export class TableRecycleComponent implements OnInit, OnChanges {
         if (changes['signal'] && changes['signal'].currentValue && changes['signal'].currentValue != '') {
             switch (changes['signal'].currentValue) {
                 case 'restore':
+                    // this.statusEvent.emit('restore');
                     this.restore();
                     break;
                 case 'delete':
+                    // this.statusEvent.emit('delete');
                     this.delete();
                     break;
             }
-            this.statusEvent.emit('');
         } else {
             if (this.listId.length > 0 && this.data.length > 0) {
                 for (let i = 0; i < this.data.length; i++) {
@@ -67,7 +69,13 @@ export class TableRecycleComponent implements OnInit, OnChanges {
                 cancel: 'Hủy',
             })
             .subscribe((data) => {
-                this.pushListEvent.emit(this.listId);
+                if (data) {
+                    this.statusEvent.emit('restore');
+                    this.pushListEvent.emit({
+                        type: 'restore',
+                        list: this.listId
+                    });
+                }
             });
     }
 
@@ -79,7 +87,13 @@ export class TableRecycleComponent implements OnInit, OnChanges {
                 cancel: 'Hủy',
             })
             .subscribe((data) => {
-                this.pushListEvent.emit([id]);
+                if (data) {
+                    this.statusEvent.emit('restore');
+                    this.pushListEvent.emit({
+                        type: 'restore',
+                        list: [id]
+                    });
+                }
             });
     }
 
@@ -87,7 +101,13 @@ export class TableRecycleComponent implements OnInit, OnChanges {
         this.confirm
             .openDialog({ message: 'Bạn có chắc chắn muốn xóa những bản ghi này?', confirm: 'Xác nhận', cancel: 'Hủy' })
             .subscribe((data) => {
-                this.pushListEvent.emit(this.listId);
+                if (data) {
+                    this.statusEvent.emit('delete');
+                    this.pushListEvent.emit({
+                        type: 'delete',
+                        list: this.listId
+                    });
+                }
             });
     }
 
@@ -95,7 +115,13 @@ export class TableRecycleComponent implements OnInit, OnChanges {
         this.confirm
             .openDialog({ message: 'Bạn có chắc chắn muốn xóa bản ghi này?', confirm: 'Xác nhận', cancel: 'Hủy' })
             .subscribe((data) => {
-                this.pushListEvent.emit([id]);
+                if (data) {
+                    this.statusEvent.emit('delete');
+                    this.pushListEvent.emit({
+                        type: 'delete',
+                        list: [id]
+                    });
+                }
             });
     }
 

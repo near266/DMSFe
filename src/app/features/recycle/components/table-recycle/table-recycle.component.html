@@ -29,15 +29,19 @@
                     {{item.id}}
                 </td>
                 <td class="custom-td border-b">
-                    {{ item.lastModifiedDate ? datePipe.transform(item.lastModifiedDate, 'dd/MM/yyyy hh:mm:ss') : ''}}
+                    {{ item.lastModifiedDate ? datePipe.transform(item.lastModifiedDate, 'HH:mm:ss dd/MM/yyyy') : ''}}
                 </td>
                 <td class="custom-td border-b">
                     {{item.lastModifiedBy ? item.lastModifiedBy : ''}}
                 </td>
                 <td class="custom-td border-b">
-                    <div class="w-full text-center text-lg">
-                        <i class="cursor-pointer fa-solid fa-rotate-left mr-2" (click)="restoreOne(item.id)"></i>
-                        <i class="cursor-pointer fa-solid fa-trash" (click)="deleteOne(item.id)"></i>
+                    <div class="w-full text-center">
+                        <button mat-icon-button class="text-[#565869] hover:text-[#0EAF8F]">
+                            <i class="cursor-pointer fa-solid fa-rotate-left text-lg" (click)="restoreOne(item.id)"></i>
+                        </button>
+                        <button mat-icon-button class="text-[#565869] hover:text-[#CB0D0C]">
+                            <i class="cursor-pointer fa-solid fa-trash text-lg" (click)="deleteOne(item.id)"></i>
+                        </button>
                     </div>
                 </td>
             </tr>
