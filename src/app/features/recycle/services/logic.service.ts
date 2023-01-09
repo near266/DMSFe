@@ -15,9 +15,14 @@ export class LogicService {
     private customers: BehaviorSubject<Customer[]> = new BehaviorSubject<Customer[]>(this.defaultCustomers);
     private totalCustomer: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
+    private totalOrder: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    private totalProduct: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
     private totalCount: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
     public customers$ = this.customers.asObservable();
+    public totalProduct$ = this.totalProduct.asObservable();
+    public totalOrder$ = this.totalOrder.asObservable();
     public totalCustomer$ = this.totalCustomer.asObservable();
     public totalCount$ = this.totalCount.asObservable();
 
@@ -94,24 +99,10 @@ export class LogicService {
         this.customerService.delete(body).subscribe(
             (data) => {
                 if (data && data.data > 0) {
-                    this.snackbar.openSnackbar(
-                        'Xóa các bản ghi thành công',
-                        2000,
-                        'Đóng',
-                        'center',
-                        'bottom',
-                        true,
-                    );
+                    this.snackbar.openSnackbar('Xóa các bản ghi thành công', 2000, 'Đóng', 'center', 'bottom', true);
                     this.getCustomer(bodyGet);
                 } else {
-                    this.snackbar.openSnackbar(
-                        'Xóa các bản ghi thất bại',
-                        2000,
-                        'Đóng',
-                        'center',
-                        'bottom',
-                        false,
-                    );
+                    this.snackbar.openSnackbar('Xóa các bản ghi thất bại', 2000, 'Đóng', 'center', 'bottom', false);
                 }
             },
             (error) => {

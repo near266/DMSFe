@@ -15,21 +15,40 @@ export class OverviewComponent implements OnInit, AfterViewInit, DoCheck, OnChan
         pagesize: 25
     }
 
+    totalCount: number = 0;
+    totalProduct: number = 0;
+    totalOrder: number = 0;
     totalCustomer: number = 0;
 
     constructor(private title: Title, private logic: LogicService) {}
 
     ngOnInit(): void {
         this.title.setTitle('Thùng rác');
+        this.logic.totalCustomer$.subscribe(data => {
+            Promise.resolve().then(() => {
+                this.totalCustomer = data;
+                this.totalCount = this.totalCustomer + this.totalOrder + this.totalProduct;
+            });
+        })
+
+        this.logic.totalProduct$.subscribe(data => {
+            Promise.resolve().then(() => {
+                this.totalProduct = data;
+                this.totalCount = this.totalCustomer + this.totalOrder + this.totalProduct;
+            });
+        })
+
+        this.logic.totalOrder$.subscribe(data => {
+            Promise.resolve().then(() => {
+                this.totalOrder = data;
+                this.totalCount = this.totalCustomer + this.totalOrder + this.totalProduct;
+            });
+        })
+
     }
 
     ngAfterViewInit(): void {
         this.logic.getCustomer(this.body);
-        this.logic.totalCustomer$.subscribe(data => {
-            Promise.resolve().then(() => {
-                this.totalCustomer = data;
-            })
-        })
     }
     ngOnChanges(changes: SimpleChanges): void {}
     ngDoCheck(): void {}
