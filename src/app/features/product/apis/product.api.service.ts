@@ -49,25 +49,6 @@ export class ProductApiService {
             }),
         );
     }
-    getListActive(settings: any): Observable<any> {
-        return this.http.post<any>(this.endPoint + '/getListActive', settings).pipe(
-            map((res) => {
-                const data = res.data.map((data: Product) => {
-                    return {
-                        ...data,
-                        supplierId: data.supplier?.id || null,
-                        brandId: data.brand?.id || null,
-                        retailUnitId: data.retailUnit?.id || null,
-                        wholeSaleUnitId: data.wholeSaleUnit?.id || null,
-                        majorId: data.major?.id || null,
-                        warehouseId: data.warehouse?.id || null,
-                    };
-                });
-                // console.log(data);
-                return { ...res, data };
-            }),
-        );
-    }
 
     get(): Observable<any[]> {
         return this.http.get<any[]>(this.endPoint + '/MajorGetAll');
@@ -81,12 +62,6 @@ export class ProductApiService {
     //PUT
     updateProduct(product: Product): Observable<HttpResponse<any>> {
         return this.http.put<HttpResponse<any>>(this.endPoint + '/update', product);
-    }
-    archiveProduct(productId: string): any {
-        const payload = {
-            id: productId,
-        };
-        return this.http.put<HttpResponse<any>>(this.endPoint + '/arhived', payload);
     }
     archiveListProduct(listId: string[]): any {
         const body = {

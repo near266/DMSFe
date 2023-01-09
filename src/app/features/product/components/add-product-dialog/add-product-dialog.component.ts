@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { RolesService } from 'src/app/core/services/roles.service';
 import { ConfirmDialogComponent } from 'src/app/core/shared/components/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
+import { ProductApiService } from '../../apis/product.api.service';
 import { Product } from '../../models/product';
 import { ProductDialogService } from '../../services/product-dialog.service';
 
@@ -23,6 +24,7 @@ export class AddProductDialogComponent implements OnInit {
         private rolesService: RolesService,
         private dialog: MatDialog,
         private confirmDialogService: ConfirmDialogService,
+        private productAPIService: ProductApiService,
         @Inject(MAT_DIALOG_DATA) public product: Product | null,
     ) {
         if (product) {
