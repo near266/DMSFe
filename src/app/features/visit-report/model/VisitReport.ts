@@ -1,3 +1,13 @@
+export class VisitReportResponse {
+    data: VisitReport[];
+    totalCount!: number;
+    totalOfCheckIn: number;
+    totalOfCustomer: number;
+    totalOfDay: number;
+    totalOfTimeCheckIn: string;
+    totalOfWork: string;
+}
+
 export class VisitReport {
     group: Group;
     data1: Data1[];

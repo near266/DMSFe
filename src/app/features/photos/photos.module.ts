@@ -10,17 +10,8 @@ import { DetailPhotoComponent } from './components/detail-photo/detail-photo.com
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
-  declarations: [
-    PhotosComponent,
-    PhotoNewCustomerComponent,
-    DetailPhotoComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    SharedModule,
-    ScrollingModule,
-    PhotosRoutingModule
-  ],
+    declarations: [PhotosComponent, PhotoNewCustomerComponent, DetailPhotoComponent],
+    imports: [CommonModule, RouterModule, SharedModule, ScrollingModule, PhotosRoutingModule],
+    exports: [DetailPhotoComponent],
 })
-export class PhotosModule { }
+export class PhotosModule {}

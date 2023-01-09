@@ -36,6 +36,7 @@ export class DetailContainerComponent implements OnInit, AfterViewInit, OnDestro
         this.clearEditSource();
         this.roleMain = localStorage.getItem('roleMain')!;
         this.getStatusNow();
+        this.isSuccessUpdate();
         this.clearDataInDetailOrderSource();
         this.setCustomerIdToLocalStorage();
         this.commonLogicService.changeToEditType();
@@ -111,5 +112,16 @@ export class DetailContainerComponent implements OnInit, AfterViewInit, OnDestro
 
     archive() {
         this.purchaseLogicService.archiveOrders([this.id], 'order/purchase');
+    }
+
+    isSuccessUpdate() {
+        this.subscriptions.add(
+            this.commonLogicService.isSucess$.subscribe((data) => {
+                if (data) {
+                    this.purchaseLogicService.clearDataInDetailOrderSource();
+                    this.getStatusNow();
+                }
+            }),
+        );
     }
 }

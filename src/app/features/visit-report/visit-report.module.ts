@@ -7,13 +7,17 @@ import { SharedModule } from 'src/app/core/shared/shared.module';
 import { PaginationComponent } from './component/pagination/pagination.component';
 import { SidebarComponent } from './component/sidebar/sidebar.component';
 import { TableComponent } from './component/table/table.component';
+import { DetailEmployeeComponent } from './component/detail-employee/detail-employee.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    VisitReportRoutes,
-    SharedModule
-  ],
-  declarations: [VisitReportComponent, ColSpanTemplateTableComponent, SidebarComponent, PaginationComponent, TableComponent]
+    imports: [CommonModule, VisitReportRoutes, SharedModule],
+    declarations: [
+        VisitReportComponent,
+        ColSpanTemplateTableComponent,
+        SidebarComponent,
+        PaginationComponent,
+        TableComponent,
+        DetailEmployeeComponent,
+    ],
 })
-export class VisitReportModule { }
+export class VisitReportModule {}

@@ -7,18 +7,21 @@ import { CustomerGroupService } from 'src/app/core/services/customer-group.servi
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 
 @Component({
-  selector: 'visit-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+    selector: 'visit-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
-    @Input() body: any;
+    @Input() body: any = {
+        page: 1,
+        pageSize: 5,
+    };
     @Output() body$ = new EventEmitter<Object>();
     isShowEmployeeTree: boolean = false;
     typeCustomerMenu: Config = {
-      icon: '<i class="fa-solid fa-vest-patches"></i>',
-      title: 'Loại khách hàng',
-      menuChildrens: [],
+        icon: '<i class="fa-solid fa-vest-patches"></i>',
+        title: 'Loại khách hàng',
+        menuChildrens: [],
     };
     groupCustomerMenu: Config = {
         icon: '<i class="fa-solid fa-users"></i>',
@@ -29,31 +32,27 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     listGroupCustomer: CustomerGroup[] = [];
 
     private subscriptions = new Subscription();
-    constructor(
-      private customerType: CustomerTypeService,
-      private customerGroup: CustomerGroupService
-    ) { }
+    constructor(private customerType: CustomerTypeService, private customerGroup: CustomerGroupService) {}
 
-    ngOnInit(): void {
-    }
-    
+    ngOnInit(): void {}
+
     ngAfterViewInit(): void {
-      setTimeout(() => {
-        this.getListTypeCustomer();
-        this.getListGroupCustomer();
-      }, 0);
+        setTimeout(() => {
+            this.getListTypeCustomer();
+            this.getListGroupCustomer();
+        }, 0);
     }
 
     getListTypeCustomer() {
-      this.subscriptions.add(
-          this.customerType.get_all().subscribe((data) => {
-              this.listTypeCustomer = data;
-              this.typeCustomerMenu.menuChildrens = this.listTypeCustomer.map((type: CustomerType) => {
-                  return type.customerTypeName;
-              });
-              this.typeCustomerMenu.menuChildrens.unshift('Tất cả');
-          }),
-      );
+        this.subscriptions.add(
+            this.customerType.get_all().subscribe((data) => {
+                this.listTypeCustomer = data;
+                this.typeCustomerMenu.menuChildrens = this.listTypeCustomer.map((type: CustomerType) => {
+                    return type.customerTypeName;
+                });
+                this.typeCustomerMenu.menuChildrens.unshift('Tất cả');
+            }),
+        );
     }
 
     getListGroupCustomer() {
@@ -69,20 +68,18 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     }
 
     selectOrderEmployee(orderEmployeeId: string) {
-
+        let id = orderEmployeeId.split(',')[1];
+        this.body.employeeId = id;
+        this.emitBody();
     }
 
     // Tìm kiếm theo loại khách hàng
-    selectTypeCustomer(e: any) {
-    }
+    selectTypeCustomer(e: any) {}
 
     // Tìm kiếm theo nhóm khách hàng
-    selectGroupCustomer(e: any) {
-      
-    }
+    selectGroupCustomer(e: any) {}
 
-    
     emitBody() {
-      this.body$.emit(this.body);
+        this.body$.emit(this.body);
     }
 }

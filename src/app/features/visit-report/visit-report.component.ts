@@ -32,4 +32,8 @@ export class VisitReportComponent implements OnInit {
     exportGross() {}
 
     exportNotGross() {}
+
+    handleEmitBody(body: any) {
+        this.body = body;
+    }
 }
