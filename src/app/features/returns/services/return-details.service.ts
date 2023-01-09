@@ -25,7 +25,6 @@ export class ReturnDetailsService {
     getReturnById(id: string | null) {
         return this.returnApiService.getReturnById(id).pipe(
             tap((data) => {
-                console.log(data);
                 data.groupId = data.group?.id;
                 data.saleRecieptId = data.saleReciept?.id || null;
                 data.orderEmployeeId = data.orderEmployee?.id;
@@ -39,7 +38,17 @@ export class ReturnDetailsService {
                 data.customerCode = data.customer?.customerCode;
                 data.customerName = data.customer?.customerName || data?.customerName;
                 this.returnDetails$.next(data);
-                this.returnListProducts$.next(data.listProduct);
+                this.returnListProducts$.next(
+                    data.listProduct.map((product: any) => {
+                        if (product.unit) {
+                            return product;
+                        }
+                        return {
+                            ...product,
+                            unit: { id: null, unitCode: null, unitName: '-' },
+                        };
+                    }),
+                );
                 this.tradeDiscount$.next(data.tradeDiscount);
                 this.promotionListProduct$.next(data.listPromotionProduct);
                 this.initialListProduct = JSON.parse(JSON.stringify(data.listProduct));

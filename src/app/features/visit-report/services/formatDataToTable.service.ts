@@ -10,7 +10,6 @@ import { Data1, Group, TimeKeepingC, VisitReport, CheckInC, VisitReportResponse 
 export class FormatDataToTableService {
     constructor(private datePipe: DatePipe, private dateService: DateService) {}
     formatListData(data: VisitReportResponse) {
-        console.log(data);
         let DataAfterFormat: FormatData[] = [];
         if (data.data) {
             data.data.forEach((group) => {
@@ -35,15 +34,15 @@ export class FormatDataToTableService {
                                     timeKeepingDate.getMonth(),
                                     timeKeepingDate.getFullYear(),
                                 ),
-                                hourWork: `${timeKeeping.entryTime.toString().split(':')[0]}:${
-                                    timeKeeping.entryTime.toString().split(':')[1]
-                                } (${timeKeeping.exitTime.toString().split(':')[0]}:${
-                                    timeKeeping.exitTime.toString().split(':')[1]
+                                hourWork: `${timeKeeping.entryTime?.toString().split(':')[0]}:${
+                                    timeKeeping.entryTime?.toString().split(':')[1]
+                                } (${timeKeeping.exitTime?.toString().split(':')[0]}:${
+                                    timeKeeping.exitTime?.toString().split(':')[1]
                                 })`,
                                 visitTime:
-                                    timeKeeping.sumOfTimeCheckIn.toString().split(':')[0] +
+                                    timeKeeping.sumOfTimeCheckIn?.toString().split(':')[0] +
                                     ':' +
-                                    timeKeeping.sumOfTimeCheckIn.toString().split(':')[1],
+                                    timeKeeping.sumOfTimeCheckIn?.toString().split(':')[1],
                                 checkinList: [],
                             };
                             if (!timeKeeping.checkInC) {
@@ -85,11 +84,11 @@ export class FormatDataToTableService {
                                         },
                                         {
                                             text:
-                                                checkinInfo.timeCheckIn.toString().split(':')[0] +
+                                                checkinInfo.timeCheckIn?.toString().split(':')[0] +
                                                 ':' +
-                                                checkinInfo.timeCheckIn.toString().split(':')[1] +
+                                                checkinInfo.timeCheckIn?.toString().split(':')[1] +
                                                 ':' +
-                                                checkinInfo.timeCheckIn.toString().split(':')[2].split('.')[0],
+                                                checkinInfo.timeCheckIn?.toString().split(':')[2].split('.')[0],
                                         },
                                         {
                                             text: checkinInfo.checkInAddress,
@@ -152,15 +151,15 @@ export class FormatDataToTableService {
                                     timeKeepingDate.getMonth(),
                                     timeKeepingDate.getFullYear(),
                                 ),
-                                hourWork: `${timeKeeping.entryTime.toString().split(':')[0]}:${
-                                    timeKeeping.entryTime.toString().split(':')[1]
-                                } (${timeKeeping.exitTime.toString().split(':')[0]}:${
-                                    timeKeeping.exitTime.toString().split(':')[1]
+                                hourWork: `${timeKeeping.entryTime?.toString().split(':')[0]}:${
+                                    timeKeeping.entryTime?.toString().split(':')[1]
+                                } (${timeKeeping.exitTime?.toString().split(':')[0]}:${
+                                    timeKeeping.exitTime?.toString().split(':')[1]
                                 })`,
                                 visitTime:
-                                    timeKeeping.sumOfTimeCheckIn.toString().split(':')[0] +
+                                    timeKeeping.sumOfTimeCheckIn?.toString().split(':')[0] +
                                     ':' +
-                                    timeKeeping.sumOfTimeCheckIn.toString().split(':')[1],
+                                    timeKeeping.sumOfTimeCheckIn?.toString().split(':')[1],
                                 checkinList: [],
                             };
                             if (!timeKeeping.checkInC) {
@@ -202,11 +201,11 @@ export class FormatDataToTableService {
                                         },
                                         {
                                             text:
-                                                checkinInfo.timeCheckIn.toString().split(':')[0] +
+                                                checkinInfo.timeCheckIn?.toString().split(':')[0] +
                                                 ':' +
-                                                checkinInfo.timeCheckIn.toString().split(':')[1] +
+                                                checkinInfo.timeCheckIn?.toString().split(':')[1] +
                                                 ':' +
-                                                checkinInfo.timeCheckIn.toString().split(':')[2].split('.')[0],
+                                                checkinInfo.timeCheckIn?.toString().split(':')[2].split('.')[0],
                                         },
                                         {
                                             text: checkinInfo.checkInAddress,

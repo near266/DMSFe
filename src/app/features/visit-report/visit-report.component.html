@@ -8,7 +8,7 @@
         class="overflow-hidden relative z-50 navbar-container"
     >
         <div class="w-60 p-1">
-            <visit-sidebar (body$)="handleEmitBody($event)"></visit-sidebar>
+            <visit-sidebar></visit-sidebar>
         </div>
     </mat-drawer>
     <mat-drawer-content>
@@ -47,7 +47,7 @@
                 [data]="visitReport$ | async"
                 [headers]="headers"
             ></app-col-span-template-table> -->
-            <visit-table [body]="body" (body$)="handleEmitBody($event)"></visit-table>
+            <visit-table></visit-table>
         </div>
     </mat-drawer-content>
 </mat-drawer-container>

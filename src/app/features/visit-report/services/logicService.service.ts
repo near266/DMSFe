@@ -14,13 +14,20 @@ export class LogicServiceService {
     private visitReportSource = new BehaviorSubject<FormatData[]>([]);
     private visitDetailReportSource = new BehaviorSubject<FormatData[]>([]);
     private totalSource = new BehaviorSubject<number>(0);
+    private bodySource = new BehaviorSubject<any>({ page: 1, pageSize: 5 });
 
     isLoading$ = this.isLoadingSource.asObservable();
     visitReport$ = this.visitReportSource.asObservable();
     visitReportDetail$ = this.visitDetailReportSource.asObservable();
     total$ = this.totalSource.asObservable();
+    body$ = this.bodySource.asObservable();
 
     constructor(private visitReportService: VisitReportService, private formatDataToTable: FormatDataToTableService) {}
+
+    // Set
+    setBodySource(body: any) {
+        this.bodySource.next(body);
+    }
 
     searchReport(body: any) {
         this.isLoadingSource.next(true);

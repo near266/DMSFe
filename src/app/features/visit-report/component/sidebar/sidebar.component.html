@@ -1,6 +1,7 @@
 <div
     (click)="isShowEmployeeTree = !isShowEmployeeTree"
-    class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg">
+    class="w-full items-center hover:font-medium flex mt-2 hover:bg-zinc-200 cursor-pointer py-2 px-3 rounded-lg"
+>
     <i class="fa-solid fa-user mr-3 text-base"></i>
     <span class="text-sm">Phòng ban / Nhân viên</span>
 </div>
@@ -14,10 +15,17 @@
 <!-- Từ - Đến -->
 <mat-form-field appearance="outline" class="w-full px-2 mt-2">
     <mat-label>Từ - Đến</mat-label>
-    <mat-date-range-input [rangePicker]="picker">
-      <input matStartDate placeholder="Start date">
-      <input matEndDate placeholder="End date">
+    <mat-date-range-input [rangePicker]="picker" [formGroup]="range">
+        <input (dateChange)="changeDate()" formControlName="start" matStartDate placeholder="Start date" />
+        <input (dateChange)="changeDate()" formControlName="end" matEndDate placeholder="End date" />
     </mat-date-range-input>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-date-range-picker #picker></mat-date-range-picker>
+    <i
+        (click)="$event.stopPropagation(); clearDate()"
+        matSuffix
+        class="cursor-pointer hover:opacity-50 fa-solid fa-xmark text-lg translate-y-[-5px]"
+    >
+    </i>
 </mat-form-field>
+<mat-hint *ngIf="!isValidDate" class="text-red-500 mx-3 text-xs">Chưa đủ ngày bắt đầu - ngày kết thúc</mat-hint>

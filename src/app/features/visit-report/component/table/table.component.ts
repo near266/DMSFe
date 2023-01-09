@@ -21,12 +21,11 @@ import { DetailEmployeeComponent } from '../detail-employee/detail-employee.comp
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
-    @Input() body: any = {
+export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
+    body: any = {
         page: 1,
         pageSize: 5,
     };
-    @Output() body$ = new EventEmitter();
     isLoading$ = this.logicService.isLoading$;
     total: number = 0;
     headers = [
@@ -74,12 +73,12 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
     }
 
     ngAfterViewInit(): void {
-        this.logicService.searchReport(this.body);
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        console.log(this.body);
-        this.logicService.searchReport(this.body);
+        this.subscriptions.add(
+            this.logicService.body$.subscribe((data: any) => {
+                this.body = data;
+                this.logicService.searchReport(this.body);
+            }),
+        );
     }
 
     ngOnDestroy(): void {
@@ -107,8 +106,9 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
     }
 
     handlePageChange(e: any) {
-        this.body.page = e;
-        this.logicService.searchReport(this.body);
+        let body = this.body;
+        body.page = e;
+        this.logicService.setBodySource(body);
     }
 }
 
