@@ -94,15 +94,15 @@ export class CustomerGroupsComponent implements OnInit {
     } else {
       this.keywords = request;
     }
-    console.log(this.keywords)
+    // console.log(this.keywords)
     this.request.keyword = this.keywords;
-    console.log(this.request.keywwords);
+    // console.log(this.request.keywwords);
     
     this.customerGrouplService.searchCustomerGroup(this.request).subscribe(
         (data) => {
           this.loading = false;
           if(data) {
-            this.customerGroup = data;
+            this.customerGroup = data.list;
           }
         },
         (error) => {
@@ -220,7 +220,7 @@ export class CustomerGroupsComponent implements OnInit {
     const body = {
       listId: selectedIds
     };
-    console.log(body);
+    // console.log(body);
     
     let sub = this.customerGrouplService.del(body).subscribe(data => {
       if (data && data.message > 0) {

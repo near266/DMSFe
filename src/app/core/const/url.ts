@@ -16,6 +16,7 @@ export const customer_group_url = api_gateway_url + '/CustomerGroup';
 export const customer_type_url = api_gateway_url + '/CustomerType';
 export const channel_url = api_gateway_url + '/Channel';
 export const area_url = api_gateway_url + '/Area';
+export const album_url = api_gateway_url + '/Album';
 export const check_in_url = api_gateway_url + '/CheckIn';
 export const history_url = api_gateway_url + '/HistoryLog';
 

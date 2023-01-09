@@ -5,6 +5,7 @@ import { Config } from 'src/app/core/model/Config';
 import { EmployeeService } from 'src/app/core/services/employee.service';
 import { Days } from '../../models/Days';
 import { IBody } from '../../models/IBody';
+import { List } from '../../models/List';
 import { TimeSheet } from '../../models/TimeSheet';
 import { DateService } from '../../services/date.service';
 import { TimeSheetService } from '../../services/time-sheet.service';
@@ -21,6 +22,8 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
     hasEmployee = false;
     listGroup: any[] = [];
     timeSheets: TimeSheet[] = [];
+    list: List[] = [];
+    totalCount: number = 0;
 
     days: Days[] = [];
 
@@ -91,6 +94,16 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
 
     show() {
         this.timeSheetService.getList(this.body);
+        this.timeSheetService.list$.subscribe((data) => {
+            Promise.resolve().then(() => {
+                this.list = data;
+            });
+        });
+        this.timeSheetService.totalCount$.subscribe((data) => {
+            Promise.resolve().then(() => {
+                this.totalCount = data;
+            });
+        });
     }
 
     openSideBar() {
@@ -146,6 +159,7 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
                 this.body.employeeId = null;
             }
         }
+        this.body.page = 1;
         this.show();
     }
 
@@ -153,6 +167,10 @@ export class TimesheetComponent implements OnInit, AfterViewInit {
         this.body.to = this.now + 'T23:59:59.999Z';
         this.body.from = this.dateService.ReturnDayStart(this.now) + 'T00:00:00.000Z';
         this.body.page = 1;
+        this.show();
+    }
+    handlePageChange(event: any) {
+        this.body.page = event;
         this.show();
     }
 }

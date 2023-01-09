@@ -220,7 +220,7 @@ export class BranchsComponent implements OnInit {
     const body = {
       id: selectedIds
     };
-    console.log(body);
+    // console.log(body);
     
     let sub = this.brandService.del(body).subscribe(data => {
       if (data && data.message > 0) {

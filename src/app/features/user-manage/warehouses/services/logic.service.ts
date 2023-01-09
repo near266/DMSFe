@@ -91,12 +91,16 @@ export class LogicService {
                         'bottom',
                         false,
                     );
+                    this.warehouses.next(this.defaultWarehouses);
+                    this.totalCountWarehouse.next(0);
                     this.loading.next(false);
                 }
                 subscription.unsubscribe();
             },
             (error) => {
                 this.snackbar.openSnackbar('Không thể tải danh sách kho hàng', 2000, 'Đóng', 'center', 'bottom', false);
+                this.warehouses.next(this.defaultWarehouses);
+                this.totalCountWarehouse.next(0);
                 this.loading.next(false);
                 subscription.unsubscribe();
             },
@@ -123,12 +127,16 @@ export class LogicService {
                         'bottom',
                         false,
                     );
+                    this.warehouses.next(this.defaultWarehouses);
+                    this.totalCountWarehouse.next(0);
                     this.loading.next(false);
                 }
                 subscription.unsubscribe();
             },
             (error) => {
                 this.snackbar.openSnackbar('Không thể tải danh sách kho hàng', 2000, 'Đóng', 'center', 'bottom', false);
+                this.warehouses.next(this.defaultWarehouses);
+                this.totalCountWarehouse.next(0);
                 this.loading.next(false);
                 subscription.unsubscribe();
             },
@@ -205,7 +213,6 @@ export class LogicService {
                 (data: Response<EmployeeInGroup>) => {
                     if (data) {
                         this.accountant.next(data.data);
-                        console.log(this.accountant);
                     } else {
                         this.snackbar.openSnackbar(
                             'Không thể tải danh sách kế toán',

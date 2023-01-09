@@ -219,7 +219,7 @@ export class AlbumsComponent implements OnInit {
     const body = {
       listId: selectedIds
     };
-    console.log(body);
+    // console.log(body);
     
     let sub = this.albumService.del(body).subscribe(data => {
       if (data && data.message > 0) {
