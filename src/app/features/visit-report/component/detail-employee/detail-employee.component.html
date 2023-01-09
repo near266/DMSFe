@@ -1,13 +1,23 @@
+<h2 style="display: flex" mat-dialog-title class="justify-between">
+    <div>
+        <span>Chi tiết viếng thăm khách hàng, nhân viên: </span>
+        <span>{{
+            visitReportData.length > 0 && visitReportData[0].listEmployee[0]
+                ? visitReportData[0].listEmployee[0].employeeName
+                : ''
+        }}</span>
+    </div>
+    <button type="button" mat-stroked-button (click)="close()" class="text-[#565869] bg-white font-medium">
+        <i class="fa-solid fa-right-from-bracket mr-1"></i>Đóng
+    </button>
+</h2>
 <div class="table-wrapper">
     <div *ngIf="isLoading$ | async" class="mt-10 text-center">
         <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
     </div>
-    <table *ngIf="!(isLoading$ | async)" class="table-auto overflow-y-scroll" [width]="'2500px'">
+    <table *ngIf="!(isLoading$ | async)" class="table-auto overflow-y-scroll" [width]="'2000px'">
         <!-- header -->
         <tr class="text-center font-bold custom-header">
-            <th class="border px-4 py-2 custom-header">STT</th>
-            <th class="border px-4 py-2 custom-header">Mã NV</th>
-            <th class="border px-4 py-2 custom-header">Nhân viên</th>
             <th class="custom-header">
                 <table class="table-auto" style="width: 100%">
                     <tr class="text-center">
@@ -19,34 +29,24 @@
                             style="text-align: center; width: calc(100% / 19)"
                             class="border px-2 py-2"
                         >
-                            {{ header }}
+                            <div>
+                                {{ header }}
+                            </div>
                         </td>
                     </tr>
                 </table>
             </th>
         </tr>
         <!-- body -->
-        <ng-container
-            *ngFor="
-                let group of visitReportData
-                    | paginate : { itemsPerPage: body.pageSize, currentPage: body.page, totalItems: total }
-            "
-        >
+        <ng-container *ngFor="let group of visitReportData">
             <!-- group -->
             <tr class="text-left">
-                <td colspan="28" class="py-2 px-2 font-semibold w-full">
+                <td colspan="16" class="py-2 px-2 font-semibold w-full">
                     {{ group.groupName }}
                 </td>
             </tr>
             <!-- employee -->
             <tr class="text-center font-medium" *ngFor="let employee of group.listEmployee; index as i">
-                <td class="border px-2 py-2">{{ i + 1 }}</td>
-                <td class="border px-2 py-2">{{ employee.employeeCode }}</td>
-                <td class="border px-2 py-2" (click)="openDetailEmployeeDialog(employee.id)">
-                    <div class="hover:text-blue-500 cursor-pointer">
-                        {{ employee.employeeName }}
-                    </div>
-                </td>
                 <td class="">
                     <table class="table-auto" style="width: 100%">
                         <tr class="text-center" *ngFor="let timekeeping of employee.timkeepingList">
@@ -70,7 +70,7 @@
                                     {{ timekeeping.visitTime }}
                                 </div>
                             </td>
-                            <td colspan="19" style="width: calc((100% / 22) * 19)">
+                            <td colspan="12" style="width: calc((100% / 16) * 12)">
                                 <table class="table-auto" style="width: 100%">
                                     <tr class="text-center" *ngFor="let checkin of timekeeping.checkinList">
                                         <td *ngFor="let detail of checkin" class="border px-1 py-2">
@@ -103,4 +103,3 @@
         </ng-container>
     </table>
 </div>
-<visit-pagination class="fixed right-0 bottom-0" (pageCurent$)="handlePageChange($event)"></visit-pagination>

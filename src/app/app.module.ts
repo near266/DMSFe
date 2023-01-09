@@ -27,7 +27,7 @@ registerLocaleData(localeVi);
         DataService,
         CurrencyPipe,
         PercentPipe,
-        AsyncPipe
+        AsyncPipe,
     ],
     bootstrap: [AppComponent],
 })

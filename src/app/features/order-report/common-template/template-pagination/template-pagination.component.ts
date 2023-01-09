@@ -10,13 +10,11 @@ import { LogicService } from '../../services/logic.service';
 export class TemplatePaginationComponent implements OnInit {
     @Output() pageCurent$ = new EventEmitter<number>();
 
-    private page: number = 1;
     constructor() {}
 
     ngOnInit(): void {}
 
     onTableDataChange(event: any) {
-        this.page = event;
-        this.pageCurent$.emit(this.page);
+        this.pageCurent$.emit(event);
     }
 }

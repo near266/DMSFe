@@ -11,6 +11,8 @@ export class ProductService {
     private readonly defaultPageSize = 30;
     private readonly defaultProducts = [];
 
+    private isSucessUpdate: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private listArchive: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
     private products: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>(this.defaultProducts);
     private currentPage: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultPage);
     private currentPageSize: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultPageSize);
@@ -26,9 +28,17 @@ export class ProductService {
     public currentPageSize$ = this.currentPageSize.asObservable();
     public startAndEndIndex$ = this.startAndEndIndex.asObservable();
     public totalProducts$ = this.totalProducts.asObservable();
+    public archivedProducts$ = this.listArchive.asObservable();
+    public isSucess$ = this.isSucessUpdate.asObservable();
 
     constructor(private productApiService: ProductApiService, private filterService: FilterService) {}
 
+    setListProductArchive(list: string[]) {
+        this.listArchive.next(list);
+    }
+    setSucessUpdate(isUpdate: boolean) {
+        this.isSucessUpdate.next(isUpdate);
+    }
     setCurrentPage(currentPage: number) {
         this.tableLoading.next(true);
         this.getProductsByPage(currentPage).subscribe((data: any) => {

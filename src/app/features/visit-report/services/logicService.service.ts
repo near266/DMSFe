@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { VisitReportService } from 'src/app/core/services/visitReport.service';
 import { FormatData } from '../component/table/table.component';
 import { JGData } from '../mocks/fake';
-import { VisitReport } from '../model/VisitReport';
+import { VisitReport, VisitReportResponse } from '../model/VisitReport';
 import { FormatDataToTableService } from './formatDataToTable.service';
 
 @Injectable({
@@ -12,25 +12,39 @@ import { FormatDataToTableService } from './formatDataToTable.service';
 export class LogicServiceService {
     private isLoadingSource = new BehaviorSubject<boolean>(true);
     private visitReportSource = new BehaviorSubject<FormatData[]>([]);
+    private visitDetailReportSource = new BehaviorSubject<FormatData[]>([]);
+    private totalSource = new BehaviorSubject<number>(0);
+    private bodySource = new BehaviorSubject<any>({ page: 1, pageSize: 5 });
 
     isLoading$ = this.isLoadingSource.asObservable();
     visitReport$ = this.visitReportSource.asObservable();
+    visitReportDetail$ = this.visitDetailReportSource.asObservable();
+    total$ = this.totalSource.asObservable();
+    body$ = this.bodySource.asObservable();
 
     constructor(private visitReportService: VisitReportService, private formatDataToTable: FormatDataToTableService) {}
 
+    // Set
+    setBodySource(body: any) {
+        this.bodySource.next(body);
+    }
+
     searchReport(body: any) {
         this.isLoadingSource.next(true);
-        this.visitReportService.searchReport(body).subscribe((data: { data: VisitReport[] }) => {
-            // this.visitReportSource.next(this.formatData(data));
-            console.log(data);
-            let dataAfterFormat = this.formatData(data);
+        this.visitReportService.searchReport(body).subscribe((data: VisitReportResponse) => {
+            let dataAfterFormat = this.formatDataToTable.formatListData(data);
             this.visitReportSource.next(dataAfterFormat);
+            this.totalSource.next(data.totalCount);
             this.isLoadingSource.next(false);
         });
     }
 
-    // format bảng ngoài cùng
-    formatData(data: { data: VisitReport[] }): any {
-        return this.formatDataToTable.formatListData(data);
+    searchDetailReport(body: any) {
+        this.isLoadingSource.next(true);
+        this.visitReportService.searchReport(body).subscribe((data: VisitReportResponse) => {
+            let dataAfterFormat = this.formatDataToTable.formatListDataDetailEmployee(data);
+            this.visitDetailReportSource.next(dataAfterFormat);
+            this.isLoadingSource.next(false);
+        });
     }
 }

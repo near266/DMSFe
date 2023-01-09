@@ -1,21 +1,38 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { JGData } from '../../mocks/fake';
-import { Headers } from '../../model/header';
-import { FormatDataToTableService } from '../../services/formatDataToTable.service';
+import { AsyncPipe } from '@angular/common';
+import {
+    AfterViewInit,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { DetailPhotoComponent } from 'src/app/features/photos/components/detail-photo/detail-photo.component';
 import { LogicServiceService } from '../../services/logicService.service';
+import { DetailEmployeeComponent } from '../detail-employee/detail-employee.component';
 
 @Component({
     selector: 'visit-table',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit, AfterViewInit {
+export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
+    body: any = {
+        page: 1,
+        pageSize: 5,
+    };
+    isLoading$ = this.logicService.isLoading$;
+    total: number = 0;
     headers = [
         'Ngày',
         'Thứ',
         'Giờ làm',
         'Giờ VT',
-        'Giờ đồng bộ',
         'Mã KH',
         'Tên KH',
         'Địa chỉ KH',
@@ -27,68 +44,71 @@ export class TableComponent implements OnInit, AfterViewInit {
         'Checkout',
         'Số giờ',
         'Địa chỉ checkin',
-        'Cách KH',
-        'Cách Checkin',
-        'Thiết bị',
         'Chụp ảnh',
         'Đúng tuyến',
         'Đơn hàng',
-        'Ghi tồn',
-        'Số KM di chuyển',
         'Ghi chú',
     ];
-    data: FormatData[] = [
-        {
-            groupName: 'Nhóm 1 Nhóm 1Nhóm 1Nhóm 1Nhóm 1Nhóm 1',
-            listEmployee: [
-                {
-                    employeeCode: 'NV1',
-                    employeeName: 'Trần Minh Quang',
-                    timkeepingList: [
-                        {
-                            day: 'Ngày 1',
-                            date: 'Thứ 1',
-                            hourWork: 12,
-                            checkinList: [
-                                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-                                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-                                ,
-                            ],
-                        },
-                    ],
-                },
-                {
-                    employeeCode: 'NV1',
-                    employeeName: 'Trần Minh Quang',
-                    timkeepingList: [
-                        {
-                            day: 'Ngày 1',
-                            date: 'Thứ 1',
-                            hourWork: 12,
-                            checkinList: [
-                                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-                                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-                                ,
-                            ],
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
-    visitReport$ = this.logicService.visitReport$;
-    isLoading$ = this.logicService.isLoading$;
-    body: any = {
-        employeeId: '766b83cc-4787-4b9e-816e-1ec0e5dfd1ed',
-        page: 1,
-        pageSize: 5,
-    };
-    constructor(private logicService: LogicServiceService) {}
 
-    ngOnInit(): void {}
+    subscriptions: Subscription = new Subscription();
+    visitReportData: FormatData[] = [];
+
+    constructor(
+        private logicService: LogicServiceService,
+        private matDialog: MatDialog,
+        private asyncPipe: AsyncPipe,
+    ) {}
+
+    ngOnInit(): void {
+        this.subscriptions.add(
+            this.logicService.total$.subscribe((total: number) => {
+                this.total = total;
+            }),
+        );
+        this.subscriptions.add(
+            this.logicService.visitReport$.subscribe((data: FormatData[]) => {
+                this.visitReportData = data;
+            }),
+        );
+    }
 
     ngAfterViewInit(): void {
-        this.logicService.searchReport(this.body);
+        this.subscriptions.add(
+            this.logicService.body$.subscribe((data: any) => {
+                this.body = data;
+                this.logicService.searchReport(this.body);
+            }),
+        );
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    openDetailAlbum(id: string): void {
+        this.matDialog.open(DetailPhotoComponent, {
+            height: '100vh',
+            minWidth: '1000px',
+            panelClass: 'custom-mat-dialog-container',
+            autoFocus: false,
+            data: id,
+        });
+    }
+
+    openDetailEmployeeDialog(id: any) {
+        this.matDialog.open(DetailEmployeeComponent, {
+            height: '100vh',
+            minWidth: '1000px',
+            autoFocus: false,
+            data: id,
+            panelClass: 'overflow-hidden',
+        });
+    }
+
+    handlePageChange(e: any) {
+        let body = this.body;
+        body.page = e;
+        this.logicService.setBodySource(body);
     }
 }
 
@@ -100,12 +120,14 @@ export interface FormatData {
 export interface Employee {
     employeeCode: string;
     employeeName: string;
+    id: string;
     timkeepingList: TimeKeeping[];
 }
 
 export interface TimeKeeping {
     day: string;
     date: string;
-    hourWork: number;
+    hourWork: string;
+    visitTime: string;
     checkinList: any;
 }

@@ -22,7 +22,6 @@
                         <th class="border">Tên SP</th>
                         <th class="border">ĐVT</th>
                         <th class="border">Kho</th>
-                        <th class="border">VAT</th>
                         <th class="border" *ngIf="type != TypeOrder.RETURN">Số lượng</th>
                         <th class="border" *ngIf="type === TypeOrder.RETURN">Số lượng trả</th>
                         <th class="border" *ngIf="type === TypeOrder.RETURN">Số lượng bán</th>
@@ -47,7 +46,6 @@
                             <td class="border p-1">
                                 {{ row.warehouse?.warehouseName }}
                             </td>
-                            <td class="border p-1">Chưa trả</td>
                             <td class="border p-1" *ngIf="type !== TypeOrder.RETURN">
                                 {{ row.quantity }}
                             </td>

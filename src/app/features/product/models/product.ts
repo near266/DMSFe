@@ -36,6 +36,7 @@ export interface Product {
     major?: Major;
     wholeSaleUnit?: Unit;
     warehouse?: Warehouse;
+    checked?: boolean;
 }
 export interface Supplier {
     id?: string;
@@ -48,7 +49,7 @@ export interface Supplier {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
-    lastModifiedDate?: Date
+    lastModifiedDate?: Date;
 }
 export interface Unit {
     id?: string;
@@ -58,7 +59,7 @@ export interface Unit {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
-    lastModifiedDate?: Date
+    lastModifiedDate?: Date;
 }
 
 export interface Brand {
@@ -69,7 +70,7 @@ export interface Brand {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
-    lastModifiedDate?: Date
+    lastModifiedDate?: Date;
 }
 
 export interface Major {

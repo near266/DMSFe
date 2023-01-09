@@ -1,19 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'visit-pagination',
-  templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.scss']
+    selector: 'visit-pagination',
+    templateUrl: './pagination.component.html',
+    styleUrls: ['./pagination.component.scss'],
 })
 export class PaginationComponent implements OnInit {
+    @Output() pageCurent$ = new EventEmitter<number>();
 
-  constructor() { }
+    constructor() {}
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {}
 
-  onTableDataChange(e: any) {
-    
-  }
-
+    onTableDataChange(e: any) {
+        this.pageCurent$.emit(e);
+    }
 }
