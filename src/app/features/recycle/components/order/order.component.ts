@@ -34,7 +34,7 @@ export class OrderComponent implements OnInit {
                     this.data = [];
                     this.orders.forEach((element) => {
                         let item: IDataTable = {
-                            id: element.id,
+                            id: element.id + ';;' + element.type,
                             title: element.orderCode,
                             lastModifiedBy: element.lastModifiedBy,
                             lastModifiedDate: element.lastModifiedDate,
@@ -101,17 +101,20 @@ export class OrderComponent implements OnInit {
     }
 
     getListId(event: IListReturn) {
+        let body: any = {
+            data: []
+        };
+        event.list.forEach((element) => {
+            let temp = element.split(';;');
+            body.data.push({
+                id: temp[0],
+                type: temp[1],
+            });
+        });
         if (event.type == 'restore') {
-            const body = {
-                listId: event.list,
-                archived: false,
-            };
-            this.logic.restoreCustomer(body, this.body);
+            this.logic.restoreOrder(body, this.body);
         } else if (event.type == 'delete') {
-            const body = {
-                listId: event.list,
-            };
-            this.logic.deleteCustomer(body, this.body);
+            this.logic.deleteOrder(body, this.body);
         }
     }
 }

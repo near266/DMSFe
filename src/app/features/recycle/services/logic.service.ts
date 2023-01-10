@@ -231,4 +231,36 @@ export class LogicService {
             },
         );
     }
+
+    restoreOrder(body: any, bodyGet: IBody) {
+        this.orderService.unArchive(body).subscribe(
+            (data) => {
+                if (data && data > 0) {
+                    this.getOrder(bodyGet);
+                    this.snackbar.openSnackbar('Khôi phục bản ghi thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                } else {
+                    this.snackbar.openSnackbar('Khôi phục bản ghi thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+                }
+            },
+            (error) => {
+                this.snackbar.openSnackbar('Khôi phục bản ghi thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+        );
+    }
+
+    deleteOrder(body: any, bodyGet: IBody) {
+        this.orderService.deleteAll(body).subscribe(
+            (data) => {
+                if (data && data > 0) {
+                    this.getOrder(bodyGet);
+                    this.snackbar.openSnackbar('Xóa bản ghi thành công', 2000, 'Đóng', 'center', 'bottom', true);
+                } else {
+                    this.snackbar.openSnackbar('Xóa bản ghi thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+                }
+            },
+            (error) => {
+                this.snackbar.openSnackbar('Xóa bản ghi thất bại', 2000, 'Đóng', 'center', 'bottom', false);
+            },
+        );
+    }
 }

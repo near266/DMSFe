@@ -5,6 +5,7 @@ export class Order {
     lastModifiedBy: string;
     lastModifiedDate: string;
     orderCode: string;
+    type: number;
 }
 
 export class Customer {
