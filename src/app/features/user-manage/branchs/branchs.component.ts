@@ -34,6 +34,7 @@ export class BranchsComponent implements OnInit {
     pageSize: number = 30;
     total: number = 0;
     totalbranchs: number;
+    isLoading: boolean = false;
 
     constructor(
         public datepipe: DatePipe,
@@ -270,6 +271,7 @@ export class BranchsComponent implements OnInit {
             .open('Bạn có muốn xuất tất cả dữ liệu nhãn hiệu tính không', ['Có', 'Không'])
             .subscribe((data) => {
                 if (data === 'Có') {
+                    this.isLoading = true;
                     this.brandService.export().subscribe(
                         (data) => {
                             const blob = new Blob([data], {
@@ -277,6 +279,7 @@ export class BranchsComponent implements OnInit {
                             });
                             const url = window.URL.createObjectURL(blob);
                             window.open(url);
+                            this.isLoading = false;
                         },
                         (err) => {
                             this.snackbar.failureSnackBar();

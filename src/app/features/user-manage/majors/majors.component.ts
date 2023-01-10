@@ -35,6 +35,7 @@ export class MajorsComponent implements OnInit {
     pageSize: number = 30;
     total: number = 0;
     totalmajors: number;
+    isLoading: boolean = false;
 
     constructor(
         public datepipe: DatePipe,
@@ -114,6 +115,7 @@ export class MajorsComponent implements OnInit {
             .open('Bạn có muốn xuất tất cả dữ liệu ngành hàng không', ['Có', 'Không'])
             .subscribe((data) => {
                 if (data === 'Có') {
+                    this.isLoading = true;
                     this.majorService.export().subscribe(
                         (data) => {
                             const blob = new Blob([data], {
@@ -121,6 +123,7 @@ export class MajorsComponent implements OnInit {
                             });
                             const url = window.URL.createObjectURL(blob);
                             window.open(url);
+                            this.isLoading = false;
                         },
                         (err) => {
                             this.snackbar.failureSnackBar();

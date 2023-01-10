@@ -34,6 +34,7 @@ export class CustomerGroupsComponent implements OnInit {
     pageSize: number = 30;
     total: number = 0;
     totalcustomerGroups: number;
+    isLoading: boolean = false;
 
     constructor(
         public datepipe: DatePipe,
@@ -278,6 +279,7 @@ export class CustomerGroupsComponent implements OnInit {
             .open('Bạn có muốn xuất tất cả dữ liệu đơn vị tính không', ['Có', 'Không'])
             .subscribe((data) => {
                 if (data === 'Có') {
+                    this.isLoading = true;
                     this.customerGrouplService.export().subscribe(
                         (data) => {
                             const blob = new Blob([data], {
@@ -285,6 +287,7 @@ export class CustomerGroupsComponent implements OnInit {
                             });
                             const url = window.URL.createObjectURL(blob);
                             window.open(url);
+                            this.isLoading = false;
                         },
                         (err) => {
                             this.snackbar.failureSnackBar();
