@@ -60,6 +60,7 @@ export interface Unit {
     createdDate?: Date;
     lastModifiedBy?: string;
     lastModifiedDate?: Date;
+    checked?: boolean;
 }
 
 export interface Brand {

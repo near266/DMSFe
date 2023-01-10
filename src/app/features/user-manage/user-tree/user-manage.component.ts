@@ -391,4 +391,27 @@ export class UserManageComponent implements OnInit {
         }
         this.filterEmployee();
     }
+
+    Export() {
+        this.confirm
+            .openDialog({
+                message: 'Bạn có chắc chắn muốn xuất dữ liệu tất cả nhân viên không?',
+                confirm: 'Đồng ý',
+                cancel: 'Hủy',
+            })
+            .subscribe((data) => {
+                this.employeeService.export().subscribe(
+                    (data) => {
+                        const blob = new Blob([data], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        window.open(url);
+                    },
+                    (err) => {
+                        this.snackbar.failureSnackBar();
+                    },
+                );
+            });
+    }
 }

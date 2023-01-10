@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { Injectable } from '@angular/core';
+import { Template } from '@angular/compiler/src/render3/r3_ast';
+import { Injectable, TemplateRef } from '@angular/core';
 import { DateService } from '../../timekeeping/services/date.service';
 import { FormatData, Employee, TimeKeeping } from '../component/table/table.component';
 import { Data1, Group, TimeKeepingC, VisitReport, CheckInC, VisitReportResponse } from '../model/VisitReport';
@@ -94,7 +95,7 @@ export class FormatDataToTableService {
                                             text: checkinInfo.checkInAddress,
                                         },
                                         {
-                                            text: checkinInfo.image ? `${checkinInfo.image?.length} ảnh` : '',
+                                            text: checkinInfo.image ? `${checkinInfo.image} ảnh` : '',
                                             isImage: checkinInfo.image ? true : false,
                                             id: checkinInfo.id,
                                         },
@@ -211,7 +212,7 @@ export class FormatDataToTableService {
                                             text: checkinInfo.checkInAddress,
                                         },
                                         {
-                                            text: checkinInfo.image ? `${checkinInfo.image?.length} ảnh` : '',
+                                            text: checkinInfo.image ? `${checkinInfo.image} ảnh` : '',
                                             isImage: checkinInfo.image ? true : false,
                                             id: checkinInfo.id,
                                         },

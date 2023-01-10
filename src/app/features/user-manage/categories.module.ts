@@ -68,6 +68,7 @@ import { AlbumsComponent } from './albums/albums.component';
 import { AddAlbumComponent } from './albums/add-album/add-album.component';
 import { AlbumComponent } from './albums/album/album.component';
 import { DetailAlbumComponent } from './albums/album/detail-album/detail-album.component';
+import { PaginationComponent } from './template-components/pagination/pagination.component';
 
 const routes: Routes = [
     {
@@ -178,6 +179,7 @@ const routes: Routes = [
         AddAlbumComponent,
         AlbumComponent,
         DetailAlbumComponent,
+        PaginationComponent,
     ],
     imports: [
         CommonModule, RouterModule.forChild(routes), 

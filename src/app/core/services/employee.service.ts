@@ -164,4 +164,9 @@ export class EmployeeService {
     GetAllByEmployeeId(): Observable<any> {
         return this.http.get(gateway_url + '/GetAllByEmployeeId').pipe(map((response: any) => response));
     }
+
+    export(): Observable<any> {
+        let body = {};
+        return this.http.post(gateway_url + '/Employee/export', body, { responseType: 'blob' });
+    }
 }

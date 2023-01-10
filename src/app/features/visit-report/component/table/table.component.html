@@ -84,6 +84,7 @@
                                                     (click)="openDetailAlbum(detail.id)"
                                                     class="min-h-10 hover:text-blue-500 cursor-pointer"
                                                 >
+                                                    <ng-conatainer [ngTemplateOutlet]="detail.icon"></ng-conatainer>
                                                     <span>
                                                         {{ detail.text }}
                                                     </span>

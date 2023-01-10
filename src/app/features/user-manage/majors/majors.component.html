@@ -1,16 +1,15 @@
 <div class="h-full w-full px-4 py-2">
-    <div class="w-full bg-white h-9 flex items-center text-lg font-medium">
-      Danh mục ngành hàng ({{totalmajors}})
-    </div>
+    <div class="w-full bg-white h-9 flex items-center text-lg font-medium">Danh mục ngành hàng ({{ totalmajors }})</div>
     <div
-        class="w-full px-2 py-1 bg-gray-100 border-gray-300 border-y border-solid h-10 flex flex-wrap items-center text-xs font-medium">
+        class="w-full px-2 py-1 bg-gray-100 border-gray-300 border-y border-solid h-10 flex flex-wrap items-center text-xs font-medium"
+    >
         <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="AddMajor()">
-          <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
-          Thêm mới
+            <i class="fa-sharp fa-solid fa-plus text-emerald-500 font-bold mr-2"></i>
+            Thêm mới
         </button>
         <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="filter()">
-          <i class="fa-sharp fa-solid fa-refresh text-emerald-500 font-bold mr-2"></i>
-          Tải lại
+            <i class="fa-sharp fa-solid fa-refresh text-emerald-500 font-bold mr-2"></i>
+            Tải lại
         </button>
         <!-- <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
           <i class="fa-sharp fa-solid fa-upload text-emerald-500 font-bold mr-2"></i>
@@ -23,77 +22,125 @@
         <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
         </app-menu-bar>
         <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="DeleteMajors()">
-          <i class="fa-sharp fa-solid fa-trash text-emerald-500 font-bold mr-2"></i>
-          Xóa nhiều
+            <i class="fa-sharp fa-solid fa-trash text-emerald-500 font-bold mr-2"></i>
+            Xóa nhiều
         </button>
-        <div class=" bg-white mx-3 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
+        <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="Export()">
+            <i class="fa-solid fa-file-export text-emerald-500 font-bold mr-2"></i>
+            Xuất dữ liệu
+        </button>
+        <div class="bg-white mx-3 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
             <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
-            <input #keyword class="bg-white text-xs w-48 h-full" placeholder="Tìm kiếm ngành hàng" [(ngModel)]="keywords" 
-              (keyup.enter)="search(keyword.value)">
+            <input
+                #keyword
+                class="bg-white text-xs w-48 h-full"
+                placeholder="Tìm kiếm ngành hàng"
+                [(ngModel)]="keywords"
+                (keyup.enter)="search(keyword.value)"
+            />
         </div>
     </div>
     <div class="w-full">
-      <div id="table" class="table-wrapper w-full">
-        <table class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
-              <thead class="h-10  border-gray-300 ">
-                <tr>
-                <th col class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">STT</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">
-                    <input type="checkbox">
-                </th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Mã ngành hàng</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Tên ngành hàng</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Trạng thái</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Người cập nhật</th>
-                <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ngày cập nhật</th>
-              </tr>
-            </thead>
-            <tbody>
-                <tr
-                    *ngFor="
-                        let order of major
-                            | paginate
-                                : {
-                                      itemsPerPage: pageSize,
-                                      currentPage: page,
-                                      totalItems: total
-                                  };
-                        index as i
-                    "
-                    class="custom-row h-8 w-fit text-xs">
-                    <td class="w-16 custom-td border">{{ i + 1 }}</td>
-                    <td class="w-16 border align-middle px-2">
-                        <span class="flex items-center text-[#1891C9]">
-                          <input type="checkbox" (change)="change(order?.id + '')">
-                          <i *ngIf="order?.status == false" class="fa-sharp fa-solid fa-lock mb-[1px] ml-2"></i>
-                          <i *ngIf="order?.status == true || order?.status == null" class="fa-sharp fa-solid fa-lock-open mb-[1px] ml-2"></i>
-                        </span>
-                    </td>
-                    <td class="custom-td border">
-                        {{ order?.commodityCode }}
-                    </td>
-                    <td
-                        class="cursor-pointer hover:text-blue-500 custom-td border" (click)="open(order)">
-                        {{ order?.commodityName }}
-                    </td>
-                    <td class="custom-td border">
-                        <button *ngIf="order.status == true" class="text-xs bg-[#10B981] text-white font-medium px-7 py-1 rounded-md w-full">Mở</button>
-                        <button *ngIf="order.status == false" class="text-xs bg-[#CB0D0C] text-white font-medium px-7 py-1 rounded-md w-full">Khóa</button>
-                    </td>
-                    <td class="custom-td border">
-                        {{ order?.lastModifiedBy }}
-                    </td>
-                    <td class="custom-td border">
-                        <!-- {{ order?.createdDate }} -->
-                        {{ datepipe.transform(order.lastModifiedDate, 'dd/MM/yyyy') || 'No Data' }}
-                    </td>
-                </tr>
-            </tbody>
-  
-        </table>
-    </div>
-  
-    <!-- <div class="mt-2">
+        <div id="table" class="table-wrapper w-full">
+            <table class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
+                <thead class="h-10 border-gray-300">
+                    <tr>
+                        <th
+                            col
+                            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x"
+                        >
+                            STT
+                        </th>
+                        <th
+                            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x"
+                        >
+                            <input type="checkbox" />
+                        </th>
+                        <th
+                            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x"
+                        >
+                            Mã ngành hàng
+                        </th>
+                        <th
+                            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x"
+                        >
+                            Tên ngành hàng
+                        </th>
+                        <th
+                            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x"
+                        >
+                            Trạng thái
+                        </th>
+                        <th
+                            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x"
+                        >
+                            Người cập nhật
+                        </th>
+                        <th
+                            class="sticky top-0 z-10 border-b backdrop-blur bg-gray-100/50 backdrop-filter border-solid border-gray-300 px-2 border-x"
+                        >
+                            Ngày cập nhật
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="
+                            let order of major
+                                | paginate
+                                    : {
+                                          itemsPerPage: pageSize,
+                                          currentPage: page,
+                                          totalItems: total
+                                      };
+                            index as i
+                        "
+                        class="custom-row h-8 w-fit text-xs"
+                    >
+                        <td class="w-16 custom-td border">{{ i + 1 }}</td>
+                        <td class="w-16 border align-middle px-2">
+                            <span class="flex items-center text-[#1891C9]">
+                                <input type="checkbox" (change)="change(order?.id + '')" />
+                                <i *ngIf="order?.status == false" class="fa-sharp fa-solid fa-lock mb-[1px] ml-2"></i>
+                                <i
+                                    *ngIf="order?.status == true || order?.status == null"
+                                    class="fa-sharp fa-solid fa-lock-open mb-[1px] ml-2"
+                                ></i>
+                            </span>
+                        </td>
+                        <td class="custom-td border">
+                            {{ order?.commodityCode }}
+                        </td>
+                        <td class="cursor-pointer hover:text-blue-500 custom-td border" (click)="open(order)">
+                            {{ order?.commodityName }}
+                        </td>
+                        <td class="custom-td border">
+                            <button
+                                *ngIf="order.status == true"
+                                class="text-xs bg-[#10B981] text-white font-medium px-7 py-1 rounded-md w-full"
+                            >
+                                Mở
+                            </button>
+                            <button
+                                *ngIf="order.status == false"
+                                class="text-xs bg-[#CB0D0C] text-white font-medium px-7 py-1 rounded-md w-full"
+                            >
+                                Khóa
+                            </button>
+                        </td>
+                        <td class="custom-td border">
+                            {{ order?.lastModifiedBy }}
+                        </td>
+                        <td class="custom-td border">
+                            <!-- {{ order?.createdDate }} -->
+                            {{ datepipe.transform(order.lastModifiedDate, 'dd/MM/yyyy') || 'No Data' }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- <div class="mt-2">
         <app-ez-pagination></app-ez-pagination>
     </div> -->
     </div>

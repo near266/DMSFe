@@ -1,0 +1,9 @@
+<div class="justify-end px-2 text-sm flex items-center">
+    <pagination-controls
+        previousLabel="Trước"
+        nextLabel="Sau"
+        [responsive]="true"
+        (pageChange)="onTableDataChange($event)"
+        [directionLinks]="true"
+    ></pagination-controls>
+</div>
