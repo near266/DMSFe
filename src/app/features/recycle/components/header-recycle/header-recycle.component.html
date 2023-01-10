@@ -24,7 +24,7 @@
 <hr>
 <div class="w-full flex justify-start">
     <mat-form-field class="w-[40%]" appearance="outline" floatLabel="always">
-        <mat-label>Tìm kiếm</mat-label>
+        <mat-label>Tìm kiếm {{title.toLowerCase()}}</mat-label>
         <input #key matInput (keydown.enter)="search(key.value)">
         <mat-icon matSuffix class="cursor-pointer" (click)="search(key.value)">search</mat-icon>
     </mat-form-field>
