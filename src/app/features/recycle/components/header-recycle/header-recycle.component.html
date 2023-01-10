@@ -1,0 +1,31 @@
+<div class="w-full flex justify-between">
+    <span class="text-2xl font-medium">{{title}} ({{totalCount}} bản ghi)</span>
+    <div>
+        <button style="margin-right: 0.5rem;" type="button" [routerLink]="['/recycle']" routerLinkActive="router-link-active"  mat-stroked-button class="text-[#565869] bg-white font-medium">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span class="md:hidden lg:inline xl:inline md:ml-0 lg:ml-1 xl:ml-1">
+                Quay lại
+            </span>
+        </button>
+        <button (click)="select('restore')" style="margin-right: 0.5rem;" type="button" mat-flat-button class="bg-[#0EAF8F] text-white font-medium mr-1">
+            <i class="fa-solid fa-arrow-rotate-left mr-1"></i>
+            <span class="md:hidden lg:inline xl:inline md:ml-0 lg:ml-1 xl:ml-1">
+                Khôi phục
+            </span>
+        </button>
+        <button (click)="select('delete')" mat-flat-button type="button" class="bg-[#CB0D0C] text-white font-medium mx-1">
+            <i class="fa-solid fa-trash mr-1"></i>
+            <span class="md:hidden lg:inline xl:inline md:ml-0 lg:ml-1 xl:ml-1">
+                Xóa
+            </span>
+        </button>
+    </div>
+</div>
+<hr>
+<div class="w-full flex justify-start">
+    <mat-form-field class="w-[40%]" appearance="outline" floatLabel="always">
+        <mat-label>Tìm kiếm {{title.toLowerCase()}}</mat-label>
+        <input #key matInput (keydown.enter)="search(key.value)">
+        <mat-icon matSuffix class="cursor-pointer" (click)="search(key.value)">search</mat-icon>
+    </mat-form-field>
+</div>

@@ -135,6 +135,13 @@ export class PurchaseOrderService {
             .put(this.api_gateway_url + '/PurchaseOrder/arhived', body)
             .pipe(map((reponse: any) => reponse));
     }
+
+    unArchive(body: any): Observable<any> {
+        return this.http
+            .put(this.api_gateway_url + '/PurchaseOrder/unarhived', body)
+            .pipe(map((reponse: any) => reponse));
+    }
+
     updateProductList(body: any): Observable<any> {
         return this.http
             .put(this.api_gateway_url + '/PurchaseOrder/updateProduct', body)
@@ -151,6 +158,30 @@ export class PurchaseOrderService {
     addProduct(body: any): Observable<any> {
         return this.http
             .post(this.api_gateway_url + '/PurchaseOrder/addProduct', body)
+            .pipe(map((reponse: any) => reponse));
+    }
+
+    searchArchived(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/PurchaseOrder/searchArchived', body)
+            .pipe(map((reponse: any) => reponse));
+    }
+
+    searchArchivedProduct(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/Catalog/listArchivedProduct', body)
+            .pipe(map((reponse: any) => reponse));
+    }
+
+    deleteProduct(body: any): Observable<any> {
+        return this.http
+            .delete(this.api_gateway_url + '/Catalog/delete', { body })
+            .pipe(map((reponse: any) => reponse));
+    }
+
+    deleteAll(body: any): Observable<any> {
+        return this.http
+            .put(this.api_gateway_url + '/PurchaseOrder/deleteall', body)
             .pipe(map((reponse: any) => reponse));
     }
 

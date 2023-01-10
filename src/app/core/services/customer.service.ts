@@ -21,6 +21,10 @@ export class CustomerService {
         return this.http.put(customer_url + '/update', body).pipe(map((response: any) => response));
     }
 
+    delete(body: any): Observable<any> {
+        return this.http.delete(customer_url + '/delete', { body }).pipe(map((response: any) => response));
+    }
+
     export(body: any): Observable<any> {
         return this.http
             .post(customer_url + '/export', body, { responseType: 'blob' })
@@ -61,5 +65,10 @@ export class CustomerService {
     }
     getCustomerHistory(id: string): Observable<any> {
         return this.http.get(history_url + '/getall?CustomerId=' + id);
+    }
+    searchArchived(page: number, pagesize: number, keyword?: string): Observable<any> {
+        let params: string = '?page=' + page + '&pagesize=' + pagesize;
+        if (keyword) params += '&keyword=' + keyword;
+        return this.http.get(customer_url + '/searchArchived' + params).pipe(map((response: any) => response));
     }
 }

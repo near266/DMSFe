@@ -1,0 +1,53 @@
+<div id="table" class="table-wrapper w-full">
+    <table class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
+          <thead class="h-10  border-gray-300 ">
+            <tr>
+            <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">
+                <mat-checkbox color="primary"></mat-checkbox>
+            </th>
+            <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Tiêu đề bản ghi rác</th>
+            <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Ngày xóa</th>
+            <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x">Người xóa</th>
+            <th class="sticky top-0 z-10  border-b backdrop-blur bg-gray-100/50 backdrop-filter  border-solid border-gray-300 px-2 border-x"></th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr
+            *ngFor="let item of data | paginate
+                : {
+                      itemsPerPage: 30,
+                      currentPage: page,
+                      totalItems: totalCount
+                  }; let i = index ; trackBy: trackByFn"
+                class="custom-row h-14 w-fit text-xs">
+                <td class="custom-td border-b">
+                    <div class="text-center w-full">
+                        <mat-checkbox color="primary" [(ngModel)]="listIndex[i]" (change)="select(item.id)"></mat-checkbox>
+                    </div>
+                </td>
+                <td class="custom-td border-b max-w-sm">
+                    {{item.title}}
+                </td>
+                <td class="custom-td border-b max-w-sm">
+                    {{ item.lastModifiedDate ? datePipe.transform(item.lastModifiedDate, 'HH:mm:ss dd/MM/yyyy') : ''}}
+                </td>
+                <td class="custom-td border-b max-w-sm">
+                    {{item.lastModifiedBy ? item.lastModifiedBy : ''}}
+                </td>
+                <td class="custom-td border-b">
+                    <div class="w-full text-center">
+                        <button mat-icon-button class="text-[#565869] hover:text-[#0EAF8F]">
+                            <i class="cursor-pointer fa-solid fa-rotate-left text-lg" (click)="restoreOne(item.id)"></i>
+                        </button>
+                        <button mat-icon-button class="text-[#565869] hover:text-[#CB0D0C]">
+                            <i class="cursor-pointer fa-solid fa-trash text-lg" (click)="deleteOne(item.id)"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="mt-2">
+    <app-pagination (pageCurrent$)="handlePageChange($event)"></app-pagination>
+</div>

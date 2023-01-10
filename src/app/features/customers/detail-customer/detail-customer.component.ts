@@ -245,7 +245,7 @@ export class DetailCustomerComponent implements OnInit {
       if(data) {
         this.loading = true;
         const body = {
-          id: this.data.id,
+          listId: [this.data.id],
           archived: true
         };
         this.customerService.archivedCustomer(body).subscribe(data => {
