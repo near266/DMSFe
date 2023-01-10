@@ -27,6 +27,7 @@ export class CustomerTypesComponent implements OnInit {
         page: 1,
         pageSize: 30,
     };
+    isLoading: boolean = false;
 
     res: any;
     dia?: any;
@@ -275,6 +276,7 @@ export class CustomerTypesComponent implements OnInit {
             .open('Bạn có muốn xuất tất cả dữ liệu loại khách hàng không', ['Có', 'Không'])
             .subscribe((data) => {
                 if (data === 'Có') {
+                    this.isLoading = true;
                     this.customerTypeService.export().subscribe(
                         (data) => {
                             const blob = new Blob([data], {
@@ -282,6 +284,7 @@ export class CustomerTypesComponent implements OnInit {
                             });
                             const url = window.URL.createObjectURL(blob);
                             window.open(url);
+                            this.isLoading = false;
                         },
                         (err) => {
                             this.snackbar.failureSnackBar();

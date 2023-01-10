@@ -34,6 +34,7 @@ export class AreasComponent implements OnInit {
     pageSize: number = 30;
     total: number = 0;
     totalareas: number;
+    isLoading: boolean = false;
 
     constructor(
         public datepipe: DatePipe,
@@ -259,8 +260,11 @@ export class AreasComponent implements OnInit {
     Export() {
         this.confirmService.open('Bạn có muốn xuất tất cả dữ liệu khu vực không', ['Có', 'Không']).subscribe((data) => {
             if (data === 'Có') {
+                this.isLoading = true;
                 this.areaService.export().subscribe(
                     (data) => {
+                        this.isLoading = false;
+
                         const blob = new Blob([data], {
                             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                         });

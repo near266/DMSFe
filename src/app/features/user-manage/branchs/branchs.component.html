@@ -40,7 +40,11 @@
             />
         </div>
     </div>
-    <div class="w-full">
+    <div *ngIf="isLoading" style="margin-top: 12px" class="text-center w-full">
+        <span class="mr-2">Đang xuất dữ liệu...</span>
+        <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+    </div>
+    <div *ngIf="!isLoading" class="w-full">
         <div id="table" class="table-wrapper w-full">
             <table class="min-w-full border-spacing-0 border-separate bg-gray-100 z-10">
                 <thead class="h-10 border-gray-300">

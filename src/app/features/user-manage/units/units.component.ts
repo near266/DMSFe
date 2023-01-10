@@ -34,6 +34,7 @@ export class UnitsComponent implements OnInit {
     pageSize: number = 30;
     total: number = 0;
     totalunits: number;
+    isLoading: boolean = false;
 
     constructor(
         public datepipe: DatePipe,
@@ -252,6 +253,7 @@ export class UnitsComponent implements OnInit {
             .open('Bạn có muốn xuất tất cả dữ liệu đơn vị tính không', ['Có', 'Không'])
             .subscribe((data) => {
                 if (data === 'Có') {
+                    this.isLoading = true;
                     this.unitService.export().subscribe(
                         (data) => {
                             const blob = new Blob([data], {
@@ -259,6 +261,7 @@ export class UnitsComponent implements OnInit {
                             });
                             const url = window.URL.createObjectURL(blob);
                             window.open(url);
+                            this.isLoading = false;
                         },
                         (err) => {
                             this.snackbar.failureSnackBar();

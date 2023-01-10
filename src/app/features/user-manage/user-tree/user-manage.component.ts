@@ -26,7 +26,7 @@ export class UserManageComponent implements OnInit {
     ) {}
 
     users: any = [];
-
+    isLoading: boolean = false;
     pageSizeList = [30, 50, 100, 200, 500];
     pageSize = 30;
     page = 1;
@@ -400,6 +400,7 @@ export class UserManageComponent implements OnInit {
                 cancel: 'Hủy',
             })
             .subscribe((data) => {
+                this.isLoading = true;
                 this.employeeService.export().subscribe(
                     (data) => {
                         const blob = new Blob([data], {
@@ -407,6 +408,7 @@ export class UserManageComponent implements OnInit {
                         });
                         const url = window.URL.createObjectURL(blob);
                         window.open(url);
+                        this.isLoading = false;
                     },
                     (err) => {
                         this.snackbar.failureSnackBar();
