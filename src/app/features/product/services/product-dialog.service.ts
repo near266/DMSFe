@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, map, Observable, startWith, Subject, tap } from 'rxjs';
 import { SelectOption } from 'src/app/core/model/Select';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ProductApiService } from '../apis/product.api.service';
 import { AddProductDialogComponent } from '../components/add-product-dialog/add-product-dialog.component';
 import { Product, Supplier } from '../models/product';
@@ -31,6 +32,7 @@ export class ProductDialogService {
         private dialogService: MatDialog,
         private productApiService: ProductApiService,
         private productService: ProductService,
+        private snackbar: SnackbarService,
     ) {}
 
     getAllSuppliers(): Observable<{ value: string | undefined; label: string | undefined }[]> {
@@ -84,13 +86,16 @@ export class ProductDialogService {
 
     deleteProduct(id: string | undefined) {
         if (id) {
-            return this.productApiService.archiveProduct(id).subscribe({
+            return this.productApiService.archiveListProduct([id]).subscribe({
                 next: () => {
                     this.dialogService.closeAll();
                     this.productService.getInititalProducts(1);
                 },
                 error: (err: HttpErrorResponse) => {
-                    console.log(err);
+                    this.snackbar.openSnackbar('Có lỗi xảy ra', 2000, 'Đóng', 'center', 'bottom', false);
+                },
+                complete: () => {
+                    this.snackbar.openSnackbar('Xóa sản phẩm thành công', 2000, 'Đóng', 'center', 'bottom', true);
                 },
             });
         }
