@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, DoCheck, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 import { IBody } from '../../models/IBody';
 import { LogicService } from '../../services/logic.service';
 
@@ -18,6 +19,8 @@ export class OverviewComponent implements OnInit, AfterViewInit, DoCheck, OnChan
     totalProduct: number = 0;
     totalOrder: number = 0;
     totalCustomer: number = 0;
+
+    subscription: Subscription;
 
     constructor(private title: Title, private logic: LogicService) {}
 
@@ -43,7 +46,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, DoCheck, OnChan
                 this.totalCount = this.totalCustomer + this.totalOrder + this.totalProduct;
             });
         });
-        this.logic.changes$.subscribe((data) => {
+        this.subscription = this.logic.changes$.subscribe((data) => {
             if (data == true) {
                 this.getData();
             }
@@ -55,7 +58,9 @@ export class OverviewComponent implements OnInit, AfterViewInit, DoCheck, OnChan
     }
     ngOnChanges(changes: SimpleChanges): void {}
     ngDoCheck(): void {}
-    ngOnDestroy(): void {}
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe()
+    }
 
     getData() {
         this.logic.getCustomer(this.body);
