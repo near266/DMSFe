@@ -26,6 +26,8 @@ export class LogicService {
     private totalOrder: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private totalProduct: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
+    private changes: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
     private totalCount: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
     public customers$ = this.customers.asObservable();
@@ -34,6 +36,7 @@ export class LogicService {
     public totalProduct$ = this.totalProduct.asObservable();
     public totalOrder$ = this.totalOrder.asObservable();
     public totalCustomer$ = this.totalCustomer.asObservable();
+    public changes$ = this.changes.asObservable();
     public totalCount$ = this.totalCount.asObservable();
 
     constructor(
@@ -46,6 +49,9 @@ export class LogicService {
     // Customer service
 
     getCustomer(body: IBody) {
+        if (body.page > 1 || body.keyword) {
+            this.changes.next(true);
+        }
         this.customerService.searchArchived(body.page, body.pagesize, body.keyword).subscribe(
             (response: Response<Customer>) => {
                 if (response) {
@@ -129,6 +135,9 @@ export class LogicService {
     // Product service
 
     getProduct(body: IBody) {
+        if (body.page > 1 || body.keyword) {
+            this.changes.next(true);
+        }
         this.orderService.searchArchivedProduct(body).subscribe(
             (response: Response<Product>) => {
                 if (response) {
@@ -198,6 +207,9 @@ export class LogicService {
     // Order service
 
     getOrder(body: IBody) {
+        if (body.page > 1 || body.keyword) {
+            this.changes.next(true);
+        }
         this.orderService.searchArchived(body).subscribe(
             (response) => {
                 if (response) {

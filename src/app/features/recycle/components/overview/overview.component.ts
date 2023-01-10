@@ -9,11 +9,10 @@ import { LogicService } from '../../services/logic.service';
     styleUrls: ['./overview.component.scss'],
 })
 export class OverviewComponent implements OnInit, AfterViewInit, DoCheck, OnChanges, OnDestroy {
-
     body: IBody = {
         page: 1,
-        pagesize: 25
-    }
+        pagesize: 30,
+    };
 
     totalCount: number = 0;
     totalProduct: number = 0;
@@ -24,27 +23,31 @@ export class OverviewComponent implements OnInit, AfterViewInit, DoCheck, OnChan
 
     ngOnInit(): void {
         this.title.setTitle('Thùng rác');
-        this.logic.totalCustomer$.subscribe(data => {
+        this.logic.totalCustomer$.subscribe((data) => {
             Promise.resolve().then(() => {
                 this.totalCustomer = data;
                 this.totalCount = this.totalCustomer + this.totalOrder + this.totalProduct;
             });
-        })
+        });
 
-        this.logic.totalProduct$.subscribe(data => {
+        this.logic.totalProduct$.subscribe((data) => {
             Promise.resolve().then(() => {
                 this.totalProduct = data;
                 this.totalCount = this.totalCustomer + this.totalOrder + this.totalProduct;
             });
-        })
+        });
 
-        this.logic.totalOrder$.subscribe(data => {
+        this.logic.totalOrder$.subscribe((data) => {
             Promise.resolve().then(() => {
                 this.totalOrder = data;
                 this.totalCount = this.totalCustomer + this.totalOrder + this.totalProduct;
             });
-        })
-
+        });
+        this.logic.changes$.subscribe((data) => {
+            if (data == true) {
+                this.getData();
+            }
+        });
     }
 
     ngAfterViewInit(): void {
@@ -53,4 +56,12 @@ export class OverviewComponent implements OnInit, AfterViewInit, DoCheck, OnChan
     ngOnChanges(changes: SimpleChanges): void {}
     ngDoCheck(): void {}
     ngOnDestroy(): void {}
+
+    getData() {
+        this.logic.getCustomer(this.body);
+        this.logic.getProduct(this.body);
+        this.body.pagesize = 10;
+        this.logic.getOrder(this.body);
+        this.body.pagesize = 30;
+    }
 }
