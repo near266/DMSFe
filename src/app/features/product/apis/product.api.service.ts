@@ -70,6 +70,13 @@ export class ProductApiService {
         };
         return this.http.put<HttpResponse<any>>(this.endPoint + '/arhived', body);
     }
+    restoreProduct(listId: string[]): any {
+        const body = {
+            id: listId,
+            archived: false,
+        };
+        return this.http.put<HttpResponse<any>>(this.endPoint + '/arhived', body);
+    }
     getProductHistory(id: string): Observable<any> {
         return this.http.get(api_base_url + '/HistoryLogProduct/getall?ProductId=' + id);
     }

@@ -154,6 +154,24 @@ export class PurchaseOrderService {
             .pipe(map((reponse: any) => reponse));
     }
 
+    searchArchived(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/PurchaseOrder/searchArchived', body)
+            .pipe(map((reponse: any) => reponse));
+    }
+
+    searchArchivedProduct(body: any): Observable<any> {
+        return this.http
+            .post(this.api_gateway_url + '/Catalog/listArchivedProduct', body)
+            .pipe(map((reponse: any) => reponse));
+    }
+
+    deleteProduct(body: any): Observable<any> {
+        return this.http
+            .delete(this.api_gateway_url + '/Catalog/delete', { body })
+            .pipe(map((reponse: any) => reponse));
+    }
+
     // customer
     searchCustomer(body: any): Observable<any> {
         return this.http

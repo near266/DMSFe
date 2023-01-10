@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
+import { IDataTable } from '../../models/IDataTable';
 import { IListReturn } from '../../models/IListReturn';
 
 @Component({
@@ -9,7 +10,7 @@ import { IListReturn } from '../../models/IListReturn';
     styleUrls: ['./table-recycle.component.scss'],
 })
 export class TableRecycleComponent implements OnInit, OnChanges {
-    @Input() data: any[] = [];
+    @Input() data: IDataTable[] = [];
     @Input() totalCount: number = 0;
     @Input() signal: string = '';
     @Output() indexPage = new EventEmitter<number>();

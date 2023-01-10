@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Customer } from '../../models/Customer';
 import { IBody } from '../../models/IBody';
+import { IDataTable } from '../../models/IDataTable';
 import { IListReturn } from '../../models/IListReturn';
 import { LogicService } from '../../services/logic.service';
 
@@ -17,23 +18,29 @@ export class CustomerComponent implements OnInit, AfterViewInit {
 
     body: IBody = {
         page: 1,
-        pagesize: 25,
+        pagesize: 30,
     };
 
     customer: Customer[] = [];
+    data: IDataTable[] = [];
 
     constructor(private logic: LogicService) {}
-    ngAfterViewInit(): void {
-        this.getData();
-    }
-
-    ngOnInit(): void {}
-
-    getData() {
-        this.logic.getCustomer(this.body);
+    ngOnInit(): void {
         this.logic.customers$.subscribe((data) => {
             Promise.resolve().then(() => {
                 this.customer = data;
+                if (this.customer) {
+                    this.data = [];
+                    this.customer.forEach((element) => {
+                        let item: IDataTable = {
+                            id: element.id,
+                            title: element.customerName,
+                            lastModifiedBy: element.lastModifiedBy,
+                            lastModifiedDate: element.lastModifiedDate,
+                        };
+                        this.data.push(item);
+                    });
+                }
             });
         });
         this.logic.totalCustomer$.subscribe((data) => {
@@ -41,6 +48,13 @@ export class CustomerComponent implements OnInit, AfterViewInit {
                 this.totalCount = data;
             });
         });
+    }
+    ngAfterViewInit(): void {
+        // this.getData();
+    }
+
+    getData() {
+        this.logic.getCustomer(this.body);
     }
 
     signal(event: any) {
@@ -53,16 +67,13 @@ export class CustomerComponent implements OnInit, AfterViewInit {
                 this.command = '';
             });
         }
-        console.log(this.command);
     }
 
     refreshCommand(event: any) {
-        console.log(event);
-
         if (event == 'restore') {
-            this.status = true;
-            Promise.resolve().then(() => {});
-            console.log(this.status);
+            Promise.resolve().then(() => {
+                this.status = true;
+            });
         } else {
             Promise.resolve().then(() => {
                 this.status = false;

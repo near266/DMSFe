@@ -15,7 +15,7 @@
             <tr
             *ngFor="let item of data | paginate
                 : {
-                      itemsPerPage: 25,
+                      itemsPerPage: 30,
                       currentPage: page,
                       totalItems: totalCount
                   }; let i = index ; trackBy: trackByFn"
@@ -25,13 +25,13 @@
                         <mat-checkbox color="primary" [(ngModel)]="listIndex[i]" (change)="select(item.id)"></mat-checkbox>
                     </div>
                 </td>
-                <td class="custom-td border-b">
-                    {{item.id}}
+                <td class="custom-td border-b max-w-sm">
+                    {{item.title}}
                 </td>
-                <td class="custom-td border-b">
+                <td class="custom-td border-b max-w-sm">
                     {{ item.lastModifiedDate ? datePipe.transform(item.lastModifiedDate, 'HH:mm:ss dd/MM/yyyy') : ''}}
                 </td>
-                <td class="custom-td border-b">
+                <td class="custom-td border-b max-w-sm">
                     {{item.lastModifiedBy ? item.lastModifiedBy : ''}}
                 </td>
                 <td class="custom-td border-b">

@@ -1,2 +1,2 @@
 <app-header-recycle [title]="title" [totalCount]="totalCount" (signal)="signal($event)" (keyword)="search($event)"></app-header-recycle>
-<app-table-recycle></app-table-recycle>
+<app-table-recycle [data]="data" [totalCount]="totalCount" [signal]="command" (indexPage)="paginate($event)" (statusEvent)="refreshCommand($event)" (pushListEvent)="getListId($event)"></app-table-recycle>

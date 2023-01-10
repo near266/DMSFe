@@ -48,7 +48,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, DoCheck, OnChan
     }
 
     ngAfterViewInit(): void {
-        this.logic.getCustomer(this.body);
+        // this.logic.getCustomer(this.body);
     }
     ngOnChanges(changes: SimpleChanges): void {}
     ngDoCheck(): void {}
