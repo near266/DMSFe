@@ -74,8 +74,10 @@ export class TableRecycleComponent implements OnInit, OnChanges {
                     this.statusEvent.emit('restore');
                     this.pushListEvent.emit({
                         type: 'restore',
-                        list: this.listId
+                        list: this.listId,
                     });
+                } else {
+                    this.statusEvent.emit('restore');
                 }
             });
     }
@@ -92,8 +94,10 @@ export class TableRecycleComponent implements OnInit, OnChanges {
                     this.statusEvent.emit('restore');
                     this.pushListEvent.emit({
                         type: 'restore',
-                        list: [id]
+                        list: [id],
                     });
+                } else {
+                    this.statusEvent.emit('restore');
                 }
             });
     }
@@ -106,8 +110,10 @@ export class TableRecycleComponent implements OnInit, OnChanges {
                     this.statusEvent.emit('delete');
                     this.pushListEvent.emit({
                         type: 'delete',
-                        list: this.listId
+                        list: this.listId,
                     });
+                } else {
+                    this.statusEvent.emit('delete');
                 }
             });
     }
@@ -120,8 +126,10 @@ export class TableRecycleComponent implements OnInit, OnChanges {
                     this.statusEvent.emit('delete');
                     this.pushListEvent.emit({
                         type: 'delete',
-                        list: [id]
+                        list: [id],
                     });
+                } else {
+                    this.statusEvent.emit('delete');
                 }
             });
     }
