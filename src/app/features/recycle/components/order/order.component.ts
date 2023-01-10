@@ -108,7 +108,7 @@ export class OrderComponent implements OnInit {
             let temp = element.split(';;');
             body.data.push({
                 id: temp[0],
-                type: temp[1],
+                type: parseInt(temp[1]),
             });
         });
         if (event.type == 'restore') {
