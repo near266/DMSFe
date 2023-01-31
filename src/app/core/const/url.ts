@@ -19,6 +19,7 @@ export const area_url = api_gateway_url + '/Area';
 export const album_url = api_gateway_url + '/Album';
 export const check_in_url = api_gateway_url + '/CheckIn';
 export const history_url = api_gateway_url + '/HistoryLog';
+export const notification_url = api_base_url + '/Notify';
 
 export const upload_url = environment.UPLOAD_URL;
 export const gateway_img_url = upload_url + '/gateway';

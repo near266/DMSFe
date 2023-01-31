@@ -1,7 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonLogicService } from 'src/app/features/order-manager/services/commonLogic.service';
+import { Notification } from '../../model/Notification';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 import { RolesService } from '../../services/roles.service';
 
 @Component({
@@ -14,12 +17,18 @@ export class HeaderComponent implements OnInit {
     listRole: string[] = [];
     isAdmin = false;
     role: string;
+    notification: boolean = false;
+    listNotify: Notification = {
+        list: [],
+    };
     annonimousAvatar = './../../../../assets/images/annonimous.jpg';
     constructor(
         private router: Router,
         private authService: AuthService,
         private rolesService: RolesService,
         private commonLogicService: CommonLogicService,
+        private notificationService: NotificationService,
+        public datePipe: DatePipe,
     ) {}
 
     ngOnInit(): void {
@@ -53,5 +62,14 @@ export class HeaderComponent implements OnInit {
 
     resetSearchTextSource() {
         this.commonLogicService.setSearchTextSource('');
+    }
+
+    viewNotification() {
+        this.notification = !this.notification;
+        if(this.notification) {
+            this.notificationService.getAll().subscribe((data: Notification) => {
+                this.listNotify = data;
+            });
+        }
     }
 }
