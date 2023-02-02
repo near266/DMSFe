@@ -223,8 +223,8 @@
         <li class="mr-4 font-medium hover:opacity-70 cursor-pointer">Trợ giúp</li>
     </ul>
     <div class="flex items-center">
-        <div class="mr-6 cursor-pointer text-blue-text relative">
-            <i class="fa-solid fa-bell fa-xl hover:opacity-70" (click)="viewNotification()"></i>
+        <div class="mr-6 text-blue-text relative">
+            <i class="fa-solid fa-bell fa-xl hover:opacity-70 cursor-pointer" (click)="viewNotification()"></i>
             <div *ngIf="notification" class="absolute z-50 top-7 right-0 w-[350px] min-h-10 h-fit max-h-[50vh] overflow-y-auto bg-white">
                 <div *ngIf="listNotify.list.length > 0">
                     <div *ngFor="let item of listNotify.list" class="w-full py-2 px-3 flex gap-x-2 bg-[#edf2fa] hover:bg-white">
