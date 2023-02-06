@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Brand } from '../../product/models/product';
+import { TypeExport } from '../common/common.service';
 import { AddBrandComponent } from './add-brand/add-brand.component';
 import { BrandComponent } from './brand/brand.component';
 import { BranchService } from './services/branch.service';
@@ -100,6 +101,7 @@ export class BranchsComponent implements OnInit {
                 this.loading = false;
                 if (data) {
                     this.brand = data;
+                    this.totalbranchs = data.length;
                 }
             },
             (error) => {
@@ -118,6 +120,7 @@ export class BranchsComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.brand = data;
+                        this.totalbranchs = data.length;
                     }
                 },
                 (error) => {
@@ -134,6 +137,7 @@ export class BranchsComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.brand = data;
+                        this.totalbranchs = data.length;
                     }
                 },
                 (error) => {
@@ -150,6 +154,7 @@ export class BranchsComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.brand = data;
+                        this.totalbranchs = data.length;
                     }
                 },
                 (error) => {
@@ -266,26 +271,58 @@ export class BranchsComponent implements OnInit {
         },
     ];
 
-    Export() {
-        this.confirmService
-            .open('Bạn có muốn xuất tất cả dữ liệu nhãn hiệu tính không', ['Có', 'Không'])
-            .subscribe((data) => {
-                if (data === 'Có') {
-                    this.isLoading = true;
-                    this.brandService.export().subscribe(
-                        (data) => {
-                            const blob = new Blob([data], {
-                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                            });
-                            const url = window.URL.createObjectURL(blob);
-                            window.open(url);
-                            this.isLoading = false;
-                        },
-                        (err) => {
-                            this.snackbar.failureSnackBar();
-                        },
+    Export(type: number, data$: any, message: string) {
+        this.confirmService.open(message, ['Có', 'Không']).subscribe((data) => {
+            if (data === 'Có') {
+                this.isLoading = true;
+                this.brandService.export(type, data$).subscribe(
+                    (data) => {
+                        const blob = new Blob([data], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        window.open(url);
+                        this.isLoading = false;
+                    },
+                    (err) => {
+                        this.snackbar.failureSnackBar();
+                    },
+                );
+            }
+        });
+    }
+
+    handleEmitMessage(e: any) {
+        switch (e) {
+            case 'Được chọn': {
+                if (this.selectedIds.length) {
+                    this.Export(
+                        TypeExport.Selected,
+                        this.selectedIds,
+                        `Bạn có muốn xuất ${this.selectedIds.length} nhãn hiệu không?`,
                     );
                 }
-            });
+                break;
+            }
+            case 'Điều kiện tìm': {
+                if (this.totalbranchs) {
+                    this.Export(
+                        TypeExport.Filter,
+                        this.request,
+                        `Bạn có muốn xuất ${this.totalbranchs} nhãn hiệu không?`,
+                    );
+                }
+                break;
+            }
+        }
     }
+
+    exportMenu = {
+        title: 'Xuất dữ liệu',
+        leftTitleIcon: 'fa-file-export',
+        listMenuPosition: [
+            { title: 'Được chọn', leftIcon: 'fa-circle-check', value: 'Được chọn' },
+            { title: 'Điều kiện tìm', leftIcon: 'fa-filter', value: 'Điều kiện tìm' },
+        ],
+    };
 }

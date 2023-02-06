@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { ProductApiService } from './apis/product.api.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { TypeExport } from '../user-manage/common/common.service';
 
 @Component({
     selector: 'app-product',
@@ -29,6 +30,15 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit, OnDestr
     totalProducts: number;
     idList: string[] = [];
     subscriptions: Subscription = new Subscription();
+    isLoading: boolean = false;
+    exportMenu = {
+        title: 'Xuất dữ liệu',
+        leftTitleIcon: 'fa-file-export',
+        listMenuPosition: [
+            { title: 'Được chọn', leftIcon: 'fa-circle-check', value: 'Được chọn' },
+            { title: 'Điều kiện tìm', leftIcon: 'fa-filter', value: 'Điều kiện tìm' },
+        ],
+    };
 
     constructor(
         private dialogService: ProductDialogService,
@@ -89,6 +99,64 @@ export class ProductComponent implements OnInit, DoCheck, AfterViewInit, OnDestr
                         );
                     }
                 });
+        }
+    }
+
+    Export(type: number, data$: any, message: string) {
+        this.confirmService.open(message, ['Có', 'Không']).subscribe((data) => {
+            if (data === 'Có') {
+                this.isLoading = true;
+                this.productAPIService.export(type, data$).subscribe(
+                    (data) => {
+                        const blob = new Blob([data], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        window.open(url);
+                        this.isLoading = false;
+                    },
+                    (err) => {
+                        this.snackbar.failureSnackBar();
+                    },
+                );
+            }
+        });
+    }
+
+    handleEmitMessage(e: any) {
+        switch (e) {
+            case 'Được chọn': {
+                if (this.idList.length) {
+                    this.Export(
+                        TypeExport.Selected,
+                        this.idList,
+                        `Bạn có muốn xuất ${this.idList.length} sản phẩm không?`,
+                    );
+                }
+                break;
+            }
+            case 'Điều kiện tìm': {
+                const type =
+                    this.filterService.currentFiler$.getValue() === ''
+                        ? 'CreatedDate'
+                        : this.filterService.currentFiler$.getValue();
+                const ascending = this.filterService.isAscending$.getValue();
+                const keyword = this.filterService.keyword$.getValue();
+                const page = this.filterService.page$.getValue();
+                const settings = {
+                    keyword,
+                    sortBy: {
+                        property: type,
+                        value: ascending,
+                    },
+                    page,
+                    pageSize: 30,
+                };
+                if (this.totalProducts) {
+                    this.Export(TypeExport.Filter, settings, `Bạn có muốn xuất ${this.totalProducts} sản phẩm không?`);
+                }
+                break;
+            }
         }
     }
 }

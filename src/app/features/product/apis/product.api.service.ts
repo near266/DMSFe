@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { api_base_url, api_url } from 'src/app/core/const/url';
 import { environment } from '../../../../environments/environment';
+import { TypeExport } from '../../user-manage/common/common.service';
 import { Brand, Major, Product, Supplier, Unit, Warehouse } from '../models/product';
 
 @Injectable({
@@ -79,5 +80,16 @@ export class ProductApiService {
     }
     getProductHistory(id: string): Observable<any> {
         return this.http.get(api_base_url + '/HistoryLogProduct/getall?ProductId=' + id);
+    }
+    export(type: number, data: any): Observable<any> {
+        let body: any = {
+            type: type,
+        };
+        if (type === TypeExport.Selected) {
+            body.listId = data;
+        } else {
+            body.filter = data;
+        }
+        return this.http.post(this.endPoint + '/export', body, { responseType: 'blob' });
     }
 }

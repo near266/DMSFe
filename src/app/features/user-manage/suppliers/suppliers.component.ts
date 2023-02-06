@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Supplier } from '../../product/models/product';
+import { TypeExport } from '../common/common.service';
 import { AddSupplierComponent } from './add-supplier/add-supplier.component';
 import { SupplierService } from './services/supplier.service';
 import { SupplierComponent } from './supplier/supplier.component';
@@ -101,6 +102,7 @@ export class SuppliersComponent implements OnInit {
                 this.loading = false;
                 if (data) {
                     this.supplier = data;
+                    this.totalsuppliers = data.length;
                 }
             },
             (error) => {
@@ -120,6 +122,7 @@ export class SuppliersComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.supplier = data;
+                        this.totalsuppliers = data.length;
                     }
                 },
                 (error) => {
@@ -136,6 +139,7 @@ export class SuppliersComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.supplier = data;
+                        this.totalsuppliers = data.length;
                     }
                 },
                 (error) => {
@@ -152,6 +156,7 @@ export class SuppliersComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.supplier = data;
+                        this.totalsuppliers = data.length;
                     }
                 },
                 (error) => {
@@ -266,26 +271,58 @@ export class SuppliersComponent implements OnInit {
         },
     ];
 
-    Export() {
-        this.confirmService
-            .open('Bạn có muốn xuất tất cả dữ liệu nhà cung cấp không', ['Có', 'Không'])
-            .subscribe((data) => {
-                if (data === 'Có') {
-                    this.isLoading = true;
-                    this.supplierService.export().subscribe(
-                        (data) => {
-                            const blob = new Blob([data], {
-                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                            });
-                            const url = window.URL.createObjectURL(blob);
-                            window.open(url);
-                            this.isLoading = false;
-                        },
-                        (err) => {
-                            this.snackbar.failureSnackBar();
-                        },
+    Export(type: number, data$: any, message: string) {
+        this.confirmService.open(message, ['Có', 'Không']).subscribe((data) => {
+            if (data === 'Có') {
+                this.isLoading = true;
+                this.supplierService.export(type, data$).subscribe(
+                    (data) => {
+                        const blob = new Blob([data], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        window.open(url);
+                        this.isLoading = false;
+                    },
+                    (err) => {
+                        this.snackbar.failureSnackBar();
+                    },
+                );
+            }
+        });
+    }
+
+    exportMenu = {
+        title: 'Xuất dữ liệu',
+        leftTitleIcon: 'fa-file-export',
+        listMenuPosition: [
+            { title: 'Được chọn', leftIcon: 'fa-circle-check', value: 'Được chọn' },
+            { title: 'Điều kiện tìm', leftIcon: 'fa-filter', value: 'Điều kiện tìm' },
+        ],
+    };
+
+    handleEmitMessage(e: any) {
+        switch (e) {
+            case 'Được chọn': {
+                if (this.selectedIds.length) {
+                    this.Export(
+                        TypeExport.Selected,
+                        this.selectedIds,
+                        `Bạn có muốn xuất ${this.selectedIds.length} nhà cung cấp không?`,
                     );
                 }
-            });
+                break;
+            }
+            case 'Điều kiện tìm': {
+                if (this.totalsuppliers) {
+                    this.Export(
+                        TypeExport.Filter,
+                        this.request,
+                        `Bạn có muốn xuất ${this.totalsuppliers} nhà cung cấp không?`,
+                    );
+                }
+                break;
+            }
+        }
     }
 }

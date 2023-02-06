@@ -25,10 +25,7 @@
             <i class="fa-sharp fa-solid fa-trash text-emerald-500 font-bold mr-2"></i>
             Xóa nhiều
         </button>
-        <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="Export()">
-            <i class="fa-solid fa-file-export text-emerald-500 font-bold mr-2"></i>
-            Xuất dữ liệu
-        </button>
+        <app-menu-bar [menuObj]="exportMenu" (message)="handleEmitMessage($event)"></app-menu-bar>
         <div class="bg-white mx-3 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
             <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
             <input

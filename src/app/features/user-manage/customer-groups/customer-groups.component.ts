@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CustomerGroup } from 'src/app/core/model/CustomerGroup';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { TypeExport } from '../common/common.service';
 import { AddCustomerGroupsComponent } from './add-customer-groups/add-customer-groups.component';
 import { CustomerGroupComponent } from './customer-group/customer-group.component';
 import { CustomerGroupsService } from './services/customer-groups.service';
@@ -51,8 +52,8 @@ export class CustomerGroupsComponent implements OnInit {
     view() {
         this.customerGrouplService.getAllCustomerGroup(this.request).subscribe((data) => {
             if (data) {
-                this.customerGroup = data.list;
-                this.totalcustomerGroups = data.list.length;
+                this.customerGroup = data.list ? data.list : [];
+                this.totalcustomerGroups = data.list ? data.list.length : 0;
                 // console.log(data);
             }
         });
@@ -102,7 +103,8 @@ export class CustomerGroupsComponent implements OnInit {
             (data) => {
                 this.loading = false;
                 if (data) {
-                    this.customerGroup = data.list;
+                    this.customerGroup = data.list ? data.list : [];
+                    this.totalcustomerGroups = data.list ? data.list.length : 0;
                 }
             },
             (error) => {
@@ -113,6 +115,7 @@ export class CustomerGroupsComponent implements OnInit {
     }
 
     Select(e: string) {
+        this.selectedIds = [];
         if (e.includes('Tất cả')) {
             this.request.keyword = this.keywords;
             this.request.status = null;
@@ -120,7 +123,8 @@ export class CustomerGroupsComponent implements OnInit {
                 (data) => {
                     this.loading = false;
                     if (data) {
-                        this.customerGroup = data.list;
+                        this.customerGroup = data.list ? data.list : [];
+                        this.totalcustomerGroups = data.list ? data.list.length : 0;
                     }
                 },
                 (error) => {
@@ -136,7 +140,8 @@ export class CustomerGroupsComponent implements OnInit {
                 (data) => {
                     this.loading = false;
                     if (data) {
-                        this.customerGroup = data.list;
+                        this.customerGroup = data.list ? data.list : [];
+                        this.totalcustomerGroups = data.list ? data.list.length : 0;
                     }
                 },
                 (error) => {
@@ -152,7 +157,8 @@ export class CustomerGroupsComponent implements OnInit {
                 (data) => {
                     this.loading = false;
                     if (data) {
-                        this.customerGroup = data.list;
+                        this.customerGroup = data.list ? data.list : [];
+                        this.totalcustomerGroups = data.list ? data.list.length : 0;
                     }
                 },
                 (error) => {
@@ -186,7 +192,7 @@ export class CustomerGroupsComponent implements OnInit {
                     this.res = data.list;
                     this.customerGroup = [];
                     this.totalcustomerGroups = this.res.length;
-                    this.customerGroup = data.list;
+                    this.customerGroup = data.list ? data.list : [];
                     this.loading = false;
                 } else {
                     this.loading = false;
@@ -274,26 +280,58 @@ export class CustomerGroupsComponent implements OnInit {
         },
     ];
 
-    Export() {
-        this.confirmService
-            .open('Bạn có muốn xuất tất cả dữ liệu đơn vị tính không', ['Có', 'Không'])
-            .subscribe((data) => {
-                if (data === 'Có') {
-                    this.isLoading = true;
-                    this.customerGrouplService.export().subscribe(
-                        (data) => {
-                            const blob = new Blob([data], {
-                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                            });
-                            const url = window.URL.createObjectURL(blob);
-                            window.open(url);
-                            this.isLoading = false;
-                        },
-                        (err) => {
-                            this.snackbar.failureSnackBar();
-                        },
+    Export(type: number, data$: any, message: string) {
+        this.confirmService.open(message, ['Có', 'Không']).subscribe((data) => {
+            if (data === 'Có') {
+                this.isLoading = true;
+                this.customerGrouplService.export(type, data$).subscribe(
+                    (data) => {
+                        const blob = new Blob([data], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        window.open(url);
+                        this.isLoading = false;
+                    },
+                    (err) => {
+                        this.snackbar.failureSnackBar();
+                    },
+                );
+            }
+        });
+    }
+
+    handleEmitMessage(e: any) {
+        switch (e) {
+            case 'Được chọn': {
+                if (this.selectedIds.length) {
+                    this.Export(
+                        TypeExport.Selected,
+                        this.selectedIds,
+                        `Bạn có muốn xuất ${this.selectedIds.length} nhóm khách hàng không?`,
                     );
                 }
-            });
+                break;
+            }
+            case 'Điều kiện tìm': {
+                if (this.totalcustomerGroups) {
+                    this.Export(
+                        TypeExport.Filter,
+                        this.request,
+                        `Bạn có muốn xuất ${this.totalcustomerGroups} nhóm khách hàng không?`,
+                    );
+                }
+                break;
+            }
+        }
     }
+
+    exportMenu = {
+        title: 'Xuất dữ liệu',
+        leftTitleIcon: 'fa-file-export',
+        listMenuPosition: [
+            { title: 'Được chọn', leftIcon: 'fa-circle-check', value: 'Được chọn' },
+            { title: 'Điều kiện tìm', leftIcon: 'fa-filter', value: 'Điều kiện tìm' },
+        ],
+    };
 }

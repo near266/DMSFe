@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Unit } from '../../product/models/product';
+import { TypeExport } from '../common/common.service';
 import { AddnitComponent } from './addnit/addnit.component';
 import { DetailUnitComponent } from './detail-unit/detail-unit.component';
 import { UnitService } from './services/unit.service';
@@ -23,7 +24,7 @@ export class UnitsComponent implements OnInit {
     keywords: '';
     request: any = {
         keyword: '',
-        status: null,
+        status: true,
         page: 1,
         pageSize: 30,
     };
@@ -85,6 +86,7 @@ export class UnitsComponent implements OnInit {
     }
 
     search(request: any) {
+        console.log(123);
         this.loading = true;
         if (request) {
             request = ('' + request).trim();
@@ -100,6 +102,7 @@ export class UnitsComponent implements OnInit {
                 this.loading = false;
                 if (data) {
                     this.unit = data;
+                    this.totalunits = data.length;
                 }
             },
             (error) => {
@@ -110,6 +113,7 @@ export class UnitsComponent implements OnInit {
     }
 
     Select(e: string) {
+        this.selectedIds = [];
         // console.log(this.request);
         if (e.includes('Tất cả')) {
             this.request.keyword = this.keywords;
@@ -119,6 +123,7 @@ export class UnitsComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.unit = data;
+                        this.totalunits = data.length;
                     }
                 },
                 (error) => {
@@ -135,6 +140,7 @@ export class UnitsComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.unit = data;
+                        this.totalunits = data.length;
                     }
                 },
                 (error) => {
@@ -151,6 +157,7 @@ export class UnitsComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.unit = data;
+                        this.totalunits = data.length;
                     }
                 },
                 (error) => {
@@ -248,27 +255,25 @@ export class UnitsComponent implements OnInit {
         }
     }
 
-    Export() {
-        this.confirmService
-            .open('Bạn có muốn xuất tất cả dữ liệu đơn vị tính không', ['Có', 'Không'])
-            .subscribe((data) => {
-                if (data === 'Có') {
-                    this.isLoading = true;
-                    this.unitService.export().subscribe(
-                        (data) => {
-                            const blob = new Blob([data], {
-                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                            });
-                            const url = window.URL.createObjectURL(blob);
-                            window.open(url);
-                            this.isLoading = false;
-                        },
-                        (err) => {
-                            this.snackbar.failureSnackBar();
-                        },
-                    );
-                }
-            });
+    Export(type: number, data$: any, message: string) {
+        this.confirmService.open(message, ['Có', 'Không']).subscribe((data) => {
+            if (data === 'Có') {
+                this.isLoading = true;
+                this.unitService.export(type, data$).subscribe(
+                    (data) => {
+                        const blob = new Blob([data], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        window.open(url);
+                        this.isLoading = false;
+                    },
+                    (err) => {
+                        this.snackbar.failureSnackBar();
+                    },
+                );
+            }
+        });
     }
 
     deleteUnitsByIds(selectedIds: string[]) {
@@ -303,4 +308,38 @@ export class UnitsComponent implements OnInit {
             ],
         },
     ];
+
+    exportMenu = {
+        title: 'Xuất dữ liệu',
+        leftTitleIcon: 'fa-file-export',
+        listMenuPosition: [
+            { title: 'Được chọn', leftIcon: 'fa-circle-check', value: 'Được chọn' },
+            { title: 'Điều kiện tìm', leftIcon: 'fa-filter', value: 'Điều kiện tìm' },
+        ],
+    };
+
+    handleEmitMessage(e: any) {
+        switch (e) {
+            case 'Được chọn': {
+                if (this.selectedIds.length) {
+                    this.Export(
+                        TypeExport.Selected,
+                        this.selectedIds,
+                        `Bạn có muốn xuất ${this.selectedIds.length} đơn vị tính không?`,
+                    );
+                }
+                break;
+            }
+            case 'Điều kiện tìm': {
+                if (this.totalunits) {
+                    this.Export(
+                        TypeExport.Filter,
+                        this.request,
+                        `Bạn có muốn xuất ${this.totalunits} đơn vị tính không?`,
+                    );
+                }
+                break;
+            }
+        }
+    }
 }

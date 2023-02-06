@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CustomerType } from 'src/app/core/model/CustomerType';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { TypeExport } from '../common/common.service';
 import { AddCustomerTypeComponent } from './add-customer-type/add-customer-type.component';
 import { CustomerTypeComponent } from './customer-type/customer-type.component';
 import { CustomerTypeService } from './services/customer-type.service';
@@ -100,6 +101,7 @@ export class CustomerTypesComponent implements OnInit {
                 this.loading = false;
                 if (data) {
                     this.customerType = data.list;
+                    this.totalcustomerTypes = data.list.lenght;
                 }
             },
             (error) => {
@@ -110,6 +112,7 @@ export class CustomerTypesComponent implements OnInit {
     }
 
     Select(e: string) {
+        this.selectedIds = [];
         if (e.includes('Tất cả')) {
             this.request.keyword = this.keywords;
             this.request.status = null;
@@ -118,6 +121,7 @@ export class CustomerTypesComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.customerType = data.list;
+                        this.totalcustomerTypes = data.list.length;
                     }
                 },
                 (error) => {
@@ -134,6 +138,7 @@ export class CustomerTypesComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.customerType = data.list;
+                        this.totalcustomerTypes = data.list.length;
                     }
                 },
                 (error) => {
@@ -150,6 +155,7 @@ export class CustomerTypesComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.customerType = data.list;
+                        this.totalcustomerTypes = data.list.length;
                     }
                 },
                 (error) => {
@@ -271,26 +277,58 @@ export class CustomerTypesComponent implements OnInit {
         },
     ];
 
-    Export() {
-        this.confirmService
-            .open('Bạn có muốn xuất tất cả dữ liệu loại khách hàng không', ['Có', 'Không'])
-            .subscribe((data) => {
-                if (data === 'Có') {
-                    this.isLoading = true;
-                    this.customerTypeService.export().subscribe(
-                        (data) => {
-                            const blob = new Blob([data], {
-                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                            });
-                            const url = window.URL.createObjectURL(blob);
-                            window.open(url);
-                            this.isLoading = false;
-                        },
-                        (err) => {
-                            this.snackbar.failureSnackBar();
-                        },
+    Export(type: number, data$: any, message: string) {
+        this.confirmService.open(message, ['Có', 'Không']).subscribe((data) => {
+            if (data === 'Có') {
+                this.isLoading = true;
+                this.customerTypeService.export(type, data$).subscribe(
+                    (data) => {
+                        const blob = new Blob([data], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        window.open(url);
+                        this.isLoading = false;
+                    },
+                    (err) => {
+                        this.snackbar.failureSnackBar();
+                    },
+                );
+            }
+        });
+    }
+
+    handleEmitMessage(e: any) {
+        switch (e) {
+            case 'Được chọn': {
+                if (this.selectedIds.length) {
+                    this.Export(
+                        TypeExport.Selected,
+                        this.selectedIds,
+                        `Bạn có muốn xuất ${this.selectedIds.length} loại khách hàng không?`,
                     );
                 }
-            });
+                break;
+            }
+            case 'Điều kiện tìm': {
+                if (this.totalcustomerTypes) {
+                    this.Export(
+                        TypeExport.Filter,
+                        this.request,
+                        `Bạn có muốn xuất ${this.totalcustomerTypes} loại khách hàng không?`,
+                    );
+                }
+                break;
+            }
+        }
     }
+
+    exportMenu = {
+        title: 'Xuất dữ liệu',
+        leftTitleIcon: 'fa-file-export',
+        listMenuPosition: [
+            { title: 'Được chọn', leftIcon: 'fa-circle-check', value: 'Được chọn' },
+            { title: 'Điều kiện tìm', leftIcon: 'fa-filter', value: 'Điều kiện tìm' },
+        ],
+    };
 }

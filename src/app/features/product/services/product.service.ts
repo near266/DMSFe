@@ -59,6 +59,7 @@ export class ProductService {
             });
     }
     getProductsByPage(page: number) {
+        this.filterService.page$.next(page);
         const type =
             this.filterService.currentFiler$.getValue() === ''
                 ? 'CreatedDate'

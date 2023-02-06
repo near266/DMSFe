@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { Unit } from 'src/app/features/product/models/product';
 import { environment } from 'src/environments/environment';
+import { TypeExport } from '../../common/common.service';
 import { DetailUnitComponent } from '../detail-unit/detail-unit.component';
 
 @Injectable({
@@ -58,10 +59,15 @@ export class UnitService {
         return this.http.post<Unit[]>(this.Point + '/search', keyword);
     }
 
-    export(): Observable<any> {
-        let body = {
-            status: null,
+    export(type: number, data: any): Observable<any> {
+        let body: any = {
+            type: type,
         };
+        if (type === TypeExport.Selected) {
+            body.listId = data;
+        } else {
+            body.filter = data;
+        }
         return this.http.post(this.Point + '/export', body, { responseType: 'blob' });
     }
 
@@ -71,17 +77,4 @@ export class UnitService {
         // };
         return this.http.delete(this.Point + '/delete', { body }).pipe(map((response: any) => response));
     }
-
-    // deleteUnit(id: string | undefined) {
-    //   if (id) {
-    //     return this.del(id).subscribe({
-    //         next: () => {
-    //             this.dialogService.closeAll();
-    //         },
-    //         error: (err: HttpErrorResponse) => {
-    //             console.log(err);
-    //         },
-    //     });
-    //   }
-    // };
 }

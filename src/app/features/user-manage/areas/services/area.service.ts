@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { Area } from 'src/app/core/model/Area';
 import { environment } from 'src/environments/environment';
+import { TypeExport } from '../../common/common.service';
 import { AreaComponent } from '../area/area.component';
 
 @Injectable({
@@ -62,10 +63,15 @@ export class AreaService {
         return this.http.delete(this.Point + '/delete', { body }).pipe(map((response: any) => response));
     }
 
-    export(): Observable<any> {
-        let body = {
-            status: null,
+    export(type: number, data: any): Observable<any> {
+        let body: any = {
+            type: type,
         };
+        if (type === TypeExport.Selected) {
+            body.listId = data;
+        } else {
+            body.filter = data;
+        }
         return this.http.post(this.Point + '/export', body, { responseType: 'blob' });
     }
 }

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Major } from '../../product/models/product';
+import { TypeExport } from '../common/common.service';
 import { AddMajorComponent } from './add-major/add-major.component';
 import { MajorComponent } from './major/major.component';
 import { MajorService } from './services/major.service';
@@ -101,6 +102,7 @@ export class MajorsComponent implements OnInit {
                 this.loading = false;
                 if (data) {
                     this.major = data;
+                    this.totalmajors = data.length;
                 }
             },
             (error) => {
@@ -110,31 +112,29 @@ export class MajorsComponent implements OnInit {
         );
     }
 
-    Export() {
-        this.confirmService
-            .open('Bạn có muốn xuất tất cả dữ liệu ngành hàng không', ['Có', 'Không'])
-            .subscribe((data) => {
-                if (data === 'Có') {
-                    this.isLoading = true;
-                    this.majorService.export().subscribe(
-                        (data) => {
-                            const blob = new Blob([data], {
-                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                            });
-                            const url = window.URL.createObjectURL(blob);
-                            window.open(url);
-                            this.isLoading = false;
-                        },
-                        (err) => {
-                            this.snackbar.failureSnackBar();
-                        },
-                    );
-                }
-            });
+    Export(type: number, data$: any, message: string) {
+        this.confirmService.open(message, ['Có', 'Không']).subscribe((data) => {
+            if (data === 'Có') {
+                this.isLoading = true;
+                this.majorService.export(type, data$).subscribe(
+                    (data) => {
+                        const blob = new Blob([data], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        window.open(url);
+                        this.isLoading = false;
+                    },
+                    (err) => {
+                        this.snackbar.failureSnackBar();
+                    },
+                );
+            }
+        });
     }
 
     Select(e: string) {
-        console.log(this.request);
+        this.selectedIds = [];
         if (e.includes('Tất cả')) {
             this.request.keyword = this.keywords;
             this.request.status = null;
@@ -143,6 +143,7 @@ export class MajorsComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.major = data;
+                        this.totalmajors = data.length;
                     }
                 },
                 (error) => {
@@ -161,6 +162,7 @@ export class MajorsComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.major = data;
+                        this.totalmajors = data.length;
                     }
                 },
                 (error) => {
@@ -177,6 +179,7 @@ export class MajorsComponent implements OnInit {
                     this.loading = false;
                     if (data) {
                         this.major = data;
+                        this.totalmajors = data.length;
                     }
                 },
                 (error) => {
@@ -280,6 +283,31 @@ export class MajorsComponent implements OnInit {
         );
     }
 
+    handleEmitMessage(e: any) {
+        switch (e) {
+            case 'Được chọn': {
+                if (this.selectedIds.length) {
+                    this.Export(
+                        TypeExport.Selected,
+                        this.selectedIds,
+                        `Bạn có muốn xuất ${this.selectedIds.length} ngành hàng không?`,
+                    );
+                }
+                break;
+            }
+            case 'Điều kiện tìm': {
+                if (this.totalmajors) {
+                    this.Export(
+                        TypeExport.Filter,
+                        this.request,
+                        `Bạn có muốn xuất ${this.totalmajors} ngành hàng không?`,
+                    );
+                }
+                break;
+            }
+        }
+    }
+
     listMenuObj = [
         {
             title: 'Trạng thái',
@@ -291,4 +319,13 @@ export class MajorsComponent implements OnInit {
             ],
         },
     ];
+
+    exportMenu = {
+        title: 'Xuất dữ liệu',
+        leftTitleIcon: 'fa-file-export',
+        listMenuPosition: [
+            { title: 'Được chọn', leftIcon: 'fa-circle-check', value: 'Được chọn' },
+            { title: 'Điều kiện tìm', leftIcon: 'fa-filter', value: 'Điều kiện tìm' },
+        ],
+    };
 }

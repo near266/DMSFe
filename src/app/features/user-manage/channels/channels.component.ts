@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Channel } from 'src/app/core/model/Channel';
 import { ConfirmDialogService } from 'src/app/core/services/confirmDialog.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { TypeExport } from '../common/common.service';
 import { AddChannelComponent } from './add-channel/add-channel.component';
 import { ChannelComponent } from './channel/channel.component';
 import { ChannelService } from './services/channel.service';
@@ -51,7 +52,8 @@ export class ChannelsComponent implements OnInit {
     view() {
         this.channelService.getAllChannel(this.request).subscribe((data) => {
             if (data) {
-                this.channel = data.list;
+                this.channel = data.list ? data.list : [];
+                this.totalchannels = data.list ? data.list.length : 0;
                 this.totalchannels = data.list.length;
                 // console.log(data);
             }
@@ -99,7 +101,8 @@ export class ChannelsComponent implements OnInit {
             (data) => {
                 this.loading = false;
                 if (data) {
-                    this.channel = data.list;
+                    this.channel = data.list ? data.list : [];
+                    this.totalchannels = data.list ? data.list.length : 0;
                 }
             },
             (error) => {
@@ -110,6 +113,7 @@ export class ChannelsComponent implements OnInit {
     }
 
     Select(e: string) {
+        this.selectedIds = [];
         if (e.includes('Tất cả')) {
             this.request.keyword = this.keywords;
             this.request.status = null;
@@ -117,7 +121,8 @@ export class ChannelsComponent implements OnInit {
                 (data) => {
                     this.loading = false;
                     if (data) {
-                        this.channel = data.list;
+                        this.channel = data.list ? data.list : [];
+                        this.totalchannels = data.list ? data.list.length : 0;
                     }
                 },
                 (error) => {
@@ -133,7 +138,8 @@ export class ChannelsComponent implements OnInit {
                 (data) => {
                     this.loading = false;
                     if (data) {
-                        this.channel = data.list;
+                        this.channel = data.list ? data.list : [];
+                        this.totalchannels = data.list ? data.list.length : 0;
                     }
                 },
                 (error) => {
@@ -149,7 +155,8 @@ export class ChannelsComponent implements OnInit {
                 (data) => {
                     this.loading = false;
                     if (data) {
-                        this.channel = data.list;
+                        this.channel = data.list ? data.list : [];
+                        this.totalchannels = data.list ? data.list.length : 0;
                     }
                 },
                 (error) => {
@@ -177,7 +184,8 @@ export class ChannelsComponent implements OnInit {
                     this.res = data.list;
                     this.channel = [];
                     this.totalchannels = this.res.length;
-                    this.channel = data.list;
+                    this.channel = data.list ? data.list : [];
+                    this.totalchannels = data.list ? data.list.length : 0;
                     this.loading = false;
                 } else {
                     this.loading = false;
@@ -251,11 +259,11 @@ export class ChannelsComponent implements OnInit {
         },
     ];
 
-    Export() {
-        this.confirmService.open('Bạn có muốn xuất tất cả dữ liệu kênh không', ['Có', 'Không']).subscribe((data) => {
+    Export(type: number, data$: any, message: string) {
+        this.confirmService.open(message, ['Có', 'Không']).subscribe((data) => {
             if (data === 'Có') {
                 this.isLoading = true;
-                this.channelService.export().subscribe(
+                this.channelService.export(type, data$).subscribe(
                     (data) => {
                         const blob = new Blob([data], {
                             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -271,4 +279,34 @@ export class ChannelsComponent implements OnInit {
             }
         });
     }
+
+    handleEmitMessage(e: any) {
+        switch (e) {
+            case 'Được chọn': {
+                if (this.selectedIds.length) {
+                    this.Export(
+                        TypeExport.Selected,
+                        this.selectedIds,
+                        `Bạn có muốn xuất ${this.selectedIds.length} kênh không?`,
+                    );
+                }
+                break;
+            }
+            case 'Điều kiện tìm': {
+                if (this.totalchannels) {
+                    this.Export(TypeExport.Filter, this.request, `Bạn có muốn xuất ${this.totalchannels} kênh không?`);
+                }
+                break;
+            }
+        }
+    }
+
+    exportMenu = {
+        title: 'Xuất dữ liệu',
+        leftTitleIcon: 'fa-file-export',
+        listMenuPosition: [
+            { title: 'Được chọn', leftIcon: 'fa-circle-check', value: 'Được chọn' },
+            { title: 'Điều kiện tìm', leftIcon: 'fa-filter', value: 'Điều kiện tìm' },
+        ],
+    };
 }
