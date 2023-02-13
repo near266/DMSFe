@@ -231,13 +231,20 @@ export class RouteComponent implements OnInit, AfterViewInit {
             }
             case 'Điều kiện tìm': {
                 if (this.response.totalCount) {
-                    let body = {
-                        keyword: this.keywordString,
-                        employeeId: this.employeeId,
-                        // groupId: this.filterObj.groupID,
-                        page: this.page,
-                        pagesize: this.pageSize,
-                    };
+                    let body: any;
+                    if(this.keywordString) {
+                        body = {
+                            keyword: this.keywordString,
+                            page: this.page,
+                            pagesize: this.pageSize,
+                        };
+                    } else {
+                        body = {
+                            keyword: '',
+                            page: this.page,
+                            pagesize: this.pageSize,
+                        };
+                    }
                     this.Export(TypeExport.Filter, body, `Bạn có muốn xuất ${this.response.totalCount} tuyến không?`);
                 }
                 break;
