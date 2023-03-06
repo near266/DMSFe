@@ -283,7 +283,10 @@ export class UserTreeViewComponent implements OnInit {
       let dialogRef = this.dialog.open(EditGroupComponent, {
         // height: '30vh',
         minWidth: '650px',
-        data: id,
+        data: {
+            id: id,
+            type: node.data.type
+        },
         panelClass: 'custom-mat-dialog-container'
       });
       dialogRef.afterClosed().subscribe( data => {

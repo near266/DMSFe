@@ -21,6 +21,11 @@ export interface Node {
   lastModifiedDate: string
 }
 
+export interface IMatData {
+    id: string;
+    type: number;
+}
+
 @Component({
   selector: 'app-edit-group',
   templateUrl: './edit-group.component.html',
@@ -48,13 +53,13 @@ export class EditGroupComponent implements OnInit, AfterViewInit {
 
   constructor(
     public dialogRef: MatDialogRef<EditGroupComponent>,
-    @Inject(MAT_DIALOG_DATA) public id: string,
+    @Inject(MAT_DIALOG_DATA) public data: IMatData,
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private snackbar: SnackbarService
     ) { }
   ngAfterViewInit(): void {
-    this.employeeService.GetGroupById(this.id).subscribe( data => {
+    this.employeeService.GetGroupById(this.data.id).subscribe( data => {
       this.response = data;
       this.addForm.controls['name'].setValue(this.response.name);
       this.addForm.controls['unitTreeGroup_Code'].setValue(this.response.unitTreeGroup_Code);
@@ -82,11 +87,11 @@ export class EditGroupComponent implements OnInit, AfterViewInit {
       return;
     }
     let body: any = {
-      id: this.id,
+      id: this.data.id,
       unitTreeGroup_Code: ('' + this.addForm.controls['unitTreeGroup_Code'].value).trim(),
       name: ('' + this.addForm.controls['name'].value).trim(),
       supervise: this.addForm.controls['supervise'].value,
-      type: 0
+      type: this.data.type
     };
     this.employeeService.updateGroup(body).subscribe( data => {
       if(data) {
