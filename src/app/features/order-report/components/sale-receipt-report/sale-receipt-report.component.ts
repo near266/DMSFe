@@ -59,10 +59,22 @@ export class SaleReceiptReportComponent implements OnInit {
     }
 
     exportGross() {
-        this.saleReportLogic.exportGross(this.body, this.async.transform(this.total$)!);
+        this.total$.subscribe((data) => {
+            let body = {
+                ...this.body,
+            };
+            body.pageSize = data;
+            this.saleReportLogic.exportGross(body, this.async.transform(this.total$)!);
+        });
     }
 
     exportNotGross() {
-        this.saleReportLogic.exportNotGross(this.body, this.async.transform(this.total$)!);
+        this.total$.subscribe((data) => {
+            let body = {
+                ...this.body,
+            };
+            body.pageSize = data;
+            this.saleReportLogic.exportNotGross(body, this.async.transform(this.total$)!);
+        });
     }
 }
