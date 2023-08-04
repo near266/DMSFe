@@ -85,10 +85,10 @@ export class FormatReportOrderService {
                     hasChildren: false,
                 },
                 // Nguồn
-                {
-                    content: data.source,
-                    hasChildren: false,
-                },
+                // {
+                //     content: data.source,
+                //     hasChildren: false,
+                // },
                 // Mã đơn đặt
                 {
                     content: data.orderCode,
@@ -110,15 +110,15 @@ export class FormatReportOrderService {
                     hasChildren: false,
                 },
                 // Số lần bán
-                {
-                    content: data.billSale | 0,
-                    hasChildren: false,
-                },
+                // {
+                //     content: data.billSale | 0,
+                //     hasChildren: false,
+                // },
                 // Số lần trả
-                {
-                    content: data.billReturn | 0,
-                    hasChildren: false,
-                },
+                // {
+                //     content: data.billReturn | 0,
+                //     hasChildren: false,
+                // },
                 // Địa chỉ
                 {
                     content: data.customer?.address,
@@ -155,40 +155,40 @@ export class FormatReportOrderService {
                     hasChildren: true,
                 },
                 // Mã kho
-                {
-                    content: warehouseCodeArray,
-                    hasChildren: true,
-                },
+                // {
+                //     content: warehouseCodeArray,
+                //     hasChildren: true,
+                // },
                 // Tên kho
-                {
-                    content: warehouseNameArray,
-                    hasChildren: true,
-                },
+                // {
+                //     content: warehouseNameArray,
+                //     hasChildren: true,
+                // },
                 // Mô tả
                 {
                     content: descriptionArray,
                     hasChildren: true,
                 },
                 // ngành hàng
-                {
-                    content: majorArray,
-                    hasChildren: true,
-                },
+                // {
+                //     content: majorArray,
+                //     hasChildren: true,
+                // },
                 // nhãn hiệu
-                {
-                    content: brandArray,
-                    hasChildren: true,
-                },
+                // {
+                //     content: brandArray,
+                //     hasChildren: true,
+                // },
                 // Số lượng
                 {
                     content: quantityArray,
                     hasChildren: true,
                 },
                 // Tên ctrinh km
-                {
-                    content: promotionNameArray,
-                    hasChildren: true,
-                },
+                // {
+                //     content: promotionNameArray,
+                //     hasChildren: true,
+                // },
                 // Số lượng km
                 {
                     content: promotionQuantityArray,
@@ -210,10 +210,10 @@ export class FormatReportOrderService {
                     hasChildren: true,
                 },
                 // VAT từng sp
-                {
-                    content: vatArray,
-                    hasChildren: true,
-                },
+                // {
+                //     content: vatArray,
+                //     hasChildren: true,
+                // },
                 // tỉ lệ ck từng sp
                 {
                     content: discountRateArray,

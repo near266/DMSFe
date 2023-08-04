@@ -19,10 +19,10 @@ export class FormtatReportSaleReceiptService {
                 header: 'ĐVT',
                 content: 'Tổng: ',
             },
-            // {
-            //     header: 'Đơn giá',
-            //     content: dataList.sumOfOrderProduct,
-            // },
+            {
+                header: 'Số lượng bán',
+                content: dataList.sumOfOrderProduct,
+            },
             {
                 header: 'Chiết khấu',
                 content: this.currency.transform(dataList.sumOfDiscount, 'VND', 'symbol', '1.0-0')!,

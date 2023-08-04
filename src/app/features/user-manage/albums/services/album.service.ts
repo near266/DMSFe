@@ -5,6 +5,7 @@ import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { Album } from 'src/app/core/model/Album';
 import { environment } from 'src/environments/environment';
 import { AlbumComponent } from '../album/album.component';
+import { TypeExport } from '../../common/common.service';
 
 @Injectable({
   providedIn: 'root'
@@ -61,5 +62,16 @@ export class AlbumService {
   del(body: any): Observable<any> {
     return this.http.delete(this.Point + '/delete', {body}).pipe(map((response: any) => response));
   }
+ exportAlbum(type: number, data: any) :Observable<any>{
+  let body: any = {
+    type: type,
+};
+if (type === TypeExport.Selected) {
+    body.listId = data;
+} else {
+    body.filter = data;
+}
+return this.http.post(this.Point + '/export', body, { responseType: 'blob' });
+ }
 
 }
