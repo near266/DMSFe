@@ -47,7 +47,7 @@ export class DetailSupplierComponent implements OnInit {
         templateOptions: {
             label: 'Mã nhà cung cấp',
             placeholder: 'Nhập code nhà cung cấp',
-            required: true,
+            required:   false,
         },
     },
     {
@@ -56,7 +56,7 @@ export class DetailSupplierComponent implements OnInit {
         templateOptions: {
             label: 'Tên nhà cung cấp',
             placeholder: 'Nhập tên nhà cung cấp',
-            required: true,
+            required: false,
         },
     },
     {
@@ -66,7 +66,7 @@ export class DetailSupplierComponent implements OnInit {
         templateOptions: {
             label: 'Địa chỉ',
             placeholder: 'Nhập địa chỉ',
-            required: true,
+            required: false,
         },
     },
     {
@@ -76,7 +76,7 @@ export class DetailSupplierComponent implements OnInit {
         templateOptions: {
             label: 'Mã số thuế',
             placeholder: 'Nhập mã số thuế',
-            required: true,
+            required: false,
         },
     },
     {
@@ -86,7 +86,7 @@ export class DetailSupplierComponent implements OnInit {
         templateOptions: {
             label: 'Số điện thoại',
             placeholder: 'Nhập số điện thoại',
-            required: true,
+            required: false,
         },
     },
     {
@@ -96,7 +96,7 @@ export class DetailSupplierComponent implements OnInit {
         templateOptions: {
             label: 'Tỉnh/TP',
             placeholder: 'Nhập Tỉnh/TP',
-            required: true,
+            required: false,
         },
     },
     {
@@ -116,7 +116,7 @@ export class DetailSupplierComponent implements OnInit {
         templateOptions: {
             label: 'Số ngày được nợ',
             placeholder: 'Nhập số ngày được nợ',
-            required: true,
+            required: false,
         },
     },
     {

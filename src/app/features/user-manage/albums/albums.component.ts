@@ -7,7 +7,15 @@ import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialo
 import { AddAlbumComponent } from './add-album/add-album.component';
 import { AlbumComponent } from './album/album.component';
 import { AlbumService } from './services/album.service';
+import { TypeExport } from '../common/common.service';
 
+import { FieldsDialogComponent } from '../../customers/fields-dialog/fields-dialog.component';
+export interface IBody {
+  filter?: any;
+  listId?: any[] | null;
+  type?: any;
+  listProperties?: any[] | null;
+}
 @Component({
   selector: 'app-albums',
   templateUrl: './albums.component.html',
@@ -22,12 +30,17 @@ export class AlbumsComponent implements OnInit {
   album: Album[] = [];
   totalCount: number;
   keywords: '';
+  keysearch:'';
   request: any = {
     keyword: '',
     status: null,
     page: 1,
     pageSize: 30
   };
+  selectedList: string[] = [];
+  isLoading: boolean = false;
+  totalAlbumTypes: number;
+  
 
   res: any;
   dia?: any;
@@ -51,7 +64,6 @@ export class AlbumsComponent implements OnInit {
   view(){
     this.albumService.getAllAlbum(this.request).subscribe(data => {
       if(data){
-        console.log(data);
         this.album = data;
         this.totalalbums = data.length
       }
@@ -91,8 +103,15 @@ export class AlbumsComponent implements OnInit {
     }
     if(request == null || request == undefined) {
       this.keywords = '';
+      this.keysearch='';
     } else {
+    if(this.keysearch !=null){
+      this.keysearch=request;
+    }else{
+
       this.keywords = request;
+    }
+      
     }
     this.request.keyword = this.keywords;
     this.albumService.searchAlbum(this.request).subscribe(
@@ -246,5 +265,59 @@ export class AlbumsComponent implements OnInit {
       ]
     }
   ]
+
+  Export(type: number, data$: any, message: string) {
+    this.confirmService.open(message, ['Có', 'Không']).subscribe((d) => {
+        if (d === 'Có') {
+            this.isLoading = true;
+            this.albumService.exportAlbum(type, data$).subscribe(
+                (data) => {
+                    const blob = new Blob([data], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    });
+                    const url = window.URL.createObjectURL(blob);
+                    window.open(url);
+                    this.isLoading = false;
+                },
+                (err) => {
+                    this.snackbar.failureSnackBar();
+                },
+            );
+        }
+    });
+}
+handleEmitMessage(e: any) {
+  switch (e) {
+      case 'Được chọn': {
+          if (this.selectedIds.length) {
+              this.Export(
+                  TypeExport.Selected,
+                  this.selectedIds,
+                  `Bạn có muốn xuất ${this.selectedIds.length} album không?`,
+              );
+          }
+          break;
+      }
+      case 'Điều kiện tìm': {
+          if (this.album.length) {
+              this.Export(
+                  TypeExport.Filter,
+                  this.request,
+                  `Bạn có muốn xuất ${this.album.length} album không?`,
+              );
+          }
+          break;
+      }
+  }
+}
+
+exportMenu = {
+  title: 'Xuất dữ liệu',
+  leftTitleIcon: 'fa-file-export',
+  listMenuPosition: [
+      { title: 'Được chọn', leftIcon: 'fa-circle-check', value: 'Được chọn' },
+      { title: 'Điều kiện tìm', leftIcon: 'fa-filter', value: 'Điều kiện tìm' },
+  ],
+};
 
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { warehouses_url } from '../const/url';
+import { TypeExport } from 'src/app/features/user-manage/common/common.service';
 
 @Injectable({
   providedIn: 'root'
@@ -51,4 +52,16 @@ export class WarehousesService {
     .delete(warehouses_url + '/deleteAccountant', {body: body})
     .pipe(map((response: any) => response));
   }
+   
+  export(type: number, data: any) :Observable<any>{
+    let body: any = {
+      type: type,
+  };
+  if (type === TypeExport.Selected) {
+      body.listId = data;
+  } else {
+      body.filter = data;
+  }
+  return this.http.post(warehouses_url + '/export', body, { responseType: 'blob' });
+   }
 }
