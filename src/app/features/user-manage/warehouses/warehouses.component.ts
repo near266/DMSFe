@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddWarehouseComponent } from './components/add-warehouse/add-warehouse.component';
 import { UpdateWarehouseComponent } from './components/update-warehouse/update-warehouse.component';
 import { ConfirmDialogService } from 'src/app/core/shared/services/confirm-dialog.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { TypeExport } from '../common/common.service';
 
 @Component({
   selector: 'app-warehouses',
@@ -58,7 +60,11 @@ export class WarehousesComponent implements OnInit {
     public router: Router,
     private logicService: LogicService,
     private dialog: MatDialog,
-    private confirmService: ConfirmDialogService
+    private confirmService: ConfirmDialogService,
+    private readonly warehouseSvc: WarehousesService,
+    private snackbar: SnackbarService,
+    
+    
     ) { }
 
   ngOnInit(): void {
@@ -157,5 +163,58 @@ export class WarehousesComponent implements OnInit {
       }
     });
   }
-
+  
+  
+  Export(type: number, data$: any, message: string) {
+    this.confirmService.open(message, ['Có', 'Không']).subscribe((d) => {
+        if (d === 'Có') {
+            this.loading = true;
+            this.warehouseSvc.export(type, data$).subscribe(
+                (data) => {
+                    const blob = new Blob([data], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    });
+                    const url = window.URL.createObjectURL(blob);
+                    window.open(url);
+                    this.loading = false;
+                },
+                (err) => {
+                    this.snackbar.failureSnackBar();
+                },
+            );
+        }
+    });
+}
+handleEmitMessage(e: any) {
+  switch (e) {
+      case 'Được chọn': {
+          if (this.listSelectedId.length) {
+              this.Export(
+                  TypeExport.Selected,
+                  this.listSelectedId,
+                  `Bạn có muốn xuất ${this.listSelectedId.length} album không?`,
+              );
+          }
+          break;
+      }
+      case 'Điều kiện tìm': {
+          if (this.totalCount) {
+              this.Export(
+                  TypeExport.Filter,
+                  this.bodySearch,
+                  `Bạn có muốn xuất ${this.totalCount} album không?`,
+              );
+          }
+          break;
+      }
+  }
+}
+  exportMenu = {
+    title: 'Xuất dữ liệu',
+    leftTitleIcon: 'fa-file-export',
+    listMenuPosition: [
+        { title: 'Được chọn', leftIcon: 'fa-circle-check', value: 'Được chọn' },
+        { title: 'Điều kiện tìm', leftIcon: 'fa-filter', value: 'Điều kiện tìm' },
+    ],
+};
 }

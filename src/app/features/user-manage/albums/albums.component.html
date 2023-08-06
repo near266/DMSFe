@@ -15,11 +15,13 @@
         <!-- <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
           <i class="fa-sharp fa-solid fa-upload text-emerald-500 font-bold mr-2"></i>
           Nhập dữ liệu
-        </button>
-        <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white">
-          <i class="fa-sharp fa-regular fa-file text-emerald-500 font-bold mr-2"></i>
-          Xuất dữ liệu
-        </button> -->
+        </button>-->
+        <app-menu-bar [menuObj]="exportMenu" (message)="handleEmitMessage($event)"></app-menu-bar>
+   
+    <div *ngIf="isLoading" style="margin-top: 12px" class="text-center w-full">
+      <span class="mr-2">Đang xuất dữ liệu...</span>
+      <i class="fa-solid fa-spinner fa-xl text-green-text animate-spin"></i>
+  </div>
         <app-menu-bar [menuObj]="menuObj" (message)="Select($event)" *ngFor="let menuObj of listMenuObj">
         </app-menu-bar>
         <button class="w-fit px-3 py-2 flex flex-row items-center hover:bg-white" (click)="DeleteAlbums()">

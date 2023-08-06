@@ -23,7 +23,7 @@ export class UserManageComponent implements OnInit {
         private dataService: DataService,
         private snackbar: SnackbarService,
         private confirm: ConfirmDialogService,
-    ) {}
+    ) { }
 
     users: any = [];
     isLoading: boolean = false;
@@ -393,27 +393,49 @@ export class UserManageComponent implements OnInit {
     }
 
     Export() {
-        this.confirm
-            .openDialog({
-                message: 'Bạn có chắc chắn muốn xuất dữ liệu tất cả nhân viên không?',
-                confirm: 'Đồng ý',
-                cancel: 'Hủy',
-            })
-            .subscribe((data) => {
+        // this.confirm
+        //     .openDialog({
+        //         message: 'Bạn có chắc chắn muốn xuất dữ liệu tất cả nhân viên không?',
+        //         confirm: 'Đồng ý',
+        //         cancel: 'Hủy',
+        //     })
+        //     .subscribe((data) => {
+        //         this.isLoading = true;
+        //         this.employeeService.export().subscribe(
+        //             (data) => {
+        //                 const blob = new Blob([data], {
+        //                     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        //                 });
+        //                 const url = window.URL.createObjectURL(blob);
+        //                 window.open(url);
+        //                 this.isLoading = false;
+        //             },
+        //             (err) => {
+        //                 this.snackbar.failureSnackBar();
+        //             },
+        //         );
+        //     });
+        const message = ' Bạn có muốn xuất tất cả nhân viên không?'
+        this.confirm.open(message, ['Có', 'Không']).subscribe((data) => {
+            if (data === 'Có') {
+
                 this.isLoading = true;
                 this.employeeService.export().subscribe(
                     (data) => {
                         const blob = new Blob([data], {
                             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                         });
+
                         const url = window.URL.createObjectURL(blob);
                         window.open(url);
                         this.isLoading = false;
+
                     },
                     (err) => {
                         this.snackbar.failureSnackBar();
                     },
-                );
-            });
+                )
+            }
+        });
     }
 }
