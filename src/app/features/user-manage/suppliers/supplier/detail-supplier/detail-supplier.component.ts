@@ -106,7 +106,7 @@ export class DetailSupplierComponent implements OnInit {
         templateOptions: {
             label: 'Hạn mức công nợ',
             placeholder: 'Nhập hạn mức công nợ',
-            required: true,
+            required: false,
         },
     },
     {
