@@ -12,8 +12,8 @@ export const environment = {
 
 
     // API TEST
-    // api: 'https://fitolabs-api.eztek.net',
-    // ID_URL: 'https://fitolabs-id.eztek.net',
-    // API_URL: 'https://fitolabs-api.eztek.net',
-    // UPLOAD_URL: 'https://cdn-fitolabs.eztek.net',
+    api: 'https://fitolabs-api.eztek.net',
+    ID_URL: 'https://fitolabs-id.eztek.net',
+    API_URL: 'https://fitolabs-api.eztek.net',
+    UPLOAD_URL: 'https://cdn-fitolabs.eztek.net',
 };
