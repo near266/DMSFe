@@ -192,7 +192,7 @@ handleEmitMessage(e: any) {
               this.Export(
                   TypeExport.Selected,
                   this.listSelectedId,
-                  `Bạn có muốn xuất ${this.listSelectedId.length} album không?`,
+                  `Bạn có muốn xuất ${this.listSelectedId.length} bản ghi không?`,
               );
           }
           break;
@@ -202,7 +202,7 @@ handleEmitMessage(e: any) {
               this.Export(
                   TypeExport.Filter,
                   this.bodySearch,
-                  `Bạn có muốn xuất ${this.totalCount} album không?`,
+                  `Bạn có muốn xuất ${this.totalCount} bản ghi không?`,
               );
           }
           break;
