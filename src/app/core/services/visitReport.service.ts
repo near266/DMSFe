@@ -9,8 +9,11 @@ import { VisitReport } from 'src/app/features/visit-report/model/VisitReport';
 })
 export class VisitReportService {
   api_gateway_url = api_gateway_url;
-  constructor(private http: HttpClient) { } 
+  constructor(private http: HttpClient) { }
   searchReport(body: any): Observable<any> {
-      return this.http.post(this.api_gateway_url + '/Report/CheckInReport', body);
+    return this.http.post(this.api_gateway_url + '/Report/CheckInReport', body);
+  }
+  HistoryVisted(body: any): Observable<any> {
+    return this.http.post(this.api_gateway_url + '/CheckIn/CheckInLog', body).pipe(map((response: any) => response));
   }
 }

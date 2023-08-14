@@ -22,6 +22,11 @@
         </div>
         <div class="ml-6 flex justify-between items-center px-3">
             <span class="font-medium text-xl"> Báo cáo viếng thăm </span>
+            <div class=" bg-white mx-3 h-8 flex items-center border border-solid border-gray-400 rounded-sm">
+                <i class="fa-solid fa-magnifying-glass fa-sm px-2 text-gray-400"></i>
+                <input class="bg-white text-xs w-50 h-full" placeholder="Tìm kiếm theo tên nhân viên"  [(ngModel)]="bodySearch.name"   (keyup.enter)="filter()">
+            </div>
+            
             <div class="py-2">
                 <div class="space-x-3 flex items-center">
                     <button class="p-2 button-option mr-1" [matMenuTriggerFor]="exportData">

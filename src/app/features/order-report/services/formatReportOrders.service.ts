@@ -9,7 +9,7 @@ import { stickyRows } from '../models/stickyRow';
     providedIn: 'root',
 })
 export class FormatReportOrderService {
-    constructor(private currency: CurrencyPipe, private percent: PercentPipe, private datePipe: DatePipe) {}
+    constructor(private currency: CurrencyPipe, private percent: PercentPipe, private datePipe: DatePipe) { }
     // format data của report đơn đặt
     formatReportOrders(dataList: RootOrderReport) {
         let dataReturn: any = [];
@@ -135,10 +135,10 @@ export class FormatReportOrderService {
                     hasChildren: false,
                 },
                 // Nhóm khách
-                {
-                    content: data.customer?.customerGroup?.customerGroupName,
-                    hasChildren: false,
-                },
+                // {
+                //     content: data.customer?.customerGroup?.customerGroupName,
+                //     hasChildren: false,
+                // },
                 // Loại khách
                 {
                     content: data.customer?.customerType?.customerTypeName,
@@ -165,10 +165,10 @@ export class FormatReportOrderService {
                 //     hasChildren: true,
                 // },
                 // Mô tả
-                {
-                    content: descriptionArray,
-                    hasChildren: true,
-                },
+                // {
+                //     content: descriptionArray,
+                //     hasChildren: true,
+                // },
                 // ngành hàng
                 // {
                 //     content: majorArray,

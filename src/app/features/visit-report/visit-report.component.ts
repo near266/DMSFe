@@ -1,6 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, filter } from 'rxjs';
 import { CustomerGroupService } from 'src/app/core/services/customer-group.service';
 import { CustomerTypeService } from 'src/app/core/services/customer-type.service';
 import { FakeData, FakeData2 } from './mocks/fakeData';
@@ -22,7 +22,14 @@ export class VisitReportComponent implements OnInit {
         page: 1,
         pageSize: 5,
     };
-
+    bodySearch:any={
+    name: '',
+    page:1,
+    pageSize:10,
+    }
+     
+    
+      
     fakeData = fakeData;
 
     constructor(private logicService: LogicServiceService, private async: AsyncPipe) {}
@@ -35,5 +42,8 @@ export class VisitReportComponent implements OnInit {
 
     handleEmitBody(body: any) {
         this.body = body;
+    }
+    filter(){
+        this.logicService.searchDetailReport(this.bodySearch);
     }
 }

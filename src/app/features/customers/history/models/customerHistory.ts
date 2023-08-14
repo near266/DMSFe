@@ -1,5 +1,27 @@
+import { List } from './../../../timekeeping/models/List';
+import { Order } from './../../../recycle/models/Order';
 export interface CustomerHistory {
     list: CustomerHistoryList[];
+}
+export interface ListHistoryVisit {
+    List: HistoryVisit[];
+}
+export interface HistoryVisit {
+    id: string,
+    employeeName: string,
+    dateCheckin: string,
+    timeCheckin: string,
+    addressCheckin: string,
+    imageCheckin: string,
+    note: string,
+    order: string,
+    isRoute: boolean,
+    dayCheckIn: string,
+    dayCheckOut: string,
+    checkInTime: string,
+    checkOutTime: string,
+
+
 }
 
 export interface CustomerHistoryList {

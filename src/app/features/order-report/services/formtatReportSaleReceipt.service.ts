@@ -4,11 +4,13 @@ import { Config } from '../models/config';
 import { ListProduct } from '../models/saleReports';
 import { RootSaleReport } from '../models/saleReports';
 import { stickyRows } from '../models/stickyRow';
+import { forEach } from 'lodash';
 
 @Injectable({
     providedIn: 'root',
 })
 export class FormtatReportSaleReceiptService {
+ 
     constructor(private currency: CurrencyPipe, private percent: PercentPipe, private datePipe: DatePipe) {}
     // format data của report đơn bán
     formatReportSale(dataList: RootSaleReport) {
@@ -34,12 +36,23 @@ export class FormtatReportSaleReceiptService {
             {
                 header: 'Doanh số thuần',
                 content: this.currency.transform(
-                    dataList.sumOfTotalPrice - dataList.sumOfDiscount - dataList.sumOfVAT,
+                    dataList.sumOfTotalPayment,
                     'VND',
                     'symbol',
                     '1.0-0',
                 )!,
             },
+            {
+                header: 'Số lượng trả lại',
+                content:dataList.sumofTotalReturn,
+                
+            },
+            {
+                header: 'Giá trị trả lại',
+                content:dataList.sumofMoneyReturn,
+                
+            }
+         
         ];
         dataReturn = dataList.data?.map((data: any, index: number) => {
             listIds.push(data.id);
@@ -169,6 +182,7 @@ export class FormtatReportSaleReceiptService {
             listIds: listIds,
             stickyRows: stickyRows,
         };
+      
         return returnInfo;
     }
 
@@ -185,6 +199,7 @@ export class FormtatReportSaleReceiptService {
         let quantitySaleArray: any = [];
         let moneyReturnArray: any = [];
         let netSalesArray: any = [];
+        let totalReturn:number=0;
 
         productList?.map((product: ListProduct) => {
             productCodeArray.push(product.productCode);
@@ -201,6 +216,12 @@ export class FormtatReportSaleReceiptService {
                 this.currency.transform((product.totalPrice || 0) - (product.discount || 0), 'VND', 'symbol', '1.0-0'),
             );
         });
+        console.log("a")
+        console.log(productList)
+        quantityReturnArray.forEach((t:number)=>{
+          totalReturn+=t+1;
+          
+        })
         return {
             productCodeArray: productCodeArray,
             productNameArray: productNameArray,
@@ -213,6 +234,11 @@ export class FormtatReportSaleReceiptService {
             moneyReturnArray: moneyReturnArray,
             netSalesArray: netSalesArray,
             quantitySaleArray: quantitySaleArray,
+        
+            
+            
         };
+        
+        
     }
 }
