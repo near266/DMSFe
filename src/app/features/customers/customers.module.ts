@@ -11,6 +11,7 @@ import { AddRouteComponent } from './add-route/add-route.component';
 import { FieldsDialogComponent } from './fields-dialog/fields-dialog.component';
 import { HistoryComponent } from './history/history.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { HistoryVisitedComponent } from './history-visited/history-visited.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     ChangeRouteComponent,
     AddRouteComponent,
     FieldsDialogComponent,
-    HistoryComponent
+    HistoryComponent,
+    HistoryVisitedComponent
   ],
   imports: [
     CommonModule,

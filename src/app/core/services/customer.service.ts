@@ -7,7 +7,7 @@ import { api_gateway_url, customer_url, history_url, route_api, route_customer_u
     providedIn: 'root',
 })
 export class CustomerService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     search(body: any): Observable<any> {
         return this.http.post(customer_url + '/search', body).pipe(map((response: any) => response));
@@ -71,4 +71,5 @@ export class CustomerService {
         if (keyword) params += '&keyword=' + keyword;
         return this.http.get(customer_url + '/searchArchived' + params).pipe(map((response: any) => response));
     }
+
 }

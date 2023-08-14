@@ -23,7 +23,7 @@ export class SaleReceiptReportComponent implements OnInit {
         private fb: FormBuilder,
         private saleReportLogic: SaleReportService,
         private async: AsyncPipe,
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.dateSearchForm = this.fb.group({
@@ -63,7 +63,7 @@ export class SaleReceiptReportComponent implements OnInit {
             let body = {
                 ...this.body,
             };
-            body.pageSize = data;
+            body.pageSize = this.total$;
             this.saleReportLogic.exportGross(body, this.async.transform(this.total$)!);
         });
     }
@@ -73,7 +73,7 @@ export class SaleReceiptReportComponent implements OnInit {
             let body = {
                 ...this.body,
             };
-            body.pageSize = data;
+            body.pageSize = this.total$;
             this.saleReportLogic.exportNotGross(body, this.async.transform(this.total$)!);
         });
     }

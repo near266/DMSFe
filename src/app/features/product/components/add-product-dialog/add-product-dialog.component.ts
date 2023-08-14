@@ -81,6 +81,7 @@ export class AddProductDialogComponent implements OnInit {
         { title: 'Tồn kho', leftIcon: 'fa-solid fa-box-archive' },
         { title: 'Tồn kho theo lô', leftIcon: 'fa-solid fa-box-archive' },
         { title: 'Lịch sử', leftIcon: 'fa-solid fa-clock-rotate-left' },
+        
         // { title: 'Chấm thi phòng nhóm', leftIcon: 'fa-solid fa-location-dot' },
     ];
 

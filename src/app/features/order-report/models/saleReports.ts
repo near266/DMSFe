@@ -5,6 +5,8 @@ export interface RootSaleReport {
     sumOfTotalPrice: number;
     sumOfDiscount: number;
     sumOfTotalPayment: number;
+    sumofTotalReturn:number;
+    sumofMoneyReturn:number;
     sumOfVAT: number;
     total: number;
     page: number;

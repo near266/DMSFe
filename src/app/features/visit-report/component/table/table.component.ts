@@ -48,6 +48,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
         'Đúng tuyến',
         'Đơn hàng',
         'Ghi chú',
+        
     ];
 
     subscriptions: Subscription = new Subscription();
